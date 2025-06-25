@@ -66,6 +66,7 @@
     "next-auth": "latest",
     "next-themes": "latest",
     "nodemailer": "latest",
+    "path": "latest",
     "react": "^19",
     "react-day-picker": "latest",
     "react-dom": "^19",

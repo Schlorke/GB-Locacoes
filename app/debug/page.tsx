@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, Database, CheckCircle, XCircle, RefreshCw } from "lucide-react"
+import EnvironmentVariablesDisplay from "@/components/environment-variables-display"
 
 interface TestResult {
   success: boolean
@@ -120,6 +121,8 @@ export default function DebugPage() {
           </CardContent>
         </Card>
       </div>
+
+      <EnvironmentVariablesDisplay />
 
       {result && (
         <Card>
