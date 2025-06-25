@@ -11,7 +11,9 @@ export async function GET() {
       DATABASE_URL_PREVIEW: process.env.DATABASE_URL ? `${process.env.DATABASE_URL.substring(0, 30)}...` : "Not found",
 
       POSTGRES_PRISMA_URL_EXISTS: !!process.env.POSTGRES_PRISMA_URL,
-      DATABASE_URL_UNPOOLED_EXISTS: !!process.env.DATABASE_URL_UNPOOLED,
+      DIRECT_URL_EXISTS: !!process.env.DIRECT_URL,
+      DIRECT_URL_LENGTH: process.env.DIRECT_URL?.length || 0,
+      DIRECT_URL_PREVIEW: process.env.DIRECT_URL ? `${process.env.DIRECT_URL.substring(0, 30)}...` : "Not found",
       NEON_PROJECT_ID: process.env.NEON_PROJECT_ID || "Not found",
 
       // === REDIS/KV (UPSTASH) ===
