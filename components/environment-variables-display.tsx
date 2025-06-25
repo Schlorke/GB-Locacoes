@@ -13,29 +13,16 @@ interface EnvInfo {
   DATABASE_URL_LENGTH: number
   DATABASE_URL_PREVIEW: string
   POSTGRES_PRISMA_URL_EXISTS: boolean
-  DIRECT_URL_EXISTS: boolean // Adicionado
-  DIRECT_URL_LENGTH: number // Adicionado
-  DIRECT_URL_PREVIEW: string // Adicionado
-  NEON_PROJECT_ID: string
-  KV_REST_API_URL_EXISTS: boolean
-  KV_REST_API_URL: string
-  KV_REST_API_TOKEN_EXISTS: boolean
-  KV_REST_API_READ_ONLY_TOKEN_EXISTS: boolean
-  UPSTASH_REDIS_REST_TOKEN_EXISTS: boolean
-  KV_URL_EXISTS: boolean
-  REDIS_URL_EXISTS: boolean
+  DIRECT_URL_EXISTS: boolean
+  DIRECT_URL_LENGTH: number
+  DIRECT_URL_PREVIEW: string
   NEXTAUTH_SECRET_EXISTS: boolean
   NEXTAUTH_URL: string
   BLOB_READ_WRITE_TOKEN_EXISTS: boolean
-  STACK_SECRET_SERVER_KEY_EXISTS: boolean
-  NEXT_PUBLIC_STACK_PROJECT_ID: string
   INTEGRATIONS_STATUS: {
-    supabase: boolean // Alterado de neon para supabase
-    neon: boolean // Adicionado para detecção específica de Neon
-    upstash: boolean
+    supabase: boolean
     vercel_blob: boolean
     nextauth: boolean
-    stack_auth: boolean
   }
   MAIN_ENV_KEYS: string[]
 }
@@ -96,26 +83,7 @@ export default function EnvironmentVariablesDisplay() {
         exists: envData.DIRECT_URL_EXISTS,
         value: envData.DIRECT_URL_PREVIEW,
         length: envData.DIRECT_URL_LENGTH,
-      }, // Adicionado
-      { name: "NEON_PROJECT_ID", exists: !!envData.NEON_PROJECT_ID, value: envData.NEON_PROJECT_ID },
-      { name: "KV_REST_API_URL", exists: envData.KV_REST_API_URL_EXISTS, value: envData.KV_REST_API_URL },
-      {
-        name: "KV_REST_API_TOKEN",
-        exists: envData.KV_REST_API_TOKEN_EXISTS,
-        value: envData.KV_REST_API_TOKEN_EXISTS ? "Configurado" : "Não encontrado",
       },
-      {
-        name: "KV_REST_API_READ_ONLY_TOKEN",
-        exists: envData.KV_REST_API_READ_ONLY_TOKEN_EXISTS,
-        value: envData.KV_REST_API_READ_ONLY_TOKEN_EXISTS ? "Configurado" : "Não encontrado",
-      },
-      {
-        name: "UPSTASH_REDIS_REST_TOKEN",
-        exists: envData.UPSTASH_REDIS_REST_TOKEN_EXISTS,
-        value: envData.UPSTASH_REDIS_REST_TOKEN_EXISTS ? "Configurado" : "Não encontrado",
-      },
-      { name: "KV_URL", exists: envData.KV_URL_EXISTS, value: envData.KV_URL },
-      { name: "REDIS_URL", exists: envData.REDIS_URL_EXISTS, value: envData.REDIS_URL },
       {
         name: "NEXTAUTH_SECRET",
         exists: envData.NEXTAUTH_SECRET_EXISTS,
@@ -126,16 +94,6 @@ export default function EnvironmentVariablesDisplay() {
         name: "BLOB_READ_WRITE_TOKEN",
         exists: envData.BLOB_READ_WRITE_TOKEN_EXISTS,
         value: envData.BLOB_READ_WRITE_TOKEN_EXISTS ? "Configurado" : "Não encontrado",
-      },
-      {
-        name: "STACK_SECRET_SERVER_KEY",
-        exists: envData.STACK_SECRET_SERVER_KEY_EXISTS,
-        value: envData.STACK_SECRET_SERVER_KEY_EXISTS ? "Configurado" : "Não encontrado",
-      },
-      {
-        name: "NEXT_PUBLIC_STACK_PROJECT_ID",
-        exists: !!envData.NEXT_PUBLIC_STACK_PROJECT_ID,
-        value: envData.NEXT_PUBLIC_STACK_PROJECT_ID,
       },
     ]
 
@@ -267,69 +225,6 @@ export default function EnvironmentVariablesDisplay() {
                 </TableCell>
               </TableRow>
               <TableRow>
-                <TableCell className="font-medium">NEON_PROJECT_ID</TableCell>
-                <TableCell>
-                  <Badge variant={!!envData?.NEON_PROJECT_ID ? "default" : "destructive"}>
-                    {!!envData?.NEON_PROJECT_ID ? "Configurado" : "Não Configurado"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{envData?.NEON_PROJECT_ID || "Not found"}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">KV_REST_API_URL</TableCell>
-                <TableCell>
-                  <Badge variant={envData?.KV_REST_API_URL_EXISTS ? "default" : "destructive"}>
-                    {envData?.KV_REST_API_URL_EXISTS ? "Configurado" : "Não Configurado"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{envData?.KV_REST_API_URL || "Não encontrado"}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">KV_REST_API_TOKEN</TableCell>
-                <TableCell>
-                  <Badge variant={envData?.KV_REST_API_TOKEN_EXISTS ? "default" : "destructive"}>
-                    {envData?.KV_REST_API_TOKEN_EXISTS ? "Configurado" : "Não Configurado"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{envData?.KV_REST_API_TOKEN_EXISTS ? "Configurado" : "Não encontrado"}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">KV_REST_API_READ_ONLY_TOKEN</TableCell>
-                <TableCell>
-                  <Badge variant={envData?.KV_REST_API_READ_ONLY_TOKEN_EXISTS ? "default" : "destructive"}>
-                    {envData?.KV_REST_API_READ_ONLY_TOKEN_EXISTS ? "Configurado" : "Não Configurado"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{envData?.KV_REST_API_READ_ONLY_TOKEN_EXISTS ? "Configurado" : "Não encontrado"}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">UPSTASH_REDIS_REST_TOKEN</TableCell>
-                <TableCell>
-                  <Badge variant={envData?.UPSTASH_REDIS_REST_TOKEN_EXISTS ? "default" : "destructive"}>
-                    {envData?.UPSTASH_REDIS_REST_TOKEN_EXISTS ? "Configurado" : "Não Configurado"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{envData?.UPSTASH_REDIS_REST_TOKEN_EXISTS ? "Configurado" : "Não encontrado"}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">KV_URL</TableCell>
-                <TableCell>
-                  <Badge variant={envData?.KV_URL_EXISTS ? "default" : "destructive"}>
-                    {envData?.KV_URL_EXISTS ? "Configurado" : "Não Configurado"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{envData?.KV_URL || "Não encontrado"}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">REDIS_URL</TableCell>
-                <TableCell>
-                  <Badge variant={envData?.REDIS_URL_EXISTS ? "default" : "destructive"}>
-                    {envData?.REDIS_URL_EXISTS ? "Configurado" : "Não Configurado"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{envData?.REDIS_URL || "Não encontrado"}</TableCell>
-              </TableRow>
-              <TableRow>
                 <TableCell className="font-medium">NEXTAUTH_SECRET</TableCell>
                 <TableCell>
                   <Badge variant={envData?.NEXTAUTH_SECRET_EXISTS ? "default" : "destructive"}>
@@ -355,24 +250,6 @@ export default function EnvironmentVariablesDisplay() {
                   </Badge>
                 </TableCell>
                 <TableCell>{envData?.BLOB_READ_WRITE_TOKEN_EXISTS ? "Configurado" : "Não encontrado"}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">STACK_SECRET_SERVER_KEY</TableCell>
-                <TableCell>
-                  <Badge variant={envData?.STACK_SECRET_SERVER_KEY_EXISTS ? "default" : "destructive"}>
-                    {envData?.STACK_SECRET_SERVER_KEY_EXISTS ? "Configurado" : "Não Configurado"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{envData?.STACK_SECRET_SERVER_KEY_EXISTS ? "Configurado" : "Não encontrado"}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">NEXT_PUBLIC_STACK_PROJECT_ID</TableCell>
-                <TableCell>
-                  <Badge variant={!!envData?.NEXT_PUBLIC_STACK_PROJECT_ID ? "default" : "destructive"}>
-                    {!!envData?.NEXT_PUBLIC_STACK_PROJECT_ID ? "Configurado" : "Não Configurado"}
-                  </Badge>
-                </TableCell>
-                <TableCell>{envData?.NEXT_PUBLIC_STACK_PROJECT_ID || "Not found"}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
