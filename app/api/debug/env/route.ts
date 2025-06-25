@@ -5,7 +5,7 @@ export async function GET() {
     const envInfo = {
       NODE_ENV: process.env.NODE_ENV || "development",
 
-      // === DATABASE (NEON) ===
+      // === DATABASE (SUPABASE/NEON) ===
       DATABASE_URL_EXISTS: !!process.env.DATABASE_URL,
       DATABASE_URL_LENGTH: process.env.DATABASE_URL?.length || 0,
       DATABASE_URL_PREVIEW: process.env.DATABASE_URL ? `${process.env.DATABASE_URL.substring(0, 30)}...` : "Not found",
@@ -14,7 +14,7 @@ export async function GET() {
       DIRECT_URL_EXISTS: !!process.env.DIRECT_URL,
       DIRECT_URL_LENGTH: process.env.DIRECT_URL?.length || 0,
       DIRECT_URL_PREVIEW: process.env.DIRECT_URL ? `${process.env.DIRECT_URL.substring(0, 30)}...` : "Not found",
-      NEON_PROJECT_ID: process.env.NEON_PROJECT_ID || "Not found",
+      NEON_PROJECT_ID: process.env.NEON_PROJECT_ID || "Not found", // Mantido para compatibilidade, mas não usado para status geral
 
       // === REDIS/KV (UPSTASH) ===
       KV_REST_API_URL_EXISTS: !!process.env.KV_REST_API_URL,
@@ -38,7 +38,8 @@ export async function GET() {
 
       // === RESUMO DE INTEGRAÇÕES ===
       INTEGRATIONS_STATUS: {
-        neon: !!process.env.DATABASE_URL,
+        supabase: !!process.env.DATABASE_URL, // Agora detecta Supabase via DATABASE_URL
+        neon: !!process.env.NEON_PROJECT_ID, // Detecta Neon apenas se o ID do projeto estiver configurado
         upstash: !!process.env.KV_REST_API_URL && !!process.env.KV_REST_API_TOKEN,
         vercel_blob: !!process.env.BLOB_READ_WRITE_TOKEN,
         nextauth: !!process.env.NEXTAUTH_SECRET && !!process.env.NEXTAUTH_URL,
@@ -50,6 +51,7 @@ export async function GET() {
         .filter(
           (key) =>
             key.includes("DATABASE") ||
+            key.includes("DIRECT_URL") || // Adicionado DIRECT_URL aqui
             key.includes("KV_") ||
             key.includes("NEXTAUTH") ||
             key.includes("BLOB") ||
