@@ -1,8 +1,8 @@
 {
   "name": "my-v0-project",
-  "type": "module",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "next build",
     "dev": "next dev",
@@ -14,7 +14,7 @@
     "@edge-runtime/vm": "latest",
     "@hookform/resolvers": "^3.9.1",
     "@neondatabase/serverless": "latest",
-    "@prisma/client": "^6.10.1",
+    "@prisma/client": "latest",
     "@radix-ui/react-accordion": "latest",
     "@radix-ui/react-alert-dialog": "latest",
     "@radix-ui/react-aspect-ratio": "latest",
@@ -56,7 +56,7 @@
     "clsx": "^2.1.1",
     "cmdk": "latest",
     "date-fns": "4.1.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "latest",
     "embla-carousel-react": "latest",
     "happy-dom": "latest",
     "input-otp": "latest",

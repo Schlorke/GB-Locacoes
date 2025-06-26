@@ -1,10 +1,10 @@
 // scripts/fix-admin-login-final.js
 
-import dotenv from 'dotenv'
+import dotenv from "dotenv"
 dotenv.config()
 
-import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
+import { PrismaClient } from "@prisma/client"
+import bcrypt from "bcryptjs"
 
 const prisma = new PrismaClient()
 
