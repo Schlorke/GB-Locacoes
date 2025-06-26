@@ -1,27 +1,38 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# 📦 Dependências
 /node_modules
 
-# next.js
+# ⚙️ Build e artefatos
 /.next/
-/out/
-
-# production
+.out/
 /build
+*.tsbuildinfo
+next-env.d.ts
 
-# debug
+# 🧪 Logs e debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files
+# 🔐 Variáveis de ambiente
 .env*
+!.env.example
 
-# vercel
+# 🧪 Test coverage
+/coverage
+
+# ⚡ Vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# 💾 Prisma
+/prisma/migrations/
+.prisma/
+
+# 🚫 Ignorar sub-repositórios locais
+/GB-Locacoes/
+
+# 🗑️ IDEs e arquivos temporários
+.vscode/
+.DS_Store
+*.swp
+*.swo
