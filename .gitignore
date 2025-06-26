@@ -6,9 +6,10 @@ node_modules/
 out/
 build/
 
-# 🔐 Variáveis de ambiente
+# 🔐 Variáveis de ambiente e configurações de nuvem
 .env*
-.vercel
+.vercel/
+*.local
 
 # 🧪 Arquivos de debug
 npm-debug.log*
@@ -23,15 +24,20 @@ next-env.d.ts
 # 🔄 Prisma
 prisma/migrations/
 prisma/dev.db
+*.sqlite
+*.dump
 
-# 🚫 Sub-repositório acidental
-GB-Locacoes/
+# 🔄 Logs e snapshots
+*.log
+*.log.*
 
 # 🧹 IDEs e editores
 .vscode/
 .idea/
 
-# 💬 Logs e dumps
-*.log
-*.sqlite
-*.dump
+# ⛔ Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# 🚫 Sub-repositórios acidentais
+GB-Locacoes/
