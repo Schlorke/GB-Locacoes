@@ -1,76 +1,63 @@
 import NextAuth, { type NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { UserRole } from "@prisma/client"
 import bcrypt from "bcryptjs"
 import { prisma } from "./prisma"
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("🔐 [AUTH] Iniciando processo de autenticação")
-        console.log("🔐 [AUTH] Credenciais recebidas:", {
-          email: credentials?.email,
-          hasPassword: !!credentials?.password,
-        })
+        console.log("🔐 [AUTH] Iniciando autenticação")
 
         if (!credentials?.email || !credentials.password) {
-          console.log("❌ [AUTH] Credenciais inválidas - email ou senha ausentes")
-          throw new Error("Email e senha são obrigatórios")
+          console.log("❌ [AUTH] Credenciais ausentes")
+          return null
         }
 
         try {
-          console.log("🔍 [AUTH] Buscando usuário no banco de dados...")
+          console.log("🔍 [AUTH] Buscando usuário:", credentials.email)
 
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
           })
 
-          console.log("🔍 [AUTH] Resultado da busca:", {
-            userFound: !!user,
-            userId: user?.id,
-            userEmail: user?.email,
-            userRole: user?.role,
-            hasPassword: !!user?.password,
-          })
-
-          if (!user || !user.password) {
-            console.log("❌ [AUTH] Usuário não encontrado ou sem senha")
-            throw new Error("Usuário não encontrado")
+          if (!user) {
+            console.log("❌ [AUTH] Usuário não encontrado")
+            return null
           }
 
-          console.log("🔑 [AUTH] Comparando senhas...")
+          console.log("👤 [AUTH] Usuário encontrado:", {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            hasPassword: !!user.password,
+          })
+
+          if (!user.password) {
+            console.log("❌ [AUTH] Usuário sem senha")
+            return null
+          }
+
           const isValidPassword = await bcrypt.compare(credentials.password, user.password)
-          console.log("🔑 [AUTH] Resultado da comparação de senha:", isValidPassword)
+          console.log("🔑 [AUTH] Senha válida:", isValidPassword)
 
           if (!isValidPassword) {
-            console.log("❌ [AUTH] Senha inválida")
-            throw new Error("Senha inválida")
+            return null
           }
 
-          console.log("👤 [AUTH] Verificando role do usuário:", user.role)
-
-          // Only allow ADMIN, OPERATOR, FINANCIAL roles to access admin panel
           if (user.role === UserRole.CUSTOMER) {
-            console.log("❌ [AUTH] Usuário com role CUSTOMER tentando acessar admin")
-            throw new Error("Usuário não autorizado para acessar o painel administrativo")
+            console.log("❌ [AUTH] Role não autorizada:", user.role)
+            return null
           }
 
-          console.log("📝 [AUTH] Atualizando último login...")
-          // Update last login
-          await prisma.user.update({
-            where: { id: user.id },
-            data: { lastLogin: new Date() },
-          })
+          console.log("✅ [AUTH] Autenticação bem-sucedida")
 
-          console.log("✅ [AUTH] Autenticação bem-sucedida!")
           return {
             id: user.id,
             email: user.email,
@@ -78,15 +65,15 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
           }
         } catch (error) {
-          console.error("💥 [AUTH] Erro durante autenticação:", error)
-          throw error
+          console.error("💥 [AUTH] Erro:", error)
+          return null
         }
       },
     }),
   ],
   session: {
     strategy: "jwt",
-    maxAge: 24 * 60 * 60, // 24 hours
+    maxAge: 24 * 60 * 60,
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -106,10 +93,9 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/admin/login",
-    error: "/admin/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: true, // Ativar debug do NextAuth
+  debug: true,
 }
 
 export default NextAuth(authOptions)

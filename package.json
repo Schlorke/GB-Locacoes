@@ -13,7 +13,6 @@
     "@edge-runtime/vm": "latest",
     "@hookform/resolvers": "^3.9.1",
     "@neondatabase/serverless": "latest",
-    "@next-auth/prisma-adapter": "latest",
     "@prisma/client": "latest",
     "@radix-ui/react-accordion": "latest",
     "@radix-ui/react-alert-dialog": "latest",
