@@ -9,7 +9,9 @@
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
-    "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'"
+    "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'",
+    "test:db": "set NODE_OPTIONS=--loader ts-node/esm && ts-node --project tsconfig.scripts.json scripts/test-db-connection.ts"
+
   },
   "dependencies": {
     "@auth/core": "latest",
@@ -84,12 +86,13 @@
     "zod": "latest"
   },
   "devDependencies": {
-    "@types/node": "^22",
+    "@types/node": "^22.15.33",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8.5",
     "prisma": "^6.10.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }
