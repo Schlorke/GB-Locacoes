@@ -6,9 +6,9 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
+    "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start",
-    "postinstall": "prisma generate"
+    "start": "next start"
   },
   "dependencies": {
     "@auth/core": "latest",
@@ -63,14 +63,14 @@
     "input-otp": "latest",
     "jsdom": "latest",
     "lucide-react": "^0.454.0",
-    "next": "^14.2.3",
-    "next-auth": "^4.24.7",
+    "next": "15.2.4",
+    "next-auth": "latest",
     "next-themes": "latest",
     "nodemailer": "latest",
     "path": "latest",
-    "react": "^18",
+    "react": "^19",
     "react-day-picker": "latest",
-    "react-dom": "^18",
+    "react-dom": "^19",
     "react-hook-form": "latest",
     "react-resizable-panels": "latest",
     "recharts": "latest",
@@ -84,8 +84,8 @@
   },
   "devDependencies": {
     "@types/node": "^22",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "postcss": "^8.5",
     "prisma": "^6.10.1",
     "tailwindcss": "^3.4.17",
