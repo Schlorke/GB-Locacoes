@@ -1,5 +1,10 @@
-import { PrismaClient } from "@prisma/client"
-import bcrypt from "bcryptjs"
+// scripts/fix-admin-login-final.js
+
+import dotenv from 'dotenv'
+dotenv.config()
+
+import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
 
@@ -7,12 +12,12 @@ async function fixAdminLogin() {
   try {
     console.log("🔧 Corrigindo login do admin...")
 
-    // Delete existing admin if exists
+    // Deleta o admin antigo, se existir
     await prisma.user.deleteMany({
       where: { email: "admin@gblocacoes.com.br" },
     })
 
-    // Create new admin with correct password
+    // Cria novo admin com senha criptografada
     const hashedPassword = await bcrypt.hash("admin123", 12)
 
     const admin = await prisma.user.create({
@@ -31,7 +36,7 @@ async function fixAdminLogin() {
       role: admin.role,
     })
 
-    // Test password verification
+    // Teste de verificação de senha
     const isValid = await bcrypt.compare("admin123", admin.password)
     console.log("🔑 Teste de senha:", isValid ? "PASSOU" : "FALHOU")
   } catch (error) {
