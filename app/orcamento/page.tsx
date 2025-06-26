@@ -69,7 +69,7 @@ function QuotePage() {
       const equipments = Array.isArray(data) ? data : []
       const equipment = equipments.find((eq: any) => eq.id === equipmentId)
 
-      if (equipment && !selectedEquipments.find((eq) => eq.id === equipmentId)) {
+      if (equipment) {
         const price = Number(equipment.pricePerDay) || 0
         const equipmentToAdd = {
           ...equipment,
@@ -77,7 +77,11 @@ function QuotePage() {
           quantity: 1,
           days: 1,
         }
-        setSelectedEquipments((prev) => [...prev, equipmentToAdd])
+        setSelectedEquipments((prev) =>
+          prev.find((eq) => eq.id === equipmentToAdd.id)
+            ? prev
+            : [...prev, equipmentToAdd]
+        )
       }
     } catch (error) {
       console.error("Erro ao buscar equipamento:", error)
