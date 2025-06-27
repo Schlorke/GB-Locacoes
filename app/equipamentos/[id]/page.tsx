@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import type { Prisma } from "@prisma/client"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -28,16 +29,13 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function EquipmentDetailPage({ params }: Props) {
-  const equipment = await prisma.equipment.findUnique({
+  const equipment = (await prisma.equipment.findUnique({
     where: { id: params.id },
     include: {
       category: true,
-      reviews: {
-        orderBy: { createdAt: "desc" },
-        take: 5,
-      },
+      // TODO: implementar reviews
     },
-  })
+  })) as Prisma.EquipmentGetPayload<{ include: { category: true } }>
 
   if (!equipment) {
     notFound()

@@ -32,14 +32,22 @@ const scrollbarStyles = `
   }
 `
 
+type ChatMessage = {
+  id: number
+  text: string
+  sender: "bot" | "user"
+  timestamp: Date
+}
+
 export default function WhatsAppFAB() {
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState("")
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 1,
-      text: "👷‍♂️ Olá! Precisa de equipamentos para sua obra? Somos especialistas em locação de equipamentos para construção civil e serviços em altura!",
-      sender: "bot" as const,
+      text:
+        "👷‍♂️ Olá! Precisa de equipamentos para sua obra? Somos especialistas em locação de equipamentos para construção civil e serviços em altura!",
+      sender: "bot",
       timestamp: new Date(),
     },
   ])
@@ -59,10 +67,10 @@ export default function WhatsAppFAB() {
     if (!message.trim()) return
 
     // Add user message to chat
-    const userMessage = {
+    const userMessage: ChatMessage = {
       id: messages.length + 1,
       text: message,
-      sender: "user" as const,
+      sender: "user",
       timestamp: new Date(),
     }
 
@@ -71,10 +79,11 @@ export default function WhatsAppFAB() {
 
     // Simulate bot response
     setTimeout(() => {
-      const botResponse = {
+      const botResponse: ChatMessage = {
         id: messages.length + 2,
-        text: "Obrigado pela mensagem! Vou te redirecionar para o WhatsApp onde nossos especialistas podem te atender melhor. 📱",
-        sender: "bot" as const,
+        text:
+          "Obrigado pela mensagem! Vou te redirecionar para o WhatsApp onde nossos especialistas podem te atender melhor. 📱",
+        sender: "bot",
         timestamp: new Date(),
       }
       setMessages((prev) => [...prev, botResponse])

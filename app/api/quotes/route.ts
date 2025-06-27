@@ -35,14 +35,16 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: `Equipamento não encontrado: ${item.equipmentId}` }, { status: 400 })
       }
 
-      const itemTotal = equipment.pricePerDay * item.quantity * (item.days || 1)
+      const pricePerDay = Number(equipment.pricePerDay)
+      const itemTotal = pricePerDay * item.quantity * (item.days || 1)
       totalAmount += itemTotal
 
       quoteItems.push({
         equipmentId: item.equipmentId,
         quantity: item.quantity,
         days: item.days || 1,
-        priceAtTime: equipment.pricePerDay,
+        pricePerDay,
+        total: itemTotal,
       })
     }
 
@@ -59,7 +61,7 @@ export async function POST(request: Request) {
         deliveryType,
         message,
         totalAmount,
-        status: "pending",
+        status: "PENDING",
         items: {
           create: quoteItems,
         },

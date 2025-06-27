@@ -25,7 +25,7 @@ interface Equipment {
   category: {
     name: string
   }
-  isAvailable: boolean
+  available: boolean
 }
 
 interface SelectedEquipment extends Equipment {

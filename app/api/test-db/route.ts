@@ -60,11 +60,15 @@ export async function GET() {
   } catch (error) {
     console.error("❌ [TEST-DB] ERRO:", error)
 
+    const code =
+      typeof error === "object" && error && "code" in error
+        ? (error as { code?: string }).code
+        : undefined
     const errorInfo = {
       success: false,
       error: "Erro na conexão com o banco de dados",
       details: error instanceof Error ? error.message : String(error),
-      code: error?.code || "UNKNOWN",
+      code: code || "UNKNOWN",
     }
 
     return NextResponse.json(errorInfo, { status: 500 })

@@ -618,11 +618,11 @@ const SidebarItem = React.forwardRef<
     href: string
     icon: React.ComponentType<{ className?: string }>
     children: React.ReactNode
-  } & React.ComponentPropsWithoutRef<"a">
->(({ href, icon: Icon, children, className, ...props }, ref) => (
+  } & Omit<React.ComponentPropsWithoutRef<"a">, "type">
+>(({ href, icon: Icon, children, className, type: _type, ...props }, ref) => (
   <SidebarMenuItem>
-    <SidebarMenuButton asChild className={cn("gap-3", className)} {...props} isActive={false}>
-      <a ref={ref} href={href}>
+    <SidebarMenuButton asChild className={cn("gap-3", className)} isActive={false}>
+      <a ref={ref} href={href} {...props}>
         <Icon className="h-4 w-4" />
         <span>{children}</span>
       </a>

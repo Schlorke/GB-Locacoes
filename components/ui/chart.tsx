@@ -102,17 +102,27 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
-const ChartTooltipContent = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-    React.ComponentProps<"div"> & {
-      hideLabel?: boolean
-      hideIndicator?: boolean
-      indicator?: "line" | "dot" | "dashed"
-      nameKey?: string
-      labelKey?: string
-    }
->(
+interface ChartTooltipContentProps
+  extends React.ComponentProps<"div"> {
+  active?: boolean
+  payload?: readonly RechartsPrimitive.Payload<any, any>[]
+  className?: string
+  hideLabel?: boolean
+  hideIndicator?: boolean
+  indicator?: "line" | "dot" | "dashed"
+  nameKey?: string
+  labelKey?: string
+  label?: any
+  labelFormatter?: (
+    label: any,
+    payload: readonly RechartsPrimitive.Payload<any, any>[],
+  ) => React.ReactNode
+  labelClassName?: string
+  formatter?: RechartsPrimitive.Formatter<any, any>
+  color?: string
+}
+
+const ChartTooltipContent = React.forwardRef<HTMLDivElement, ChartTooltipContentProps>(
   (
     {
       active,
@@ -185,7 +195,7 @@ const ChartTooltipContent = React.forwardRef<
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
-          {payload.map((item, index) => {
+          {payload.map((item: RechartsPrimitive.Payload<any, any>, index: number) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`
             const itemConfig = getPayloadConfigFromPayload(config, item, key)
             const indicatorColor = color || item.payload.fill || item.color
@@ -260,14 +270,21 @@ const ChartLegend = RechartsPrimitive.Legend
 
 const ChartLegendContent = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<"div"> &
-    Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
-      hideIcon?: boolean
-      nameKey?: string
-    }
+  React.ComponentProps<"div"> & {
+    payload?: readonly RechartsPrimitive.LegendPayload[]
+    verticalAlign?: RechartsPrimitive.DefaultLegendContentProps["verticalAlign"]
+    hideIcon?: boolean
+    nameKey?: string
+  }
 >(
   (
-    { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
+    {
+      className,
+      hideIcon = false,
+      payload,
+      verticalAlign = "bottom",
+      nameKey,
+    },
     ref
   ) => {
     const { config } = useChart()
@@ -285,7 +302,7 @@ const ChartLegendContent = React.forwardRef<
           className
         )}
       >
-        {payload.map((item) => {
+        {payload.map((item: RechartsPrimitive.LegendPayload) => {
           const key = `${nameKey || item.dataKey || "value"}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
 

@@ -170,7 +170,7 @@ export default function EquipmentsPage() {
             {filteredEquipments.map((equipment) => {
               // TODO: implementar reviews
               const averageRating = 0
-              const reviewCount = 0
+              const reviewCount: number = 0
 
               return (
                 <Card key={equipment.id} className="flex flex-col h-full hover:shadow-lg transition-shadow">
