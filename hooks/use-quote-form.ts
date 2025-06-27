@@ -4,10 +4,13 @@ import type React from "react"
 
 import { useState, useCallback } from "react"
 
+interface Material {
+  id: number
+  price: number
+}
+
 // Supondo que 'materials' venha de props ou context, ou seja buscado aqui
-const initialMaterials = [
-  /* ... seus materiais ... */
-]
+const initialMaterials: Material[] = []
 
 export interface SelectedMaterial {
   id: number
