@@ -67,8 +67,8 @@ export async function GET(request: NextRequest) {
         category: true,
         _count: {
           select: {
-            reviews: true,
             quoteItems: true,
+            rental_items: true,
           },
         },
       },
