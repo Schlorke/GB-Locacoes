@@ -35,8 +35,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar se já existe categoria com esse nome
+    const slug = name
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "")
+
     const existingCategory = await prisma.category.findUnique({
-      where: { name },
+      where: { slug },
     })
 
     if (existingCategory) {
@@ -46,6 +52,7 @@ export async function POST(request: NextRequest) {
     const category = await prisma.category.create({
       data: {
         name,
+        slug,
         description: description || null,
         icon: icon || null,
         iconColor: iconColor || "#000000",
