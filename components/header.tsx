@@ -47,9 +47,6 @@ export default function Header() {
               >
                 Admin
               </Link>
-              <Link href="/setup" className="hover:text-gray-300 transition-colors" onClick={handleInternalNavigation}>
-                Setup
-              </Link>
             </div>
           </div>
         </div>

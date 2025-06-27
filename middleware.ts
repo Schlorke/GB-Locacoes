@@ -14,11 +14,6 @@ export default withAuth(
           return true
         }
 
-        // Allow access to setup pages without authentication
-        if (pathname === "/setup" || pathname === "/setup-db") {
-          return true
-        }
-
         // Allow access to debug pages in development
         if (pathname.startsWith("/debug") && process.env.NODE_ENV === "development") {
           return true
@@ -37,5 +32,5 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ["/admin/:path*", "/setup/:path*", "/debug/:path*"],
+  matcher: ["/admin/:path*", "/debug/:path*"],
 }
