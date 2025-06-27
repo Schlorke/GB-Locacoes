@@ -1,100 +1,111 @@
 "use client"
 
-import React from "react"
+import { DialogFooter } from "@/components/ui/dialog"
 
-import { useState, useEffect, useCallback } from "react"
+import type React from "react"
+import { useState, useEffect, createElement } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Search, Plus, MoreHorizontal, Edit, Trash2, Loader2, ServerCrash } from "lucide-react"
-import { toast } from "sonner"
+import { Label } from "@/components/ui/label"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Plus, Edit, Trash2, Tag, Loader2, Info, Check } from "lucide-react"
 import * as LucideIcons from "lucide-react"
-import { IconPicker } from "@/components/ui/icon-picker"
+import { toast } from "sonner"
+import { IconPicker } from "@/components/ui/icon-picker" // Importado
 
 interface Category {
   id: string
   name: string
-  description?: string | null
-  slug: string
-  icon?: string | null
-  iconColor?: string | null
-  bgColor?: string | null
-  fontColor?: string | null
-  _count: {
+  description?: string
+  icon?: keyof typeof LucideIcons // Nome do ícone Lucide
+  iconColor?: string // Cor do ícone
+  bgColor?: string // Cor de fundo do rótulo
+  fontColor?: string // Cor da fonte do rótulo
+  createdAt: string
+  _count?: {
     equipments: number
   }
-  createdAt: string
 }
 
-export default function CategoriesPage() {
+export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
-  const [apiError, setApiError] = useState<string | null>(null)
-  const [search, setSearch] = useState("")
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [editingCategory, setEditingCategory] = useState<Category | null>(null)
+  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false)
+  const [isIconPickerOpen, setIsIconPickerOpen] = useState(false)
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    icon: "",
+    icon: undefined as keyof typeof LucideIcons | undefined,
     iconColor: "#000000",
-    bgColor: "#f3f4f6",
+    bgColor: "#e0e0e0",
     fontColor: "#000000",
   })
 
-  const fetchCategories = useCallback(async () => {
-    setLoading(true)
-    setApiError(null)
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  const fetchCategories = async () => {
+    setIsLoading(true)
     try {
       const response = await fetch("/api/admin/categories")
       if (response.ok) {
         const data = await response.json()
         setCategories(data)
       } else {
-        const errorData = await response.json()
-        const errorMessage = errorData.error || `Erro ${response.status} ao buscar categorias.`
-        toast.error(errorMessage)
-        setApiError(errorMessage)
-        setCategories([])
+        toast.error("Erro ao carregar categorias")
       }
     } catch (error) {
       console.error("Error fetching categories:", error)
-      const errorMessage = "Erro de rede ao buscar categorias."
-      toast.error(errorMessage)
-      setApiError(errorMessage)
-      setCategories([])
+      toast.error("Erro ao carregar categorias")
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
-  }, [])
+  }
 
-  useEffect(() => {
-    fetchCategories()
-  }, [fetchCategories])
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      description: "",
+      icon: undefined,
+      iconColor: "#000000",
+      bgColor: "#e0e0e0",
+      fontColor: "#000000",
+    })
+    setEditingCategory(null)
+  }
+
+  const openCreateDialog = () => {
+    resetForm()
+    setIsFormDialogOpen(true)
+  }
+
+  const openEditDialog = (category: Category) => {
+    setFormData({
+      name: category.name,
+      description: category.description || "",
+      icon: category.icon || undefined,
+      iconColor: category.iconColor || "#000000",
+      bgColor: category.bgColor || "#e0e0e0",
+      fontColor: category.fontColor || "#000000",
+    })
+    setEditingCategory(category)
+    setIsFormDialogOpen(true)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    if (!formData.name.trim()) {
-      toast.error("Nome da categoria é obrigatório.")
+    if (!formData.name) {
+      toast.error("O nome da categoria é obrigatório.")
       return
     }
-
+    setIsSubmitting(true)
     try {
       const url = editingCategory ? `/api/admin/categories/${editingCategory.id}` : "/api/admin/categories"
       const method = editingCategory ? "PUT" : "POST"
@@ -106,456 +117,270 @@ export default function CategoriesPage() {
       })
 
       if (response.ok) {
-        toast.success(`Categoria ${editingCategory ? "atualizada" : "criada"} com sucesso!`)
-        setIsDialogOpen(false)
-        resetForm()
+        toast.success(editingCategory ? "Categoria atualizada!" : "Categoria criada!")
         fetchCategories()
+        setIsFormDialogOpen(false)
+        resetForm()
       } else {
         const errorData = await response.json()
-        toast.error(
-          `Erro ao ${editingCategory ? "atualizar" : "criar"} categoria: ${errorData.error || "Erro desconhecido"}`,
-        )
+        toast.error(errorData.error || "Erro ao salvar categoria")
       }
     } catch (error) {
       console.error("Error saving category:", error)
-      toast.error("Erro de rede ao salvar categoria.")
+      toast.error("Erro ao salvar categoria")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const deleteCategory = async (categoryId: string) => {
     if (!confirm("Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.")) return
-
+    setIsSubmitting(true) // Reutilizar para indicar carregamento
     try {
-      const response = await fetch(`/api/admin/categories/${id}`, {
+      const response = await fetch(`/api/admin/categories/${categoryId}`, {
         method: "DELETE",
       })
-
       if (response.ok) {
-        toast.success("Categoria excluída com sucesso!")
+        toast.success("Categoria excluída com sucesso")
         fetchCategories()
       } else {
         const errorData = await response.json()
-        toast.error(`Erro ao excluir categoria: ${errorData.error || "Erro desconhecido"}`)
+        toast.error(errorData.error || "Erro ao excluir categoria")
       }
     } catch (error) {
       console.error("Error deleting category:", error)
-      toast.error("Erro de rede ao excluir categoria.")
+      toast.error("Erro ao excluir categoria")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      description: "",
-      icon: "",
-      iconColor: "#000000",
-      bgColor: "#f3f4f6",
-      fontColor: "#000000",
-    })
-    setEditingCategory(null)
+  const handleIconSelect = (iconName?: string, color?: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      icon: iconName as keyof typeof LucideIcons | undefined,
+      iconColor: color || prev.iconColor,
+    }))
   }
 
-  const openEditDialog = (category: Category) => {
-    setEditingCategory(category)
-    setFormData({
-      name: category.name,
-      description: category.description || "",
-      icon: category.icon || "",
-      iconColor: category.iconColor || "#000000",
-      bgColor: category.bgColor || "#f3f4f6",
-      fontColor: category.fontColor || "#000000",
-    })
-    setIsDialogOpen(true)
+  const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
+    if (!iconName || !LucideIcons[iconName]) return <Info className="h-5 w-5 text-gray-400" />
+    return createElement(LucideIcons[iconName], { size: 20, color: color || formData.iconColor, className: "mr-2" })
   }
 
-  const filteredCategories = categories.filter(
-    (category) =>
-      category.name.toLowerCase().includes(search.toLowerCase()) ||
-      (category.description && category.description.toLowerCase().includes(search.toLowerCase())),
-  )
-
-  // Renderização condicional para estado de carregamento inicial
-  if (loading && categories.length === 0 && !apiError) {
+  if (isLoading && categories.length === 0) {
+    // Mostrar loader apenas no carregamento inicial
     return (
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-4 mt-4 text-lg text-muted-foreground">Carregando categorias...</p>
-      </div>
-    )
-  }
-
-  // Renderização para estado de erro da API
-  if (apiError && categories.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)] text-center p-4">
-        <ServerCrash className="h-16 w-16 text-destructive mb-4" />
-        <h2 className="text-2xl font-semibold mb-2">Erro ao Carregar Categorias</h2>
-        <p className="text-muted-foreground mb-4 max-w-md">{apiError}</p>
-        <Button onClick={fetchCategories} disabled={loading}>
-          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          Tentar Novamente
-        </Button>
+      <div className="flex items-center justify-center h-[calc(100vh-150px)]">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
       </div>
     )
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6">
-      {/* Header Section - Responsivo */}
-      <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:items-center sm:space-y-0">
-        <div className="space-y-1">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">
-            Gerenciar Categorias
-          </h1>
-          <p className="text-sm text-muted-foreground hidden sm:block">Organize os equipamentos por categorias</p>
+    <div className="space-y-6 p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold">Categorias</h1>
+          <p className="text-muted-foreground">Gerencie as categorias de equipamentos.</p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={resetForm} className="w-full sm:w-auto">
-              <Plus className="h-4 w-4 mr-2" />
-              <span className="sm:hidden">Nova</span>
-              <span className="hidden sm:inline">Nova Categoria</span>
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="w-[95vw] max-w-md sm:max-w-lg max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{editingCategory ? "Editar Categoria" : "Nova Categoria"}</DialogTitle>
-              <DialogDescription>
-                {editingCategory
-                  ? "Atualize as informações da categoria."
-                  : "Crie uma nova categoria para organizar os equipamentos."}
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="sm:col-span-2">
-                  <Label htmlFor="name">Nome *</Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Nome da categoria"
-                    required
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <Label htmlFor="description">Descrição</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Descrição da categoria (opcional)"
-                    rows={3}
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <Label htmlFor="icon">Ícone</Label>
-                  <IconPicker value={formData.icon} onChange={(icon) => setFormData({ ...formData, icon })} />
-                </div>
-                <div>
-                  <Label htmlFor="iconColor">Cor do Ícone</Label>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      id="iconColor"
-                      type="color"
-                      value={formData.iconColor}
-                      onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
-                      className="w-12 h-10 p-1 border rounded"
-                    />
-                    <Input
-                      value={formData.iconColor}
-                      onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
-                      placeholder="#000000"
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <Label htmlFor="bgColor">Cor de Fundo</Label>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      id="bgColor"
-                      type="color"
-                      value={formData.bgColor}
-                      onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
-                      className="w-12 h-10 p-1 border rounded"
-                    />
-                    <Input
-                      value={formData.bgColor}
-                      onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
-                      placeholder="#f3f4f6"
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-                <div className="sm:col-span-2">
-                  <Label htmlFor="fontColor">Cor do Texto</Label>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      id="fontColor"
-                      type="color"
-                      value={formData.fontColor}
-                      onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
-                      className="w-12 h-10 p-1 border rounded"
-                    />
-                    <Input
-                      value={formData.fontColor}
-                      onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
-                      placeholder="#000000"
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-center p-4 border rounded-lg">
-                <Badge
-                  variant="outline"
-                  style={{
-                    backgroundColor: formData.bgColor,
-                    color: formData.fontColor,
-                    borderColor: "transparent",
-                  }}
-                  className="text-sm"
-                >
-                  {formData.icon && LucideIcons[formData.icon as keyof typeof LucideIcons] && (
-                    <span className="mr-2">
-                      {React.createElement(LucideIcons[formData.icon as keyof typeof LucideIcons], {
-                        size: 16,
-                        color: formData.iconColor,
-                      })}
-                    </span>
-                  )}
-                  {formData.name || "Preview"}
-                </Badge>
-              </div>
-              <DialogFooter className="flex flex-col sm:flex-row gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsDialogOpen(false)}
-                  className="w-full sm:w-auto"
-                >
-                  Cancelar
-                </Button>
-                <Button type="submit" className="w-full sm:w-auto">
-                  {editingCategory ? "Atualizar" : "Criar"} Categoria
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <Button onClick={openCreateDialog} className="w-full sm:w-auto">
+          <Plus className="h-4 w-4 mr-2" />
+          Nova Categoria
+        </Button>
       </div>
 
-      {/* Busca - Desktop */}
-      <Card className="hidden lg:block">
+      <Card>
         <CardHeader>
-          <CardTitle>Buscar Categorias</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Tag className="h-5 w-5" />
+            Lista de Categorias
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Buscar por nome ou descrição..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Busca Mobile */}
-      <div className="lg:hidden">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            placeholder="Buscar categorias..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
-
-      {/* Lista de Categorias */}
-      <Card className="relative">
-        {loading && categories.length > 0 && (
-          <div className="absolute inset-0 bg-background/70 flex items-center justify-center z-20 rounded-md">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        )}
-        <CardContent className="p-0">
-          {filteredCategories.length === 0 && !loading ? (
-            <div className="text-center py-8 sm:py-12 px-4">
-              <Search className="h-12 sm:h-16 w-12 sm:w-16 mx-auto text-gray-300 dark:text-gray-500 mb-4" />
-              <p className="text-lg sm:text-xl font-medium text-gray-600 dark:text-gray-300 mb-2">
-                {search ? "Nenhuma categoria encontrada" : "Nenhuma categoria cadastrada"}
+        <CardContent className="overflow-x-auto">
+          {isLoading && categories.length > 0 && <Loader2 className="h-5 w-5 animate-spin my-4" />}
+          {!isLoading && categories.length === 0 ? (
+            <div className="text-center py-12">
+              <Tag className="h-16 w-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+              <p className="text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">Nenhuma categoria encontrada.</p>
+              <p className="text-gray-400 dark:text-gray-500 mb-6">
+                Crie sua primeira categoria para organizar seus equipamentos.
               </p>
-              <p className="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-md mx-auto">
-                {search
-                  ? "Tente ajustar o termo de busca."
-                  : "Crie sua primeira categoria para organizar os equipamentos."}
-              </p>
-              <Button
-                onClick={() => {
-                  resetForm()
-                  setIsDialogOpen(true)
-                }}
-                variant="default"
-                className="w-full sm:w-auto"
-              >
+              <Button onClick={openCreateDialog}>
                 <Plus className="h-4 w-4 mr-2" />
                 Criar Primeira Categoria
               </Button>
             </div>
           ) : (
-            <>
-              {/* Desktop Table */}
-              <div className="hidden md:block overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Categoria</TableHead>
-                      <TableHead>Descrição</TableHead>
-                      <TableHead>Equipamentos</TableHead>
-                      <TableHead>Preview</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredCategories.map((category) => (
-                      <TableRow key={category.id}>
-                        <TableCell>
-                          <div>
-                            <div className="font-medium">{category.name}</div>
-                            <div className="text-sm text-muted-foreground">/{category.slug}</div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="max-w-xs truncate text-sm">{category.description || "Sem descrição"}</div>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="secondary" className="text-xs">
-                            {category._count.equipments} equipamentos
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            variant="outline"
-                            style={{
-                              backgroundColor: category.bgColor || undefined,
-                              color: category.fontColor || undefined,
-                              borderColor: category.bgColor ? "transparent" : undefined,
-                            }}
-                            className="text-xs"
-                          >
-                            {category.icon && LucideIcons[category.icon as keyof typeof LucideIcons] && (
-                              <span className="mr-1">
-                                {React.createElement(LucideIcons[category.icon as keyof typeof LucideIcons], {
-                                  size: 12,
-                                  color: category.iconColor || category.fontColor || "currentColor",
-                                })}
-                              </span>
-                            )}
-                            {category.name}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreHorizontal className="h-4 w-4" />
-                                <span className="sr-only">Ações para {category.name}</span>
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => openEditDialog(category)}>
-                                <Edit className="h-4 w-4 mr-2" />
-                                Editar
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleDelete(category.id)}
-                                className="text-red-600 hover:!text-red-500 focus:!text-red-500"
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Excluir
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-
-              {/* Mobile Cards */}
-              <div className="md:hidden space-y-3 p-3">
-                {filteredCategories.map((category) => (
-                  <Card key={category.id} className="p-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <h3 className="font-medium truncate">{category.name}</h3>
-                          <Badge variant="secondary" className="text-xs flex-shrink-0">
-                            {category._count.equipments}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground mb-2">/{category.slug}</p>
-                        {category.description && (
-                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
-                            {category.description}
-                          </p>
-                        )}
-                        <Badge
-                          variant="outline"
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[250px]">Nome</TableHead>
+                  <TableHead className="hidden md:table-cell">Descrição</TableHead>
+                  <TableHead className="w-[150px] text-center hidden sm:table-cell">Equipamentos</TableHead>
+                  <TableHead className="w-[150px] text-right">Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {categories.map((category) => (
+                  <TableRow key={category.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-2.5">
+                        <span
+                          className="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-medium"
                           style={{
-                            backgroundColor: category.bgColor || undefined,
-                            color: category.fontColor || undefined,
-                            borderColor: category.bgColor ? "transparent" : undefined,
+                            backgroundColor: category.bgColor || "#e0e0e0",
+                            color: category.fontColor || "#000000",
                           }}
-                          className="text-xs"
                         >
-                          {category.icon && LucideIcons[category.icon as keyof typeof LucideIcons] && (
-                            <span className="mr-1">
-                              {React.createElement(LucideIcons[category.icon as keyof typeof LucideIcons], {
-                                size: 12,
-                                color: category.iconColor || category.fontColor || "currentColor",
-                              })}
-                            </span>
-                          )}
+                          {category.icon &&
+                            LucideIcons[category.icon] &&
+                            createElement(LucideIcons[category.icon], {
+                              size: 14,
+                              color: category.iconColor || category.fontColor,
+                              className: "mr-1.5",
+                            })}
                           {category.name}
-                        </Badge>
+                        </span>
                       </div>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 flex-shrink-0">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Ações para {category.name}</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => openEditDialog(category)}>
-                            <Edit className="h-4 w-4 mr-2" />
-                            Editar
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleDelete(category.id)}
-                            className="text-red-600 hover:!text-red-500 focus:!text-red-500"
-                          >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Excluir
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </Card>
+                    </TableCell>
+                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
+                      {category.description
+                        ? category.description.length > 60
+                          ? category.description.substring(0, 60) + "..."
+                          : category.description
+                        : "-"}
+                    </TableCell>
+                    <TableCell className="text-center hidden sm:table-cell">
+                      {category._count?.equipments || 0}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openEditDialog(category)}
+                          aria-label="Editar"
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => deleteCategory(category.id)}
+                          className="text-red-500 hover:text-red-600"
+                          disabled={(category._count?.equipments || 0) > 0 || isSubmitting}
+                          aria-label="Excluir"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </div>
-            </>
+              </TableBody>
+            </Table>
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
+        <DialogContent className="max-w-lg w-[90vw]">
+          <DialogHeader>
+            <DialogTitle>{editingCategory ? "Editar Categoria" : "Nova Categoria"}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-6 py-4">
+            <div>
+              <Label htmlFor="cat-name">Nome da Categoria *</Label>
+              <Input
+                id="cat-name"
+                required
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Ex: Andaimes e Escadas"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="cat-description">Descrição</Label>
+              <Textarea
+                id="cat-description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder="Breve descrição da categoria"
+                rows={3}
+                className="mt-1"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label>Ícone</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsIconPickerOpen(true)}
+                  className="w-full mt-1 flex items-center justify-start text-left"
+                >
+                  {renderIcon(formData.icon, formData.iconColor)}
+                  {formData.icon ? formData.icon : "Selecionar Ícone"}
+                </Button>
+              </div>
+              <div>
+                <Label htmlFor="cat-iconColor">Cor do Ícone</Label>
+                <Input
+                  id="cat-iconColor"
+                  type="color"
+                  value={formData.iconColor}
+                  onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
+                  className="mt-1 w-full h-10 p-1"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="cat-bgColor">Cor de Fundo do Rótulo</Label>
+                <Input
+                  id="cat-bgColor"
+                  type="color"
+                  value={formData.bgColor}
+                  onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
+                  className="mt-1 w-full h-10 p-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="cat-fontColor">Cor da Fonte do Rótulo</Label>
+                <Input
+                  id="cat-fontColor"
+                  type="color"
+                  value={formData.fontColor}
+                  onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
+                  className="mt-1 w-full h-10 p-1"
+                />
+              </div>
+            </div>
+
+            <DialogFooter className="pt-4">
+              <Button type="button" variant="outline" onClick={() => setIsFormDialogOpen(false)}>
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4" />}
+                {editingCategory ? "Atualizar Categoria" : "Criar Categoria"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <IconPicker
+        isOpen={isIconPickerOpen}
+        onClose={() => setIsIconPickerOpen(false)}
+        onSelect={handleIconSelect}
+        value={formData.icon}
+        color={formData.iconColor}
+      />
     </div>
   )
 }

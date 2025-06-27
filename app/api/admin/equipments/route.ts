@@ -43,63 +43,32 @@ export async function GET(request: NextRequest) {
 
     console.log("[API GET /admin/equipments] Filtros aplicados:", JSON.stringify(where, null, 2))
 
-    // Teste de conexão com o banco - com timeout
+    // Teste de conexão com o banco
     console.log("[API GET /admin/equipments] Testando conexão com banco...")
+    await prisma.$connect()
+    console.log("[API GET /admin/equipments] Conexão estabelecida!")
 
-    // Primeiro, vamos tentar uma query simples para testar a conexão
-    try {
-      await prisma.$queryRaw`SELECT 1 as test`
-      console.log("[API GET /admin/equipments] Conexão com banco OK!")
-    } catch (dbError) {
-      console.error("[API GET /admin/equipments] Erro de conexão com banco:", dbError)
-      return NextResponse.json(
-        {
-          error: "Erro de conexão com o banco de dados.",
-          details: process.env.NODE_ENV === "development" ? String(dbError) : "Verifique a configuração do banco.",
-        },
-        { status: 503 },
-      )
-    }
-
-    // Buscar equipamentos com timeout
-    const equipments = (await Promise.race([
-      prisma.equipment.findMany({
-        where,
-        skip,
-        take: limit,
-        include: {
-          category: {
-            select: {
-              id: true,
-              name: true,
-              icon: true,
-              iconColor: true,
-              bgColor: true,
-              fontColor: true,
-            },
-          },
-          _count: {
-            select: {
-              reviews: true,
-              quoteItems: true,
-            },
+    const equipments = await prisma.equipment.findMany({
+      where,
+      skip,
+      take: limit,
+      include: {
+        category: true,
+        _count: {
+          select: {
+            reviews: true,
+            quoteItems: true,
           },
         },
-        orderBy: {
-          createdAt: "desc",
-        },
-      }),
-      new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout na consulta")), 10000)),
-    ])) as any[]
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    })
 
     console.log(`[API GET /admin/equipments] Equipamentos encontrados: ${equipments.length}`)
 
-    // Contar total com timeout
-    const totalItems = (await Promise.race([
-      prisma.equipment.count({ where }),
-      new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout na contagem")), 5000)),
-    ])) as number
-
+    const totalItems = await prisma.equipment.count({ where })
     const totalPages = Math.ceil(totalItems / limit)
 
     console.log(`[API GET /admin/equipments] Total de itens: ${totalItems}, Total de páginas: ${totalPages}`)
@@ -127,46 +96,16 @@ export async function GET(request: NextRequest) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.error("[API GET /admin/equipments] Erro do Prisma - Código:", error.code)
       console.error("[API GET /admin/equipments] Erro do Prisma - Meta:", error.meta)
-
-      // Tratar erros específicos do Prisma
-      if (error.code === "P2002") {
-        return NextResponse.json({ error: "Conflito de dados únicos." }, { status: 409 })
-      }
-      if (error.code === "P2025") {
-        return NextResponse.json({ error: "Registro não encontrado." }, { status: 404 })
-      }
-    }
-
-    // Se for erro de timeout
-    if (error instanceof Error && error.message.includes("Timeout")) {
-      return NextResponse.json(
-        {
-          error: "Timeout na consulta ao banco de dados.",
-          details: "A consulta demorou muito para responder. Tente novamente.",
-        },
-        { status: 504 },
-      )
     }
 
     return NextResponse.json(
       {
         error: "Erro interno do servidor ao buscar equipamentos.",
         details:
-          process.env.NODE_ENV === "development"
-            ? error instanceof Error
-              ? error.message
-              : String(error)
-            : "Erro interno do servidor.",
+          process.env.NODE_ENV === "development" ? (error instanceof Error ? error.message : String(error)) : undefined,
       },
       { status: 500 },
     )
-  } finally {
-    // Garantir que a conexão seja fechada
-    try {
-      await prisma.$disconnect()
-    } catch (disconnectError) {
-      console.error("[API GET /admin/equipments] Erro ao desconectar:", disconnectError)
-    }
   }
 }
 
@@ -251,11 +190,5 @@ export async function POST(request: NextRequest) {
       },
       { status: 500 },
     )
-  } finally {
-    try {
-      await prisma.$disconnect()
-    } catch (disconnectError) {
-      console.error("[API POST /admin/equipments] Erro ao desconectar:", disconnectError)
-    }
   }
 }

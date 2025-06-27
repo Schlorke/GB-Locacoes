@@ -65,11 +65,13 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 
   // Render admin layout for authenticated users
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
       <AdminSidebar />
       <div className="flex flex-1 flex-col overflow-hidden">
         <AdminHeader />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto bg-gray-50">
+          <div className="h-full">{children}</div>
+        </main>
       </div>
     </div>
   )
