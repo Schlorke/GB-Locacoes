@@ -165,7 +165,11 @@ export default function AdminCategoriesPage() {
 
   const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
     if (!iconName || !LucideIcons[iconName]) return <Info className="h-5 w-5 text-gray-400" />
-    return createElement(LucideIcons[iconName], { size: 20, color: color || formData.iconColor, className: "mr-2" })
+    return createElement(LucideIcons[iconName] as React.ElementType, {
+      size: 20,
+      color: color || formData.iconColor,
+      className: "mr-2",
+    })
   }
 
   if (isLoading && categories.length === 0) {
@@ -235,7 +239,7 @@ export default function AdminCategoriesPage() {
                         >
                           {category.icon &&
                             LucideIcons[category.icon] &&
-                            createElement(LucideIcons[category.icon], {
+                            createElement(LucideIcons[category.icon] as React.ElementType, {
                               size: 14,
                               color: category.iconColor || category.fontColor,
                               className: "mr-1.5",
