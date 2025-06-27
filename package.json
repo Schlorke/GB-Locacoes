@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": {
+ "scripts": {
     "build": "next build",
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'",
+    "test:db": "set NODE_OPTIONS=--loader ts-node/esm && ts-node --project tsconfig.scripts.json scripts/test-db-connection.ts",
+    "test:db:codex": "node scripts/test-db-connection.cjs",
+    "test:db:vercel": "node scripts/test-db-vercel.cjs",
+    "show:roles": "node --loader ts-node/esm scripts/show-roles.ts --project tsconfig.scripts.json"
   },
   "dependencies": {
     "@auth/core": "latest",
