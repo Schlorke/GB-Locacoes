@@ -61,7 +61,7 @@ export async function GET() {
         pricePerDay: equipment.pricePerDay,
         imageUrl: primaryImage, // Campo principal para imagem
         images: equipment.images && equipment.images.length > 0 ? equipment.images : primaryImage ? [primaryImage] : [],
-        isAvailable: equipment.isAvailable,
+        isAvailable: (equipment as any).available ?? (equipment as any).isAvailable,
         category: {
           id: equipment.category.id,
           name: equipment.category.name,
