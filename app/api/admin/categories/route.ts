@@ -47,7 +47,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body = await request.json()
+    let body
+    try {
+      body = await request.json()
+    } catch {
+      return NextResponse.json(
+        { error: "JSON inválido" },
+        { status: 400 },
+      )
+    }
     const { name, description, icon, iconColor, bgColor, fontColor } = body
 
     if (!name) {
@@ -65,7 +73,7 @@ export async function POST(request: NextRequest) {
     })
 
     if (existingCategory) {
-      return NextResponse.json({ error: "Categoria já existente" }, { status: 400 })
+      return NextResponse.json({ error: "Categoria já existente" }, { status: 409 })
     }
 
     const category = await prisma.category.create({
@@ -73,9 +81,9 @@ export async function POST(request: NextRequest) {
         name: name.trim(),
         description: description?.trim() || null,
         icon: icon?.trim() || null,
-        iconColor: iconColor?.trim() || "#000000",
-        bgColor: bgColor?.trim() || "#e0e0e0",
-        fontColor: fontColor?.trim() || "#000000",
+        iconColor: iconColor?.trim() || "#3B82F6",
+        bgColor: bgColor?.trim() || "#EFF6FF",
+        fontColor: fontColor?.trim() || "#1E40AF",
         slug,
       },
     })
@@ -90,6 +98,12 @@ export async function POST(request: NextRequest) {
         error.code,
         error.message,
       )
+      if (error.code === "P2002") {
+        return NextResponse.json(
+          { error: "Categoria já existente" },
+          { status: 409 },
+        )
+      }
       return NextResponse.json(
         { error: "Erro ao processar dados da categoria." },
         { status: 400 },
