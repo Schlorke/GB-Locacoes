@@ -1,7 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma"
 
-const prisma = new PrismaClient()
+function slugify(text: string) {
+  return text
+    .normalize("NFKD")
+    .replace(/[^\w\s-]/g, "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/--+/g, "-")
+    .replace(/^-+|-+$/g, "")
+}
 
 // GET /api/admin/categories - List all categories
 export async function GET() {
@@ -15,7 +24,7 @@ export async function GET() {
         },
       },
       orderBy: {
-        name: "asc",
+        createdAt: "desc",
       },
     })
 
@@ -36,23 +45,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Nome da categoria é obrigatório" }, { status: 400 })
     }
 
-    // Verificar se já existe categoria com esse nome
-    const existingCategory = await prisma.category.findUnique({
-      where: { name },
+    const slug = slugify(name)
+
+    const existingCategory = await prisma.category.findFirst({
+      where: {
+        OR: [{ name }, { slug }],
+      },
     })
 
     if (existingCategory) {
-      return NextResponse.json({ error: "Já existe uma categoria com esse nome" }, { status: 400 })
+      return NextResponse.json({ error: "Categoria já existente" }, { status: 400 })
     }
 
     const category = await prisma.category.create({
       data: {
-        name,
-        description: description || null,
-        icon: icon || null,
-        iconColor: iconColor || "#000000",
-        bgColor: bgColor || "#e0e0e0",
-        fontColor: fontColor || "#000000",
+        name: name.trim(),
+        description: description?.trim() || null,
+        icon: icon?.trim() || null,
+        iconColor: iconColor?.trim() || "#000000",
+        bgColor: bgColor?.trim() || "#e0e0e0",
+        fontColor: fontColor?.trim() || "#000000",
+        slug,
       },
     })
 
