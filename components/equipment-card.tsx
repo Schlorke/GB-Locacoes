@@ -16,7 +16,7 @@ interface Equipment {
   category: {
     name: string
   }
-  isAvailable: boolean
+  available: boolean
 }
 
 interface EquipmentCardProps {
@@ -43,8 +43,8 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
           <Badge variant="secondary" className="text-xs">
             {equipment.category.name}
           </Badge>
-          <Badge variant={equipment.isAvailable ? "default" : "destructive"} className="text-xs">
-            {equipment.isAvailable ? "Disponível" : "Indisponível"}
+          <Badge variant={equipment.available ? "default" : "destructive"} className="text-xs">
+            {equipment.available ? "Disponível" : "Indisponível"}
           </Badge>
         </div>
 
@@ -78,7 +78,7 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
               setTimeout(() => window.scrollTo(0, 0), 100)
             }}
           >
-            <Button className="w-full" size="sm" disabled={!equipment.isAvailable}>
+            <Button className="w-full" size="sm" disabled={!equipment.available}>
               Solicitar Orçamento
             </Button>
           </Link>
