@@ -23,7 +23,7 @@ interface Equipment {
   name: string
   description: string
   pricePerDay: number
-  isAvailable: boolean
+  available: boolean
   images: string[]
   category: {
     id: string
@@ -34,7 +34,7 @@ interface Equipment {
     fontColor?: string | null
   }
   _count: {
-    reviews: number
+    // TODO: implementar reviews
     quoteItems: number
   }
   createdAt: string
@@ -83,7 +83,7 @@ export default function EquipmentsPage() {
       params.append("limit", itemsPerPage.toString())
       if (search) params.append("search", search)
       if (selectedCategory && selectedCategory !== "all") params.append("categoryId", selectedCategory)
-      if (availabilityFilter && availabilityFilter !== "all") params.append("isAvailable", availabilityFilter)
+      if (availabilityFilter && availabilityFilter !== "all") params.append("available", availabilityFilter)
 
       console.log(`[EquipmentsPage] Fetching: /api/admin/equipments?${params.toString()}`)
       const response = await fetch(`/api/admin/equipments?${params.toString()}`)
@@ -359,26 +359,29 @@ export default function EquipmentsPage() {
                       >
                         {equipment.category.icon &&
                           LucideIcons[equipment.category.icon as keyof typeof LucideIcons] &&
-                          React.createElement(LucideIcons[equipment.category.icon as keyof typeof LucideIcons], {
-                            size: 12,
-                            color: equipment.category.iconColor || equipment.category.fontColor || "currentColor",
-                            className: "mr-1 inline-block",
-                          })}
+                          React.createElement(
+                            LucideIcons[equipment.category.icon as keyof typeof LucideIcons] as React.ElementType,
+                            {
+                              size: 12,
+                              color: equipment.category.iconColor || equipment.category.fontColor || "currentColor",
+                              className: "mr-1 inline-block",
+                            },
+                          )}
                         {equipment.category.name}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-sm">R$ {equipment.pricePerDay.toFixed(2)}</TableCell>
                     <TableCell>
                       <Badge
-                        variant={equipment.isAvailable ? "default" : "destructive"}
+                        variant={equipment.available ? "default" : "destructive"}
                         className={cn(
                           "text-xs",
-                          equipment.isAvailable
+                          equipment.available
                             ? "bg-green-100 text-green-700 border-green-300 dark:bg-green-700 dark:text-green-100 dark:border-green-500"
                             : "bg-red-100 text-red-700 border-red-300 dark:bg-red-700 dark:text-red-100 dark:border-red-500",
                         )}
                       >
-                        {equipment.isAvailable ? "Disponível" : "Indisponível"}
+                        {equipment.available ? "Disponível" : "Indisponível"}
                       </Badge>
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-center text-sm">

@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         category: true,
         _count: {
           select: {
-            reviews: true,
+            // TODO: implementar reviews
             quoteItems: true,
           },
         },
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
     console.log("[API POST /admin/equipments] Iniciando criação de equipamento...")
 
     const body = await request.json()
-    const { name, description, pricePerDay, categoryId, images, available, specifications } = body
+    const { name, description, pricePerDay, categoryId, images, available /*, specifications*/ } = body
 
     console.log("[API POST /admin/equipments] Dados recebidos:", {
       name,
@@ -159,7 +159,7 @@ export async function POST(request: NextRequest) {
         categoryId,
         images: Array.isArray(images) ? images.filter((img) => typeof img === "string" && img.trim() !== "") : [],
         available: typeof available === "boolean" ? available : true,
-        specifications: specifications && typeof specifications === "object" ? specifications : Prisma.JsonNull,
+        // TODO: implementar specifications
       },
       include: {
         category: true,
