@@ -1,3 +1,5 @@
+'use server'
+
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
@@ -7,8 +9,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import bcrypt from "bcryptjs"
-
-'use server'
 
 async function updateUser(formData: FormData) {
   const session = await getServerSession(authOptions)
@@ -20,7 +20,7 @@ async function updateUser(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
 
-  const data: any = { name, email }
+  const data: { name: string; email: string; password?: string } = { name, email }
   if (password) {
     const hashed = await bcrypt.hash(password, 10)
     data.password = hashed

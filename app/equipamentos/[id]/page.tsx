@@ -32,10 +32,7 @@ export default async function EquipmentDetailPage({ params }: Props) {
     where: { id: params.id },
     include: {
       category: true,
-      reviews: {
-        orderBy: { createdAt: "desc" },
-        take: 5,
-      },
+      // TODO: implementar reviews
     },
   })
 
