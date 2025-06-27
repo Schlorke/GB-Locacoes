@@ -1,8 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
 import ClientLayout from "./ClientLayout"
+import "./globals.css"
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://gblocacoes.com.br"),
   title: {
     default: "GB Locações - Especializada em Locação de Equipamentos para Construção Civil",
     template: "%s | GB Locações",
@@ -69,6 +71,3 @@ export default function RootLayout({
 }) {
   return <ClientLayout>{children}</ClientLayout>
 }
-
-
-import './globals.css'
