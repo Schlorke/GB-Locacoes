@@ -34,8 +34,8 @@ export async function GET() {
             id: "mock-cat-1",
             name: "Equipamentos",
           },
-          reviews: [],
-        },
+          // TODO: implementar reviews
+      },
       ]
       return NextResponse.json(mockEquipments)
     }
@@ -66,7 +66,7 @@ export async function GET() {
           id: equipment.category.id,
           name: equipment.category.name,
         },
-        reviews: [],
+        // TODO: implementar reviews
       }
 
       console.log(`Equipamento formatado:`, {
@@ -96,7 +96,7 @@ export async function GET() {
           id: "fallback-cat-1",
           name: "Equipamentos",
         },
-        reviews: [],
+        // TODO: implementar reviews
       },
     ]
 

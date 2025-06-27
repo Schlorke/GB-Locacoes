@@ -59,7 +59,7 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             name: user.name,
             role: user.role,
-          } as any
+          }
         } catch (error) {
           console.error("💥 [AUTH] Erro:", error)
           return null
