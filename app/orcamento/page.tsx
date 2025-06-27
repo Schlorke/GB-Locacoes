@@ -25,7 +25,7 @@ interface Equipment {
   category: {
     name: string
   }
-  isAvailable: boolean
+  available: boolean
 }
 
 interface SelectedEquipment extends Equipment {
@@ -66,8 +66,8 @@ function QuotePage() {
     try {
       const response = await fetch(`/api/equipments`)
       const data = await response.json()
-      const equipments = Array.isArray(data) ? data : []
-      const equipment = equipments.find((eq: any) => eq.id === equipmentId)
+      const equipments: Equipment[] = Array.isArray(data) ? data : []
+      const equipment = equipments.find((eq) => eq.id === equipmentId)
 
       if (equipment) {
         const price = Number(equipment.pricePerDay) || 0
