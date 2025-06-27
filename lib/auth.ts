@@ -51,10 +51,6 @@ export const authOptions: NextAuthOptions = {
             return null
           }
 
-          if (user.role === UserRole.CUSTOMER) {
-            console.log("❌ [AUTH] Role não autorizada:", user.role)
-            return null
-          }
 
           console.log("✅ [AUTH] Autenticação bem-sucedida")
 
