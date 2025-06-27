@@ -46,6 +46,7 @@
     "@radix-ui/react-tooltip": "latest",
     "@types/debug": "latest",
     "@vercel/blob": "latest",
+    "@vercel/speed-insights": "^1.2.0",
     "@vitest/browser": "latest",
     "@vitest/ui": "latest",
     "autoprefixer": "^10.4.20",

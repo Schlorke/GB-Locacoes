@@ -1,5 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
+import { SpeedInsights } from "@vercel/speed-insights/next" // ✅ Importado aqui
 import ClientLayout from "./ClientLayout"
 import "./globals.css"
 
@@ -69,5 +70,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <ClientLayout>{children}</ClientLayout>
+  return (
+    <ClientLayout>
+      {children}
+      <SpeedInsights /> {/* ✅ Aqui dentro do ClientLayout, depois dos children */}
+    </ClientLayout>
+  )
 }
