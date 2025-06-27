@@ -12,9 +12,9 @@ export async function GET(request: NextRequest) {
     const limit = Number.parseInt(searchParams.get("limit") || "10")
     const search = searchParams.get("search")
     const categoryId = searchParams.get("categoryId")
-    const availableParam = searchParams.get("available")
+    const isAvailableParam = searchParams.get("isAvailable")
 
-    console.log("[API GET /admin/equipments] Parâmetros:", { page, limit, search, categoryId, availableParam })
+    console.log("[API GET /admin/equipments] Parâmetros:", { page, limit, search, categoryId, isAvailableParam })
 
     if (isNaN(page) || page < 1) {
       return NextResponse.json({ error: "Parâmetro 'page' inválido." }, { status: 400 })
@@ -37,8 +37,8 @@ export async function GET(request: NextRequest) {
       where.categoryId = categoryId
     }
 
-    if (availableParam !== null && availableParam !== undefined && availableParam !== "all") {
-      where.available = availableParam === "true"
+    if (isAvailableParam !== null && isAvailableParam !== undefined && isAvailableParam !== "all") {
+      where.isAvailable = isAvailableParam === "true"
     }
 
     console.log("[API GET /admin/equipments] Filtros aplicados:", JSON.stringify(where, null, 2))
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
         category: true,
         _count: {
           select: {
-            // TODO: implementar reviews
+            reviews: true,
             quoteItems: true,
           },
         },
@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
     console.log("[API POST /admin/equipments] Iniciando criação de equipamento...")
 
     const body = await request.json()
-    const { name, description, pricePerDay, categoryId, images, available /*, specifications*/ } = body
+    const { name, description, pricePerDay, categoryId, images, isAvailable, specifications } = body
 
     console.log("[API POST /admin/equipments] Dados recebidos:", {
       name,
@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
       pricePerDay,
       categoryId,
       images,
-      available,
+      isAvailable,
     })
 
     // Validações
@@ -158,8 +158,8 @@ export async function POST(request: NextRequest) {
         pricePerDay: parsedPrice,
         categoryId,
         images: Array.isArray(images) ? images.filter((img) => typeof img === "string" && img.trim() !== "") : [],
-        available: typeof available === "boolean" ? available : true,
-        // TODO: implementar specifications
+        isAvailable: typeof isAvailable === "boolean" ? isAvailable : true,
+        specifications: specifications && typeof specifications === "object" ? specifications : Prisma.JsonNull,
       },
       include: {
         category: true,

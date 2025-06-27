@@ -27,7 +27,7 @@ interface FormData {
   pricePerDay: number
   categoryId: string
   images: string[]
-  available: boolean
+  isAvailable: boolean
   specifications?: Record<string, string>
 }
 
@@ -41,7 +41,7 @@ export default function NovoEquipamento() {
     pricePerDay: 0,
     categoryId: "",
     images: [],
-    available: true,
+    isAvailable: true,
     specifications: {},
   })
   const [specKey, setSpecKey] = useState("")
@@ -222,13 +222,11 @@ export default function NovoEquipamento() {
               </div>
               <div className="flex items-center space-x-3 pt-6">
                 <Switch
-                  id="available"
-                  checked={formData.available}
-                  onCheckedChange={(checked) =>
-                    setFormData((prev) => ({ ...prev, available: checked }))
-                  }
+                  id="isAvailable"
+                  checked={formData.isAvailable}
+                  onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isAvailable: checked }))}
                 />
-                <Label htmlFor="available" className="cursor-pointer">
+                <Label htmlFor="isAvailable" className="cursor-pointer">
                   Equipamento disponível para locação
                 </Label>
               </div>

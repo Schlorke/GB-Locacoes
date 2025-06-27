@@ -25,7 +25,7 @@ interface Equipment {
   category: {
     name: string
   }
-  available: boolean
+  isAvailable: boolean
 }
 
 interface SelectedEquipment extends Equipment {
@@ -66,10 +66,10 @@ function QuotePage() {
     try {
       const response = await fetch(`/api/equipments`)
       const data = await response.json()
-      const equipments: Equipment[] = Array.isArray(data) ? data : []
-      const equipment = equipments.find((eq) => eq.id === equipmentId)
+      const equipments = Array.isArray(data) ? data : []
+      const equipment = equipments.find((eq: any) => eq.id === equipmentId)
 
-      if (equipment) {
+      if (equipment && !selectedEquipments.find((eq) => eq.id === equipmentId)) {
         const price = Number(equipment.pricePerDay) || 0
         const equipmentToAdd = {
           ...equipment,
@@ -77,11 +77,7 @@ function QuotePage() {
           quantity: 1,
           days: 1,
         }
-        setSelectedEquipments((prev) =>
-          prev.find((eq) => eq.id === equipmentToAdd.id)
-            ? prev
-            : [...prev, equipmentToAdd]
-        )
+        setSelectedEquipments((prev) => [...prev, equipmentToAdd])
       }
     } catch (error) {
       console.error("Erro ao buscar equipamento:", error)

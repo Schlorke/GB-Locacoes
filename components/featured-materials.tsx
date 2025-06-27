@@ -18,7 +18,7 @@ interface Equipment {
     id: string
     name: string
   }
-  available: boolean
+  isAvailable: boolean
 }
 
 export default function FeaturedMaterials() {
@@ -91,7 +91,7 @@ export default function FeaturedMaterials() {
                   <div className="absolute top-4 left-4">
                     <Badge variant="secondary">{equipment.category.name}</Badge>
                   </div>
-                  {!equipment.available && (
+                  {!equipment.isAvailable && (
                     <div className="absolute top-4 right-4">
                       <Badge variant="destructive">Indisponível</Badge>
                     </div>
@@ -121,11 +121,11 @@ export default function FeaturedMaterials() {
                     </Button>
                     <Button
                       size="sm"
-                      disabled={!equipment.available}
-                      asChild={equipment.available}
+                      disabled={!equipment.isAvailable}
+                      asChild={equipment.isAvailable}
                       className="flex-1"
                     >
-                      {equipment.available ? (
+                      {equipment.isAvailable ? (
                         <Link href={`/orcamento?equipmentId=${equipment.id}`}>Solicitar</Link>
                       ) : (
                         <span>Indisponível</span>

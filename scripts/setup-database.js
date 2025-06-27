@@ -29,7 +29,7 @@ try {
   console.error("")
   console.error("🔧 Possíveis soluções:")
   console.error("1. Verifique se DATABASE_URL está configurado")
-  console.error("2. Verifique se o banco está acessível")
+  console.error("2. Verifique se o banco Neon está acessível")
   console.error("3. Verifique permissões do usuário no banco")
   process.exit(1)
 }

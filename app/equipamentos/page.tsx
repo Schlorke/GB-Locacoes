@@ -28,7 +28,7 @@ interface Equipment {
     name: string
     color?: string
   }
-  available: boolean
+  isAvailable: boolean
   reviews?: Review[]
 }
 
@@ -168,9 +168,11 @@ export default function EquipmentsPage() {
         {filteredEquipments.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredEquipments.map((equipment) => {
-              // TODO: implementar reviews
-              const averageRating: number = 0
-              const reviewCount: number = 0
+              const averageRating =
+                equipment.reviews && equipment.reviews.length > 0
+                  ? equipment.reviews.reduce((acc, review) => acc + review.rating, 0) / equipment.reviews.length
+                  : 0
+              const reviewCount = equipment.reviews ? equipment.reviews.length : 0
 
               return (
                 <Card key={equipment.id} className="flex flex-col h-full hover:shadow-lg transition-shadow">
@@ -184,7 +186,7 @@ export default function EquipmentsPage() {
                     <div className="absolute top-3 left-3">
                       <Badge variant="secondary">{equipment.category?.name || "Sem categoria"}</Badge>
                     </div>
-                    {!equipment.available && (
+                    {!equipment.isAvailable && (
                       <div className="absolute top-3 right-3">
                         <Badge variant="destructive">Indisponível</Badge>
                       </div>
@@ -230,11 +232,11 @@ export default function EquipmentsPage() {
                       </Button>
                       <Button
                         size="sm"
-                        disabled={!equipment.available}
-                        asChild={equipment.available}
+                        disabled={!equipment.isAvailable}
+                        asChild={equipment.isAvailable}
                         className="w-full"
                       >
-                        {equipment.available ? (
+                        {equipment.isAvailable ? (
                           <Link href={`/orcamento?equipmentId=${equipment.id}`}>Solicitar Orçamento</Link>
                         ) : (
                           <span>Indisponível</span>

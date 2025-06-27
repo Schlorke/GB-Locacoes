@@ -8,19 +8,13 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start",
-    "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'",
-    "test:db": "set NODE_OPTIONS=--loader ts-node/esm && ts-node --project tsconfig.scripts.json scripts/test-db-connection.ts",
-    "test:db:codex": "node scripts/test-db-connection.cjs",
-    "test:db:vercel": "node scripts/test-db-vercel.cjs",
-    "show:roles": "node --loader ts-node/esm scripts/show-roles.ts --project tsconfig.scripts.json"
-    
-
+    "start": "next start"
   },
   "dependencies": {
     "@auth/core": "latest",
     "@edge-runtime/vm": "latest",
     "@hookform/resolvers": "^3.9.1",
+    "@neondatabase/serverless": "latest",
     "@prisma/client": "latest",
     "@radix-ui/react-accordion": "latest",
     "@radix-ui/react-alert-dialog": "latest",
@@ -50,6 +44,8 @@
     "@radix-ui/react-toggle-group": "latest",
     "@radix-ui/react-tooltip": "latest",
     "@types/debug": "latest",
+    "@upstash/ratelimit": "latest",
+    "@upstash/redis": "latest",
     "@vercel/blob": "latest",
     "@vitest/browser": "latest",
     "@vitest/ui": "latest",
@@ -68,7 +64,7 @@
     "jsdom": "latest",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
-    "next-auth": "^4.24.11",
+    "next-auth": "latest",
     "next-themes": "latest",
     "nodemailer": "latest",
     "path": "latest",
@@ -87,13 +83,12 @@
     "zod": "latest"
   },
   "devDependencies": {
-    "@types/node": "^22.15.33",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8.5",
     "prisma": "^6.10.1",
     "tailwindcss": "^3.4.17",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5"
   }
 }

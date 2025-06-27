@@ -1,6 +1,6 @@
-import NextAuth, { type NextAuthOptions, type RequestInternal } from "next-auth"
+import NextAuth, { type NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { Role } from "@prisma/client"
+import { UserRole } from "@prisma/client"
 import bcrypt from "bcryptjs"
 import { prisma } from "./prisma"
 
@@ -12,10 +12,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(
-        credentials: { email?: string; password?: string } | undefined,
-        req: Pick<RequestInternal, "body" | "query" | "headers" | "method">
-      ) {
+      async authorize(credentials) {
         console.log("🔐 [AUTH] Iniciando autenticação")
 
         if (!credentials?.email || !credentials.password) {
@@ -54,6 +51,10 @@ export const authOptions: NextAuthOptions = {
             return null
           }
 
+          if (user.role === UserRole.CUSTOMER) {
+            console.log("❌ [AUTH] Role não autorizada:", user.role)
+            return null
+          }
 
           console.log("✅ [AUTH] Autenticação bem-sucedida")
 
@@ -85,7 +86,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
-        session.user.role = token.role as Role
+        session.user.role = token.role as UserRole
       }
       return session
     },

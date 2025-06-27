@@ -29,13 +29,13 @@ export async function GET() {
           pricePerDay: 60,
           imageUrl: "/placeholder.svg?height=200&width=300&text=Betoneira",
           images: ["/placeholder.svg?height=200&width=300&text=Betoneira"],
-          available: true,
+          isAvailable: true,
           category: {
             id: "mock-cat-1",
             name: "Equipamentos",
           },
-          // TODO: implementar reviews
-      },
+          reviews: [],
+        },
       ]
       return NextResponse.json(mockEquipments)
     }
@@ -44,9 +44,13 @@ export async function GET() {
     const formattedEquipments = equipments.map((equipment) => {
       console.log(`Processando equipamento: ${equipment.name}`)
       console.log(`Imagens do banco:`, equipment.images)
-      // Priorizar primeira imagem do array
+      console.log(`ImageUrl do banco:`, equipment.imageUrl)
+
+      // Priorizar imageUrl se existir, senão usar primeira imagem do array
       let primaryImage = null
-      if (equipment.images && equipment.images.length > 0) {
+      if (equipment.imageUrl && equipment.imageUrl.trim() !== "") {
+        primaryImage = equipment.imageUrl
+      } else if (equipment.images && equipment.images.length > 0) {
         primaryImage = equipment.images[0]
       }
 
@@ -57,17 +61,18 @@ export async function GET() {
         pricePerDay: equipment.pricePerDay,
         imageUrl: primaryImage, // Campo principal para imagem
         images: equipment.images && equipment.images.length > 0 ? equipment.images : primaryImage ? [primaryImage] : [],
-        available: equipment.available,
+        isAvailable: equipment.isAvailable,
         category: {
           id: equipment.category.id,
           name: equipment.category.name,
         },
-        // TODO: implementar reviews
+        reviews: [],
       }
 
       console.log(`Equipamento formatado:`, {
         id: formattedEquipment.id,
         name: formattedEquipment.name,
+        imageUrl: formattedEquipment.imageUrl,
         images: formattedEquipment.images,
       })
 
@@ -86,12 +91,12 @@ export async function GET() {
         pricePerDay: 60,
         imageUrl: "/placeholder.svg?height=200&width=300&text=Betoneira",
         images: ["/placeholder.svg?height=200&width=300&text=Betoneira"],
-        available: true,
+        isAvailable: true,
         category: {
           id: "fallback-cat-1",
           name: "Equipamentos",
         },
-        // TODO: implementar reviews
+        reviews: [],
       },
     ]
 

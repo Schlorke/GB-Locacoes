@@ -82,7 +82,7 @@ export default function SetupDatabasePage() {
           </div>
           <div>
             <h1 className="text-4xl font-bold text-blue-800">Setup do Banco de Dados</h1>
-            <p className="text-xl text-blue-600 mt-2">Criar tabelas e configurar o banco Supabase</p>
+            <p className="text-xl text-blue-600 mt-2">Criar tabelas e configurar o banco Neon</p>
           </div>
         </div>
 
@@ -94,7 +94,7 @@ export default function SetupDatabasePage() {
               Configurar Banco de Dados
             </CardTitle>
             <CardDescription>
-              Este processo irá criar todas as tabelas necessárias no banco Supabase usando o Prisma.
+              Este processo irá criar todas as tabelas necessárias no banco Neon usando o Prisma.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -202,7 +202,7 @@ export default function SetupDatabasePage() {
                 </div>
                 <div>
                   <h4 className="font-medium text-slate-800 mb-1">Configurar Banco</h4>
-                  <p>Clique no botão acima para criar as tabelas no banco Supabase.</p>
+                  <p>Clique no botão acima para criar as tabelas no banco Neon.</p>
                 </div>
               </div>
               <div className="flex gap-4">

@@ -45,14 +45,10 @@ async function seedCategories() {
   ]
 
   for (const category of categories) {
-    const slug = category.name
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-]/g, "")
     await prisma.category.upsert({
-      where: { slug },
+      where: { name: category.name },
       update: {},
-      create: { ...category, slug },
+      create: category,
     })
   }
 

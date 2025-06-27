@@ -23,7 +23,7 @@ export async function GET() {
                 category: {
                   select: {
                     name: true,
-                    // TODO: adicionar cor da categoria se necessário
+                    color: true,
                   },
                 },
               },

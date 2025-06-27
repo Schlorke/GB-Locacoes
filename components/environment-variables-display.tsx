@@ -44,8 +44,7 @@ export default function EnvironmentVariablesDisplay() {
         const data = await response.json()
         setEnvData(data.data)
       } catch (e) {
-        const err = e as Error
-        setError(`Falha ao carregar variáveis de ambiente: ${err.message}`)
+        setError(`Falha ao carregar variáveis de ambiente: ${e.message}`)
       } finally {
         setIsLoading(false)
       }

@@ -26,7 +26,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                 category: {
                   select: {
                     name: true,
-                    // TODO: adicionar cor da categoria se necessário
+                    color: true,
                   },
                 },
               },

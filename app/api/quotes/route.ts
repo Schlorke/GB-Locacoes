@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { Prisma, QuoteStatus } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
 export async function POST(request: Request) {
@@ -10,10 +9,10 @@ export async function POST(request: Request) {
       customerEmail,
       customerPhone,
       customerCompany,
-      // projectAddress,
-      // startDate,
-      // endDate,
-      // deliveryType,
+      projectAddress,
+      startDate,
+      endDate,
+      deliveryType,
       message,
       items,
     } = body
@@ -36,33 +35,31 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: `Equipamento não encontrado: ${item.equipmentId}` }, { status: 400 })
       }
 
-      const itemTotal =
-        Number(equipment.pricePerDay) * item.quantity * (item.days || 1)
+      const itemTotal = equipment.pricePerDay * item.quantity * (item.days || 1)
       totalAmount += itemTotal
 
       quoteItems.push({
         equipmentId: item.equipmentId,
         quantity: item.quantity,
         days: item.days || 1,
-        pricePerDay: equipment.pricePerDay,
-        total: new Prisma.Decimal(itemTotal),
+        priceAtTime: equipment.pricePerDay,
       })
     }
 
     // Criar orçamento
     const quote = await prisma.quote.create({
       data: {
-        name: customerName,
-        email: customerEmail,
-        phone: customerPhone,
-        company: customerCompany,
-        // TODO: adicionar endereço do projeto quando houver campo no schema
-        // startDate: startDate ? new Date(startDate) : null,
-        // endDate: endDate ? new Date(endDate) : null,
-        // deliveryType,
+        customerName,
+        customerEmail,
+        customerPhone,
+        customerCompany,
+        projectAddress,
+        startDate: startDate ? new Date(startDate) : null,
+        endDate: endDate ? new Date(endDate) : null,
+        deliveryType,
         message,
-        total: new Prisma.Decimal(totalAmount),
-        status: QuoteStatus.PENDING,
+        totalAmount,
+        status: "pending",
         items: {
           create: quoteItems,
         },

@@ -7,7 +7,7 @@ export const CreateEquipmentSchema = z.object({
   pricePerDay: z.number().positive("Preço por dia deve ser positivo"),
   categoryId: z.string().cuid("ID da categoria inválido"),
   images: z.array(z.string().url("URL da imagem inválida")).optional().default([]),
-  available: z.boolean().optional().default(true),
+  isAvailable: z.boolean().optional().default(true),
 })
 
 export type CreateEquipmentInput = z.infer<typeof CreateEquipmentSchema>

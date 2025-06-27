@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       console.log("✅ [SEED-ADMIN] Conexão Prisma estabelecida")
     } catch (connectError) {
       console.error("❌ [SEED-ADMIN] Erro na conexão Prisma:", connectError)
-      throw new Error(`Falha na conexão: ${(connectError as Error).message}`)
+      throw new Error(`Falha na conexão: ${connectError.message}`)
     }
 
     // Test basic query
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       console.log("✅ [SEED-ADMIN] Query básica OK. Total de usuários:", userCount)
     } catch (queryError) {
       console.error("❌ [SEED-ADMIN] Erro na query básica:", queryError)
-      throw new Error(`Falha na query: ${(queryError as Error).message}`)
+      throw new Error(`Falha na query: ${queryError.message}`)
     }
 
     // Check if admin user already exists
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       console.log("✅ [SEED-ADMIN] Verificação de admin existente OK")
     } catch (findError) {
       console.error("❌ [SEED-ADMIN] Erro ao buscar admin existente:", findError)
-      throw new Error(`Falha ao verificar admin: ${(findError as Error).message}`)
+      throw new Error(`Falha ao verificar admin: ${findError.message}`)
     }
 
     if (existingAdmin) {
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
       console.log("✅ [SEED-ADMIN] Hash da senha gerado com sucesso")
     } catch (hashError) {
       console.error("❌ [SEED-ADMIN] Erro ao gerar hash:", hashError)
-      throw new Error(`Falha no hash: ${(hashError as Error).message}`)
+      throw new Error(`Falha no hash: ${hashError.message}`)
     }
 
     // Create admin user
@@ -103,14 +103,13 @@ export async function POST(request: NextRequest) {
       console.log("✅ [SEED-ADMIN] Admin criado com sucesso:", adminUser.id)
     } catch (createError) {
       console.error("❌ [SEED-ADMIN] Erro ao criar admin:", createError)
-      const err = createError as any
       console.error("❌ [SEED-ADMIN] Detalhes do erro:", {
-        name: err.name,
-        message: err.message,
-        code: err.code,
-        meta: err.meta,
+        name: createError.name,
+        message: createError.message,
+        code: createError.code,
+        meta: createError.meta,
       })
-      throw new Error(`Falha ao criar admin: ${err.message}`)
+      throw new Error(`Falha ao criar admin: ${createError.message}`)
     }
 
     console.log("🎉 [SEED-ADMIN] Processo concluído com sucesso!")
@@ -136,14 +135,13 @@ export async function POST(request: NextRequest) {
     )
   } catch (error) {
     console.error("💥 [SEED-ADMIN] ERRO GERAL:", error)
-    console.error("💥 [SEED-ADMIN] Stack trace:", (error as Error).stack)
+    console.error("💥 [SEED-ADMIN] Stack trace:", error.stack)
 
-    const err = error as any
     const errorDetails = {
-      name: err.name || "Unknown",
-      message: err.message || "Unknown error",
-      code: err.code || "NO_CODE",
-      stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
+      name: error?.name || "Unknown",
+      message: error?.message || "Unknown error",
+      code: error?.code || "NO_CODE",
+      stack: process.env.NODE_ENV === "development" ? error?.stack : undefined,
     }
 
     console.error("📋 [SEED-ADMIN] Detalhes completos do erro:", errorDetails)
@@ -151,7 +149,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         status: "error",
-        message: `Erro interno: ${(error as Error).message}`,
+        message: `Erro interno: ${error.message}`,
         error: "INTERNAL_SERVER_ERROR",
         details: errorDetails,
       },
@@ -185,7 +183,7 @@ export async function GET(request: NextRequest) {
         role: true,
         createdAt: true,
         emailVerified: true,
-        // lastLogin não existe no schema atual
+        lastLogin: true,
       },
     })
 
@@ -215,9 +213,9 @@ export async function GET(request: NextRequest) {
         message: "Erro ao verificar admin",
         error: "VERIFICATION_ERROR",
         details: {
-          name: error instanceof Error ? error.name : "Unknown",
-          message: error instanceof Error ? error.message : "Unknown error",
-          code: (error as any)?.code || "NO_CODE",
+          name: error?.name || "Unknown",
+          message: error?.message || "Unknown error",
+          code: error?.code || "NO_CODE",
         },
       },
       { status: 500 },

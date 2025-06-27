@@ -10,6 +10,6 @@
 //   ...(pricePerDay && { pricePerDay: parseFloat(pricePerDay) }),
 //   ...(categoryId && { categoryId }),
 //   ...(images && images.length > 0 && { images: { set: images } }), // Atualiza se houver imagens
-//   ...(available !== undefined && { available }),
+//   ...(isAvailable !== undefined && { isAvailable }),
 // },
 // ... (restante do código PUT)
