@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const limit = Number.parseInt(searchParams.get("limit") || "10")
     const search = searchParams.get("search")
     const categoryId = searchParams.get("categoryId")
-    const isAvailableParam = searchParams.get("isAvailable")
+  const isAvailableParam = searchParams.get("isAvailable")
 
     console.log("[API GET /admin/equipments] Parâmetros:", { page, limit, search, categoryId, isAvailableParam })
 
@@ -37,9 +37,9 @@ export async function GET(request: NextRequest) {
       where.categoryId = categoryId
     }
 
-    if (isAvailableParam !== null && isAvailableParam !== undefined && isAvailableParam !== "all") {
-      where.isAvailable = isAvailableParam === "true"
-    }
+  if (isAvailableParam !== null && isAvailableParam !== undefined && isAvailableParam !== "all") {
+    where.available = isAvailableParam === "true"
+  }
 
     console.log("[API GET /admin/equipments] Filtros aplicados:", JSON.stringify(where, null, 2))
 
@@ -68,13 +68,18 @@ export async function GET(request: NextRequest) {
 
     console.log(`[API GET /admin/equipments] Equipamentos encontrados: ${equipments.length}`)
 
+    const equipmentsFormatted = equipments.map((equip) => ({
+      ...equip,
+      isAvailable: equip.available,
+    }))
+
     const totalItems = await prisma.equipment.count({ where })
     const totalPages = Math.ceil(totalItems / limit)
 
     console.log(`[API GET /admin/equipments] Total de itens: ${totalItems}, Total de páginas: ${totalPages}`)
 
     const response = {
-      equipments,
+      equipments: equipmentsFormatted,
       pagination: {
         page,
         limit,
@@ -158,7 +163,7 @@ export async function POST(request: NextRequest) {
         pricePerDay: parsedPrice,
         categoryId,
         images: Array.isArray(images) ? images.filter((img) => typeof img === "string" && img.trim() !== "") : [],
-        isAvailable: typeof isAvailable === "boolean" ? isAvailable : true,
+        available: typeof isAvailable === "boolean" ? isAvailable : true,
         specifications: specifications && typeof specifications === "object" ? specifications : Prisma.JsonNull,
       },
       include: {
@@ -167,7 +172,7 @@ export async function POST(request: NextRequest) {
     })
 
     console.log("[API POST /admin/equipments] Equipamento criado com sucesso:", equipment.id)
-    return NextResponse.json(equipment, { status: 201 })
+    return NextResponse.json({ ...equipment, isAvailable: equipment.available }, { status: 201 })
   } catch (error) {
     console.error("[API POST /admin/equipments] ERRO ao criar equipamento:", error)
 
