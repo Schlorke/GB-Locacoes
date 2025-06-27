@@ -34,7 +34,7 @@ interface Equipment {
     fontColor?: string | null
   }
   _count: {
-    reviews: number
+    // TODO: implementar reviews
     quoteItems: number
   }
   createdAt: string
@@ -359,11 +359,14 @@ export default function EquipmentsPage() {
                       >
                         {equipment.category.icon &&
                           LucideIcons[equipment.category.icon as keyof typeof LucideIcons] &&
-                          React.createElement(LucideIcons[equipment.category.icon as keyof typeof LucideIcons], {
-                            size: 12,
-                            color: equipment.category.iconColor || equipment.category.fontColor || "currentColor",
-                            className: "mr-1 inline-block",
-                          })}
+                          React.createElement(
+                            LucideIcons[equipment.category.icon as keyof typeof LucideIcons] as React.ElementType,
+                            {
+                              size: 12,
+                              color: equipment.category.iconColor || equipment.category.fontColor || "currentColor",
+                              className: "mr-1 inline-block",
+                            },
+                          )}
                         {equipment.category.name}
                       </Badge>
                     </TableCell>

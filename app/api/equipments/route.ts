@@ -44,13 +44,9 @@ export async function GET() {
     const formattedEquipments = equipments.map((equipment) => {
       console.log(`Processando equipamento: ${equipment.name}`)
       console.log(`Imagens do banco:`, equipment.images)
-      console.log(`ImageUrl do banco:`, equipment.imageUrl)
-
-      // Priorizar imageUrl se existir, senão usar primeira imagem do array
+      // Priorizar primeira imagem do array
       let primaryImage = null
-      if (equipment.imageUrl && equipment.imageUrl.trim() !== "") {
-        primaryImage = equipment.imageUrl
-      } else if (equipment.images && equipment.images.length > 0) {
+      if (equipment.images && equipment.images.length > 0) {
         primaryImage = equipment.images[0]
       }
 
@@ -72,7 +68,6 @@ export async function GET() {
       console.log(`Equipamento formatado:`, {
         id: formattedEquipment.id,
         name: formattedEquipment.name,
-        imageUrl: formattedEquipment.imageUrl,
         images: formattedEquipment.images,
       })
 
