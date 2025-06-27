@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { Prisma } from "@prisma/client"
 import { prisma } from "@/lib/prisma"
 
 function slugify(text: string) {
@@ -38,6 +39,14 @@ export async function GET() {
 // POST /api/admin/categories - Create new category
 export async function POST(request: NextRequest) {
   try {
+    if (!process.env.DATABASE_URL) {
+      console.error("[API POST /admin/categories] DATABASE_URL não definido")
+      return NextResponse.json(
+        { error: "Configuração do banco de dados ausente." },
+        { status: 500 },
+      )
+    }
+
     const body = await request.json()
     const { name, description, icon, iconColor, bgColor, fontColor } = body
 
@@ -46,6 +55,8 @@ export async function POST(request: NextRequest) {
     }
 
     const slug = slugify(name)
+
+    await prisma.$connect()
 
     const existingCategory = await prisma.category.findFirst({
       where: {
@@ -72,6 +83,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(category, { status: 201 })
   } catch (error) {
     console.error("Error creating category:", error)
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.error(
+        "[API POST /admin/categories] Prisma error:",
+        error.code,
+        error.message,
+      )
+      return NextResponse.json(
+        { error: "Erro ao processar dados da categoria." },
+        { status: 400 },
+      )
+    }
+
     return NextResponse.json({ error: "Erro ao criar categoria" }, { status: 500 })
   }
 }
