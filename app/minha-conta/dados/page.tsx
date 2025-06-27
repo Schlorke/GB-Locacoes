@@ -8,12 +8,14 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import bcrypt from "bcryptjs"
 
+'use server'
+
 async function updateUser(formData: FormData) {
-  'use server'
   const session = await getServerSession(authOptions)
   if (!session) {
     redirect('/login')
   }
+
   const name = formData.get('name') as string
   const email = formData.get('email') as string
   const password = formData.get('password') as string
