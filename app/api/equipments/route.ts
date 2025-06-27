@@ -29,7 +29,7 @@ export async function GET() {
           pricePerDay: 60,
           imageUrl: "/placeholder.svg?height=200&width=300&text=Betoneira",
           images: ["/placeholder.svg?height=200&width=300&text=Betoneira"],
-          isAvailable: true,
+          available: true,
           category: {
             id: "mock-cat-1",
             name: "Equipamentos",
@@ -61,7 +61,7 @@ export async function GET() {
         pricePerDay: equipment.pricePerDay,
         imageUrl: primaryImage, // Campo principal para imagem
         images: equipment.images && equipment.images.length > 0 ? equipment.images : primaryImage ? [primaryImage] : [],
-        isAvailable: equipment.isAvailable,
+        available: equipment.available,
         category: {
           id: equipment.category.id,
           name: equipment.category.name,
@@ -91,7 +91,7 @@ export async function GET() {
         pricePerDay: 60,
         imageUrl: "/placeholder.svg?height=200&width=300&text=Betoneira",
         images: ["/placeholder.svg?height=200&width=300&text=Betoneira"],
-        isAvailable: true,
+        available: true,
         category: {
           id: "fallback-cat-1",
           name: "Equipamentos",
