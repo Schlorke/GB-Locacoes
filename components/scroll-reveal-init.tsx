@@ -191,28 +191,34 @@ export default function ScrollRevealInit() {
     // Lógica principal
     if (shouldExecuteAnimations) {
       // EXECUTAR ANIMAÇÕES: Refresh, URL digitada, nova aba, etc.
-      console.log("🎬 Executando animações - Refresh/URL/Nova aba", isOnMobile ? "(Mobile)" : "(Desktop)")
+      console.log(
+        "🎬 Executando animações - Refresh/URL/Nova aba",
+        isOnMobile ? "(Mobile)" : "(Desktop)",
+      )
 
-      initializeElementsForAnimation()
+      // Aguardar a hidratação antes de manipular o DOM
+      setTimeout(() => {
+        initializeElementsForAnimation()
 
-      requestAnimationFrame(() => {
-        const observer = setupObserver()
+        requestAnimationFrame(() => {
+          const observer = setupObserver()
 
-        // Delay menor para mobile para animações mais rápidas
-        const observerDelay = isOnMobile ? 50 : 100
+          // Delay menor para mobile para animações mais rápidas
+          const observerDelay = isOnMobile ? 50 : 100
 
-        setTimeout(() => {
-          const elementsToObserve = document.querySelectorAll(
-            ".hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, " +
-              ".section-title, .section-subtitle, .category-card, .material-card, .benefit-card, " +
-              ".contact-form, .contact-info, .cta-section",
-          )
+          setTimeout(() => {
+            const elementsToObserve = document.querySelectorAll(
+              ".hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, " +
+                ".section-title, .section-subtitle, .category-card, .material-card, .benefit-card, " +
+                ".contact-form, .contact-info, .cta-section",
+            )
 
-          elementsToObserve.forEach((element) => {
-            observer.observe(element)
-          })
-        }, observerDelay)
-      })
+            elementsToObserve.forEach((element) => {
+              observer.observe(element)
+            })
+          }, observerDelay)
+        })
+      }, 50)
     } else {
       // NAVEGAÇÃO INTERNA: Mostrar tudo imediatamente
       console.log("🚀 Navegação interna - mostrando conteúdo imediatamente")
