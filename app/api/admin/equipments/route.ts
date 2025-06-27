@@ -7,6 +7,17 @@ export async function GET(request: NextRequest) {
   try {
     console.log("[API GET /admin/equipments] Iniciando requisição...")
 
+    // Verifica se as variáveis de ambiente para o banco estão configuradas
+    if (!process.env.DATABASE_URL) {
+      console.error("[API GET /admin/equipments] DATABASE_URL não definido")
+      return NextResponse.json(
+        {
+          error: "Configuração do banco de dados ausente.",
+        },
+        { status: 500 },
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const page = Number.parseInt(searchParams.get("page") || "1")
     const limit = Number.parseInt(searchParams.get("limit") || "10")
