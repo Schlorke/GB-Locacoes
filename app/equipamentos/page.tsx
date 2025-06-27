@@ -169,8 +169,8 @@ export default function EquipmentsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredEquipments.map((equipment) => {
               // TODO: implementar reviews
-              const averageRating = 0
-              const reviewCount = 0
+              const averageRating: number = 0
+              const reviewCount: number = 0
 
               return (
                 <Card key={equipment.id} className="flex flex-col h-full hover:shadow-lg transition-shadow">

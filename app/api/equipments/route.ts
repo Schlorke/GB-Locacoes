@@ -34,8 +34,8 @@ export async function GET() {
             id: "mock-cat-1",
             name: "Equipamentos",
           },
-          reviews: [],
-        },
+          // TODO: implementar reviews
+      },
       ]
       return NextResponse.json(mockEquipments)
     }
@@ -44,13 +44,9 @@ export async function GET() {
     const formattedEquipments = equipments.map((equipment) => {
       console.log(`Processando equipamento: ${equipment.name}`)
       console.log(`Imagens do banco:`, equipment.images)
-      console.log(`ImageUrl do banco:`, equipment.imageUrl)
-
-      // Priorizar imageUrl se existir, senão usar primeira imagem do array
+      // Priorizar primeira imagem do array
       let primaryImage = null
-      if (equipment.imageUrl && equipment.imageUrl.trim() !== "") {
-        primaryImage = equipment.imageUrl
-      } else if (equipment.images && equipment.images.length > 0) {
+      if (equipment.images && equipment.images.length > 0) {
         primaryImage = equipment.images[0]
       }
 
@@ -66,13 +62,12 @@ export async function GET() {
           id: equipment.category.id,
           name: equipment.category.name,
         },
-        reviews: [],
+        // TODO: implementar reviews
       }
 
       console.log(`Equipamento formatado:`, {
         id: formattedEquipment.id,
         name: formattedEquipment.name,
-        imageUrl: formattedEquipment.imageUrl,
         images: formattedEquipment.images,
       })
 
@@ -96,7 +91,7 @@ export async function GET() {
           id: "fallback-cat-1",
           name: "Equipamentos",
         },
-        reviews: [],
+        // TODO: implementar reviews
       },
     ]
 

@@ -1,4 +1,4 @@
-import NextAuth, { type NextAuthOptions } from "next-auth"
+import NextAuth, { type NextAuthOptions, type RequestInternal } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { Role } from "@prisma/client"
 import bcrypt from "bcryptjs"
@@ -12,7 +12,10 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(
+        credentials: { email?: string; password?: string } | undefined,
+        req: Pick<RequestInternal, "body" | "query" | "headers" | "method">
+      ) {
         console.log("🔐 [AUTH] Iniciando autenticação")
 
         if (!credentials?.email || !credentials.password) {
@@ -59,7 +62,7 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             name: user.name,
             role: user.role,
-          } as any
+          }
         } catch (error) {
           console.error("💥 [AUTH] Erro:", error)
           return null
