@@ -47,7 +47,7 @@ export default defineConfig([
       "react/display-name": "off",
       "react/react-in-jsx-scope": "off",
       "react/jsx-uses-react": "off",
-      "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", caughtErrorsIgnorePattern: "^_" }],
       "no-undef": "error",
     },
   },
