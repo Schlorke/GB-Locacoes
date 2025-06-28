@@ -13,6 +13,7 @@
     "seed": "tsx prisma/seed.ts",
     "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'"
   },
+  "eslintIgnore": ["**/*.css"],
   "dependencies": {
     "@auth/core": "latest",
     "@edge-runtime/vm": "latest",
