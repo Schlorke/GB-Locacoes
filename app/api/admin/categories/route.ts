@@ -14,14 +14,17 @@ function slugify(text: string) {
     .replace(/^-+|-+$/g, "")
 }
 
-const CategorySchema = z.object({
-  name: z.string().min(1, "O nome da categoria é obrigatório"),
-  description: z.string().optional(),
-  icon: z.string().min(1, "Ícone é obrigatório"),
-  iconColor: z.string().min(1, "Cor do ícone é obrigatória"),
-  bgColor: z.string().min(1, "Cor de fundo é obrigatória"),
-  fontColor: z.string().min(1, "Cor da fonte é obrigatória"),
-})
+const CategorySchema = z
+  .object({
+    name: z.string().min(1, "O nome da categoria é obrigatório"),
+    description: z.string().optional(),
+    icon: z.string().min(1, "Ícone é obrigatório"),
+    iconColor: z.string().min(1, "Cor do ícone é obrigatória"),
+    bgColor: z.string().min(1, "Cor de fundo é obrigatória"),
+    fontColor: z.string().min(1, "Cor da fonte é obrigatória"),
+  })
+  .strict()
+
 
 // GET /api/admin/categories - List all categories
 export async function GET() {
@@ -68,15 +71,15 @@ export async function POST(request: NextRequest) {
       console.log("[CATEGORY_PAYLOAD]", raw)
     }
 
-    const parseResult = CategorySchema.safeParse(raw)
-
-    if (!parseResult.success) {
-      console.error("[CATEGORY_ERROR]", parseResult.error)
+    let parsed
+    try {
+      parsed = CategorySchema.parse(raw)
+    } catch (err) {
+      console.error("[CATEGORY_ERROR]", err)
       return NextResponse.json({ error: "Dados inválidos" }, { status: 400 })
     }
 
-    const { name, description, icon, iconColor, bgColor, fontColor } =
-      parseResult.data
+    const { name, description, icon, iconColor, bgColor, fontColor } = parsed
 
     const slug = slugify(name)
 
