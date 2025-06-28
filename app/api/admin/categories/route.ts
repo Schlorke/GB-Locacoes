@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { Prisma } from "@prisma/client"
 import { z } from "zod"
+import crypto from "node:crypto"
 import { prisma } from "@/lib/prisma"
 
 function slugify(text: string) {
@@ -101,6 +102,7 @@ export async function POST(request: NextRequest) {
 
     const category = await prisma.category.create({
       data: {
+        id: crypto.randomUUID(),
         name: name.trim(),
         description: description?.trim() || null,
         icon: icon?.trim() || null,
