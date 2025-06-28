@@ -6,7 +6,7 @@ import { Input } from "./input"
 
 interface CurrencyInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value"> {
   value?: number
-  onValueChange?: (value: number) => void
+  onValueChange?: (_value: number) => void
   currency?: string
   locale?: string
 }

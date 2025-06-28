@@ -1,9 +1,9 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { UserRole } from "@prisma/client"
 import bcrypt from "bcryptjs"
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   console.log("🚀 [SEED-ADMIN] Iniciando processo de criação do admin...")
 
   try {
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
 }
 
 // GET method remains the same
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     console.log("🔍 [SEED-ADMIN-GET] Verificando status do admin...")
 

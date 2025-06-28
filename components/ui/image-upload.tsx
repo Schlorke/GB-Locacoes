@@ -10,7 +10,7 @@ import { Upload, X, Link } from "lucide-react"
 
 interface ImageUploadProps {
   images: string[]
-  onImagesChange: (images: string[]) => void
+  onImagesChange: (_images: string[]) => void
   maxImages?: number
 }
 

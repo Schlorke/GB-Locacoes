@@ -10,7 +10,7 @@ import { Search, Smile } from "lucide-react"
 interface EmojiPickerProps {
   isOpen: boolean
   onClose: () => void
-  onSelect: (emoji: string) => void
+  onSelect: (_emoji: string) => void
   currentEmoji?: string
 }
 

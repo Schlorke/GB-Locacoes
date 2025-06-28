@@ -140,7 +140,7 @@ const ICONS = {
 interface IconPickerProps {
   value?: string
   color?: string
-  onSelect: (iconName?: string, iconColor?: string) => void
+  onSelect: (_iconName?: string, _iconColor?: string) => void
   onClose: () => void
   isOpen: boolean
 }

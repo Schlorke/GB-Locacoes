@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${item.title} | Catálogo GB Locações`,
       description: item.description,
     }
-  } catch (error) {
+  } catch {
     // Se notFound() foi chamado em getCatalogoItem, não chegará aqui.
     // Mas é bom ter um fallback.
     return {
