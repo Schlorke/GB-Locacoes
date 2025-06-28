@@ -123,7 +123,11 @@ export default function AdminCategoriesPage() {
         resetForm()
       } else {
         const errorData = await response.json()
-        toast.error(errorData.error || "Erro ao salvar categoria")
+        if (response.status === 409) {
+          toast.error("Categoria já existente")
+        } else {
+          toast.error(errorData.error || "Erro ao salvar categoria")
+        }
       }
     } catch (error) {
       console.error("Error saving category:", error)

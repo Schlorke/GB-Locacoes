@@ -47,7 +47,13 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body = await request.json()
+    let body
+    try {
+      body = await request.json()
+    } catch (err) {
+      return NextResponse.json({ error: "JSON inválido" }, { status: 400 })
+    }
+
     const { name, description, icon, iconColor, bgColor, fontColor } = body
 
     if (!name) {
@@ -56,16 +62,20 @@ export async function POST(request: NextRequest) {
 
     const slug = slugify(name)
 
-    await prisma.$connect()
-
     const existingCategory = await prisma.category.findFirst({
       where: {
-        OR: [{ name }, { slug }],
+        OR: [
+          { name: { equals: name.trim(), mode: "insensitive" } },
+          { slug },
+        ],
       },
     })
 
     if (existingCategory) {
-      return NextResponse.json({ error: "Categoria já existente" }, { status: 400 })
+      return NextResponse.json(
+        { error: "Categoria já existente" },
+        { status: 409 },
+      )
     }
 
     const category = await prisma.category.create({
@@ -90,6 +100,14 @@ export async function POST(request: NextRequest) {
         error.code,
         error.message,
       )
+
+      if (error.code === "P2002") {
+        return NextResponse.json(
+          { error: "Categoria já existente" },
+          { status: 409 },
+        )
+      }
+
       return NextResponse.json(
         { error: "Erro ao processar dados da categoria." },
         { status: 400 },
