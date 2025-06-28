@@ -79,8 +79,8 @@ function QuotePage() {
         }
         setSelectedEquipments((prev) => [...prev, equipmentToAdd])
       }
-    } catch (error) {
-      console.error("Erro ao buscar equipamento:", error)
+    } catch {
+      console.error("Erro ao buscar equipamento")
     }
   }
 
@@ -138,7 +138,7 @@ function QuotePage() {
       } else {
         throw new Error("Erro ao enviar orçamento")
       }
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro",
         description: "Erro ao enviar orçamento. Tente novamente.",
