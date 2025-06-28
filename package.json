@@ -7,8 +7,8 @@
     "build": "next build",
     "dev": "next dev",
     "postinstall": "prisma generate",
-    "lint": "eslint app components --ext .ts,.tsx --ignore-pattern '**/*.css'",
-    "lint:fix": "eslint app components --ext .js,.ts,.tsx --fix",
+    "lint": "eslint app components --ext .ts,.tsx --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
+    "lint:fix": "eslint app components --ext .js,.ts,.tsx --fix --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
     "start": "next start",
     "seed": "tsx prisma/seed.ts",
     "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'"
