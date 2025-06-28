@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { Prisma } from "@prisma/client"
+import { z } from "zod"
 import { prisma } from "@/lib/prisma"
 
 function slugify(text: string) {
@@ -12,6 +13,15 @@ function slugify(text: string) {
     .replace(/--+/g, "-")
     .replace(/^-+|-+$/g, "")
 }
+
+const CategorySchema = z.object({
+  name: z.string().min(1, "O nome da categoria é obrigatório"),
+  description: z.string().optional(),
+  icon: z.string().min(1, "Ícone é obrigatório"),
+  iconColor: z.string().min(1, "Cor do ícone é obrigatória"),
+  bgColor: z.string().min(1, "Cor de fundo é obrigatória"),
+  fontColor: z.string().min(1, "Cor da fonte é obrigatória"),
+})
 
 // GET /api/admin/categories - List all categories
 export async function GET() {
@@ -47,18 +57,26 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    let body
+    let raw
     try {
-      body = await request.json()
+      raw = await request.json()
     } catch (_err) {
       return NextResponse.json({ error: "JSON inválido" }, { status: 400 })
     }
 
-    const { name, description, icon, iconColor, bgColor, fontColor } = body
-
-    if (!name) {
-      return NextResponse.json({ error: "Nome da categoria é obrigatório" }, { status: 400 })
+    if (process.env.NODE_ENV !== "production") {
+      console.log("[CATEGORY_PAYLOAD]", raw)
     }
+
+    const parseResult = CategorySchema.safeParse(raw)
+
+    if (!parseResult.success) {
+      console.error("[CATEGORY_ERROR]", parseResult.error)
+      return NextResponse.json({ error: "Dados inválidos" }, { status: 400 })
+    }
+
+    const { name, description, icon, iconColor, bgColor, fontColor } =
+      parseResult.data
 
     const slug = slugify(name)
 

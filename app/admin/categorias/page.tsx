@@ -101,8 +101,12 @@ export default function AdminCategoriesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formData.name) {
+    if (!formData.name.trim()) {
       toast.error("O nome da categoria é obrigatório.")
+      return
+    }
+    if (!formData.icon || !formData.iconColor || !formData.bgColor || !formData.fontColor) {
+      toast.error("Preencha todos os campos obrigatórios.")
       return
     }
     setIsSubmitting(true)
