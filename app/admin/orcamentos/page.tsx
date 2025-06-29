@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import {
   Eye,
@@ -405,7 +405,7 @@ export default function AdminQuotesPage() {
                               </Button>
                             </DialogTrigger>
                             <DialogContent
-                              className="max-w-6xl w-[90vw] sm:w-full max-h-[90vh] overflow-hidden p-0 flex flex-col"
+                              className="w-full max-w-6xl max-h-[90vh] overflow-hidden p-0 rounded-xl shadow-xl"
                               aria-labelledby="quote-dialog-title"
                               aria-describedby="quote-dialog-desc"
                             >
@@ -422,7 +422,7 @@ export default function AdminQuotesPage() {
                                 </DialogDescription>
                               </DialogHeader>
                               {selectedQuote && (
-                                <div className="space-y-6 overflow-y-auto px-6 pb-6 flex-grow">
+                                <div className="overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 hover:scrollbar-thumb-slate-500 px-6 py-4 space-y-6">
                                   {/* Customer & Project Info */}
                                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <Card>
