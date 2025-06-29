@@ -13,8 +13,9 @@ import {
   X,
   ChevronsLeft,
   ChevronsRight,
+  UserCircle,
 } from "lucide-react"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -32,6 +33,7 @@ const navItems = [
 
 export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
   const pathname = usePathname()
+  const { data: session } = useSession()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
@@ -125,7 +127,26 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         })}
       </nav>
 
-      <div className={cn("p-2 sm:p-3 border-t border-slate-700 mt-auto", isSidebarCollapsed && "flex justify-center")}>
+      <div
+        className={cn(
+          "p-2 sm:p-3 border-t border-slate-700 mt-auto",
+          isSidebarCollapsed && "flex flex-col items-center"
+        )}
+      >
+        <div className="flex items-center gap-1 sm:gap-2 min-w-0 mb-2">
+          <UserCircle className="h-6 w-6 sm:h-7 sm:w-7 text-slate-400 flex-shrink-0" />
+          {!isSidebarCollapsed && (
+            <div className="hidden sm:block min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-slate-200 truncate max-w-24 lg:max-w-none">
+                {session?.user?.name || "Admin"}
+              </p>
+              {/* @ts-ignore */}
+              <p className="text-xs text-slate-400 truncate max-w-24 lg:max-w-none">
+                {session?.user?.role}
+              </p>
+            </div>
+          )}
+        </div>
         <Button
           variant="ghost"
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
