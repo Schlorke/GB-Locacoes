@@ -18,9 +18,9 @@ export default function AdminHeader() {
             <Button
               variant="outline"
               size="icon"
-              className="md:hidden h-9 w-9 sm:h-10 sm:w-10 bg-transparent flex-shrink-0"
+              className="md:hidden h-[20px] w-[20px] p-0 bg-transparent flex-shrink-0"
             >
-              <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
+              <Menu className="h-3 w-3" />
               <span className="sr-only">Abrir menu</span>
             </Button>
           </SheetTrigger>
