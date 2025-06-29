@@ -306,7 +306,7 @@ export default function AdminCategoriesPage() {
 
       <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
         <DialogContent
-          className="max-w-md sm:max-w-lg w-[90vw] sm:w-full max-h-[90vh] overflow-hidden p-0 flex flex-col"
+          className="w-full max-w-2xl max-h-[90vh] overflow-hidden p-0 rounded-xl shadow-xl"
           aria-labelledby="category-dialog-title"
           aria-describedby="category-dialog-desc"
         >
@@ -318,14 +318,12 @@ export default function AdminCategoriesPage() {
               Preencha os dados da categoria.
             </DialogDescription>
           </DialogHeader>
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-4 sm:space-y-6 overflow-y-auto px-6 pb-6 flex-grow"
-          >
-            <div>
-              <Label htmlFor="cat-name" className="text-sm font-medium">
-                Nome da Categoria *
-              </Label>
+          <div className="overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 hover:scrollbar-thumb-slate-500 px-6 py-4">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+              <div>
+                <Label htmlFor="cat-name" className="text-sm font-medium">
+                  Nome da Categoria *
+                </Label>
               <Input
                 id="cat-name"
                 required
@@ -417,7 +415,8 @@ export default function AdminCategoriesPage() {
                 {editingCategory ? "Atualizar Categoria" : "Criar Categoria"}
               </Button>
             </DialogFooter>
-          </form>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
 
