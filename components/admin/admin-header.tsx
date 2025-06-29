@@ -10,7 +10,7 @@ export default function AdminHeader() {
   const { data: session } = useSession()
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white">
+    <header className="relative z-50 border-b bg-white">
       <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8 overflow-hidden w-full">
         <div className="flex flex-1 items-center gap-2 sm:gap-4 min-w-0">
           <Sheet>
