@@ -384,36 +384,25 @@ section {
   }
 }
 
-/* Custom scrollbar - Design limpo e moderno */
+/* Scrollbar moderna e discreta */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
+  height: 8px;
 }
 
-/* Track (fundo da scrollbar) - cor do header */
 ::-webkit-scrollbar-track {
-  background: #334155; /* Cor slate-700 igual ao header */
-  border-radius: 0;
+  background: transparent;
 }
 
-/* Thumb (parte arrastável) */
 ::-webkit-scrollbar-thumb {
-  background: #64748b; /* Cor slate-500 para contraste */
-  border-radius: 6px;
-  border: 2px solid #334155; /* Borda na cor do track para efeito visual */
+  background-color: rgba(120, 120, 120, 0.3);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569; /* Cor slate-600 para hover */
-}
-
-/* Esconder as setinhas (arrows) */
-::-webkit-scrollbar-button {
-  display: none;
-}
-
-/* Corner (canto onde scrollbars se encontram) */
-::-webkit-scrollbar-corner {
-  background: #334155; /* Cor slate-700 igual ao header */
+  background-color: rgba(80, 80, 80, 0.5);
 }
 
 /* Selection styles */

@@ -10,15 +10,15 @@ export default function AdminHeader() {
   const { data: session } = useSession()
 
   return (
-    <div className="w-full overflow-x-hidden">
-      <header className="w-full sticky top-0 z-50 bg-white border-b flex items-center justify-between px-4 sm:px-6 lg:px-8 h-12 sm:h-14 md:h-16 flex-nowrap gap-2 sm:gap-4 shadow-sm">
+    <header className="w-full sticky top-0 z-50 bg-white border-b">
+      <div className="mx-auto flex max-w-screen px-4 sm:px-6 lg:px-8 h-16 items-center justify-between overflow-x-hidden">
         <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="md:hidden h-9 w-9 sm:h-10 sm:w-10 bg-transparent">
-              <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="sr-only">Abrir menu</span>
-            </Button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="md:hidden h-9 w-9 sm:h-10 sm:w-10 bg-transparent">
+                <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="sr-only">Abrir menu</span>
+              </Button>
           </SheetTrigger>
           <SheetContent side="left" className="flex flex-col p-0 w-64">
             <AdminSidebar />
@@ -32,14 +32,13 @@ export default function AdminHeader() {
           <Building className="h-4 w-4 text-orange-500 flex-shrink-0" />
           <span className="truncate">GB Admin</span>
         </div>
-      </div>
-
-      <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 flex-shrink-0">
-        <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 sm:h-10 sm:w-10 hidden sm:flex">
-          <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
-          <span className="sr-only">Buscar</span>
-        </Button>
-        <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 sm:h-10 sm:w-10 hidden sm:flex">
+        </div>
+        <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 flex-shrink-0">
+          <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 sm:h-10 sm:w-10 hidden sm:flex">
+            <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
+            <span className="sr-only">Buscar</span>
+          </Button>
+          <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 sm:h-10 sm:w-10 hidden sm:flex">
           <Bell className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
           <span className="sr-only">Notificações</span>
         </Button>
@@ -52,9 +51,9 @@ export default function AdminHeader() {
             {/* @ts-ignore */}
             <p className="text-xs text-gray-500 truncate max-w-24 lg:max-w-none">{session?.user?.role}</p>
           </div>
+          </div>
         </div>
       </div>
-      </header>
-    </div>
+    </header>
   )
 }
