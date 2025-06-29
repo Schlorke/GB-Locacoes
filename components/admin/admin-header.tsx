@@ -10,8 +10,9 @@ export default function AdminHeader() {
   const { data: session } = useSession()
 
   return (
-    <header className="sticky top-0 z-20 w-full flex-wrap flex items-center justify-between px-4 sm:px-6 lg:px-8 overflow-hidden gap-2 sm:gap-4 border-b bg-white h-12 sm:h-14 md:h-16 shadow-sm">
-      <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+    <div className="w-full overflow-x-hidden">
+      <header className="w-full sticky top-0 z-50 bg-white border-b flex items-center justify-between px-4 sm:px-6 lg:px-8 h-12 sm:h-14 md:h-16 flex-nowrap gap-2 sm:gap-4 shadow-sm">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden h-9 w-9 sm:h-10 sm:w-10 bg-transparent">
@@ -53,6 +54,7 @@ export default function AdminHeader() {
           </div>
         </div>
       </div>
-    </header>
+      </header>
+    </div>
   )
 }
