@@ -1,10 +1,9 @@
 "use client"
 
 import { SessionProvider, useSession } from "next-auth/react"
-import { type ReactNode, useEffect, useState } from "react"
+import { type ReactNode, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import AdminSidebar from "@/components/admin/admin-sidebar"
-import AdminHeader from "@/components/admin/admin-header"
 
 interface AdminLayoutProps {
   children: ReactNode
@@ -12,7 +11,6 @@ interface AdminLayoutProps {
 
 function AdminLayoutContent({ children }: AdminLayoutProps) {
   const { data: session, status } = useSession()
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
 
@@ -64,10 +62,9 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 
   return (
     <div className="flex w-full h-screen overflow-hidden bg-gray-50">
-      <AdminSidebar onCollapseChange={setSidebarCollapsed} />
+      <AdminSidebar />
       <main className="flex flex-col flex-1 overflow-hidden overflow-x-hidden min-w-0">
-        <AdminHeader />
-        <div className="flex-1 overflow-y-auto overflow-x-hidden pt-16 max-w-[100vw]">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">
           {children}
         </div>
       </main>
