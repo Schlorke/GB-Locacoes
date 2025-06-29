@@ -5,15 +5,17 @@
   "type": "module",
   "scripts": {
     "build": "next build",
+    "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'",
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "eslint app components --ext .ts,.tsx --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
     "lint:fix": "eslint app components --ext .js,.ts,.tsx --fix --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
-    "start": "next start",
     "seed": "tsx prisma/seed.ts",
-    "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'"
+    "start": "next start"
   },
-  "eslintIgnore": ["**/*.css"],
+  "eslintIgnore": [
+    "**/*.css"
+  ],
   "dependencies": {
     "@auth/core": "latest",
     "@edge-runtime/vm": "latest",
@@ -46,9 +48,10 @@
     "@radix-ui/react-toggle": "latest",
     "@radix-ui/react-toggle-group": "latest",
     "@radix-ui/react-tooltip": "latest",
+    "@sveltejs/kit": "latest",
     "@types/debug": "latest",
     "@vercel/blob": "latest",
-    "@vercel/speed-insights": "^1.2.0",
+    "@vercel/speed-insights": "latest",
     "@vitest/browser": "latest",
     "@vitest/ui": "latest",
     "autoprefixer": "^10.4.20",
@@ -63,11 +66,13 @@
     "embla-carousel-react": "latest",
     "happy-dom": "latest",
     "input-otp": "latest",
+    "jiti": "latest",
     "jsdom": "latest",
     "lucide-react": "^0.454.0",
     "next": "15.2.4",
     "next-auth": "latest",
     "next-themes": "latest",
+    "node:crypto": "latest",
     "nodemailer": "6.9.0",
     "path": "latest",
     "react": "^19",
@@ -77,11 +82,14 @@
     "react-resizable-panels": "latest",
     "recharts": "latest",
     "sonner": "latest",
+    "svelte": "latest",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "util": "latest",
     "vaul": "latest",
     "vitest": "latest",
+    "vue": "latest",
+    "vue-router": "latest",
     "zod": "latest"
   },
   "devDependencies": {
@@ -100,7 +108,7 @@
     "prisma": "^6.10.1",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3",
+    "typescript": "^5",
     "typescript-eslint": "^8.35.0"
   }
 }
