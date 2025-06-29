@@ -145,16 +145,17 @@ export default function AdminSidebar() {
       </header>
 
       {/* Mobile Sidebar (Overlay) */}
-      {isMobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm md:hidden"
-          onClick={() => setIsMobileMenuOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+      <div
+        className={cn(
+          "fixed inset-0 z-30 bg-black/40 transition-opacity md:hidden",
+          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        )}
+        onClick={() => setIsMobileMenuOpen(false)}
+        aria-hidden="true"
+      />
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white flex-col transition-transform duration-300 ease-in-out md:hidden flex",
+          "fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white flex-col transition-transform duration-300 ease-in-out md:hidden flex overflow-y-auto max-h-screen",
           isMobileMenuOpen ? "translate-x-0 shadow-xl" : "-translate-x-full",
         )}
       >

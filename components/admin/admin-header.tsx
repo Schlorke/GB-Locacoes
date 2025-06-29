@@ -10,7 +10,7 @@ export default function AdminHeader() {
   const { data: session } = useSession()
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 sm:h-16 items-center justify-between gap-2 sm:gap-4 border-b bg-white px-3 sm:px-4 md:px-6 shadow-sm">
+    <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-2 sm:gap-4 border-b bg-white px-4 h-12 sm:h-14 md:h-16 shadow-sm">
       <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
         <Sheet>
           <SheetTrigger asChild>
