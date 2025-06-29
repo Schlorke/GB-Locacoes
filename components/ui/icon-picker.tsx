@@ -185,7 +185,7 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
         </DialogHeader>
 
         <div className="flex flex-col md:grid md:grid-cols-[280px_1fr] gap-0 flex-1 overflow-hidden">
-          <div className="p-6 border-r flex flex-col gap-6 bg-muted/30 overflow-y-auto">
+          <div className="p-6 border-r flex flex-col gap-6 bg-muted/30">
             <div>
               <Label htmlFor="icon-color" className="mb-2 block font-medium text-sm">
                 Cor do Ícone
@@ -210,23 +210,26 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
             </div>
 
             {selectedIcon && ICONS[selectedIcon as keyof typeof ICONS] && (
-              <div className="space-y-2">
-                <Label className="font-medium text-sm">Ícone Selecionado</Label>
-                <div className="p-4 border rounded-lg flex flex-col items-center justify-center gap-2 bg-background min-h-[120px]">
+              <div className="flex flex-col items-center gap-2 py-2">
+                <div className="p-2 border rounded-md bg-muted flex items-center justify-center w-20 h-20">
                   {React.createElement(ICONS[selectedIcon as keyof typeof ICONS], {
-                    size: 48,
+                    className: "w-10 h-10",
                     color: iconColor,
                     strokeWidth: 1.5,
                   })}
-                  <span className="text-xs text-muted-foreground">{selectedIcon}</span>
                 </div>
+                <span className="text-sm text-muted-foreground">{selectedIcon}</span>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-2"
+                  onClick={() => setSelectedIcon(undefined)}
+                >
+                  Limpar Seleção
+                </Button>
               </div>
             )}
-
-            <Button variant="outline" onClick={() => setSelectedIcon(undefined)} className="w-full text-sm">
-              <X className="h-4 w-4 mr-2" />
-              Limpar Seleção
-            </Button>
           </div>
 
           <div className="flex flex-col max-h-[500px] overflow-hidden">
