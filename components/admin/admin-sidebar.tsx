@@ -165,29 +165,6 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
 
   return (
     <>
-      {/* Mobile Header & Hamburger */}
-      <header className="md:hidden sticky top-0 z-40 bg-slate-900 text-white p-3 flex items-center justify-between border-b border-slate-700">
-        <Link href="/admin/dashboard" className="flex items-center gap-2 min-w-0">
-          <Image
-            src="/placeholder-logo.svg"
-            alt="Logo"
-            width={40}
-            height={40}
-            priority
-            className="flex-shrink-0 w-auto h-auto"
-          />
-          <span className="font-semibold text-sm truncate">GB Admin</span>
-        </Link>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="text-slate-300 hover:text-white h-9 w-9"
-        >
-          {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
-      </header>
-
       {/* Mobile Sidebar (Overlay) */}
       <div
         className={cn(
