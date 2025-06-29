@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import Header from "@/components/header"
 import { AlertTriangle, Eye, EyeOff } from "lucide-react"
 
 export default function AdminLoginPage() {
@@ -83,8 +84,10 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-12">
-      <Card className="w-full max-w-md shadow-2xl border-0">
+    <>
+      <Header />
+      <div className="h-dvh w-dvw flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
+        <Card className="w-full max-w-md shadow-2xl border-0">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
             <span className="text-2xl font-bold">GB</span>
@@ -182,6 +185,7 @@ export default function AdminLoginPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+      </div>
+    </>
   )
 }
