@@ -65,16 +65,12 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   return (
     <div className="flex w-full h-screen overflow-hidden bg-gray-50">
       <AdminSidebar onCollapseChange={setSidebarCollapsed} />
-      <main className="flex flex-col flex-1 overflow-hidden min-w-0">
+      <main className="flex flex-col flex-1 overflow-hidden overflow-x-hidden min-w-0">
         <AdminHeader />
-        <div className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden pt-16 max-w-[100vw]">
           {children}
         </div>
       </main>
-      <aside
-        aria-hidden="true"
-        className="hidden md:block w-96 shrink-0 border-l"
-      />
     </div>
   )
 }
