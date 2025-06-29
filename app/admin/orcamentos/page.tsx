@@ -404,15 +404,25 @@ export default function AdminQuotesPage() {
                                 <Eye className="h-4 w-4" />
                               </Button>
                             </DialogTrigger>
-                            <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
-                              <DialogHeader>
-                                <DialogTitle className="flex items-center gap-2">
+                            <DialogContent
+                              className="max-w-6xl w-[90vw] sm:w-full max-h-[90vh] overflow-hidden p-0 flex flex-col"
+                              aria-labelledby="quote-dialog-title"
+                              aria-describedby="quote-dialog-desc"
+                            >
+                              <DialogHeader className="p-6 pb-4 border-b">
+                                <DialogTitle
+                                  id="quote-dialog-title"
+                                  className="flex items-center gap-2"
+                                >
                                   <FileText className="h-5 w-5" />
                                   Detalhes do Orçamento #{selectedQuote?.id.slice(-8)}
                                 </DialogTitle>
+                                <DialogDescription id="quote-dialog-desc">
+                                  Informações completas do orçamento.
+                                </DialogDescription>
                               </DialogHeader>
                               {selectedQuote && (
-                                <div className="space-y-6">
+                                <div className="space-y-6 overflow-y-auto px-6 pb-6 flex-grow">
                                   {/* Customer & Project Info */}
                                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                     <Card>

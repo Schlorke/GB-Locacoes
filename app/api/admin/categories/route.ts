@@ -19,7 +19,7 @@ const CategorySchema = z
   .object({
     name: z.string().min(1, "O nome da categoria é obrigatório"),
     description: z.string().optional(),
-    icon: z.string().min(1, "Ícone é obrigatório"),
+    icon: z.string().optional().nullable(),
     iconColor: z.string().min(1, "Cor do ícone é obrigatória"),
     bgColor: z.string().min(1, "Cor de fundo é obrigatória"),
     fontColor: z.string().min(1, "Cor da fonte é obrigatória"),
@@ -67,6 +67,8 @@ export async function POST(request: NextRequest) {
     } catch (_err) {
       return NextResponse.json({ error: "JSON inválido" }, { status: 400 })
     }
+
+    if (!raw.icon) delete raw.icon
 
     if (process.env.NODE_ENV !== "production") {
       console.log("[CATEGORY_PAYLOAD]", raw)

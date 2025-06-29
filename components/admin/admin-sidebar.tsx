@@ -64,7 +64,7 @@ export default function AdminSidebar() {
               alt="GB Locações Logo"
               width={32}
               height={32}
-              className="flex-shrink-0"
+              className="flex-shrink-0 w-auto h-auto"
             />
             <div className="flex flex-col min-w-0">
               <h2 className="text-base sm:text-lg font-bold text-white truncate">GB Locações</h2>
@@ -74,7 +74,13 @@ export default function AdminSidebar() {
         )}
         {isSidebarCollapsed && (
           <Link href="/" className="flex items-center justify-center w-full py-2">
-            <Image src="/placeholder-logo.svg" alt="GB Locações Logo" width={32} height={32} />
+            <Image
+              src="/placeholder-logo.svg"
+              alt="GB Locações Logo"
+              width={32}
+              height={32}
+              className="w-auto h-auto"
+            />
           </Link>
         )}
       </div>
@@ -131,7 +137,13 @@ export default function AdminSidebar() {
       {/* Mobile Header & Hamburger */}
       <header className="md:hidden sticky top-0 z-40 bg-slate-900 text-white p-3 flex items-center justify-between border-b border-slate-700">
         <Link href="/admin/dashboard" className="flex items-center gap-2 min-w-0">
-          <Image src="/placeholder-logo.svg" alt="GB Locações Logo" width={24} height={24} className="flex-shrink-0" />
+          <Image
+            src="/placeholder-logo.svg"
+            alt="GB Locações Logo"
+            width={24}
+            height={24}
+            className="flex-shrink-0 w-auto h-auto"
+          />
           <span className="font-semibold text-sm truncate">GB Admin</span>
         </Link>
         <Button
