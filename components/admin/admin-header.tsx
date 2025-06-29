@@ -15,10 +15,14 @@ export default function AdminHeader() {
         <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden h-9 w-9 sm:h-10 sm:w-10 bg-transparent">
-                <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
-                <span className="sr-only">Abrir menu</span>
-              </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="md:hidden h-9 w-9 sm:h-10 sm:w-10 bg-transparent flex-shrink-0"
+            >
+              <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="sr-only">Abrir menu</span>
+            </Button>
           </SheetTrigger>
           <SheetContent side="left" className="flex flex-col p-0 w-64">
             <AdminSidebar />
@@ -34,11 +38,19 @@ export default function AdminHeader() {
         </div>
         </div>
         <div className="flex items-center gap-1 sm:gap-2 lg:gap-4 flex-shrink-0">
-          <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 sm:h-10 sm:w-10 hidden sm:flex">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full h-9 w-9 sm:h-10 sm:w-10 hidden sm:flex flex-shrink-0"
+          >
             <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
             <span className="sr-only">Buscar</span>
           </Button>
-          <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 sm:h-10 sm:w-10 hidden sm:flex">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full h-9 w-9 sm:h-10 sm:w-10 hidden sm:flex flex-shrink-0"
+          >
           <Bell className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
           <span className="sr-only">Notificações</span>
         </Button>
