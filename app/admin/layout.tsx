@@ -64,7 +64,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       <AdminSidebar />
-      <div className="flex flex-1 flex-col overflow-hidden min-w-0">
+      <div className="flex flex-1 flex-col overflow-hidden min-w-0 overflow-x-hidden">
         <AdminHeader />
         <main className="flex-1 overflow-auto bg-gray-50">
           <div className="h-full min-h-0 max-h-[100vh] overflow-auto">{children}</div>

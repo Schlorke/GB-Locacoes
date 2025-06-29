@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Plus, Edit, Trash2, Tag, Loader2, Info, Check } from "lucide-react"
 import * as LucideIcons from "lucide-react"
 import { toast } from "sonner"
@@ -105,7 +105,7 @@ export default function AdminCategoriesPage() {
       toast.error("O nome da categoria é obrigatório.")
       return
     }
-    if (!formData.icon || !formData.iconColor || !formData.bgColor || !formData.fontColor) {
+    if (!formData.bgColor || !formData.fontColor) {
       toast.error("Preencha todos os campos obrigatórios.")
       return
     }
@@ -305,11 +305,18 @@ export default function AdminCategoriesPage() {
       </Card>
 
       <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
-        <DialogContent className="max-w-md sm:max-w-lg w-[90vw] sm:w-full max-h-[90vh] overflow-y-auto p-6">
+        <DialogContent
+          className="max-w-md sm:max-w-lg w-[90vw] sm:w-full max-h-[90vh] overflow-y-auto p-6"
+          aria-labelledby="category-dialog-title"
+          aria-describedby="category-dialog-desc"
+        >
           <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl">
+            <DialogTitle id="category-dialog-title" className="text-lg sm:text-xl">
               {editingCategory ? "Editar Categoria" : "Nova Categoria"}
             </DialogTitle>
+            <DialogDescription id="category-dialog-desc">
+              Preencha os dados da categoria.
+            </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 py-4">
             <div>
@@ -349,7 +356,7 @@ export default function AdminCategoriesPage() {
                   className="w-full mt-1 flex items-center justify-start text-left"
                 >
                   {renderIcon(formData.icon, formData.iconColor)}
-                  <span className="truncate">{formData.icon ? formData.icon : "Selecionar Ícone"}</span>
+                  {!formData.icon && <span className="ml-2 truncate">Selecionar Ícone</span>}
                 </Button>
               </div>
               <div>
