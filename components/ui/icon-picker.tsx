@@ -175,10 +175,13 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
       <DialogContent
         className="max-w-2xl w-[90vw] sm:w-full max-h-[90vh] overflow-y-hidden p-0 flex flex-col"
         aria-labelledby="icon-picker-title"
+        aria-describedby="icon-picker-desc"
       >
         <DialogHeader className="p-6 pb-4 border-b">
           <DialogTitle id="icon-picker-title">Selecionar Ícone</DialogTitle>
-          <DialogDescription>Escolha um ícone da biblioteca e personalize a cor.</DialogDescription>
+          <DialogDescription id="icon-picker-desc">
+            Escolha um ícone da biblioteca e personalize a cor.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col md:grid md:grid-cols-[280px_1fr] gap-0 flex-1 overflow-hidden">

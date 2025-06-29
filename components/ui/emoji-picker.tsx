@@ -72,12 +72,19 @@ export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPi
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent
+        className="max-w-md"
+        aria-labelledby="emoji-picker-title"
+        aria-describedby="emoji-picker-desc"
+      >
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+          <DialogTitle id="emoji-picker-title" className="flex items-center gap-2">
             <Smile className="h-5 w-5" />
             Selecionar Emoji
           </DialogTitle>
+          <DialogDescription id="emoji-picker-desc">
+            Escolha um emoji para a categoria.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
