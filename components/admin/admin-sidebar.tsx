@@ -61,9 +61,10 @@ export default function AdminSidebar() {
           <Link href="/" className="flex items-center gap-2 min-w-0">
             <Image
               src="/placeholder-logo.svg"
-              alt="GB Locações Logo"
-              width={32}
-              height={32}
+              alt="Logo"
+              width={40}
+              height={40}
+              priority
               className="flex-shrink-0 w-auto h-auto"
             />
             <div className="flex flex-col min-w-0">
@@ -76,9 +77,10 @@ export default function AdminSidebar() {
           <Link href="/" className="flex items-center justify-center w-full py-2">
             <Image
               src="/placeholder-logo.svg"
-              alt="GB Locações Logo"
-              width={32}
-              height={32}
+              alt="Logo"
+              width={40}
+              height={40}
+              priority
               className="w-auto h-auto"
             />
           </Link>
@@ -139,9 +141,10 @@ export default function AdminSidebar() {
         <Link href="/admin/dashboard" className="flex items-center gap-2 min-w-0">
           <Image
             src="/placeholder-logo.svg"
-            alt="GB Locações Logo"
-            width={24}
-            height={24}
+            alt="Logo"
+            width={40}
+            height={40}
+            priority
             className="flex-shrink-0 w-auto h-auto"
           />
           <span className="font-semibold text-sm truncate">GB Admin</span>
