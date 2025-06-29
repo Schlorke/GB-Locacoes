@@ -113,7 +113,7 @@ export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPi
           )}
 
           {/* Grid de Emojis */}
-          <div className="grid grid-cols-8 gap-2 max-h-64 overflow-y-auto">
+          <div className="grid grid-cols-6 gap-2 max-h-[300px] overflow-hidden">
             {filteredEmojis.map((emoji, index) => (
               <Button
                 key={`${emoji}-${index}`}
