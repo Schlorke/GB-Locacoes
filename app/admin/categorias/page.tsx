@@ -14,16 +14,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Plus, Edit, Trash2, Tag, Loader2, Info, Check } from "lucide-react"
 import * as LucideIcons from "lucide-react"
 import { toast } from "sonner"
-import { IconPicker } from "@/components/ui/icon-picker" // Importado
+import { IconPicker } from "@/components/ui/icon-picker"
 
 interface Category {
   id: string
   name: string
   description?: string
-  icon?: keyof typeof LucideIcons // Nome do ícone Lucide
-  iconColor?: string // Cor do ícone
-  bgColor?: string // Cor de fundo do rótulo
-  fontColor?: string // Cor da fonte do rótulo
+  icon?: keyof typeof LucideIcons
+  iconColor?: string
+  bgColor?: string
+  fontColor?: string
   createdAt: string
   _count?: {
     equipments: number
@@ -143,7 +143,7 @@ export default function AdminCategoriesPage() {
 
   const deleteCategory = async (categoryId: string) => {
     if (!confirm("Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.")) return
-    setIsSubmitting(true) // Reutilizar para indicar carregamento
+    setIsSubmitting(true)
     try {
       const response = await fetch(`/api/admin/categories/${categoryId}`, {
         method: "DELETE",
@@ -177,129 +177,145 @@ export default function AdminCategoriesPage() {
   }
 
   if (isLoading && categories.length === 0) {
-    // Mostrar loader apenas no carregamento inicial
     return (
-      <div className="flex items-center justify-center h-[calc(100vh-150px)]">
-        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      <div className="flex items-center justify-center h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-150px)]">
+        <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 animate-spin text-primary" />
       </div>
     )
   }
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold">Categorias</h1>
-          <p className="text-muted-foreground">Gerencie as categorias de equipamentos.</p>
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Categorias</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">Gerencie as categorias de equipamentos.</p>
         </div>
-        <Button onClick={openCreateDialog} className="w-full sm:w-auto">
+        <Button onClick={openCreateDialog} className="w-full sm:w-auto" size="sm">
           <Plus className="h-4 w-4 mr-2" />
-          Nova Categoria
+          <span className="sm:inline">Nova Categoria</span>
         </Button>
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Tag className="h-5 w-5" />
-            Lista de Categorias
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <Tag className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <span className="truncate">Lista de Categorias</span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="overflow-x-auto">
-          {isLoading && categories.length > 0 && <Loader2 className="h-5 w-5 animate-spin my-4" />}
+        <CardContent className="p-0 sm:p-6">
+          {isLoading && categories.length > 0 && (
+            <div className="flex justify-center py-4">
+              <Loader2 className="h-5 w-5 animate-spin" />
+            </div>
+          )}
           {!isLoading && categories.length === 0 ? (
-            <div className="text-center py-12">
-              <Tag className="h-16 w-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-              <p className="text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">Nenhuma categoria encontrada.</p>
-              <p className="text-gray-400 dark:text-gray-500 mb-6">
+            <div className="text-center py-8 sm:py-12 px-4">
+              <Tag className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+              <p className="text-lg sm:text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">
+                Nenhuma categoria encontrada.
+              </p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-md mx-auto">
                 Crie sua primeira categoria para organizar seus equipamentos.
               </p>
-              <Button onClick={openCreateDialog}>
+              <Button onClick={openCreateDialog} size="sm">
                 <Plus className="h-4 w-4 mr-2" />
                 Criar Primeira Categoria
               </Button>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[250px]">Nome</TableHead>
-                  <TableHead className="hidden md:table-cell">Descrição</TableHead>
-                  <TableHead className="w-[150px] text-center hidden sm:table-cell">Equipamentos</TableHead>
-                  <TableHead className="w-[150px] text-right">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {categories.map((category) => (
-                  <TableRow key={category.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-2.5">
-                        <span
-                          className="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-medium"
-                          style={{
-                            backgroundColor: category.bgColor || "#e0e0e0",
-                            color: category.fontColor || "#000000",
-                          }}
-                        >
-                          {category.icon &&
-                            LucideIcons[category.icon] &&
-                            createElement(LucideIcons[category.icon], {
-                              size: 14,
-                              color: category.iconColor || category.fontColor,
-                              className: "mr-1.5",
-                            })}
-                          {category.name}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
-                      {category.description
-                        ? category.description.length > 60
-                          ? category.description.substring(0, 60) + "..."
-                          : category.description
-                        : "-"}
-                    </TableCell>
-                    <TableCell className="text-center hidden sm:table-cell">
-                      {category._count?.equipments || 0}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openEditDialog(category)}
-                          aria-label="Editar"
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => deleteCategory(category.id)}
-                          className="text-red-500 hover:text-red-600"
-                          disabled={(category._count?.equipments || 0) > 0 || isSubmitting}
-                          aria-label="Excluir"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[200px] sm:w-[250px]">Nome</TableHead>
+                    <TableHead className="hidden md:table-cell min-w-[200px]">Descrição</TableHead>
+                    <TableHead className="w-[100px] sm:w-[150px] text-center hidden sm:table-cell">
+                      Equipamentos
+                    </TableHead>
+                    <TableHead className="w-[100px] sm:w-[150px] text-right">Ações</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {categories.map((category) => (
+                    <TableRow key={category.id}>
+                      <TableCell className="p-2 sm:p-4">
+                        <div className="flex items-center gap-2.5">
+                          <span
+                            className="inline-flex items-center justify-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium max-w-full"
+                            style={{
+                              backgroundColor: category.bgColor || "#e0e0e0",
+                              color: category.fontColor || "#000000",
+                            }}
+                          >
+                            {category.icon &&
+                              LucideIcons[category.icon] &&
+                              createElement(LucideIcons[category.icon], {
+                                size: 14,
+                                color: category.iconColor || category.fontColor,
+                                className: "mr-1.5 flex-shrink-0",
+                              })}
+                            <span className="truncate">{category.name}</span>
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell text-sm text-muted-foreground p-2 sm:p-4">
+                        <div className="max-w-xs">
+                          {category.description
+                            ? category.description.length > 60
+                              ? category.description.substring(0, 60) + "..."
+                              : category.description
+                            : "-"}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center hidden sm:table-cell p-2 sm:p-4">
+                        <span className="font-medium">{category._count?.equipments || 0}</span>
+                      </TableCell>
+                      <TableCell className="text-right p-2 sm:p-4">
+                        <div className="flex items-center justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => openEditDialog(category)}
+                            aria-label="Editar"
+                            className="h-8 w-8"
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => deleteCategory(category.id)}
+                            className="text-red-500 hover:text-red-600 h-8 w-8"
+                            disabled={(category._count?.equipments || 0) > 0 || isSubmitting}
+                            aria-label="Excluir"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
 
       <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
-        <DialogContent className="max-w-lg w-[90vw]">
+        <DialogContent className="max-w-lg w-[95vw] sm:w-[90vw] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingCategory ? "Editar Categoria" : "Nova Categoria"}</DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">
+              {editingCategory ? "Editar Categoria" : "Nova Categoria"}
+            </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit} className="space-y-6 py-4">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 py-4">
             <div>
-              <Label htmlFor="cat-name">Nome da Categoria *</Label>
+              <Label htmlFor="cat-name" className="text-sm font-medium">
+                Nome da Categoria *
+              </Label>
               <Input
                 id="cat-name"
                 required
@@ -310,7 +326,9 @@ export default function AdminCategoriesPage() {
               />
             </div>
             <div>
-              <Label htmlFor="cat-description">Descrição</Label>
+              <Label htmlFor="cat-description" className="text-sm font-medium">
+                Descrição
+              </Label>
               <Textarea
                 id="cat-description"
                 value={formData.description}
@@ -323,7 +341,7 @@ export default function AdminCategoriesPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label>Ícone</Label>
+                <Label className="text-sm font-medium">Ícone</Label>
                 <Button
                   type="button"
                   variant="outline"
@@ -331,11 +349,13 @@ export default function AdminCategoriesPage() {
                   className="w-full mt-1 flex items-center justify-start text-left"
                 >
                   {renderIcon(formData.icon, formData.iconColor)}
-                  {formData.icon ? formData.icon : "Selecionar Ícone"}
+                  <span className="truncate">{formData.icon ? formData.icon : "Selecionar Ícone"}</span>
                 </Button>
               </div>
               <div>
-                <Label htmlFor="cat-iconColor">Cor do Ícone</Label>
+                <Label htmlFor="cat-iconColor" className="text-sm font-medium">
+                  Cor do Ícone
+                </Label>
                 <Input
                   id="cat-iconColor"
                   type="color"
@@ -348,7 +368,9 @@ export default function AdminCategoriesPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="cat-bgColor">Cor de Fundo do Rótulo</Label>
+                <Label htmlFor="cat-bgColor" className="text-sm font-medium">
+                  Cor de Fundo do Rótulo
+                </Label>
                 <Input
                   id="cat-bgColor"
                   type="color"
@@ -358,7 +380,9 @@ export default function AdminCategoriesPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="cat-fontColor">Cor da Fonte do Rótulo</Label>
+                <Label htmlFor="cat-fontColor" className="text-sm font-medium">
+                  Cor da Fonte do Rótulo
+                </Label>
                 <Input
                   id="cat-fontColor"
                   type="color"
@@ -369,11 +393,16 @@ export default function AdminCategoriesPage() {
               </div>
             </div>
 
-            <DialogFooter className="pt-4">
-              <Button type="button" variant="outline" onClick={() => setIsFormDialogOpen(false)}>
+            <DialogFooter className="pt-4 flex-col sm:flex-row gap-2 sm:gap-0">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsFormDialogOpen(false)}
+                className="w-full sm:w-auto"
+              >
                 Cancelar
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
                 {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4" />}
                 {editingCategory ? "Atualizar Categoria" : "Criar Categoria"}
               </Button>
