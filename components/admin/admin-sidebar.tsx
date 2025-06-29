@@ -19,6 +19,10 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
+export interface AdminSidebarProps {
+  onCollapseChange?: (collapsed: boolean) => void
+}
+
 const navItems = [
   { href: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/admin/equipamentos", icon: PackageSearch, label: "Equipamentos" },
@@ -26,10 +30,14 @@ const navItems = [
   { href: "/admin/orcamentos", icon: FileText, label: "Orçamentos" },
 ]
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+
+  useEffect(() => {
+    if (onCollapseChange) onCollapseChange(isSidebarCollapsed);
+  }, [isSidebarCollapsed, onCollapseChange]);
 
   useEffect(() => {
     setIsMobileMenuOpen(false)
