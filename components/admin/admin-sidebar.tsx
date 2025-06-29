@@ -9,12 +9,13 @@ import {
   ListChecks,
   FileText,
   LogOut,
+  UserCircle,
   Menu,
   X,
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react"
-import { signOut } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -34,6 +35,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const { data: session } = useSession()
 
   useEffect(() => {
     if (onCollapseChange) onCollapseChange(isSidebarCollapsed);
@@ -125,13 +127,33 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         })}
       </nav>
 
-      <div className={cn("p-2 sm:p-3 border-t border-slate-700 mt-auto", isSidebarCollapsed && "flex justify-center")}>
+      <div
+        className={cn(
+          "p-2 sm:p-3 border-t border-slate-700 mt-auto space-y-3",
+          isSidebarCollapsed && "flex flex-col items-center"
+        )}
+      >
+        <div className={cn("flex items-center gap-2 sm:gap-3", isSidebarCollapsed && "justify-center")}>
+          <UserCircle className="h-5 w-5 text-slate-400 flex-shrink-0" />
+          {!isSidebarCollapsed && (
+            <div className="min-w-0">
+              <p className="text-xs font-medium text-white truncate">
+                {session?.user?.name || "Admin"}
+              </p>
+              {/* @ts-ignore */}
+              <p className="text-xs text-slate-400 truncate">
+                {session?.user?.role}
+              </p>
+            </div>
+          )}
+        </div>
+
         <Button
           variant="ghost"
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className={cn(
             "flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base",
-            isSidebarCollapsed && "justify-center w-auto",
+            isSidebarCollapsed && "justify-center w-auto"
           )}
           title="Sair"
         >

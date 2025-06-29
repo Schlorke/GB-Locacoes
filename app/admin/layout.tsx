@@ -4,7 +4,6 @@ import { SessionProvider, useSession } from "next-auth/react"
 import { type ReactNode, useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import AdminSidebar from "@/components/admin/admin-sidebar"
-import AdminHeader from "@/components/admin/admin-header"
 
 interface AdminLayoutProps {
   children: ReactNode
@@ -65,16 +64,11 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
   return (
     <div className="flex w-full h-screen overflow-hidden bg-gray-50">
       <AdminSidebar onCollapseChange={setSidebarCollapsed} />
-      <main className="flex flex-col flex-1 overflow-hidden min-w-0">
-        <AdminHeader />
+      <main className="flex flex-col flex-1 overflow-hidden overflow-x-hidden min-w-0">
         <div className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">
           {children}
         </div>
       </main>
-      <aside
-        aria-hidden="true"
-        className="hidden md:block w-96 shrink-0 border-l"
-      />
     </div>
   )
 }
