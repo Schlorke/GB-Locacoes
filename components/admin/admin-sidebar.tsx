@@ -189,13 +189,13 @@ export default function AdminSidebar() {
           variant="ghost"
           size="icon"
           onClick={toggleSidebarCollapse}
-          className="absolute top-1/2 -right-3 lg:-right-4 transform -translate-y-1/2 bg-slate-800 hover:bg-slate-700 text-white rounded-full h-6 w-6 lg:h-8 lg:w-8 border-2 border-slate-900 shadow-lg"
+          className="absolute top-1/2 -right-3 lg:-right-4 transform -translate-y-1/2 bg-slate-800 hover:bg-slate-700 text-white rounded-full h-[20px] w-[20px] border-2 border-slate-900 shadow-lg"
           title={isSidebarCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
         >
           {isSidebarCollapsed ? (
-            <ChevronsRight className="h-3 w-3 lg:h-4 lg:w-4" />
+            <ChevronsRight className="h-3 w-3" />
           ) : (
-            <ChevronsLeft className="h-3 w-3 lg:h-4 lg:w-4" />
+            <ChevronsLeft className="h-3 w-3" />
           )}
         </Button>
       </aside>
