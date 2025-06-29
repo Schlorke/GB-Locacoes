@@ -172,14 +172,17 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl w-[90vw] sm:w-full p-0">
+      <DialogContent
+        className="max-w-2xl w-[90vw] sm:w-full max-h-[90vh] overflow-y-hidden p-0 flex flex-col"
+        aria-labelledby="icon-picker-title"
+      >
         <DialogHeader className="p-6 pb-4 border-b">
-          <DialogTitle>Selecionar Ícone</DialogTitle>
+          <DialogTitle id="icon-picker-title">Selecionar Ícone</DialogTitle>
           <DialogDescription>Escolha um ícone da biblioteca e personalize a cor.</DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-0">
-          <div className="p-6 border-r flex flex-col gap-6 bg-muted/30">
+        <div className="flex flex-col md:grid md:grid-cols-[280px_1fr] gap-0 flex-1 overflow-hidden">
+          <div className="p-6 border-r flex flex-col gap-6 bg-muted/30 overflow-y-auto">
             <div>
               <Label htmlFor="icon-color" className="mb-2 block font-medium text-sm">
                 Cor do Ícone
@@ -223,7 +226,7 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
             </Button>
           </div>
 
-          <div className="flex flex-col max-h-[500px]">
+          <div className="flex flex-col max-h-[500px] overflow-hidden">
             <div className="p-4 border-b">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -236,7 +239,7 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
               </div>
             </div>
 
-            <ScrollArea className="flex-grow p-4">
+            <ScrollArea className="flex-grow p-4 overflow-y-auto">
               {filteredIcons.length > 0 ? (
                 <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
                   {filteredIcons.map((iconName) => {
@@ -248,8 +251,8 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
                         size="icon"
                         title={iconName}
                         className={cn(
-                          "h-16 w-full flex flex-col items-center justify-center gap-1 p-2 aspect-square",
-                          selectedIcon === iconName && "ring-2 ring-primary border-primary bg-primary/10",
+                          "h-16 w-full flex items-center justify-center p-2 aspect-square",
+                          selectedIcon === iconName && "ring-1 ring-primary border-primary bg-primary/10",
                         )}
                         onClick={() => handleSelectIcon(iconName)}
                       >
@@ -258,9 +261,6 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
                           color={selectedIcon === iconName ? iconColor : "currentColor"}
                           strokeWidth={1.5}
                         />
-                        <span className="text-[10px] truncate w-full text-center text-muted-foreground">
-                          {iconName}
-                        </span>
                       </Button>
                     )
                   })}

@@ -62,9 +62,9 @@ export default function AdminSidebar() {
             <Image
               src="/placeholder-logo.svg"
               alt="GB Locações Logo"
-              width={28}
-              height={28}
-              className="sm:w-8 sm:h-8 flex-shrink-0"
+              width={32}
+              height={32}
+              className="flex-shrink-0"
             />
             <div className="flex flex-col min-w-0">
               <h2 className="text-base sm:text-lg font-bold text-white truncate">GB Locações</h2>
