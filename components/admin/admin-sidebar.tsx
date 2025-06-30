@@ -133,7 +133,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           isSidebarCollapsed && "flex flex-col items-center"
         )}
       >
-        <div className="flex items-center gap-1 sm:gap-2 min-w-0 mb-2">
+        <div className="flex items-center gap-1 sm:gap-2 min-w-0 mb-2 mx-auto">
           <UserCircle className="h-6 w-6 sm:h-7 sm:w-7 text-slate-400 flex-shrink-0" />
           {!isSidebarCollapsed && (
             <div className="hidden sm:block min-w-0">
@@ -195,7 +195,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           size="icon"
           onClick={toggleSidebarCollapse}
-          className="absolute top-1/2 -right-3 lg:-right-4 transform -translate-y-1/2 bg-slate-800 hover:bg-slate-700 text-white rounded-full h-[20px] w-[20px] border-2 border-slate-900 shadow-lg"
+          className="absolute top-1/2 -right-3 lg:-right-4 transform -translate-y-1/2 bg-slate-700 hover:bg-slate-600 text-white rounded-full h-6 w-6 border-2 border-slate-900 shadow-lg transition-colors hover:scale-105"
           title={isSidebarCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
         >
           {isSidebarCollapsed ? (
