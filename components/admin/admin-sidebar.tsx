@@ -110,7 +110,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
             isSidebarCollapsed ? "justify-center" : "justify-start",
           )}
         >
-          <UserCircle className="h-10 w-10 text-slate-400 flex-shrink-0" />
+          <UserCircle className={cn("h-10 w-10 text-slate-400 flex-shrink-0", isSidebarCollapsed && "ml-[-2px]")} />
           {!isSidebarCollapsed && (
             <div className="flex flex-col min-w-0">
               <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
@@ -125,7 +125,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className={cn(
-            "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base",
+            "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors w-full group text-sm sm:text-base",
             isSidebarCollapsed ? "justify-center px-2" : "justify-start",
           )}
           title="Sair"
