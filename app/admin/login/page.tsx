@@ -19,6 +19,21 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [headerHeight, setHeaderHeight] = useState(0)
+
+  // Measure header height to offset the login panel correctly
+  useEffect(() => {
+    const headerEl = document.querySelector("header")
+    if (!headerEl) return
+
+    const updateHeight = () => {
+      setHeaderHeight(headerEl.getBoundingClientRect().height)
+    }
+
+    updateHeight()
+    window.addEventListener("resize", updateHeight)
+    return () => window.removeEventListener("resize", updateHeight)
+  }, [])
 
   // Check if user is already authenticated
   useEffect(() => {
@@ -87,8 +102,18 @@ export default function AdminLoginPage() {
     <>
       <Header />
 
-      <div className="flex items-center justify-center min-h-screen sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
-        <Card className="w-full max-w-md max-h-[calc(100vh-6rem)] overflow-y-auto shadow-2xl border-0">
+      <div
+        className="flex flex-col items-center justify-center px-6 bg-gradient-to-br from-slate-50 to-slate-100"
+        style={{
+          minHeight: `calc(100vh - ${headerHeight}px)`,
+          paddingTop: headerHeight + 16,
+          paddingBottom: 16,
+        }}
+      >
+        <Card
+          className="w-full max-w-sm overflow-y-auto shadow-2xl border-0"
+          style={{ maxHeight: `calc(100vh - ${headerHeight}px - 32px)` }}
+        >
 
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
@@ -102,7 +127,14 @@ export default function AdminLoginPage() {
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-6 max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <CardContent
+          className="px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
+          style={{
+            maxHeight: `calc(100vh - ${headerHeight}px - 32px)`,
+            paddingTop: headerHeight + 16,
+            paddingBottom: 16,
+          }}
+        >
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
