@@ -72,7 +72,9 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
         <AdminMobileHeader />
 
         {/* Conteúdo Principal */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">{children}</main>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw] p-4 md:p-6">
+          <div className="max-w-full overflow-x-hidden">{children}</div>
+        </main>
       </div>
     </div>
   )
