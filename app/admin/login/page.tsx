@@ -19,6 +19,21 @@ export default function AdminLoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [headerHeight, setHeaderHeight] = useState(0)
+
+  // Measure header height to offset the login panel correctly
+  useEffect(() => {
+    const headerEl = document.querySelector("header")
+    if (!headerEl) return
+
+    const updateHeight = () => {
+      setHeaderHeight(headerEl.getBoundingClientRect().height)
+    }
+
+    updateHeight()
+    window.addEventListener("resize", updateHeight)
+    return () => window.removeEventListener("resize", updateHeight)
+  }, [])
 
   // Check if user is already authenticated
   useEffect(() => {
@@ -89,11 +104,17 @@ export default function AdminLoginPage() {
 
 
       <div
-        className="flex flex-col items-center justify-center min-h-[calc(100vh-var(--header-height)*2)] px-6 py-[var(--header-height)] bg-gradient-to-br from-slate-50 to-slate-100"
-
+        className="flex flex-col items-center justify-center px-6 bg-gradient-to-br from-slate-50 to-slate-100"
+        style={{
+          minHeight: `calc(100vh - ${headerHeight * 2}px)`,
+          paddingTop: headerHeight,
+          paddingBottom: headerHeight,
+        }}
       >
         <Card
-          className="w-full max-w-md max-h-[calc(100vh-var(--header-height)*2)] overflow-y-auto shadow-2xl border-0"
+          className="w-full max-w-md overflow-y-auto shadow-2xl border-0"
+          style={{ maxHeight: `calc(100vh - ${headerHeight * 2}px)` }}
+
         >
 
         <CardHeader className="text-center space-y-4">
@@ -110,7 +131,12 @@ export default function AdminLoginPage() {
 
         <CardContent
 
-          className="max-h-[calc(100vh-var(--header-height)*2)] pt-[var(--header-height)] pb-[var(--header-height)] px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
+          className="px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
+          style={{
+            maxHeight: `calc(100vh - ${headerHeight * 2}px)`,
+            paddingTop: headerHeight,
+            paddingBottom: headerHeight,
+          }}
 
         >
 
