@@ -106,11 +106,11 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
       <div className="p-3 sm:p-4 border-t border-slate-700 mt-auto">
         <div
           className={cn(
-            "flex items-center gap-2 sm:gap-3 min-w-0 mb-3 w-full",
+            "flex items-center gap-2 sm:gap-1.52 min-w-0 mb-3 w-full",
             isSidebarCollapsed ? "justify-center" : "justify-start",
           )}
         >
-          <UserCircle className="h-4 w-4 sm:h-5 sm:w-5 text-slate-400 flex-shrink-0" />
+          <UserCircle className="h-10 w-10 text-slate-400 flex-shrink-0" />
           {!isSidebarCollapsed && (
             <div className="flex flex-col min-w-0">
               <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
@@ -130,7 +130,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           )}
           title="Sair"
         >
-          <LogOut className="h-4 w-4 sm:h-5 sm:w-5 text-slate-400 group-hover:text-red-400" />
+          <LogOut className="h-5 w-5 sm:h-5 sm:w-5 text-slate-400 group-hover:text-red-400" />
           {!isSidebarCollapsed && <span className="font-medium">Sair</span>}
         </Button>
       </div>
