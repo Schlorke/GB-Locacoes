@@ -87,8 +87,12 @@ export default function AdminLoginPage() {
     <>
       <Header />
 
-      <div className="flex items-center justify-center min-h-screen sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
-        <Card className="w-full max-w-md max-h-[calc(100vh-6rem)] overflow-y-auto shadow-2xl border-0">
+      <div
+        className="flex items-center justify-center min-h-screen px-6 py-[var(--header-height)] bg-gradient-to-br from-slate-50 to-slate-100"
+      >
+        <Card
+          className="w-full max-w-md max-h-[calc(100vh_-_(var(--header-height)*2))] overflow-y-auto shadow-2xl border-0"
+        >
 
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
@@ -102,7 +106,9 @@ export default function AdminLoginPage() {
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-6 max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <CardContent
+          className="max-h-[calc(100vh_-_(var(--header-height)*2))] pt-[var(--header-height)] pb-[var(--header-height)] px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
+        >
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
