@@ -89,10 +89,10 @@ export default function AdminLoginPage() {
 
 
       <div
-        className="flex items-center justify-center min-h-screen px-6 py-[var(--header-height)] bg-gradient-to-br from-slate-50 to-slate-100"
+        className="flex items-center justify-center min-h-[calc(100vh-var(--header-height)*2)] px-6 py-[var(--header-height)] bg-gradient-to-br from-slate-50 to-slate-100"
       >
         <Card
-          className="w-full max-w-md max-h-[calc(100vh_-_(var(--header-height)*2))] overflow-y-auto shadow-2xl border-0"
+          className="w-full max-w-md max-h-[calc(100vh-var(--header-height)*2)] overflow-y-auto shadow-2xl border-0"
         >
 
 
@@ -110,7 +110,7 @@ export default function AdminLoginPage() {
 
         <CardContent
 
-          className="max-h-[calc(100vh_-_(var(--header-height)*2))] pt-[var(--header-height)] pb-[var(--header-height)] px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
+          className="max-h-[calc(100vh-var(--header-height)*2)] pt-[var(--header-height)] pb-[var(--header-height)] px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
 
         >
 
