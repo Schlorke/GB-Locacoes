@@ -103,16 +103,16 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         })}
       </nav>
 
-      <div
-        className={cn(
-          "p-3 sm:p-4 border-t border-slate-700 mt-auto",
-          isSidebarCollapsed ? "flex flex-col items-center" : "flex flex-col items-center",
-        )}
-      >
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0 mb-3 w-full justify-center">
-          <UserCircle className="h-8 w-8 sm:h-9 sm:w-9 text-slate-400 flex-shrink-0" />
+      <div className="p-3 sm:p-4 border-t border-slate-700 mt-auto">
+        <div
+          className={cn(
+            "flex items-center gap-2 sm:gap-3 min-w-0 mb-3 w-full",
+            isSidebarCollapsed ? "justify-center" : "justify-start",
+          )}
+        >
+          <UserCircle className="h-4 w-4 sm:h-5 sm:w-5 text-slate-400 flex-shrink-0" />
           {!isSidebarCollapsed && (
-            <div className="flex flex-col items-center text-center min-w-0">
+            <div className="flex flex-col min-w-0">
               <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
                 {session?.user?.name || "Administrador"}
               </p>
@@ -125,8 +125,8 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className={cn(
-            "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base justify-center",
-            isSidebarCollapsed && "w-auto px-2",
+            "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base",
+            isSidebarCollapsed ? "justify-center px-2" : "justify-start",
           )}
           title="Sair"
         >
@@ -151,7 +151,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           size="icon"
           onClick={toggleSidebarCollapse}
-          className="absolute top-1/2 -right-4 transform -translate-y-1/2 bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white rounded-xl h-8 w-8 border border-slate-500/50 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl backdrop-blur-sm"
+          className="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-600 hover:from-slate-700 hover:via-slate-600 hover:to-slate-500 text-white rounded-full h-10 w-10 border-2 border-slate-500/30 shadow-xl transition-all duration-300 hover:scale-110 hover:shadow-2xl backdrop-blur-sm hover:border-slate-400/50"
           title={isSidebarCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
         >
           {isSidebarCollapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}

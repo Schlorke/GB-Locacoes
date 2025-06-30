@@ -24,18 +24,23 @@ export default function AdminMobileHeader() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 md:hidden">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-700 bg-slate-900 md:hidden">
       <div className="flex h-16 items-center justify-between px-4">
         {/* Logo e Título */}
         <Link href="/" className="flex items-center gap-2 min-w-0">
           <Building className="h-6 w-6 text-orange-500 flex-shrink-0" />
-          <span className="font-semibold text-slate-700 truncate">GB Admin</span>
+          <span className="font-semibold text-white truncate">GB Admin</span>
         </Link>
 
         {/* Menu Hambúrguer */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-10 w-10" aria-label="Abrir menu de navegação">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10 bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-600"
+              aria-label="Abrir menu de navegação"
+            >
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
@@ -65,9 +70,11 @@ export default function AdminMobileHeader() {
                         href={item.href}
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-sm font-medium",
+                          "flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-sm font-medium border",
                           "hover:bg-slate-100 active:bg-slate-200",
-                          isActive && "bg-primary text-primary-foreground hover:bg-primary/90",
+                          isActive
+                            ? "bg-primary text-primary-foreground hover:bg-primary/90 border-primary/20"
+                            : "bg-slate-50/80 text-slate-700 border-slate-200/60 hover:border-slate-300/80",
                         )}
                       >
                         <Icon className="h-5 w-5 flex-shrink-0" />
@@ -97,7 +104,7 @@ export default function AdminMobileHeader() {
                     setIsOpen(false)
                     signOut({ callbackUrl: "/admin/login" })
                   }}
-                  className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50"
+                  className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200/60 hover:border-red-300/80"
                 >
                   <LogOut className="h-5 w-5" />
                   <span>Sair do Sistema</span>
