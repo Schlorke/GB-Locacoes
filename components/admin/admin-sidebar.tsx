@@ -103,7 +103,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         })}
       </nav>
 
-      <div className="p-3 sm:p-4 border-t border-slate-700 mt-auto">
+      <div className={cn("border-t border-slate-700 mt-auto", isSidebarCollapsed ? "px-3 py-3" : "p-3 sm:p-4")}>
         <div
           className={cn(
             "flex items-center gap-2 sm:gap-1.52 min-w-0 mb-3 w-full",
