@@ -4,6 +4,7 @@ import { SessionProvider, useSession } from "next-auth/react"
 import { type ReactNode, useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import AdminSidebar from "@/components/admin/admin-sidebar"
+import AdminMobileHeader from "@/components/admin/admin-mobile-header"
 
 interface AdminLayoutProps {
   children: ReactNode
@@ -62,12 +63,17 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 
   return (
     <div className="flex w-full h-screen overflow-hidden bg-gray-50">
+      {/* Sidebar Desktop */}
       <AdminSidebar />
-      <main className="flex flex-col flex-1 overflow-hidden overflow-x-hidden min-w-0">
-        <div className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">
-          {children}
-        </div>
-      </main>
+
+      {/* Layout Principal */}
+      <div className="flex flex-col flex-1 overflow-hidden min-w-0">
+        {/* Header Mobile */}
+        <AdminMobileHeader />
+
+        {/* Conteúdo Principal */}
+        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">{children}</main>
+      </div>
     </div>
   )
 }

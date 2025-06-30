@@ -185,19 +185,19 @@ export default function AdminCategoriesPage() {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6">
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
         <div className="min-w-0 flex-1">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Categorias</h1>
           <p className="text-sm sm:text-base text-muted-foreground mt-1">Gerencie as categorias de equipamentos.</p>
         </div>
-        <Button onClick={openCreateDialog} className="w-full sm:w-auto" size="sm">
-          <Plus className="h-4 w-4 mr-2" />
-          <span className="sm:inline">Nova Categoria</span>
+        <Button onClick={openCreateDialog} className="w-full sm:w-auto max-w-xs px-4" size="sm">
+          <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
+          <span className="truncate">Nova Categoria</span>
         </Button>
       </div>
 
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <Tag className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
@@ -219,9 +219,9 @@ export default function AdminCategoriesPage() {
               <p className="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-md mx-auto">
                 Crie sua primeira categoria para organizar seus equipamentos.
               </p>
-              <Button onClick={openCreateDialog} size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                Criar Primeira Categoria
+              <Button onClick={openCreateDialog} size="sm" className="w-full max-w-xs mx-auto px-4">
+                <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
+                <span className="truncate">Criar Primeira Categoria</span>
               </Button>
             </div>
           ) : (
@@ -314,9 +314,7 @@ export default function AdminCategoriesPage() {
             <DialogTitle id="category-dialog-title" className="text-lg sm:text-xl">
               {editingCategory ? "Editar Categoria" : "Nova Categoria"}
             </DialogTitle>
-            <DialogDescription id="category-dialog-desc">
-              Preencha os dados da categoria.
-            </DialogDescription>
+            <DialogDescription id="category-dialog-desc">Preencha os dados da categoria.</DialogDescription>
           </DialogHeader>
           <div className="overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 hover:scrollbar-thumb-slate-500 px-6 py-4">
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -324,97 +322,101 @@ export default function AdminCategoriesPage() {
                 <Label htmlFor="cat-name" className="text-sm font-medium">
                   Nome da Categoria *
                 </Label>
-              <Input
-                id="cat-name"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Ex: Andaimes e Escadas"
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <Label htmlFor="cat-description" className="text-sm font-medium">
-                Descrição
-              </Label>
-              <Textarea
-                id="cat-description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Breve descrição da categoria"
-                rows={3}
-                className="mt-1"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Input
+                  id="cat-name"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Ex: Andaimes e Escadas"
+                  className="mt-1"
+                />
+              </div>
               <div>
-                <Label className="text-sm font-medium">Ícone</Label>
+                <Label htmlFor="cat-description" className="text-sm font-medium">
+                  Descrição
+                </Label>
+                <Textarea
+                  id="cat-description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Breve descrição da categoria"
+                  rows={3}
+                  className="mt-1"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm font-medium">Ícone</Label>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setIsIconPickerOpen(true)}
+                    className="w-full mt-1 flex items-center justify-start text-left"
+                  >
+                    {renderIcon(formData.icon, formData.iconColor)}
+                    {!formData.icon && <span className="ml-2 truncate">Selecionar Ícone</span>}
+                  </Button>
+                </div>
+                <div>
+                  <Label htmlFor="cat-iconColor" className="text-sm font-medium">
+                    Cor do Ícone
+                  </Label>
+                  <Input
+                    id="cat-iconColor"
+                    type="color"
+                    value={formData.iconColor}
+                    onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
+                    className="mt-1 w-full h-10 p-1"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="cat-bgColor" className="text-sm font-medium">
+                    Cor de Fundo do Rótulo
+                  </Label>
+                  <Input
+                    id="cat-bgColor"
+                    type="color"
+                    value={formData.bgColor}
+                    onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
+                    className="mt-1 w-full h-10 p-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="cat-fontColor" className="text-sm font-medium">
+                    Cor da Fonte do Rótulo
+                  </Label>
+                  <Input
+                    id="cat-fontColor"
+                    type="color"
+                    value={formData.fontColor}
+                    onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
+                    className="mt-1 w-full h-10 p-1"
+                  />
+                </div>
+              </div>
+
+              <DialogFooter className="pt-4 flex-col sm:flex-row gap-2 sm:gap-0">
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setIsIconPickerOpen(true)}
-                  className="w-full mt-1 flex items-center justify-start text-left"
+                  onClick={() => setIsFormDialogOpen(false)}
+                  className="w-full sm:w-auto"
                 >
-                  {renderIcon(formData.icon, formData.iconColor)}
-                  {!formData.icon && <span className="ml-2 truncate">Selecionar Ícone</span>}
+                  Cancelar
                 </Button>
-              </div>
-              <div>
-                <Label htmlFor="cat-iconColor" className="text-sm font-medium">
-                  Cor do Ícone
-                </Label>
-                <Input
-                  id="cat-iconColor"
-                  type="color"
-                  value={formData.iconColor}
-                  onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
-                  className="mt-1 w-full h-10 p-1"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="cat-bgColor" className="text-sm font-medium">
-                  Cor de Fundo do Rótulo
-                </Label>
-                <Input
-                  id="cat-bgColor"
-                  type="color"
-                  value={formData.bgColor}
-                  onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
-                  className="mt-1 w-full h-10 p-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="cat-fontColor" className="text-sm font-medium">
-                  Cor da Fonte do Rótulo
-                </Label>
-                <Input
-                  id="cat-fontColor"
-                  type="color"
-                  value={formData.fontColor}
-                  onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
-                  className="mt-1 w-full h-10 p-1"
-                />
-              </div>
-            </div>
-
-            <DialogFooter className="pt-4 flex-col sm:flex-row gap-2 sm:gap-0">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsFormDialogOpen(false)}
-                className="w-full sm:w-auto"
-              >
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
-                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4" />}
-                {editingCategory ? "Atualizar Categoria" : "Criar Categoria"}
-              </Button>
-            </DialogFooter>
+                <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+                  {isSubmitting ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Check className="mr-2 h-4 w-4" />
+                  )}
+                  {editingCategory ? "Atualizar Categoria" : "Criar Categoria"}
+                </Button>
+              </DialogFooter>
             </form>
           </div>
         </DialogContent>

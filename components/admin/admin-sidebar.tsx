@@ -9,8 +9,6 @@ import {
   ListChecks,
   FileText,
   LogOut,
-  Menu,
-  X,
   ChevronsLeft,
   ChevronsRight,
   UserCircle,
@@ -34,26 +32,11 @@ const navItems = [
 export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
   const pathname = usePathname()
   const { data: session } = useSession()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
 
   useEffect(() => {
-    if (onCollapseChange) onCollapseChange(isSidebarCollapsed);
-  }, [isSidebarCollapsed, onCollapseChange]);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false)
-  }, [pathname])
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsMobileMenuOpen(false)
-      }
-    }
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+    if (onCollapseChange) onCollapseChange(isSidebarCollapsed)
+  }, [isSidebarCollapsed, onCollapseChange])
 
   const toggleSidebarCollapse = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed)
@@ -85,14 +68,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         )}
         {isSidebarCollapsed && (
           <Link href="/" className="flex items-center justify-center w-full py-2">
-            <Image
-              src="/placeholder-logo.svg"
-              alt="Logo"
-              width={40}
-              height={40}
-              priority
-              className="w-auto h-auto"
-            />
+            <Image src="/placeholder-logo.svg" alt="Logo" width={40} height={40} priority className="w-auto h-auto" />
           </Link>
         )}
       </div>
@@ -129,21 +105,19 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
 
       <div
         className={cn(
-          "p-2 sm:p-3 border-t border-slate-700 mt-auto",
-          isSidebarCollapsed && "flex flex-col items-center"
+          "p-3 sm:p-4 border-t border-slate-700 mt-auto",
+          isSidebarCollapsed ? "flex flex-col items-center" : "flex flex-col items-center",
         )}
       >
-        <div className="flex items-center gap-1 sm:gap-2 min-w-0 mb-2 mx-auto">
-          <UserCircle className="h-6 w-6 sm:h-7 sm:w-7 text-slate-400 flex-shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 mb-3 w-full justify-center">
+          <UserCircle className="h-8 w-8 sm:h-9 sm:w-9 text-slate-400 flex-shrink-0" />
           {!isSidebarCollapsed && (
-            <div className="hidden sm:block min-w-0">
-              <p className="text-xs sm:text-sm font-medium text-slate-200 truncate max-w-24 lg:max-w-none">
-                {session?.user?.name || "Admin"}
+            <div className="flex flex-col items-center text-center min-w-0">
+              <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
+                {session?.user?.name || "Administrador"}
               </p>
               {/* @ts-ignore */}
-              <p className="text-xs text-slate-400 truncate max-w-24 lg:max-w-none">
-                {session?.user?.role}
-              </p>
+              <p className="text-xs text-slate-400 truncate">{session?.user?.role || "ADMIN"}</p>
             </div>
           )}
         </div>
@@ -151,8 +125,8 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className={cn(
-            "flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base",
-            isSidebarCollapsed && "justify-center w-auto",
+            "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base justify-center",
+            isSidebarCollapsed && "w-auto px-2",
           )}
           title="Sair"
         >
@@ -165,24 +139,6 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
 
   return (
     <>
-      {/* Mobile Sidebar (Overlay) */}
-      <div
-        className={cn(
-          "fixed inset-0 z-30 bg-black/40 transition-opacity md:hidden",
-          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        )}
-        onClick={() => setIsMobileMenuOpen(false)}
-        aria-hidden="true"
-      />
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white flex-col transition-transform duration-300 ease-in-out md:hidden flex overflow-y-auto max-h-screen",
-          isMobileMenuOpen ? "translate-x-0 shadow-xl" : "-translate-x-full",
-        )}
-      >
-        <SidebarContent />
-      </aside>
-
       {/* Desktop Sidebar */}
       <aside
         className={cn(
@@ -195,14 +151,10 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           size="icon"
           onClick={toggleSidebarCollapse}
-          className="absolute top-1/2 -right-3 lg:-right-4 transform -translate-y-1/2 bg-slate-700 hover:bg-slate-600 text-white rounded-full h-6 w-6 border-2 border-slate-900 shadow-lg transition-colors hover:scale-105"
+          className="absolute top-1/2 -right-4 transform -translate-y-1/2 bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white rounded-xl h-8 w-8 border border-slate-500/50 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl backdrop-blur-sm"
           title={isSidebarCollapsed ? "Expandir sidebar" : "Recolher sidebar"}
         >
-          {isSidebarCollapsed ? (
-            <ChevronsRight className="h-3 w-3" />
-          ) : (
-            <ChevronsLeft className="h-3 w-3" />
-          )}
+          {isSidebarCollapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
         </Button>
       </aside>
     </>
