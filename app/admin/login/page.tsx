@@ -112,13 +112,12 @@ export default function AdminLoginPage() {
         }}
       >
         <Card
-          className="w-full max-w-sm overflow-y-auto shadow-2xl border-0"
-          style={{ maxHeight: `calc(100vh - ${headerHeight}px - 32px)` }}
+          className="w-full max-w-xs shadow-xl border-0"
 
         >
 
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
             <span className="text-2xl font-bold">GB</span>
           </div>
           <div>
@@ -131,10 +130,9 @@ export default function AdminLoginPage() {
 
         <CardContent
 
-          className="px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
+          className="px-6 flex flex-col justify-center items-center space-y-6"
           style={{
-            maxHeight: `calc(100vh - ${headerHeight}px - 32px)`,
-            paddingTop: headerHeight + 16,
+            paddingTop: 16,
             paddingBottom: 16,
           }}
 
