@@ -57,9 +57,11 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2" onClick={handleInternalNavigation}>
+
             <div className="bg-slate-700 text-white p-2 rounded-lg font-bold text-lg">GB</div>
             <div>
               <div className="font-bold text-lg text-gray-900">GB Locações</div>
+
               <div className="text-xs text-gray-500">Equipamentos para Construção</div>
             </div>
           </Link>
