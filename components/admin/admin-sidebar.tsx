@@ -109,11 +109,13 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           isSidebarCollapsed ? "flex flex-col items-center" : "flex flex-col items-center",
         )}
       >
-        <div className="flex items-center gap-3 min-w-0 mb-3 w-full">
-          <UserCircle className="h-5 w-5 text-slate-400 flex-shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 mb-3 w-full justify-center">
+          <UserCircle className="h-8 w-8 sm:h-9 sm:w-9 text-slate-400 flex-shrink-0" />
           {!isSidebarCollapsed && (
-            <div className="flex flex-col min-w-0 flex-1">
-              <p className="text-sm font-medium text-slate-200 truncate">{session?.user?.name || "Administrador"}</p>
+            <div className="flex flex-col items-center text-center min-w-0">
+              <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
+                {session?.user?.name || "Administrador"}
+              </p>
               {/* @ts-ignore */}
               <p className="text-xs text-slate-400 truncate">{session?.user?.role || "ADMIN"}</p>
             </div>
@@ -123,12 +125,12 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className={cn(
-            "flex items-center gap-3 px-4 py-3 rounded-full text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-all duration-300 w-full group text-sm border border-slate-600/50 hover:border-red-400/30 hover:shadow-lg backdrop-blur-sm",
-            isSidebarCollapsed && "w-12 h-12 p-0 justify-center",
+            "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base justify-center",
+            isSidebarCollapsed && "w-auto px-2",
           )}
           title="Sair"
         >
-          <LogOut className="h-4 w-4 text-slate-400 group-hover:text-red-400 transition-colors" />
+          <LogOut className="h-4 w-4 sm:h-5 sm:w-5 text-slate-400 group-hover:text-red-400" />
           {!isSidebarCollapsed && <span className="font-medium">Sair</span>}
         </Button>
       </div>
