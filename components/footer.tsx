@@ -9,10 +9,10 @@ export default function Footer() {
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-orange-600 text-white p-2 rounded-lg font-bold text-xl">GB</div>
+              <div className="bg-orange-600 text-white p-2 rounded-lg font-bold text-h3">GB</div>
               <div>
-                <div className="font-bold text-xl">GB Locações</div>
-                <div className="text-sm text-gray-400">Equipamentos para Construção</div>
+                <div className="font-bold text-h3">GB Locações</div>
+                <div className="text-small text-gray-400">Equipamentos para Construção</div>
               </div>
             </div>
             <p className="text-gray-300 mb-4">
@@ -34,7 +34,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Links Rápidos</h3>
+            <h3 className="font-semibold text-h3 mb-4">Links Rápidos</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/catalogo" className="text-gray-300 hover:text-orange-500 transition-colors">
@@ -124,7 +124,7 @@ export default function Footer() {
                 <div>
                   <p className="text-gray-300">(51) 2313-6262</p>
                   <p className="text-gray-300">(51) 99820-5163</p>
-                  <p className="text-sm text-gray-400">Atendimento especializado</p>
+                  <p className="text-small text-gray-400">Atendimento especializado</p>
                 </div>
               </div>
 
@@ -132,7 +132,7 @@ export default function Footer() {
                 <Mail className="h-5 w-5 text-orange-500 mt-0.5" />
                 <div>
                   <p className="text-gray-300">contato@gblocacoes.com.br</p>
-                  <p className="text-sm text-gray-400">Resposta rápida garantida</p>
+                  <p className="text-small text-gray-400">Resposta rápida garantida</p>
                 </div>
               </div>
 
@@ -144,7 +144,7 @@ export default function Footer() {
                     <br />
                     Humaitá - Porto Alegre/RS
                   </p>
-                  <p className="text-sm text-gray-400">Entregamos em toda região</p>
+                  <p className="text-small text-gray-400">Entregamos em toda região</p>
                 </div>
               </div>
 
@@ -153,7 +153,7 @@ export default function Footer() {
                 <div>
                   <p className="text-gray-300">Seg-Sex: 8h às 18h</p>
                   <p className="text-gray-300">Sáb: 8h às 12h</p>
-                  <p className="text-sm text-gray-400">CNPJ: 34.780.330/0001-69</p>
+                  <p className="text-small text-gray-400">CNPJ: 34.780.330/0001-69</p>
                 </div>
               </div>
             </div>
@@ -163,15 +163,15 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">© 2024 GB Locações. Todos os direitos reservados.</p>
+            <p className="text-gray-400 text-small">© 2024 GB Locações. Todos os direitos reservados.</p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacidade" className="text-gray-400 hover:text-orange-500 text-sm transition-colors">
+              <Link href="/privacidade" className="text-gray-400 hover:text-orange-500 text-small transition-colors">
                 Política de Privacidade
               </Link>
-              <Link href="/termos" className="text-gray-400 hover:text-orange-500 text-sm transition-colors">
+              <Link href="/termos" className="text-gray-400 hover:text-orange-500 text-small transition-colors">
                 Termos de Uso
               </Link>
-              <Link href="/cookies" className="text-gray-400 hover:text-orange-500 text-sm transition-colors">
+              <Link href="/cookies" className="text-gray-400 hover:text-orange-500 text-small transition-colors">
                 Cookies
               </Link>
             </div>
