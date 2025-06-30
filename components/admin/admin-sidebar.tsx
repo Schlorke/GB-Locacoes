@@ -103,11 +103,16 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         })}
       </nav>
 
-      <div className="p-3 sm:p-4 border-t border-slate-700 mt-auto">
-        <div className="flex items-center gap-2 sm:gap-3 px-3 py-2 mb-3 w-full">
+      <div
+        className={cn(
+          "p-3 sm:p-4 border-t border-slate-700 mt-auto",
+          isSidebarCollapsed ? "flex flex-col items-center" : "flex flex-col items-center",
+        )}
+      >
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 mb-3 w-full justify-center">
           <UserCircle className="h-8 w-8 sm:h-9 sm:w-9 text-slate-400 flex-shrink-0" />
           {!isSidebarCollapsed && (
-            <div className="flex flex-col min-w-0">
+            <div className="flex flex-col items-center text-center min-w-0">
               <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
                 {session?.user?.name || "Administrador"}
               </p>
@@ -116,18 +121,17 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
             </div>
           )}
         </div>
-
         <Button
           variant="ghost"
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className={cn(
-            "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base border border-slate-600 hover:border-red-400/50",
-            isSidebarCollapsed ? "justify-center px-2" : "justify-start",
+            "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base justify-center",
+            isSidebarCollapsed && "w-auto px-2",
           )}
-          title="Sair do Sistema"
+          title="Sair"
         >
           <LogOut className="h-4 w-4 sm:h-5 sm:w-5 text-slate-400 group-hover:text-red-400" />
-          {!isSidebarCollapsed && <span className="font-medium">Sair do Sistema</span>}
+          {!isSidebarCollapsed && <span className="font-medium">Sair</span>}
         </Button>
       </div>
     </>
