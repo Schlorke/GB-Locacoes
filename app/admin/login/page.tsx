@@ -86,8 +86,10 @@ export default function AdminLoginPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
-        <Card className="w-full max-w-md shadow-2xl border-0">
+
+      <div className="flex items-center justify-center min-h-screen sm:p-6 bg-gradient-to-br from-slate-50 to-slate-100">
+        <Card className="w-full max-w-md max-h-[calc(100vh-6rem)] overflow-y-auto shadow-2xl border-0">
+
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
             <span className="text-2xl font-bold">GB</span>
@@ -99,7 +101,9 @@ export default function AdminLoginPage() {
             </CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="space-y-6 max-h-[100vh] overflow-y-auto">
+
+        <CardContent className="space-y-6 max-h-[calc(100vh-6rem)] overflow-y-auto">
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <Alert variant="destructive" className="border-red-200 bg-red-50">
