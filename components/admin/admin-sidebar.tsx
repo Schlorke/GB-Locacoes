@@ -51,7 +51,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         )}
       >
         {!isSidebarCollapsed && (
-          <Link href="/" className="flex items-center gap-2 min-w-0">
+          <Link href="/" className="flex items-center gap-2 min-w-0 max-w-full overflow-hidden">
             <Image
               src="/placeholder-logo.svg"
               alt="Logo"
@@ -60,7 +60,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
               priority
               className="flex-shrink-0 w-auto h-auto"
             />
-            <div className="flex flex-col min-w-0">
+            <div className="flex flex-col min-w-0 flex-1">
               <h2 className="text-base sm:text-lg font-bold text-white truncate">GB Locações</h2>
               <p className="text-xs text-slate-400 truncate">Admin Panel</p>
             </div>
@@ -84,7 +84,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
                 href={item.href}
                 title={item.label}
                 className={cn(
-                  "flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md transition-all duration-200 ease-in-out group text-sm sm:text-base",
+                  "flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md transition-all duration-200 ease-in-out group text-sm sm:text-base w-full",
                   "text-slate-300 hover:bg-slate-800 hover:text-white",
                   isActive && "bg-primary text-primary-foreground shadow-md hover:bg-primary/90",
                   isSidebarCollapsed && "justify-center",
@@ -96,7 +96,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
                     isActive ? "text-white" : "text-slate-400 group-hover:text-white",
                   )}
                 />
-                {!isSidebarCollapsed && <span className="font-medium truncate">{item.label}</span>}
+                {!isSidebarCollapsed && <span className="font-medium truncate flex-1">{item.label}</span>}
               </Link>
             </li>
           )
@@ -110,9 +110,14 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
             isSidebarCollapsed ? "justify-center" : "justify-start",
           )}
         >
-          <UserCircle className="h-4 w-4 sm:h-5 sm:w-5 text-slate-400 flex-shrink-0" />
+          <UserCircle
+            className={cn(
+              "text-slate-400 flex-shrink-0",
+              isSidebarCollapsed ? "h-6 w-6 sm:h-7 sm:w-7" : "h-5 w-5 sm:h-6 sm:w-6",
+            )}
+          />
           {!isSidebarCollapsed && (
-            <div className="flex flex-col min-w-0">
+            <div className="flex flex-col min-w-0 flex-1">
               <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
                 {session?.user?.name || "Administrador"}
               </p>
@@ -125,13 +130,13 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           onClick={() => signOut({ callbackUrl: "/admin/login" })}
           className={cn(
-            "flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base",
-            isSidebarCollapsed ? "justify-center px-2" : "justify-start",
+            "flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors w-full group text-sm sm:text-base",
+            isSidebarCollapsed ? "justify-center" : "justify-start",
           )}
           title="Sair"
         >
-          <LogOut className="h-4 w-4 sm:h-5 sm:w-5 text-slate-400 group-hover:text-red-400" />
-          {!isSidebarCollapsed && <span className="font-medium">Sair</span>}
+          <LogOut className="h-4 w-4 sm:h-5 sm:w-5 text-slate-400 group-hover:text-white flex-shrink-0" />
+          {!isSidebarCollapsed && <span className="font-medium truncate flex-1">Sair</span>}
         </Button>
       </div>
     </>
@@ -157,6 +162,11 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           {isSidebarCollapsed ? <ChevronsRight className="h-4 w-4" /> : <ChevronsLeft className="h-4 w-4" />}
         </Button>
       </aside>
+
+      {/* Mobile Sidebar Content */}
+      <div className="md:hidden flex flex-col bg-slate-900 text-white h-full">
+        <SidebarContent />
+      </div>
     </>
   )
 }
