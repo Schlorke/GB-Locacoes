@@ -9,8 +9,24 @@ const config: Config = {
     "*.{js,ts,jsx,tsx,mdx}"
   ],
   theme: {
-  	extend: {
-  		colors: {
+        extend: {
+                fontFamily: {
+                        sans: ['var(--font-inter)', 'sans-serif'],
+                        heading: ['var(--font-jost)', 'sans-serif'],
+                },
+                fontSize: {
+                        h1: ['clamp(2.5rem, 5vw, 3.5rem)', { lineHeight: '1.2' }],
+                        h2: ['clamp(2rem, 4vw, 3rem)', { lineHeight: '1.3' }],
+                        h3: ['clamp(1.5rem, 3vw, 2.25rem)', { lineHeight: '1.4' }],
+                        base: ['clamp(1rem, 2vw, 1.125rem)', { lineHeight: '1.6' }],
+                        small: ['clamp(0.875rem, 1.5vw, 1rem)', { lineHeight: '1.5' }],
+                },
+                letterSpacing: {
+                        tight: '-0.015em',
+                        normal: '0em',
+                        wide: '0.015em',
+                },
+                colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

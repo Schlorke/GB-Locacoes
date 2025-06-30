@@ -9,10 +9,10 @@ export default function PrivacidadePage() {
   return (
     <div className="container mx-auto px-4 py-12">
       <header className="mb-8 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-5xl">
+        <h1 className="font-bold tracking-tight text-h1 text-gray-900 dark:text-white">
           Política de Privacidade
         </h1>
-        <p className="mt-4 text-lg leading-7 text-gray-600 dark:text-gray-300">
+        <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-300">
           Última atualização: 23 de Junho de 2025
         </p>
       </header>
