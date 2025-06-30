@@ -106,14 +106,14 @@ export default function AdminLoginPage() {
       <div
         className="flex flex-col items-center justify-center px-6 bg-gradient-to-br from-slate-50 to-slate-100"
         style={{
-          minHeight: `calc(100vh - ${headerHeight * 2}px)`,
-          paddingTop: headerHeight,
-          paddingBottom: headerHeight,
+          minHeight: `calc(100vh - ${headerHeight}px)`,
+          paddingTop: headerHeight + 16,
+          paddingBottom: 16,
         }}
       >
         <Card
-          className="w-full max-w-md overflow-y-auto shadow-2xl border-0"
-          style={{ maxHeight: `calc(100vh - ${headerHeight * 2}px)` }}
+          className="w-full max-w-sm overflow-y-auto shadow-2xl border-0"
+          style={{ maxHeight: `calc(100vh - ${headerHeight}px - 32px)` }}
 
         >
 
@@ -133,9 +133,9 @@ export default function AdminLoginPage() {
 
           className="px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
           style={{
-            maxHeight: `calc(100vh - ${headerHeight * 2}px)`,
-            paddingTop: headerHeight,
-            paddingBottom: headerHeight,
+            maxHeight: `calc(100vh - ${headerHeight}px - 32px)`,
+            paddingTop: headerHeight + 16,
+            paddingBottom: 16,
           }}
 
         >
