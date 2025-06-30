@@ -63,7 +63,31 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans text-base;
+  }
+
+  h1 {
+    @apply text-h1 font-heading font-bold tracking-tight;
+  }
+
+  h2 {
+    @apply text-h2 font-heading font-semibold tracking-tight;
+  }
+
+  h3 {
+    @apply text-h3 font-heading font-semibold;
+  }
+
+  p {
+    @apply text-base;
+  }
+
+  small {
+    @apply text-small;
+  }
+
+  button {
+    @apply text-base;
   }
 
   html {
