@@ -59,12 +59,14 @@ export default function AdminHeader() {
             <span className="sr-only">Notificações</span>
           </Button>
 
-          <div className="flex items-center gap-1 sm:gap-2 min-w-0 max-w-[120px] sm:max-w-none">
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0">
             <UserCircle className="h-6 w-6 sm:h-7 sm:w-7 text-slate-400 flex-shrink-0" />
-            <div className="hidden sm:block min-w-0 flex-1">
-              <p className="text-xs sm:text-sm font-medium text-slate-200 truncate">{session?.user?.name || "Admin"}</p>
+            <div className="hidden sm:block min-w-0">
+              <p className="text-xs sm:text-sm font-medium text-slate-200 truncate max-w-24 lg:max-w-none">
+                {session?.user?.name || "Admin"}
+              </p>
               {/* @ts-ignore */}
-              <p className="text-xs text-slate-400 truncate">{session?.user?.role}</p>
+              <p className="text-xs text-slate-400 truncate max-w-24 lg:max-w-none">{session?.user?.role}</p>
             </div>
           </div>
         </div>
