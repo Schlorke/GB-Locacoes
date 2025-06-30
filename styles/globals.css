@@ -20,8 +20,9 @@ body {
 
 @layer base {
   :root {
-    /* Altura do cabeçalho fixo */
-    --header-height: 4rem;
+
+    /* Altura do cabeçalho fixo (soma da topbar e header) */
+    --header-height: 5rem;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -101,8 +102,10 @@ body {
   }
 }
 
+
 @media (min-width: 640px) {
   :root {
     --header-height: 4.5rem;
   }
 }
+

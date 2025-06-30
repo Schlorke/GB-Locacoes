@@ -89,12 +89,12 @@ export default function AdminLoginPage() {
 
 
       <div
-        className="flex items-center justify-center min-h-[calc(100vh-var(--header-height)*2)] px-6 py-[var(--header-height)] bg-gradient-to-br from-slate-50 to-slate-100"
+        className="flex flex-col items-center justify-center min-h-[calc(100vh-var(--header-height)*2)] px-6 py-[var(--header-height)] bg-gradient-to-br from-slate-50 to-slate-100"
+
       >
         <Card
           className="w-full max-w-md max-h-[calc(100vh-var(--header-height)*2)] overflow-y-auto shadow-2xl border-0"
         >
-
 
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
