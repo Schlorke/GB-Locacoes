@@ -110,7 +110,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
             isSidebarCollapsed ? "justify-center" : "justify-start",
           )}
         >
-          <UserCircle className="h-10 w-10 text-slate-400 flex-shrink-0" />
+          <UserCircle className={cn("h-10 w-10 text-slate-400 flex-shrink-0", isSidebarCollapsed && "-ml-[2px]")} />
           {!isSidebarCollapsed && (
             <div className="flex flex-col min-w-0">
               <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
