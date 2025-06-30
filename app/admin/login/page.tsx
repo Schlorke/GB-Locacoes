@@ -99,41 +99,41 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100">
+    <>
       <Header />
-      <div
-        className="flex items-center justify-center px-4"
-        style={{
-          minHeight: `calc(100vh - ${headerHeight}px)`,
-          paddingTop: `${headerHeight + 20}px`,
-        }}
-      >
-        <Card className="w-full max-w-xl shadow-xl border-0 bg-white/95 backdrop-blur-sm">
-          <CardHeader className="text-center space-y-3 pb-3">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
-              <span className="text-xl font-bold">GB</span>
-            </div>
-            <div className="space-y-1">
-              <CardTitle className="text-xl md:text-2xl font-bold text-slate-800">Painel Administrativo</CardTitle>
-              <CardDescription className="text-slate-600 text-sm">
-                Acesse com suas credenciais de administrador
-              </CardDescription>
-            </div>
-          </CardHeader>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-4 py-8">
+        {/* Espaçamento dinâmico do header */}
+        <div
+          className="w-full max-w-md"
+          style={{
+            paddingTop: `${Math.max(headerHeight + 16, 80)}px`,
+          }}
+        >
+          <Card className="w-full shadow-xl border-0 bg-white/95 backdrop-blur-sm">
+            <CardHeader className="text-center space-y-6 pb-6">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
+                <span className="text-2xl font-bold">GB</span>
+              </div>
+              <div className="space-y-2">
+                <CardTitle className="text-2xl md:text-3xl font-bold text-slate-800">Painel Administrativo</CardTitle>
+                <CardDescription className="text-slate-600 text-sm md:text-base">
+                  Acesse com suas credenciais de administrador
+                </CardDescription>
+              </div>
+            </CardHeader>
 
-          <CardContent className="px-8 pb-6 space-y-4">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <Alert variant="destructive" className="border-red-200 bg-red-50">
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertTitle className="text-red-800">Erro de Login</AlertTitle>
-                  <AlertDescription className="text-red-700">{error}</AlertDescription>
-                </Alert>
-              )}
+            <CardContent className="px-6 pb-8 space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <Alert variant="destructive" className="border-red-200 bg-red-50">
+                    <AlertTriangle className="h-4 w-4" />
+                    <AlertTitle className="text-red-800">Erro de Login</AlertTitle>
+                    <AlertDescription className="text-red-700">{error}</AlertDescription>
+                  </Alert>
+                )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-slate-700 font-medium text-sm">
+                  <Label htmlFor="email" className="text-slate-700 font-medium text-sm md:text-base">
                     E-mail
                   </Label>
                   <Input
@@ -144,13 +144,13 @@ export default function AdminLoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isLoading}
-                    className="h-11 border-slate-200 focus:border-slate-400 focus:ring-slate-400"
+                    className="h-12 border-slate-200 focus:border-slate-400 focus:ring-slate-400 text-base"
                     aria-label="Digite seu e-mail de administrador"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-slate-700 font-medium text-sm">
+                  <Label htmlFor="password" className="text-slate-700 font-medium text-sm md:text-base">
                     Senha
                   </Label>
                   <div className="relative">
@@ -162,14 +162,14 @@ export default function AdminLoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       disabled={isLoading}
-                      className="h-11 border-slate-200 focus:border-slate-400 focus:ring-slate-400 pr-10"
+                      className="h-12 border-slate-200 focus:border-slate-400 focus:ring-slate-400 pr-12 text-base"
                       aria-label="Digite sua senha de administrador"
                     />
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 p-0 hover:bg-slate-100"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100"
                       onClick={() => setShowPassword(!showPassword)}
                       disabled={isLoading}
                       aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
@@ -182,38 +182,57 @@ export default function AdminLoginPage() {
                     </Button>
                   </div>
                 </div>
-              </div>
 
-              <Button
-                type="submit"
-                className="w-full h-11 bg-slate-700 hover:bg-slate-800 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
-                disabled={isLoading}
-                aria-label="Entrar no Painel Administrativo"
-              >
-                {isLoading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                    Entrando...
+                <Button
+                  type="submit"
+                  className="w-full h-12 bg-slate-700 hover:bg-slate-800 text-white font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-200 focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
+                  disabled={isLoading}
+                  aria-label="Entrar no Painel Administrativo"
+                >
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                      Entrando...
+                    </div>
+                  ) : (
+                    "Entrar no Painel"
+                  )}
+                </Button>
+              </form>
+
+              {/* Seção de informações */}
+              <div className="text-center space-y-4 pt-4 border-t border-slate-200">
+                <div className="text-sm text-slate-500">
+                  <p className="font-medium">Credenciais padrão para teste:</p>
+                  <div className="font-mono text-xs bg-slate-100 p-3 rounded-md mt-2 break-all">
+                    <div>admin@gblocacoes.com.br</div>
+                    <div>admin123</div>
                   </div>
-                ) : (
-                  "Entrar no Painel"
-                )}
-              </Button>
-            </form>
+                </div>
 
-            {/* Seção de informações compacta */}
-            <div className="text-center space-y-2 pt-3 border-t border-slate-200">
-              <div className="text-xs text-slate-500">
-                <p className="font-medium mb-1">Credenciais para teste:</p>
-                <div className="font-mono text-xs bg-slate-100 px-3 py-2 rounded inline-block">
-                  admin@gblocacoes.com.br / admin123
+                <div className="pt-2">
+                  <p className="text-xs text-slate-400">© 2024 GB Locações - Sistema Administrativo</p>
                 </div>
               </div>
-              <p className="text-xs text-slate-400">© 2024 GB Locações - Sistema Administrativo</p>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
+
+// Adicionar antes do export default
+const styles = `
+  @media (max-width: 640px) {
+    .admin-login-container {
+      padding: 1rem;
+    }
+  }
+  
+  @media (min-height: 800px) {
+    .admin-login-container {
+      justify-content: center;
+    }
+  }
+`
