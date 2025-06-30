@@ -87,8 +87,10 @@ export default function AdminLoginPage() {
     <>
       <Header />
 
+
       <div
         className="flex flex-col items-center justify-center min-h-[calc(100vh-var(--header-height)*2)] px-6 py-[var(--header-height)] bg-gradient-to-br from-slate-50 to-slate-100"
+
       >
         <Card
           className="w-full max-w-md max-h-[calc(100vh-var(--header-height)*2)] overflow-y-auto shadow-2xl border-0"
@@ -107,7 +109,9 @@ export default function AdminLoginPage() {
         </CardHeader>
 
         <CardContent
+
           className="max-h-[calc(100vh-var(--header-height)*2)] pt-[var(--header-height)] pb-[var(--header-height)] px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
+
         >
 
           <form onSubmit={handleSubmit} className="space-y-6">

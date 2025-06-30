@@ -100,12 +100,12 @@ export default async function EquipmentDetailPage({ params }: Props) {
               {equipment.category.name}
             </Badge>
 
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">{equipment.name}</h1>
+            <h1 className="font-bold text-h1 text-gray-900 mb-4">{equipment.name}</h1>
 
             <div className="flex items-center gap-4 mb-6">
-              <div className="text-3xl font-bold text-orange-600">
+              <div className="text-h2 font-bold text-orange-600">
                 R$ {equipment.pricePerDay.toFixed(2)}
-                <span className="text-lg font-normal text-gray-500">/dia</span>
+                <span className="text-base font-normal text-gray-500">/dia</span>
               </div>
               <div className="flex items-center gap-1">
                 <Clock className="h-4 w-4 text-gray-500" />

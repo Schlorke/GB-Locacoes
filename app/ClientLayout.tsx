@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { Inter } from "next/font/google"
+import { Inter, Jost } from "next/font/google"
 import "./globals.css"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
@@ -15,6 +15,12 @@ const inter = Inter({
   variable: "--font-inter",
 })
 
+const jost = Jost({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jost",
+})
+
 export default function ClientLayout({
   children,
 }: {
@@ -24,7 +30,7 @@ export default function ClientLayout({
   const isAdminRoute = pathname.startsWith("/admin")
 
   return (
-    <html lang="pt-BR" className={inter.variable}>
+    <html lang="pt-BR" className={`${inter.variable} ${jost.variable}`}>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
