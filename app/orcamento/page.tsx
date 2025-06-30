@@ -163,8 +163,8 @@ function QuotePage() {
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Solicitar Orçamento</h1>
-          <p className="text-lg md:text-xl text-gray-600">Configure seu orçamento e receba nossa melhor proposta</p>
+          <h1 className="font-bold text-h1 text-gray-900 mb-4">Solicitar Orçamento</h1>
+          <p className="text-base text-gray-600">Configure seu orçamento e receba nossa melhor proposta</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
@@ -172,7 +172,7 @@ function QuotePage() {
           <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg md:text-xl">
+                <CardTitle className="flex items-center gap-2 text-h3">
                   <ShoppingCart className="h-5 w-5" />
                   Equipamentos Selecionados ({selectedEquipments.length})
                 </CardTitle>
@@ -181,8 +181,8 @@ function QuotePage() {
                 {selectedEquipments.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
                     <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p className="text-base md:text-lg font-medium">Nenhum equipamento selecionado</p>
-                    <p className="text-sm text-gray-400 mt-2">
+                    <p className="text-base font-medium">Nenhum equipamento selecionado</p>
+                    <p className="text-small text-gray-400 mt-2">
                       Você pode solicitar um orçamento geral ou{" "}
                       <a href="/equipamentos" className="text-orange-600 hover:text-orange-700 underline">
                         navegar pelos equipamentos
@@ -271,7 +271,7 @@ function QuotePage() {
 
                             {/* Preço e Ações */}
                             <div className="text-center sm:text-right flex-shrink-0">
-                              <p className="text-lg font-semibold text-primary mb-2">
+                              <p className="text-base font-semibold text-primary mb-2">
                                 {formatCurrency(calculateSubtotal(equipment))}
                               </p>
                               <Button
@@ -295,8 +295,8 @@ function QuotePage() {
             {/* Formulário de Contato - SEMPRE VISÍVEL */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-lg md:text-xl">Dados para Contato</CardTitle>
-                <p className="text-sm text-gray-600">Preencha seus dados para receber o orçamento personalizado</p>
+                <CardTitle className="text-h3">Dados para Contato</CardTitle>
+                <p className="text-small text-gray-600">Preencha seus dados para receber o orçamento personalizado</p>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -361,7 +361,7 @@ function QuotePage() {
           <div className="lg:col-span-1">
             <Card className="sticky top-24">
               <CardHeader>
-                <CardTitle className="text-lg">Resumo do Pedido</CardTitle>
+                <CardTitle className="text-h3">Resumo do Pedido</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {selectedEquipments.length > 0 ? (
