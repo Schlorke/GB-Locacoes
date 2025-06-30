@@ -102,6 +102,7 @@ export default function AdminLoginPage() {
     <>
       <Header />
 
+
       <div
         className="flex flex-col items-center justify-center px-6 bg-gradient-to-br from-slate-50 to-slate-100"
         style={{
@@ -113,6 +114,7 @@ export default function AdminLoginPage() {
         <Card
           className="w-full max-w-sm overflow-y-auto shadow-2xl border-0"
           style={{ maxHeight: `calc(100vh - ${headerHeight}px - 32px)` }}
+
         >
 
         <CardHeader className="text-center space-y-4">
@@ -128,12 +130,14 @@ export default function AdminLoginPage() {
         </CardHeader>
 
         <CardContent
+
           className="px-6 flex flex-col justify-center items-center space-y-6 overflow-y-auto"
           style={{
             maxHeight: `calc(100vh - ${headerHeight}px - 32px)`,
             paddingTop: headerHeight + 16,
             paddingBottom: 16,
           }}
+
         >
 
           <form onSubmit={handleSubmit} className="space-y-6">
