@@ -88,7 +88,7 @@ export default function AdminMobileHeader() {
               {/* Seção do Usuário */}
               <div className="p-4 border-t">
                 <div className="flex items-center gap-3 mb-4">
-                  <UserCircle className="h-10 w-10 text-slate-400 flex-shrink-0" />
+                  <UserCircle className="h-10 w-10 ml-[0.2rem] text-slate-400 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-slate-900 truncate">{session?.user?.name || "Administrador"}</p>
                     {/* @ts-ignore */}
