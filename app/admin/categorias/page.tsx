@@ -223,6 +223,7 @@ export default function AdminCategoriesPage() {
               <p className="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-md mx-auto">
                 Crie sua primeira categoria para organizar seus equipamentos.
               </p>
+              <div className="w-full sm:w-auto flex justify-center sm:justify-end">
               <Button
                 onClick={openCreateDialog}
                 className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4"
@@ -231,6 +232,7 @@ export default function AdminCategoriesPage() {
                 <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
                 <span className="truncate">Criar Primeira Categoria</span>
               </Button>
+              </div>
             </div>
           ) : (
             <div className="overflow-x-auto">
