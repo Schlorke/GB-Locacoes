@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils"
 
-import React from "react" // Import React
-import { useState, useEffect, useCallback } from "react" // Adicionado useCallback
+import React from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -45,7 +45,6 @@ interface Category {
   id: string
   name: string
   _count?: {
-    // _count pode ser opcional dependendo da query
     equipments: number
   }
 }
@@ -62,14 +61,13 @@ interface ApiResponse {
 
 export default function EquipmentsPage() {
   const { data: session } = useSession()
-  // const router = useRouter() // Não utilizado, pode ser removido se não houver navegação programática
   const [equipments, setEquipments] = useState<Equipment[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [apiError, setApiError] = useState<string | null>(null)
   const [search, setSearch] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all") // Default "all"
-  const [availabilityFilter, setAvailabilityFilter] = useState("all") // Default "all"
+  const [selectedCategory, setSelectedCategory] = useState("all")
+  const [availabilityFilter, setAvailabilityFilter] = useState("all")
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const [totalPages, setTotalPages] = useState(1)
@@ -95,7 +93,7 @@ export default function EquipmentsPage() {
         setEquipments(data.equipments)
         setTotalPages(data.pagination.totalPages)
         setTotalItems(data.pagination.totalItems)
-        setCurrentPage(data.pagination.page) // Sincronizar com a página retornada pela API
+        setCurrentPage(data.pagination.page)
       } else {
         const errorData = await response.json()
         const errorMessage = errorData.error || `Erro ${response.status} ao buscar equipamentos.`
@@ -117,7 +115,7 @@ export default function EquipmentsPage() {
     } finally {
       setLoading(false)
     }
-  }, [currentPage, itemsPerPage, search, selectedCategory, availabilityFilter]) // Dependências do useCallback
+  }, [currentPage, itemsPerPage, search, selectedCategory, availabilityFilter])
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -132,15 +130,15 @@ export default function EquipmentsPage() {
       console.error("Error fetching categories:", error)
       toast.error("Erro de rede ao buscar categorias.")
     }
-  }, []) // fetchCategories não tem dependências que mudam frequentemente
+  }, [])
 
   useEffect(() => {
     fetchCategories()
-  }, [fetchCategories]) // Executa uma vez na montagem
+  }, [fetchCategories])
 
   useEffect(() => {
     fetchEquipments()
-  }, [fetchEquipments]) // Executa quando as dependências de fetchEquipments mudam
+  }, [fetchEquipments])
 
   const handleDelete = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir este equipamento? Esta ação não pode ser desfeita.")) return
@@ -176,7 +174,6 @@ export default function EquipmentsPage() {
 
   const hasActiveFilters = search || selectedCategory !== "all" || availabilityFilter !== "all"
 
-  // Renderização condicional para estado de carregamento inicial
   if (loading && equipments.length === 0 && !apiError) {
     return (
       <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
@@ -186,7 +183,6 @@ export default function EquipmentsPage() {
     )
   }
 
-  // Renderização para estado de erro da API
   if (apiError && equipments.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)] text-center p-4">
@@ -202,22 +198,25 @@ export default function EquipmentsPage() {
   }
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
-      {/* Header Section - Responsivo */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">Gerenciar Equipamentos</h1>
-          <p className="text-muted-foreground">Gerencie todos os equipamentos do sistema</p>
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+        <div className="min-w-0 flex-1">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 truncate">
+            Gerenciar Equipamentos
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">Gerencie todos os equipamentos do sistema</p>
         </div>
-        <Button asChild className="w-full sm:w-auto">
+        <Button
+          asChild
+          className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto max-w-xs h-10 px-4"
+        >
           <Link href="/admin/equipamentos/novo">
-            <Plus className="h-4 w-4 mr-2" />
-            Novo Equipamento
+            <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
+            <span className="truncate">Novo Equipamento</span>
           </Link>
         </Button>
       </div>
 
-      {/* Filtros - Desktop */}
       <Card className="hidden lg:block">
         <CardHeader>
           <CardTitle>Filtros e Busca</CardTitle>
@@ -233,7 +232,7 @@ export default function EquipmentsPage() {
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value)
-                  setCurrentPage(1) // Resetar página ao buscar
+                  setCurrentPage(1)
                 }}
                 className="pl-10 mt-1"
               />
@@ -286,7 +285,6 @@ export default function EquipmentsPage() {
         </CardContent>
       </Card>
 
-      {/* Filtros Mobile - Sheet */}
       <div className="lg:hidden space-y-3">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -384,28 +382,31 @@ export default function EquipmentsPage() {
         </div>
       </div>
 
-      {/* Tabela/Lista de Equipamentos */}
       <Card className="relative">
-        {loading &&
-          equipments.length > 0 && ( // Loader sutil para recargas
-            <div className="absolute inset-0 bg-background/70 flex items-center justify-center z-20 rounded-md">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          )}
+        {loading && equipments.length > 0 && (
+          <div className="absolute inset-0 bg-background/70 flex items-center justify-center z-20 rounded-md">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        )}
         <CardContent className="overflow-x-auto">
           {equipments.length === 0 && !loading ? (
-            <div className="text-center py-12">
-              <Search className="h-16 w-16 mx-auto text-gray-300 dark:text-gray-500 mb-4" />
-              <p className="text-xl font-medium text-gray-600 dark:text-gray-300 mb-2">Nenhum equipamento encontrado</p>
-              <p className="text-sm text-gray-400 dark:text-gray-500 mb-6">
+            <div className="text-center py-8 sm:py-12 px-4">
+              <Search className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-gray-300 dark:text-gray-500 mb-4" />
+              <p className="text-lg sm:text-xl font-medium text-gray-600 dark:text-gray-300 mb-2">
+                Nenhum equipamento encontrado
+              </p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-md mx-auto">
                 {search || selectedCategory !== "all" || availabilityFilter !== "all"
                   ? "Tente ajustar os filtros ou limpar a busca."
                   : "Parece que não há equipamentos cadastrados ainda."}
               </p>
-              <Button asChild variant="default">
+              <Button
+                asChild
+                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full max-w-xs mx-auto h-10 px-4"
+              >
                 <Link href="/admin/equipamentos/novo">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Adicionar Primeiro Equipamento
+                  <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <span className="truncate">Adicionar Primeiro Equipamento</span>
                 </Link>
               </Button>
             </div>

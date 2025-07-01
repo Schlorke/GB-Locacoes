@@ -191,7 +191,11 @@ export default function AdminCategoriesPage() {
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Categorias</h1>
           <p className="text-sm sm:text-base text-muted-foreground mt-1">Gerencie as categorias de equipamentos.</p>
         </div>
-        <Button onClick={openCreateDialog} className="w-full sm:w-auto max-w-xs px-4" size="sm">
+        <Button
+          onClick={openCreateDialog}
+          className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto max-w-xs h-10 px-4"
+          size="sm"
+        >
           <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
           <span className="truncate">Nova Categoria</span>
         </Button>
@@ -219,7 +223,11 @@ export default function AdminCategoriesPage() {
               <p className="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-md mx-auto">
                 Crie sua primeira categoria para organizar seus equipamentos.
               </p>
-              <Button onClick={openCreateDialog} size="sm" className="w-full max-w-xs mx-auto px-4">
+              <Button
+                onClick={openCreateDialog}
+                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full max-w-xs mx-auto h-10 px-4"
+                size="sm"
+              >
                 <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
                 <span className="truncate">Criar Primeira Categoria</span>
               </Button>
@@ -408,7 +416,11 @@ export default function AdminCategoriesPage() {
                 >
                   Cancelar
                 </Button>
-                <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto"
+                >
                   {isSubmitting ? (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   ) : (

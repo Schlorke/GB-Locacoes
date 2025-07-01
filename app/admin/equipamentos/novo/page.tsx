@@ -148,24 +148,24 @@ export default function NovoEquipamento() {
   }
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
-      <div className="flex items-center gap-4">
-        <Button variant="outline" size="icon" asChild>
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
+      <div className="flex items-center gap-3 sm:gap-4">
+        <Button variant="outline" size="icon" asChild className="flex-shrink-0 bg-transparent">
           <Link href="/admin/equipamentos">
             <ArrowLeft className="h-4 w-4" />
             <span className="sr-only">Voltar</span>
           </Link>
         </Button>
-        <h1 className="text-2xl font-bold">Novo Equipamento</h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Novo Equipamento</h1>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
         <Card>
           <CardHeader>
             <CardTitle>Informações Básicas</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CardContent className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <Label htmlFor="name">Nome do Equipamento *</Label>
                 <Input
@@ -209,7 +209,7 @@ export default function NovoEquipamento() {
                 className="mt-1"
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <Label htmlFor="pricePerDay">Preço por Dia (R$) *</Label>
                 <CurrencyInput
@@ -226,7 +226,7 @@ export default function NovoEquipamento() {
                   checked={formData.isAvailable}
                   onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isAvailable: checked }))}
                 />
-                <Label htmlFor="isAvailable" className="cursor-pointer">
+                <Label htmlFor="isAvailable" className="cursor-pointer text-sm">
                   Equipamento disponível para locação
                 </Label>
               </div>
@@ -287,7 +287,7 @@ export default function NovoEquipamento() {
                 type="button"
                 variant="outline"
                 onClick={handleAddSpecification}
-                className="w-full sm:w-auto mt-2 sm:mt-0"
+                className="w-full sm:w-auto mt-2 sm:mt-0 bg-transparent"
               >
                 <PlusCircle className="h-4 w-4 mr-2" />
                 Adicionar
@@ -297,10 +297,14 @@ export default function NovoEquipamento() {
         </Card>
 
         <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
-          <Button variant="outline" type="button" asChild className="w-full sm:w-auto">
+          <Button variant="outline" type="button" asChild className="w-full sm:w-auto bg-transparent">
             <Link href="/admin/equipamentos">Cancelar</Link>
           </Button>
-          <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto"
+          >
             <Save className="h-4 w-4 mr-2" />
             {isLoading ? "Salvando..." : "Salvar Equipamento"}
           </Button>
