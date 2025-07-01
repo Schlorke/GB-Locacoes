@@ -95,7 +95,8 @@ export default function AdminDashboard() {
 
       if (quotesResponse.ok) {
         const quotesData = await quotesResponse.json()
-        setRecentQuotes(quotesData.slice(0, 5))
+        // The quotes endpoint returns an object with a `quotes` array
+        setRecentQuotes(quotesData.quotes.slice(0, 5))
       }
     } catch (error) {
       console.error("Erro ao carregar dados do dashboard:", error)
