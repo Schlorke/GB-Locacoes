@@ -119,14 +119,14 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
         <div className="min-w-0 flex-1 text-center sm:text-left">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Dashboard</h1>
           <p className="text-sm sm:text-base text-muted-foreground mt-1">
             Visão geral do sistema de locação de equipamentos
           </p>
         </div>
-        <div className="flex justify-center sm:justify-start">
+        <div className="w-full sm:w-auto flex justify-center sm:justify-end">
           <Button asChild size="sm" className="h-10 px-4">
             <Link href="/admin/equipamentos/novo">
               <Plus className="h-4 w-4 mr-2" />
