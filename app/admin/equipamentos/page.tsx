@@ -1,198 +1,128 @@
 "use client"
 
-import { cn } from "@/lib/utils"
-
-import React from "react"
-import { useState, useEffect, useCallback } from "react"
-import Link from "next/link"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Search, Plus, MoreHorizontal, Edit, Trash2, Eye, Loader2, ServerCrash, Filter } from "lucide-react"
-import { useSession } from "next-auth/react"
+import { Badge } from "@/components/ui/badge"
+import { Plus, Search, Eye, Edit, Trash2, Package, Loader2, AlertCircle } from "lucide-react"
+import Link from "next/link"
 import { toast } from "sonner"
-import * as LucideIcons from "lucide-react"
-import { Label } from "@/components/ui/label"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 interface Equipment {
   id: string
   name: string
-  description: string
-  pricePerDay: number
-  isAvailable: boolean
-  images: string[]
-  category: {
+  description?: string
+  dailyPrice: number
+  weeklyPrice?: number
+  monthlyPrice?: number
+  available: boolean
+  category?: {
     id: string
     name: string
-    icon?: string | null
-    iconColor?: string | null
-    bgColor?: string | null
-    fontColor?: string | null
+    bgColor?: string
+    fontColor?: string
   }
-  _count: {
-    reviews: number
-    quoteItems: number
-  }
+  images: string[]
   createdAt: string
 }
 
 interface Category {
   id: string
   name: string
-  _count?: {
-    equipments: number
-  }
+  bgColor?: string
+  fontColor?: string
 }
 
-interface ApiResponse {
-  equipments: Equipment[]
-  pagination: {
-    page: number
-    limit: number
-    totalItems: number
-    totalPages: number
-  }
-}
-
-export default function EquipmentsPage() {
-  const { data: session } = useSession()
+export default function AdminEquipmentsPage() {
   const [equipments, setEquipments] = useState<Equipment[]>([])
   const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
-  const [apiError, setApiError] = useState<string | null>(null)
-  const [search, setSearch] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [availabilityFilter, setAvailabilityFilter] = useState("all")
-  const [currentPage, setCurrentPage] = useState(1)
-  const [itemsPerPage, setItemsPerPage] = useState(10)
-  const [totalPages, setTotalPages] = useState(1)
-  const [totalItems, setTotalItems] = useState(0)
-  const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [availabilityFilter, setAvailabilityFilter] = useState<string>("all")
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
 
-  const fetchEquipments = useCallback(async () => {
-    setLoading(true)
-    setApiError(null)
+  useEffect(() => {
+    fetchEquipments()
+    fetchCategories()
+  }, [])
+
+  const fetchEquipments = async () => {
+    setIsLoading(true)
     try {
-      const params = new URLSearchParams()
-      params.append("page", currentPage.toString())
-      params.append("limit", itemsPerPage.toString())
-      if (search) params.append("search", search)
-      if (selectedCategory && selectedCategory !== "all") params.append("categoryId", selectedCategory)
-      if (availabilityFilter && availabilityFilter !== "all") params.append("isAvailable", availabilityFilter)
-
-      console.log(`[EquipmentsPage] Fetching: /api/admin/equipments?${params.toString()}`)
-      const response = await fetch(`/api/admin/equipments?${params.toString()}`)
-
+      const response = await fetch("/api/admin/equipments")
       if (response.ok) {
-        const data: ApiResponse = await response.json()
-        setEquipments(data.equipments)
-        setTotalPages(data.pagination.totalPages)
-        setTotalItems(data.pagination.totalItems)
-        setCurrentPage(data.pagination.page)
+        const data = await response.json()
+        setEquipments(data)
       } else {
-        const errorData = await response.json()
-        const errorMessage = errorData.error || `Erro ${response.status} ao buscar equipamentos.`
-        console.error("[EquipmentsPage] API Error:", errorMessage, errorData.details)
-        toast.error(errorMessage, { description: errorData.details })
-        setApiError(errorMessage)
-        setEquipments([])
-        setTotalPages(1)
-        setTotalItems(0)
+        toast.error("Erro ao carregar equipamentos")
       }
     } catch (error) {
-      console.error("[EquipmentsPage] Network/Catch Error:", error)
-      const errorMessage = "Erro de rede ou inesperado ao buscar equipamentos."
-      toast.error(errorMessage)
-      setApiError(errorMessage)
-      setEquipments([])
-      setTotalPages(1)
-      setTotalItems(0)
+      console.error("Error fetching equipments:", error)
+      toast.error("Erro ao carregar equipamentos")
     } finally {
-      setLoading(false)
+      setIsLoading(false)
     }
-  }, [currentPage, itemsPerPage, search, selectedCategory, availabilityFilter])
+  }
 
-  const fetchCategories = useCallback(async () => {
+  const fetchCategories = async () => {
     try {
       const response = await fetch("/api/admin/categories")
       if (response.ok) {
         const data = await response.json()
         setCategories(data)
-      } else {
-        toast.error("Erro ao buscar categorias.")
       }
     } catch (error) {
       console.error("Error fetching categories:", error)
-      toast.error("Erro de rede ao buscar categorias.")
     }
-  }, [])
+  }
 
-  useEffect(() => {
-    fetchCategories()
-  }, [fetchCategories])
-
-  useEffect(() => {
-    fetchEquipments()
-  }, [fetchEquipments])
-
-  const handleDelete = async (id: string) => {
+  const deleteEquipment = async (equipmentId: string) => {
     if (!confirm("Tem certeza que deseja excluir este equipamento? Esta ação não pode ser desfeita.")) return
 
+    setIsDeleting(true)
     try {
-      const response = await fetch(`/api/admin/equipments/${id}`, {
+      const response = await fetch(`/api/admin/equipments/${equipmentId}`, {
         method: "DELETE",
       })
 
       if (response.ok) {
-        toast.success("Equipamento excluído com sucesso!")
+        toast.success("Equipamento excluído com sucesso")
         fetchEquipments()
       } else {
         const errorData = await response.json()
-        toast.error(`Erro ao excluir equipamento: ${errorData.error || "Erro desconhecido"}`)
+        toast.error(errorData.error || "Erro ao excluir equipamento")
       }
     } catch (error) {
       console.error("Error deleting equipment:", error)
-      toast.error("Erro de rede ao excluir equipamento.")
+      toast.error("Erro ao excluir equipamento")
+    } finally {
+      setIsDeleting(false)
     }
   }
 
-  // @ts-ignore
-  const canDelete = session?.user?.role === "ADMIN"
+  const filteredEquipments = equipments.filter((equipment) => {
+    const matchesSearch =
+      equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      equipment.description?.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCategory = selectedCategory === "all" || equipment.category?.id === selectedCategory
+    const matchesAvailability =
+      availabilityFilter === "all" ||
+      (availabilityFilter === "available" && equipment.available) ||
+      (availabilityFilter === "unavailable" && !equipment.available)
 
-  const handleClearFilters = () => {
-    setSearch("")
-    setSelectedCategory("all")
-    setAvailabilityFilter("all")
-    setCurrentPage(1)
-    setIsFilterSheetOpen(false)
-  }
+    return matchesSearch && matchesCategory && matchesAvailability
+  })
 
-  const hasActiveFilters = search || selectedCategory !== "all" || availabilityFilter !== "all"
-
-  if (loading && equipments.length === 0 && !apiError) {
+  if (isLoading && equipments.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)]">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="ml-4 mt-4 text-lg text-muted-foreground">Carregando equipamentos...</p>
-      </div>
-    )
-  }
-
-  if (apiError && equipments.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-[calc(100vh-200px)] text-center p-4">
-        <ServerCrash className="h-16 w-16 text-destructive mb-4" />
-        <h2 className="text-2xl font-semibold mb-2">Erro ao Carregar Equipamentos</h2>
-        <p className="text-muted-foreground mb-4 max-w-md">{apiError}</p>
-        <Button onClick={fetchEquipments} disabled={loading}>
-          {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          Tentar Novamente
-        </Button>
+      <div className="flex items-center justify-center h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-150px)]">
+        <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 animate-spin text-primary" />
       </div>
     )
   }
@@ -201,383 +131,215 @@ export default function EquipmentsPage() {
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
       <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
         <div className="min-w-0 flex-1 text-center sm:text-left">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 truncate">
-            Gerenciar Equipamentos
-          </h1>
-          <p className="text-sm sm:text-base text-muted-foreground mt-1">Gerencie todos os equipamentos do sistema</p>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Equipamentos</h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
+            Gerencie o catálogo de equipamentos para locação.
+          </p>
         </div>
-        <Button
-          asChild
-          className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-auto h-10 px-4"
-        >
-          <Link href="/admin/equipamentos/novo">
-            <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
-            <span className="truncate">Novo Equipamento</span>
-          </Link>
-        </Button>
+        <div className="w-full sm:w-auto flex justify-center sm:justify-end">
+          <Button
+            asChild
+            className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4"
+            size="sm"
+          >
+            <Link href="/admin/equipamentos/novo">
+              <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
+              <span className="truncate">Novo Equipamento</span>
+            </Link>
+          </Button>
+        </div>
       </div>
 
-      <Card className="hidden lg:block">
-        <CardHeader>
-          <CardTitle>Filtros e Busca</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-            <div className="relative">
-              <Label htmlFor="search-equipments">Buscar</Label>
-              <Search className="absolute left-3 bottom-2.5 text-gray-400 h-4 w-4" />
-              <Input
-                id="search-equipments"
-                placeholder="Nome ou descrição..."
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value)
-                  setCurrentPage(1)
-                }}
-                className="pl-10 mt-1"
-              />
+      {/* Filtros */}
+      <Card>
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1">
+              <Label htmlFor="search" className="sr-only">
+                Pesquisar equipamentos
+              </Label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  id="search"
+                  placeholder="Pesquisar equipamentos..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
-            <div>
-              <Label htmlFor="category-filter">Categoria</Label>
-              <Select
-                value={selectedCategory}
-                onValueChange={(value) => {
-                  setSelectedCategory(value)
-                  setCurrentPage(1)
-                }}
-              >
-                <SelectTrigger id="category-filter" className="mt-1">
-                  <SelectValue placeholder="Todas as categorias" />
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Categoria" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todas as categorias</SelectItem>
                   {categories.map((category) => (
                     <SelectItem key={category.id} value={category.id}>
-                      {category.name} ({category._count?.equipments !== undefined ? category._count.equipments : 0})
+                      {category.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-            <div>
-              <Label htmlFor="availability-filter">Disponibilidade</Label>
-              <Select
-                value={availabilityFilter}
-                onValueChange={(value) => {
-                  setAvailabilityFilter(value)
-                  setCurrentPage(1)
-                }}
-              >
-                <SelectTrigger id="availability-filter" className="mt-1">
-                  <SelectValue placeholder="Todos" />
+              <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Disponibilidade" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos</SelectItem>
-                  <SelectItem value="true">Disponível</SelectItem>
-                  <SelectItem value="false">Indisponível</SelectItem>
+                  <SelectItem value="available">Disponíveis</SelectItem>
+                  <SelectItem value="unavailable">Indisponíveis</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <Button variant="outline" onClick={handleClearFilters} className="w-full md:w-auto bg-transparent">
-              Limpar Filtros
-            </Button>
           </div>
         </CardContent>
       </Card>
 
-      <div className="lg:hidden space-y-3">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-          <Input
-            placeholder="Buscar equipamentos..."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value)
-              setCurrentPage(1)
-            }}
-            className="pl-10"
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
-          <Sheet open={isFilterSheetOpen} onOpenChange={setIsFilterSheetOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" className="flex-1 mr-2 bg-transparent h-10">
-                <Filter className="h-4 w-4 mr-2" />
-                Filtros
-                {hasActiveFilters && (
-                  <Badge
-                    variant="secondary"
-                    className="ml-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
-                  >
-                    !
-                  </Badge>
-                )}
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="bottom" className="h-[80vh]">
-              <SheetHeader>
-                <SheetTitle>Filtros</SheetTitle>
-                <SheetDescription>Filtre os equipamentos por categoria e disponibilidade</SheetDescription>
-              </SheetHeader>
-              <div className="space-y-4 mt-6">
-                <div>
-                  <Label htmlFor="mobile-category-filter">Categoria</Label>
-                  <Select
-                    value={selectedCategory}
-                    onValueChange={(value) => {
-                      setSelectedCategory(value)
-                      setCurrentPage(1)
-                    }}
-                  >
-                    <SelectTrigger id="mobile-category-filter" className="mt-1">
-                      <SelectValue placeholder="Todas as categorias" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todas as categorias</SelectItem>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name} ({category._count?.equipments !== undefined ? category._count.equipments : 0})
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="mobile-availability-filter">Disponibilidade</Label>
-                  <Select
-                    value={availabilityFilter}
-                    onValueChange={(value) => {
-                      setAvailabilityFilter(value)
-                      setCurrentPage(1)
-                    }}
-                  >
-                    <SelectTrigger id="mobile-availability-filter" className="mt-1">
-                      <SelectValue placeholder="Todos" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos</SelectItem>
-                      <SelectItem value="true">Disponível</SelectItem>
-                      <SelectItem value="false">Indisponível</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex space-x-2 pt-4">
-                  <Button variant="outline" onClick={handleClearFilters} className="flex-1 bg-transparent h-10">
-                    Limpar Filtros
-                  </Button>
-                  <Button onClick={() => setIsFilterSheetOpen(false)} className="flex-1 h-10">
-                    Aplicar
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
-
-          {hasActiveFilters && (
-            <Button variant="ghost" size="sm" onClick={handleClearFilters} className="h-10">
-              Limpar
-            </Button>
+      <Card className="overflow-hidden">
+        <CardHeader className="pb-4">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <Package className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <span className="truncate">Lista de Equipamentos</span>
+            <Badge variant="secondary" className="ml-auto">
+              {filteredEquipments.length}
+            </Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0 sm:p-6">
+          {isLoading && equipments.length > 0 && (
+            <div className="flex justify-center py-4">
+              <Loader2 className="h-5 w-5 animate-spin" />
+            </div>
           )}
-        </div>
-      </div>
-
-      <Card className="relative">
-        {loading && equipments.length > 0 && (
-          <div className="absolute inset-0 bg-background/70 flex items-center justify-center z-20 rounded-md">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        )}
-        <CardContent className="overflow-x-auto">
-          {equipments.length === 0 && !loading ? (
+          {!isLoading && filteredEquipments.length === 0 && equipments.length === 0 ? (
             <div className="text-center py-8 sm:py-12 px-4">
-              <Search className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-gray-300 dark:text-gray-500 mb-4" />
-              <p className="text-lg sm:text-xl font-medium text-gray-600 dark:text-gray-300 mb-2">
-                Nenhum equipamento encontrado
+              <Package className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
+              <p className="text-lg sm:text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">
+                Nenhum equipamento encontrado.
               </p>
               <p className="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-md mx-auto">
-                {search || selectedCategory !== "all" || availabilityFilter !== "all"
-                  ? "Tente ajustar os filtros ou limpar a busca."
-                  : "Parece que não há equipamentos cadastrados ainda."}
+                Adicione seu primeiro equipamento para começar a gerenciar o catálogo.
               </p>
-              <Button
-                asChild
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-auto mx-auto h-10 px-4"
-              >
-                <Link href="/admin/equipamentos/novo">
-                  <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
-                  <span className="truncate">Adicionar Primeiro Equipamento</span>
-                </Link>
-              </Button>
+              <div className="flex justify-center">
+                <Button
+                  asChild
+                  className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4"
+                  size="sm"
+                >
+                  <Link href="/admin/equipamentos/novo">
+                    <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
+                    <span className="truncate">Adicionar Primeiro Equipamento</span>
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          ) : !isLoading && filteredEquipments.length === 0 ? (
+            <div className="text-center py-8 px-4">
+              <AlertCircle className="h-12 w-12 mx-auto text-gray-300 mb-4" />
+              <p className="text-lg font-medium text-gray-600 mb-2">Nenhum equipamento encontrado</p>
+              <p className="text-sm text-gray-400">Tente ajustar os filtros de pesquisa</p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[60px] hidden md:table-cell">Imagem</TableHead>
-                  <TableHead>Equipamento</TableHead>
-                  <TableHead className="hidden sm:table-cell">Categoria</TableHead>
-                  <TableHead>Preço/Dia</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="hidden lg:table-cell text-center">Orçamentos</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {equipments.map((equipment) => (
-                  <TableRow key={equipment.id}>
-                    <TableCell className="hidden md:table-cell p-2">
-                      <img
-                        src={equipment.images?.[0] || "/placeholder.svg?width=48&height=48&text=S/I"}
-                        alt={equipment.name}
-                        className="w-12 h-12 object-cover rounded-md border"
-                        onError={(e) => (e.currentTarget.src = "/placeholder.svg?width=48&height=48&text=Erro")}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={equipment.images?.[0] || "/placeholder.svg?width=40&height=40&text=S/I"}
-                          alt={equipment.name}
-                          className="w-10 h-10 object-cover rounded-md border md:hidden"
-                          onError={(e) => (e.currentTarget.src = "/placeholder.svg?width=40&height=40&text=Erro")}
-                        />
-                        <div>
-                          <Link
-                            href={`/admin/equipamentos/${equipment.id}`}
-                            className="font-medium hover:underline text-primary"
-                          >
-                            {equipment.name}
-                          </Link>
-                          <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[150px] sm:max-w-xs">
-                            {equipment.description}
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[200px] sm:w-[250px]">Nome</TableHead>
+                    <TableHead className="hidden md:table-cell min-w-[120px]">Categoria</TableHead>
+                    <TableHead className="hidden lg:table-cell w-[120px]">Preço Diário</TableHead>
+                    <TableHead className="w-[100px] text-center">Status</TableHead>
+                    <TableHead className="w-[120px] text-right">Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredEquipments.map((equipment) => (
+                    <TableRow key={equipment.id}>
+                      <TableCell className="p-2 sm:p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            {equipment.images.length > 0 ? (
+                              <img
+                                src={equipment.images[0] || "/placeholder.svg"}
+                                alt={equipment.name}
+                                className="w-full h-full object-cover rounded-lg"
+                              />
+                            ) : (
+                              <Package className="h-6 w-6 text-gray-400" />
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-sm truncate">{equipment.name}</p>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {equipment.description || "Sem descrição"}
+                            </p>
                           </div>
                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="hidden sm:table-cell">
-                      <Badge
-                        variant="outline"
-                        className="text-xs"
-                        style={{
-                          backgroundColor: equipment.category.bgColor || undefined,
-                          color: equipment.category.fontColor || undefined,
-                          borderColor: equipment.category.bgColor ? "transparent" : undefined,
-                        }}
-                      >
-                        {equipment.category.icon &&
-                          LucideIcons[equipment.category.icon as keyof typeof LucideIcons] &&
-                          React.createElement(LucideIcons[equipment.category.icon as keyof typeof LucideIcons], {
-                            size: 12,
-                            color: equipment.category.iconColor || equipment.category.fontColor || "currentColor",
-                            className: "mr-1 inline-block",
-                          })}
-                        {equipment.category.name}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-sm">R$ {equipment.pricePerDay.toFixed(2)}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={equipment.isAvailable ? "default" : "destructive"}
-                        className={cn(
-                          "text-xs",
-                          equipment.isAvailable
-                            ? "bg-green-100 text-green-700 border-green-300 dark:bg-green-700 dark:text-green-100 dark:border-green-500"
-                            : "bg-red-100 text-red-700 border-red-300 dark:bg-red-700 dark:text-red-100 dark:border-red-500",
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell p-2 sm:p-4">
+                        {equipment.category ? (
+                          <Badge
+                            className="text-xs"
+                            style={{
+                              backgroundColor: equipment.category.bgColor || "#e0e0e0",
+                              color: equipment.category.fontColor || "#000000",
+                            }}
+                          >
+                            {equipment.category.name}
+                          </Badge>
+                        ) : (
+                          <span className="text-sm text-muted-foreground">Sem categoria</span>
                         )}
-                      >
-                        {equipment.isAvailable ? "Disponível" : "Indisponível"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="hidden lg:table-cell text-center text-sm">
-                      {equipment._count.quoteItems}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Ações para {equipment.name}</span>
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell p-2 sm:p-4">
+                        <span className="font-bold text-green-600 text-sm">R$ {equipment.dailyPrice.toFixed(2)}</span>
+                      </TableCell>
+                      <TableCell className="text-center p-2 sm:p-4">
+                        <Badge
+                          variant={equipment.available ? "default" : "secondary"}
+                          className={`text-xs ${
+                            equipment.available
+                              ? "bg-green-100 text-green-800 border-green-200"
+                              : "bg-red-100 text-red-800 border-red-200"
+                          }`}
+                        >
+                          {equipment.available ? "Disponível" : "Indisponível"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right p-2 sm:p-4">
+                        <div className="flex items-center justify-end gap-1">
+                          <Button variant="ghost" size="icon" asChild aria-label="Visualizar" className="h-8 w-8">
                             <Link href={`/admin/equipamentos/${equipment.id}`}>
-                              <Eye className="h-4 w-4 mr-2" />
-                              Ver Detalhes
+                              <Eye className="h-4 w-4" />
                             </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem asChild>
+                          </Button>
+                          <Button variant="ghost" size="icon" asChild aria-label="Editar" className="h-8 w-8">
                             <Link href={`/admin/equipamentos/${equipment.id}/editar`}>
-                              <Edit className="h-4 w-4 mr-2" />
-                              Editar
+                              <Edit className="h-4 w-4" />
                             </Link>
-                          </DropdownMenuItem>
-                          {canDelete && (
-                            <DropdownMenuItem
-                              onClick={() => handleDelete(equipment.id)}
-                              className="text-red-600 hover:!text-red-500 focus:!text-red-500"
-                            >
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Excluir
-                            </DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => deleteEquipment(equipment.id)}
+                            className="text-red-500 hover:text-red-600 h-8 w-8"
+                            disabled={isDeleting}
+                            aria-label="Excluir"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
-
-      {equipments.length > 0 && totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 border-t mt-6">
-          <div className="text-sm text-muted-foreground">
-            Mostrando {equipments.length} de {totalItems} equipamentos. Página {currentPage} de {totalPages}.
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              Anterior
-            </Button>
-            <span className="text-sm p-2">
-              {currentPage} / {totalPages}
-            </span>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              Próxima
-            </Button>
-            <Select
-              value={itemsPerPage.toString()}
-              onValueChange={(value) => {
-                setItemsPerPage(Number.parseInt(value))
-                setCurrentPage(1)
-              }}
-            >
-              <SelectTrigger className="w-[130px] h-9 text-sm">
-                <SelectValue placeholder="Itens por pág." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="5">5 por página</SelectItem>
-                <SelectItem value="10">10 por página</SelectItem>
-                <SelectItem value="20">20 por página</SelectItem>
-                <SelectItem value="50">50 por página</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
