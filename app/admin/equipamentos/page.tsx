@@ -58,7 +58,10 @@ export default function AdminEquipmentsPage() {
       const response = await fetch("/api/admin/equipments")
       if (response.ok) {
         const data = await response.json()
-        setEquipments(data)
+        // The API returns an object with an `equipments` array and pagination
+        // info. We only need the equipments list here.
+        const equipmentsData = Array.isArray(data) ? data : data.equipments
+        setEquipments(equipmentsData)
       } else {
         toast.error("Erro ao carregar equipamentos")
       }
