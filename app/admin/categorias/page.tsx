@@ -314,7 +314,7 @@ export default function AdminCategoriesPage() {
 
       <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
         <DialogContent
-          className="w-[95vw] sm:w-full max-w-5xl max-h-[90vh] overflow-hidden p-0 rounded-xl shadow-xl"
+          className="w-[95vw] sm:w-full max-w-4xl max-h-[90vh] overflow-hidden p-0 rounded-xl shadow-xl"
           aria-labelledby="category-dialog-title"
           aria-describedby="category-dialog-desc"
         >
@@ -329,14 +329,19 @@ export default function AdminCategoriesPage() {
               </DialogDescription>
             </div>
             <div className="flex items-center gap-3">
-              <Button type="button" variant="outline" onClick={() => setIsFormDialogOpen(false)} className="px-4 py-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="h-10 px-4 bg-transparent"
+                onClick={() => setIsFormDialogOpen(false)}
+              >
                 Voltar
               </Button>
               <Button
                 type="submit"
                 form="category-form"
                 disabled={isSubmitting}
-                className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2"
+                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-6"
               >
                 {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 {editingCategory ? "Atualizar Categoria" : "Salvar Categoria"}
@@ -346,16 +351,173 @@ export default function AdminCategoriesPage() {
 
           {/* Content */}
           <div className="flex h-[calc(90vh-100px)] overflow-hidden">
-            {/* Main Content */}
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+            {/* Sidebar - Agora à esquerda */}
+            <div className="w-80 border-r bg-muted/30 overflow-y-auto">
+              <div className="p-6 space-y-6">
+                {/* Settings Section */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">Configurações</h4>
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground">Ícone</Label>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsIconPickerOpen(true)}
+                        className="w-full mt-2 h-10 flex items-center justify-start text-left"
+                      >
+                        {formData.icon ? (
+                          <>
+                            {renderIcon(formData.icon, formData.iconColor)}
+                            <span className="ml-2 text-sm capitalize">{formData.icon}</span>
+                          </>
+                        ) : (
+                          <>
+                            <div className="w-5 h-5 mr-2 rounded border-2 border-dashed border-gray-300 flex items-center justify-center">
+                              <Plus className="w-3 h-3 text-gray-400" />
+                            </div>
+                            <span className="text-gray-500">Selecionar Ícone</span>
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <Label htmlFor="cat-iconColor" className="text-xs font-medium text-muted-foreground">
+                          Cor Ícone
+                        </Label>
+                        <Input
+                          id="cat-iconColor"
+                          type="color"
+                          value={formData.iconColor}
+                          onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
+                          className="mt-1 w-full h-10 p-1 cursor-pointer"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="cat-bgColor" className="text-xs font-medium text-muted-foreground">
+                          Fundo
+                        </Label>
+                        <Input
+                          id="cat-bgColor"
+                          type="color"
+                          value={formData.bgColor}
+                          onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
+                          className="mt-1 w-full h-10 p-1 cursor-pointer"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="cat-fontColor" className="text-xs font-medium text-muted-foreground">
+                          Texto
+                        </Label>
+                        <Input
+                          id="cat-fontColor"
+                          type="color"
+                          value={formData.fontColor}
+                          onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
+                          className="mt-1 w-full h-10 p-1 cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Attributes Section */}
+                <div className="space-y-4 pt-6 border-t">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+                      Atributos Filtráveis
+                    </h4>
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        id="attr-price"
+                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        defaultChecked
+                      />
+                      <Label htmlFor="attr-price" className="text-sm text-muted-foreground">
+                        Preço
+                      </Label>
+                    </div>
+
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        id="attr-condition"
+                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        defaultChecked
+                      />
+                      <Label htmlFor="attr-condition" className="text-sm text-muted-foreground">
+                        Estado
+                      </Label>
+                    </div>
+
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        id="attr-brand"
+                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                      />
+                      <Label htmlFor="attr-brand" className="text-sm text-muted-foreground">
+                        Marca
+                      </Label>
+                    </div>
+
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        id="attr-availability"
+                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                      />
+                      <Label htmlFor="attr-availability" className="text-sm text-muted-foreground">
+                        Disponibilidade
+                      </Label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* SEO Section */}
+                <div className="space-y-4 pt-6 border-t">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">SEO</h4>
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  <div className="text-sm text-gray-500">Configurações de SEO serão implementadas em breve.</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Content - Agora à direita */}
+            <div className="flex-1 overflow-y-auto p-6 bg-background">
               <form id="category-form" onSubmit={handleSubmit} className="space-y-8">
                 {/* General Section */}
-                <div className="bg-white rounded-lg border p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-6">Geral</h3>
+                <div className="bg-muted/50 rounded-lg border p-6">
+                  <h3 className="text-lg font-medium text-foreground mb-6">Geral</h3>
 
                   <div className="space-y-6">
                     <div>
-                      <Label htmlFor="cat-name" className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                      <Label
+                        htmlFor="cat-name"
+                        className="text-sm font-medium text-muted-foreground flex items-center gap-1"
+                      >
                         Nome
                         <span className="text-red-500">*</span>
                       </Label>
@@ -365,27 +527,27 @@ export default function AdminCategoriesPage() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="Equipamentos Eletrônicos"
-                        className="mt-2 h-11"
+                        className="mt-2 h-10"
                       />
                     </div>
 
                     <div>
-                      <Label className="text-sm font-medium text-gray-700">Categoria Pai</Label>
-                      <div className="mt-2 p-3 border rounded-lg bg-gray-50 flex items-center gap-2">
+                      <Label className="text-sm font-medium text-muted-foreground">Categoria Pai</Label>
+                      <div className="mt-2 p-3 border rounded-lg bg-muted/50 flex items-center gap-2">
                         <Tag className="h-4 w-4 text-purple-600" />
-                        <span className="text-sm text-gray-600">Raiz</span>
+                        <span className="text-sm text-foreground">Raiz</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Description and Visual */}
-                <div className="bg-white rounded-lg border p-6">
-                  <h3 className="text-lg font-medium text-gray-900 mb-6">Descrição e Aparência</h3>
+                <div className="bg-muted/50 rounded-lg border p-6">
+                  <h3 className="text-lg font-medium text-foreground mb-6">Descrição e Aparência</h3>
 
                   <div className="space-y-6">
                     <div>
-                      <Label htmlFor="cat-description" className="text-sm font-medium text-gray-700">
+                      <Label htmlFor="cat-description" className="text-sm font-medium text-muted-foreground">
                         Descrição
                         <span className="text-red-500">*</span>
                       </Label>
@@ -395,14 +557,16 @@ export default function AdminCategoriesPage() {
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         placeholder="Descreva a categoria de equipamentos..."
                         rows={4}
-                        className="mt-2 resize-none"
+                        className="mt-2 h-20 resize-none"
                       />
                     </div>
 
                     {/* Visual Preview */}
                     <div>
-                      <Label className="text-sm font-medium text-gray-700 mb-3 block">Preview da Categoria</Label>
-                      <div className="p-4 border-2 border-dashed border-gray-200 rounded-lg bg-gray-50 flex items-center justify-center">
+                      <Label className="text-sm font-medium text-muted-foreground mb-3 block">
+                        Preview da Categoria
+                      </Label>
+                      <div className="p-4 border-2 border-dashed border-gray-200 rounded-lg bg-muted/50 flex items-center justify-center">
                         <span
                           className="inline-flex items-center justify-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
                           style={{
@@ -424,160 +588,6 @@ export default function AdminCategoriesPage() {
                   </div>
                 </div>
               </form>
-            </div>
-
-            {/* Sidebar */}
-            <div className="w-80 border-l bg-white overflow-y-auto">
-              <div className="p-6 space-y-6">
-                {/* Settings Section */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Configurações</h4>
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-sm font-medium text-gray-700">Ícone</Label>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setIsIconPickerOpen(true)}
-                        className="w-full mt-2 h-11 flex items-center justify-start text-left"
-                      >
-                        {formData.icon ? (
-                          <>
-                            {renderIcon(formData.icon, formData.iconColor)}
-                            <span className="ml-2 text-sm capitalize">{formData.icon}</span>
-                          </>
-                        ) : (
-                          <>
-                            <div className="w-5 h-5 mr-2 rounded border-2 border-dashed border-gray-300 flex items-center justify-center">
-                              <Plus className="w-3 h-3 text-gray-400" />
-                            </div>
-                            <span className="text-gray-500">Selecionar Ícone</span>
-                          </>
-                        )}
-                      </Button>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-3">
-                      <div>
-                        <Label htmlFor="cat-iconColor" className="text-xs font-medium text-gray-600">
-                          Cor Ícone
-                        </Label>
-                        <Input
-                          id="cat-iconColor"
-                          type="color"
-                          value={formData.iconColor}
-                          onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
-                          className="mt-1 w-full h-10 p-1 cursor-pointer"
-                        />
-                      </div>
-
-                      <div>
-                        <Label htmlFor="cat-bgColor" className="text-xs font-medium text-gray-600">
-                          Fundo
-                        </Label>
-                        <Input
-                          id="cat-bgColor"
-                          type="color"
-                          value={formData.bgColor}
-                          onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
-                          className="mt-1 w-full h-10 p-1 cursor-pointer"
-                        />
-                      </div>
-
-                      <div>
-                        <Label htmlFor="cat-fontColor" className="text-xs font-medium text-gray-600">
-                          Texto
-                        </Label>
-                        <Input
-                          id="cat-fontColor"
-                          type="color"
-                          value={formData.fontColor}
-                          onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
-                          className="mt-1 w-full h-10 p-1 cursor-pointer"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Attributes Section */}
-                <div className="space-y-4 pt-6 border-t">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">
-                      Atributos Filtráveis
-                    </h4>
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        id="attr-price"
-                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                        defaultChecked
-                      />
-                      <Label htmlFor="attr-price" className="text-sm text-gray-700">
-                        Preço
-                      </Label>
-                    </div>
-
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        id="attr-condition"
-                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                        defaultChecked
-                      />
-                      <Label htmlFor="attr-condition" className="text-sm text-gray-700">
-                        Estado
-                      </Label>
-                    </div>
-
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        id="attr-brand"
-                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                      />
-                      <Label htmlFor="attr-brand" className="text-sm text-gray-700">
-                        Marca
-                      </Label>
-                    </div>
-
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        id="attr-availability"
-                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                      />
-                      <Label htmlFor="attr-availability" className="text-sm text-gray-700">
-                        Disponibilidade
-                      </Label>
-                    </div>
-                  </div>
-                </div>
-
-                {/* SEO Section */}
-                <div className="space-y-4 pt-6 border-t">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">SEO</h4>
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  <div className="text-sm text-gray-500">Configurações de SEO serão implementadas em breve.</div>
-                </div>
-              </div>
             </div>
           </div>
         </DialogContent>
