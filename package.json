@@ -11,7 +11,8 @@
     "lint": "eslint app components --ext .ts,.tsx --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
     "lint:fix": "eslint app components --ext .js,.ts,.tsx --fix --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
     "seed": "tsx prisma/seed.ts",
-    "start": "next start"
+    "start": "next start",
+    "test": "vitest run"
   },
   "eslintIgnore": [
     "**/*.css"
@@ -71,7 +72,6 @@
     "next": "15.2.4",
     "next-auth": "latest",
     "next-themes": "latest",
-    "node:crypto": "latest",
     "nodemailer": "6.9.0",
     "react": "^19",
     "react-day-picker": "latest",
@@ -84,7 +84,6 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "latest",
-    "vitest": "latest",
     "vue": "latest",
     "vue-router": "latest",
     "zod": "latest"
@@ -104,11 +103,11 @@
     "globals": "^16.2.0",
     "postcss": "^8.5",
     "prisma": "^6.10.1",
-    "tailwind-scrollbar": "^4.0.2",
     "tailwind-scrollbar-hide": "^4.0.0",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.20.3",
     "typescript": "^5",
-    "typescript-eslint": "^8.35.0"
+    "typescript-eslint": "^8.35.0",
+    "vitest": "^3.2.4"
   }
 }
