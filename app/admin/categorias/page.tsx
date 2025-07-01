@@ -224,14 +224,14 @@ export default function AdminCategoriesPage() {
                 Crie sua primeira categoria para organizar seus equipamentos.
               </p>
               <div className="w-full sm:w-auto flex justify-center sm:center">
-              <Button
-                onClick={openCreateDialog}
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4"
-                size="sm"
-              >
-                <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span className="truncate">Criar Primeira Categoria</span>
-              </Button>
+                <Button
+                  onClick={openCreateDialog}
+                  className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4"
+                  size="sm"
+                >
+                  <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <span className="truncate">Criar Primeira Categoria</span>
+                </Button>
               </div>
             </div>
           ) : (
@@ -316,121 +316,216 @@ export default function AdminCategoriesPage() {
 
       <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
         <DialogContent
-          className="w-full max-w-2xl max-h-[90vh] overflow-hidden p-0 rounded-xl shadow-xl"
+          className="w-[95vw] sm:w-full max-w-4xl max-h-[95vh] overflow-hidden p-0 rounded-xl shadow-xl"
           aria-labelledby="category-dialog-title"
           aria-describedby="category-dialog-desc"
         >
-          <DialogHeader className="p-6 pb-4 border-b">
-            <DialogTitle id="category-dialog-title" className="text-lg sm:text-xl">
+          <DialogHeader className="p-4 sm:p-6 pb-3 sm:pb-4 border-b bg-muted/30">
+            <DialogTitle id="category-dialog-title" className="text-lg sm:text-xl font-bold">
               {editingCategory ? "Editar Categoria" : "Nova Categoria"}
             </DialogTitle>
-            <DialogDescription id="category-dialog-desc">Preencha os dados da categoria.</DialogDescription>
+            <DialogDescription id="category-dialog-desc" className="text-sm text-muted-foreground">
+              Configure os dados da categoria de equipamentos.
+            </DialogDescription>
           </DialogHeader>
-          <div className="overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 hover:scrollbar-thumb-slate-500 px-6 py-4">
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-              <div>
-                <Label htmlFor="cat-name" className="text-sm font-medium">
-                  Nome da Categoria *
-                </Label>
-                <Input
-                  id="cat-name"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Ex: Andaimes e Escadas"
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="cat-description" className="text-sm font-medium">
-                  Descrição
-                </Label>
-                <Textarea
-                  id="cat-description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Breve descrição da categoria"
-                  rows={3}
-                  className="mt-1"
-                />
+
+          <div className="overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 hover:scrollbar-thumb-slate-500 max-h-[calc(95vh-140px)]">
+            <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-6">
+              {/* Seção: Informações Básicas */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 pb-2 border-b border-muted">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                    Informações Básicas
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="lg:col-span-1">
+                    <Label htmlFor="cat-name" className="text-sm font-medium flex items-center gap-1">
+                      Nome da Categoria
+                      <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="cat-name"
+                      required
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="Ex: Andaimes e Escadas"
+                      className="mt-1.5 h-11"
+                    />
+                  </div>
+
+                  <div className="lg:col-span-1">
+                    <Label htmlFor="cat-description" className="text-sm font-medium">
+                      Descrição
+                    </Label>
+                    <Textarea
+                      id="cat-description"
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      placeholder="Breve descrição da categoria"
+                      rows={3}
+                      className="mt-1.5 resize-none"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-sm font-medium">Ícone</Label>
+              {/* Seção: Aparência Visual */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 pb-2 border-b border-muted">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                    Aparência Visual
+                  </h3>
+                </div>
+
+                {/* Preview da Categoria */}
+                <div className="bg-muted/50 rounded-lg p-4 border-2 border-dashed border-muted">
+                  <Label className="text-sm font-medium mb-2 block">Preview da Categoria</Label>
+                  <div className="flex items-center justify-center py-3">
+                    <span
+                      className="inline-flex items-center justify-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+                      style={{
+                        backgroundColor: formData.bgColor || "#e0e0e0",
+                        color: formData.fontColor || "#000000",
+                      }}
+                    >
+                      {formData.icon &&
+                        LucideIcons[formData.icon] &&
+                        createElement(LucideIcons[formData.icon], {
+                          size: 16,
+                          color: formData.iconColor || formData.fontColor,
+                          className: "mr-2 flex-shrink-0",
+                        })}
+                      <span>{formData.name || "Nome da Categoria"}</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Configurações de Ícone */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Ícone da Categoria</Label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsIconPickerOpen(true)}
+                      className="w-full h-11 flex items-center justify-start text-left hover:bg-muted/50"
+                    >
+                      {formData.icon ? (
+                        <>
+                          {renderIcon(formData.icon, formData.iconColor)}
+                          <span className="ml-2 truncate capitalize">{formData.icon}</span>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-5 h-5 mr-2 rounded border-2 border-dashed border-muted-foreground/50 flex items-center justify-center">
+                            <Plus className="w-3 h-3 text-muted-foreground/50" />
+                          </div>
+                          <span className="text-muted-foreground">Selecionar Ícone</span>
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="cat-iconColor" className="text-sm font-medium">
+                      Cor do Ícone
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="cat-iconColor"
+                        type="color"
+                        value={formData.iconColor}
+                        onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
+                        className="w-12 h-11 p-1 cursor-pointer"
+                      />
+                      <Input
+                        type="text"
+                        value={formData.iconColor}
+                        onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
+                        placeholder="#000000"
+                        className="flex-1 h-11 font-mono text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Configurações de Cores do Rótulo */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="cat-bgColor" className="text-sm font-medium">
+                      Cor de Fundo
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="cat-bgColor"
+                        type="color"
+                        value={formData.bgColor}
+                        onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
+                        className="w-12 h-11 p-1 cursor-pointer"
+                      />
+                      <Input
+                        type="text"
+                        value={formData.bgColor}
+                        onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
+                        placeholder="#e0e0e0"
+                        className="flex-1 h-11 font-mono text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="cat-fontColor" className="text-sm font-medium">
+                      Cor do Texto
+                    </Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="cat-fontColor"
+                        type="color"
+                        value={formData.fontColor}
+                        onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
+                        className="w-12 h-11 p-1 cursor-pointer"
+                      />
+                      <Input
+                        type="text"
+                        value={formData.fontColor}
+                        onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
+                        placeholder="#000000"
+                        className="flex-1 h-11 font-mono text-sm"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Botões de Ação */}
+              <div className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t pt-4 mt-6">
+                <DialogFooter className="flex-col sm:flex-row gap-3 sm:gap-2">
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setIsIconPickerOpen(true)}
-                    className="w-full mt-1 flex items-center justify-start text-left"
+                    onClick={() => setIsFormDialogOpen(false)}
+                    className="w-full sm:w-auto h-11 order-2 sm:order-1"
                   >
-                    {renderIcon(formData.icon, formData.iconColor)}
-                    {!formData.icon && <span className="ml-2 truncate">Selecionar Ícone</span>}
+                    Cancelar
                   </Button>
-                </div>
-                <div>
-                  <Label htmlFor="cat-iconColor" className="text-sm font-medium">
-                    Cor do Ícone
-                  </Label>
-                  <Input
-                    id="cat-iconColor"
-                    type="color"
-                    value={formData.iconColor}
-                    onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
-                    className="mt-1 w-full h-10 p-1"
-                  />
-                </div>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto h-11 order-1 sm:order-2"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Check className="mr-2 h-4 w-4" />
+                    )}
+                    {editingCategory ? "Atualizar Categoria" : "Criar Categoria"}
+                  </Button>
+                </DialogFooter>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="cat-bgColor" className="text-sm font-medium">
-                    Cor de Fundo do Rótulo
-                  </Label>
-                  <Input
-                    id="cat-bgColor"
-                    type="color"
-                    value={formData.bgColor}
-                    onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
-                    className="mt-1 w-full h-10 p-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="cat-fontColor" className="text-sm font-medium">
-                    Cor da Fonte do Rótulo
-                  </Label>
-                  <Input
-                    id="cat-fontColor"
-                    type="color"
-                    value={formData.fontColor}
-                    onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
-                    className="mt-1 w-full h-10 p-1"
-                  />
-                </div>
-              </div>
-
-              <DialogFooter className="pt-4 flex-col sm:flex-row gap-2 sm:gap-0">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsFormDialogOpen(false)}
-                  className="w-full sm:w-auto"
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Check className="mr-2 h-4 w-4" />
-                  )}
-                  {editingCategory ? "Atualizar Categoria" : "Criar Categoria"}
-                </Button>
-              </DialogFooter>
             </form>
           </div>
         </DialogContent>
