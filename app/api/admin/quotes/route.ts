@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { Prisma } from "@prisma/client"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
@@ -11,7 +12,39 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
+    const { searchParams } = new URL(request.url)
+    const page = Number.parseInt(searchParams.get("page") || "1")
+    const limit = Number.parseInt(searchParams.get("limit") || "10")
+    const search = searchParams.get("search")
+    const status = searchParams.get("status")
+
+    if (isNaN(page) || page < 1) {
+      return NextResponse.json({ error: "Parâmetro 'page' inválido." }, { status: 400 })
+    }
+
+    if (isNaN(limit) || limit < 1) {
+      return NextResponse.json({ error: "Parâmetro 'limit' inválido." }, { status: 400 })
+    }
+
+    const skip = (page - 1) * limit
+    const where: Prisma.QuoteWhereInput = {}
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: "insensitive" } },
+        { email: { contains: search, mode: "insensitive" } },
+        { phone: { contains: search, mode: "insensitive" } },
+      ]
+    }
+
+    if (status && status !== "all") {
+      where.status = status.toUpperCase() as any
+    }
+
     const quotes = await prisma.quote.findMany({
+      where,
+      skip,
+      take: limit,
       include: {
         items: {
           include: {
@@ -20,23 +53,9 @@ export async function GET() {
                 id: true,
                 name: true,
                 pricePerDay: true,
-                category: {
-                  select: {
-                    name: true,
-                    iconColor: true,
-                    bgColor: true,
-                    fontColor: true,
-                  },
-                },
+                images: true,
               },
             },
-          },
-        },
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
           },
         },
       },
@@ -45,7 +64,30 @@ export async function GET() {
       },
     })
 
-    return NextResponse.json(quotes)
+    const totalItems = await prisma.quote.count({ where })
+    const totalPages = Math.ceil(totalItems / limit)
+
+    const [total, pending, approved, rejected, completed] = await Promise.all([
+      prisma.quote.count(),
+      prisma.quote.count({ where: { status: "PENDING" } }),
+      prisma.quote.count({ where: { status: "APPROVED" } }),
+      prisma.quote.count({ where: { status: "REJECTED" } }),
+      prisma.quote.count({ where: { status: "COMPLETED" } }),
+    ])
+
+    const response = {
+      quotes,
+      pagination: { page, limit, totalItems, totalPages },
+      stats: {
+        total,
+        pending,
+        approved,
+        rejected,
+        expired: completed,
+      },
+    }
+
+    return NextResponse.json(response)
   } catch (error) {
     console.error("Error fetching quotes:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
