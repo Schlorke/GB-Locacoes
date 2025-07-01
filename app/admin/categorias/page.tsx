@@ -186,14 +186,14 @@ export default function AdminCategoriesPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-        <div className="min-w-0 flex-1">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
+        <div className="min-w-0 flex-1 text-center sm:text-left">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Categorias</h1>
           <p className="text-sm sm:text-base text-muted-foreground mt-1">Gerencie as categorias de equipamentos.</p>
         </div>
         <Button
           onClick={openCreateDialog}
-          className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto max-w-xs h-10 px-4"
+          className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-auto h-10 px-4"
           size="sm"
         >
           <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
@@ -225,7 +225,7 @@ export default function AdminCategoriesPage() {
               </p>
               <Button
                 onClick={openCreateDialog}
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full max-w-xs mx-auto h-10 px-4"
+                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-auto mx-auto h-10 px-4"
                 size="sm"
               >
                 <Plus className="h-4 w-4 mr-2 flex-shrink-0" />

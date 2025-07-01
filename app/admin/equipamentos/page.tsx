@@ -199,8 +199,8 @@ export default function EquipmentsPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-        <div className="min-w-0 flex-1">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
+        <div className="min-w-0 flex-1 text-center sm:text-left">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 truncate">
             Gerenciar Equipamentos
           </h1>
@@ -208,7 +208,7 @@ export default function EquipmentsPage() {
         </div>
         <Button
           asChild
-          className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto max-w-xs h-10 px-4"
+          className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-auto h-10 px-4"
         >
           <Link href="/admin/equipamentos/novo">
             <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
@@ -302,7 +302,7 @@ export default function EquipmentsPage() {
         <div className="flex items-center justify-between">
           <Sheet open={isFilterSheetOpen} onOpenChange={setIsFilterSheetOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" className="flex-1 mr-2 bg-transparent">
+              <Button variant="outline" className="flex-1 mr-2 bg-transparent h-10">
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
                 {hasActiveFilters && (
@@ -363,10 +363,10 @@ export default function EquipmentsPage() {
                   </Select>
                 </div>
                 <div className="flex space-x-2 pt-4">
-                  <Button variant="outline" onClick={handleClearFilters} className="flex-1 bg-transparent">
+                  <Button variant="outline" onClick={handleClearFilters} className="flex-1 bg-transparent h-10">
                     Limpar Filtros
                   </Button>
-                  <Button onClick={() => setIsFilterSheetOpen(false)} className="flex-1">
+                  <Button onClick={() => setIsFilterSheetOpen(false)} className="flex-1 h-10">
                     Aplicar
                   </Button>
                 </div>
@@ -375,7 +375,7 @@ export default function EquipmentsPage() {
           </Sheet>
 
           {hasActiveFilters && (
-            <Button variant="ghost" size="sm" onClick={handleClearFilters}>
+            <Button variant="ghost" size="sm" onClick={handleClearFilters} className="h-10">
               Limpar
             </Button>
           )}
@@ -402,7 +402,7 @@ export default function EquipmentsPage() {
               </p>
               <Button
                 asChild
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full max-w-xs mx-auto h-10 px-4"
+                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-auto mx-auto h-10 px-4"
               >
                 <Link href="/admin/equipamentos/novo">
                   <Plus className="h-4 w-4 mr-2 flex-shrink-0" />

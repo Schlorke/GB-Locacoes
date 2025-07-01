@@ -120,14 +120,14 @@ export default function AdminDashboard() {
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 text-center sm:text-left">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Dashboard</h1>
           <p className="text-sm sm:text-base text-muted-foreground mt-1">
             Visão geral do sistema de locação de equipamentos
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <Button asChild size="sm" className="w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto justify-center sm:justify-start">
+          <Button asChild size="sm" className="w-auto">
             <Link href="/admin/equipamentos/novo">
               <Plus className="h-4 w-4 mr-2" />
               <span className="truncate">Novo Equipamento</span>
@@ -251,8 +251,8 @@ export default function AdminDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 justify-items-center sm:justify-items-stretch">
+            <Button asChild variant="outline" className="h-auto p-4 bg-transparent w-auto">
               <Link href="/admin/equipamentos/novo" className="flex flex-col items-center gap-2">
                 <Plus className="h-6 w-6 text-blue-600" />
                 <span className="font-medium text-center">Adicionar Equipamento</span>
@@ -260,7 +260,7 @@ export default function AdminDashboard() {
               </Link>
             </Button>
 
-            <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
+            <Button asChild variant="outline" className="h-auto p-4 bg-transparent w-auto">
               <Link href="/admin/categorias" className="flex flex-col items-center gap-2">
                 <BarChart3 className="h-6 w-6 text-green-600" />
                 <span className="font-medium text-center">Gerenciar Categorias</span>
@@ -268,7 +268,7 @@ export default function AdminDashboard() {
               </Link>
             </Button>
 
-            <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
+            <Button asChild variant="outline" className="h-auto p-4 bg-transparent w-auto">
               <Link href="/admin/orcamentos" className="flex flex-col items-center gap-2">
                 <FileText className="h-6 w-6 text-purple-600" />
                 <span className="font-medium text-center">Ver Orçamentos</span>
@@ -287,7 +287,7 @@ export default function AdminDashboard() {
               <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="truncate">Orçamentos Recentes</span>
             </CardTitle>
-            <Button asChild variant="outline" size="sm" className="w-full sm:w-auto bg-transparent">
+            <Button asChild variant="outline" size="sm" className="w-auto bg-transparent">
               <Link href="/admin/orcamentos">
                 <Eye className="h-4 w-4 mr-2" />
                 Ver Todos

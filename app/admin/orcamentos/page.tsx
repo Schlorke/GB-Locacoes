@@ -218,8 +218,8 @@ export default function QuotesPage() {
 
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-        <div className="min-w-0 flex-1">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
+        <div className="min-w-0 flex-1 text-center sm:text-left">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 truncate">
             Gerenciar Orçamentos
           </h1>
@@ -359,7 +359,7 @@ export default function QuotesPage() {
         <div className="flex items-center justify-between">
           <Sheet open={isFilterSheetOpen} onOpenChange={setIsFilterSheetOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" className="flex-1 mr-2 bg-transparent">
+              <Button variant="outline" className="flex-1 mr-2 bg-transparent h-10">
                 <Filter className="h-4 w-4 mr-2" />
                 Filtros
                 {hasActiveFilters && (
@@ -400,10 +400,10 @@ export default function QuotesPage() {
                   </Select>
                 </div>
                 <div className="flex space-x-2 pt-4">
-                  <Button variant="outline" onClick={handleClearFilters} className="flex-1 bg-transparent">
+                  <Button variant="outline" onClick={handleClearFilters} className="flex-1 bg-transparent h-10">
                     Limpar Filtros
                   </Button>
-                  <Button onClick={() => setIsFilterSheetOpen(false)} className="flex-1">
+                  <Button onClick={() => setIsFilterSheetOpen(false)} className="flex-1 h-10">
                     Aplicar
                   </Button>
                 </div>
@@ -411,11 +411,9 @@ export default function QuotesPage() {
             </SheetContent>
           </Sheet>
 
-          {hasActiveFilters && (
-            <Button variant="ghost" size="sm" onClick={handleClearFilters}>
-              Limpar
-            </Button>
-          )}
+          <Button variant="ghost" size="sm" onClick={handleClearFilters} className="h-10">
+            Limpar
+          </Button>
         </div>
       </div>
 
@@ -660,10 +658,10 @@ export default function QuotesPage() {
 
               {/* Ações de Status */}
               {selectedQuote.status === "PENDING" && (
-                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t justify-center sm:justify-start">
                   <Button
                     onClick={() => updateQuoteStatus(selectedQuote.id, "APPROVED")}
-                    className="bg-green-600 hover:bg-green-700 text-white flex-1"
+                    className="bg-green-600 hover:bg-green-700 text-white w-auto h-10"
                   >
                     <CheckCircle className="h-4 w-4 mr-2" />
                     Aprovar Orçamento
@@ -671,7 +669,7 @@ export default function QuotesPage() {
                   <Button
                     onClick={() => updateQuoteStatus(selectedQuote.id, "REJECTED")}
                     variant="destructive"
-                    className="flex-1"
+                    className="w-auto h-10"
                   >
                     <XCircle className="h-4 w-4 mr-2" />
                     Rejeitar Orçamento
