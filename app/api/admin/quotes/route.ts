@@ -23,7 +23,9 @@ export async function GET() {
                 category: {
                   select: {
                     name: true,
-                    color: true,
+                    iconColor: true,
+                    bgColor: true,
+                    fontColor: true,
                   },
                 },
               },
