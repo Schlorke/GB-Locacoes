@@ -26,7 +26,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                 category: {
                   select: {
                     name: true,
-                    color: true,
+                    iconColor: true,
+                    bgColor: true,
+                    fontColor: true,
                   },
                 },
               },
