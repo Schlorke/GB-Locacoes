@@ -2,30 +2,38 @@
 
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
-  Users,
+  BarChart3,
   Package,
   FileText,
   TrendingUp,
-  DollarSign,
-  Activity,
   Clock,
   CheckCircle,
-  AlertTriangle,
+  XCircle,
+  Plus,
+  Eye,
   Loader2,
+  AlertTriangle,
+  DollarSign,
+  Calendar,
+  Building,
+  User,
 } from "lucide-react"
-import { useSession } from "next-auth/react"
 import Link from "next/link"
+import { toast } from "sonner"
 
 interface DashboardStats {
   totalEquipments: number
+  availableEquipments: number
   totalCategories: number
   totalQuotes: number
   pendingQuotes: number
   approvedQuotes: number
   rejectedQuotes: number
+  completedQuotes: number
   totalRevenue: number
   monthlyRevenue: number
 }
@@ -34,14 +42,37 @@ interface RecentQuote {
   id: string
   customerName: string
   customerEmail: string
-  totalAmount: number
+  customerCompany?: string
+  totalAmount?: number
   status: string
   createdAt: string
   itemsCount: number
 }
 
+const statusConfig = {
+  pending: {
+    label: "Pendente",
+    color: "bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-200",
+    icon: Clock,
+  },
+  approved: {
+    label: "Aprovado",
+    color: "bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-200",
+    icon: CheckCircle,
+  },
+  rejected: {
+    label: "Rejeitado",
+    color: "bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-200",
+    icon: XCircle,
+  },
+  completed: {
+    label: "Concluído",
+    color: "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-200",
+    icon: CheckCircle,
+  },
+}
+
 export default function AdminDashboard() {
-  const { data: session } = useSession()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [recentQuotes, setRecentQuotes] = useState<RecentQuote[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -52,68 +83,25 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      // Simulated data - replace with actual API calls
-      setStats({
-        totalEquipments: 45,
-        totalCategories: 8,
-        totalQuotes: 127,
-        pendingQuotes: 12,
-        approvedQuotes: 89,
-        rejectedQuotes: 26,
-        totalRevenue: 125000,
-        monthlyRevenue: 18500,
-      })
-
-      setRecentQuotes([
-        {
-          id: "1",
-          customerName: "João Silva",
-          customerEmail: "joao@empresa.com",
-          totalAmount: 2500,
-          status: "pending",
-          createdAt: new Date().toISOString(),
-          itemsCount: 3,
-        },
-        {
-          id: "2",
-          customerName: "Maria Santos",
-          customerEmail: "maria@construtora.com",
-          totalAmount: 4200,
-          status: "approved",
-          createdAt: new Date(Date.now() - 86400000).toISOString(),
-          itemsCount: 5,
-        },
+      const [statsResponse, quotesResponse] = await Promise.all([
+        fetch("/api/admin/dashboard/stats"),
+        fetch("/api/admin/quotes?limit=5"),
       ])
+
+      if (statsResponse.ok) {
+        const statsData = await statsResponse.json()
+        setStats(statsData)
+      }
+
+      if (quotesResponse.ok) {
+        const quotesData = await quotesResponse.json()
+        setRecentQuotes(quotesData.slice(0, 5))
+      }
     } catch (error) {
-      console.error("Error fetching dashboard data:", error)
+      console.error("Erro ao carregar dados do dashboard:", error)
+      toast.error("Erro ao carregar dados do dashboard")
     } finally {
       setIsLoading(false)
-    }
-  }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200"
-      case "approved":
-        return "bg-green-100 text-green-800 border-green-200"
-      case "rejected":
-        return "bg-red-100 text-red-800 border-red-200"
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200"
-    }
-  }
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "Pendente"
-      case "approved":
-        return "Aprovado"
-      case "rejected":
-        return "Rejeitado"
-      default:
-        return status
     }
   }
 
@@ -133,17 +121,15 @@ export default function AdminDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 truncate">
-            Dashboard
-          </h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Dashboard</h1>
           <p className="text-sm sm:text-base text-muted-foreground mt-1">
-            Bem-vindo de volta, {session?.user?.name || "Administrador"}!
+            Visão geral do sistema de locação de equipamentos
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <Button asChild size="sm" className="w-full sm:w-auto">
             <Link href="/admin/equipamentos/novo">
-              <Package className="h-4 w-4 mr-2" />
+              <Plus className="h-4 w-4 mr-2" />
               <span className="truncate">Novo Equipamento</span>
             </Link>
           </Button>
@@ -152,202 +138,239 @@ export default function AdminDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-        <Card className="hover:shadow-md transition-shadow">
+        <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Total Equipamentos</p>
-                <p className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100">
-                  {stats?.totalEquipments || 0}
-                </p>
+                <p className="text-blue-100 text-xs sm:text-sm truncate">Total de Equipamentos</p>
+                <p className="text-xl sm:text-2xl font-bold">{stats?.totalEquipments || 0}</p>
+                <p className="text-blue-200 text-xs mt-1 truncate">{stats?.availableEquipments || 0} disponíveis</p>
               </div>
-              <div className="flex-shrink-0 ml-3">
-                <Package className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
-              </div>
+              <Package className="h-6 w-6 sm:h-8 sm:w-8 text-blue-200 flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-md transition-shadow">
+        <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Categorias</p>
-                <p className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100">
-                  {stats?.totalCategories || 0}
-                </p>
+                <p className="text-green-100 text-xs sm:text-sm truncate">Categorias</p>
+                <p className="text-xl sm:text-2xl font-bold">{stats?.totalCategories || 0}</p>
+                <p className="text-green-200 text-xs mt-1 truncate">Organizadas</p>
               </div>
-              <div className="flex-shrink-0 ml-3">
-                <Activity className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
-              </div>
+              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-green-200 flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-md transition-shadow">
+        <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Total Orçamentos</p>
-                <p className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100">
-                  {stats?.totalQuotes || 0}
-                </p>
+                <p className="text-purple-100 text-xs sm:text-sm truncate">Orçamentos</p>
+                <p className="text-xl sm:text-2xl font-bold">{stats?.totalQuotes || 0}</p>
+                <p className="text-purple-200 text-xs mt-1 truncate">{stats?.pendingQuotes || 0} pendentes</p>
               </div>
-              <div className="flex-shrink-0 ml-3">
-                <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-orange-600" />
-              </div>
+              <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-purple-200 flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-md transition-shadow">
+        <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">Receita Mensal</p>
-                <p className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100">
-                  R$ {(stats?.monthlyRevenue || 0).toLocaleString("pt-BR")}
-                </p>
+                <p className="text-orange-100 text-xs sm:text-sm truncate">Receita Mensal</p>
+                <p className="text-xl sm:text-2xl font-bold">R$ {((stats?.monthlyRevenue || 0) / 100).toFixed(0)}</p>
+                <p className="text-orange-200 text-xs mt-1 truncate">Este mês</p>
               </div>
-              <div className="flex-shrink-0 ml-3">
-                <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
-              </div>
+              <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-orange-200 flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Quote Status Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-        <Card className="bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200 hover:shadow-md transition-shadow">
-          <CardContent className="p-4 sm:p-6">
+      {/* Status dos Orçamentos */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <Card className="border-l-4 border-l-yellow-500">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-yellow-800 truncate">Orçamentos Pendentes</p>
-                <p className="text-xl sm:text-2xl font-bold text-yellow-900">{stats?.pendingQuotes || 0}</p>
+                <p className="text-sm text-muted-foreground truncate">Pendentes</p>
+                <p className="text-lg sm:text-xl font-bold text-yellow-600">{stats?.pendingQuotes || 0}</p>
               </div>
-              <div className="flex-shrink-0 ml-3">
-                <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-600" />
-              </div>
+              <Clock className="h-5 w-5 text-yellow-500 flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200 hover:shadow-md transition-shadow">
-          <CardContent className="p-4 sm:p-6">
+        <Card className="border-l-4 border-l-green-500">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-green-800 truncate">Orçamentos Aprovados</p>
-                <p className="text-xl sm:text-2xl font-bold text-green-900">{stats?.approvedQuotes || 0}</p>
+                <p className="text-sm text-muted-foreground truncate">Aprovados</p>
+                <p className="text-lg sm:text-xl font-bold text-green-600">{stats?.approvedQuotes || 0}</p>
               </div>
-              <div className="flex-shrink-0 ml-3">
-                <CheckCircle className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
-              </div>
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-red-50 to-red-100 border-red-200 hover:shadow-md transition-shadow">
-          <CardContent className="p-4 sm:p-6">
+        <Card className="border-l-4 border-l-red-500">
+          <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
-                <p className="text-xs sm:text-sm font-medium text-red-800 truncate">Orçamentos Rejeitados</p>
-                <p className="text-xl sm:text-2xl font-bold text-red-900">{stats?.rejectedQuotes || 0}</p>
+                <p className="text-sm text-muted-foreground truncate">Rejeitados</p>
+                <p className="text-lg sm:text-xl font-bold text-red-600">{stats?.rejectedQuotes || 0}</p>
               </div>
-              <div className="flex-shrink-0 ml-3">
-                <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8 text-red-600" />
+              <XCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-l-blue-500">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-muted-foreground truncate">Concluídos</p>
+                <p className="text-lg sm:text-xl font-bold text-blue-600">{stats?.completedQuotes || 0}</p>
               </div>
+              <CheckCircle className="h-5 w-5 text-blue-500 flex-shrink-0" />
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="pb-3 sm:pb-4">
+      {/* Ações Rápidas */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+            <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="truncate">Ações Rápidas</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
+              <Link href="/admin/equipamentos/novo" className="flex flex-col items-center gap-2">
+                <Plus className="h-6 w-6 text-blue-600" />
+                <span className="font-medium text-center">Adicionar Equipamento</span>
+                <span className="text-xs text-muted-foreground text-center">Cadastrar novo equipamento no sistema</span>
+              </Link>
+            </Button>
+
+            <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
+              <Link href="/admin/categorias" className="flex flex-col items-center gap-2">
+                <BarChart3 className="h-6 w-6 text-green-600" />
+                <span className="font-medium text-center">Gerenciar Categorias</span>
+                <span className="text-xs text-muted-foreground text-center">Organizar equipamentos por categoria</span>
+              </Link>
+            </Button>
+
+            <Button asChild variant="outline" className="h-auto p-4 bg-transparent">
+              <Link href="/admin/orcamentos" className="flex flex-col items-center gap-2">
+                <FileText className="h-6 w-6 text-purple-600" />
+                <span className="font-medium text-center">Ver Orçamentos</span>
+                <span className="text-xs text-muted-foreground text-center">Gerenciar solicitações de orçamento</span>
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Orçamentos Recentes */}
+      <Card>
+        <CardHeader>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-              <FileText className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+              <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="truncate">Orçamentos Recentes</span>
             </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0 sm:px-6 sm:pb-6">
-            <div className="space-y-3 sm:space-y-4 px-4 sm:px-0 pb-4 sm:pb-0">
-              {recentQuotes.length === 0 ? (
-                <div className="text-center py-6 sm:py-8">
-                  <FileText className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-gray-300 mb-3 sm:mb-4" />
-                  <p className="text-sm sm:text-base text-muted-foreground">Nenhum orçamento recente</p>
-                </div>
-              ) : (
-                recentQuotes.map((quote) => (
-                  <div
-                    key={quote.id}
-                    className="flex items-center justify-between p-3 sm:p-4 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <p className="text-sm sm:text-base font-medium text-slate-900 truncate">{quote.customerName}</p>
-                        <Badge className={`text-xs ${getStatusColor(quote.status)} flex-shrink-0`}>
-                          {getStatusLabel(quote.status)}
-                        </Badge>
-                      </div>
-                      <p className="text-xs sm:text-sm text-muted-foreground truncate">{quote.customerEmail}</p>
-                      <div className="flex items-center gap-3 sm:gap-4 mt-1">
-                        <span className="text-xs sm:text-sm font-medium text-green-600">
-                          R$ {quote.totalAmount.toLocaleString("pt-BR")}
-                        </span>
-                        <span className="text-xs text-muted-foreground">{quote.itemsCount} itens</span>
-                      </div>
-                    </div>
-                    <div className="flex-shrink-0 ml-3">
-                      <Button variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
-                        <Link href={`/admin/orcamentos`}>
-                          <FileText className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-md transition-shadow">
-          <CardHeader className="pb-3 sm:pb-4">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span className="truncate">Ações Rápidas</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 sm:space-y-4">
-            <Button asChild className="w-full justify-start bg-transparent" variant="outline">
-              <Link href="/admin/equipamentos/novo">
-                <Package className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span className="truncate">Adicionar Novo Equipamento</span>
-              </Link>
-            </Button>
-            <Button asChild className="w-full justify-start bg-transparent" variant="outline">
-              <Link href="/admin/categorias">
-                <Activity className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span className="truncate">Gerenciar Categorias</span>
-              </Link>
-            </Button>
-            <Button asChild className="w-full justify-start bg-transparent" variant="outline">
+            <Button asChild variant="outline" size="sm" className="w-full sm:w-auto bg-transparent">
               <Link href="/admin/orcamentos">
-                <FileText className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span className="truncate">Ver Todos os Orçamentos</span>
+                <Eye className="h-4 w-4 mr-2" />
+                Ver Todos
               </Link>
             </Button>
-            <Button asChild className="w-full justify-start bg-transparent" variant="outline">
-              <Link href="/admin/equipamentos">
-                <Users className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span className="truncate">Gerenciar Equipamentos</span>
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {recentQuotes.length === 0 ? (
+            <div className="text-center py-8">
+              <FileText className="h-12 w-12 mx-auto text-gray-300 mb-4" />
+              <p className="text-lg font-medium text-gray-600 mb-2">Nenhum orçamento recente</p>
+              <p className="text-sm text-gray-400">Os orçamentos solicitados aparecerão aqui</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[200px]">Cliente</TableHead>
+                    <TableHead className="hidden sm:table-cell min-w-[150px]">Empresa</TableHead>
+                    <TableHead className="hidden md:table-cell w-[100px] text-center">Itens</TableHead>
+                    <TableHead className="hidden lg:table-cell w-[120px]">Valor</TableHead>
+                    <TableHead className="w-[100px]">Status</TableHead>
+                    <TableHead className="hidden sm:table-cell w-[100px]">Data</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recentQuotes.map((quote) => {
+                    const StatusIcon = statusConfig[quote.status as keyof typeof statusConfig]?.icon || AlertTriangle
+
+                    return (
+                      <TableRow key={quote.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                        <TableCell className="p-2 sm:p-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                              <User className="h-4 w-4 text-white" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="font-medium text-sm truncate">{quote.customerName}</p>
+                              <p className="text-xs text-muted-foreground truncate">{quote.customerEmail}</p>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell p-2 sm:p-4">
+                          <div className="flex items-center gap-2">
+                            <Building className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                            <span className="text-sm truncate">{quote.customerCompany || "-"}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell text-center p-2 sm:p-4">
+                          <span className="font-medium text-sm">{quote.itemsCount}</span>
+                        </TableCell>
+                        <TableCell className="hidden lg:table-cell p-2 sm:p-4">
+                          <span className="font-bold text-green-600 text-sm">
+                            {quote.totalAmount ? `R$ ${quote.totalAmount.toFixed(2)}` : "-"}
+                          </span>
+                        </TableCell>
+                        <TableCell className="p-2 sm:p-4">
+                          <Badge
+                            className={`${statusConfig[quote.status as keyof typeof statusConfig]?.color} flex items-center gap-1 w-fit text-xs`}
+                          >
+                            <StatusIcon className="h-3 w-3" />
+                            <span className="hidden sm:inline">
+                              {statusConfig[quote.status as keyof typeof statusConfig]?.label}
+                            </span>
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden sm:table-cell p-2 sm:p-4">
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Calendar className="h-3 w-3" />
+                            {new Date(quote.createdAt).toLocaleDateString("pt-BR")}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

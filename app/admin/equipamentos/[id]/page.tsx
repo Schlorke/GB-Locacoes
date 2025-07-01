@@ -5,11 +5,10 @@ import { useParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { ArrowLeft, Edit, Trash2, Package, Calendar, DollarSign, Eye, EyeOff, Loader2 } from "lucide-react"
-import { toast } from "sonner"
+import { ImageCarouselZoom } from "@/components/image-carousel-zoom"
+import { ArrowLeft, Edit, Trash2, Package, Calendar, DollarSign, Info, Loader2 } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
+import { toast } from "sonner"
 import * as LucideIcons from "lucide-react"
 import React from "react"
 
@@ -26,14 +25,14 @@ interface Equipment {
   category: {
     id: string
     name: string
-    icon?: string | null
-    iconColor?: string | null
-    bgColor?: string | null
-    fontColor?: string | null
+    icon?: string
+    iconColor?: string
+    bgColor?: string
+    fontColor?: string
   }
   _count: {
-    reviews: number
     quoteItems: number
+    reviews: number
   }
 }
 
@@ -43,7 +42,6 @@ export default function EquipmentDetailsPage() {
   const [equipment, setEquipment] = useState<Equipment | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
 
   useEffect(() => {
     if (params.id) {
@@ -58,11 +56,11 @@ export default function EquipmentDetailsPage() {
         const data = await response.json()
         setEquipment(data)
       } else {
-        toast.error("Erro ao carregar equipamento")
+        toast.error("Equipamento não encontrado")
         router.push("/admin/equipamentos")
       }
     } catch (error) {
-      console.error("Error fetching equipment:", error)
+      console.error("Erro ao carregar equipamento:", error)
       toast.error("Erro ao carregar equipamento")
       router.push("/admin/equipamentos")
     } finally {
@@ -89,8 +87,8 @@ export default function EquipmentDetailsPage() {
         toast.error(`Erro ao excluir equipamento: ${errorData.error || "Erro desconhecido"}`)
       }
     } catch (error) {
-      console.error("Error deleting equipment:", error)
-      toast.error("Erro de rede ao excluir equipamento.")
+      console.error("Erro ao excluir equipamento:", error)
+      toast.error("Erro de rede ao excluir equipamento")
     } finally {
       setIsDeleting(false)
     }
@@ -111,13 +109,11 @@ export default function EquipmentDetailsPage() {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-200px)]">
         <div className="text-center">
-          <Package className="h-16 w-16 mx-auto text-gray-300 mb-4" />
-          <p className="text-xl font-medium text-gray-600 mb-2">Equipamento não encontrado</p>
+          <Package className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+          <h2 className="text-2xl font-semibold mb-2">Equipamento não encontrado</h2>
+          <p className="text-muted-foreground mb-4">O equipamento solicitado não existe ou foi removido.</p>
           <Button asChild>
-            <Link href="/admin/equipamentos">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Voltar para Equipamentos
-            </Link>
+            <Link href="/admin/equipamentos">Voltar para Equipamentos</Link>
           </Button>
         </div>
       </div>
@@ -136,17 +132,15 @@ export default function EquipmentDetailsPage() {
             </Link>
           </Button>
           <div className="min-w-0 flex-1">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-100 truncate">
-              {equipment.name}
-            </h1>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">{equipment.name}</h1>
             <p className="text-sm sm:text-base text-muted-foreground mt-1">Detalhes do equipamento</p>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <Button asChild size="sm" className="w-full sm:w-auto">
+          <Button asChild variant="outline" size="sm" className="w-full sm:w-auto bg-transparent">
             <Link href={`/admin/equipamentos/${equipment.id}/editar`}>
               <Edit className="h-4 w-4 mr-2" />
-              <span className="truncate">Editar</span>
+              Editar
             </Link>
           </Button>
           <Button
@@ -156,84 +150,39 @@ export default function EquipmentDetailsPage() {
             disabled={isDeleting}
             className="w-full sm:w-auto"
           >
-            {isDeleting ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Trash2 className="h-4 w-4 mr-2" />}
-            <span className="truncate">{isDeleting ? "Excluindo..." : "Excluir"}</span>
+            <Trash2 className="h-4 w-4 mr-2" />
+            {isDeleting ? "Excluindo..." : "Excluir"}
           </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        {/* Images */}
-        <Card className="overflow-hidden">
-          <CardHeader className="pb-3 sm:pb-4">
-            <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-              <Eye className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-              <span className="truncate">Imagens do Equipamento</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 sm:space-y-4">
-            {equipment.images.length > 0 ? (
-              <>
-                <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                  <Image
-                    src={equipment.images[selectedImageIndex] || "/placeholder.svg?height=400&width=600"}
-                    alt={equipment.name}
-                    width={600}
-                    height={400}
-                    className="w-full h-full object-cover"
-                    onError={(e) => (e.currentTarget.src = "/placeholder.svg?height=400&width=600&text=Erro")}
-                  />
-                </div>
-                {equipment.images.length > 1 && (
-                  <div className="flex gap-2 overflow-x-auto pb-2">
-                    {equipment.images.map((image, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImageIndex(index)}
-                        className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-colors ${
-                          selectedImageIndex === index ? "border-primary" : "border-gray-200 hover:border-gray-300"
-                        }`}
-                      >
-                        <Image
-                          src={image || "/placeholder.svg"}
-                          alt={`${equipment.name} - ${index + 1}`}
-                          width={80}
-                          height={80}
-                          className="w-full h-full object-cover"
-                          onError={(e) => (e.currentTarget.src = "/placeholder.svg?height=80&width=80&text=Erro")}
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-                <div className="text-center">
-                  <Package className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-gray-300 mb-2" />
-                  <p className="text-sm sm:text-base text-muted-foreground">Nenhuma imagem disponível</p>
-                </div>
-              </div>
-            )}
+        {/* Galeria de Imagens */}
+        <Card>
+          <CardContent className="p-4 sm:p-6">
+            <ImageCarouselZoom
+              images={equipment.images.length > 0 ? equipment.images : ["/placeholder.svg?height=400&width=400"]}
+              alt={equipment.name}
+            />
           </CardContent>
         </Card>
 
-        {/* Equipment Info */}
+        {/* Informações Principais */}
         <div className="space-y-4 sm:space-y-6">
           <Card>
-            <CardHeader className="pb-3 sm:pb-4">
+            <CardHeader>
               <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                <Package className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-                <span className="truncate">Informações Básicas</span>
+                <Info className="h-4 w-4 sm:h-5 sm:w-5" />
+                Informações Gerais
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 sm:space-y-4">
+            <CardContent className="space-y-4">
               <div>
-                <label className="text-xs sm:text-sm font-medium text-muted-foreground">Categoria</label>
+                <label className="text-sm font-medium text-muted-foreground">Categoria</label>
                 <div className="mt-1">
                   <Badge
                     variant="outline"
-                    className="text-xs sm:text-sm"
+                    className="text-sm"
                     style={{
                       backgroundColor: equipment.category.bgColor || undefined,
                       color: equipment.category.fontColor || undefined,
@@ -253,79 +202,86 @@ export default function EquipmentDetailsPage() {
               </div>
 
               <div>
-                <label className="text-xs sm:text-sm font-medium text-muted-foreground">Descrição</label>
-                <p className="mt-1 text-sm sm:text-base text-slate-900 dark:text-slate-100">{equipment.description}</p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="text-xs sm:text-sm font-medium text-muted-foreground">Preço por Dia</label>
-                  <div className="mt-1 flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-green-600 flex-shrink-0" />
-                    <span className="text-lg sm:text-xl font-bold text-green-600">
-                      R$ {equipment.pricePerDay.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs sm:text-sm font-medium text-muted-foreground">Status</label>
-                  <div className="mt-1">
-                    <Badge variant={equipment.isAvailable ? "default" : "destructive"} className="text-xs sm:text-sm">
-                      {equipment.isAvailable ? (
-                        <>
-                          <Eye className="h-3 w-3 mr-1" />
-                          Disponível
-                        </>
-                      ) : (
-                        <>
-                          <EyeOff className="h-3 w-3 mr-1" />
-                          Indisponível
-                        </>
-                      )}
-                    </Badge>
-                  </div>
+                <label className="text-sm font-medium text-muted-foreground">Preço por Dia</label>
+                <div className="mt-1 flex items-center gap-2">
+                  <DollarSign className="h-4 w-4 text-green-600" />
+                  <span className="text-xl sm:text-2xl font-bold text-green-600">
+                    R$ {equipment.pricePerDay.toFixed(2)}
+                  </span>
                 </div>
               </div>
 
-              <Separator />
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Status</label>
+                <div className="mt-1">
+                  <Badge variant={equipment.isAvailable ? "default" : "destructive"} className="text-sm">
+                    {equipment.isAvailable ? "Disponível" : "Indisponível"}
+                  </Badge>
+                </div>
+              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="font-medium text-muted-foreground">Orçamentos</label>
-                  <p className="text-slate-900 dark:text-slate-100">{equipment._count.quoteItems} solicitações</p>
+                  <label className="text-sm font-medium text-muted-foreground">Orçamentos</label>
+                  <p className="text-lg font-semibold">{equipment._count.quoteItems}</p>
                 </div>
                 <div>
-                  <label className="font-medium text-muted-foreground">Avaliações</label>
-                  <p className="text-slate-900 dark:text-slate-100">{equipment._count.reviews} avaliações</p>
+                  <label className="text-sm font-medium text-muted-foreground">Avaliações</label>
+                  <p className="text-lg font-semibold">{equipment._count.reviews}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Specifications */}
-          {equipment.specifications && Object.keys(equipment.specifications).length > 0 && (
-            <Card>
-              <CardHeader className="pb-3 sm:pb-4">
-                <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-                  <span className="truncate">Especificações Técnicas</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  {Object.entries(equipment.specifications).map(([key, value]) => (
-                    <div key={key} className="p-3 bg-slate-50 rounded-lg">
-                      <label className="text-xs sm:text-sm font-medium text-muted-foreground">{key}</label>
-                      <p className="text-sm sm:text-base text-slate-900 dark:text-slate-100 mt-1">{String(value)}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base sm:text-lg flex items-center gap-2">
+                <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
+                Datas
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Criado em</label>
+                <p className="text-sm">{new Date(equipment.createdAt).toLocaleString("pt-BR")}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-muted-foreground">Última atualização</label>
+                <p className="text-sm">{new Date(equipment.updatedAt).toLocaleString("pt-BR")}</p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
+
+      {/* Descrição */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base sm:text-lg">Descrição</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">{equipment.description}</p>
+        </CardContent>
+      </Card>
+
+      {/* Especificações Técnicas */}
+      {equipment.specifications && Object.keys(equipment.specifications).length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base sm:text-lg">Especificações Técnicas</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Object.entries(equipment.specifications).map(([key, value]) => (
+                <div key={key} className="p-3 border rounded-lg">
+                  <label className="text-sm font-medium text-muted-foreground">{key}</label>
+                  <p className="text-sm font-semibold mt-1">{String(value)}</p>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }
