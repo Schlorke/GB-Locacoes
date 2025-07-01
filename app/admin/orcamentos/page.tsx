@@ -109,7 +109,8 @@ export default function AdminQuotesPage() {
       const response = await fetch("/api/admin/quotes")
       if (response.ok) {
         const data = await response.json()
-        setQuotes(data)
+        // API returns an object with a `quotes` array
+        setQuotes(data.quotes)
       } else {
         toast.error("Erro ao carregar orçamentos")
       }
