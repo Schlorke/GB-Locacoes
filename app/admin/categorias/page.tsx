@@ -388,6 +388,31 @@ export default function AdminCategoriesPage() {
                       </Button>
                     </div>
 
+                    {/* Preview da Categoria - Movido para cá */}
+                    <div>
+                      <Label className="text-sm font-medium text-muted-foreground mb-2 block">
+                        Preview da Categoria
+                      </Label>
+                      <div className="p-3 border-2 border-dashed border-gray-200 rounded-lg bg-muted/50 flex items-center justify-center">
+                        <span
+                          className="inline-flex items-center justify-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200"
+                          style={{
+                            backgroundColor: formData.bgColor || "#e0e0e0",
+                            color: formData.fontColor || "#000000",
+                          }}
+                        >
+                          {formData.icon &&
+                            LucideIcons[formData.icon] &&
+                            createElement(LucideIcons[formData.icon], {
+                              size: 14,
+                              color: formData.iconColor || formData.fontColor,
+                              className: "mr-1.5 flex-shrink-0",
+                            })}
+                          <span>{formData.name || "Nome da Categoria"}</span>
+                        </span>
+                      </div>
+                    </div>
+
                     <div className="grid grid-cols-3 gap-3">
                       <div>
                         <Label htmlFor="cat-iconColor" className="text-xs font-medium text-muted-foreground">
@@ -447,7 +472,7 @@ export default function AdminCategoriesPage() {
                       <input
                         type="checkbox"
                         id="attr-price"
-                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        className="h-4 w-4 text-slate-600 border-gray-300 rounded focus:ring-slate-500"
                         defaultChecked
                       />
                       <Label htmlFor="attr-price" className="text-sm text-muted-foreground">
@@ -458,20 +483,8 @@ export default function AdminCategoriesPage() {
                     <div className="flex items-center space-x-3">
                       <input
                         type="checkbox"
-                        id="attr-condition"
-                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                        defaultChecked
-                      />
-                      <Label htmlFor="attr-condition" className="text-sm text-muted-foreground">
-                        Estado
-                      </Label>
-                    </div>
-
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
                         id="attr-brand"
-                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        className="h-4 w-4 text-slate-600 border-gray-300 rounded focus:ring-slate-500"
                       />
                       <Label htmlFor="attr-brand" className="text-sm text-muted-foreground">
                         Marca
@@ -482,7 +495,7 @@ export default function AdminCategoriesPage() {
                       <input
                         type="checkbox"
                         id="attr-availability"
-                        className="h-4 w-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        className="h-4 w-4 text-slate-600 border-gray-300 rounded focus:ring-slate-500"
                       />
                       <Label htmlFor="attr-availability" className="text-sm text-muted-foreground">
                         Disponibilidade
@@ -490,23 +503,11 @@ export default function AdminCategoriesPage() {
                     </div>
                   </div>
                 </div>
-
-                {/* SEO Section */}
-                <div className="space-y-4 pt-6 border-t">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">SEO</h4>
-                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  <div className="text-sm text-gray-500">Configurações de SEO serão implementadas em breve.</div>
-                </div>
               </div>
             </div>
 
             {/* Main Content - Agora à direita */}
-            <div className="flex-1 overflow-y-auto p-6 bg-background">
+            <div className="flex-1 overflow-y-auto px-6 pb-6 bg-background">
               <form id="category-form" onSubmit={handleSubmit} className="space-y-8">
                 {/* General Section */}
                 <div className="bg-muted/50 rounded-lg border p-6">
@@ -530,20 +531,12 @@ export default function AdminCategoriesPage() {
                         className="mt-2 h-10"
                       />
                     </div>
-
-                    <div>
-                      <Label className="text-sm font-medium text-muted-foreground">Categoria Pai</Label>
-                      <div className="mt-2 p-3 border rounded-lg bg-muted/50 flex items-center gap-2">
-                        <Tag className="h-4 w-4 text-purple-600" />
-                        <span className="text-sm text-foreground">Raiz</span>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
-                {/* Description and Visual */}
+                {/* Description Section */}
                 <div className="bg-muted/50 rounded-lg border p-6">
-                  <h3 className="text-lg font-medium text-foreground mb-6">Descrição e Aparência</h3>
+                  <h3 className="text-lg font-medium text-foreground mb-6">Descrição</h3>
 
                   <div className="space-y-6">
                     <div>
@@ -559,31 +552,6 @@ export default function AdminCategoriesPage() {
                         rows={4}
                         className="mt-2 h-20 resize-none"
                       />
-                    </div>
-
-                    {/* Visual Preview */}
-                    <div>
-                      <Label className="text-sm font-medium text-muted-foreground mb-3 block">
-                        Preview da Categoria
-                      </Label>
-                      <div className="p-4 border-2 border-dashed border-gray-200 rounded-lg bg-muted/50 flex items-center justify-center">
-                        <span
-                          className="inline-flex items-center justify-center px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
-                          style={{
-                            backgroundColor: formData.bgColor || "#e0e0e0",
-                            color: formData.fontColor || "#000000",
-                          }}
-                        >
-                          {formData.icon &&
-                            LucideIcons[formData.icon] &&
-                            createElement(LucideIcons[formData.icon], {
-                              size: 16,
-                              color: formData.iconColor || formData.fontColor,
-                              className: "mr-2 flex-shrink-0",
-                            })}
-                          <span>{formData.name || "Nome da Categoria"}</span>
-                        </span>
-                      </div>
                     </div>
                   </div>
                 </div>
