@@ -225,7 +225,7 @@ export default function AdminCategoriesPage() {
               </p>
               <Button
                 onClick={openCreateDialog}
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-auto mx-auto h-10 px-4"
+                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto mx-auto h-10 px-4"
                 size="sm"
               >
                 <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
