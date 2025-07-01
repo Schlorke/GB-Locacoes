@@ -506,51 +506,15 @@ export default function AdminCategoriesPage() {
               <form id="category-form" onSubmit={handleSubmit} className="space-y-8">
                 {/* General Section */}
                 <div className="bg-muted/50 rounded-lg border p-6">
-                  <h3 className="text-lg font-medium text-foreground mb-6">Geral</h3>
+                  <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start mb-6 gap-4">
+                    <h3 className="text-lg font-medium text-foreground">Geral</h3>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Left Column - Name and Description */}
-                    <div className="lg:col-span-2 space-y-6">
-                      <div>
-                        <Label
-                          htmlFor="cat-name"
-                          className="text-sm font-medium text-muted-foreground flex items-center gap-1"
-                        >
-                          Nome
-                          <span className="text-red-500">*</span>
-                        </Label>
-                        <Input
-                          id="cat-name"
-                          required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          placeholder="Equipamentos Eletrônicos"
-                          className="mt-2 h-10"
-                        />
-                      </div>
-
-                      <div>
-                        <Label htmlFor="cat-description" className="text-sm font-medium text-muted-foreground">
-                          Descrição
-                          <span className="text-red-500">*</span>
-                        </Label>
-                        <Textarea
-                          id="cat-description"
-                          value={formData.description}
-                          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                          placeholder="Descreva a categoria de equipamentos..."
-                          rows={4}
-                          className="mt-2 h-20 resize-none"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Right Column - Preview */}
-                    <div className="lg:col-span-1">
+                    {/* Preview da Categoria - Agora no topo direito */}
+                    <div className="w-full lg:w-48">
                       <Label className="text-sm font-medium text-muted-foreground mb-2 block">
                         Preview da Categoria
                       </Label>
-                      <div className="p-4 border-2 border-dashed border-gray-200 rounded-lg bg-muted/50 flex items-center justify-center h-full min-h-[120px]">
+                      <div className="p-3 border-2 border-dashed border-gray-200 rounded-lg bg-muted/50 flex items-center justify-center">
                         <span
                           className="inline-flex items-center justify-center px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200"
                           style={{
@@ -568,6 +532,41 @@ export default function AdminCategoriesPage() {
                           <span>{formData.name || "Nome da Categoria"}</span>
                         </span>
                       </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-6">
+                    <div>
+                      <Label
+                        htmlFor="cat-name"
+                        className="text-sm font-medium text-muted-foreground flex items-center gap-1"
+                      >
+                        Nome
+                        <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="cat-name"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Equipamentos Eletrônicos"
+                        className="mt-2 h-10"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="cat-description" className="text-sm font-medium text-muted-foreground">
+                        Descrição
+                        <span className="text-red-500">*</span>
+                      </Label>
+                      <Textarea
+                        id="cat-description"
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        placeholder="Descreva a categoria de equipamentos..."
+                        rows={4}
+                        className="mt-2 h-20 resize-none"
+                      />
                     </div>
                   </div>
                 </div>
