@@ -256,9 +256,9 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
                         size="icon"
                         title={iconName}
                         className={cn(
-                          "h-16 w-full flex items-center justify-center p-2 aspect-square",
+                          "h-10 w-10 flex items-center justify-center p-2 aspect-square", // Alterado aqui: h-10 w-10
                           selectedIcon === iconName &&
-                            "ring-1 ring-primary bg-primary/10 scale-100 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0", // Alterado aqui
+                            "ring-1 ring-primary bg-primary/10 hover:scale-100 transition-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0", // Alterado aqui: hover:scale-100 transition-none
                         )}
                         onClick={() => handleSelectIcon(iconName)}
                       >
