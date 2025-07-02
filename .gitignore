@@ -35,3 +35,7 @@ GB-Locacoes/
 *.log
 *.sqlite
 *.dump
+
+.next/
+node_modules/
+.env.local
