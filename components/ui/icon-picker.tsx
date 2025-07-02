@@ -19,7 +19,6 @@ import {
   Search,
   Palette,
   Check,
-  X,
   AlertTriangle,
   Home,
   Settings,
@@ -223,7 +222,7 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
                 <Button
                   variant="outline"
                   size="sm"
-                  className="mt-2"
+                  className="mt-2 bg-transparent"
                   onClick={() => setSelectedIcon(undefined)}
                 >
                   Limpar Seleção
@@ -258,7 +257,7 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
                         title={iconName}
                         className={cn(
                           "h-16 w-full flex items-center justify-center p-2 aspect-square",
-                          selectedIcon === iconName && "ring-1 ring-primary border-primary bg-primary/10",
+                          selectedIcon === iconName && "border-2 border-primary bg-primary/10", // Alterado aqui
                         )}
                         onClick={() => handleSelectIcon(iconName)}
                       >
