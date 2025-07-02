@@ -246,7 +246,9 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
 
             <ScrollArea className="flex-grow p-4 overflow-y-auto">
               {filteredIcons.length > 0 ? (
-                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
+                <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3">
+                  {" "}
+                  {/* Alterado aqui: gap-3 */}
                   {filteredIcons.map((iconName) => {
                     const IconComponent = ICONS[iconName as keyof typeof ICONS]
                     return (
@@ -256,9 +258,10 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
                         size="icon"
                         title={iconName}
                         className={cn(
-                          "h-10 w-10 flex items-center justify-center p-2 aspect-square", // Alterado aqui: h-10 w-10
-                          selectedIcon === iconName &&
-                            "ring-1 ring-primary bg-primary/10 hover:scale-100 transition-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0", // Alterado aqui: hover:scale-100 transition-none
+                          "h-10 w-10 flex items-center justify-center p-2 aspect-square", // Tamanho dos blocos
+                          selectedIcon === iconName
+                            ? "ring-1 ring-primary bg-primary/10 hover:scale-100 transition-none focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0" // Ícone selecionado: borda fina, sem expansão, sem foco padrão
+                            : "hover:scale-105", // Ícone não selecionado: mantém a animação de expansão
                         )}
                         onClick={() => handleSelectIcon(iconName)}
                       >
