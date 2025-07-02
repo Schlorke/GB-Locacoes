@@ -1,8 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "include": [
-    "eslint.config.js",
-    "app",
-    "components"
-  ]
+  "include": ["eslint.config.js", "app", "components"]
 }
