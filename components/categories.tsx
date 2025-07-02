@@ -1,6 +1,15 @@
-import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
-import { Hammer, Truck, HardHat, Wrench, Building, Zap, Shield, Container } from "lucide-react"
+import Link from "next/link";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Hammer,
+  Truck,
+  HardHat,
+  Wrench,
+  Building,
+  Zap,
+  Shield,
+  Container,
+} from "lucide-react";
 
 const categories = [
   {
@@ -67,7 +76,7 @@ const categories = [
     description: "Diversos equipamentos para obras",
     color: "from-orange-500 to-orange-600",
   },
-]
+];
 
 export default function Categories() {
   return (
@@ -79,13 +88,14 @@ export default function Categories() {
             Categorias de Equipamentos
           </h2>
           <p className="section-subtitle text-xl text-gray-600 max-w-2xl mx-auto opacity-0">
-            Encontre rapidamente o equipamento especializado que você precisa para sua obra
+            Encontre rapidamente o equipamento especializado que você precisa
+            para sua obra
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {categories.map((category) => {
-            const IconComponent = category.icon
+            const IconComponent = category.icon;
             return (
               <Link key={category.name} href={category.href} className="group">
                 <Card className="category-card h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 group-focus:ring-2 group-focus:ring-orange-500 overflow-hidden relative opacity-0">
@@ -121,11 +131,11 @@ export default function Categories() {
                   </CardContent>
                 </Card>
               </Link>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }
 // Não há botões específicos neste componente, mas se houver no futuro, usar h-12 para padrão

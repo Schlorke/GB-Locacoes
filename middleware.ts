@@ -31,7 +31,7 @@ export default withAuth(
         return true;
       },
     },
-  }
+  },
 );
 
 export const config = {

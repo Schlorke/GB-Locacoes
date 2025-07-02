@@ -1,42 +1,63 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect, createElement } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Plus, Edit, Trash2, Tag, Loader2, Info, ChevronDown, ChevronRight } from "lucide-react"
-import * as LucideIcons from "lucide-react"
-import { toast } from "sonner"
-import { IconPicker } from "@/components/ui/icon-picker"
+import type React from "react";
+import { useState, useEffect, createElement } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Tag,
+  Loader2,
+  Info,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import { toast } from "sonner";
+import { IconPicker } from "@/components/ui/icon-picker";
 
 interface Category {
-  id: string
-  name: string
-  description?: string
-  icon?: keyof typeof LucideIcons
-  iconColor?: string
-  bgColor?: string
-  fontColor?: string
-  createdAt: string
+  id: string;
+  name: string;
+  description?: string;
+  icon?: keyof typeof LucideIcons;
+  iconColor?: string;
+  bgColor?: string;
+  fontColor?: string;
+  createdAt: string;
   _count?: {
-    equipments: number
-  }
+    equipments: number;
+  };
 }
 
 export default function AdminCategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null)
-  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false)
-  const [isIconPickerOpen, setIsIconPickerOpen] = useState(false)
-  const [isConfigExpanded, setIsConfigExpanded] = useState(true)
-  const [isAttributesExpanded, setIsAttributesExpanded] = useState(true)
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+  const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
+  const [isConfigExpanded, setIsConfigExpanded] = useState(true);
+  const [isAttributesExpanded, setIsAttributesExpanded] = useState(true);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -45,29 +66,29 @@ export default function AdminCategoriesPage() {
     iconColor: "#000000",
     bgColor: "#e0e0e0",
     fontColor: "#000000",
-  })
+  });
 
   useEffect(() => {
-    fetchCategories()
-  }, [])
+    fetchCategories();
+  }, []);
 
   const fetchCategories = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const response = await fetch("/api/admin/categories")
+      const response = await fetch("/api/admin/categories");
       if (response.ok) {
-        const data = await response.json()
-        setCategories(data)
+        const data = await response.json();
+        setCategories(data);
       } else {
-        toast.error("Erro ao carregar categorias")
+        toast.error("Erro ao carregar categorias");
       }
     } catch (error) {
-      console.error("Error fetching categories:", error)
-      toast.error("Erro ao carregar categorias")
+      console.error("Error fetching categories:", error);
+      toast.error("Erro ao carregar categorias");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const resetForm = () => {
     setFormData({
@@ -77,14 +98,14 @@ export default function AdminCategoriesPage() {
       iconColor: "#000000",
       bgColor: "#e0e0e0",
       fontColor: "#000000",
-    })
-    setEditingCategory(null)
-  }
+    });
+    setEditingCategory(null);
+  };
 
   const openCreateDialog = () => {
-    resetForm()
-    setIsFormDialogOpen(true)
-  }
+    resetForm();
+    setIsFormDialogOpen(true);
+  };
 
   const openEditDialog = (category: Category) => {
     setFormData({
@@ -94,102 +115,120 @@ export default function AdminCategoriesPage() {
       iconColor: category.iconColor || "#000000",
       bgColor: category.bgColor || "#e0e0e0",
       fontColor: category.fontColor || "#000000",
-    })
-    setEditingCategory(category)
-    setIsFormDialogOpen(true)
-  }
+    });
+    setEditingCategory(category);
+    setIsFormDialogOpen(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!formData.name.trim()) {
-      toast.error("O nome da categoria é obrigatório.")
-      return
+      toast.error("O nome da categoria é obrigatório.");
+      return;
     }
     if (!formData.bgColor || !formData.fontColor) {
-      toast.error("Preencha todos os campos obrigatórios.")
-      return
+      toast.error("Preencha todos os campos obrigatórios.");
+      return;
     }
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
-      const url = editingCategory ? `/api/admin/categories/${editingCategory.id}` : "/api/admin/categories"
-      const method = editingCategory ? "PUT" : "POST"
+      const url = editingCategory
+        ? `/api/admin/categories/${editingCategory.id}`
+        : "/api/admin/categories";
+      const method = editingCategory ? "PUT" : "POST";
 
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      })
+      });
 
       if (response.ok) {
-        toast.success(editingCategory ? "Categoria atualizada!" : "Categoria criada!")
-        fetchCategories()
-        setIsFormDialogOpen(false)
-        resetForm()
+        toast.success(
+          editingCategory ? "Categoria atualizada!" : "Categoria criada!",
+        );
+        fetchCategories();
+        setIsFormDialogOpen(false);
+        resetForm();
       } else {
-        const errorData = await response.json()
+        const errorData = await response.json();
         if (response.status === 409) {
-          toast.error("Categoria já existente")
+          toast.error("Categoria já existente");
         } else {
-          toast.error(errorData.error || "Erro ao salvar categoria")
+          toast.error(errorData.error || "Erro ao salvar categoria");
         }
       }
     } catch (error) {
-      console.error("Error saving category:", error)
-      toast.error("Erro ao salvar categoria")
+      console.error("Error saving category:", error);
+      toast.error("Erro ao salvar categoria");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const deleteCategory = async (categoryId: string) => {
-    if (!confirm("Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.")) return
-    setIsSubmitting(true)
+    if (
+      !confirm(
+        "Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.",
+      )
+    )
+      return;
+    setIsSubmitting(true);
     try {
       const response = await fetch(`/api/admin/categories/${categoryId}`, {
         method: "DELETE",
-      })
+      });
       if (response.ok) {
-        toast.success("Categoria excluída com sucesso")
-        fetchCategories()
+        toast.success("Categoria excluída com sucesso");
+        fetchCategories();
       } else {
-        const errorData = await response.json()
-        toast.error(errorData.error || "Erro ao excluir categoria")
+        const errorData = await response.json();
+        toast.error(errorData.error || "Erro ao excluir categoria");
       }
     } catch (error) {
-      console.error("Error deleting category:", error)
-      toast.error("Erro ao excluir categoria")
+      console.error("Error deleting category:", error);
+      toast.error("Erro ao excluir categoria");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleIconSelect = (iconName?: string, color?: string) => {
     setFormData((prev) => ({
       ...prev,
       icon: iconName as keyof typeof LucideIcons | undefined,
       iconColor: color || prev.iconColor,
-    }))
-  }
+    }));
+  };
 
   const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
-    if (!iconName || !LucideIcons[iconName]) return <Info className="h-5 w-5 text-gray-400" />
-    return createElement(LucideIcons[iconName], { size: 20, color: color || formData.iconColor, className: "mr-2" })
-  }
+    if (!iconName || !LucideIcons[iconName])
+      return <Info className="h-5 w-5 text-gray-400" />;
+    return createElement(LucideIcons[iconName], {
+      size: 20,
+      color: color || formData.iconColor,
+      className: "mr-2",
+    });
+  };
 
   if (isLoading && categories.length === 0) {
     return (
       <div className="flex items-center justify-center h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-150px)]">
         <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 animate-spin text-primary" />
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
       <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
         <div className="min-w-0 flex-1 text-center sm:text-left">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Categorias</h1>
-          <p className="text-sm sm:text-base text-muted-foreground mt-1">Gerencie as categorias de equipamentos.</p>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">
+            Categorias
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
+            Gerencie as categorias de equipamentos.
+          </p>
         </div>
         <Button
           onClick={openCreateDialog}
@@ -239,12 +278,18 @@ export default function AdminCategoriesPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="min-w-[200px] sm:w-[250px]">Nome</TableHead>
-                    <TableHead className="hidden md:table-cell min-w-[200px]">Descrição</TableHead>
+                    <TableHead className="min-w-[200px] sm:w-[250px]">
+                      Nome
+                    </TableHead>
+                    <TableHead className="hidden md:table-cell min-w-[200px]">
+                      Descrição
+                    </TableHead>
                     <TableHead className="w-[100px] sm:w-[150px] text-center hidden sm:table-cell">
                       Equipamentos
                     </TableHead>
-                    <TableHead className="w-[100px] sm:w-[150px] text-right">Ações</TableHead>
+                    <TableHead className="w-[100px] sm:w-[150px] text-right">
+                      Ações
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -280,7 +325,9 @@ export default function AdminCategoriesPage() {
                         </div>
                       </TableCell>
                       <TableCell className="text-center hidden sm:table-cell p-2 sm:p-4">
-                        <span className="font-medium">{category._count?.equipments || 0}</span>
+                        <span className="font-medium">
+                          {category._count?.equipments || 0}
+                        </span>
                       </TableCell>
                       <TableCell className="text-right p-2 sm:p-4">
                         <div className="flex items-center justify-end gap-1">
@@ -298,7 +345,10 @@ export default function AdminCategoriesPage() {
                             size="icon"
                             onClick={() => deleteCategory(category.id)}
                             className="text-red-500 hover:text-red-600 h-8 w-8"
-                            disabled={(category._count?.equipments || 0) > 0 || isSubmitting}
+                            disabled={
+                              (category._count?.equipments || 0) > 0 ||
+                              isSubmitting
+                            }
                             aria-label="Excluir"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -323,10 +373,18 @@ export default function AdminCategoriesPage() {
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b bg-white">
             <div>
-              <DialogTitle id="category-dialog-title" className="text-xl font-semibold text-gray-900">
-                {editingCategory ? "Editar Categoria" : "Adicionar Nova Categoria"}
+              <DialogTitle
+                id="category-dialog-title"
+                className="text-xl font-semibold text-gray-900"
+              >
+                {editingCategory
+                  ? "Editar Categoria"
+                  : "Adicionar Nova Categoria"}
               </DialogTitle>
-              <DialogDescription id="category-dialog-desc" className="text-sm text-gray-500 mt-1">
+              <DialogDescription
+                id="category-dialog-desc"
+                className="text-sm text-gray-500 mt-1"
+              >
                 Configure os dados da categoria de equipamentos
               </DialogDescription>
             </div>
@@ -345,7 +403,9 @@ export default function AdminCategoriesPage() {
                 disabled={isSubmitting}
                 className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-6"
               >
-                {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                {isSubmitting ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
                 {editingCategory ? "Atualizar Categoria" : "Salvar Categoria"}
               </Button>
             </div>
@@ -359,21 +419,29 @@ export default function AdminCategoriesPage() {
                 {/* Settings Section */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">Configurações</h4>
+                    <h4 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+                      Configurações
+                    </h4>
                     <Button
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"
                       onClick={() => setIsConfigExpanded(!isConfigExpanded)}
                     >
-                      {isConfigExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                      {isConfigExpanded ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4" />
+                      )}
                     </Button>
                   </div>
 
                   {isConfigExpanded && (
                     <div className="space-y-4">
                       <div>
-                        <Label className="text-sm font-medium text-muted-foreground">Ícone</Label>
+                        <Label className="text-sm font-medium text-muted-foreground">
+                          Ícone
+                        </Label>
                         <Button
                           type="button"
                           variant="outline"
@@ -383,14 +451,18 @@ export default function AdminCategoriesPage() {
                           {formData.icon ? (
                             <>
                               {renderIcon(formData.icon, formData.iconColor)}
-                              <span className="ml-2 text-sm capitalize">{formData.icon}</span>
+                              <span className="ml-2 text-sm capitalize">
+                                {formData.icon}
+                              </span>
                             </>
                           ) : (
                             <>
                               <div className="w-5 h-5 mr-2 rounded border-2 border-dashed border-gray-300 flex items-center justify-center">
                                 <Plus className="w-3 h-3 text-gray-400" />
                               </div>
-                              <span className="text-gray-500">Selecionar Ícone</span>
+                              <span className="text-gray-500">
+                                Selecionar Ícone
+                              </span>
                             </>
                           )}
                         </Button>
@@ -398,40 +470,64 @@ export default function AdminCategoriesPage() {
 
                       <div className="grid grid-cols-3 gap-3">
                         <div>
-                          <Label htmlFor="cat-iconColor" className="text-xs font-medium text-muted-foreground">
+                          <Label
+                            htmlFor="cat-iconColor"
+                            className="text-xs font-medium text-muted-foreground"
+                          >
                             Cor Ícone
                           </Label>
                           <Input
                             id="cat-iconColor"
                             type="color"
                             value={formData.iconColor}
-                            onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                iconColor: e.target.value,
+                              })
+                            }
                             className="mt-1 w-full h-10 p-1 cursor-pointer"
                           />
                         </div>
 
                         <div>
-                          <Label htmlFor="cat-bgColor" className="text-xs font-medium text-muted-foreground">
+                          <Label
+                            htmlFor="cat-bgColor"
+                            className="text-xs font-medium text-muted-foreground"
+                          >
                             Fundo
                           </Label>
                           <Input
                             id="cat-bgColor"
                             type="color"
                             value={formData.bgColor}
-                            onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                bgColor: e.target.value,
+                              })
+                            }
                             className="mt-1 w-full h-10 p-1 cursor-pointer"
                           />
                         </div>
 
                         <div>
-                          <Label htmlFor="cat-fontColor" className="text-xs font-medium text-muted-foreground">
+                          <Label
+                            htmlFor="cat-fontColor"
+                            className="text-xs font-medium text-muted-foreground"
+                          >
                             Texto
                           </Label>
                           <Input
                             id="cat-fontColor"
                             type="color"
                             value={formData.fontColor}
-                            onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                fontColor: e.target.value,
+                              })
+                            }
                             className="mt-1 w-full h-10 p-1 cursor-pointer"
                           />
                         </div>
@@ -450,7 +546,9 @@ export default function AdminCategoriesPage() {
                       variant="ghost"
                       size="sm"
                       className="h-6 w-6 p-0"
-                      onClick={() => setIsAttributesExpanded(!isAttributesExpanded)}
+                      onClick={() =>
+                        setIsAttributesExpanded(!isAttributesExpanded)
+                      }
                     >
                       {isAttributesExpanded ? (
                         <ChevronDown className="h-4 w-4" />
@@ -469,7 +567,10 @@ export default function AdminCategoriesPage() {
                           className="h-4 w-4 border-gray-300 rounded focus:ring-blue-500 checked:bg-primary checked:border-primary checked:text-primary-foreground"
                           defaultChecked
                         />
-                        <Label htmlFor="attr-price" className="text-sm text-muted-foreground">
+                        <Label
+                          htmlFor="attr-price"
+                          className="text-sm text-muted-foreground"
+                        >
                           Preço
                         </Label>
                       </div>
@@ -480,7 +581,10 @@ export default function AdminCategoriesPage() {
                           id="attr-brand"
                           className="h-4 w-4 border-gray-300 rounded focus:ring-blue-500 checked:bg-primary checked:border-primary checked:text-primary-foreground"
                         />
-                        <Label htmlFor="attr-brand" className="text-sm text-muted-foreground">
+                        <Label
+                          htmlFor="attr-brand"
+                          className="text-sm text-muted-foreground"
+                        >
                           Marca
                         </Label>
                       </div>
@@ -491,7 +595,10 @@ export default function AdminCategoriesPage() {
                           id="attr-availability"
                           className="h-4 w-4 border-gray-300 rounded focus:ring-blue-500 checked:bg-primary checked:border-primary checked:text-primary-foreground"
                         />
-                        <Label htmlFor="attr-availability" className="text-sm text-muted-foreground">
+                        <Label
+                          htmlFor="attr-availability"
+                          className="text-sm text-muted-foreground"
+                        >
                           Disponibilidade
                         </Label>
                       </div>
@@ -503,11 +610,17 @@ export default function AdminCategoriesPage() {
 
             {/* Main Content - Agora à direita */}
             <div className="flex-1 overflow-y-auto px-6 pb-6 bg-background">
-              <form id="category-form" onSubmit={handleSubmit} className="space-y-8">
+              <form
+                id="category-form"
+                onSubmit={handleSubmit}
+                className="space-y-8"
+              >
                 {/* General Section */}
                 <div className="bg-muted/50 rounded-lg border p-6">
                   <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start mb-6 gap-4">
-                    <h3 className="text-lg font-medium text-foreground">Geral</h3>
+                    <h3 className="text-lg font-medium text-foreground">
+                      Geral
+                    </h3>
 
                     {/* Preview da Categoria - Agora no topo direito */}
                     <div className="w-full lg:w-48">
@@ -548,21 +661,31 @@ export default function AdminCategoriesPage() {
                         id="cat-name"
                         required
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
                         placeholder="Equipamentos Eletrônicos"
                         className="mt-2 h-10"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="cat-description" className="text-sm font-medium text-muted-foreground">
+                      <Label
+                        htmlFor="cat-description"
+                        className="text-sm font-medium text-muted-foreground"
+                      >
                         Descrição
                         <span className="text-red-500">*</span>
                       </Label>
                       <Textarea
                         id="cat-description"
                         value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            description: e.target.value,
+                          })
+                        }
                         placeholder="Descreva a categoria de equipamentos..."
                         rows={4}
                         className="mt-2 h-20 resize-none"
@@ -584,5 +707,5 @@ export default function AdminCategoriesPage() {
         color={formData.iconColor}
       />
     </div>
-  )
+  );
 }

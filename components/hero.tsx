@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Search, Phone, MapPin, Play, ArrowRight } from "lucide-react"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search, Phone, MapPin, Play, ArrowRight } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -26,8 +26,9 @@ export default function Hero() {
             </h1>
 
             <p className="hero-subtitle text-xl md:text-2xl text-orange-100 leading-relaxed opacity-0">
-              Há 10 anos oferecendo soluções em locação de equipamentos para obras e serviços em altura. Segurança,
-              qualidade e manutenção constante.
+              Há 10 anos oferecendo soluções em locação de equipamentos para
+              obras e serviços em altura. Segurança, qualidade e manutenção
+              constante.
             </p>
 
             {/* Animated Search Bar */}
@@ -93,7 +94,9 @@ export default function Hero() {
               {/* Floating Stats */}
               <div className="absolute -bottom-4 -left-4 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                 <div className="text-2xl font-bold animate-count-up">+200</div>
-                <div className="text-sm font-medium">Equipamentos Disponíveis</div>
+                <div className="text-sm font-medium">
+                  Equipamentos Disponíveis
+                </div>
               </div>
 
               <div className="absolute -top-4 -right-4 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
@@ -124,5 +127,5 @@ export default function Hero() {
         </svg>
       </div>
     </section>
-  )
+  );
 }

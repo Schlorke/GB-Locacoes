@@ -1,44 +1,44 @@
-"use client"
+"use client";
 
-import { SessionProvider, useSession } from "next-auth/react"
-import { type ReactNode, useEffect } from "react"
-import { useRouter, usePathname } from "next/navigation"
-import AdminSidebar from "@/components/admin/admin-sidebar"
-import AdminMobileHeader from "@/components/admin/admin-mobile-header"
+import { SessionProvider, useSession } from "next-auth/react";
+import { type ReactNode, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import AdminSidebar from "@/components/admin/admin-sidebar";
+import AdminMobileHeader from "@/components/admin/admin-mobile-header";
 
 interface AdminLayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 function AdminLayoutContent({ children }: AdminLayoutProps) {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const pathname = usePathname()
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    document.body.classList.add("admin-body-layout")
+    document.body.classList.add("admin-body-layout");
     return () => {
-      document.body.classList.remove("admin-body-layout")
-    }
-  }, [])
+      document.body.classList.remove("admin-body-layout");
+    };
+  }, []);
 
-  const isLoginPage = pathname === "/admin/login"
+  const isLoginPage = pathname === "/admin/login";
 
   useEffect(() => {
-    if (status === "loading" || isLoginPage) return
+    if (status === "loading" || isLoginPage) return;
 
     if (!session) {
-      router.push("/admin/login")
-      return
+      router.push("/admin/login");
+      return;
     }
 
     // @ts-ignore
-    const userRole = session.user?.role
+    const userRole = session.user?.role;
     if (!["ADMIN", "OPERATOR", "FINANCIAL"].includes(userRole)) {
-      router.push("/admin/login?error=unauthorized")
-      return
+      router.push("/admin/login?error=unauthorized");
+      return;
     }
-  }, [session, status, router, isLoginPage])
+  }, [session, status, router, isLoginPage]);
 
   if (status === "loading") {
     return (
@@ -50,15 +50,15 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
           </p>
         </div>
       </div>
-    )
+    );
   }
 
   if (isLoginPage) {
-    return <>{children}</>
+    return <>{children}</>;
   }
 
   if (!session) {
-    return null
+    return null;
   }
 
   return (
@@ -72,10 +72,12 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
         <AdminMobileHeader />
 
         {/* Conteúdo Principal */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">{children}</main>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">
+          {children}
+        </main>
       </div>
     </div>
-  )
+  );
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
@@ -83,5 +85,5 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     <SessionProvider>
       <AdminLayoutContent>{children}</AdminLayoutContent>
     </SessionProvider>
-  )
+  );
 }

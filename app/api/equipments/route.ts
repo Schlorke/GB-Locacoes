@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server"
-import prisma from "@/lib/prisma"
+import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
-    console.log("=== BUSCANDO EQUIPAMENTOS COM IMAGENS ===")
+    console.log("=== BUSCANDO EQUIPAMENTOS COM IMAGENS ===");
 
-    await prisma.$connect()
-    console.log("Conexão com banco estabelecida")
+    await prisma.$connect();
+    console.log("Conexão com banco estabelecida");
 
     const equipments = await prisma.equipment.findMany({
       include: {
@@ -15,12 +15,12 @@ export async function GET() {
       orderBy: {
         createdAt: "desc",
       },
-    })
+    });
 
-    console.log(`Encontrados ${equipments.length} equipamentos no banco`)
+    console.log(`Encontrados ${equipments.length} equipamentos no banco`);
 
     if (equipments.length === 0) {
-      console.log("Nenhum equipamento encontrado, retornando dados mock")
+      console.log("Nenhum equipamento encontrado, retornando dados mock");
       const mockEquipments = [
         {
           id: "mock-1",
@@ -36,22 +36,22 @@ export async function GET() {
           },
           reviews: [],
         },
-      ]
-      return NextResponse.json(mockEquipments)
+      ];
+      return NextResponse.json(mockEquipments);
     }
 
     // Formatar os dados do banco garantindo que as imagens sejam incluídas
     const formattedEquipments = equipments.map((equipment) => {
-      console.log(`Processando equipamento: ${equipment.name}`)
-      console.log(`Imagens do banco:`, equipment.images)
-      console.log(`ImageUrl do banco:`, equipment.imageUrl)
+      console.log(`Processando equipamento: ${equipment.name}`);
+      console.log(`Imagens do banco:`, equipment.images);
+      console.log(`ImageUrl do banco:`, equipment.imageUrl);
 
       // Priorizar imageUrl se existir, senão usar primeira imagem do array
-      let primaryImage = null
+      let primaryImage = null;
       if (equipment.imageUrl && equipment.imageUrl.trim() !== "") {
-        primaryImage = equipment.imageUrl
+        primaryImage = equipment.imageUrl;
       } else if (equipment.images && equipment.images.length > 0) {
-        primaryImage = equipment.images[0]
+        primaryImage = equipment.images[0];
       }
 
       const formattedEquipment = {
@@ -60,28 +60,34 @@ export async function GET() {
         description: equipment.description,
         pricePerDay: equipment.pricePerDay,
         imageUrl: primaryImage, // Campo principal para imagem
-        images: equipment.images && equipment.images.length > 0 ? equipment.images : primaryImage ? [primaryImage] : [],
-        isAvailable: (equipment as any).available ?? (equipment as any).isAvailable,
+        images:
+          equipment.images && equipment.images.length > 0
+            ? equipment.images
+            : primaryImage
+              ? [primaryImage]
+              : [],
+        isAvailable:
+          (equipment as any).available ?? (equipment as any).isAvailable,
         category: {
           id: equipment.category.id,
           name: equipment.category.name,
         },
         reviews: [],
-      }
+      };
 
       console.log(`Equipamento formatado:`, {
         id: formattedEquipment.id,
         name: formattedEquipment.name,
         imageUrl: formattedEquipment.imageUrl,
         images: formattedEquipment.images,
-      })
+      });
 
-      return formattedEquipment
-    })
+      return formattedEquipment;
+    });
 
-    return NextResponse.json(formattedEquipments)
+    return NextResponse.json(formattedEquipments);
   } catch (error) {
-    console.error("Erro ao buscar equipamentos:", error)
+    console.error("Erro ao buscar equipamentos:", error);
 
     const mockEquipments = [
       {
@@ -98,8 +104,8 @@ export async function GET() {
         },
         reviews: [],
       },
-    ]
+    ];
 
-    return NextResponse.json(mockEquipments)
+    return NextResponse.json(mockEquipments);
   }
 }

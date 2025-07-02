@@ -1,9 +1,9 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Política de Cookies | GB Locações",
   description: "Política de cookies da GB Locações",
-}
+};
 
 export default function CookiesPage() {
   return (
@@ -13,8 +13,9 @@ export default function CookiesPage() {
       <div className="prose dark:prose-invert lg:prose-xl">
         <h2>O que são cookies?</h2>
         <p>
-          Cookies são pequenos arquivos de texto que são armazenados no seu dispositivo quando você visita um site. Eles
-          são amplamente utilizados para fazer os sites funcionarem de forma mais eficiente.
+          Cookies são pequenos arquivos de texto que são armazenados no seu
+          dispositivo quando você visita um site. Eles são amplamente utilizados
+          para fazer os sites funcionarem de forma mais eficiente.
         </p>
 
         <h2>Como usamos cookies</h2>
@@ -28,17 +29,22 @@ export default function CookiesPage() {
 
         <h2>Tipos de cookies que usamos</h2>
         <h3>Cookies essenciais</h3>
-        <p>Estes cookies são necessários para o funcionamento básico do site.</p>
+        <p>
+          Estes cookies são necessários para o funcionamento básico do site.
+        </p>
 
         <h3>Cookies de preferências</h3>
-        <p>Estes cookies permitem que o site lembre de escolhas que você fez.</p>
+        <p>
+          Estes cookies permitem que o site lembre de escolhas que você fez.
+        </p>
 
         <h2>Controle de cookies</h2>
         <p>
-          Você pode controlar e/ou excluir cookies conforme desejar. Você pode excluir todos os cookies que já estão no
-          seu computador e pode configurar a maioria dos navegadores para impedir que sejam colocados.
+          Você pode controlar e/ou excluir cookies conforme desejar. Você pode
+          excluir todos os cookies que já estão no seu computador e pode
+          configurar a maioria dos navegadores para impedir que sejam colocados.
         </p>
       </div>
     </div>
-  )
+  );
 }

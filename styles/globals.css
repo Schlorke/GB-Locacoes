@@ -20,7 +20,6 @@ body {
 
 @layer base {
   :root {
-
     /* Altura do cabeçalho fixo (soma da topbar e header) */
     --header-height: 5rem;
     --background: 0 0% 100%;
@@ -101,8 +100,6 @@ body {
     @apply bg-background text-foreground;
   }
 }
-
-
 
 @media (min-width: 640px) {
   :root {

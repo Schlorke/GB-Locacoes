@@ -1,14 +1,15 @@
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function seedCategories() {
-  console.log("Seeding categories...")
+  console.log("Seeding categories...");
 
   const categories = [
     {
       name: "Andaimes Suspensos",
-      description: "Andaimes suspensos elétricos e manuais para trabalhos em altura",
+      description:
+        "Andaimes suspensos elétricos e manuais para trabalhos em altura",
       icon: "Building",
       color: "from-blue-500 to-blue-600",
     },
@@ -42,24 +43,24 @@ async function seedCategories() {
       icon: "Container",
       color: "from-indigo-500 to-indigo-600",
     },
-  ]
+  ];
 
   for (const category of categories) {
     await prisma.category.upsert({
       where: { name: category.name },
       update: {},
       create: category,
-    })
+    });
   }
 
-  console.log("Categories seeded successfully!")
+  console.log("Categories seeded successfully!");
 }
 
 seedCategories()
   .catch((e) => {
-    console.error(e)
-    process.exit(1)
+    console.error(e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+    await prisma.$disconnect();
+  });

@@ -1,17 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Search, Smile } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Search, Smile } from "lucide-react";
 
 interface EmojiPickerProps {
-  isOpen: boolean
-  onClose: () => void
-  onSelect: (_emoji: string) => void
-  currentEmoji?: string
+  isOpen: boolean;
+  onClose: () => void;
+  onSelect: (_emoji: string) => void;
+  currentEmoji?: string;
 }
 
 const EMOJI_CATEGORIES = {
@@ -42,10 +48,61 @@ const EMOJI_CATEGORIES = {
     "💡",
     "🧱",
   ],
-  tools: ["🔨", "🔧", "🪚", "🔩", "⚙️", "🛠️", "⚒️", "🪓", "⛏️", "🪝", "🔗", "⛓️", "📏", "📐", "🧰", "🔬"],
-  vehicles: ["🚜", "🚛", "🚚", "🚐", "🚙", "🚗", "🏍️", "🚲", "🛴", "🛵", "🚁", "✈️", "🚀", "⛵", "🚤", "🛥️"],
-  symbols: ["⚡", "🔥", "💧", "🌪️", "❄️", "☀️", "🌙", "⭐", "💎", "🔮", "🎯", "🎪", "🎨", "🎭", "🎪", "🎡"],
-}
+  tools: [
+    "🔨",
+    "🔧",
+    "🪚",
+    "🔩",
+    "⚙️",
+    "🛠️",
+    "⚒️",
+    "🪓",
+    "⛏️",
+    "🪝",
+    "🔗",
+    "⛓️",
+    "📏",
+    "📐",
+    "🧰",
+    "🔬",
+  ],
+  vehicles: [
+    "🚜",
+    "🚛",
+    "🚚",
+    "🚐",
+    "🚙",
+    "🚗",
+    "🏍️",
+    "🚲",
+    "🛴",
+    "🛵",
+    "🚁",
+    "✈️",
+    "🚀",
+    "⛵",
+    "🚤",
+    "🛥️",
+  ],
+  symbols: [
+    "⚡",
+    "🔥",
+    "💧",
+    "🌪️",
+    "❄️",
+    "☀️",
+    "🌙",
+    "⭐",
+    "💎",
+    "🔮",
+    "🎯",
+    "🎪",
+    "🎨",
+    "🎭",
+    "🎪",
+    "🎡",
+  ],
+};
 
 const CATEGORY_LABELS = {
   recent: "Recentes",
@@ -53,22 +110,27 @@ const CATEGORY_LABELS = {
   tools: "Ferramentas",
   vehicles: "Veículos",
   symbols: "Símbolos",
-}
+};
 
-export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPickerProps) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("recent")
+export function EmojiPicker({
+  isOpen,
+  onClose,
+  onSelect,
+  currentEmoji,
+}: EmojiPickerProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("recent");
 
   const filteredEmojis = searchTerm
     ? Object.values(EMOJI_CATEGORIES)
         .flat()
         .filter((emoji) => emoji.includes(searchTerm.toLowerCase()))
-    : EMOJI_CATEGORIES[selectedCategory as keyof typeof EMOJI_CATEGORIES]
+    : EMOJI_CATEGORIES[selectedCategory as keyof typeof EMOJI_CATEGORIES];
 
   const handleEmojiSelect = (emoji: string) => {
-    onSelect(emoji)
-    onClose()
-  }
+    onSelect(emoji);
+    onClose();
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -78,7 +140,10 @@ export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPi
         aria-describedby="emoji-picker-desc"
       >
         <DialogHeader>
-          <DialogTitle id="emoji-picker-title" className="flex items-center gap-2">
+          <DialogTitle
+            id="emoji-picker-title"
+            className="flex items-center gap-2"
+          >
             <Smile className="h-5 w-5" />
             Selecionar Emoji
           </DialogTitle>
@@ -104,7 +169,11 @@ export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPi
             <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
               <TabsList className="grid w-full grid-cols-5">
                 {Object.keys(EMOJI_CATEGORIES).map((category) => (
-                  <TabsTrigger key={category} value={category} className="text-xs">
+                  <TabsTrigger
+                    key={category}
+                    value={category}
+                    className="text-xs"
+                  >
                     {CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS]}
                   </TabsTrigger>
                 ))}
@@ -148,5 +217,5 @@ export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPi
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

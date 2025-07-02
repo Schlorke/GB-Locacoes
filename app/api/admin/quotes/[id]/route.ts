@@ -1,14 +1,17 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { type NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
 
     if (!session?.user || !["ADMIN", "OPERATOR"].includes(session.user.role)) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const quote = await prisma.quote.findUnique({
@@ -43,29 +46,35 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
           },
         },
       },
-    })
+    });
 
     if (!quote) {
-      return NextResponse.json({ error: "Quote not found" }, { status: 404 })
+      return NextResponse.json({ error: "Quote not found" }, { status: 404 });
     }
 
-    return NextResponse.json(quote)
+    return NextResponse.json(quote);
   } catch (error) {
-    console.error("Error fetching quote:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error("Error fetching quote:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
 
     if (!session?.user || !["ADMIN", "OPERATOR"].includes(session.user.role)) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await request.json()
-    const { status, ...updateData } = body
+    const body = await request.json();
+    const { status, ...updateData } = body;
 
     const quote = await prisma.quote.update({
       where: { id: params.id },
@@ -87,30 +96,39 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
           },
         },
       },
-    })
+    });
 
-    return NextResponse.json(quote)
+    return NextResponse.json(quote);
   } catch (error) {
-    console.error("Error updating quote:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error("Error updating quote:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
 
     if (!session?.user || session.user.role !== "ADMIN") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     await prisma.quote.delete({
       where: { id: params.id },
-    })
+    });
 
-    return NextResponse.json({ message: "Quote deleted successfully" })
+    return NextResponse.json({ message: "Quote deleted successfully" });
   } catch (error) {
-    console.error("Error deleting quote:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error("Error deleting quote:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

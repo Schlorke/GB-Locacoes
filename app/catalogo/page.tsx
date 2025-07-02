@@ -1,9 +1,9 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Catálogo | GB Locações",
   description: "Catálogo completo de equipamentos para construção civil",
-}
+};
 
 export default function CatalogoPage() {
   return (
@@ -16,17 +16,23 @@ export default function CatalogoPage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <div className="p-6 border rounded-lg">
           <h3 className="text-h3 font-semibold mb-2">Andaimes</h3>
-          <p className="text-muted-foreground">Andaimes suspensos e convencionais para trabalhos em altura.</p>
+          <p className="text-muted-foreground">
+            Andaimes suspensos e convencionais para trabalhos em altura.
+          </p>
         </div>
         <div className="p-6 border rounded-lg">
           <h3 className="text-h3 font-semibold mb-2">Betoneiras</h3>
-          <p className="text-muted-foreground">Betoneiras de diversos tamanhos para preparo de concreto.</p>
+          <p className="text-muted-foreground">
+            Betoneiras de diversos tamanhos para preparo de concreto.
+          </p>
         </div>
         <div className="p-6 border rounded-lg">
           <h3 className="text-h3 font-semibold mb-2">Ferramentas</h3>
-          <p className="text-muted-foreground">Ferramentas elétricas e manuais para construção.</p>
+          <p className="text-muted-foreground">
+            Ferramentas elétricas e manuais para construção.
+          </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

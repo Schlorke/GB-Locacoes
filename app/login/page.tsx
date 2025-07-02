@@ -1,57 +1,57 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { signIn, getSession } from "next-auth/react"
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
-import { Loader2, LogIn } from "lucide-react"
+import { signIn, getSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { Loader2, LogIn } from "lucide-react";
 
 export default function LoginPage() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-  })
+  });
 
   useEffect(() => {
     // Verificar se já está logado
     getSession().then((session) => {
       if (session) {
-        router.push("/admin")
+        router.push("/admin");
       }
-    })
-  }, [router])
+    });
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
     try {
       const result = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
         redirect: false,
-      })
+      });
 
       if (result?.error) {
-        toast.error("Credenciais inválidas")
+        toast.error("Credenciais inválidas");
       } else {
-        toast.success("Login realizado com sucesso!")
-        router.push("/admin")
+        toast.success("Login realizado com sucesso!");
+        router.push("/admin");
       }
     } catch {
-      toast.error("Erro ao fazer login")
+      toast.error("Erro ao fazer login");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -69,7 +69,9 @@ export default function LoginPage() {
                 type="email"
                 required
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 placeholder="admin@gblocacoes.com.br"
               />
             </div>
@@ -80,7 +82,9 @@ export default function LoginPage() {
                 type="password"
                 required
                 value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
                 placeholder="admin123"
               />
             </div>
@@ -106,5 +110,5 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

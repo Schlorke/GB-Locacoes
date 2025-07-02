@@ -1,27 +1,42 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { LayoutDashboard, PackageSearch, ListChecks, FileText, LogOut, Menu, UserCircle, Building } from "lucide-react"
-import { signOut, useSession } from "next-auth/react"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { Separator } from "@/components/ui/separator"
-import Image from "next/image"
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import {
+  LayoutDashboard,
+  PackageSearch,
+  ListChecks,
+  FileText,
+  LogOut,
+  Menu,
+  UserCircle,
+  Building,
+} from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
 const navItems = [
   { href: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/admin/equipamentos", icon: PackageSearch, label: "Equipamentos" },
   { href: "/admin/categorias", icon: ListChecks, label: "Categorias" },
   { href: "/admin/orcamentos", icon: FileText, label: "Orçamentos" },
-]
+];
 
 export default function AdminMobileHeader() {
-  const pathname = usePathname()
-  const { data: session } = useSession()
-  const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname();
+  const { data: session } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-700 bg-slate-900 md:hidden">
@@ -49,10 +64,20 @@ export default function AdminMobileHeader() {
               {/* Header do Sheet */}
               <SheetHeader className="p-6 pb-4 border-b">
                 <div className="flex items-center gap-3">
-                  <Image src="/placeholder-logo.svg" alt="Logo" width={32} height={32} className="flex-shrink-0" />
+                  <Image
+                    src="/placeholder-logo.svg"
+                    alt="Logo"
+                    width={32}
+                    height={32}
+                    className="flex-shrink-0"
+                  />
                   <div className="text-left">
-                    <SheetTitle className="text-lg font-bold">GB Locações</SheetTitle>
-                    <p className="text-sm text-muted-foreground">Painel Administrativo</p>
+                    <SheetTitle className="text-lg font-bold">
+                      GB Locações
+                    </SheetTitle>
+                    <p className="text-sm text-muted-foreground">
+                      Painel Administrativo
+                    </p>
                   </div>
                 </div>
               </SheetHeader>
@@ -61,8 +86,8 @@ export default function AdminMobileHeader() {
               <nav className="flex-1 p-4">
                 <div className="space-y-2">
                   {navItems.map((item) => {
-                    const Icon = item.icon
-                    const isActive = pathname.startsWith(item.href)
+                    const Icon = item.icon;
+                    const isActive = pathname.startsWith(item.href);
 
                     return (
                       <Link
@@ -80,7 +105,7 @@ export default function AdminMobileHeader() {
                         <Icon className="h-5 w-5 flex-shrink-0" />
                         <span>{item.label}</span>
                       </Link>
-                    )
+                    );
                   })}
                 </div>
               </nav>
@@ -90,9 +115,13 @@ export default function AdminMobileHeader() {
                 <div className="flex items-center gap-3 mb-4">
                   <UserCircle className="h-10 w-10 ml-[0.2rem] text-slate-400 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-slate-900 truncate">{session?.user?.name || "Administrador"}</p>
+                    <p className="font-medium text-slate-900 truncate">
+                      {session?.user?.name || "Administrador"}
+                    </p>
                     {/* @ts-ignore */}
-                    <p className="text-sm text-slate-500 truncate">{session?.user?.role || "ADMIN"}</p>
+                    <p className="text-sm text-slate-500 truncate">
+                      {session?.user?.role || "ADMIN"}
+                    </p>
                   </div>
                 </div>
 
@@ -101,8 +130,8 @@ export default function AdminMobileHeader() {
                 <Button
                   variant="ghost"
                   onClick={() => {
-                    setIsOpen(false)
-                    signOut({ callbackUrl: "/admin/login" })
+                    setIsOpen(false);
+                    signOut({ callbackUrl: "/admin/login" });
                   }}
                   className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200/60 hover:border-red-300/80"
                 >
@@ -115,5 +144,5 @@ export default function AdminMobileHeader() {
         </Sheet>
       </div>
     </header>
-  )
+  );
 }
