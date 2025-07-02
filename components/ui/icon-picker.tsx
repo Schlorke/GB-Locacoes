@@ -257,7 +257,8 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
                         title={iconName}
                         className={cn(
                           "h-16 w-full flex items-center justify-center p-2 aspect-square",
-                          selectedIcon === iconName && "border-2 border-primary bg-primary/10", // Alterado aqui
+                          selectedIcon === iconName &&
+                            "border-2 border-primary bg-primary/10 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0", // Alterado aqui
                         )}
                         onClick={() => handleSelectIcon(iconName)}
                       >
