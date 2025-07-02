@@ -7,6 +7,8 @@
     "build": "next build",
     "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'",
     "dev": "next dev",
+    "open:chrome": "wait-on --http-get --timeout 60000 http://localhost:3000 && start chrome --incognito http://localhost:3000",
+    "dev:chrome": "concurrently \"pnpm dev\" \"pnpm open:chrome\"",
     "postinstall": "prisma generate",
     "lint": "eslint app components --ext .ts,.tsx --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
     "lint:fix": "eslint app components --ext .js,.ts,.tsx --fix --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
