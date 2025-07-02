@@ -260,7 +260,18 @@ export default function ScrollRevealInit() {
 
         allElements.forEach((element) => {
           const htmlElement = element as HTMLElement;
-          htmlElement.style.animation = "none";
+          htmlElement.style.removeProperty("animation");
+          htmlElement.style.removeProperty("opacity");
+          htmlElement.style.removeProperty("transform");
+          htmlElement.style.removeProperty("transition");
+        });
+
+        const contactCards = document.querySelectorAll(".contact-card");
+        contactCards.forEach((card) => {
+          const htmlCard = card as HTMLElement;
+          htmlCard.style.removeProperty("animation");
+          htmlCard.style.removeProperty("opacity");
+          htmlCard.style.removeProperty("transform");
         });
       }
     };
