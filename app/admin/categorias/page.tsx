@@ -466,7 +466,7 @@ export default function AdminCategoriesPage() {
                         <input
                           type="checkbox"
                           id="attr-price"
-                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          className="h-4 w-4 border-gray-300 rounded focus:ring-blue-500 checked:bg-slate-700 checked:border-slate-700 checked:text-primary-foreground"
                           defaultChecked
                         />
                         <Label htmlFor="attr-price" className="text-sm text-muted-foreground">
@@ -478,7 +478,7 @@ export default function AdminCategoriesPage() {
                         <input
                           type="checkbox"
                           id="attr-brand"
-                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          className="h-4 w-4 border-gray-300 rounded focus:ring-blue-500 checked:bg-slate-700 checked:border-slate-700 checked:text-primary-foreground"
                         />
                         <Label htmlFor="attr-brand" className="text-sm text-muted-foreground">
                           Marca
@@ -489,7 +489,7 @@ export default function AdminCategoriesPage() {
                         <input
                           type="checkbox"
                           id="attr-availability"
-                          className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          className="h-4 w-4 border-gray-300 rounded focus:ring-blue-500 checked:bg-slate-700 checked:border-slate-700 checked:text-primary-foreground"
                         />
                         <Label htmlFor="attr-availability" className="text-sm text-muted-foreground">
                           Disponibilidade
