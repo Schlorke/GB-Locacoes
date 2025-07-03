@@ -1,33 +1,35 @@
 'use client';
 
-import { DialogFooter } from '@/components/ui/dialog';
-
-import type React from 'react';
-import { useState, useEffect, createElement } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
+  DialogFooter,
 } from '@/components/ui/dialog';
-import { Plus, Edit, Trash2, Tag, Loader2, Info, Check } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import {
+  Search,
+  Plus,
+  Edit,
+  Trash2,
+  Tag,
+  Eye,
+  Package,
+  Palette,
+  Hash,
+  FileText,
+  Check,
+} from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
-import { toast } from 'sonner';
-import { IconPicker } from '@/components/ui/icon-picker';
 
 interface Category {
   id: string;
@@ -45,41 +47,70 @@ interface Category {
 
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
-  const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     icon: undefined as keyof typeof LucideIcons | undefined,
-    iconColor: '#000000',
-    bgColor: '#e0e0e0',
-    fontColor: '#000000',
+    iconColor: '#3b82f6',
+    bgColor: '#e0e7ff',
+    fontColor: '#1e40af',
   });
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    filterCategories();
+  }, [categories, searchTerm]);
+
   const fetchCategories = async () => {
-    setIsLoading(true);
     try {
+      setLoading(true);
       const response = await fetch('/api/admin/categories');
-      if (response.ok) {
-        const data = await response.json();
-        setCategories(data);
-      } else {
-        toast.error('Erro ao carregar categorias');
-      }
+      const data = await response.json();
+
+      const categoriesArray = Array.isArray(data) ? data : data?.categories || [];
+      console.log('Categories API response:', categoriesArray);
+
+      setCategories(categoriesArray);
     } catch (error) {
       console.error('Error fetching categories:', error);
-      toast.error('Erro ao carregar categorias');
+      toast({
+        title: 'Erro',
+        description: 'Erro ao carregar categorias. Tente novamente.',
+        variant: 'destructive',
+      });
+      setCategories([]);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
+  };
+
+  const filterCategories = () => {
+    if (!Array.isArray(categories)) {
+      setFilteredCategories([]);
+      return;
+    }
+
+    let filtered = categories.filter((category) => {
+      const matchesSearch =
+        category.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        category.description?.toLowerCase().includes(searchTerm.toLowerCase());
+
+      return matchesSearch;
+    });
+
+    setFilteredCategories(filtered);
   };
 
   const resetForm = () => {
@@ -87,9 +118,9 @@ export default function AdminCategoriesPage() {
       name: '',
       description: '',
       icon: undefined,
-      iconColor: '#000000',
-      bgColor: '#e0e0e0',
-      fontColor: '#000000',
+      iconColor: '#3b82f6',
+      bgColor: '#e0e7ff',
+      fontColor: '#1e40af',
     });
     setEditingCategory(null);
   };
@@ -104,9 +135,9 @@ export default function AdminCategoriesPage() {
       name: category.name,
       description: category.description || '',
       icon: category.icon || undefined,
-      iconColor: category.iconColor || '#000000',
-      bgColor: category.bgColor || '#e0e0e0',
-      fontColor: category.fontColor || '#000000',
+      iconColor: category.iconColor || '#3b82f6',
+      bgColor: category.bgColor || '#e0e7ff',
+      fontColor: category.fontColor || '#1e40af',
     });
     setEditingCategory(category);
     setIsFormDialogOpen(true);
@@ -115,13 +146,14 @@ export default function AdminCategoriesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      toast.error('O nome da categoria é obrigatório.');
+      toast({
+        title: 'Erro',
+        description: 'O nome da categoria é obrigatório.',
+        variant: 'destructive',
+      });
       return;
     }
-    if (!formData.bgColor || !formData.fontColor) {
-      toast.error('Preencha todos os campos obrigatórios.');
-      return;
-    }
+
     setIsSubmitting(true);
     try {
       const url = editingCategory
@@ -136,21 +168,36 @@ export default function AdminCategoriesPage() {
       });
 
       if (response.ok) {
-        toast.success(editingCategory ? 'Categoria atualizada!' : 'Categoria criada!');
+        toast({
+          title: 'Sucesso',
+          description: editingCategory ? 'Categoria atualizada!' : 'Categoria criada!',
+        });
         fetchCategories();
         setIsFormDialogOpen(false);
         resetForm();
       } else {
         const errorData = await response.json();
         if (response.status === 409) {
-          toast.error('Categoria já existente');
+          toast({
+            title: 'Erro',
+            description: 'Categoria já existente',
+            variant: 'destructive',
+          });
         } else {
-          toast.error(errorData.error || 'Erro ao salvar categoria');
+          toast({
+            title: 'Erro',
+            description: errorData.error || 'Erro ao salvar categoria',
+            variant: 'destructive',
+          });
         }
       }
     } catch (error) {
       console.error('Error saving category:', error);
-      toast.error('Erro ao salvar categoria');
+      toast({
+        title: 'Erro',
+        description: 'Erro ao salvar categoria',
+        variant: 'destructive',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -159,197 +206,334 @@ export default function AdminCategoriesPage() {
   const deleteCategory = async (categoryId: string) => {
     if (!confirm('Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.'))
       return;
+
     setIsSubmitting(true);
     try {
       const response = await fetch(`/api/admin/categories/${categoryId}`, {
         method: 'DELETE',
       });
       if (response.ok) {
-        toast.success('Categoria excluída com sucesso');
+        toast({
+          title: 'Sucesso',
+          description: 'Categoria excluída com sucesso',
+        });
         fetchCategories();
       } else {
         const errorData = await response.json();
-        toast.error(errorData.error || 'Erro ao excluir categoria');
+        toast({
+          title: 'Erro',
+          description: errorData.error || 'Erro ao excluir categoria',
+          variant: 'destructive',
+        });
       }
     } catch (error) {
       console.error('Error deleting category:', error);
-      toast.error('Erro ao excluir categoria');
+      toast({
+        title: 'Erro',
+        description: 'Erro ao excluir categoria',
+        variant: 'destructive',
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleIconSelect = (iconName?: string, color?: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      icon: iconName as keyof typeof LucideIcons | undefined,
-      iconColor: color || prev.iconColor,
-    }));
-  };
-
   const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
-    if (!iconName || !LucideIcons[iconName]) return <Info className="h-5 w-5 text-gray-400" />;
-    return createElement(LucideIcons[iconName], {
-      size: 20,
-      color: color || formData.iconColor,
-      className: 'mr-2',
-    });
+    if (!iconName || !LucideIcons[iconName]) return <Tag className="h-4 w-4 text-gray-400" />;
+
+    const IconComponent = LucideIcons[iconName] as React.ComponentType<any>;
+    return (
+      <IconComponent size={16} color={color || formData.iconColor} className="flex-shrink-0" />
+    );
   };
 
-  if (isLoading && categories.length === 0) {
+  const getCategoryBadge = (category: Category) => {
     return (
-      <div className="flex items-center justify-center h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-150px)]">
-        <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 animate-spin text-primary" />
+      <Badge
+        variant="outline"
+        className="inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-300 max-w-full"
+        style={{
+          backgroundColor: category.bgColor || '#e0e7ff',
+          color: category.fontColor || '#1e40af',
+          boxShadow: `0 2px 8px ${category.fontColor || '#1e40af'}15, 0 1px 4px ${category.fontColor || '#1e40af'}08`,
+        }}
+      >
+        <span className="flex-shrink-0">{renderIcon(category.icon, category.iconColor)}</span>
+        <span className="truncate font-semibold text-sm min-w-0">{category.name}</span>
+      </Badge>
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
+        />
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
-        <div className="min-w-0 flex-1 text-center sm:text-left">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Categorias</h1>
-          <p className="text-sm sm:text-base text-muted-foreground mt-1">
-            Gerencie as categorias de equipamentos.
-          </p>
-        </div>
-        <Button
-          onClick={openCreateDialog}
-          className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-auto h-10 px-4"
-          size="sm"
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
         >
-          <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
-          <span className="truncate">Nova Categoria</span>
-        </Button>
-      </div>
+          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-2xl">
+            {/* Clean depth layers without decorative elements */}
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
-      <Card className="overflow-hidden">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-            <Tag className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-            <span className="truncate">Lista de Categorias</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0 sm:p-6">
-          {isLoading && categories.length > 0 && (
-            <div className="flex justify-center py-4">
-              <Loader2 className="h-5 w-5 animate-spin" />
-            </div>
-          )}
-          {!isLoading && categories.length === 0 ? (
-            <div className="text-center py-8 sm:py-12 px-4">
-              <Tag className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-              <p className="text-lg sm:text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">
-                Nenhuma categoria encontrada.
+            {/* Content */}
+            <div className="relative z-10">
+              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
+                Gerenciar Categorias
+              </h1>
+              <p className="text-orange-50 mb-4 font-medium">
+                Organize e gerencie as categorias de equipamentos
               </p>
-              <p className="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-md mx-auto">
-                Crie sua primeira categoria para organizar seus equipamentos.
-              </p>
-              <Button
-                onClick={openCreateDialog}
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-auto mx-auto h-10 px-4"
-                size="sm"
-              >
-                <Plus className="h-4 w-4 mr-2 flex-shrink-0" />
-                <span className="truncate">Criar Primeira Categoria</span>
-              </Button>
+              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
+                <Tag className="w-5 h-5 text-orange-50" />
+                <span className="font-semibold text-white">
+                  {Array.isArray(filteredCategories) ? filteredCategories.length : 0} categorias
+                  encontradas
+                </span>
+              </div>
             </div>
+          </div>
+        </motion.div>
+
+        {/* Filtros e Ações */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-6"
+        >
+          <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm">
+            {/* Clean depth layers for filter card */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+            <CardContent className="relative z-10 p-6">
+              <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+                <div className="relative flex-1 max-w-md">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    placeholder="Buscar categorias..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                  />
+                </div>
+                <Button
+                  onClick={openCreateDialog}
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Nova Categoria
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Grid de Categorias */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          {!Array.isArray(filteredCategories) || filteredCategories.length === 0 ? (
+            <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm">
+              {/* Clean depth layers for empty state card */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+              <CardContent className="relative z-10 text-center py-12">
+                <div className="text-gray-400 mb-4">
+                  <Tag className="w-12 h-12 mx-auto mb-3" />
+                  <p className="text-lg font-medium">Nenhuma categoria encontrada</p>
+                  <p className="text-sm">
+                    {searchTerm
+                      ? 'Tente ajustar os filtros de busca'
+                      : 'Crie sua primeira categoria para organizar os equipamentos'}
+                  </p>
+                </div>
+                {!searchTerm && (
+                  <Button
+                    onClick={openCreateDialog}
+                    className="mt-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white hover:scale-105 transition-all duration-300"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Criar Primeira Categoria
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="min-w-[200px] sm:w-[250px]">Nome</TableHead>
-                    <TableHead className="hidden md:table-cell min-w-[200px]">Descrição</TableHead>
-                    <TableHead className="w-[100px] sm:w-[150px] text-center hidden sm:table-cell">
-                      Equipamentos
-                    </TableHead>
-                    <TableHead className="w-[100px] sm:w-[150px] text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {categories.map((category) => (
-                    <TableRow key={category.id}>
-                      <TableCell className="p-2 sm:p-4">
-                        <div className="flex items-center gap-2.5">
-                          <span
-                            className="inline-flex items-center justify-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium max-w-full"
-                            style={{
-                              backgroundColor: category.bgColor || '#e0e0e0',
-                              color: category.fontColor || '#000000',
-                            }}
-                          >
-                            {category.icon &&
-                              LucideIcons[category.icon] &&
-                              createElement(LucideIcons[category.icon], {
-                                size: 14,
-                                color: category.iconColor || category.fontColor,
-                                className: 'mr-1.5 flex-shrink-0',
-                              })}
-                            <span className="truncate">{category.name}</span>
-                          </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <AnimatePresence>
+                {filteredCategories.map((category, index) => (
+                  <motion.div
+                    key={category.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
+                    className="group"
+                  >
+                    <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+                      {/* Clean depth layers for category card */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+                      <CardHeader className="relative z-10 pb-3">
+                        <div className="flex flex-col">
+                          <div className="w-full flex justify-center mb-4">
+                            {getCategoryBadge(category)}
+                          </div>
+                          <div className="text-left w-full">
+                            <h3 className="font-semibold text-lg text-gray-900 truncate">
+                              {category.name}
+                            </h3>
+                            <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                              {category.description || 'Sem descrição'}
+                            </p>
+                          </div>
                         </div>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell text-sm text-muted-foreground p-2 sm:p-4">
-                        <div className="max-w-xs">
-                          {category.description
-                            ? category.description.length > 60
-                              ? category.description.substring(0, 60) + '...'
-                              : category.description
-                            : '-'}
+                      </CardHeader>
+                      <CardContent className="relative z-10 pt-0">
+                        <div className="space-y-3">
+                          {/* Linha 1: Equipamentos (sempre à esquerda) */}
+                          <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <Package className="w-4 h-4 flex-shrink-0" />
+                            <span className="truncate">
+                              {category._count?.equipments || 0} equipamentos
+                            </span>
+                          </div>
+
+                          {/* Linha 2: Botões de ação (à direita em mobile, à direita em desktop) */}
+                          <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setSelectedCategory(category)}
+                              className="flex-shrink-0"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => openEditDialog(category)}
+                              className="flex-shrink-0"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => deleteCategory(category.id)}
+                              disabled={(category._count?.equipments || 0) > 0 || isSubmitting}
+                              className="hover:bg-red-100 hover:text-red-700 disabled:opacity-50 flex-shrink-0"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </div>
-                      </TableCell>
-                      <TableCell className="text-center hidden sm:table-cell p-2 sm:p-4">
-                        <span className="font-medium">{category._count?.equipments || 0}</span>
-                      </TableCell>
-                      <TableCell className="text-right p-2 sm:p-4">
-                        <div className="flex items-center justify-end gap-1">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => openEditDialog(category)}
-                            aria-label="Editar"
-                            className="h-8 w-8"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => deleteCategory(category.id)}
-                            className="text-red-500 hover:text-red-600 h-8 w-8"
-                            disabled={(category._count?.equipments || 0) > 0 || isSubmitting}
-                            aria-label="Excluir"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </motion.div>
 
-      <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
-        <DialogContent
-          className="w-full max-w-2xl max-h-[90vh] overflow-hidden p-0 rounded-xl shadow-xl"
-          aria-labelledby="category-dialog-title"
-          aria-describedby="category-dialog-desc"
-        >
-          <DialogHeader className="p-6 pb-4 border-b">
-            <DialogTitle id="category-dialog-title" className="text-lg sm:text-xl">
-              {editingCategory ? 'Editar Categoria' : 'Nova Categoria'}
-            </DialogTitle>
-            <DialogDescription id="category-dialog-desc">
-              Preencha os dados da categoria.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 hover:scrollbar-thumb-slate-500 px-6 py-4">
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        {/* Modal de Detalhes da Categoria */}
+        <Dialog open={!!selectedCategory} onOpenChange={() => setSelectedCategory(null)}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-3 text-xl">
+                <div className="w-8 h-8 bg-gradient-to-br from-orange-600 to-orange-700 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
+                  {selectedCategory?.icon ? (
+                    renderIcon(selectedCategory.icon, selectedCategory.iconColor)
+                  ) : (
+                    <Tag className="w-4 h-4" />
+                  )}
+                </div>
+                Detalhes da Categoria - {selectedCategory?.name}
+              </DialogTitle>
+            </DialogHeader>
+
+            {selectedCategory && (
+              <div className="space-y-6">
+                {/* Informações da Categoria */}
+                <Card className="border-l-4 border-l-blue-500">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <Tag className="w-5 h-5 text-blue-600" />
+                      Informações da Categoria
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-3">
+                      <Palette className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500">Badge</div>
+                        <div className="mt-1">{getCategoryBadge(selectedCategory)}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Package className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500">Equipamentos</div>
+                        <div className="font-medium">
+                          {selectedCategory._count?.equipments || 0} equipamentos
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Hash className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500">ID da Categoria</div>
+                        <div className="font-medium font-mono text-xs">{selectedCategory.id}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <FileText className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500">Descrição</div>
+                        <div className="font-medium">
+                          {selectedCategory.description || 'Sem descrição'}
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Modal de Criação/Edição */}
+        <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-xl">
+                {editingCategory ? 'Editar Categoria' : 'Nova Categoria'}
+              </DialogTitle>
+            </DialogHeader>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <Label htmlFor="cat-name" className="text-sm font-medium">
                   Nome da Categoria *
@@ -363,6 +547,7 @@ export default function AdminCategoriesPage() {
                   className="mt-1"
                 />
               </div>
+
               <div>
                 <Label htmlFor="cat-description" className="text-sm font-medium">
                   Descrição
@@ -383,11 +568,12 @@ export default function AdminCategoriesPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setIsIconPickerOpen(true)}
                     className="w-full mt-1 flex items-center justify-start text-left"
                   >
                     {renderIcon(formData.icon, formData.iconColor)}
-                    {!formData.icon && <span className="ml-2 truncate">Selecionar Ícone</span>}
+                    <span className="ml-2 truncate">
+                      {formData.icon ? 'Ícone Selecionado' : 'Selecionar Ícone'}
+                    </span>
                   </Button>
                 </div>
                 <div>
@@ -407,7 +593,7 @@ export default function AdminCategoriesPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="cat-bgColor" className="text-sm font-medium">
-                    Cor de Fundo do Rótulo
+                    Cor de Fundo do Badge
                   </Label>
                   <Input
                     id="cat-bgColor"
@@ -419,7 +605,7 @@ export default function AdminCategoriesPage() {
                 </div>
                 <div>
                   <Label htmlFor="cat-fontColor" className="text-sm font-medium">
-                    Cor da Fonte do Rótulo
+                    Cor da Fonte do Badge
                   </Label>
                   <Input
                     id="cat-fontColor"
@@ -431,7 +617,31 @@ export default function AdminCategoriesPage() {
                 </div>
               </div>
 
-              <DialogFooter className="pt-4 flex-col sm:flex-row gap-2 sm:gap-0">
+              {/* Preview do Badge */}
+              <div>
+                <Label className="text-sm font-medium">Preview</Label>
+                <div className="mt-2 p-4 bg-gray-50 rounded-lg flex items-center justify-center gap-3">
+                  <span className="text-sm text-gray-600">Badge:</span>
+                  <Badge
+                    variant="outline"
+                    className="inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-300 max-w-full"
+                    style={{
+                      backgroundColor: formData.bgColor,
+                      color: formData.fontColor,
+                      boxShadow: `0 2px 8px ${formData.fontColor}15, 0 1px 4px ${formData.fontColor}08`,
+                    }}
+                  >
+                    <span className="flex-shrink-0">
+                      {renderIcon(formData.icon, formData.iconColor)}
+                    </span>
+                    <span className="truncate font-semibold text-sm min-w-0">
+                      {formData.name || 'Nome da Categoria'}
+                    </span>
+                  </Badge>
+                </div>
+              </div>
+
+              <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
                 <Button
                   type="button"
                   variant="outline"
@@ -443,28 +653,29 @@ export default function AdminCategoriesPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto"
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white w-full sm:w-auto hover:scale-105 transition-all duration-300"
                 >
                   {isSubmitting ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        className="w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"
+                      />
+                      {editingCategory ? 'Atualizando...' : 'Criando...'}
+                    </>
                   ) : (
-                    <Check className="mr-2 h-4 w-4" />
+                    <>
+                      <Check className="mr-2 h-4 w-4" />
+                      {editingCategory ? 'Atualizar Categoria' : 'Criar Categoria'}
+                    </>
                   )}
-                  {editingCategory ? 'Atualizar Categoria' : 'Criar Categoria'}
                 </Button>
               </DialogFooter>
             </form>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <IconPicker
-        isOpen={isIconPickerOpen}
-        onClose={() => setIsIconPickerOpen(false)}
-        onSelect={handleIconSelect}
-        value={formData.icon}
-        color={formData.iconColor}
-      />
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 }

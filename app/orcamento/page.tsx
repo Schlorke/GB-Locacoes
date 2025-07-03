@@ -86,16 +86,25 @@ function QuotePage() {
 
   const updateQuantity = (id: string, quantity: number) => {
     if (quantity < 1) return;
-    setSelectedEquipments((prev) => prev.map((eq) => (eq.id === id ? { ...eq, quantity } : eq)));
+    setSelectedEquipments((prev) => {
+      const safePrev = Array.isArray(prev) ? prev : [];
+      return safePrev.map((eq) => (eq.id === id ? { ...eq, quantity } : eq));
+    });
   };
 
   const updateDays = (id: string, days: number) => {
     if (days < 1) return;
-    setSelectedEquipments((prev) => prev.map((eq) => (eq.id === id ? { ...eq, days } : eq)));
+    setSelectedEquipments((prev) => {
+      const safePrev = Array.isArray(prev) ? prev : [];
+      return safePrev.map((eq) => (eq.id === id ? { ...eq, days } : eq));
+    });
   };
 
   const removeEquipment = (id: string) => {
-    setSelectedEquipments((prev) => prev.filter((eq) => eq.id !== id));
+    setSelectedEquipments((prev) => {
+      const safePrev = Array.isArray(prev) ? prev : [];
+      return safePrev.filter((eq) => eq.id !== id);
+    });
   };
 
   const calculateSubtotal = (equipment: SelectedEquipment) => {
@@ -114,12 +123,13 @@ function QuotePage() {
     setIsSubmitting(true);
 
     try {
+      const safeSelectedEquipments = Array.isArray(selectedEquipments) ? selectedEquipments : [];
       const response = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          equipments: selectedEquipments.map((eq) => ({
+          equipments: safeSelectedEquipments.map((eq) => ({
             equipmentId: eq.id,
             quantity: eq.quantity,
             days: eq.days,
@@ -197,110 +207,116 @@ function QuotePage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {selectedEquipments.map((equipment) => {
-                      const imageUrl = getEquipmentImage(equipment);
-                      return (
-                        <div key={equipment.id} className="border rounded-lg p-4">
-                          <div className="flex flex-col sm:flex-row gap-4">
-                            {/* Imagem */}
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden mx-auto sm:mx-0">
-                              <img
-                                src={imageUrl || '/placeholder.svg'}
-                                alt={equipment.name}
-                                className="w-full h-full object-cover"
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.src = `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.name)}`;
-                                }}
-                              />
-                            </div>
-
-                            {/* Informações do Equipamento */}
-                            <div className="flex-1 min-w-0">
-                              <div className="text-center sm:text-left">
-                                <h3 className="font-semibold text-lg truncate">{equipment.name}</h3>
-                                <Badge variant="secondary" className="text-xs mb-2">
-                                  {equipment.category.name}
-                                </Badge>
-                                <p className="text-sm text-gray-600 mb-3">
-                                  {formatCurrency(Number(equipment.pricePerDay) || 0)}/dia
-                                </p>
+                    {Array.isArray(selectedEquipments) &&
+                      selectedEquipments.map((equipment) => {
+                        const imageUrl = getEquipmentImage(equipment);
+                        return (
+                          <div key={equipment.id} className="border rounded-lg p-4">
+                            <div className="flex flex-col sm:flex-row gap-4">
+                              {/* Imagem */}
+                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden mx-auto sm:mx-0">
+                                <img
+                                  src={imageUrl || '/placeholder.svg'}
+                                  alt={equipment.name}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.name)}`;
+                                  }}
+                                />
                               </div>
 
-                              {/* Controles - Layout Responsivo */}
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <div className="flex items-center justify-center sm:justify-start gap-2">
-                                  <Label className="text-sm font-medium">Quantidade:</Label>
-                                  <div className="flex items-center gap-1">
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() =>
-                                        updateQuantity(equipment.id, equipment.quantity - 1)
-                                      }
-                                      disabled={equipment.quantity <= 1}
-                                      className="h-8 w-8 p-0"
-                                    >
-                                      <Minus className="h-3 w-3" />
-                                    </Button>
+                              {/* Informações do Equipamento */}
+                              <div className="flex-1 min-w-0">
+                                <div className="text-center sm:text-left">
+                                  <h3 className="font-semibold text-lg truncate">
+                                    {equipment.name}
+                                  </h3>
+                                  <Badge variant="secondary" className="text-xs mb-2">
+                                    {equipment.category.name}
+                                  </Badge>
+                                  <p className="text-sm text-gray-600 mb-3">
+                                    {formatCurrency(Number(equipment.pricePerDay) || 0)}/dia
+                                  </p>
+                                </div>
+
+                                {/* Controles - Layout Responsivo */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                  <div className="flex items-center justify-center sm:justify-start gap-2">
+                                    <Label className="text-sm font-medium">Quantidade:</Label>
+                                    <div className="flex items-center gap-1">
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                          updateQuantity(equipment.id, equipment.quantity - 1)
+                                        }
+                                        disabled={equipment.quantity <= 1}
+                                        className="h-8 w-8 p-0"
+                                      >
+                                        <Minus className="h-3 w-3" />
+                                      </Button>
+                                      <Input
+                                        type="number"
+                                        value={equipment.quantity}
+                                        onChange={(e) =>
+                                          updateQuantity(
+                                            equipment.id,
+                                            Number.parseInt(e.target.value) || 1,
+                                          )
+                                        }
+                                        className="w-16 text-center h-8"
+                                        min="1"
+                                      />
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() =>
+                                          updateQuantity(equipment.id, equipment.quantity + 1)
+                                        }
+                                        className="h-8 w-8 p-0"
+                                      >
+                                        <Plus className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex items-center justify-center sm:justify-start gap-2">
+                                    <Label className="text-sm font-medium">Dias:</Label>
                                     <Input
                                       type="number"
-                                      value={equipment.quantity}
+                                      value={equipment.days}
                                       onChange={(e) =>
-                                        updateQuantity(
+                                        updateDays(
                                           equipment.id,
                                           Number.parseInt(e.target.value) || 1,
                                         )
                                       }
-                                      className="w-16 text-center h-8"
+                                      className="w-20 h-8"
                                       min="1"
                                     />
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() =>
-                                        updateQuantity(equipment.id, equipment.quantity + 1)
-                                      }
-                                      className="h-8 w-8 p-0"
-                                    >
-                                      <Plus className="h-3 w-3" />
-                                    </Button>
                                   </div>
                                 </div>
+                              </div>
 
-                                <div className="flex items-center justify-center sm:justify-start gap-2">
-                                  <Label className="text-sm font-medium">Dias:</Label>
-                                  <Input
-                                    type="number"
-                                    value={equipment.days}
-                                    onChange={(e) =>
-                                      updateDays(equipment.id, Number.parseInt(e.target.value) || 1)
-                                    }
-                                    className="w-20 h-8"
-                                    min="1"
-                                  />
-                                </div>
+                              {/* Preço e Ações */}
+                              <div className="text-center sm:text-right flex-shrink-0">
+                                <p className="text-base font-semibold text-primary mb-2">
+                                  {formatCurrency(calculateSubtotal(equipment))}
+                                </p>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeEquipment(equipment.id)}
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
                               </div>
                             </div>
-
-                            {/* Preço e Ações */}
-                            <div className="text-center sm:text-right flex-shrink-0">
-                              <p className="text-base font-semibold text-primary mb-2">
-                                {formatCurrency(calculateSubtotal(equipment))}
-                              </p>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => removeEquipment(equipment.id)}
-                                className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
                   </div>
                 )}
               </CardContent>
@@ -384,7 +400,7 @@ function QuotePage() {
                 <CardTitle className="text-h3">Resumo do Pedido</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {selectedEquipments.length > 0 ? (
+                {Array.isArray(selectedEquipments) && selectedEquipments.length > 0 ? (
                   <>
                     {selectedEquipments.map((equipment) => (
                       <div key={equipment.id} className="flex justify-between text-sm">

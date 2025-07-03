@@ -1,12 +1,20 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 export default function ScrollRevealInit() {
   const pathname = usePathname();
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Aguardar hidratação completa
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   useEffect(() => {
+    // Só executar após hidratação completa
+    if (!isHydrated) return;
     // Detectar o tipo de navegação
     const getNavigationType = () => {
       // Verificar se existe performance.navigation (método mais antigo)
@@ -59,15 +67,26 @@ export default function ScrollRevealInit() {
       const animatedElements = document.querySelectorAll(
         '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
           '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
-          '.contact-form, .contact-info, .cta-section',
+          '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
       );
 
       animatedElements.forEach((element) => {
         const htmlElement = element as HTMLElement;
-        htmlElement.style.opacity = '1';
-        htmlElement.style.transform = 'translateY(0)';
-        htmlElement.style.animation = 'none';
-        htmlElement.style.transition = 'none';
+
+        // For new CSS-only classes, just add the animate-in class
+        if (
+          htmlElement.classList.contains('animate-on-scroll') ||
+          htmlElement.classList.contains('animate-on-scroll-delayed') ||
+          htmlElement.classList.contains('category-card-animate')
+        ) {
+          htmlElement.classList.add('animate-in');
+        } else {
+          // Legacy inline style approach
+          htmlElement.style.opacity = '1';
+          htmlElement.style.transform = 'translateY(0)';
+          htmlElement.style.animation = 'none';
+          htmlElement.style.transition = 'none';
+        }
       });
 
       // Também mostrar os contact-cards imediatamente
@@ -108,11 +127,17 @@ export default function ScrollRevealInit() {
           if (entry.isIntersecting) {
             const element = entry.target as HTMLElement;
 
-            // Restaurar transições antes de animar
-            element.style.transition = '';
+            // Use CSS classes instead of inline styles to prevent hydration mismatches
+            if (
+              element.classList.contains('animate-on-scroll') ||
+              element.classList.contains('animate-on-scroll-delayed') ||
+              element.classList.contains('category-card-animate')
+            ) {
+              element.classList.add('animate-in');
+            }
 
-            // Animações do Hero - ajustadas para mobile
-            if (element.classList.contains('hero-title')) {
+            // Legacy support for existing classes with inline style animations
+            else if (element.classList.contains('hero-title')) {
               element.style.animation = 'slideInLeft 1.2s ease-out 0.2s forwards';
             } else if (element.classList.contains('hero-subtitle')) {
               element.style.animation = 'slideInLeft 1s ease-out 0.4s forwards';
@@ -126,20 +151,31 @@ export default function ScrollRevealInit() {
               element.style.animation = 'slideInRight 1.2s ease-out 0.3s forwards';
             }
 
-            // Títulos de seção
+            // Títulos de seção - legacy
             else if (element.classList.contains('section-title')) {
               element.style.animation = 'slideInUp 0.8s ease-out 0.2s forwards';
             } else if (element.classList.contains('section-subtitle')) {
               element.style.animation = 'slideInUp 0.6s ease-out 0.4s forwards';
             }
 
-            // Cards de categoria - EFEITO ESCADA SEQUENCIAL
+            // Cards de benefícios - EFEITO ESCADA SEQUENCIAL
+            else if (element.classList.contains('benefit-card')) {
+              const parent = element.parentElement;
+              if (parent) {
+                const allCards = Array.from(parent.querySelectorAll('.benefit-card'));
+                const index = allCards.indexOf(element);
+                const delay = 0.2 + index * 0.15;
+                element.style.animation = `slideInUp 0.7s ease-out ${delay}s forwards`;
+              }
+            }
+
+            // Cards de categoria - MESMO EFEITO DOS BENEFIT-CARDS
             else if (element.classList.contains('category-card')) {
               const parent = element.parentElement;
               if (parent) {
                 const allCards = Array.from(parent.querySelectorAll('.category-card'));
                 const index = allCards.indexOf(element);
-                const delay = 0.2 + index * 0.2;
+                const delay = 0.2 + index * 0.15; // Mesmo delay dos benefit-cards para consistência
                 element.style.animation = `slideInUp 0.8s ease-out ${delay}s forwards`;
               }
             }
@@ -152,17 +188,6 @@ export default function ScrollRevealInit() {
                 const index = allCards.indexOf(element);
                 const delay = 0.3 + index * 0.15;
                 element.style.animation = `slideInUp 0.8s ease-out ${delay}s forwards`;
-              }
-            }
-
-            // Cards de benefícios - EFEITO ESCADA SEQUENCIAL
-            else if (element.classList.contains('benefit-card')) {
-              const parent = element.parentElement;
-              if (parent) {
-                const allCards = Array.from(parent.querySelectorAll('.benefit-card'));
-                const index = allCards.indexOf(element);
-                const delay = 0.2 + index * 0.15;
-                element.style.animation = `slideInUp 0.7s ease-out ${delay}s forwards`;
               }
             }
 
@@ -196,11 +221,6 @@ export default function ScrollRevealInit() {
     // Lógica principal
     if (shouldExecuteAnimations) {
       // EXECUTAR ANIMAÇÕES: Refresh, URL digitada, nova aba, etc.
-      console.log(
-        '🎬 Executando animações - Refresh/URL/Nova aba',
-        isOnMobile ? '(Mobile)' : '(Desktop)',
-      );
-
       // Aguardar a hidratação antes de manipular o DOM
       setTimeout(() => {
         initializeElementsForAnimation();
@@ -215,7 +235,7 @@ export default function ScrollRevealInit() {
             const elementsToObserve = document.querySelectorAll(
               '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
                 '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
-                '.contact-form, .contact-info, .cta-section',
+                '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
             );
 
             elementsToObserve.forEach((element) => {
@@ -223,11 +243,9 @@ export default function ScrollRevealInit() {
             });
           }, observerDelay);
         });
-      }, 50);
+      }, 100); // Delay maior para garantir DOM completo
     } else {
       // NAVEGAÇÃO INTERNA: Mostrar tudo imediatamente
-      console.log('🚀 Navegação interna - mostrando conteúdo imediatamente');
-
       setTimeout(() => {
         showAllElementsImmediately();
       }, 50);
@@ -239,16 +257,17 @@ export default function ScrollRevealInit() {
         const allElements = document.querySelectorAll(
           '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
             '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
-            '.contact-form, .contact-info, .cta-section',
+            '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
         );
 
         allElements.forEach((element) => {
           const htmlElement = element as HTMLElement;
           htmlElement.style.animation = 'none';
+          htmlElement.classList.remove('animate-in');
         });
       }
     };
-  }, [pathname]);
+  }, [pathname, isHydrated]);
 
   return null;
 }

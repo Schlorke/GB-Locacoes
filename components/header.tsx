@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Phone, Search, User, ShoppingCart } from 'lucide-react';
+import { Menu, Phone, Search, User, ShoppingCart } from 'lucide-react';
+import { CloseButton } from '@/components/ui/close-button';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -101,15 +102,25 @@ export default function Header() {
           </div>
 
           {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="lg:hidden text-gray-700 hover:text-orange-600"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Abrir menu"
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
+          {isMenuOpen ? (
+            <CloseButton
+              onClick={() => setIsMenuOpen(false)}
+              variant="ghost"
+              size="md"
+              className="lg:hidden text-gray-700 hover:text-orange-600"
+              aria-label="Fechar menu"
+            />
+          ) : (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="lg:hidden text-gray-700 hover:text-orange-600"
+              onClick={() => setIsMenuOpen(true)}
+              aria-label="Abrir menu"
+            >
+              <Menu className="h-6 w-6" />
+            </Button>
+          )}
         </div>
 
         {/* Mobile Navigation */}

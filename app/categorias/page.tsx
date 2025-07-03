@@ -54,21 +54,22 @@ export default function CategoriesPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category) => (
-            <Link key={category.id} href={`/equipamentos?category=${category.id}`}>
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Package className="h-5 w-5" />
-                    {category.name}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <Badge variant="secondary">{category._count.equipments} equipamentos</Badge>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+          {Array.isArray(categories) &&
+            categories.map((category) => (
+              <Link key={category.id} href={`/equipamentos?category=${category.id}`}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Package className="h-5 w-5" />
+                      {category.name}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Badge variant="secondary">{category._count.equipments} equipamentos</Badge>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
         </div>
       </div>
     </div>

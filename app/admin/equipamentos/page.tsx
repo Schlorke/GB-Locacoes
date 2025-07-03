@@ -125,7 +125,9 @@ export default function AdminEquipmentsPage() {
     }
   };
 
-  const filteredEquipments = equipments.filter((equipment) => {
+  // Garantir que equipments é sempre um array antes de filtrar
+  const safeEquipments = Array.isArray(equipments) ? equipments : [];
+  const filteredEquipments = safeEquipments.filter((equipment) => {
     const matchesSearch =
       equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       equipment.description?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -146,7 +148,6 @@ export default function AdminEquipmentsPage() {
       </div>
     );
   }
-
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
       <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">

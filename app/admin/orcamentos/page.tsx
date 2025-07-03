@@ -1,12 +1,9 @@
 'use client';
 
-import React from 'react';
-
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -14,547 +11,591 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/components/ui/dialog';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import {
-  FileText,
   Search,
+  Filter,
   Eye,
-  Check,
-  X,
-  Clock,
   CheckCircle,
   XCircle,
-  Loader2,
-  AlertTriangle,
-  Calendar,
-  Building,
+  Clock,
   User,
   Mail,
   Phone,
+  Calendar,
   Package,
+  MessageSquare,
+  Building,
+  Hash,
+  Briefcase,
+  FileText,
 } from 'lucide-react';
-import { toast } from 'sonner';
-
-interface QuoteItem {
-  id: string;
-  equipmentId: string;
-  equipment: {
-    name: string;
-    dailyPrice: number;
-  };
-  quantity: number;
-  days: number;
-  totalPrice: number;
-}
 
 interface Quote {
   id: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone?: string;
-  customerCompany?: string;
+  name: string;
+  email: string;
+  phone: string;
+  company?: string;
+  equipments: Array<{
+    id: string;
+    name: string;
+    quantity: number;
+    dailyPrice: number;
+  }>;
+  startDate: string;
+  endDate: string;
+  totalPrice: number;
+  status: 'pending' | 'approved' | 'rejected';
   message?: string;
-  status: 'pending' | 'approved' | 'rejected' | 'completed';
-  totalAmount?: number;
-  adminNotes?: string;
+  address?: {
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
   createdAt: string;
   updatedAt: string;
-  items: QuoteItem[];
 }
 
 const statusConfig = {
   pending: {
     label: 'Pendente',
-    color:
-      'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900 dark:text-yellow-200',
+    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     icon: Clock,
+    gradient: 'from-yellow-400 to-orange-500',
   },
   approved: {
     label: 'Aprovado',
-    color: 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900 dark:text-green-200',
+    color: 'bg-green-100 text-green-800 border-green-200',
     icon: CheckCircle,
+    gradient: 'from-green-400 to-emerald-500',
   },
   rejected: {
     label: 'Rejeitado',
-    color: 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900 dark:text-red-200',
+    color: 'bg-red-100 text-red-800 border-red-200',
     icon: XCircle,
-  },
-  completed: {
-    label: 'Concluído',
-    color: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-200',
-    icon: CheckCircle,
+    gradient: 'from-red-400 to-rose-500',
   },
 };
 
 export default function AdminQuotesPage() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [filteredQuotes, setFilteredQuotes] = useState<Quote[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
-  const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-  const [adminNotes, setAdminNotes] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchQuotes();
   }, []);
 
+  useEffect(() => {
+    filterQuotes();
+  }, [quotes, searchTerm, statusFilter]);
+
   const fetchQuotes = async () => {
-    setIsLoading(true);
     try {
+      setLoading(true);
       const response = await fetch('/api/admin/quotes');
-      if (response.ok) {
-        const data = await response.json();
-        setQuotes(data);
-      } else {
-        toast.error('Erro ao carregar orçamentos');
-      }
+      const data = await response.json();
+
+      // Verificação defensiva para garantir que data é um array
+      const quotesArray = Array.isArray(data) ? data : data?.quotes || [];
+      console.log('Quotes API response:', quotesArray);
+
+      setQuotes(quotesArray);
     } catch (error) {
       console.error('Error fetching quotes:', error);
-      toast.error('Erro ao carregar orçamentos');
+      toast({
+        title: 'Erro',
+        description: 'Erro ao carregar orçamentos. Tente novamente.',
+        variant: 'destructive',
+      });
+      setQuotes([]);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const updateQuoteStatus = async (quoteId: string, status: string, notes?: string) => {
-    setIsUpdating(true);
+  const filterQuotes = () => {
+    if (!Array.isArray(quotes)) {
+      setFilteredQuotes([]);
+      return;
+    }
+
+    let filtered = quotes.filter((quote) => {
+      const matchesSearch =
+        quote.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        quote.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        quote.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        quote.phone?.includes(searchTerm);
+
+      const matchesStatus = statusFilter === 'all' || quote.status === statusFilter;
+
+      return matchesSearch && matchesStatus;
+    });
+
+    setFilteredQuotes(filtered);
+  };
+
+  const updateQuoteStatus = async (quoteId: string, newStatus: 'approved' | 'rejected') => {
     try {
+      setIsUpdating(true);
       const response = await fetch(`/api/admin/quotes/${quoteId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status, adminNotes: notes }),
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
       });
 
-      if (response.ok) {
-        toast.success('Status do orçamento atualizado!');
-        fetchQuotes();
-        setIsDetailDialogOpen(false);
-        setSelectedQuote(null);
-        setAdminNotes('');
-      } else {
-        const errorData = await response.json();
-        toast.error(errorData.error || 'Erro ao atualizar orçamento');
+      if (!response.ok) {
+        throw new Error('Erro ao atualizar status');
       }
+
+      await fetchQuotes();
+      setSelectedQuote(null);
+
+      toast({
+        title: 'Sucesso',
+        description: `Orçamento ${newStatus === 'approved' ? 'aprovado' : 'rejeitado'} com sucesso!`,
+      });
     } catch (error) {
       console.error('Error updating quote:', error);
-      toast.error('Erro ao atualizar orçamento');
+      toast({
+        title: 'Erro',
+        description: 'Erro ao atualizar status do orçamento.',
+        variant: 'destructive',
+      });
     } finally {
       setIsUpdating(false);
     }
   };
 
-  const openQuoteDetail = (quote: Quote) => {
-    setSelectedQuote(quote);
-    setAdminNotes(quote.adminNotes || '');
-    setIsDetailDialogOpen(true);
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
   };
 
-  const filteredQuotes = quotes.filter((quote) => {
-    const matchesSearch =
-      quote.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      quote.customerEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      quote.customerCompany?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || quote.status === statusFilter;
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('pt-BR');
+  };
 
-    return matchesSearch && matchesStatus;
-  });
+  const getStatusBadge = (status: Quote['status']) => {
+    const config = statusConfig[status];
+    const Icon = config.icon;
 
-  if (isLoading && quotes.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-150px)]">
-        <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 animate-spin text-primary" />
+      <Badge variant="outline" className={`${config.color} flex items-center gap-1.5 font-medium`}>
+        <Icon className="w-3.5 h-3.5" />
+        {config.label}
+      </Badge>
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
+        />
       </div>
     );
   }
-
   return (
-    <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
-        <div className="min-w-0 flex-1 text-center sm:text-left">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Orçamentos</h1>
-          <p className="text-sm sm:text-base text-muted-foreground mt-1">
-            Gerencie as solicitações de orçamento dos clientes.
-          </p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-2xl">
+            {/* Clean depth layers without decorative elements */}
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
-      {/* Filtros */}
-      <Card>
-        <CardContent className="p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <Label htmlFor="search" className="sr-only">
-                Pesquisar orçamentos
-              </Label>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="search"
-                  placeholder="Pesquisar por cliente, email ou empresa..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
+            {/* Content */}
+            <div className="relative z-10">
+              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
+                Gerenciar Orçamentos
+              </h1>
+              <p className="text-orange-50 mb-4 font-medium">
+                Visualize, analise e gerencie todos os orçamentos solicitados
+              </p>
+              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
+                <FileText className="w-5 h-5 text-orange-50" />
+                <span className="font-semibold text-white">
+                  {Array.isArray(filteredQuotes) ? filteredQuotes.length : 0} orçamentos encontrados
+                </span>
               </div>
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-[180px]">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os status</SelectItem>
-                <SelectItem value="pending">Pendentes</SelectItem>
-                <SelectItem value="approved">Aprovados</SelectItem>
-                <SelectItem value="rejected">Rejeitados</SelectItem>
-                <SelectItem value="completed">Concluídos</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
-        </CardContent>
-      </Card>
+        </motion.div>
 
-      <Card className="overflow-hidden">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-            <FileText className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
-            <span className="truncate">Lista de Orçamentos</span>
-            <Badge variant="secondary" className="ml-auto">
-              {filteredQuotes.length}
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0 sm:p-6">
-          {isLoading && quotes.length > 0 && (
-            <div className="flex justify-center py-4">
-              <Loader2 className="h-5 w-5 animate-spin" />
-            </div>
-          )}
-          {!isLoading && filteredQuotes.length === 0 && quotes.length === 0 ? (
-            <div className="text-center py-8 sm:py-12 px-4">
-              <FileText className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-gray-300 dark:text-gray-600 mb-4" />
-              <p className="text-lg sm:text-xl font-medium text-gray-500 dark:text-gray-400 mb-2">
-                Nenhum orçamento encontrado.
-              </p>
-              <p className="text-sm text-gray-400 dark:text-gray-500 mb-6 max-w-md mx-auto">
-                Os orçamentos solicitados pelos clientes aparecerão aqui.
-              </p>
-            </div>
-          ) : !isLoading && filteredQuotes.length === 0 ? (
-            <div className="text-center py-8 px-4">
-              <AlertTriangle className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-              <p className="text-lg font-medium text-gray-600 mb-2">Nenhum orçamento encontrado</p>
-              <p className="text-sm text-gray-400">Tente ajustar os filtros de pesquisa</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="min-w-[200px]">Cliente</TableHead>
-                    <TableHead className="hidden sm:table-cell min-w-[150px]">Empresa</TableHead>
-                    <TableHead className="hidden md:table-cell w-[100px] text-center">
-                      Itens
-                    </TableHead>
-                    <TableHead className="hidden lg:table-cell w-[120px]">Valor</TableHead>
-                    <TableHead className="w-[100px]">Status</TableHead>
-                    <TableHead className="hidden sm:table-cell w-[100px]">Data</TableHead>
-                    <TableHead className="w-[80px] text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredQuotes.map((quote) => {
-                    const StatusIcon = statusConfig[quote.status]?.icon || AlertTriangle;
+        {/* Filtros */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-6"
+        >
+          <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm">
+            {/* Clean depth layers for filter card */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-                    return (
-                      <TableRow key={quote.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                        <TableCell className="p-2 sm:p-4">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                              <User className="h-4 w-4 text-white" />
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <p className="font-medium text-sm truncate">{quote.customerName}</p>
-                              <p className="text-xs text-muted-foreground truncate">
-                                {quote.customerEmail}
-                              </p>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell p-2 sm:p-4">
-                          <div className="flex items-center gap-2">
-                            <Building className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                            <span className="text-sm truncate">{quote.customerCompany || '-'}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell text-center p-2 sm:p-4">
-                          <span className="font-medium text-sm">{quote.items.length}</span>
-                        </TableCell>
-                        <TableCell className="hidden lg:table-cell p-2 sm:p-4">
-                          <span className="font-bold text-green-600 text-sm">
-                            {quote.totalAmount ? `R$ ${quote.totalAmount.toFixed(2)}` : '-'}
-                          </span>
-                        </TableCell>
-                        <TableCell className="p-2 sm:p-4">
-                          <Badge
-                            className={`${statusConfig[quote.status]?.color} flex items-center gap-1 w-fit text-xs`}
-                          >
-                            <StatusIcon className="h-3 w-3" />
-                            <span className="hidden sm:inline">
-                              {statusConfig[quote.status]?.label}
-                            </span>
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell p-2 sm:p-4">
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(quote.createdAt).toLocaleDateString('pt-BR')}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right p-2 sm:p-4">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => openQuoteDetail(quote)}
-                            aria-label="Visualizar detalhes"
-                            className="h-8 w-8"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Dialog de Detalhes do Orçamento */}
-      <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent className="w-full max-w-4xl max-h-[90vh] overflow-hidden p-0 rounded-xl shadow-xl">
-          <DialogHeader className="p-6 pb-4 border-b">
-            <DialogTitle className="text-lg sm:text-xl">Detalhes do Orçamento</DialogTitle>
-            <DialogDescription>
-              Visualize e gerencie o orçamento solicitado pelo cliente.
-            </DialogDescription>
-          </DialogHeader>
-
-          {selectedQuote && (
-            <div className="overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 hover:scrollbar-thumb-slate-500 px-6 py-4">
-              <div className="space-y-6">
-                {/* Informações do Cliente */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-3">
-                    <h3 className="font-semibold text-base flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      Informações do Cliente
-                    </h3>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <User className="h-3 w-3 text-muted-foreground" />
-                        <span className="font-medium">Nome:</span>
-                        <span>{selectedQuote.customerName}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Mail className="h-3 w-3 text-muted-foreground" />
-                        <span className="font-medium">Email:</span>
-                        <span>{selectedQuote.customerEmail}</span>
-                      </div>
-                      {selectedQuote.customerPhone && (
-                        <div className="flex items-center gap-2">
-                          <Phone className="h-3 w-3 text-muted-foreground" />
-                          <span className="font-medium">Telefone:</span>
-                          <span>{selectedQuote.customerPhone}</span>
-                        </div>
-                      )}
-                      {selectedQuote.customerCompany && (
-                        <div className="flex items-center gap-2">
-                          <Building className="h-3 w-3 text-muted-foreground" />
-                          <span className="font-medium">Empresa:</span>
-                          <span>{selectedQuote.customerCompany}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <h3 className="font-semibold text-base flex items-center gap-2">
-                      <FileText className="h-4 w-4" />
-                      Status do Orçamento
-                    </h3>
-                    <div className="space-y-2">
-                      <Badge
-                        className={`${statusConfig[selectedQuote.status]?.color} flex items-center gap-2 w-fit`}
-                      >
-                        {React.createElement(
-                          statusConfig[selectedQuote.status]?.icon || AlertTriangle,
-                          {
-                            className: 'h-3 w-3',
-                          },
-                        )}
-                        {statusConfig[selectedQuote.status]?.label}
-                      </Badge>
-                      <div className="text-sm text-muted-foreground">
-                        <p>
-                          Criado em: {new Date(selectedQuote.createdAt).toLocaleString('pt-BR')}
-                        </p>
-                        <p>
-                          Atualizado em: {new Date(selectedQuote.updatedAt).toLocaleString('pt-BR')}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Mensagem do Cliente */}
-                {selectedQuote.message && (
-                  <div className="space-y-3">
-                    <h3 className="font-semibold text-base">Mensagem do Cliente</h3>
-                    <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                      <p className="text-sm whitespace-pre-wrap">{selectedQuote.message}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Itens do Orçamento */}
-                <div className="space-y-3">
-                  <h3 className="font-semibold text-base flex items-center gap-2">
-                    <Package className="h-4 w-4" />
-                    Itens Solicitados
-                  </h3>
-                  <div className="border rounded-lg overflow-hidden">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Equipamento</TableHead>
-                          <TableHead className="text-center">Qtd</TableHead>
-                          <TableHead className="text-center">Dias</TableHead>
-                          <TableHead className="text-right">Preço Unit.</TableHead>
-                          <TableHead className="text-right">Total</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {selectedQuote.items.map((item) => (
-                          <TableRow key={item.id}>
-                            <TableCell className="font-medium">{item.equipment.name}</TableCell>
-                            <TableCell className="text-center">{item.quantity}</TableCell>
-                            <TableCell className="text-center">{item.days}</TableCell>
-                            <TableCell className="text-right">
-                              R$ {item.equipment.dailyPrice.toFixed(2)}
-                            </TableCell>
-                            <TableCell className="text-right font-bold">
-                              R$ {item.totalPrice.toFixed(2)}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                        <TableRow className="bg-gray-50 dark:bg-gray-800">
-                          <TableCell colSpan={4} className="font-bold text-right">
-                            Total Geral:
-                          </TableCell>
-                          <TableCell className="font-bold text-right text-green-600">
-                            R${' '}
-                            {selectedQuote.items
-                              .reduce((sum, item) => sum + item.totalPrice, 0)
-                              .toFixed(2)}
-                          </TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </div>
-                </div>
-
-                {/* Notas do Administrador */}
-                <div className="space-y-3">
-                  <Label htmlFor="admin-notes" className="font-semibold text-base">
-                    Notas do Administrador
-                  </Label>
-                  <Textarea
-                    id="admin-notes"
-                    placeholder="Adicione observações sobre este orçamento..."
-                    value={adminNotes}
-                    onChange={(e) => setAdminNotes(e.target.value)}
-                    rows={3}
+            <CardContent className="relative z-10 p-6">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    placeholder="Buscar por nome, email, empresa..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
+                <div className="flex items-center gap-2">
+                  <Filter className="w-4 h-4 text-gray-500" />
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className="w-48 border-gray-200 focus:border-blue-500 focus:ring-blue-500">
+                      <SelectValue placeholder="Filtrar por status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos os status</SelectItem>
+                      <SelectItem value="pending">Pendentes</SelectItem>
+                      <SelectItem value="approved">Aprovados</SelectItem>
+                      <SelectItem value="rejected">Rejeitados</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            </div>
-          )}
+            </CardContent>
+          </Card>
+        </motion.div>
 
-          <DialogFooter className="p-6 pt-4 border-t flex-col sm:flex-row gap-2 sm:gap-0">
-            <Button
-              variant="outline"
-              onClick={() => setIsDetailDialogOpen(false)}
-              className="w-full sm:w-auto"
-            >
-              Fechar
-            </Button>
-            {selectedQuote?.status === 'pending' && (
-              <>
-                <Button
-                  onClick={() => updateQuoteStatus(selectedQuote.id, 'rejected', adminNotes)}
-                  disabled={isUpdating}
-                  variant="destructive"
-                  className="w-full sm:w-auto"
-                >
-                  {isUpdating ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <X className="mr-2 h-4 w-4" />
-                  )}
-                  Rejeitar
-                </Button>
-                <Button
-                  onClick={() => updateQuoteStatus(selectedQuote.id, 'approved', adminNotes)}
-                  disabled={isUpdating}
-                  className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto"
-                >
-                  {isUpdating ? (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Check className="mr-2 h-4 w-4" />
-                  )}
-                  Aprovar
-                </Button>
-              </>
-            )}
-            {selectedQuote?.status === 'approved' && (
-              <Button
-                onClick={() => updateQuoteStatus(selectedQuote.id, 'completed', adminNotes)}
-                disabled={isUpdating}
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto"
-              >
-                {isUpdating ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : (
-                  <CheckCircle className="mr-2 h-4 w-4" />
+        {/* Tabela de Orçamentos */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm">
+            {/* Clean depth layers for table card */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+            <CardContent className="relative z-10 p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b border-gray-100 bg-gray-50/50">
+                      <th className="text-left p-4 font-semibold text-gray-700">Cliente</th>
+                      <th className="text-left p-4 font-semibold text-gray-700">Equipamentos</th>
+                      <th className="text-left p-4 font-semibold text-gray-700">Período</th>
+                      <th className="text-left p-4 font-semibold text-gray-700">Valor Total</th>
+                      <th className="text-left p-4 font-semibold text-gray-700">Status</th>
+                      <th className="text-left p-4 font-semibold text-gray-700">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <AnimatePresence>
+                      {Array.isArray(filteredQuotes) &&
+                        filteredQuotes.map((quote, index) => (
+                          <motion.tr
+                            key={quote.id}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                            transition={{ delay: index * 0.05 }}
+                            className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors group"
+                          >
+                            <td className="p-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                  {quote.name?.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                  <div className="font-medium text-gray-900">{quote.name}</div>
+                                  <div className="text-sm text-gray-500">{quote.email}</div>
+                                  {quote.company && (
+                                    <div className="text-xs text-gray-400 flex items-center gap-1 mt-1">
+                                      <Building className="w-3 h-3" />
+                                      {quote.company}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Package className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm font-medium">
+                                  {Array.isArray(quote.equipments) ? quote.equipments.length : 0}{' '}
+                                  equipamentos
+                                </span>
+                              </div>
+                            </td>
+                            <td className="p-4">
+                              <div className="text-sm">
+                                <div className="flex items-center gap-1 text-gray-600">
+                                  <Calendar className="w-3 h-3" />
+                                  {formatDate(quote.startDate)}
+                                </div>
+                                <div className="text-gray-500 ml-4">
+                                  até {formatDate(quote.endDate)}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="p-4">
+                              <span className="font-semibold text-lg text-green-600">
+                                {formatCurrency(quote.totalPrice || 0)}
+                              </span>
+                            </td>
+                            <td className="p-4">{getStatusBadge(quote.status)}</td>
+                            <td className="p-4">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSelectedQuote(quote)}
+                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <Eye className="w-4 h-4 mr-2" />
+                                Ver Detalhes
+                              </Button>
+                            </td>
+                          </motion.tr>
+                        ))}
+                    </AnimatePresence>
+                  </tbody>
+                </table>
+
+                {(!Array.isArray(filteredQuotes) || filteredQuotes.length === 0) && (
+                  <div className="text-center py-12">
+                    <div className="text-gray-400 mb-4">
+                      <FileText className="w-12 h-12 mx-auto mb-3" />
+                      <p className="text-lg font-medium">Nenhum orçamento encontrado</p>
+                      <p className="text-sm">
+                        Tente ajustar os filtros ou aguarde novos orçamentos
+                      </p>
+                    </div>
+                  </div>
                 )}
-                Marcar como Concluído
-              </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Modal de Detalhes */}
+        <Dialog open={!!selectedQuote} onOpenChange={() => setSelectedQuote(null)}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-3 text-xl">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
+                  {selectedQuote?.name?.charAt(0).toUpperCase()}
+                </div>
+                Detalhes do Orçamento - {selectedQuote?.name}
+              </DialogTitle>
+            </DialogHeader>
+
+            {selectedQuote && (
+              <div className="space-y-6">
+                {/* Informações do Cliente */}
+                <Card className="border-l-4 border-l-blue-500">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <User className="w-5 h-5 text-blue-600" />
+                      Informações do Cliente
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center gap-3">
+                      <Mail className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500">Email</div>
+                        <div className="font-medium">{selectedQuote.email}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Phone className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500">Telefone</div>
+                        <div className="font-medium">{selectedQuote.phone}</div>
+                      </div>
+                    </div>
+                    {selectedQuote.company && (
+                      <div className="flex items-center gap-3">
+                        <Building className="w-4 h-4 text-gray-400" />
+                        <div>
+                          <div className="text-sm text-gray-500">Empresa</div>
+                          <div className="font-medium">{selectedQuote.company}</div>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex items-center gap-3">
+                      <Hash className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <div className="text-sm text-gray-500">ID do Orçamento</div>
+                        <div className="font-medium font-mono text-xs">{selectedQuote.id}</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Período e Status */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Card className="border-l-4 border-l-green-500">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Calendar className="w-5 h-5 text-green-600" />
+                        Período da Locação
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2">
+                        <div>
+                          <span className="text-sm text-gray-500">Início:</span>
+                          <span className="ml-2 font-medium">
+                            {formatDate(selectedQuote.startDate)}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-sm text-gray-500">Fim:</span>
+                          <span className="ml-2 font-medium">
+                            {formatDate(selectedQuote.endDate)}
+                          </span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-l-4 border-l-purple-500">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Briefcase className="w-5 h-5 text-purple-600" />
+                        Status Atual
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center justify-between">
+                        {getStatusBadge(selectedQuote.status)}
+                        <div className="text-right">
+                          <div className="text-2xl font-bold text-green-600">
+                            {formatCurrency(selectedQuote.totalPrice || 0)}
+                          </div>
+                          <div className="text-sm text-gray-500">Valor Total</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Equipamentos */}
+                <Card className="border-l-4 border-l-orange-500">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="flex items-center gap-2 text-lg">
+                      <Package className="w-5 h-5 text-orange-600" />
+                      Equipamentos Solicitados
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {Array.isArray(selectedQuote.equipments) &&
+                        selectedQuote.equipments.map((equipment, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                          >
+                            <div>
+                              <div className="font-medium">{equipment.name}</div>
+                              <div className="text-sm text-gray-500">
+                                Quantidade: {equipment.quantity} •{' '}
+                                {formatCurrency(equipment.dailyPrice)}/dia
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="font-semibold text-green-600">
+                                {formatCurrency(equipment.quantity * equipment.dailyPrice)}
+                              </div>
+                              <div className="text-xs text-gray-500">subtotal/dia</div>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Mensagem */}
+                {selectedQuote.message && (
+                  <Card className="border-l-4 border-l-indigo-500">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <MessageSquare className="w-5 h-5 text-indigo-600" />
+                        Mensagem do Cliente
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Textarea
+                        value={selectedQuote.message}
+                        readOnly
+                        className="min-h-[100px] resize-none border-gray-200"
+                      />
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Ações Administrativas */}
+                {selectedQuote.status === 'pending' && (
+                  <Card className="border-l-4 border-l-yellow-500">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <Briefcase className="w-5 h-5 text-yellow-600" />
+                        Ações Administrativas
+                      </CardTitle>
+                      <CardDescription>Aprove ou rejeite este orçamento</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex gap-3">
+                        <Button
+                          onClick={() => updateQuoteStatus(selectedQuote.id, 'approved')}
+                          disabled={isUpdating}
+                          className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                        >
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                          {isUpdating ? 'Aprovando...' : 'Aprovar Orçamento'}
+                        </Button>
+                        <Button
+                          onClick={() => updateQuoteStatus(selectedQuote.id, 'rejected')}
+                          disabled={isUpdating}
+                          variant="outline"
+                          className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+                        >
+                          <XCircle className="w-4 h-4 mr-2" />
+                          {isUpdating ? 'Rejeitando...' : 'Rejeitar Orçamento'}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
             )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 }

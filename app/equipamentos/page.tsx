@@ -95,7 +95,9 @@ export default function EquipmentsPage() {
   };
 
   const filterEquipments = () => {
-    let filtered = equipments;
+    // Garantir que equipments é sempre um array
+    const safeEquipments = Array.isArray(equipments) ? equipments : [];
+    let filtered = safeEquipments;
 
     if (searchTerm) {
       filtered = filtered.filter(

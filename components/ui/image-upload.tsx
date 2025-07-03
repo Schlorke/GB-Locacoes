@@ -6,7 +6,8 @@ import { Button } from './button';
 import { Input } from './input';
 import { Label } from './label';
 import { toast } from '@/hooks/use-toast';
-import { Upload, X, Link } from 'lucide-react';
+import { Upload, Link } from 'lucide-react';
+import { CloseButton } from './close-button';
 
 interface ImageUploadProps {
   images: string[];
@@ -183,15 +184,11 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
                     }}
                   />
                 </div>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="icon"
-                  className="absolute -top-2 -right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                <CloseButton
+                  className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 text-white hover:bg-red-600"
                   onClick={() => removeImage(index)}
-                >
-                  <X className="h-3 w-3" />
-                </Button>
+                  size="sm"
+                />
                 {index === 0 && (
                   <div className="absolute bottom-1 left-1 bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded">
                     Principal

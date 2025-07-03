@@ -90,24 +90,50 @@ export default function AdminDashboard() {
   }, []);
 
   const fetchDashboardData = async () => {
+    setIsLoading(true);
+    setRecentQuotes([]); // Reset para garantir array vazio
+
     try {
       const [statsResponse, quotesResponse] = await Promise.all([
-        fetch('/api/admin/dashboard/stats'),
+        fetch('/api/admin/dashboard'),
         fetch('/api/admin/quotes?limit=5'),
       ]);
 
       if (statsResponse.ok) {
         const statsData = await statsResponse.json();
-        setStats(statsData);
+        setStats(statsData || null);
       }
 
       if (quotesResponse.ok) {
         const quotesData = await quotesResponse.json();
-        setRecentQuotes(quotesData.slice(0, 5));
+
+        // Garantir que sempre temos um array
+        let quotes: RecentQuote[] = [];
+
+        if (Array.isArray(quotesData)) {
+          quotes = quotesData;
+        } else if (quotesData && quotesData.quotes && Array.isArray(quotesData.quotes)) {
+          quotes = quotesData.quotes;
+        } else {
+          console.warn('Quotes data is not in expected format:', quotesData);
+          quotes = [];
+        }
+
+        // Garantir que o slice funcione corretamente
+        const safeQuotes = Array.isArray(quotes) ? quotes : [];
+        const finalQuotes = safeQuotes.slice(0, 5);
+
+        setRecentQuotes(finalQuotes);
+      } else {
+        console.warn('Failed to fetch quotes:', quotesResponse.status);
+        setRecentQuotes([]);
       }
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error);
       toast.error('Erro ao carregar dados do dashboard');
+      // Garantir que sempre temos um estado válido
+      setRecentQuotes([]);
+      setStats(null);
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +149,6 @@ export default function AdminDashboard() {
       </div>
     );
   }
-
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
       {/* Header */}
@@ -146,7 +171,7 @@ export default function AdminDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-        <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+        <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -161,7 +186,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+        <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -174,7 +199,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+        <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -189,7 +214,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+        <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -207,7 +232,7 @@ export default function AdminDashboard() {
 
       {/* Status dos Orçamentos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <Card className="border-l-4 border-l-yellow-500">
+        <Card className="border-l-4 border-l-yellow-500 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-102 bg-white/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -221,7 +246,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500">
+        <Card className="border-l-4 border-l-green-500 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-102 bg-white/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -235,7 +260,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-red-500">
+        <Card className="border-l-4 border-l-red-500 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-102 bg-white/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -249,7 +274,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500">
+        <Card className="border-l-4 border-l-blue-500 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-102 bg-white/80 backdrop-blur-sm">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -265,7 +290,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Ações Rápidas */}
-      <Card>
+      <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-base sm:text-lg flex items-center gap-2">
             <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -274,7 +299,11 @@ export default function AdminDashboard() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 items-center sm:items-stretch">
-            <Button asChild variant="outline" className="h-auto p-4 w-auto max-w-xs bg-transparent">
+            <Button
+              asChild
+              variant="outline"
+              className="h-auto p-4 w-auto max-w-xs bg-transparent hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md"
+            >
               <Link href="/admin/equipamentos/novo" className="flex flex-col items-center gap-2">
                 <Plus className="h-6 w-6 text-blue-600" />
                 <span className="font-medium text-center">Adicionar Equipamento</span>
@@ -284,7 +313,11 @@ export default function AdminDashboard() {
               </Link>
             </Button>
 
-            <Button asChild variant="outline" className="h-auto p-4 w-auto max-w-xs bg-transparent">
+            <Button
+              asChild
+              variant="outline"
+              className="h-auto p-4 w-auto max-w-xs bg-transparent hover:bg-green-50 hover:border-green-300 transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md"
+            >
               <Link href="/admin/categorias" className="flex flex-col items-center gap-2">
                 <BarChart3 className="h-6 w-6 text-green-600" />
                 <span className="font-medium text-center">Gerenciar Categorias</span>
@@ -294,7 +327,11 @@ export default function AdminDashboard() {
               </Link>
             </Button>
 
-            <Button asChild variant="outline" className="h-auto p-4 w-auto max-w-xs bg-transparent">
+            <Button
+              asChild
+              variant="outline"
+              className="h-auto p-4 w-auto max-w-xs bg-transparent hover:bg-purple-50 hover:border-purple-300 transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md"
+            >
               <Link href="/admin/orcamentos" className="flex flex-col items-center gap-2">
                 <FileText className="h-6 w-6 text-purple-600" />
                 <span className="font-medium text-center">Ver Orçamentos</span>
@@ -308,14 +345,19 @@ export default function AdminDashboard() {
       </Card>
 
       {/* Orçamentos Recentes */}
-      <Card>
+      <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
         <CardHeader>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
             <CardTitle className="text-base sm:text-lg flex items-center gap-2">
               <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="truncate">Orçamentos Recentes</span>
             </CardTitle>
-            <Button asChild variant="outline" size="sm" className="h-10 px-4 bg-transparent">
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="h-10 px-4 bg-transparent hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 hover:scale-105"
+            >
               <Link href="/admin/orcamentos">
                 <Eye className="h-4 w-4 mr-2" />
                 Ver Todos
@@ -324,7 +366,7 @@ export default function AdminDashboard() {
           </div>
         </CardHeader>
         <CardContent>
-          {recentQuotes.length === 0 ? (
+          {!Array.isArray(recentQuotes) || recentQuotes.length === 0 ? (
             <div className="text-center py-8">
               <FileText className="h-12 w-12 mx-auto text-gray-300 mb-4" />
               <p className="text-lg font-medium text-gray-600 mb-2">Nenhum orçamento recente</p>
@@ -346,59 +388,65 @@ export default function AdminDashboard() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {recentQuotes.map((quote) => {
-                    const StatusIcon =
-                      statusConfig[quote.status as keyof typeof statusConfig]?.icon ||
-                      AlertTriangle;
+                  {Array.isArray(recentQuotes) &&
+                    recentQuotes.map((quote) => {
+                      const StatusIcon =
+                        statusConfig[quote.status as keyof typeof statusConfig]?.icon ||
+                        AlertTriangle;
 
-                    return (
-                      <TableRow key={quote.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-                        <TableCell className="p-2 sm:p-4">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                              <User className="h-4 w-4 text-white" />
+                      return (
+                        <TableRow
+                          key={quote.id}
+                          className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                        >
+                          <TableCell className="p-2 sm:p-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <User className="h-4 w-4 text-white" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="font-medium text-sm truncate">{quote.customerName}</p>
+                                <p className="text-xs text-muted-foreground truncate">
+                                  {quote.customerEmail}
+                                </p>
+                              </div>
                             </div>
-                            <div className="min-w-0 flex-1">
-                              <p className="font-medium text-sm truncate">{quote.customerName}</p>
-                              <p className="text-xs text-muted-foreground truncate">
-                                {quote.customerEmail}
-                              </p>
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell p-2 sm:p-4">
+                            <div className="flex items-center gap-2">
+                              <Building className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                              <span className="text-sm truncate">
+                                {quote.customerCompany || '-'}
+                              </span>
                             </div>
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell p-2 sm:p-4">
-                          <div className="flex items-center gap-2">
-                            <Building className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                            <span className="text-sm truncate">{quote.customerCompany || '-'}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="hidden md:table-cell text-center p-2 sm:p-4">
-                          <span className="font-medium text-sm">{quote.itemsCount}</span>
-                        </TableCell>
-                        <TableCell className="hidden lg:table-cell p-2 sm:p-4">
-                          <span className="font-bold text-green-600 text-sm">
-                            {quote.totalAmount ? `R$ ${quote.totalAmount.toFixed(2)}` : '-'}
-                          </span>
-                        </TableCell>
-                        <TableCell className="p-2 sm:p-4">
-                          <Badge
-                            className={`${statusConfig[quote.status as keyof typeof statusConfig]?.color} flex items-center gap-1 w-fit text-xs`}
-                          >
-                            <StatusIcon className="h-3 w-3" />
-                            <span className="hidden sm:inline">
-                              {statusConfig[quote.status as keyof typeof statusConfig]?.label}
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell text-center p-2 sm:p-4">
+                            <span className="font-medium text-sm">{quote.itemsCount}</span>
+                          </TableCell>
+                          <TableCell className="hidden lg:table-cell p-2 sm:p-4">
+                            <span className="font-bold text-green-600 text-sm">
+                              {quote.totalAmount ? `R$ ${quote.totalAmount.toFixed(2)}` : '-'}
                             </span>
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="hidden sm:table-cell p-2 sm:p-4">
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(quote.createdAt).toLocaleDateString('pt-BR')}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                          </TableCell>
+                          <TableCell className="p-2 sm:p-4">
+                            <Badge
+                              className={`${statusConfig[quote.status as keyof typeof statusConfig]?.color} flex items-center gap-1 w-fit text-xs`}
+                            >
+                              <StatusIcon className="h-3 w-3" />
+                              <span className="hidden sm:inline">
+                                {statusConfig[quote.status as keyof typeof statusConfig]?.label}
+                              </span>
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell p-2 sm:p-4">
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                              <Calendar className="h-3 w-3" />
+                              {new Date(quote.createdAt).toLocaleDateString('pt-BR')}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
                 </TableBody>
               </Table>
             </div>

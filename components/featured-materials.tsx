@@ -70,7 +70,7 @@ export default function FeaturedMaterials() {
   }
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Equipamentos em Destaque</h2>
@@ -82,7 +82,7 @@ export default function FeaturedMaterials() {
             {equipments.map((equipment) => (
               <Card
                 key={equipment.id}
-                className="group hover:shadow-xl transition-all duration-300"
+                className="group hover:shadow-xl transition-all duration-300 overflow-hidden relative"
               >
                 <div className="relative h-64 overflow-hidden rounded-t-lg">
                   <Image
@@ -135,6 +135,9 @@ export default function FeaturedMaterials() {
                       )}
                     </Button>
                   </div>
+
+                  {/* Bottom accent line - sempre no fundo */}
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
                 </CardContent>
               </Card>
             ))}

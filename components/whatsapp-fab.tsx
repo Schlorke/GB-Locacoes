@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { MessageCircle, X, Send } from 'lucide-react';
+import { MessageCircle, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { CloseButton } from '@/components/ui/close-button';
 
 const scrollbarStyles = `
   .whatsapp-chat-scroll::-webkit-scrollbar {
@@ -135,14 +136,12 @@ export default function WhatsAppFAB() {
                 <p className="text-xs text-green-100">Equipamentos para Construção</p>
               </div>
             </div>
-            <Button
+            <CloseButton
+              onClick={() => setIsOpen(false)}
+              className="text-white hover:bg-green-600"
               variant="ghost"
               size="sm"
-              onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-green-600 p-1 h-8 w-8"
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            />
           </div>
 
           {/* Messages - área expandida */}
@@ -213,19 +212,30 @@ export default function WhatsAppFAB() {
           </div>
         )}
 
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
-          style={{ backgroundColor: '#25D366' }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#128C7E';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = '#25D366';
-          }}
-        >
-          {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
-        </button>
+        {isOpen ? (
+          <CloseButton
+            onClick={() => setIsOpen(false)}
+            variant="ghost"
+            size="md"
+            className="!w-14 !h-14 !rounded-full !text-white !shadow-lg hover:!shadow-xl !transition-all !duration-300 hover:!scale-110 !border-0 !bg-green-500 hover:!bg-green-600"
+            aria-label="Fechar chat do WhatsApp"
+          />
+        ) : (
+          <button
+            onClick={() => setIsOpen(true)}
+            className="w-14 h-14 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+            style={{ backgroundColor: '#25D366' }}
+            aria-label="Abrir chat do WhatsApp"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#128C7E';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#25D366';
+            }}
+          >
+            <MessageCircle className="h-6 w-6" />
+          </button>
+        )}
       </div>
     </>
   );

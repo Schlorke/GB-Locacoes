@@ -24,6 +24,11 @@ export const metadata: Metadata = {
   authors: [{ name: 'GB Locações' }],
   creator: 'GB Locações',
   publisher: 'GB Locações',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   robots: {
     index: true,
     follow: true,
