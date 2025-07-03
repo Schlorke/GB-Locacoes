@@ -10,7 +10,7 @@ export function safeAccess<T>(obj: any, path: string, defaultValue: T): T {
 export function getSimulatedReviews() {
   return {
     average: 4.8,
-    count: Math.floor(Math.random() * 200) + 50,
+    count: 120,
     stars: 5,
   };
 }
