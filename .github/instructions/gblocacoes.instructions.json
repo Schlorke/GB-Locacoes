@@ -1,0 +1,13 @@
+{
+  "language": "typescript",
+  "instructions": [
+    "Utilizar apenas recursos compatíveis com Next.js App Router",
+    "Usar TailwindCSS com classes utilitárias e responsivas",
+    "Empregar Prisma ORM com Supabase e tipos seguros",
+    "Utilizar autenticação com NextAuth e 2FA",
+    "Seguir arquitetura modular e com boas práticas (Clean Code, DX)",
+    "Sugerir apenas componentes ShadCN, sem UI externas",
+    "Evitar dependências como Neon, Upstash ou bibliotecas legadas",
+    "Preservar animações e identidade visual já implementadas"
+  ]
+}

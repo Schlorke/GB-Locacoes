@@ -1,0 +1,7 @@
+{
+  "formatter": "prettier",
+  "linter": "eslint",
+  "testFramework": "vitest",
+  "typeChecker": "typescript",
+  "deployment": "vercel"
+}
