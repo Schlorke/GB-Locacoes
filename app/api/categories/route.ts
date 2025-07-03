@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 export async function GET() {
   try {
@@ -12,13 +12,13 @@ export async function GET() {
         },
       },
       orderBy: {
-        name: "asc",
+        name: 'asc',
       },
-    })
+    });
 
-    return NextResponse.json(categories)
+    return NextResponse.json(categories);
   } catch (error) {
-    console.error("Erro ao buscar categorias:", error)
-    return NextResponse.json({ error: "Erro interno do servidor" }, { status: 500 })
+    console.error('Erro ao buscar categorias:', error);
+    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
   }
 }

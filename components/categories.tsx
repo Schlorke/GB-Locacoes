@@ -1,73 +1,73 @@
-import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
-import { Hammer, Truck, HardHat, Wrench, Building, Zap, Shield, Container } from "lucide-react"
+import Link from 'next/link';
+import { Card, CardContent } from '@/components/ui/card';
+import { Hammer, Truck, HardHat, Wrench, Building, Zap, Shield, Container } from 'lucide-react';
 
 const categories = [
   {
-    name: "Andaimes Suspensos",
+    name: 'Andaimes Suspensos',
     icon: Building,
     count: 25,
-    href: "/catalogo/andaimes-suspensos",
-    description: "Andaimes suspensos elétricos e manuais",
-    color: "from-blue-500 to-blue-600",
+    href: '/catalogo/andaimes-suspensos',
+    description: 'Andaimes suspensos elétricos e manuais',
+    color: 'from-blue-500 to-blue-600',
   },
   {
-    name: "Cadeiras Elétricas",
+    name: 'Cadeiras Elétricas',
     icon: Zap,
     count: 18,
-    href: "/catalogo/cadeiras-eletricas",
-    description: "Cadeiras elétricas e manuais para altura",
-    color: "from-yellow-500 to-yellow-600",
+    href: '/catalogo/cadeiras-eletricas',
+    description: 'Cadeiras elétricas e manuais para altura',
+    color: 'from-yellow-500 to-yellow-600',
   },
   {
-    name: "Andaimes Tubulares",
+    name: 'Andaimes Tubulares',
     icon: Wrench,
     count: 35,
-    href: "/catalogo/andaimes-tubulares",
-    description: "Andaimes tubulares para diversas alturas",
-    color: "from-red-500 to-red-600",
+    href: '/catalogo/andaimes-tubulares',
+    description: 'Andaimes tubulares para diversas alturas',
+    color: 'from-red-500 to-red-600',
   },
   {
-    name: "Betoneiras",
+    name: 'Betoneiras',
     icon: Truck,
     count: 22,
-    href: "/catalogo/betoneiras",
-    description: "Betoneiras de diversos tamanhos",
-    color: "from-green-500 to-green-600",
+    href: '/catalogo/betoneiras',
+    description: 'Betoneiras de diversos tamanhos',
+    color: 'from-green-500 to-green-600',
   },
   {
-    name: "Rompedores",
+    name: 'Rompedores',
     icon: Hammer,
     count: 28,
-    href: "/catalogo/rompedores",
-    description: "Rompedores pneumáticos e elétricos",
-    color: "from-purple-500 to-purple-600",
+    href: '/catalogo/rompedores',
+    description: 'Rompedores pneumáticos e elétricos',
+    color: 'from-purple-500 to-purple-600',
   },
   {
-    name: "Compressores",
+    name: 'Compressores',
     icon: Container,
     count: 15,
-    href: "/catalogo/compressores",
-    description: "Compressores de ar para obras",
-    color: "from-indigo-500 to-indigo-600",
+    href: '/catalogo/compressores',
+    description: 'Compressores de ar para obras',
+    color: 'from-indigo-500 to-indigo-600',
   },
   {
-    name: "Equipamentos de Segurança",
+    name: 'Equipamentos de Segurança',
     icon: Shield,
     count: 45,
-    href: "/catalogo/seguranca",
-    description: "EPIs e equipamentos de proteção",
-    color: "from-emerald-500 to-emerald-600",
+    href: '/catalogo/seguranca',
+    description: 'EPIs e equipamentos de proteção',
+    color: 'from-emerald-500 to-emerald-600',
   },
   {
-    name: "Outros Equipamentos",
+    name: 'Outros Equipamentos',
     icon: HardHat,
     count: 32,
-    href: "/catalogo/outros",
-    description: "Diversos equipamentos para obras",
-    color: "from-orange-500 to-orange-600",
+    href: '/catalogo/outros',
+    description: 'Diversos equipamentos para obras',
+    color: 'from-orange-500 to-orange-600',
   },
-]
+];
 
 export default function Categories() {
   return (
@@ -85,7 +85,7 @@ export default function Categories() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {categories.map((category) => {
-            const IconComponent = category.icon
+            const IconComponent = category.icon;
             return (
               <Link key={category.name} href={category.href} className="group">
                 <Card className="category-card h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 group-focus:ring-2 group-focus:ring-orange-500 overflow-hidden relative opacity-0">
@@ -121,11 +121,11 @@ export default function Categories() {
                   </CardContent>
                 </Card>
               </Link>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }
 // Não há botões específicos neste componente, mas se houver no futuro, usar h-12 para padrão

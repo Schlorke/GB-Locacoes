@@ -1,25 +1,25 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Menu, X, Phone, Search, User, ShoppingCart } from "lucide-react"
+import { useState } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Menu, X, Phone, Search, User, ShoppingCart } from 'lucide-react';
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleInternalNavigation = () => {
-    sessionStorage.setItem("internalNavigation", "true")
-    setIsMenuOpen(false)
-  }
+    sessionStorage.setItem('internalNavigation', 'true');
+    setIsMenuOpen(false);
+  };
 
   const navigation = [
-    { name: "Início", href: "/" },
-    { name: "Equipamentos", href: "/equipamentos" },
-    { name: "Orçamento", href: "/orcamento" },
-    { name: "Sobre", href: "/sobre" },
-    { name: "Contato", href: "/contato" },
-  ]
+    { name: 'Início', href: '/' },
+    { name: 'Equipamentos', href: '/equipamentos' },
+    { name: 'Orçamento', href: '/orcamento' },
+    { name: 'Sobre', href: '/sobre' },
+    { name: 'Contato', href: '/contato' },
+  ];
 
   return (
     <header className="fixed top-0 left-0 w-screen z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100">
@@ -37,7 +37,11 @@ export default function Header() {
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <Link href="/login" className="hover:text-gray-300 transition-colors" onClick={handleInternalNavigation}>
+              <Link
+                href="/login"
+                className="hover:text-gray-300 transition-colors"
+                onClick={handleInternalNavigation}
+              >
                 Área do Cliente
               </Link>
               <Link
@@ -57,7 +61,6 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2" onClick={handleInternalNavigation}>
-
             <div className="bg-slate-700 text-white p-2 rounded-lg font-bold text-lg">GB</div>
             <div>
               <div className="font-bold text-lg text-gray-900">GB Locações</div>
@@ -135,5 +138,5 @@ export default function Header() {
         )}
       </div>
     </header>
-  )
+  );
 }

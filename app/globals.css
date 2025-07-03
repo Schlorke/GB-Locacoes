@@ -372,7 +372,7 @@ section {
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   .bg-gradient-to-br {
-    background: theme("colors.blue.600") !important;
+    background: theme('colors.blue.600') !important;
   }
 
   .text-blue-100 {
@@ -431,15 +431,15 @@ section {
 
 /* Selection styles */
 ::selection {
-  background-color: theme("colors.blue.200");
-  color: theme("colors.blue.900");
+  background-color: theme('colors.blue.200');
+  color: theme('colors.blue.900');
 }
 
 /* Form enhancements */
 input:focus,
 textarea:focus,
 select:focus {
-  box-shadow: 0 0 0 3px theme("colors.blue.100");
+  box-shadow: 0 0 0 3px theme('colors.blue.100');
 }
 
 /* Button hover effects */

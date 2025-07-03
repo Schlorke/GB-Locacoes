@@ -1,31 +1,30 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { Prisma } from "@prisma/client"
-import { z } from "zod"
-import crypto from "node:crypto"
-import { prisma } from "@/lib/prisma"
+import { type NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
+import { z } from 'zod';
+import crypto from 'node:crypto';
+import { prisma } from '@/lib/prisma';
 
 function slugify(text: string) {
   return text
-    .normalize("NFKD")
-    .replace(/[^\w\s-]/g, "")
+    .normalize('NFKD')
+    .replace(/[^\w\s-]/g, '')
     .trim()
     .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/--+/g, "-")
-    .replace(/^-+|-+$/g, "")
+    .replace(/\s+/g, '-')
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 const CategorySchema = z
   .object({
-    name: z.string().min(1, "O nome da categoria é obrigatório"),
+    name: z.string().min(1, 'O nome da categoria é obrigatório'),
     description: z.string().optional(),
     icon: z.string().optional().nullable(),
-    iconColor: z.string().min(1, "Cor do ícone é obrigatória"),
-    bgColor: z.string().min(1, "Cor de fundo é obrigatória"),
-    fontColor: z.string().min(1, "Cor da fonte é obrigatória"),
+    iconColor: z.string().min(1, 'Cor do ícone é obrigatória'),
+    bgColor: z.string().min(1, 'Cor de fundo é obrigatória'),
+    fontColor: z.string().min(1, 'Cor da fonte é obrigatória'),
   })
-  .strict()
-
+  .strict();
 
 // GET /api/admin/categories - List all categories
 export async function GET() {
@@ -39,14 +38,14 @@ export async function GET() {
         },
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
-    })
+    });
 
-    return NextResponse.json(categories)
+    return NextResponse.json(categories);
   } catch (error) {
-    console.error("Error fetching categories:", error)
-    return NextResponse.json({ error: "Erro ao buscar categorias" }, { status: 500 })
+    console.error('Error fetching categories:', error);
+    return NextResponse.json({ error: 'Erro ao buscar categorias' }, { status: 500 });
   }
 }
 
@@ -54,52 +53,46 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     if (!process.env.DATABASE_URL) {
-      console.error("[API POST /admin/categories] DATABASE_URL não definido")
+      console.error('[API POST /admin/categories] DATABASE_URL não definido');
       return NextResponse.json(
-        { error: "Configuração do banco de dados ausente." },
+        { error: 'Configuração do banco de dados ausente.' },
         { status: 500 },
-      )
+      );
     }
 
-    let raw
+    let raw;
     try {
-      raw = await request.json()
+      raw = await request.json();
     } catch (_err) {
-      return NextResponse.json({ error: "JSON inválido" }, { status: 400 })
+      return NextResponse.json({ error: 'JSON inválido' }, { status: 400 });
     }
 
-    if (!raw.icon) delete raw.icon
+    if (!raw.icon) delete raw.icon;
 
-    if (process.env.NODE_ENV !== "production") {
-      console.log("[CATEGORY_PAYLOAD]", raw)
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('[CATEGORY_PAYLOAD]', raw);
     }
 
-    let parsed
+    let parsed;
     try {
-      parsed = CategorySchema.parse(raw)
+      parsed = CategorySchema.parse(raw);
     } catch (err) {
-      console.error("[CATEGORY_ERROR]", err)
-      return NextResponse.json({ error: "Dados inválidos" }, { status: 400 })
+      console.error('[CATEGORY_ERROR]', err);
+      return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 });
     }
 
-    const { name, description, icon, iconColor, bgColor, fontColor } = parsed
+    const { name, description, icon, iconColor, bgColor, fontColor } = parsed;
 
-    const slug = slugify(name)
+    const slug = slugify(name);
 
     const existingCategory = await prisma.category.findFirst({
       where: {
-        OR: [
-          { name: { equals: name.trim(), mode: "insensitive" } },
-          { slug },
-        ],
+        OR: [{ name: { equals: name.trim(), mode: 'insensitive' } }, { slug }],
       },
-    })
+    });
 
     if (existingCategory) {
-      return NextResponse.json(
-        { error: "Categoria já existente" },
-        { status: 409 },
-      )
+      return NextResponse.json({ error: 'Categoria já existente' }, { status: 409 });
     }
 
     const category = await prisma.category.create({
@@ -108,37 +101,27 @@ export async function POST(request: NextRequest) {
         name: name.trim(),
         description: description?.trim() || null,
         icon: icon?.trim() || null,
-        iconColor: iconColor?.trim() || "#000000",
-        bgColor: bgColor?.trim() || "#e0e0e0",
-        fontColor: fontColor?.trim() || "#000000",
+        iconColor: iconColor?.trim() || '#000000',
+        bgColor: bgColor?.trim() || '#e0e0e0',
+        fontColor: fontColor?.trim() || '#000000',
         slug,
       },
-    })
+    });
 
-    return NextResponse.json(category, { status: 201 })
+    return NextResponse.json(category, { status: 201 });
   } catch (error) {
-    console.error("Error creating category:", error)
+    console.error('Error creating category:', error);
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      console.error(
-        "[API POST /admin/categories] Prisma error:",
-        error.code,
-        error.message,
-      )
+      console.error('[API POST /admin/categories] Prisma error:', error.code, error.message);
 
-      if (error.code === "P2002") {
-        return NextResponse.json(
-          { error: "Categoria já existente" },
-          { status: 409 },
-        )
+      if (error.code === 'P2002') {
+        return NextResponse.json({ error: 'Categoria já existente' }, { status: 409 });
       }
 
-      return NextResponse.json(
-        { error: "Erro ao processar dados da categoria." },
-        { status: 400 },
-      )
+      return NextResponse.json({ error: 'Erro ao processar dados da categoria.' }, { status: 400 });
     }
 
-    return NextResponse.json({ error: "Erro ao criar categoria" }, { status: 500 })
+    return NextResponse.json({ error: 'Erro ao criar categoria' }, { status: 500 });
   }
 }

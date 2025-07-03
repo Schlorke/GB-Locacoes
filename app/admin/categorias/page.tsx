@@ -1,187 +1,207 @@
-"use client"
+'use client';
 
-import { DialogFooter } from "@/components/ui/dialog"
+import { DialogFooter } from '@/components/ui/dialog';
 
-import type React from "react"
-import { useState, useEffect, createElement } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Plus, Edit, Trash2, Tag, Loader2, Info, Check } from "lucide-react"
-import * as LucideIcons from "lucide-react"
-import { toast } from "sonner"
-import { IconPicker } from "@/components/ui/icon-picker"
+import type React from 'react';
+import { useState, useEffect, createElement } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Plus, Edit, Trash2, Tag, Loader2, Info, Check } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
+import { toast } from 'sonner';
+import { IconPicker } from '@/components/ui/icon-picker';
 
 interface Category {
-  id: string
-  name: string
-  description?: string
-  icon?: keyof typeof LucideIcons
-  iconColor?: string
-  bgColor?: string
-  fontColor?: string
-  createdAt: string
+  id: string;
+  name: string;
+  description?: string;
+  icon?: keyof typeof LucideIcons;
+  iconColor?: string;
+  bgColor?: string;
+  fontColor?: string;
+  createdAt: string;
   _count?: {
-    equipments: number
-  }
+    equipments: number;
+  };
 }
 
 export default function AdminCategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null)
-  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false)
-  const [isIconPickerOpen, setIsIconPickerOpen] = useState(false)
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+  const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
+    name: '',
+    description: '',
     icon: undefined as keyof typeof LucideIcons | undefined,
-    iconColor: "#000000",
-    bgColor: "#e0e0e0",
-    fontColor: "#000000",
-  })
+    iconColor: '#000000',
+    bgColor: '#e0e0e0',
+    fontColor: '#000000',
+  });
 
   useEffect(() => {
-    fetchCategories()
-  }, [])
+    fetchCategories();
+  }, []);
 
   const fetchCategories = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const response = await fetch("/api/admin/categories")
+      const response = await fetch('/api/admin/categories');
       if (response.ok) {
-        const data = await response.json()
-        setCategories(data)
+        const data = await response.json();
+        setCategories(data);
       } else {
-        toast.error("Erro ao carregar categorias")
+        toast.error('Erro ao carregar categorias');
       }
     } catch (error) {
-      console.error("Error fetching categories:", error)
-      toast.error("Erro ao carregar categorias")
+      console.error('Error fetching categories:', error);
+      toast.error('Erro ao carregar categorias');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const resetForm = () => {
     setFormData({
-      name: "",
-      description: "",
+      name: '',
+      description: '',
       icon: undefined,
-      iconColor: "#000000",
-      bgColor: "#e0e0e0",
-      fontColor: "#000000",
-    })
-    setEditingCategory(null)
-  }
+      iconColor: '#000000',
+      bgColor: '#e0e0e0',
+      fontColor: '#000000',
+    });
+    setEditingCategory(null);
+  };
 
   const openCreateDialog = () => {
-    resetForm()
-    setIsFormDialogOpen(true)
-  }
+    resetForm();
+    setIsFormDialogOpen(true);
+  };
 
   const openEditDialog = (category: Category) => {
     setFormData({
       name: category.name,
-      description: category.description || "",
+      description: category.description || '',
       icon: category.icon || undefined,
-      iconColor: category.iconColor || "#000000",
-      bgColor: category.bgColor || "#e0e0e0",
-      fontColor: category.fontColor || "#000000",
-    })
-    setEditingCategory(category)
-    setIsFormDialogOpen(true)
-  }
+      iconColor: category.iconColor || '#000000',
+      bgColor: category.bgColor || '#e0e0e0',
+      fontColor: category.fontColor || '#000000',
+    });
+    setEditingCategory(category);
+    setIsFormDialogOpen(true);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!formData.name.trim()) {
-      toast.error("O nome da categoria é obrigatório.")
-      return
+      toast.error('O nome da categoria é obrigatório.');
+      return;
     }
     if (!formData.bgColor || !formData.fontColor) {
-      toast.error("Preencha todos os campos obrigatórios.")
-      return
+      toast.error('Preencha todos os campos obrigatórios.');
+      return;
     }
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
-      const url = editingCategory ? `/api/admin/categories/${editingCategory.id}` : "/api/admin/categories"
-      const method = editingCategory ? "PUT" : "POST"
+      const url = editingCategory
+        ? `/api/admin/categories/${editingCategory.id}`
+        : '/api/admin/categories';
+      const method = editingCategory ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-      })
+      });
 
       if (response.ok) {
-        toast.success(editingCategory ? "Categoria atualizada!" : "Categoria criada!")
-        fetchCategories()
-        setIsFormDialogOpen(false)
-        resetForm()
+        toast.success(editingCategory ? 'Categoria atualizada!' : 'Categoria criada!');
+        fetchCategories();
+        setIsFormDialogOpen(false);
+        resetForm();
       } else {
-        const errorData = await response.json()
+        const errorData = await response.json();
         if (response.status === 409) {
-          toast.error("Categoria já existente")
+          toast.error('Categoria já existente');
         } else {
-          toast.error(errorData.error || "Erro ao salvar categoria")
+          toast.error(errorData.error || 'Erro ao salvar categoria');
         }
       }
     } catch (error) {
-      console.error("Error saving category:", error)
-      toast.error("Erro ao salvar categoria")
+      console.error('Error saving category:', error);
+      toast.error('Erro ao salvar categoria');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const deleteCategory = async (categoryId: string) => {
-    if (!confirm("Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.")) return
-    setIsSubmitting(true)
+    if (!confirm('Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.'))
+      return;
+    setIsSubmitting(true);
     try {
       const response = await fetch(`/api/admin/categories/${categoryId}`, {
-        method: "DELETE",
-      })
+        method: 'DELETE',
+      });
       if (response.ok) {
-        toast.success("Categoria excluída com sucesso")
-        fetchCategories()
+        toast.success('Categoria excluída com sucesso');
+        fetchCategories();
       } else {
-        const errorData = await response.json()
-        toast.error(errorData.error || "Erro ao excluir categoria")
+        const errorData = await response.json();
+        toast.error(errorData.error || 'Erro ao excluir categoria');
       }
     } catch (error) {
-      console.error("Error deleting category:", error)
-      toast.error("Erro ao excluir categoria")
+      console.error('Error deleting category:', error);
+      toast.error('Erro ao excluir categoria');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleIconSelect = (iconName?: string, color?: string) => {
     setFormData((prev) => ({
       ...prev,
       icon: iconName as keyof typeof LucideIcons | undefined,
       iconColor: color || prev.iconColor,
-    }))
-  }
+    }));
+  };
 
   const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
-    if (!iconName || !LucideIcons[iconName]) return <Info className="h-5 w-5 text-gray-400" />
-    return createElement(LucideIcons[iconName], { size: 20, color: color || formData.iconColor, className: "mr-2" })
-  }
+    if (!iconName || !LucideIcons[iconName]) return <Info className="h-5 w-5 text-gray-400" />;
+    return createElement(LucideIcons[iconName], {
+      size: 20,
+      color: color || formData.iconColor,
+      className: 'mr-2',
+    });
+  };
 
   if (isLoading && categories.length === 0) {
     return (
       <div className="flex items-center justify-center h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-150px)]">
         <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 animate-spin text-primary" />
       </div>
-    )
+    );
   }
 
   return (
@@ -189,7 +209,9 @@ export default function AdminCategoriesPage() {
       <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
         <div className="min-w-0 flex-1 text-center sm:text-left">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Categorias</h1>
-          <p className="text-sm sm:text-base text-muted-foreground mt-1">Gerencie as categorias de equipamentos.</p>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
+            Gerencie as categorias de equipamentos.
+          </p>
         </div>
         <Button
           onClick={openCreateDialog}
@@ -253,8 +275,8 @@ export default function AdminCategoriesPage() {
                           <span
                             className="inline-flex items-center justify-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium max-w-full"
                             style={{
-                              backgroundColor: category.bgColor || "#e0e0e0",
-                              color: category.fontColor || "#000000",
+                              backgroundColor: category.bgColor || '#e0e0e0',
+                              color: category.fontColor || '#000000',
                             }}
                           >
                             {category.icon &&
@@ -262,7 +284,7 @@ export default function AdminCategoriesPage() {
                               createElement(LucideIcons[category.icon], {
                                 size: 14,
                                 color: category.iconColor || category.fontColor,
-                                className: "mr-1.5 flex-shrink-0",
+                                className: 'mr-1.5 flex-shrink-0',
                               })}
                             <span className="truncate">{category.name}</span>
                           </span>
@@ -272,9 +294,9 @@ export default function AdminCategoriesPage() {
                         <div className="max-w-xs">
                           {category.description
                             ? category.description.length > 60
-                              ? category.description.substring(0, 60) + "..."
+                              ? category.description.substring(0, 60) + '...'
                               : category.description
-                            : "-"}
+                            : '-'}
                         </div>
                       </TableCell>
                       <TableCell className="text-center hidden sm:table-cell p-2 sm:p-4">
@@ -320,9 +342,11 @@ export default function AdminCategoriesPage() {
         >
           <DialogHeader className="p-6 pb-4 border-b">
             <DialogTitle id="category-dialog-title" className="text-lg sm:text-xl">
-              {editingCategory ? "Editar Categoria" : "Nova Categoria"}
+              {editingCategory ? 'Editar Categoria' : 'Nova Categoria'}
             </DialogTitle>
-            <DialogDescription id="category-dialog-desc">Preencha os dados da categoria.</DialogDescription>
+            <DialogDescription id="category-dialog-desc">
+              Preencha os dados da categoria.
+            </DialogDescription>
           </DialogHeader>
           <div className="overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-slate-400 hover:scrollbar-thumb-slate-500 px-6 py-4">
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -426,7 +450,7 @@ export default function AdminCategoriesPage() {
                   ) : (
                     <Check className="mr-2 h-4 w-4" />
                   )}
-                  {editingCategory ? "Atualizar Categoria" : "Criar Categoria"}
+                  {editingCategory ? 'Atualizar Categoria' : 'Criar Categoria'}
                 </Button>
               </DialogFooter>
             </form>
@@ -442,5 +466,5 @@ export default function AdminCategoriesPage() {
         color={formData.iconColor}
       />
     </div>
-  )
+  );
 }

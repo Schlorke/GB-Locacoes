@@ -1,5 +1,5 @@
-import { Phone, Mail, MapPin, Clock } from "lucide-react"
-import ContactForm from "@/components/contact-form"
+import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import ContactForm from '@/components/contact-form';
 
 export default function ContatoPage() {
   return (
@@ -75,9 +75,12 @@ export default function ContatoPage() {
             <div className="mt-8 p-6 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-lg text-white">
               <h3 className="text-h3 font-bold mb-2">Atendimento Especializado</h3>
               <p className="mb-4">
-                Nossa equipe técnica está pronta para orientar sobre o melhor equipamento para seu projeto.
+                Nossa equipe técnica está pronta para orientar sobre o melhor equipamento para seu
+                projeto.
               </p>
-              <p className="text-small opacity-90">Entrega em toda região metropolitana de Porto Alegre</p>
+              <p className="text-small opacity-90">
+                Entrega em toda região metropolitana de Porto Alegre
+              </p>
             </div>
           </div>
 
@@ -88,5 +91,5 @@ export default function ContatoPage() {
         </div>
       </div>
     </main>
-  )
+  );
 }

@@ -5,8 +5,8 @@ export default function SobrePage() {
         <div className="text-center mb-16">
           <h1 className="font-bold text-h1 text-gray-900 mb-4">Sobre a GB Locações</h1>
           <p className="text-base text-gray-600 max-w-3xl mx-auto">
-            Há mais de 10 anos fornecendo equipamentos de qualidade para a construção civil em Porto Alegre e região
-            metropolitana.
+            Há mais de 10 anos fornecendo equipamentos de qualidade para a construção civil em Porto
+            Alegre e região metropolitana.
           </p>
         </div>
 
@@ -14,16 +14,17 @@ export default function SobrePage() {
           <div>
             <h2 className="font-bold text-h2 text-gray-900 mb-6">Nossa História</h2>
             <p className="text-gray-600 mb-4">
-              A GB Locações nasceu da necessidade de oferecer equipamentos de construção civil com qualidade e
-              confiabilidade para empresas e profissionais da região de Porto Alegre.
+              A GB Locações nasceu da necessidade de oferecer equipamentos de construção civil com
+              qualidade e confiabilidade para empresas e profissionais da região de Porto Alegre.
             </p>
             <p className="text-gray-600 mb-4">
-              Com uma frota moderna e bem mantida, atendemos desde pequenas reformas até grandes obras, sempre com o
-              compromisso de entregar equipamentos em perfeito estado de funcionamento.
+              Com uma frota moderna e bem mantida, atendemos desde pequenas reformas até grandes
+              obras, sempre com o compromisso de entregar equipamentos em perfeito estado de
+              funcionamento.
             </p>
             <p className="text-gray-600">
-              Nossa equipe especializada está sempre pronta para orientar sobre o melhor equipamento para cada tipo de
-              trabalho, garantindo eficiência e segurança em seus projetos.
+              Nossa equipe especializada está sempre pronta para orientar sobre o melhor equipamento
+              para cada tipo de trabalho, garantindo eficiência e segurança em seus projetos.
             </p>
           </div>
           <div className="bg-gradient-to-br from-orange-500 to-yellow-500 rounded-lg p-8 text-white">
@@ -59,7 +60,9 @@ export default function SobrePage() {
               <span className="text-h2 font-bold text-orange-600">10+</span>
             </div>
             <h3 className="text-h3 font-semibold text-gray-900 mb-2">Anos de Experiência</h3>
-            <p className="text-gray-600">Mais de uma década atendendo o mercado da construção civil</p>
+            <p className="text-gray-600">
+              Mais de uma década atendendo o mercado da construção civil
+            </p>
           </div>
           <div className="text-center">
             <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -73,10 +76,12 @@ export default function SobrePage() {
               <span className="text-h2 font-bold text-orange-600">100+</span>
             </div>
             <h3 className="text-h3 font-semibold text-gray-900 mb-2">Equipamentos</h3>
-            <p className="text-gray-600">Ampla variedade de equipamentos para todas as necessidades</p>
+            <p className="text-gray-600">
+              Ampla variedade de equipamentos para todas as necessidades
+            </p>
           </div>
         </div>
       </div>
     </main>
-  )
+  );
 }

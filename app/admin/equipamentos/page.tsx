@@ -1,133 +1,150 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Search, Eye, Edit, Trash2, Package, Loader2, AlertCircle } from "lucide-react"
-import Link from "next/link"
-import { toast } from "sonner"
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Plus, Search, Eye, Edit, Trash2, Package, Loader2, AlertCircle } from 'lucide-react';
+import Link from 'next/link';
+import { toast } from 'sonner';
 
 interface Equipment {
-  id: string
-  name: string
-  description?: string
-  dailyPrice: number
-  weeklyPrice?: number
-  monthlyPrice?: number
-  available: boolean
+  id: string;
+  name: string;
+  description?: string;
+  dailyPrice: number;
+  weeklyPrice?: number;
+  monthlyPrice?: number;
+  available: boolean;
   category?: {
-    id: string
-    name: string
-    bgColor?: string
-    fontColor?: string
-  }
-  images: string[]
-  createdAt: string
+    id: string;
+    name: string;
+    bgColor?: string;
+    fontColor?: string;
+  };
+  images: string[];
+  createdAt: string;
 }
 
 interface Category {
-  id: string
-  name: string
-  bgColor?: string
-  fontColor?: string
+  id: string;
+  name: string;
+  bgColor?: string;
+  fontColor?: string;
 }
 
 export default function AdminEquipmentsPage() {
-  const [equipments, setEquipments] = useState<Equipment[]>([])
-  const [categories, setCategories] = useState<Category[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState<string>("all")
-  const [availabilityFilter, setAvailabilityFilter] = useState<string>("all")
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [equipments, setEquipments] = useState<Equipment[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [availabilityFilter, setAvailabilityFilter] = useState<string>('all');
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   useEffect(() => {
-    fetchEquipments()
-    fetchCategories()
-  }, [])
+    fetchEquipments();
+    fetchCategories();
+  }, []);
 
   const fetchEquipments = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const response = await fetch("/api/admin/equipments")
+      const response = await fetch('/api/admin/equipments');
       if (response.ok) {
-        const data = await response.json()
+        const data = await response.json();
         // The API returns an object with an `equipments` array and pagination
         // info. We only need the equipments list here.
-        const equipmentsData = Array.isArray(data) ? data : data.equipments
-        setEquipments(equipmentsData)
+        const equipmentsData = Array.isArray(data) ? data : data.equipments;
+        setEquipments(equipmentsData);
       } else {
-        toast.error("Erro ao carregar equipamentos")
+        toast.error('Erro ao carregar equipamentos');
       }
     } catch (error) {
-      console.error("Error fetching equipments:", error)
-      toast.error("Erro ao carregar equipamentos")
+      console.error('Error fetching equipments:', error);
+      toast.error('Erro ao carregar equipamentos');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("/api/admin/categories")
+      const response = await fetch('/api/admin/categories');
       if (response.ok) {
-        const data = await response.json()
-        setCategories(data)
+        const data = await response.json();
+        setCategories(data);
       }
     } catch (error) {
-      console.error("Error fetching categories:", error)
+      console.error('Error fetching categories:', error);
     }
-  }
+  };
 
   const deleteEquipment = async (equipmentId: string) => {
-    if (!confirm("Tem certeza que deseja excluir este equipamento? Esta ação não pode ser desfeita.")) return
+    if (
+      !confirm('Tem certeza que deseja excluir este equipamento? Esta ação não pode ser desfeita.')
+    )
+      return;
 
-    setIsDeleting(true)
+    setIsDeleting(true);
     try {
       const response = await fetch(`/api/admin/equipments/${equipmentId}`, {
-        method: "DELETE",
-      })
+        method: 'DELETE',
+      });
 
       if (response.ok) {
-        toast.success("Equipamento excluído com sucesso")
-        fetchEquipments()
+        toast.success('Equipamento excluído com sucesso');
+        fetchEquipments();
       } else {
-        const errorData = await response.json()
-        toast.error(errorData.error || "Erro ao excluir equipamento")
+        const errorData = await response.json();
+        toast.error(errorData.error || 'Erro ao excluir equipamento');
       }
     } catch (error) {
-      console.error("Error deleting equipment:", error)
-      toast.error("Erro ao excluir equipamento")
+      console.error('Error deleting equipment:', error);
+      toast.error('Erro ao excluir equipamento');
     } finally {
-      setIsDeleting(false)
+      setIsDeleting(false);
     }
-  }
+  };
 
   const filteredEquipments = equipments.filter((equipment) => {
     const matchesSearch =
       equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      equipment.description?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "all" || equipment.category?.id === selectedCategory
+      equipment.description?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      selectedCategory === 'all' || equipment.category?.id === selectedCategory;
     const matchesAvailability =
-      availabilityFilter === "all" ||
-      (availabilityFilter === "available" && equipment.available) ||
-      (availabilityFilter === "unavailable" && !equipment.available)
+      availabilityFilter === 'all' ||
+      (availabilityFilter === 'available' && equipment.available) ||
+      (availabilityFilter === 'unavailable' && !equipment.available);
 
-    return matchesSearch && matchesCategory && matchesAvailability
-  })
+    return matchesSearch && matchesCategory && matchesAvailability;
+  });
 
   if (isLoading && equipments.length === 0) {
     return (
       <div className="flex items-center justify-center h-[50vh] sm:h-[60vh] lg:h-[calc(100vh-150px)]">
         <Loader2 className="h-8 w-8 sm:h-10 sm:w-10 animate-spin text-primary" />
       </div>
-    )
+    );
   }
 
   return (
@@ -242,7 +259,9 @@ export default function AdminEquipmentsPage() {
           ) : !isLoading && filteredEquipments.length === 0 ? (
             <div className="text-center py-8 px-4">
               <AlertCircle className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-              <p className="text-lg font-medium text-gray-600 mb-2">Nenhum equipamento encontrado</p>
+              <p className="text-lg font-medium text-gray-600 mb-2">
+                Nenhum equipamento encontrado
+              </p>
               <p className="text-sm text-gray-400">Tente ajustar os filtros de pesquisa</p>
             </div>
           ) : (
@@ -265,7 +284,7 @@ export default function AdminEquipmentsPage() {
                           <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
                             {equipment.images.length > 0 ? (
                               <img
-                                src={equipment.images[0] || "/placeholder.svg"}
+                                src={equipment.images[0] || '/placeholder.svg'}
                                 alt={equipment.name}
                                 className="w-full h-full object-cover rounded-lg"
                               />
@@ -276,7 +295,7 @@ export default function AdminEquipmentsPage() {
                           <div className="min-w-0 flex-1">
                             <p className="font-medium text-sm truncate">{equipment.name}</p>
                             <p className="text-xs text-muted-foreground truncate">
-                              {equipment.description || "Sem descrição"}
+                              {equipment.description || 'Sem descrição'}
                             </p>
                           </div>
                         </div>
@@ -286,8 +305,8 @@ export default function AdminEquipmentsPage() {
                           <Badge
                             className="text-xs"
                             style={{
-                              backgroundColor: equipment.category.bgColor || "#e0e0e0",
-                              color: equipment.category.fontColor || "#000000",
+                              backgroundColor: equipment.category.bgColor || '#e0e0e0',
+                              color: equipment.category.fontColor || '#000000',
                             }}
                           >
                             {equipment.category.name}
@@ -297,28 +316,42 @@ export default function AdminEquipmentsPage() {
                         )}
                       </TableCell>
                       <TableCell className="hidden lg:table-cell p-2 sm:p-4">
-                        <span className="font-bold text-green-600 text-sm">R$ {equipment.dailyPrice.toFixed(2)}</span>
+                        <span className="font-bold text-green-600 text-sm">
+                          R$ {equipment.dailyPrice.toFixed(2)}
+                        </span>
                       </TableCell>
                       <TableCell className="text-center p-2 sm:p-4">
                         <Badge
-                          variant={equipment.available ? "default" : "secondary"}
+                          variant={equipment.available ? 'default' : 'secondary'}
                           className={`text-xs ${
                             equipment.available
-                              ? "bg-green-100 text-green-800 border-green-200"
-                              : "bg-red-100 text-red-800 border-red-200"
+                              ? 'bg-green-100 text-green-800 border-green-200'
+                              : 'bg-red-100 text-red-800 border-red-200'
                           }`}
                         >
-                          {equipment.available ? "Disponível" : "Indisponível"}
+                          {equipment.available ? 'Disponível' : 'Indisponível'}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right p-2 sm:p-4">
                         <div className="flex items-center justify-end gap-1">
-                          <Button variant="ghost" size="icon" asChild aria-label="Visualizar" className="h-8 w-8">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            asChild
+                            aria-label="Visualizar"
+                            className="h-8 w-8"
+                          >
                             <Link href={`/admin/equipamentos/${equipment.id}`}>
                               <Eye className="h-4 w-4" />
                             </Link>
                           </Button>
-                          <Button variant="ghost" size="icon" asChild aria-label="Editar" className="h-8 w-8">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            asChild
+                            aria-label="Editar"
+                            className="h-8 w-8"
+                          >
                             <Link href={`/admin/equipamentos/${equipment.id}/editar`}>
                               <Edit className="h-4 w-4" />
                             </Link>
@@ -344,5 +377,5 @@ export default function AdminEquipmentsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

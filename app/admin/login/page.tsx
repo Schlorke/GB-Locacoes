@@ -1,102 +1,102 @@
-"use client"
+'use client';
 
-import { useState, type FormEvent, useEffect } from "react"
-import { signIn, getSession } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import Header from "@/components/header"
-import { AlertTriangle, Eye, EyeOff } from "lucide-react"
+import { useState, type FormEvent, useEffect } from 'react';
+import { signIn, getSession } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import Header from '@/components/header';
+import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
 
 export default function AdminLoginPage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [headerHeight, setHeaderHeight] = useState(0)
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
 
   // Measure header height to offset the login panel correctly
   useEffect(() => {
-    const headerEl = document.querySelector("header")
-    if (!headerEl) return
+    const headerEl = document.querySelector('header');
+    if (!headerEl) return;
 
     const updateHeight = () => {
-      setHeaderHeight(headerEl.getBoundingClientRect().height)
-    }
+      setHeaderHeight(headerEl.getBoundingClientRect().height);
+    };
 
-    updateHeight()
-    window.addEventListener("resize", updateHeight)
-    return () => window.removeEventListener("resize", updateHeight)
-  }, [])
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
 
   // Check if user is already authenticated
   useEffect(() => {
     const checkAuth = async () => {
-      const session = await getSession()
+      const session = await getSession();
       if (session) {
-        router.push("/admin/dashboard")
+        router.push('/admin/dashboard');
       }
-    }
-    checkAuth()
-  }, [router])
+    };
+    checkAuth();
+  }, [router]);
 
   // Handle URL error parameters
   useEffect(() => {
-    const errorParam = searchParams.get("error")
+    const errorParam = searchParams.get('error');
     if (errorParam) {
       switch (errorParam) {
-        case "CredentialsSignin":
-          setError("Credenciais inválidas. Verifique seu email e senha.")
-          break
-        case "unauthorized":
-          setError("Usuário não autorizado para acessar o painel administrativo.")
-          break
+        case 'CredentialsSignin':
+          setError('Credenciais inválidas. Verifique seu email e senha.');
+          break;
+        case 'unauthorized':
+          setError('Usuário não autorizado para acessar o painel administrativo.');
+          break;
         default:
-          setError("Erro ao fazer login. Tente novamente.")
+          setError('Erro ao fazer login. Tente novamente.');
       }
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
-    setIsLoading(true)
-    setError(null)
+    event.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
     if (!email || !password) {
-      setError("Por favor, preencha todos os campos.")
-      setIsLoading(false)
-      return
+      setError('Por favor, preencha todos os campos.');
+      setIsLoading(false);
+      return;
     }
 
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn('credentials', {
         redirect: false,
         email,
         password,
-      })
+      });
 
       if (result?.error) {
-        setError("Credenciais inválidas ou usuário não autorizado.")
+        setError('Credenciais inválidas ou usuário não autorizado.');
       } else if (result?.ok) {
         // Successful login, redirect to dashboard
-        router.push("/admin/dashboard")
-        router.refresh()
+        router.push('/admin/dashboard');
+        router.refresh();
       } else {
-        setError("Ocorreu um erro desconhecido. Tente novamente.")
+        setError('Ocorreu um erro desconhecido. Tente novamente.');
       }
     } catch (err) {
-      console.error("Login error:", err)
-      setError("Falha ao tentar fazer login. Verifique sua conexão.")
+      console.error('Login error:', err);
+      setError('Falha ao tentar fazer login. Verifique sua conexão.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100">
@@ -129,7 +129,9 @@ export default function AdminLoginPage() {
                 <Alert variant="destructive" className="border-red-200 bg-red-50">
                   <AlertTriangle className="h-4 w-4" />
                   <AlertTitle className="text-red-800 text-sm">Erro de Login</AlertTitle>
-                  <AlertDescription className="text-red-700 text-xs sm:text-sm">{error}</AlertDescription>
+                  <AlertDescription className="text-red-700 text-xs sm:text-sm">
+                    {error}
+                  </AlertDescription>
                 </Alert>
               )}
 
@@ -157,7 +159,7 @@ export default function AdminLoginPage() {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Digite sua senha"
                     required
                     value={password}
@@ -173,7 +175,7 @@ export default function AdminLoginPage() {
                     className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100"
                     onClick={() => setShowPassword(!showPassword)}
                     disabled={isLoading}
-                    aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4 text-slate-500" />
@@ -196,7 +198,7 @@ export default function AdminLoginPage() {
                     <span className="text-sm">Entrando...</span>
                   </div>
                 ) : (
-                  "Entrar no Painel"
+                  'Entrar no Painel'
                 )}
               </Button>
             </form>
@@ -210,11 +212,13 @@ export default function AdminLoginPage() {
                   <div>admin123</div>
                 </div>
               </div>
-              <p className="text-xs text-slate-400 pt-1">© 2024 GB Locações - Sistema Administrativo</p>
+              <p className="text-xs text-slate-400 pt-1">
+                © 2024 GB Locações - Sistema Administrativo
+              </p>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }

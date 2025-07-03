@@ -8,5 +8,5 @@ export default function LoginLoading() {
         <p className="text-slate-600 font-medium">Carregando página de login...</p>
       </div>
     </div>
-  )
+  );
 }

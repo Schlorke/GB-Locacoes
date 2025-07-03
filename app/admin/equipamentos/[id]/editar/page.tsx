@@ -1,78 +1,84 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState, useEffect } from "react"
-import { useParams, useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Switch } from "@/components/ui/switch"
-import { CurrencyInput } from "@/components/ui/currency-input"
-import { ImageUpload } from "@/components/ui/image-upload"
-import { toast } from "@/hooks/use-toast"
-import { ArrowLeft, Save, PlusCircle, Trash2, Loader2 } from "lucide-react"
-import Link from "next/link"
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { CurrencyInput } from '@/components/ui/currency-input';
+import { ImageUpload } from '@/components/ui/image-upload';
+import { toast } from '@/hooks/use-toast';
+import { ArrowLeft, Save, PlusCircle, Trash2, Loader2 } from 'lucide-react';
+import Link from 'next/link';
 
 interface Category {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 interface Equipment {
-  id: string
-  name: string
-  description: string
-  pricePerDay: number
-  categoryId: string
-  images: string[]
-  isAvailable: boolean
-  specifications?: Record<string, string>
+  id: string;
+  name: string;
+  description: string;
+  pricePerDay: number;
+  categoryId: string;
+  images: string[];
+  isAvailable: boolean;
+  specifications?: Record<string, string>;
 }
 
 interface FormData {
-  name: string
-  description: string
-  pricePerDay: number
-  categoryId: string
-  images: string[]
-  isAvailable: boolean
-  specifications?: Record<string, string>
+  name: string;
+  description: string;
+  pricePerDay: number;
+  categoryId: string;
+  images: string[];
+  isAvailable: boolean;
+  specifications?: Record<string, string>;
 }
 
 export default function EditarEquipamento() {
-  const params = useParams()
-  const router = useRouter()
-  const [categories, setCategories] = useState<Category[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSaving, setIsSaving] = useState(false)
+  const params = useParams();
+  const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-    name: "",
-    description: "",
+    name: '',
+    description: '',
     pricePerDay: 0,
-    categoryId: "",
+    categoryId: '',
     images: [],
     isAvailable: true,
     specifications: {},
-  })
-  const [specKey, setSpecKey] = useState("")
-  const [specValue, setSpecValue] = useState("")
+  });
+  const [specKey, setSpecKey] = useState('');
+  const [specValue, setSpecValue] = useState('');
 
   useEffect(() => {
     if (params.id) {
-      fetchEquipment(params.id as string)
-      fetchCategories()
+      fetchEquipment(params.id as string);
+      fetchCategories();
     }
-  }, [params.id])
+  }, [params.id]);
 
   const fetchEquipment = async (id: string) => {
     try {
-      const response = await fetch(`/api/admin/equipments/${id}`)
+      const response = await fetch(`/api/admin/equipments/${id}`);
       if (response.ok) {
-        const equipment: Equipment = await response.json()
+        const equipment: Equipment = await response.json();
         setFormData({
           name: equipment.name,
           description: equipment.description,
@@ -81,44 +87,44 @@ export default function EditarEquipamento() {
           images: equipment.images,
           isAvailable: equipment.isAvailable,
           specifications: equipment.specifications || {},
-        })
+        });
       } else {
         toast({
-          title: "Erro",
-          description: "Equipamento não encontrado.",
-          variant: "destructive",
-        })
-        router.push("/admin/equipamentos")
+          title: 'Erro',
+          description: 'Equipamento não encontrado.',
+          variant: 'destructive',
+        });
+        router.push('/admin/equipamentos');
       }
     } catch (error) {
-      console.error("Erro ao carregar equipamento:", error)
+      console.error('Erro ao carregar equipamento:', error);
       toast({
-        title: "Erro",
-        description: "Falha ao carregar equipamento.",
-        variant: "destructive",
-      })
-      router.push("/admin/equipamentos")
+        title: 'Erro',
+        description: 'Falha ao carregar equipamento.',
+        variant: 'destructive',
+      });
+      router.push('/admin/equipamentos');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("/api/admin/categories")
+      const response = await fetch('/api/admin/categories');
       if (response.ok) {
-        const data = await response.json()
-        setCategories(data)
+        const data = await response.json();
+        setCategories(data);
       }
     } catch (error) {
-      console.error("Erro ao carregar categorias:", error)
+      console.error('Erro ao carregar categorias:', error);
       toast({
-        title: "Erro",
-        description: "Falha ao carregar categorias.",
-        variant: "destructive",
-      })
+        title: 'Erro',
+        description: 'Falha ao carregar categorias.',
+        variant: 'destructive',
+      });
     }
-  }
+  };
 
   const handleAddSpecification = () => {
     if (specKey && specValue) {
@@ -128,76 +134,82 @@ export default function EditarEquipamento() {
           ...prev.specifications,
           [specKey]: specValue,
         },
-      }))
-      setSpecKey("")
-      setSpecValue("")
+      }));
+      setSpecKey('');
+      setSpecValue('');
     } else {
       toast({
-        title: "Atenção",
-        description: "Preencha a chave e o valor da especificação.",
-        variant: "default",
-      })
+        title: 'Atenção',
+        description: 'Preencha a chave e o valor da especificação.',
+        variant: 'default',
+      });
     }
-  }
+  };
 
   const handleRemoveSpecification = (keyToRemove: string) => {
     setFormData((prev) => {
-      const newSpecifications = { ...prev.specifications }
-      delete newSpecifications[keyToRemove]
-      return { ...prev, specifications: newSpecifications }
-    })
-  }
+      const newSpecifications = { ...prev.specifications };
+      delete newSpecifications[keyToRemove];
+      return { ...prev, specifications: newSpecifications };
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!formData.name || !formData.description || !formData.categoryId || formData.pricePerDay <= 0) {
+    if (
+      !formData.name ||
+      !formData.description ||
+      !formData.categoryId ||
+      formData.pricePerDay <= 0
+    ) {
       toast({
-        title: "Erro de Validação",
-        description: "Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.",
-        variant: "destructive",
-      })
-      return
+        title: 'Erro de Validação',
+        description: 'Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.',
+        variant: 'destructive',
+      });
+      return;
     }
 
     if (formData.images.length === 0) {
       toast({
-        title: "Erro de Validação",
-        description: "Adicione pelo menos uma imagem do equipamento.",
-        variant: "destructive",
-      })
-      return
+        title: 'Erro de Validação',
+        description: 'Adicione pelo menos uma imagem do equipamento.',
+        variant: 'destructive',
+      });
+      return;
     }
 
-    setIsSaving(true)
+    setIsSaving(true);
     try {
       const response = await fetch(`/api/admin/equipments/${params.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-      })
+      });
 
       if (response.ok) {
         toast({
-          title: "Sucesso!",
-          description: "Equipamento atualizado com sucesso.",
-        })
-        router.push(`/admin/equipamentos/${params.id}`)
+          title: 'Sucesso!',
+          description: 'Equipamento atualizado com sucesso.',
+        });
+        router.push(`/admin/equipamentos/${params.id}`);
       } else {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Erro ao atualizar equipamento")
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao atualizar equipamento');
       }
     } catch (error) {
-      console.error("Erro ao atualizar equipamento:", error)
+      console.error('Erro ao atualizar equipamento:', error);
       toast({
-        title: "Erro",
-        description: error instanceof Error ? error.message : "Ocorreu um erro ao atualizar o equipamento.",
-        variant: "destructive",
-      })
+        title: 'Erro',
+        description:
+          error instanceof Error ? error.message : 'Ocorreu um erro ao atualizar o equipamento.',
+        variant: 'destructive',
+      });
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -207,7 +219,7 @@ export default function EditarEquipamento() {
           <p className="text-lg text-muted-foreground">Carregando equipamento...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -221,7 +233,9 @@ export default function EditarEquipamento() {
         </Button>
         <div className="min-w-0 flex-1">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold truncate">Editar Equipamento</h1>
-          <p className="text-sm sm:text-base text-muted-foreground mt-1">Atualize as informações do equipamento</p>
+          <p className="text-sm sm:text-base text-muted-foreground mt-1">
+            Atualize as informações do equipamento
+          </p>
         </div>
       </div>
 
@@ -289,7 +303,9 @@ export default function EditarEquipamento() {
                 <CurrencyInput
                   id="pricePerDay"
                   value={formData.pricePerDay}
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, pricePerDay: value || 0 }))}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, pricePerDay: value || 0 }))
+                  }
                   required
                   className="mt-1"
                 />
@@ -298,7 +314,9 @@ export default function EditarEquipamento() {
                 <Switch
                   id="isAvailable"
                   checked={formData.isAvailable}
-                  onCheckedChange={(checked) => setFormData((prev) => ({ ...prev, isAvailable: checked }))}
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({ ...prev, isAvailable: checked }))
+                  }
                 />
                 <Label htmlFor="isAvailable" className="cursor-pointer text-sm">
                   Equipamento disponível para locação
@@ -323,13 +341,16 @@ export default function EditarEquipamento() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base sm:text-lg">Especificações Técnicas (Opcional)</CardTitle>
+            <CardTitle className="text-base sm:text-lg">
+              Especificações Técnicas (Opcional)
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {Object.entries(formData.specifications || {}).map(([key, value]) => (
               <div key={key} className="flex items-center justify-between p-3 border rounded-md">
                 <div className="min-w-0 flex-1">
-                  <span className="font-medium text-sm">{key}:</span> <span className="text-sm">{String(value)}</span>
+                  <span className="font-medium text-sm">{key}:</span>{' '}
+                  <span className="text-sm">{String(value)}</span>
                 </div>
                 <Button
                   type="button"
@@ -381,15 +402,20 @@ export default function EditarEquipamento() {
         </Card>
 
         <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
-          <Button variant="outline" type="button" asChild className="w-full sm:w-auto bg-transparent">
+          <Button
+            variant="outline"
+            type="button"
+            asChild
+            className="w-full sm:w-auto bg-transparent"
+          >
             <Link href={`/admin/equipamentos/${params.id}`}>Cancelar</Link>
           </Button>
           <Button type="submit" disabled={isSaving} className="w-full sm:w-auto">
             <Save className="h-4 w-4 mr-2" />
-            {isSaving ? "Salvando..." : "Salvar Alterações"}
+            {isSaving ? 'Salvando...' : 'Salvar Alterações'}
           </Button>
         </div>
       </form>
     </div>
-  )
+  );
 }

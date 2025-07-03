@@ -1,9 +1,9 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { User, FileText, Clock, Phone } from "lucide-react"
-import Link from "next/link"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { User, FileText, Clock, Phone } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AreaClientePage() {
   return (
@@ -55,7 +55,9 @@ export default function AreaClientePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 mb-4">Acompanhe o status dos seus orçamentos em tempo real</p>
+                <p className="text-slate-600 mb-4">
+                  Acompanhe o status dos seus orçamentos em tempo real
+                </p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
@@ -113,5 +115,5 @@ export default function AreaClientePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

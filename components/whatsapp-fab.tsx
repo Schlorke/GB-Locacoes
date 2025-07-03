@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { MessageCircle, X, Send } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState, useEffect } from 'react';
+import { MessageCircle, X, Send } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const scrollbarStyles = `
   .whatsapp-chat-scroll::-webkit-scrollbar {
@@ -30,88 +30,90 @@ const scrollbarStyles = `
     scrollbar-width: thin;
     scrollbar-color: #25D366 #f0f0f0;
   }
-`
+`;
 
 export default function WhatsAppFAB() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [message, setMessage] = useState("")
+  const [isOpen, setIsOpen] = useState(false);
+  const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "👷‍♂️ Olá! Precisa de equipamentos para sua obra? Somos especialistas em locação de equipamentos para construção civil e serviços em altura!",
-      sender: "bot" as const,
+      text: '👷‍♂️ Olá! Precisa de equipamentos para sua obra? Somos especialistas em locação de equipamentos para construção civil e serviços em altura!',
+      sender: 'bot' as const,
       timestamp: new Date(),
     },
-  ])
-  const [unreadCount, setUnreadCount] = useState(1) // Contador de mensagens não lidas
-  const [showQuickMessages, setShowQuickMessages] = useState(true)
+  ]);
+  const [unreadCount, setUnreadCount] = useState(1); // Contador de mensagens não lidas
+  const [showQuickMessages, setShowQuickMessages] = useState(true);
 
-  const whatsappNumber = "5551998205163" // WhatsApp da GB Locações
+  const whatsappNumber = '5551998205163'; // WhatsApp da GB Locações
 
   useEffect(() => {
     // Quando o chat é aberto, marcar mensagens como lidas
     if (isOpen) {
-      setUnreadCount(0)
+      setUnreadCount(0);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   const handleSendMessage = () => {
-    if (!message.trim()) return
+    if (!message.trim()) return;
 
     // Add user message to chat
     const userMessage = {
       id: messages.length + 1,
       text: message,
-      sender: "user" as const,
+      sender: 'user' as const,
       timestamp: new Date(),
-    }
+    };
 
-    setMessages([...messages, userMessage])
-    setShowQuickMessages(false) // Hide quick messages after user sends a message
+    setMessages([...messages, userMessage]);
+    setShowQuickMessages(false); // Hide quick messages after user sends a message
 
     // Simulate bot response
     setTimeout(() => {
       const botResponse = {
         id: messages.length + 2,
-        text: "Obrigado pela mensagem! Vou te redirecionar para o WhatsApp onde nossos especialistas podem te atender melhor. 📱",
-        sender: "bot" as const,
+        text: 'Obrigado pela mensagem! Vou te redirecionar para o WhatsApp onde nossos especialistas podem te atender melhor. 📱',
+        sender: 'bot' as const,
         timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, botResponse])
+      };
+      setMessages((prev) => [...prev, botResponse]);
 
       // Se o chat não estiver aberto, incrementar contador de não lidas
       if (!isOpen) {
-        setUnreadCount((prev) => prev + 1)
+        setUnreadCount((prev) => prev + 1);
       }
 
       // Redirect to WhatsApp after bot response
       setTimeout(() => {
         const whatsappMessage = encodeURIComponent(
           `Olá! Vim do site da GB Locações e gostaria de solicitar informações sobre locação de equipamentos para construção civil. Minha mensagem: ${message}`,
-        )
-        window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, "_blank")
-        setIsOpen(false)
-        setMessage("")
-        setShowQuickMessages(true) // Reset for next time
-      }, 1500)
-    }, 1000)
+        );
+        window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
+        setIsOpen(false);
+        setMessage('');
+        setShowQuickMessages(true); // Reset for next time
+      }, 1500);
+    }, 1000);
 
-    setMessage("")
-  }
+    setMessage('');
+  };
 
   const handleQuickMessage = (quickMessage: string) => {
-    const whatsappMessage = encodeURIComponent(`Olá! Vim do site da GB Locações e gostaria de ${quickMessage}`)
-    window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, "_blank")
-    setIsOpen(false)
-    setShowQuickMessages(true) // Reset for next time
-  }
+    const whatsappMessage = encodeURIComponent(
+      `Olá! Vim do site da GB Locações e gostaria de ${quickMessage}`,
+    );
+    window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
+    setIsOpen(false);
+    setShowQuickMessages(true); // Reset for next time
+  };
 
   const quickMessages = [
-    "solicitar um orçamento de equipamentos",
-    "saber sobre andaimes suspensos",
-    "informações sobre cadeiras elétricas",
-    "conhecer todos os equipamentos disponíveis",
-  ]
+    'solicitar um orçamento de equipamentos',
+    'saber sobre andaimes suspensos',
+    'informações sobre cadeiras elétricas',
+    'conhecer todos os equipamentos disponíveis',
+  ];
 
   return (
     <>
@@ -122,7 +124,7 @@ export default function WhatsAppFAB() {
           {/* Header - cor verde WhatsApp e sem bordas brancas */}
           <div
             className="text-white p-4 flex items-center justify-between rounded-t-lg"
-            style={{ backgroundColor: "#25D366" }}
+            style={{ backgroundColor: '#25D366' }}
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
@@ -146,12 +148,15 @@ export default function WhatsAppFAB() {
           {/* Messages - área expandida */}
           <div className="flex-1 p-4 space-y-3 overflow-y-auto min-h-[200px] whatsapp-chat-scroll">
             {messages.map((msg) => (
-              <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+              <div
+                key={msg.id}
+                className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
                 <div
                   className={`max-w-xs p-3 rounded-lg text-sm ${
-                    msg.sender === "user" ? "text-white" : "bg-gray-100 text-gray-900"
+                    msg.sender === 'user' ? 'text-white' : 'bg-gray-100 text-gray-900'
                   }`}
-                  style={msg.sender === "user" ? { backgroundColor: "#25D366" } : {}}
+                  style={msg.sender === 'user' ? { backgroundColor: '#25D366' } : {}}
                 >
                   {msg.text}
                 </div>
@@ -183,7 +188,7 @@ export default function WhatsAppFAB() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Digite sua mensagem..."
-              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
               className="flex-1"
             />
             <Button
@@ -191,7 +196,7 @@ export default function WhatsAppFAB() {
               size="sm"
               disabled={!message.trim()}
               className="text-white h-10"
-              style={{ backgroundColor: "#25D366" }}
+              style={{ backgroundColor: '#25D366' }}
             >
               <Send className="h-4 w-4" />
             </Button>
@@ -204,24 +209,24 @@ export default function WhatsAppFAB() {
         {/* Notification Badge - estilo numérico */}
         {unreadCount > 0 && !isOpen && (
           <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold min-w-[20px] h-5 rounded-full flex items-center justify-center px-1 animate-pulse border-2 border-white shadow-lg z-10">
-            {unreadCount > 99 ? "99+" : unreadCount}
+            {unreadCount > 99 ? '99+' : unreadCount}
           </div>
         )}
 
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="w-14 h-14 rounded-full bg-green-500 hover:bg-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
-          style={{ backgroundColor: "#25D366" }}
+          style={{ backgroundColor: '#25D366' }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = "#128C7E"
+            e.currentTarget.style.backgroundColor = '#128C7E';
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = "#25D366"
+            e.currentTarget.style.backgroundColor = '#25D366';
           }}
         >
           {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
         </button>
       </div>
     </>
-  )
+  );
 }

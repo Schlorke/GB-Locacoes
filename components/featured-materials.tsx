@@ -1,48 +1,48 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Clock } from "lucide-react"
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Clock } from 'lucide-react';
 
 interface Equipment {
-  id: string
-  name: string
-  description: string
-  pricePerDay: number
-  images: string[]
+  id: string;
+  name: string;
+  description: string;
+  pricePerDay: number;
+  images: string[];
   category: {
-    id: string
-    name: string
-  }
-  isAvailable: boolean
+    id: string;
+    name: string;
+  };
+  isAvailable: boolean;
 }
 
 export default function FeaturedMaterials() {
-  const [equipments, setEquipments] = useState<Equipment[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [equipments, setEquipments] = useState<Equipment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchFeaturedEquipments()
-  }, [])
+    fetchFeaturedEquipments();
+  }, []);
 
   const fetchFeaturedEquipments = async () => {
     try {
-      const response = await fetch("/api/equipments")
+      const response = await fetch('/api/equipments');
       if (response.ok) {
-        const data = await response.json()
+        const data = await response.json();
         // Pegar apenas os primeiros 6 equipamentos para destaque
-        setEquipments(Array.isArray(data) ? data.slice(0, 6) : [])
+        setEquipments(Array.isArray(data) ? data.slice(0, 6) : []);
       }
     } catch (error) {
-      console.error("Erro ao carregar equipamentos em destaque:", error)
+      console.error('Erro ao carregar equipamentos em destaque:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -66,7 +66,7 @@ export default function FeaturedMaterials() {
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   return (
@@ -80,10 +80,13 @@ export default function FeaturedMaterials() {
         {equipments.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {equipments.map((equipment) => (
-              <Card key={equipment.id} className="group hover:shadow-xl transition-all duration-300">
+              <Card
+                key={equipment.id}
+                className="group hover:shadow-xl transition-all duration-300"
+              >
                 <div className="relative h-64 overflow-hidden rounded-t-lg">
                   <Image
-                    src={equipment.images?.[0] || "/placeholder.svg?height=300&width=400"}
+                    src={equipment.images?.[0] || '/placeholder.svg?height=300&width=400'}
                     alt={equipment.name}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -149,5 +152,5 @@ export default function FeaturedMaterials() {
         </div>
       </div>
     </section>
-  )
+  );
 }

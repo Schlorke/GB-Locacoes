@@ -1,107 +1,107 @@
-"use client"
+'use client';
 
-import type * as React from "react"
-import { useState } from "react"
-import { Button } from "./button"
-import { Input } from "./input"
-import { Label } from "./label"
-import { toast } from "@/hooks/use-toast"
-import { Upload, X, Link } from "lucide-react"
+import type * as React from 'react';
+import { useState } from 'react';
+import { Button } from './button';
+import { Input } from './input';
+import { Label } from './label';
+import { toast } from '@/hooks/use-toast';
+import { Upload, X, Link } from 'lucide-react';
 
 interface ImageUploadProps {
-  images: string[]
-  onImagesChange: (_images: string[]) => void
-  maxImages?: number
+  images: string[];
+  onImagesChange: (_images: string[]) => void;
+  maxImages?: number;
 }
 
 export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUploadProps) {
-  const [isUploading, setIsUploading] = useState(false)
-  const [urlInput, setUrlInput] = useState("")
+  const [isUploading, setIsUploading] = useState(false);
+  const [urlInput, setUrlInput] = useState('');
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
-    if (!files || files.length === 0) return
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
 
     if (images.length + files.length > maxImages) {
       toast({
-        title: "Limite excedido",
+        title: 'Limite excedido',
         description: `Máximo de ${maxImages} imagens permitidas`,
-        variant: "destructive",
-      })
-      return
+        variant: 'destructive',
+      });
+      return;
     }
 
-    setIsUploading(true)
-    const uploadedUrls: string[] = []
+    setIsUploading(true);
+    const uploadedUrls: string[] = [];
 
     try {
       for (const file of Array.from(files)) {
-        const formData = new FormData()
-        formData.append("file", file)
+        const formData = new FormData();
+        formData.append('file', file);
 
-        const response = await fetch("/api/upload", {
-          method: "POST",
+        const response = await fetch('/api/upload', {
+          method: 'POST',
           body: formData,
-        })
+        });
 
         if (response.ok) {
-          const data = await response.json()
-          uploadedUrls.push(data.url)
+          const data = await response.json();
+          uploadedUrls.push(data.url);
         } else {
-          const error = await response.json()
-          throw new Error(error.error || "Erro no upload")
+          const error = await response.json();
+          throw new Error(error.error || 'Erro no upload');
         }
       }
 
-      onImagesChange([...images, ...uploadedUrls])
+      onImagesChange([...images, ...uploadedUrls]);
       toast({
-        title: "Upload concluído",
+        title: 'Upload concluído',
         description: `${uploadedUrls.length} imagem(ns) enviada(s) com sucesso`,
-      })
+      });
     } catch (error) {
-      console.error("Upload error:", error)
+      console.error('Upload error:', error);
       toast({
-        title: "Erro no upload",
-        description: error instanceof Error ? error.message : "Erro desconhecido",
-        variant: "destructive",
-      })
+        title: 'Erro no upload',
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        variant: 'destructive',
+      });
     } finally {
-      setIsUploading(false)
+      setIsUploading(false);
       // Reset input
-      event.target.value = ""
+      event.target.value = '';
     }
-  }
+  };
 
   const handleUrlAdd = () => {
-    if (!urlInput.trim()) return
+    if (!urlInput.trim()) return;
 
     if (images.length >= maxImages) {
       toast({
-        title: "Limite excedido",
+        title: 'Limite excedido',
         description: `Máximo de ${maxImages} imagens permitidas`,
-        variant: "destructive",
-      })
-      return
+        variant: 'destructive',
+      });
+      return;
     }
 
     // Validação básica de URL
     try {
-      new URL(urlInput)
-      onImagesChange([...images, urlInput.trim()])
-      setUrlInput("")
+      new URL(urlInput);
+      onImagesChange([...images, urlInput.trim()]);
+      setUrlInput('');
     } catch {
       toast({
-        title: "URL inválida",
-        description: "Por favor, insira uma URL válida",
-        variant: "destructive",
-      })
+        title: 'URL inválida',
+        description: 'Por favor, insira uma URL válida',
+        variant: 'destructive',
+      });
     }
-  }
+  };
 
   const removeImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index)
-    onImagesChange(newImages)
-  }
+    const newImages = images.filter((_, i) => i !== index);
+    onImagesChange(newImages);
+  };
 
   return (
     <div className="space-y-4">
@@ -123,15 +123,17 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
           <Button
             type="button"
             variant="outline"
-            onClick={() => document.getElementById("file-upload")?.click()}
+            onClick={() => document.getElementById('file-upload')?.click()}
             disabled={isUploading || images.length >= maxImages}
             className="flex-1"
           >
             <Upload className="h-4 w-4 mr-2" />
-            {isUploading ? "Enviando..." : "Escolher Arquivos"}
+            {isUploading ? 'Enviando...' : 'Escolher Arquivos'}
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground mt-1">JPG, PNG ou WebP. Máximo 5MB por arquivo.</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          JPG, PNG ou WebP. Máximo 5MB por arquivo.
+        </p>
       </div>
 
       {/* URL de imagem */}
@@ -172,12 +174,12 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
               <div key={index} className="relative group">
                 <div className="aspect-video bg-muted rounded-lg overflow-hidden border">
                   <img
-                    src={url || "/placeholder.svg"}
+                    src={url || '/placeholder.svg'}
                     alt={`Preview ${index + 1}`}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = "/placeholder.svg?height=120&width=200"
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/placeholder.svg?height=120&width=200';
                     }}
                   />
                 </div>
@@ -201,5 +203,5 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
         </div>
       )}
     </div>
-  )
+  );
 }

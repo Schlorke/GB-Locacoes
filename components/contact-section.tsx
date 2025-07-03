@@ -1,8 +1,8 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Phone, Mail, MapPin, Clock } from "lucide-react"
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 
 export default function ContactSection() {
   return (
@@ -10,9 +10,12 @@ export default function ContactSection() {
       {/* Container com largura consistente */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4">Entre em Contato</h2>
+          <h2 className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Entre em Contato
+          </h2>
           <p className="section-subtitle text-xl text-gray-600 max-w-2xl mx-auto">
-            Estamos prontos para atender sua necessidade de equipamentos para construção civil. Fale conosco!
+            Estamos prontos para atender sua necessidade de equipamentos para construção civil. Fale
+            conosco!
           </p>
         </div>
 
@@ -157,7 +160,9 @@ export default function ContactSection() {
                     <Mail className="h-6 w-6 text-orange-600" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-lg mb-2 group-hover:text-orange-600 transition-colors">E-mail</h4>
+                    <h4 className="font-semibold text-lg mb-2 group-hover:text-orange-600 transition-colors">
+                      E-mail
+                    </h4>
                     <p className="text-gray-600 mb-1">contato@gblocacoes.com.br</p>
                     <p className="text-gray-600">comercial@gblocacoes.com.br</p>
                     <p className="text-sm text-orange-600 mt-2">Resposta rápida garantida</p>
@@ -181,7 +186,9 @@ export default function ContactSection() {
                       <br />
                       Humaitá - Porto Alegre/RS
                     </p>
-                    <p className="text-sm text-orange-600 mt-2">Entregamos em toda região de Porto Alegre</p>
+                    <p className="text-sm text-orange-600 mt-2">
+                      Entregamos em toda região de Porto Alegre
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -210,5 +217,5 @@ export default function ContactSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

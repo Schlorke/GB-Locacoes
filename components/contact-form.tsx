@@ -1,76 +1,77 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/hooks/use-toast"
-import { Loader2 } from "lucide-react"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
 
 interface ContactFormData {
-  name: string
-  email: string
-  phone: string
-  equipment: string
-  message: string
+  name: string;
+  email: string;
+  phone: string;
+  equipment: string;
+  message: string;
 }
 
 export default function ContactForm() {
   const [formData, setFormData] = useState<ContactFormData>({
-    name: "",
-    email: "",
-    phone: "",
-    equipment: "",
-    message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+    name: '',
+    email: '',
+    phone: '',
+    equipment: '',
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
+      const response = await fetch('/api/contact', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (data.success) {
         toast({
-          title: "Sucesso!",
+          title: 'Sucesso!',
           description: data.message,
-        })
+        });
 
         // Limpar formulário
         setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          equipment: "",
-          message: "",
-        })
+          name: '',
+          email: '',
+          phone: '',
+          equipment: '',
+          message: '',
+        });
       } else {
-        throw new Error(data.message || "Erro ao enviar mensagem")
+        throw new Error(data.message || 'Erro ao enviar mensagem');
       }
     } catch (error) {
-      console.error("Erro ao enviar formulário:", error)
+      console.error('Erro ao enviar formulário:', error);
       toast({
-        title: "Erro",
-        description: error instanceof Error ? error.message : "Erro ao enviar mensagem. Tente novamente.",
-        variant: "destructive",
-      })
+        title: 'Erro',
+        description:
+          error instanceof Error ? error.message : 'Erro ao enviar mensagem. Tente novamente.',
+        variant: 'destructive',
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -143,9 +144,9 @@ export default function ContactForm() {
             Enviando...
           </>
         ) : (
-          "Enviar Solicitação"
+          'Enviar Solicitação'
         )}
       </Button>
     </form>
-  )
+  );
 }

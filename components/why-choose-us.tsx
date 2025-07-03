@@ -1,50 +1,50 @@
-import { Card, CardContent } from "@/components/ui/card"
-import { Shield, Truck, Clock, Users, Award, Headphones } from "lucide-react"
+import { Card, CardContent } from '@/components/ui/card';
+import { Shield, Truck, Clock, Users, Award, Headphones } from 'lucide-react';
 
 const benefits = [
   {
     icon: Shield,
-    title: "Equipamentos Certificados",
+    title: 'Equipamentos Certificados',
     description:
-      "Todos os nossos equipamentos possuem certificação e passam por manutenção preventiva constante para garantir segurança total.",
-    color: "from-blue-500 to-blue-600",
+      'Todos os nossos equipamentos possuem certificação e passam por manutenção preventiva constante para garantir segurança total.',
+    color: 'from-blue-500 to-blue-600',
   },
   {
     icon: Truck,
-    title: "Entrega Rápida e Eficiente",
+    title: 'Entrega Rápida e Eficiente',
     description:
-      "Entregamos em toda região de Porto Alegre com logística própria e rastreamento dos equipamentos em tempo real.",
-    color: "from-green-500 to-green-600",
+      'Entregamos em toda região de Porto Alegre com logística própria e rastreamento dos equipamentos em tempo real.',
+    color: 'from-green-500 to-green-600',
   },
   {
     icon: Clock,
-    title: "Atendimento Especializado",
+    title: 'Atendimento Especializado',
     description:
-      "Atendimento personalizado com profissionais experientes em equipamentos para obras e serviços em altura.",
-    color: "from-purple-500 to-purple-600",
+      'Atendimento personalizado com profissionais experientes em equipamentos para obras e serviços em altura.',
+    color: 'from-purple-500 to-purple-600',
   },
   {
     icon: Users,
-    title: "Parceira de Grandes Construtoras",
+    title: 'Parceira de Grandes Construtoras',
     description:
-      "Atendemos grandes construtoras como Melnick, Cyrela, Joal Teitelbaum, UMA Incorporadora, ABF Developments e outras.",
-    color: "from-orange-500 to-orange-600",
+      'Atendemos grandes construtoras como Melnick, Cyrela, Joal Teitelbaum, UMA Incorporadora, ABF Developments e outras.',
+    color: 'from-orange-500 to-orange-600',
   },
   {
     icon: Award,
-    title: "10 Anos de Experiência",
+    title: '10 Anos de Experiência',
     description:
-      "Há 10 anos oferecendo soluções em locação de equipamentos com foco em segurança, qualidade e comprometimento.",
-    color: "from-yellow-500 to-yellow-600",
+      'Há 10 anos oferecendo soluções em locação de equipamentos com foco em segurança, qualidade e comprometimento.',
+    color: 'from-yellow-500 to-yellow-600',
   },
   {
     icon: Headphones,
-    title: "Rastreamento dos Equipamentos",
+    title: 'Rastreamento dos Equipamentos',
     description:
-      "Sistema de rastreamento que identifica onde cada equipamento está e quando foi feita a última manutenção.",
-    color: "from-red-500 to-red-600",
+      'Sistema de rastreamento que identifica onde cada equipamento está e quando foi feita a última manutenção.',
+    color: 'from-red-500 to-red-600',
   },
-]
+];
 
 export default function WhyChooseUs() {
   return (
@@ -68,7 +68,7 @@ export default function WhyChooseUs() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => {
-            const IconComponent = benefit.icon
+            const IconComponent = benefit.icon;
             return (
               <Card
                 key={index}
@@ -99,7 +99,7 @@ export default function WhyChooseUs() {
                   <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                 </CardContent>
               </Card>
-            )
+            );
           })}
         </div>
 
@@ -109,10 +109,12 @@ export default function WhyChooseUs() {
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full blur-xl animate-pulse delay-1000"></div>
 
           <div className="relative z-10">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">Pronto para Começar seu Projeto?</h3>
+            <h3 className="text-2xl md:text-3xl font-bold mb-4">
+              Pronto para Começar seu Projeto?
+            </h3>
             <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-              Solicite um orçamento gratuito e receba nossa proposta personalizada. Atendimento com segurança, qualidade
-              e manutenção constante dos equipamentos.
+              Solicite um orçamento gratuito e receba nossa proposta personalizada. Atendimento com
+              segurança, qualidade e manutenção constante dos equipamentos.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
@@ -132,5 +134,5 @@ export default function WhyChooseUs() {
         </div>
       </div>
     </section>
-  )
+  );
 }

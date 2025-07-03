@@ -1,48 +1,48 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Loader2, Package } from "lucide-react"
-import Link from "next/link"
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Package } from 'lucide-react';
+import Link from 'next/link';
 
 interface Category {
-  id: string
-  name: string
-  color?: string
+  id: string;
+  name: string;
+  color?: string;
   _count: {
-    equipments: number
-  }
+    equipments: number;
+  };
 }
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchCategories()
-  }, [])
+    fetchCategories();
+  }, []);
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch("/api/categories")
+      const response = await fetch('/api/categories');
       if (response.ok) {
-        const data = await response.json()
-        setCategories(data)
+        const data = await response.json();
+        setCategories(data);
       }
     } catch (error) {
-      console.error("Erro ao carregar categorias:", error)
+      console.error('Erro ao carregar categorias:', error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-orange-600" />
       </div>
-    )
+    );
   }
 
   return (
@@ -72,5 +72,5 @@ export default function CategoriesPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

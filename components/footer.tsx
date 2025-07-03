@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Linkedin } from "lucide-react"
+import Link from 'next/link';
+import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Linkedin } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -16,17 +16,30 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-gray-300 mb-4">
-              Há 10 anos oferecendo soluções em locação de equipamentos para construção civil. Especializada em
-              equipamentos para obras e serviços em altura com segurança e qualidade.
+              Há 10 anos oferecendo soluções em locação de equipamentos para construção civil.
+              Especializada em equipamentos para obras e serviços em altura com segurança e
+              qualidade.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Facebook">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-orange-500 transition-colors"
+                aria-label="Facebook"
+              >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="Instagram">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-orange-500 transition-colors"
+                aria-label="Instagram"
+              >
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-500 transition-colors" aria-label="LinkedIn">
+              <a
+                href="#"
+                className="text-gray-400 hover:text-orange-500 transition-colors"
+                aria-label="LinkedIn"
+              >
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
@@ -37,32 +50,50 @@ export default function Footer() {
             <h3 className="font-semibold text-h3 mb-4">Links Rápidos</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/catalogo" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <Link
+                  href="/catalogo"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
+                >
                   Catálogo de Equipamentos
                 </Link>
               </li>
               <li>
-                <Link href="/categorias" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <Link
+                  href="/categorias"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
+                >
                   Categorias
                 </Link>
               </li>
               <li>
-                <Link href="/orcamento" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <Link
+                  href="/orcamento"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
+                >
                   Solicitar Orçamento
                 </Link>
               </li>
               <li>
-                <Link href="/sobre" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <Link
+                  href="/sobre"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
+                >
                   Sobre Nós
                 </Link>
               </li>
               <li>
-                <Link href="/contato" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <Link
+                  href="/contato"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
+                >
                   Contato
                 </Link>
               </li>
               <li>
-                <Link href="/login" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <Link
+                  href="/login"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
+                >
                   Área do Cliente
                 </Link>
               </li>
@@ -98,17 +129,26 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/catalogo/betoneiras" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <Link
+                  href="/catalogo/betoneiras"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
+                >
                   Betoneiras
                 </Link>
               </li>
               <li>
-                <Link href="/catalogo/rompedores" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <Link
+                  href="/catalogo/rompedores"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
+                >
                   Rompedores
                 </Link>
               </li>
               <li>
-                <Link href="/catalogo/compressores" className="text-gray-300 hover:text-orange-500 transition-colors">
+                <Link
+                  href="/catalogo/compressores"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
+                >
                   Compressores
                 </Link>
               </li>
@@ -163,15 +203,26 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-small">© 2024 GB Locações. Todos os direitos reservados.</p>
+            <p className="text-gray-400 text-small">
+              © 2024 GB Locações. Todos os direitos reservados.
+            </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link href="/privacidade" className="text-gray-400 hover:text-orange-500 text-small transition-colors">
+              <Link
+                href="/privacidade"
+                className="text-gray-400 hover:text-orange-500 text-small transition-colors"
+              >
                 Política de Privacidade
               </Link>
-              <Link href="/termos" className="text-gray-400 hover:text-orange-500 text-small transition-colors">
+              <Link
+                href="/termos"
+                className="text-gray-400 hover:text-orange-500 text-small transition-colors"
+              >
                 Termos de Uso
               </Link>
-              <Link href="/cookies" className="text-gray-400 hover:text-orange-500 text-small transition-colors">
+              <Link
+                href="/cookies"
+                className="text-gray-400 hover:text-orange-500 text-small transition-colors"
+              >
                 Cookies
               </Link>
             </div>
@@ -179,5 +230,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

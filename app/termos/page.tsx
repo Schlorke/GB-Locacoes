@@ -1,9 +1,9 @@
-import type { Metadata } from "next"
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Termos de Uso | GB Locações",
-  description: "Termos de uso e condições da GB Locações",
-}
+  title: 'Termos de Uso | GB Locações',
+  description: 'Termos de uso e condições da GB Locações',
+};
 
 export default function TermosPage() {
   return (
@@ -13,14 +13,14 @@ export default function TermosPage() {
       <div className="prose dark:prose-invert lg:prose-xl">
         <h2>1. Aceitação dos Termos</h2>
         <p>
-          Ao acessar e usar este site, você aceita e concorda em ficar vinculado aos termos e condições de uso aqui
-          estabelecidos.
+          Ao acessar e usar este site, você aceita e concorda em ficar vinculado aos termos e
+          condições de uso aqui estabelecidos.
         </p>
 
         <h2>2. Uso do Site</h2>
         <p>
-          Este site é fornecido para fins informativos sobre nossos serviços de locação de equipamentos para construção
-          civil.
+          Este site é fornecido para fins informativos sobre nossos serviços de locação de
+          equipamentos para construção civil.
         </p>
 
         <h2>3. Serviços de Locação</h2>
@@ -43,19 +43,22 @@ export default function TermosPage() {
 
         <h2>5. Preços e Pagamento</h2>
         <p>
-          Os preços estão sujeitos a alterações sem aviso prévio. O pagamento deve ser efetuado conforme as condições
-          acordadas no contrato de locação.
+          Os preços estão sujeitos a alterações sem aviso prévio. O pagamento deve ser efetuado
+          conforme as condições acordadas no contrato de locação.
         </p>
 
         <h2>6. Limitação de Responsabilidade</h2>
         <p>
-          A GB Locações não se responsabiliza por danos indiretos, incidentais ou consequenciais decorrentes do uso dos
-          equipamentos locados.
+          A GB Locações não se responsabiliza por danos indiretos, incidentais ou consequenciais
+          decorrentes do uso dos equipamentos locados.
         </p>
 
         <h2>7. Contato</h2>
-        <p>Para dúvidas sobre estes termos, entre em contato conosco através dos canais disponíveis em nosso site.</p>
+        <p>
+          Para dúvidas sobre estes termos, entre em contato conosco através dos canais disponíveis
+          em nosso site.
+        </p>
       </div>
     </div>
-  )
+  );
 }

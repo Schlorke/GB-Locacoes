@@ -1,74 +1,131 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Search, Smile } from "lucide-react"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Search, Smile } from 'lucide-react';
 
 interface EmojiPickerProps {
-  isOpen: boolean
-  onClose: () => void
-  onSelect: (_emoji: string) => void
-  currentEmoji?: string
+  isOpen: boolean;
+  onClose: () => void;
+  onSelect: (_emoji: string) => void;
+  currentEmoji?: string;
 }
 
 const EMOJI_CATEGORIES = {
-  recent: ["🏗️", "🔨", "⚡", "🏢", "🚧", "🔧", "⚙️", "🛠️"],
+  recent: ['🏗️', '🔨', '⚡', '🏢', '🚧', '🔧', '⚙️', '🛠️'],
   construction: [
-    "🏗️",
-    "🔨",
-    "🔧",
-    "⚙️",
-    "🛠️",
-    "🚧",
-    "🏢",
-    "🏭",
-    "🏘️",
-    "🏠",
-    "🏡",
-    "🏰",
-    "🗼",
-    "🌉",
-    "⛽",
-    "🚜",
-    "🚛",
-    "🚚",
-    "🏗️",
-    "🔩",
-    "⚡",
-    "🔌",
-    "💡",
-    "🧱",
+    '🏗️',
+    '🔨',
+    '🔧',
+    '⚙️',
+    '🛠️',
+    '🚧',
+    '🏢',
+    '🏭',
+    '🏘️',
+    '🏠',
+    '🏡',
+    '🏰',
+    '🗼',
+    '🌉',
+    '⛽',
+    '🚜',
+    '🚛',
+    '🚚',
+    '🏗️',
+    '🔩',
+    '⚡',
+    '🔌',
+    '💡',
+    '🧱',
   ],
-  tools: ["🔨", "🔧", "🪚", "🔩", "⚙️", "🛠️", "⚒️", "🪓", "⛏️", "🪝", "🔗", "⛓️", "📏", "📐", "🧰", "🔬"],
-  vehicles: ["🚜", "🚛", "🚚", "🚐", "🚙", "🚗", "🏍️", "🚲", "🛴", "🛵", "🚁", "✈️", "🚀", "⛵", "🚤", "🛥️"],
-  symbols: ["⚡", "🔥", "💧", "🌪️", "❄️", "☀️", "🌙", "⭐", "💎", "🔮", "🎯", "🎪", "🎨", "🎭", "🎪", "🎡"],
-}
+  tools: [
+    '🔨',
+    '🔧',
+    '🪚',
+    '🔩',
+    '⚙️',
+    '🛠️',
+    '⚒️',
+    '🪓',
+    '⛏️',
+    '🪝',
+    '🔗',
+    '⛓️',
+    '📏',
+    '📐',
+    '🧰',
+    '🔬',
+  ],
+  vehicles: [
+    '🚜',
+    '🚛',
+    '🚚',
+    '🚐',
+    '🚙',
+    '🚗',
+    '🏍️',
+    '🚲',
+    '🛴',
+    '🛵',
+    '🚁',
+    '✈️',
+    '🚀',
+    '⛵',
+    '🚤',
+    '🛥️',
+  ],
+  symbols: [
+    '⚡',
+    '🔥',
+    '💧',
+    '🌪️',
+    '❄️',
+    '☀️',
+    '🌙',
+    '⭐',
+    '💎',
+    '🔮',
+    '🎯',
+    '🎪',
+    '🎨',
+    '🎭',
+    '🎪',
+    '🎡',
+  ],
+};
 
 const CATEGORY_LABELS = {
-  recent: "Recentes",
-  construction: "Construção",
-  tools: "Ferramentas",
-  vehicles: "Veículos",
-  symbols: "Símbolos",
-}
+  recent: 'Recentes',
+  construction: 'Construção',
+  tools: 'Ferramentas',
+  vehicles: 'Veículos',
+  symbols: 'Símbolos',
+};
 
 export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPickerProps) {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("recent")
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('recent');
 
   const filteredEmojis = searchTerm
     ? Object.values(EMOJI_CATEGORIES)
         .flat()
         .filter((emoji) => emoji.includes(searchTerm.toLowerCase()))
-    : EMOJI_CATEGORIES[selectedCategory as keyof typeof EMOJI_CATEGORIES]
+    : EMOJI_CATEGORIES[selectedCategory as keyof typeof EMOJI_CATEGORIES];
 
   const handleEmojiSelect = (emoji: string) => {
-    onSelect(emoji)
-    onClose()
-  }
+    onSelect(emoji);
+    onClose();
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -117,7 +174,7 @@ export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPi
             {filteredEmojis.map((emoji, index) => (
               <Button
                 key={`${emoji}-${index}`}
-                variant={currentEmoji === emoji ? "default" : "ghost"}
+                variant={currentEmoji === emoji ? 'default' : 'ghost'}
                 size="sm"
                 className="h-10 w-10 text-lg hover:bg-gray-100"
                 onClick={() => handleEmojiSelect(emoji)}
@@ -140,7 +197,7 @@ export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPi
               Cancelar
             </Button>
             {currentEmoji && (
-              <Button variant="ghost" onClick={() => handleEmojiSelect("")}>
+              <Button variant="ghost" onClick={() => handleEmojiSelect('')}>
                 Remover
               </Button>
             )}
@@ -148,5 +205,5 @@ export function EmojiPicker({ isOpen, onClose, onSelect, currentEmoji }: EmojiPi
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

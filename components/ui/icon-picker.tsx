@@ -1,9 +1,9 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import * as React from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Dialog,
   DialogContent,
@@ -12,9 +12,9 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { cn } from "@/lib/utils"
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 import {
   Search,
   Palette,
@@ -76,7 +76,7 @@ import {
   Key,
   CreditCard,
   DollarSign,
-} from "lucide-react"
+} from 'lucide-react';
 
 // Lista direta de ícones importados
 const ICONS = {
@@ -135,40 +135,48 @@ const ICONS = {
   Key,
   CreditCard,
   DollarSign,
-}
+};
 
 interface IconPickerProps {
-  value?: string
-  color?: string
-  onSelect: (_iconName?: string, _iconColor?: string) => void
-  onClose: () => void
-  isOpen: boolean
+  value?: string;
+  color?: string;
+  onSelect: (_iconName?: string, _iconColor?: string) => void;
+  onClose: () => void;
+  isOpen: boolean;
 }
 
-export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClose }: IconPickerProps) {
-  const [searchTerm, setSearchTerm] = React.useState("")
-  const [selectedIcon, setSelectedIcon] = React.useState<string | undefined>(value)
-  const [iconColor, setIconColor] = React.useState<string>(initialColor || "#000000")
+export function IconPicker({
+  value,
+  color: initialColor,
+  onSelect,
+  isOpen,
+  onClose,
+}: IconPickerProps) {
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [selectedIcon, setSelectedIcon] = React.useState<string | undefined>(value);
+  const [iconColor, setIconColor] = React.useState<string>(initialColor || '#000000');
 
   React.useEffect(() => {
     if (isOpen) {
-      setSelectedIcon(value)
-      setIconColor(initialColor || "#000000")
-      setSearchTerm("")
+      setSelectedIcon(value);
+      setIconColor(initialColor || '#000000');
+      setSearchTerm('');
     }
-  }, [value, initialColor, isOpen])
+  }, [value, initialColor, isOpen]);
 
-  const iconNames = Object.keys(ICONS)
-  const filteredIcons = iconNames.filter((name) => name.toLowerCase().includes(searchTerm.toLowerCase()))
+  const iconNames = Object.keys(ICONS);
+  const filteredIcons = iconNames.filter((name) =>
+    name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   const handleSelectIcon = (iconName: string) => {
-    setSelectedIcon(iconName)
-  }
+    setSelectedIcon(iconName);
+  };
 
   const handleConfirm = () => {
-    onSelect(selectedIcon, iconColor)
-    onClose()
-  }
+    onSelect(selectedIcon, iconColor);
+    onClose();
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -213,7 +221,7 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
               <div className="flex flex-col items-center gap-2 py-2">
                 <div className="p-2 border rounded-md bg-muted flex items-center justify-center w-20 h-20">
                   {React.createElement(ICONS[selectedIcon as keyof typeof ICONS], {
-                    className: "w-10 h-10",
+                    className: 'w-10 h-10',
                     color: iconColor,
                     strokeWidth: 1.5,
                   })}
@@ -249,7 +257,7 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
               {filteredIcons.length > 0 ? (
                 <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
                   {filteredIcons.map((iconName) => {
-                    const IconComponent = ICONS[iconName as keyof typeof ICONS]
+                    const IconComponent = ICONS[iconName as keyof typeof ICONS];
                     return (
                       <Button
                         key={iconName}
@@ -257,18 +265,19 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
                         size="icon"
                         title={iconName}
                         className={cn(
-                          "h-16 w-full flex items-center justify-center p-2 aspect-square",
-                          selectedIcon === iconName && "ring-1 ring-primary border-primary bg-primary/10",
+                          'h-16 w-full flex items-center justify-center p-2 aspect-square',
+                          selectedIcon === iconName &&
+                            'ring-1 ring-primary border-primary bg-primary/10',
                         )}
                         onClick={() => handleSelectIcon(iconName)}
                       >
                         <IconComponent
                           size={24}
-                          color={selectedIcon === iconName ? iconColor : "currentColor"}
+                          color={selectedIcon === iconName ? iconColor : 'currentColor'}
                           strokeWidth={1.5}
                         />
                       </Button>
-                    )
+                    );
                   })}
                 </div>
               ) : (
@@ -286,8 +295,8 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
           <Button
             variant="ghost"
             onClick={() => {
-              onSelect(undefined, undefined)
-              onClose()
+              onSelect(undefined, undefined);
+              onClose();
             }}
             className="text-red-600"
           >
@@ -303,5 +312,5 @@ export function IconPicker({ value, color: initialColor, onSelect, isOpen, onClo
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
