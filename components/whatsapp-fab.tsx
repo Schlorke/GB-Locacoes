@@ -6,6 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CloseButton } from '@/components/ui/close-button';
 
+type MessageSender = 'bot' | 'user';
+
+interface ChatMessage {
+  id: number;
+  text: string;
+  sender: MessageSender;
+  timestamp: Date;
+}
+
 const scrollbarStyles = `
   .whatsapp-chat-scroll::-webkit-scrollbar {
     width: 6px;
@@ -36,11 +45,11 @@ const scrollbarStyles = `
 export default function WhatsAppFAB() {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 1,
       text: '👷‍♂️ Olá! Precisa de equipamentos para sua obra? Somos especialistas em locação de equipamentos para construção civil e serviços em altura!',
-      sender: 'bot' as const,
+      sender: 'bot' as MessageSender,
       timestamp: new Date(),
     },
   ]);
@@ -60,10 +69,10 @@ export default function WhatsAppFAB() {
     if (!message.trim()) return;
 
     // Add user message to chat
-    const userMessage = {
+    const userMessage: ChatMessage = {
       id: messages.length + 1,
       text: message,
-      sender: 'user' as const,
+      sender: 'user' as MessageSender,
       timestamp: new Date(),
     };
 
@@ -72,10 +81,10 @@ export default function WhatsAppFAB() {
 
     // Simulate bot response
     setTimeout(() => {
-      const botResponse = {
+      const botResponse: ChatMessage = {
         id: messages.length + 2,
         text: 'Obrigado pela mensagem! Vou te redirecionar para o WhatsApp onde nossos especialistas podem te atender melhor. 📱',
-        sender: 'bot' as const,
+        sender: 'bot' as MessageSender,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botResponse]);
@@ -121,19 +130,16 @@ export default function WhatsAppFAB() {
       <style jsx>{scrollbarStyles}</style>
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-80 bg-white rounded-lg shadow-2xl border z-50 max-h-[500px] flex flex-col overflow-hidden">
+        <div className="whatsapp-chat-window fixed bottom-24 right-4 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border z-50 h-[500px] flex flex-col overflow-hidden">
           {/* Header - cor verde WhatsApp e sem bordas brancas */}
-          <div
-            className="text-white p-4 flex items-center justify-between rounded-t-lg"
-            style={{ backgroundColor: '#25D366' }}
-          >
+          <div className="whatsapp-header text-white p-4 flex items-center justify-between rounded-t-xl flex-shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <span className="text-gray-900 font-bold text-sm">GB</span>
+              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                <span className="text-gray-900 font-bold text-lg">GB</span>
               </div>
               <div>
-                <h3 className="font-semibold">GB Locações</h3>
-                <p className="text-xs text-green-100">Equipamentos para Construção</p>
+                <h3 className="font-semibold text-lg">GB Locações</h3>
+                <p className="text-sm text-green-100">Equipamentos para Construção</p>
               </div>
             </div>
             <CloseButton
@@ -144,61 +150,73 @@ export default function WhatsAppFAB() {
             />
           </div>
 
-          {/* Messages - área expandida */}
-          <div className="flex-1 p-4 space-y-3 overflow-y-auto min-h-[200px] whatsapp-chat-scroll">
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
+          {/* Messages + Quick Messages - área flexível */}
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Messages */}
+            <div className="flex-1 p-4 space-y-4 overflow-y-auto whatsapp-chat-scroll bg-gray-50">
+              {messages.map((msg) => (
                 <div
-                  className={`max-w-xs p-3 rounded-lg text-sm ${
-                    msg.sender === 'user' ? 'text-white' : 'bg-gray-100 text-gray-900'
-                  }`}
-                  style={msg.sender === 'user' ? { backgroundColor: '#25D366' } : {}}
+                  key={msg.id}
+                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  {msg.text}
+                  <div
+                    className={`max-w-[80%] p-3 rounded-lg text-sm shadow-sm ${
+                      msg.sender === 'user'
+                        ? 'whatsapp-green text-white rounded-br-none'
+                        : 'bg-white text-gray-900 rounded-bl-none border'
+                    }`}
+                  >
+                    {msg.text}
+                    <div
+                      className={`text-xs mt-1 opacity-70 ${
+                        msg.sender === 'user' ? 'text-green-100' : 'text-gray-500'
+                      }`}
+                    >
+                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Quick Messages - apenas quando não há conversa */}
+            {showQuickMessages && messages.length === 1 && (
+              <div className="flex-shrink-0 p-3 border-t bg-white">
+                <p className="text-xs text-gray-600 mb-2 font-medium">Mensagens rápidas:</p>
+                <div className="space-y-1 max-h-20 overflow-y-auto whatsapp-chat-scroll">
+                  {quickMessages.map((quickMsg, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleQuickMessage(quickMsg)}
+                      className="block w-full text-left text-xs p-2 hover:bg-green-50 hover:text-green-700 rounded transition-colors border border-gray-200 hover:border-green-300"
+                    >
+                      • {quickMsg}
+                    </button>
+                  ))}
                 </div>
               </div>
-            ))}
+            )}
           </div>
 
-          {/* Quick Messages - apenas quando não há conversa */}
-          {showQuickMessages && messages.length === 1 && (
-            <div className="p-3 border-t bg-gray-50">
-              <p className="text-xs text-gray-600 mb-2">Mensagens rápidas:</p>
-              <div className="space-y-1 max-h-24 overflow-y-auto whatsapp-chat-scroll">
-                {quickMessages.map((quickMsg, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleQuickMessage(quickMsg)}
-                    className="block w-full text-left text-xs p-2 hover:bg-green-50 hover:text-green-700 rounded transition-colors"
-                  >
-                    {quickMsg}
-                  </button>
-                ))}
-              </div>
+          {/* Input - sempre visível no fundo */}
+          <div className="whatsapp-input-area flex-shrink-0 p-4 border-t bg-white">
+            <div className="flex gap-3 items-end">
+              <Input
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Digite sua mensagem..."
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                className="flex-1 h-12 text-base border-2 border-gray-200 focus:border-green-500 rounded-lg px-4"
+              />
+              <Button
+                onClick={handleSendMessage}
+                size="lg"
+                disabled={!message.trim()}
+                className="whatsapp-green text-white h-12 w-12 rounded-lg hover:scale-105 transition-transform"
+              >
+                <Send className="h-5 w-5" />
+              </Button>
             </div>
-          )}
-
-          {/* Input */}
-          <div className="p-4 border-t flex gap-2 bg-white">
-            <Input
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Digite sua mensagem..."
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-              className="flex-1"
-            />
-            <Button
-              onClick={handleSendMessage}
-              size="sm"
-              disabled={!message.trim()}
-              className="text-white h-10"
-              style={{ backgroundColor: '#25D366' }}
-            >
-              <Send className="h-4 w-4" />
-            </Button>
           </div>
         </div>
       )}
@@ -223,15 +241,8 @@ export default function WhatsAppFAB() {
         ) : (
           <button
             onClick={() => setIsOpen(true)}
-            className="w-14 h-14 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
-            style={{ backgroundColor: '#25D366' }}
+            className="whatsapp-green w-14 h-14 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
             aria-label="Abrir chat do WhatsApp"
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#128C7E';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#25D366';
-            }}
           >
             <MessageCircle className="h-6 w-6" />
           </button>

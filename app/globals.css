@@ -580,6 +580,33 @@ select:focus {
   animation: slideInUp 0.8s ease-out forwards;
 }
 
+/* WhatsApp FAB Styles */
+.whatsapp-green {
+  background-color: #25d366;
+}
+
+.whatsapp-green:hover {
+  background-color: #128c7e;
+}
+
+.whatsapp-header {
+  background-color: #25d366;
+}
+
+/* WhatsApp Chat Window - garantir visibilidade */
+.whatsapp-chat-window {
+  max-height: 90vh;
+  min-height: 400px;
+  bottom: 90px !important;
+}
+
+/* Garantir que o input do WhatsApp seja sempre visível */
+.whatsapp-input-area {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
 body.admin-body-layout {
   padding-top: 0 !important;
 }
