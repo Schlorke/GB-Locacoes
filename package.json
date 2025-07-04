@@ -6,10 +6,12 @@
   "scripts": {
     "build": "next build",
     "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "postinstall": "prisma generate",
     "lint": "eslint app components --ext .ts,.tsx --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
     "lint:fix": "eslint app components --ext .js,.ts,.tsx --fix --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
+    "format": "prettier --write \"**/*.{js,ts,tsx,json,md,css}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md,css}\" --ignore-path .gitignore",
     "seed": "tsx prisma/seed.ts",
     "start": "next start",
     "test": "vitest"

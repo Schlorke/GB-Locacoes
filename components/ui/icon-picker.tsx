@@ -19,7 +19,7 @@ import {
   Search,
   Palette,
   Check,
-  X,
+  // X, // Removido - não utilizado
   AlertTriangle,
   Home,
   Settings,
