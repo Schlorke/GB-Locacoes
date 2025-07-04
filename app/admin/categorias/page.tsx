@@ -285,7 +285,7 @@ export default function AdminCategoriesPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-2xl">
+          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-lg">
             {/* Clean depth layers without decorative elements */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
@@ -316,7 +316,7 @@ export default function AdminCategoriesPage() {
           transition={{ delay: 0.1 }}
           className="mb-6"
         >
-          <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm">
+          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
             {/* Clean depth layers for filter card */}
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
@@ -334,7 +334,7 @@ export default function AdminCategoriesPage() {
                 </div>
                 <Button
                   onClick={openCreateDialog}
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Nova Categoria
@@ -351,7 +351,7 @@ export default function AdminCategoriesPage() {
           transition={{ delay: 0.2 }}
         >
           {!Array.isArray(filteredCategories) || filteredCategories.length === 0 ? (
-            <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm">
+            <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
               {/* Clean depth layers for empty state card */}
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
@@ -390,7 +390,7 @@ export default function AdminCategoriesPage() {
                     whileHover={{ scale: 1.02 }}
                     className="group"
                   >
-                    <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+                    <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
                       {/* Clean depth layers for category card */}
                       <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
                       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>

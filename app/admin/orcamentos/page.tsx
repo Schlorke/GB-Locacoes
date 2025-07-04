@@ -223,7 +223,7 @@ export default function AdminQuotesPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-2xl">
+          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-lg">
             {/* Clean depth layers without decorative elements */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
@@ -253,7 +253,7 @@ export default function AdminQuotesPage() {
           transition={{ delay: 0.1 }}
           className="mb-6"
         >
-          <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm">
+          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
             {/* Clean depth layers for filter card */}
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
@@ -294,7 +294,7 @@ export default function AdminQuotesPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm">
+          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
             {/* Clean depth layers for table card */}
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
