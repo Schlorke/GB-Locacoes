@@ -1,4 +1,8 @@
 {
+  "engines": {
+  "npm": "please-use-pnpm",
+  "pnpm": ">=8.0.0"
+  },
   "name": "my-v0-project",
   "version": "0.1.0",
   "private": true,
@@ -14,7 +18,8 @@
     "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md,css}\" --ignore-path .gitignore",
     "seed": "tsx prisma/seed.ts",
     "start": "next start",
-    "test": "vitest"
+    "test": "vitest run",
+    "preinstall": "npx only-allow pnpm"
   },
   "eslintIgnore": [
     "**/*.css"
@@ -123,4 +128,6 @@
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vitest": "^3.2.4"
   }
+
 }
+

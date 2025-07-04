@@ -16,15 +16,7 @@ export default function ScrollRevealInit() {
     if (!isHydrated) return;
 
     let cleanup: () => void = () => {};
-    const run = () => {
-    const getNavigationType = () => {
-      // Verificar se existe performance.navigation (método mais antigo)
-      if (performance.navigation) {
-        return performance.navigation.type;
-      }
 
-
-    let cleanup: () => void = () => {};
     const run = () => {
       const getNavigationType = () => {
         // Verificar se existe performance.navigation (método mais antigo)
@@ -278,25 +270,6 @@ export default function ScrollRevealInit() {
         }
       };
     };
-
-    const handleLoad = () => {
-      requestAnimationFrame(() => {
-        cleanup = run();
-      });
-    };
-
-    if (document.readyState === 'complete') {
-      handleLoad();
-    } else {
-      window.addEventListener('load', handleLoad);
-    }
-
-    return () => {
-      cleanup();
-      window.removeEventListener('load', handleLoad);
-    };
-
-  };
 
     const handleLoad = () => {
       const start = () => {

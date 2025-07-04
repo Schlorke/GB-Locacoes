@@ -1,11 +1,8 @@
 'use client';
 
-
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import * as LucideIcons from 'lucide-react';
-import { fetchJson } from '@/lib/api';
-
 
 interface ApiCategory {
   id: string;
@@ -20,7 +17,7 @@ interface ApiCategory {
 }
 
 interface Category {
-  icon: React.ComponentType<any>;
+  icon: any;
   title: string;
   description: string;
   color: string;
@@ -87,13 +84,11 @@ export default function Categories() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-
-        const data = await fetchJson<ApiCategory[]>('/api/categories');
-        if (!data) return;
+        const res = await fetch('/api/categories');
+        if (!res.ok) return;
+        const data: ApiCategory[] = await res.json();
         const mapped: Category[] = data.map((cat) => ({
-          icon:
-            (cat.icon && (LucideIcons as any)[cat.icon]) || LucideIcons.Package,
-
+          icon: (cat.icon && (LucideIcons as any)[cat.icon]) || LucideIcons.Package,
           title: cat.name,
           description: cat.description || '',
           color: 'from-orange-500 to-orange-600',
@@ -105,7 +100,6 @@ export default function Categories() {
         console.error('Erro ao buscar categorias', err);
       }
     };
-
 
     const runFetch = () => {
       if ('requestIdleCallback' in window) {
