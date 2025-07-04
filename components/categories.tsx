@@ -1,9 +1,34 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Hammer, Truck, Wrench, Building, Zap, Container } from 'lucide-react';
+'use client';
 
-const categories = [
+import { useEffect, useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import * as LucideIcons from 'lucide-react';
+import { fetchJson } from '@/lib/api';
+
+interface ApiCategory {
+  id: string;
+  name: string;
+  description?: string;
+  icon?: keyof typeof LucideIcons;
+  iconColor?: string;
+  bgColor?: string;
+  fontColor?: string;
+  slug: string;
+  _count?: { equipments: number };
+}
+
+interface Category {
+  icon: React.ComponentType<any>;
+  title: string;
+  description: string;
+  color: string;
+  count: number;
+  href: string;
+}
+
+const fallbackCategories: Category[] = [
   {
-    icon: Building,
+    icon: LucideIcons.Building,
     title: 'Andaimes Suspensos',
     description:
       'Andaimes suspensos elétricos e manuais para trabalhos em altura com segurança total.',
@@ -12,7 +37,7 @@ const categories = [
     href: '/catalogo/andaimes-suspensos',
   },
   {
-    icon: Zap,
+    icon: LucideIcons.Zap,
     title: 'Cadeiras Elétricas',
     description:
       'Cadeiras elétricas e manuais para altura com tecnologia avançada e manutenção constante.',
@@ -21,7 +46,7 @@ const categories = [
     href: '/catalogo/cadeiras-eletricas',
   },
   {
-    icon: Wrench,
+    icon: LucideIcons.Wrench,
     title: 'Andaimes Tubulares',
     description: 'Andaimes tubulares para diversas alturas com certificação e estrutura robusta.',
     color: 'from-red-500 to-red-600',
@@ -29,7 +54,7 @@ const categories = [
     href: '/catalogo/andaimes-tubulares',
   },
   {
-    icon: Truck,
+    icon: LucideIcons.Truck,
     title: 'Betoneiras',
     description: 'Betoneiras de diversos tamanhos para preparo de concreto com eficiência máxima.',
     color: 'from-green-500 to-green-600',
@@ -37,7 +62,7 @@ const categories = [
     href: '/catalogo/betoneiras',
   },
   {
-    icon: Hammer,
+    icon: LucideIcons.Hammer,
     title: 'Rompedores',
     description: 'Rompedores pneumáticos e elétricos para demolição e quebra de concreto.',
     color: 'from-purple-500 to-purple-600',
@@ -45,7 +70,7 @@ const categories = [
     href: '/catalogo/rompedores',
   },
   {
-    icon: Container,
+    icon: LucideIcons.Container,
     title: 'Compressores',
     description: 'Compressores de ar para obras com alta pressão e durabilidade comprovada.',
     color: 'from-indigo-500 to-indigo-600',
@@ -55,9 +80,40 @@ const categories = [
 ];
 
 export default function Categories() {
+  const [categories, setCategories] = useState<Category[]>(fallbackCategories);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await fetchJson<ApiCategory[]>('/api/categories');
+        if (!data) return;
+        const mapped: Category[] = data.map((cat) => ({
+          icon:
+            (cat.icon && (LucideIcons as any)[cat.icon]) || LucideIcons.Package,
+          title: cat.name,
+          description: cat.description || '',
+          color: 'from-orange-500 to-orange-600',
+          count: cat._count?.equipments ?? 0,
+          href: `/catalogo/${cat.slug}`,
+        }));
+        setCategories(mapped);
+      } catch (err) {
+        console.error('Erro ao buscar categorias', err);
+      }
+    };
+    const runFetch = () => {
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(fetchCategories);
+      } else {
+        setTimeout(fetchCategories, 0);
+      }
+    };
+
+    runFetch();
+  }, []);
+
   return (
     <section className="py-16 bg-gray-50">
-      {/* Container com largura consistente */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4 opacity-0">
@@ -76,7 +132,6 @@ export default function Categories() {
                 key={index}
                 className="benefit-card bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0"
               >
-                {/* Gradient overlay */}
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
                 ></div>
@@ -84,8 +139,6 @@ export default function Categories() {
                 <CardContent className="p-6 text-center relative z-10">
                   <div className="mb-4 inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-600 to-orange-700 rounded-full group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 relative">
                     <IconComponent className="h-8 w-8 text-white group-hover:scale-110 transition-transform duration-300" />
-
-                    {/* Pulse ring */}
                     <div className="absolute inset-0 bg-orange-500 rounded-full animate-ping opacity-0 group-hover:opacity-30"></div>
                   </div>
 
@@ -102,7 +155,6 @@ export default function Categories() {
                   </div>
                 </CardContent>
 
-                {/* Bottom accent line - sempre no fundo */}
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
               </Card>
             );

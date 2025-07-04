@@ -13,9 +13,10 @@ export default function ScrollRevealInit() {
   }, []);
 
   useEffect(() => {
-    // Só executar após hidratação completa
     if (!isHydrated) return;
-    // Detectar o tipo de navegação
+
+    let cleanup: () => void = () => {};
+    const run = () => {
     const getNavigationType = () => {
       // Verificar se existe performance.navigation (método mais antigo)
       if (performance.navigation) {
@@ -266,6 +267,32 @@ export default function ScrollRevealInit() {
           htmlElement.classList.remove('animate-in');
         });
       }
+    };
+
+  };
+
+    const handleLoad = () => {
+      const start = () => {
+        requestAnimationFrame(() => {
+          cleanup = run();
+        });
+      };
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(start);
+      } else {
+        setTimeout(start, 0);
+      }
+    };
+
+    if (document.readyState === 'complete') {
+      handleLoad();
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+
+    return () => {
+      cleanup();
+      window.removeEventListener('load', handleLoad);
     };
   }, [pathname, isHydrated]);
 
