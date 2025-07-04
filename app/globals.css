@@ -610,3 +610,31 @@ select:focus {
 body.admin-body-layout {
   padding-top: 0 !important;
 }
+
+/* Correção específica para transição de sombra do formulário de contato */
+.contact-form-hover {
+  transition:
+    box-shadow 0.5s ease,
+    transform 0.3s ease !important;
+}
+
+.contact-form-hover:hover {
+  transform: scale(1.02) !important;
+}
+
+/* Garantir que elementos com animações mantenham transições de hover */
+.contact-form,
+.contact-card,
+.benefit-card,
+.category-card,
+.material-card {
+  transition: all 0.3s ease !important;
+}
+
+.contact-form:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.contact-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
