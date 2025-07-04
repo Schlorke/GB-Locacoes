@@ -17,6 +17,15 @@ export default function ScrollRevealInit() {
 
     let cleanup: () => void = () => {};
     const run = () => {
+    const getNavigationType = () => {
+      // Verificar se existe performance.navigation (método mais antigo)
+      if (performance.navigation) {
+        return performance.navigation.type;
+      }
+
+
+    let cleanup: () => void = () => {};
+    const run = () => {
       const getNavigationType = () => {
         // Verificar se existe performance.navigation (método mais antigo)
         if (performance.navigation) {
@@ -274,6 +283,32 @@ export default function ScrollRevealInit() {
       requestAnimationFrame(() => {
         cleanup = run();
       });
+    };
+
+    if (document.readyState === 'complete') {
+      handleLoad();
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+
+    return () => {
+      cleanup();
+      window.removeEventListener('load', handleLoad);
+    };
+
+  };
+
+    const handleLoad = () => {
+      const start = () => {
+        requestAnimationFrame(() => {
+          cleanup = run();
+        });
+      };
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(start);
+      } else {
+        setTimeout(start, 0);
+      }
     };
 
     if (document.readyState === 'complete') {
