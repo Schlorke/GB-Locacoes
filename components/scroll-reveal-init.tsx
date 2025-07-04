@@ -281,11 +281,13 @@ export default function ScrollRevealInit() {
       handleLoad();
     } else {
       window.addEventListener('load', handleLoad);
+
     }
 
     return () => {
       cleanup();
       window.removeEventListener('load', handleLoad);
+
     };
   }, [pathname, isHydrated]);
 

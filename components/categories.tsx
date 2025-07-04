@@ -101,6 +101,7 @@ export default function Categories() {
         console.error('Erro ao buscar categorias', err);
       }
     };
+
     const runFetch = () => {
       if ('requestIdleCallback' in window) {
         (window as any).requestIdleCallback(fetchCategories);
@@ -110,6 +111,7 @@ export default function Categories() {
     };
 
     runFetch();
+
   }, []);
 
   return (
