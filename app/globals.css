@@ -622,6 +622,11 @@ body.admin-body-layout {
   transform: scale(1.02) !important;
 }
 
+/* Badge customizations - bordas mais arredondadas apenas para badges */
+div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2'] {
+  border-radius: 9999px !important;
+}
+
 /* Garantir que elementos com animações mantenham transições de hover */
 .contact-form,
 .contact-card,
