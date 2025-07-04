@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 
 export interface AdminSidebarProps {
-  onCollapseChange?: (collapsed: boolean) => void;
+  onCollapseChange?: (_collapsed: boolean) => void;
 }
 
 const navItems = [

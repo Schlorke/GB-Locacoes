@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import * as LucideIcons from 'lucide-react';
 
@@ -88,8 +88,7 @@ export default function Categories() {
         if (!res.ok) return;
         const data: ApiCategory[] = await res.json();
         const mapped: Category[] = data.map((cat) => ({
-          icon:
-            (cat.icon && (LucideIcons as any)[cat.icon]) || LucideIcons.Package,
+          icon: (cat.icon && (LucideIcons as any)[cat.icon]) || LucideIcons.Package,
           title: cat.name,
           description: cat.description || '',
           color: 'from-orange-500 to-orange-600',
@@ -111,7 +110,6 @@ export default function Categories() {
     };
 
     runFetch();
-
   }, []);
 
   return (

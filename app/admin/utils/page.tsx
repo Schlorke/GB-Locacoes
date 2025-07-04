@@ -41,7 +41,7 @@ interface SystemInfo {
 
 export default function AdminUtilsPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [systemInfo, setSystemInfo] = useState<SystemInfo>({
+  const [systemInfo] = useState<SystemInfo>({
     database: {
       status: 'connected',
       totalTables: 8,
@@ -99,7 +99,7 @@ export default function AdminUtilsPage() {
       // Simulate cache clearing
       await new Promise((resolve) => setTimeout(resolve, 2000));
       toast.success('Cache limpo com sucesso!');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Erro ao limpar cache');
     } finally {
       setIsLoading(false);
@@ -112,7 +112,7 @@ export default function AdminUtilsPage() {
       // Simulate backup creation
       await new Promise((resolve) => setTimeout(resolve, 3000));
       toast.success('Backup criado com sucesso!');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Erro ao criar backup');
     } finally {
       setIsLoading(false);
@@ -125,7 +125,7 @@ export default function AdminUtilsPage() {
       // Simulate system check
       await new Promise((resolve) => setTimeout(resolve, 2000));
       toast.success('Verificação do sistema concluída - Tudo funcionando corretamente!');
-    } catch (error) {
+    } catch (_error) {
       toast.error('Erro na verificação do sistema');
     } finally {
       setIsLoading(false);
