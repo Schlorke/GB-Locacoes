@@ -271,15 +271,23 @@ export default function ScrollRevealInit() {
 
   };
 
+    const handleLoad = () => {
+      requestAnimationFrame(() => {
+        cleanup = run();
+      });
+    };
+
     if (document.readyState === 'complete') {
-      cleanup = run();
+      handleLoad();
     } else {
-      window.addEventListener('load', run);
+      window.addEventListener('load', handleLoad);
+
     }
 
     return () => {
       cleanup();
-      window.removeEventListener('load', run);
+      window.removeEventListener('load', handleLoad);
+
     };
   }, [pathname, isHydrated]);
 

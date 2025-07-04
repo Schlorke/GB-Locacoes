@@ -101,7 +101,17 @@ export default function Categories() {
         console.error('Erro ao buscar categorias', err);
       }
     };
-    fetchCategories();
+
+    const runFetch = () => {
+      if ('requestIdleCallback' in window) {
+        (window as any).requestIdleCallback(fetchCategories);
+      } else {
+        setTimeout(fetchCategories, 0);
+      }
+    };
+
+    runFetch();
+
   }, []);
 
   return (
