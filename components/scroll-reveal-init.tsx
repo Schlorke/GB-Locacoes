@@ -13,9 +13,10 @@ export default function ScrollRevealInit() {
   }, []);
 
   useEffect(() => {
-    // Só executar após hidratação completa
     if (!isHydrated) return;
-    // Detectar o tipo de navegação
+
+    let cleanup: () => void = () => {};
+    const run = () => {
     const getNavigationType = () => {
       // Verificar se existe performance.navigation (método mais antigo)
       if (performance.navigation) {
@@ -266,6 +267,19 @@ export default function ScrollRevealInit() {
           htmlElement.classList.remove('animate-in');
         });
       }
+    };
+
+  };
+
+    if (document.readyState === 'complete') {
+      cleanup = run();
+    } else {
+      window.addEventListener('load', run);
+    }
+
+    return () => {
+      cleanup();
+      window.removeEventListener('load', run);
     };
   }, [pathname, isHydrated]);
 
