@@ -279,7 +279,9 @@ section {
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
 }
 
 .animate-on-scroll.animate-in {
@@ -290,7 +292,9 @@ section {
 .animate-on-scroll-delayed {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
   transition-delay: 0.2s;
 }
 
@@ -303,7 +307,9 @@ section {
 .category-card-animate {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
 }
 
 .category-card-animate.animate-in {
@@ -433,15 +439,15 @@ section {
 
 /* Selection styles */
 ::selection {
-  background-color: theme("colors.blue.200");
-  color: theme("colors.blue.900");
+  background-color: theme('colors.blue.200');
+  color: theme('colors.blue.900');
 }
 
 /* Form enhancements */
 input:focus,
 textarea:focus,
 select:focus {
-  box-shadow: 0 0 0 3px theme("colors.blue.100");
+  box-shadow: 0 0 0 3px theme('colors.blue.100');
 }
 
 /* Button hover effects */
@@ -547,7 +553,9 @@ body.admin-body-layout {
 
 /* Correção específica para transição de sombra do formulário de contato */
 .contact-form-hover {
-  transition: box-shadow 0.5s ease, transform 0.3s ease !important;
+  transition:
+    box-shadow 0.5s ease,
+    transform 0.3s ease !important;
 }
 
 .contact-form-hover:hover {
@@ -555,7 +563,7 @@ body.admin-body-layout {
 }
 
 /* Badge customizations - bordas mais arredondadas apenas para badges */
-div[class*="text-xs"][class*="inline-flex"][class*="items-center"][class*="gap-2"] {
+div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2'] {
   border-radius: 9999px !important;
 }
 
@@ -586,7 +594,7 @@ div[class*="text-xs"][class*="inline-flex"][class*="items-center"][class*="gap-2
 }
 
 /* Garantir centralização perfeita de modais */
-[role="dialog"] {
+[role='dialog'] {
   position: fixed !important;
   left: 50% !important;
   top: 50% !important;
@@ -598,7 +606,7 @@ div[class*="text-xs"][class*="inline-flex"][class*="items-center"][class*="gap-2
 
 /* Responsividade para telas pequenas */
 @media (max-width: 640px) {
-  [role="dialog"] {
+  [role='dialog'] {
     max-width: 95vw !important;
     max-height: 95vh !important;
   }
@@ -615,7 +623,7 @@ div[class*="text-xs"][class*="inline-flex"][class*="items-center"][class*="gap-2
 }
 
 /* Garantir que o popover fique sempre embaixo do trigger */
-[role="dialog"] .modal-centered-popover[data-side="bottom"] {
+[role='dialog'] .modal-centered-popover[data-side='bottom'] {
   position: fixed !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
@@ -624,7 +632,7 @@ div[class*="text-xs"][class*="inline-flex"][class*="items-center"][class*="gap-2
 }
 
 /* Forçar que o popover nunca apareça em cima */
-[role="dialog"] .modal-centered-popover[data-side="top"] {
+[role='dialog'] .modal-centered-popover[data-side='top'] {
   display: none !important;
 }
 

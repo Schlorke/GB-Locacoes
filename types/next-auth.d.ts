@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import type { DefaultSession, DefaultUser } from 'next-auth';
 import type { DefaultJWT } from 'next-auth/jwt';
 import type { UserRole } from '@prisma/client';

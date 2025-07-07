@@ -43,17 +43,17 @@ Reverter todas as alterações experimentais relacionadas ao suporte de login/ad
 \`\`\`typescript
 // lib/auth.ts - NextAuth options padrão
 export const authOptions: NextAuthOptions = {
-  providers: [
-    CredentialsProvider({
-      async authorize(credentials) {
-        // Validação com Prisma + bcrypt
-        // Role check: ADMIN, OPERATOR, FINANCIAL
-      },
-    }),
-  ],
-  session: { strategy: 'jwt' },
-  callbacks: { jwt, session },
-  pages: { signIn: '/admin/login' },
+providers: [
+CredentialsProvider({
+async authorize(credentials) {
+// Validação com Prisma + bcrypt
+// Role check: ADMIN, OPERATOR, FINANCIAL
+},
+}),
+],
+session: { strategy: 'jwt' },
+callbacks: { jwt, session },
+pages: { signIn: '/admin/login' },
 };
 \`\`\`
 
@@ -62,17 +62,17 @@ export const authOptions: NextAuthOptions = {
 \`\`\`typescript
 // middleware.ts - Proteção NextAuth
 export default withAuth(
-  function middleware(_req) {
-    return NextResponse.next();
-  },
-  {
-    callbacks: {
-      authorized: ({ token, req }) => {
-        // /admin/login liberado
-        // /admin/* requer token válido
-      },
-    },
-  },
+function middleware(\_req) {
+return NextResponse.next();
+},
+{
+callbacks: {
+authorized: ({ token, req }) => {
+// /admin/login liberado
+// /admin/\* requer token válido
+},
+},
+},
 );
 \`\`\`
 
@@ -86,7 +86,7 @@ const { data: session } = useSession();
 const user = session?.user;
 
 const handleLogout = () => {
-  signOut({ callbackUrl: '/admin/login' });
+signOut({ callbackUrl: '/admin/login' });
 };
 \`\`\`
 
@@ -123,7 +123,9 @@ const handleLogout = () => {
 ### 🔍 Validação de Limpeza
 
 \`\`\`bash
+
 # Busca por referências experimentais (todas zeradas):
+
 ❌ simple-browser: 0 matches (exceto backups)
 ❌ unified-auth: 0 matches
 ❌ experimental: 0 matches

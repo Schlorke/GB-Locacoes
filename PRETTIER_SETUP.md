@@ -23,10 +23,13 @@
 5. **Formatação manual via terminal**:
 
    \`\`\`bash
+
    # Formatar todos os arquivos
+
    pnpm format
 
    # Formatar arquivo específico
+
    npx prettier --write "caminho/para/arquivo.tsx"
    \`\`\`
 
