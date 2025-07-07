@@ -23,31 +23,31 @@ export default function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-screen z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100">
+    <header className="fixed top-0 left-0 w-screen z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-slate-200/50">
       {/* Top Bar */}
-      <div className="bg-slate-700 text-white py-2 w-full">
+      <div className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-700 text-white py-2.5 w-full shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1">
-                <Phone className="h-4 w-4" />
-                (51) 2313-6262
+              <span className="flex items-center gap-2 font-medium">
+                <Phone className="h-4 w-4 text-slate-200" />
+                <span className="text-slate-100">(51) 2313-6262</span>
               </span>
-              <span className="hidden md:inline">
+              <span className="hidden md:inline text-slate-200 font-light">
                 Atendimento especializado • Entrega em toda região de Porto Alegre
               </span>
             </div>
             <div className="flex items-center gap-4">
               <Link
                 href="/login"
-                className="hover:text-gray-300 transition-colors"
+                className="text-slate-200 hover:text-white transition-all duration-200 font-medium hover:scale-105"
                 onClick={handleInternalNavigation}
               >
                 Área do Cliente
               </Link>
               <Link
                 href="/admin/login"
-                className="hover:text-gray-300 transition-colors"
+                className="text-slate-200 hover:text-white transition-all duration-200 font-medium hover:scale-105"
                 onClick={handleInternalNavigation}
               >
                 Admin
@@ -61,12 +61,21 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2" onClick={handleInternalNavigation}>
-            <div className="bg-slate-700 text-white p-2 rounded-lg font-bold text-lg">GB</div>
+          <Link
+            href="/"
+            className="flex items-center space-x-3 group"
+            onClick={handleInternalNavigation}
+          >
+            <div className="bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg ring-2 ring-slate-200/20 group-hover:ring-slate-300/30 transition-all duration-200 group-hover:scale-105">
+              GB
+            </div>
             <div>
-              <div className="font-bold text-lg text-gray-900">GB Locações</div>
-
-              <div className="text-xs text-gray-500">Equipamentos para Construção</div>
+              <div className="font-bold text-lg text-slate-800 group-hover:text-slate-900 transition-colors duration-200">
+                GB Locações
+              </div>
+              <div className="text-xs text-slate-500 group-hover:text-slate-600 transition-colors duration-200">
+                Equipamentos para Construção
+              </div>
             </div>
           </Link>
 
@@ -76,26 +85,38 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="relative text-gray-700 hover:text-orange-600 font-medium transition-colors group"
+                className="relative text-slate-700 hover:text-orange-600 font-medium transition-all duration-200 group py-2"
                 onClick={handleInternalNavigation}
               >
                 {item.name}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></span>
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center rounded-full"></span>
               </Link>
             ))}
           </nav>
 
           {/* Desktop Actions */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <Button variant="ghost" size="sm" className="text-gray-700 hover:text-orange-600">
+          <div className="hidden lg:flex items-center space-x-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
+            >
               <Search className="h-5 w-5" />
               <span className="sr-only">Buscar</span>
             </Button>
-            <Button variant="ghost" size="sm" className="text-gray-700 hover:text-orange-600">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
+            >
               <User className="h-5 w-5" />
               <span className="sr-only">Minha conta</span>
             </Button>
-            <Button variant="ghost" size="sm" className="text-gray-700 hover:text-orange-600">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
+            >
               <ShoppingCart className="h-5 w-5" />
               <span className="sr-only">Carrinho</span>
             </Button>
@@ -107,14 +128,14 @@ export default function Header() {
               onClick={() => setIsMenuOpen(false)}
               variant="ghost"
               size="md"
-              className="lg:hidden text-gray-700 hover:text-orange-600"
+              className="lg:hidden text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
               aria-label="Fechar menu"
             />
           ) : (
             <Button
               variant="ghost"
               size="sm"
-              className="lg:hidden text-gray-700 hover:text-orange-600"
+              className="lg:hidden text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
               onClick={() => setIsMenuOpen(true)}
               aria-label="Abrir menu"
             >
@@ -125,21 +146,25 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden border-t py-4">
+          <div className="lg:hidden border-t border-slate-200/50 py-4 bg-white/95 backdrop-blur-sm">
             <nav className="space-y-1">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+                  className="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 mx-2"
                   onClick={handleInternalNavigation}
                 >
                   {item.name}
                 </Link>
               ))}
             </nav>
-            <div className="mt-6 pt-4 border-t space-y-2">
-              <Button variant="outline" asChild className="w-full h-12">
+            <div className="mt-6 pt-4 border-t border-slate-200/50 px-2 space-y-2">
+              <Button
+                variant="outline"
+                asChild
+                className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
+              >
                 <Link href="/login" onClick={handleInternalNavigation}>
                   Área do Cliente
                 </Link>

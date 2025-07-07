@@ -1,35 +1,27 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { ModernCategoryModal, type CategoryData } from '@/components/ui/modern-category-modal';
 import { useToast } from '@/hooks/use-toast';
+import { AnimatePresence, motion } from 'framer-motion';
+import * as LucideIcons from 'lucide-react';
 import {
-  Search,
-  Plus,
   Edit,
-  Trash2,
-  Tag,
   Eye,
+  FileText,
+  Hash,
   Package,
   Palette,
-  Hash,
-  FileText,
-  Check,
+  Plus,
+  Search,
+  Tag,
+  Trash2,
 } from 'lucide-react';
-import * as LucideIcons from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface Category {
   id: string;
@@ -37,12 +29,14 @@ interface Category {
   description?: string;
   icon?: keyof typeof LucideIcons;
   iconColor?: string;
-  bgColor?: string;
+  backgroundColor?: string; // Renomeado para compatibilidade com TagData
   fontColor?: string;
   createdAt: string;
   _count?: {
     equipments: number;
   };
+  // Mantém compatibilidade com API existente
+  bgColor?: string;
 }
 
 export default function AdminCategoriesPage() {
@@ -51,18 +45,34 @@ export default function AdminCategoriesPage() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Novo estado para o ModernCategoryModal
+  const [isModernModalOpen, setIsModernModalOpen] = useState(false);
+  const [editingCategoryData, setEditingCategoryData] = useState<CategoryData | null>(null);
+
   const { toast } = useToast();
 
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    icon: undefined as keyof typeof LucideIcons | undefined,
-    iconColor: '#3b82f6',
-    bgColor: '#e0e7ff',
-    fontColor: '#1e40af',
+  // Função para converter Category para CategoryData
+  const categoryToCategoryData = (category: Category): CategoryData => ({
+    id: category.id,
+    name: category.name,
+    description: category.description || '',
+    backgroundColor: category.backgroundColor || category.bgColor || '#f0f9ff',
+    fontColor: category.fontColor || '#0c4a6e',
+    icon: category.icon || 'Package',
+    iconColor: category.iconColor || '#0ea5e9',
+  });
+
+  // Função para converter CategoryData para Category
+  const categoryDataToCategory = (categoryData: CategoryData): Partial<Category> => ({
+    name: categoryData.name,
+    description: categoryData.description,
+    backgroundColor: categoryData.backgroundColor,
+    bgColor: categoryData.backgroundColor, // Mantém compatibilidade
+    fontColor: categoryData.fontColor,
+    icon: categoryData.icon,
+    iconColor: categoryData.iconColor,
   });
 
   useEffect(() => {
@@ -113,94 +123,48 @@ export default function AdminCategoriesPage() {
     setFilteredCategories(filtered);
   };
 
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      description: '',
-      icon: undefined,
-      iconColor: '#3b82f6',
-      bgColor: '#e0e7ff',
-      fontColor: '#1e40af',
+  // Novas funções para o ModernCategoryModal
+  const openNewCategoryModal = () => {
+    setEditingCategoryData(null);
+    setIsModernModalOpen(true);
+  };
+
+  const openEditCategoryModal = (category: Category) => {
+    setEditingCategoryData(categoryToCategoryData(category));
+    setIsModernModalOpen(true);
+  };
+
+  const handleCategorySave = async (categoryData: CategoryData) => {
+    const isEditing = !!editingCategoryData?.id;
+    const url = isEditing
+      ? `/api/admin/categories/${editingCategoryData.id}`
+      : '/api/admin/categories';
+    const method = isEditing ? 'PUT' : 'POST';
+
+    const categoryPayload = categoryDataToCategory(categoryData);
+
+    const response = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(categoryPayload),
     });
-    setEditingCategory(null);
-  };
 
-  const openCreateDialog = () => {
-    resetForm();
-    setIsFormDialogOpen(true);
-  };
-
-  const openEditDialog = (category: Category) => {
-    setFormData({
-      name: category.name,
-      description: category.description || '',
-      icon: category.icon || undefined,
-      iconColor: category.iconColor || '#3b82f6',
-      bgColor: category.bgColor || '#e0e7ff',
-      fontColor: category.fontColor || '#1e40af',
-    });
-    setEditingCategory(category);
-    setIsFormDialogOpen(true);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name.trim()) {
-      toast({
-        title: 'Erro',
-        description: 'O nome da categoria é obrigatório.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const url = editingCategory
-        ? `/api/admin/categories/${editingCategory.id}`
-        : '/api/admin/categories';
-      const method = editingCategory ? 'PUT' : 'POST';
-
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        toast({
-          title: 'Sucesso',
-          description: editingCategory ? 'Categoria atualizada!' : 'Categoria criada!',
-        });
-        fetchCategories();
-        setIsFormDialogOpen(false);
-        resetForm();
+    if (!response.ok) {
+      const errorData = await response.json();
+      if (response.status === 409) {
+        throw new Error('Categoria já existente');
       } else {
-        const errorData = await response.json();
-        if (response.status === 409) {
-          toast({
-            title: 'Erro',
-            description: 'Categoria já existente',
-            variant: 'destructive',
-          });
-        } else {
-          toast({
-            title: 'Erro',
-            description: errorData.error || 'Erro ao salvar categoria',
-            variant: 'destructive',
-          });
-        }
+        throw new Error(errorData.error || 'Erro ao salvar categoria');
       }
-    } catch (error) {
-      console.error('Error saving category:', error);
-      toast({
-        title: 'Erro',
-        description: 'Erro ao salvar categoria',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSubmitting(false);
     }
+
+    // Recarrega as categorias
+    await fetchCategories();
+
+    toast({
+      title: 'Sucesso',
+      description: isEditing ? 'Categoria atualizada com sucesso' : 'Categoria criada com sucesso',
+    });
   };
 
   const deleteCategory = async (categoryId: string) => {
@@ -242,9 +206,7 @@ export default function AdminCategoriesPage() {
     if (!iconName || !LucideIcons[iconName]) return <Tag className="h-4 w-4 text-gray-400" />;
 
     const IconComponent = LucideIcons[iconName] as React.ComponentType<any>;
-    return (
-      <IconComponent size={16} color={color || formData.iconColor} className="flex-shrink-0" />
-    );
+    return <IconComponent size={16} color={color || '#3b82f6'} className="flex-shrink-0" />;
   };
 
   const getCategoryBadge = (category: Category) => {
@@ -253,7 +215,7 @@ export default function AdminCategoriesPage() {
         variant="outline"
         className="inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-300 max-w-full"
         style={{
-          backgroundColor: category.bgColor || '#e0e7ff',
+          backgroundColor: category.backgroundColor || category.bgColor || '#e0e7ff',
           color: category.fontColor || '#1e40af',
           boxShadow: `0 2px 8px ${category.fontColor || '#1e40af'}15, 0 1px 4px ${category.fontColor || '#1e40af'}08`,
         }}
@@ -333,7 +295,7 @@ export default function AdminCategoriesPage() {
                   />
                 </div>
                 <Button
-                  onClick={openCreateDialog}
+                  onClick={openNewCategoryModal}
                   className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4"
                 >
                   <Plus className="w-4 h-4 mr-2" />
@@ -368,7 +330,7 @@ export default function AdminCategoriesPage() {
                 </div>
                 {!searchTerm && (
                   <Button
-                    onClick={openCreateDialog}
+                    onClick={openNewCategoryModal}
                     className="mt-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white hover:scale-105 transition-all duration-300"
                   >
                     <Plus className="w-4 h-4 mr-2" />
@@ -433,7 +395,7 @@ export default function AdminCategoriesPage() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => openEditDialog(category)}
+                              onClick={() => openEditCategoryModal(category)}
                               className="flex-shrink-0"
                             >
                               <Edit className="w-4 h-4" />
@@ -524,157 +486,15 @@ export default function AdminCategoriesPage() {
           </DialogContent>
         </Dialog>
 
-        {/* Modal de Criação/Edição */}
-        <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="text-xl">
-                {editingCategory ? 'Editar Categoria' : 'Nova Categoria'}
-              </DialogTitle>
-            </DialogHeader>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <Label htmlFor="cat-name" className="text-sm font-medium">
-                  Nome da Categoria *
-                </Label>
-                <Input
-                  id="cat-name"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="Ex: Andaimes e Escadas"
-                  className="mt-1"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="cat-description" className="text-sm font-medium">
-                  Descrição
-                </Label>
-                <Textarea
-                  id="cat-description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Breve descrição da categoria"
-                  rows={3}
-                  className="mt-1"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label className="text-sm font-medium">Ícone</Label>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full mt-1 flex items-center justify-start text-left"
-                  >
-                    {renderIcon(formData.icon, formData.iconColor)}
-                    <span className="ml-2 truncate">
-                      {formData.icon ? 'Ícone Selecionado' : 'Selecionar Ícone'}
-                    </span>
-                  </Button>
-                </div>
-                <div>
-                  <Label htmlFor="cat-iconColor" className="text-sm font-medium">
-                    Cor do Ícone
-                  </Label>
-                  <Input
-                    id="cat-iconColor"
-                    type="color"
-                    value={formData.iconColor}
-                    onChange={(e) => setFormData({ ...formData, iconColor: e.target.value })}
-                    className="mt-1 w-full h-10 p-1"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="cat-bgColor" className="text-sm font-medium">
-                    Cor de Fundo do Badge
-                  </Label>
-                  <Input
-                    id="cat-bgColor"
-                    type="color"
-                    value={formData.bgColor}
-                    onChange={(e) => setFormData({ ...formData, bgColor: e.target.value })}
-                    className="mt-1 w-full h-10 p-1"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="cat-fontColor" className="text-sm font-medium">
-                    Cor da Fonte do Badge
-                  </Label>
-                  <Input
-                    id="cat-fontColor"
-                    type="color"
-                    value={formData.fontColor}
-                    onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
-                    className="mt-1 w-full h-10 p-1"
-                  />
-                </div>
-              </div>
-
-              {/* Preview do Badge */}
-              <div>
-                <Label className="text-sm font-medium">Preview</Label>
-                <div className="mt-2 p-4 bg-gray-50 rounded-lg flex items-center justify-center gap-3">
-                  <span className="text-sm text-gray-600">Badge:</span>
-                  <Badge
-                    variant="outline"
-                    className="inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-300 max-w-full"
-                    style={{
-                      backgroundColor: formData.bgColor,
-                      color: formData.fontColor,
-                      boxShadow: `0 2px 8px ${formData.fontColor}15, 0 1px 4px ${formData.fontColor}08`,
-                    }}
-                  >
-                    <span className="flex-shrink-0">
-                      {renderIcon(formData.icon, formData.iconColor)}
-                    </span>
-                    <span className="truncate font-semibold text-sm min-w-0">
-                      {formData.name || 'Nome da Categoria'}
-                    </span>
-                  </Badge>
-                </div>
-              </div>
-
-              <DialogFooter className="flex-col sm:flex-row gap-2 sm:gap-0">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsFormDialogOpen(false)}
-                  className="w-full sm:w-auto"
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white w-full sm:w-auto hover:scale-105 transition-all duration-300"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                        className="w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"
-                      />
-                      {editingCategory ? 'Atualizando...' : 'Criando...'}
-                    </>
-                  ) : (
-                    <>
-                      <Check className="mr-2 h-4 w-4" />
-                      {editingCategory ? 'Atualizar Categoria' : 'Criar Categoria'}
-                    </>
-                  )}
-                </Button>
-              </DialogFooter>
-            </form>
-          </DialogContent>
-        </Dialog>
+        {/* Novo ModernCategoryModal */}
+        <ModernCategoryModal
+          isOpen={isModernModalOpen}
+          onClose={() => setIsModernModalOpen(false)}
+          onSave={handleCategorySave}
+          initialData={editingCategoryData || undefined}
+          title={editingCategoryData ? 'Editar Categoria' : 'Nova Categoria'}
+          saveButtonText={editingCategoryData ? 'Atualizar Categoria' : 'Criar Categoria'}
+        />
       </div>
     </div>
   );

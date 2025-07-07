@@ -1,7 +1,7 @@
 {
   "engines": {
-  "npm": "please-use-pnpm",
-  "pnpm": ">=8.0.0"
+    "npm": "please-use-pnpm",
+    "pnpm": ">=8.0.0"
   },
   "name": "my-v0-project",
   "version": "0.1.0",
@@ -128,6 +128,4 @@
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vitest": "^3.2.4"
   }
-
 }
-

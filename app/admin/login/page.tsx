@@ -21,18 +21,27 @@ export default function AdminLoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
 
-  // Measure header height to offset the login panel correctly
+  // Measure header height to properly center the login block
   useEffect(() => {
-    const headerEl = document.querySelector('header');
-    if (!headerEl) return;
-
-    const updateHeight = () => {
-      setHeaderHeight(headerEl.getBoundingClientRect().height);
+    const measureHeader = () => {
+      const headerEl = document.querySelector('header');
+      if (headerEl) {
+        const height = headerEl.getBoundingClientRect().height;
+        setHeaderHeight(height);
+      }
     };
 
-    updateHeight();
-    window.addEventListener('resize', updateHeight);
-    return () => window.removeEventListener('resize', updateHeight);
+    // Measure on mount
+    measureHeader();
+    // Measure on resize
+    window.addEventListener('resize', measureHeader);
+    // Measure after a short delay to ensure header is fully rendered
+    const timer = setTimeout(measureHeader, 100);
+
+    return () => {
+      window.removeEventListener('resize', measureHeader);
+      clearTimeout(timer);
+    };
   }, []);
 
   // Check if user is already authenticated
@@ -99,125 +108,164 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 overflow-hidden">
       <Header />
       <div
-        className="flex items-center justify-center px-3 sm:px-4 md:px-6"
+        className="flex items-center justify-center px-4 relative"
         style={{
-          minHeight: `calc(100vh - ${headerHeight}px)`,
-          paddingTop: `${Math.max(headerHeight + 12, 60)}px`,
+          height: `calc(100vh - ${headerHeight || 80}px)`,
+          marginTop: `${headerHeight || 80}px`,
         }}
       >
-        <Card className="w-full max-w-sm sm:max-w-md shadow-xl border-0 bg-white/95 backdrop-blur-sm">
-          <CardHeader className="text-center space-y-3 pb-4 px-4 sm:px-6">
-            <div className="mx-auto flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-gradient-to-br from-slate-700 to-slate-800 text-white shadow-lg">
-              <span className="text-lg sm:text-xl font-bold">GB</span>
-            </div>
-            <div className="space-y-1">
-              <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold text-slate-800">
-                Painel Administrativo
-              </CardTitle>
-              <CardDescription className="text-slate-600 text-xs sm:text-sm">
-                Acesse com suas credenciais de administrador
-              </CardDescription>
-            </div>
-          </CardHeader>
+        {/* Background decorativo */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-1000"></div>
+        </div>
 
-          <CardContent className="px-4 sm:px-6 pb-4 space-y-4">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <Alert variant="destructive" className="border-red-200 bg-red-50">
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertTitle className="text-red-800 text-sm">Erro de Login</AlertTitle>
-                  <AlertDescription className="text-red-700 text-xs sm:text-sm">
-                    {error}
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-slate-700 font-medium text-xs sm:text-sm">
-                  E-mail
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="admin@gblocacoes.com.br"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isLoading}
-                  className="h-10 sm:h-11 border-slate-200 focus:border-slate-400 focus:ring-slate-400 text-sm placeholder:text-slate-400"
-                  aria-label="Digite seu e-mail de administrador"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="password" className="text-slate-700 font-medium text-xs sm:text-sm">
-                  Senha
-                </Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Digite sua senha"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={isLoading}
-                    className="h-10 sm:h-11 border-slate-200 focus:border-slate-400 focus:ring-slate-400 pr-10 text-sm placeholder:text-slate-400"
-                    aria-label="Digite sua senha de administrador"
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
-                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-slate-500" />
-                    ) : (
-                      <Eye className="h-4 w-4 text-slate-500" />
-                    )}
-                  </Button>
+        {/* Container do login centralizado */}
+        <div className="w-full max-w-md relative z-10">
+          <Card
+            className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in"
+            style={{
+              maxHeight: `calc(100vh - ${(headerHeight || 80) + 80}px)`,
+            }}
+          >
+            <div
+              className="overflow-y-auto rounded-2xl"
+              style={{
+                maxHeight: `calc(100vh - ${(headerHeight || 80) + 80}px)`,
+              }}
+            >
+              <CardHeader className="text-center space-y-4 py-6 px-6 animate-fade-in-up">
+                {/* Logo melhorado com animação */}
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white shadow-xl ring-4 ring-slate-200/30 animate-scale-in relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-60"></div>
+                  <span className="text-2xl font-bold tracking-tight relative z-10">GB</span>
                 </div>
-              </div>
+                {/* Título e descrição centralizados */}
+                <div className="space-y-2 max-w-sm mx-auto">
+                  <CardTitle className="text-2xl font-bold text-slate-800 tracking-tight leading-tight">
+                    Painel Administrativo
+                  </CardTitle>
+                  <CardDescription className="text-slate-600 text-sm leading-relaxed">
+                    Acesse com suas credenciais de administrador
+                  </CardDescription>
+                </div>
+              </CardHeader>
 
-              <Button
-                type="submit"
-                className="w-full h-10 sm:h-11 bg-slate-700 hover:bg-slate-800 text-white font-semibold text-sm shadow-lg hover:shadow-xl transition-all duration-200 focus:ring-2 focus:ring-slate-400 focus:ring-offset-2"
-                disabled={isLoading}
-                aria-label="Entrar no Painel Administrativo"
-              >
-                {isLoading ? (
-                  <div className="flex items-center gap-2">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                    <span className="text-sm">Entrando...</span>
+              <CardContent className="px-6 pb-6 space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-5 max-w-sm mx-auto">
+                  {error && (
+                    <Alert
+                      variant="destructive"
+                      className="border-red-200 bg-red-50/90 backdrop-blur-sm rounded-2xl shadow-md"
+                    >
+                      <AlertTriangle className="h-4 w-4" />
+                      <AlertTitle className="text-red-800 text-sm font-semibold">
+                        Erro de Login
+                      </AlertTitle>
+                      <AlertDescription className="text-red-700 text-sm leading-relaxed">
+                        {error}
+                      </AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="email"
+                      className="text-slate-700 font-semibold text-sm block text-left"
+                    >
+                      E-mail
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="admin@gblocacoes.com.br"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isLoading}
+                      className="h-12 border-slate-300 focus:border-slate-500 focus:ring-slate-500 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-lg"
+                      aria-label="Digite seu e-mail de administrador"
+                    />
                   </div>
-                ) : (
-                  'Entrar no Painel'
-                )}
-              </Button>
-            </form>
 
-            {/* Seção de informações compacta */}
-            <div className="text-center space-y-2 pt-3 border-t border-slate-200">
-              <div className="text-xs text-slate-500">
-                <p className="font-medium mb-1">Credenciais padrão para teste:</p>
-                <div className="font-mono text-xs bg-slate-100 px-2 py-1.5 rounded text-slate-600">
-                  <div>admin@gblocacoes.com.br</div>
-                  <div>admin123</div>
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="password"
+                      className="text-slate-700 font-semibold text-sm block text-left"
+                    >
+                      Senha
+                    </Label>
+                    <div className="relative">
+                      <Input
+                        id="password"
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Digite sua senha"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        disabled={isLoading}
+                        className="h-12 border-slate-300 focus:border-slate-500 focus:ring-slate-500 pr-12 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-lg"
+                        aria-label="Digite sua senha de administrador"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100 rounded-2xl transition-all duration-200"
+                        onClick={() => setShowPassword(!showPassword)}
+                        disabled={isLoading}
+                        aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4 text-slate-500" />
+                        ) : (
+                          <Eye className="h-4 w-4 text-slate-500" />
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="pt-1">
+                    <Button
+                      type="submit"
+                      className="w-full h-12 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 transform hover:scale-[1.02] disabled:transform-none rounded-2xl"
+                      disabled={isLoading}
+                      aria-label="Entrar no Painel Administrativo"
+                    >
+                      {isLoading ? (
+                        <div className="flex items-center gap-2">
+                          <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                          <span className="text-sm">Entrando...</span>
+                        </div>
+                      ) : (
+                        'Entrar no Painel'
+                      )}
+                    </Button>
+                  </div>
+                </form>
+
+                {/* Seção de informações melhorada e centralizada */}
+                <div className="text-center space-y-3 pt-4 border-t border-slate-200/60 max-w-sm mx-auto">
+                  <div className="text-xs text-slate-500">
+                    <p className="font-semibold mb-2 text-slate-600 text-sm">
+                      Credenciais padrão para teste:
+                    </p>
+                    <div className="font-mono text-xs bg-gradient-to-r from-slate-100 to-slate-50 px-3 py-2.5 rounded-2xl text-slate-700 border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow duration-200">
+                      <div className="font-medium">admin@gblocacoes.com.br</div>
+                      <div className="font-medium mt-1">admin123</div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 pt-2 leading-relaxed">
+                    © 2024 GB Locações - Sistema Administrativo
+                  </p>
                 </div>
-              </div>
-              <p className="text-xs text-slate-400 pt-1">
-                © 2024 GB Locações - Sistema Administrativo
-              </p>
+              </CardContent>
             </div>
-          </CardContent>
-        </Card>
+          </Card>
+        </div>
       </div>
     </div>
   );

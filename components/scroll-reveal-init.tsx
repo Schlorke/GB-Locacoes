@@ -1,10 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
-
 export default function ScrollRevealInit() {
-  const pathname = usePathname();
   const [isHydrated, setIsHydrated] = useState(false);
 
   // Aguardar hidratação completa
@@ -294,7 +291,7 @@ export default function ScrollRevealInit() {
       cleanup();
       window.removeEventListener('load', handleLoad);
     };
-  }, [pathname, isHydrated]);
+  }, [isHydrated]);
 
   return null;
 }

@@ -366,105 +366,45 @@ section {
   animation: count-up 1s ease-out forwards;
 }
 
-.animation-delay-1000 {
-  animation-delay: 1s;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-500 {
-  animation-delay: 0.5s;
-}
-
-/* 3D Card Effects */
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-.preserve-3d {
-  transform-style: preserve-3d;
-}
-
-.backface-hidden {
-  backface-visibility: hidden;
-}
-
-.rotate-y-180 {
-  transform: rotateY(180deg);
-}
-
-/* Gradient backgrounds */
-.bg-gradient-radial {
-  background: radial-gradient(circle, var(--tw-gradient-stops));
-}
-
-/* Focus styles for accessibility */
-.focus-visible:focus-visible {
-  outline: 2px solid #111827; /* slate-700 */
-  outline-offset: 2px;
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+@layer utilities {
+  .animation-delay-1000 {
+    animation-delay: 1s;
   }
 
-  /* Show content immediately for reduced motion */
-  .hero-title,
-  .hero-subtitle,
-  .hero-search,
-  .hero-buttons,
-  .hero-contact,
-  .hero-image,
-  .section-title,
-  .section-subtitle,
-  .category-card,
-  .material-card,
-  .benefit-card,
-  .contact-form,
-  .contact-info,
-  .cta-section {
-    opacity: 1 !important;
-    transform: none !important;
+  .animation-delay-2000 {
+    animation-delay: 2s;
   }
 }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .bg-gradient-to-br {
-    background: theme('colors.blue.600') !important;
+/* Animações suaves para o login */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-
-  .text-blue-100 {
-    color: white !important;
-  }
-}
-
-/* Print styles */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-
-  * {
-    animation: none !important;
-    transition: none !important;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Loading states */
-.loading-skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s ease-out;
 }
 
 @keyframes loading {

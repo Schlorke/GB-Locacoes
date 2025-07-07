@@ -1,14 +1,15 @@
 // eslint.config.js
+import css from '@eslint/css';
 import js from '@eslint/js';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
-import react from 'eslint-plugin-react';
 import json from '@eslint/json';
 import markdown from '@eslint/markdown';
-import css from '@eslint/css';
 import parser from '@typescript-eslint/parser';
-import { defineConfig } from 'eslint/config';
+import configPrettier from 'eslint-config-prettier';
 import prettier from 'eslint-plugin-prettier';
+import react from 'eslint-plugin-react';
+import { defineConfig } from 'eslint/config';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default defineConfig({
   ignores: ['**/*.css', '**/*.module.css', '**/node_modules/**', '**/.next/**', 'eslint.config.js'],
@@ -43,6 +44,7 @@ export default defineConfig({
   rules: {
     ...js.configs.recommended.rules,
     ...tseslint.configs.recommended[0].rules,
+    ...configPrettier.rules,
     'prettier/prettier': 'error',
     'react/display-name': 'off',
     'react/react-in-jsx-scope': 'off',
