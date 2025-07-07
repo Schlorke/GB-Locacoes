@@ -600,37 +600,28 @@ div[class*="text-xs"][class*="inline-flex"][class*="items-center"][class*="gap-2
   }
 }
 
-/* Popover dentro de modal - posicionamento correto */
-[role="dialog"] [data-radix-popover-content] {
-  position: absolute !important;
+/* Popover centralizado dentro da modal */
+.modal-centered-popover {
+  position: fixed !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  top: 100% !important;
-  margin-top: 8px !important;
   z-index: 99999 !important;
   max-height: 70vh !important;
   overflow-y: auto !important;
 }
 
-/* Garantir que o trigger seja relativo */
-[role="dialog"] [data-radix-popover-trigger] {
-  position: relative !important;
+/* Garantir que o popover fique sempre embaixo do trigger */
+[role="dialog"] .modal-centered-popover[data-side="bottom"] {
+  position: fixed !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  top: auto !important;
+  margin-top: 8px !important;
 }
 
-/* Container do popover deve ser relativo */
-[role="dialog"] .relative {
-  position: relative !important;
-}
-
-/* Forçar que o popover sempre apareça embaixo */
-[role="dialog"] [data-radix-popover-content][data-side="top"] {
+/* Forçar que o popover nunca apareça em cima */
+[role="dialog"] .modal-centered-popover[data-side="top"] {
   display: none !important;
-}
-
-/* Garantir que o wrapper não interfira */
-[role="dialog"] [data-radix-popper-content-wrapper] {
-  position: relative !important;
-  z-index: 99999 !important;
 }
 
 /* Classes utilitárias para modal de categoria */
