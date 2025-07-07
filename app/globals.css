@@ -279,9 +279,7 @@ section {
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(30px);
-  transition:
-    opacity 0.8s ease-out,
-    transform 0.8s ease-out;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
 .animate-on-scroll.animate-in {
@@ -292,9 +290,7 @@ section {
 .animate-on-scroll-delayed {
   opacity: 0;
   transform: translateY(30px);
-  transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   transition-delay: 0.2s;
 }
 
@@ -307,9 +303,7 @@ section {
 .category-card-animate {
   opacity: 0;
   transform: translateY(30px);
-  transition:
-    opacity 0.8s ease-out,
-    transform 0.8s ease-out;
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
 .category-card-animate.animate-in {
@@ -439,15 +433,15 @@ section {
 
 /* Selection styles */
 ::selection {
-  background-color: theme('colors.blue.200');
-  color: theme('colors.blue.900');
+  background-color: theme("colors.blue.200");
+  color: theme("colors.blue.900");
 }
 
 /* Form enhancements */
 input:focus,
 textarea:focus,
 select:focus {
-  box-shadow: 0 0 0 3px theme('colors.blue.100');
+  box-shadow: 0 0 0 3px theme("colors.blue.100");
 }
 
 /* Button hover effects */
@@ -553,9 +547,7 @@ body.admin-body-layout {
 
 /* Correção específica para transição de sombra do formulário de contato */
 .contact-form-hover {
-  transition:
-    box-shadow 0.5s ease,
-    transform 0.3s ease !important;
+  transition: box-shadow 0.5s ease, transform 0.3s ease !important;
 }
 
 .contact-form-hover:hover {
@@ -563,7 +555,7 @@ body.admin-body-layout {
 }
 
 /* Badge customizations - bordas mais arredondadas apenas para badges */
-div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2'] {
+div[class*="text-xs"][class*="inline-flex"][class*="items-center"][class*="gap-2"] {
   border-radius: 9999px !important;
 }
 
@@ -584,13 +576,13 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
 }
 
-/* Modal e Popover - Centralização perfeita */
+/* Modal e Popover - Posicionamento Simplificado */
 [data-radix-popper-content-wrapper] {
   z-index: 999999 !important;
 }
 
 /* Garantir centralização perfeita de modais */
-[role='dialog'] {
+[role="dialog"] {
   position: fixed !important;
   left: 50% !important;
   top: 50% !important;
@@ -602,158 +594,33 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Responsividade para telas pequenas */
 @media (max-width: 640px) {
-  [role='dialog'] {
+  [role="dialog"] {
     max-width: 95vw !important;
     max-height: 95vh !important;
   }
 }
 
-/* Popover dentro de modal - configurações específicas */
-[role='dialog'] [data-radix-popover-content] {
-  position: fixed !important;
+/* Popover dentro de modal - posicionamento centralizado */
+[role="dialog"] [data-radix-popover-content] {
+  position: absolute !important;
   z-index: 99999 !important;
-  transform-origin: center top !important;
-  inset: auto !important;
-}
-
-/* Garantir que popovers dentro de modais fiquem posicionados corretamente */
-[role='dialog'] [data-radix-popover-trigger] {
-  position: relative !important;
-}
-
-/* Forçar popover sempre embaixo, nunca em cima */
-[role='dialog'] [data-radix-popover-content][data-side='bottom'] {
-  position: fixed !important;
-  z-index: 99999 !important;
-  transform-origin: right top !important;
-}
-
-/* Forçar que o popover sempre apareça embaixo, mesmo se não houver espaço */
-[role='dialog'] [data-radix-popover-content] {
-  --radix-popover-trigger-transform-origin: center top !important;
-  transform-origin: center top !important;
-}
-
-/* Evitar que o popover apareça em cima - FORÇAR SEMPRE EMBAIXO */
-[role='dialog'] [data-radix-popover-content][data-side='top'] {
-  display: none !important;
-}
-
-/* Radix UI - Forçar que o popover sempre use side="bottom" */
-[role='dialog'] [data-radix-popper-content-wrapper] {
-  --radix-popover-content-available-height: 100vh !important;
-}
-
-/* Garantir que sempre há espaço embaixo para o popover */
-[role='dialog'] [data-radix-popover-content] {
-  --radix-popover-content-transform-origin: var(
-    --radix-popover-content-transform-origin,
-    center top
-  ) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  margin: 0 auto !important;
   max-height: 70vh !important;
   overflow-y: auto !important;
 }
 
-/* Sobrescrever qualquer tentativa do Radix de posicionar acima */
-[data-radix-popover-content][data-side='top'],
-[data-radix-popover-content][data-side='top'][data-align='start'],
-[data-radix-popover-content][data-side='top'][data-align='center'],
-[data-radix-popover-content][data-side='top'][data-align='end'] {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
+/* Garantir que o popover sempre apareça embaixo do trigger */
+[role="dialog"] [data-radix-popover-content][data-side="bottom"] {
+  top: 100% !important;
+  margin-top: 8px !important;
 }
 
-/* Forçar que QUALQUER popover sempre use bottom side */
-[data-radix-popover-content]:not([data-side='bottom']) {
-  display: none !important;
-}
-
-/* Garantir que o popover dentro do modal sempre apareça embaixo */
-[role='dialog'] [data-radix-popover-content] {
-  --radix-popover-content-side: bottom !important;
-  max-height: min(70vh, 500px) !important;
-  top: auto !important;
-  bottom: auto !important;
-}
-
-/* Garantir posicionamento correto quando alinhado à direita */
-[data-align='end'][data-side='bottom'] {
-  transform-origin: right top !important;
-}
-
-/* Popover trigger específico para modal */
-[role='dialog'] .relative [data-radix-popover-trigger] {
-  display: flex !important;
-  justify-content: center !important;
-}
-
-/* Solução definitiva - forçar posicionamento correto do popover dentro do modal */
-[role='dialog'] [data-radix-popper-content-wrapper] {
-  position: fixed !important;
-  z-index: 99999 !important;
-  inset: auto !important;
-}
-
-/* Centralizar popover em relação ao viewport quando dentro de modal */
-[role='dialog'] [data-radix-popover-content][data-side='bottom'][data-align='center'] {
-  position: fixed !important;
-  left: 50% !important;
-  top: auto !important;
-  transform: translateX(-50%) !important;
-  z-index: 99999 !important;
-}
-
-/* Classe específica para popover centralizado na modal */
-.popover-centered-in-modal[data-side='bottom'] {
-  position: fixed !important;
-  left: 50% !important;
-  transform: translateX(-80%) !important;
-  z-index: 99999 !important;
-}
-
-/* Sobrescrever completamente o posicionamento do Radix para popovers centralizados */
-[role='dialog'] [data-radix-popover-content].popover-centered-in-modal,
-[role='dialog'] [data-radix-popper-content-wrapper] .popover-centered-in-modal {
-  position: fixed !important;
-  left: 50% !important;
-  right: auto !important;
-  transform: translateX(-50%) !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  inset: auto !important;
-}
-
-/* Garantir que o wrapper do Radix não interfira */
-[role='dialog'] [data-radix-popper-content-wrapper]:has(.popover-centered-in-modal) {
-  position: fixed !important;
+/* Forçar alinhamento central */
+[role="dialog"] [data-radix-popover-content][data-align="center"] {
   left: 50% !important;
   transform: translateX(-50%) !important;
-  width: auto !important;
-}
-
-/* Popover centralizado */
-[data-side='bottom'] {
-  transform-origin: center top !important;
-}
-
-[data-side='top'] {
-  transform-origin: center bottom !important;
-}
-
-[data-side='left'] {
-  transform-origin: right center !important;
-}
-
-[data-side='right'] {
-  transform-origin: left center !important;
-}
-
-/* Garantir que popovers fiquem alinhados ao centro do trigger */
-[data-align='center'] {
-  --radix-popper-anchor-width: auto !important;
-  --radix-popper-anchor-height: auto !important;
 }
 
 /* Classes utilitárias para modal de categoria */

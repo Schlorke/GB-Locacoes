@@ -40,7 +40,7 @@ Reverter todas as alterações experimentais relacionadas ao suporte de login/ad
 
 ### 🎯 NextAuth Configuração Limpa
 
-```typescript
+\`\`\`typescript
 // lib/auth.ts - NextAuth options padrão
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -55,11 +55,11 @@ export const authOptions: NextAuthOptions = {
   callbacks: { jwt, session },
   pages: { signIn: '/admin/login' },
 };
-```
+\`\`\`
 
 ### 🛡️ Middleware Seguro
 
-```typescript
+\`\`\`typescript
 // middleware.ts - Proteção NextAuth
 export default withAuth(
   function middleware(_req) {
@@ -74,11 +74,11 @@ export default withAuth(
     },
   },
 );
-```
+\`\`\`
 
 ### 🖥️ Componentes Admin Limpos
 
-```tsx
+\`\`\`tsx
 // Exemplo: admin-sidebar.tsx
 import { useSession, signOut } from 'next-auth/react';
 
@@ -88,7 +88,7 @@ const user = session?.user;
 const handleLogout = () => {
   signOut({ callbackUrl: '/admin/login' });
 };
-```
+\`\`\`
 
 ## 🚀 BENEFÍCIOS ALCANÇADOS
 
@@ -122,14 +122,14 @@ const handleLogout = () => {
 
 ### 🔍 Validação de Limpeza
 
-```bash
+\`\`\`bash
 # Busca por referências experimentais (todas zeradas):
 ❌ simple-browser: 0 matches (exceto backups)
 ❌ unified-auth: 0 matches
 ❌ experimental: 0 matches
 ❌ interceptor: 0 matches
 ✅ NextAuth: Funcionando perfeitamente
-```
+\`\`\`
 
 ### 📝 Próximos Passos Recomendados
 

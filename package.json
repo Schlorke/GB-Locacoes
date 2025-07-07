@@ -1,8 +1,4 @@
 {
-  "engines": {
-    "npm": "please-use-pnpm",
-    "pnpm": ">=8.0.0"
-  },
   "name": "my-v0-project",
   "version": "0.1.0",
   "private": true,
@@ -11,15 +7,15 @@
     "build": "next build",
     "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'",
     "dev": "next dev --turbopack",
+    "format": "prettier --write \"**/*.{js,ts,tsx,json,md,css}\" --ignore-path .gitignore",
+    "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md,css}\" --ignore-path .gitignore",
+    "preinstall": "npx only-allow pnpm",
     "postinstall": "prisma generate",
     "lint": "eslint app components --ext .ts,.tsx --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
     "lint:fix": "eslint app components --ext .js,.ts,.tsx --fix --ignore-pattern '**/*.css' --ignore-pattern '**/*.module.css'",
-    "format": "prettier --write \"**/*.{js,ts,tsx,json,md,css}\" --ignore-path .gitignore",
-    "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md,css}\" --ignore-path .gitignore",
     "seed": "tsx prisma/seed.ts",
     "start": "next start",
-    "test": "vitest run",
-    "preinstall": "npx only-allow pnpm"
+    "test": "vitest run"
   },
   "eslintIgnore": [
     "**/*.css"
@@ -27,6 +23,7 @@
   "dependencies": {
     "@auth/core": "latest",
     "@edge-runtime/vm": "latest",
+    "@emotion/is-prop-valid": "latest",
     "@hookform/resolvers": "^3.9.1",
     "@prisma/client": "latest",
     "@radix-ui/react-accordion": "latest",
@@ -57,7 +54,9 @@
     "@radix-ui/react-toggle-group": "latest",
     "@radix-ui/react-tooltip": "latest",
     "@sveltejs/kit": "latest",
+    "@testing-library/dom": "latest",
     "@types/debug": "latest",
+    "@types/eslint": "latest",
     "@vercel/blob": "latest",
     "@vercel/speed-insights": "latest",
     "@vitest/browser": "latest",
@@ -70,14 +69,16 @@
     "date-fns": "latest",
     "dotenv": "latest",
     "embla-carousel-react": "latest",
-    "framer-motion": "^12.23.0",
+    "framer-motion": "latest",
     "happy-dom": "latest",
     "input-otp": "latest",
     "jiti": "latest",
     "lucide-react": "^0.454.0",
-    "next": "15.4.0-canary.112",
+    "next": "15.2.4",
     "next-auth": "latest",
     "next-themes": "latest",
+    "node:crypto": "latest",
+    "node:path": "latest",
     "nodemailer": "6.9.0",
     "react": "^19",
     "react-day-picker": "latest",
@@ -127,5 +128,9 @@
     "vite": "^7.0.0",
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vitest": "^3.2.4"
+  },
+  "engines": {
+    "npm": "please-use-pnpm",
+    "pnpm": ">=8.0.0"
   }
 }

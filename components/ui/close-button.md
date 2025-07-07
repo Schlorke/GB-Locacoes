@@ -11,7 +11,7 @@ Este é o componente universal de botão Close que deve ser usado em todo o proj
 
 ## Props
 
-```typescript
+\`\`\`typescript
 interface CloseButtonProps {
   onClick?: () => void; // Função chamada ao clicar
   className?: string; // Classes CSS customizadas
@@ -20,7 +20,7 @@ interface CloseButtonProps {
   disabled?: boolean; // Estado desabilitado
   'aria-label'?: string; // Label para acessibilidade
 }
-```
+\`\`\`
 
 ## Variantes
 
@@ -52,37 +52,37 @@ interface CloseButtonProps {
 
 ### Básico
 
-```tsx
+\`\`\`tsx
 import { CloseButton } from '@/components/ui/close-button';
 
 <CloseButton onClick={() => setIsOpen(false)} />;
-```
+\`\`\`
 
 ### Com variante ghost
 
-```tsx
+\`\`\`tsx
 <CloseButton onClick={() => setIsOpen(false)} variant="ghost" size="sm" />
-```
+\`\`\`
 
 ### Com classes customizadas
 
-```tsx
+\`\`\`tsx
 <CloseButton
   onClick={() => setIsOpen(false)}
   className="absolute top-4 right-4 text-red-500"
   variant="outline"
 />
-```
+\`\`\`
 
 ### Para uso com Radix UI
 
-```tsx
+\`\`\`tsx
 import * as Dialog from '@radix-ui/react-dialog';
 
 <Dialog.Close asChild>
   <CloseButton />
 </Dialog.Close>;
-```
+\`\`\`
 
 ## Componentes Já Atualizados
 
