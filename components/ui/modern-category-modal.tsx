@@ -484,7 +484,7 @@ export function ModernCategoryModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg fixed inset-0 m-auto h-fit overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95">
+      <DialogContent className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0">
         {/* Header */}
         <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg">
           <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
@@ -499,7 +499,7 @@ export function ModernCategoryModal({
         <ScrollArea className="flex-1 max-h-[calc(90vh-180px)]">
           <div className="p-6 space-y-6">
             {/* Preview da Categoria */}
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-slate-700">Preview da Categoria</h3>
                 <Popover open={isDesignOpen} onOpenChange={setIsDesignOpen}>
@@ -514,23 +514,24 @@ export function ModernCategoryModal({
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[400px] max-w-[calc(100vw-2rem)] p-0 shadow-2xl border-0 rounded-lg bg-white z-50"
+                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] popover-centered-in-modal"
                     align="center"
-                    side="left"
+                    side="bottom"
                     sideOffset={12}
                     alignOffset={0}
-                    avoidCollisions={true}
-                    collisionPadding={20}
-                    sticky="partial"
+                    avoidCollisions={false}
+                    collisionPadding={0}
+                    sticky="always"
+                    onOpenAutoFocus={(e) => e.preventDefault()}
+                    onCloseAutoFocus={(e) => e.preventDefault()}
+                    style={{
+                      pointerEvents: 'auto',
+                      touchAction: 'pan-y',
+                      overscrollBehavior: 'contain',
+                    }}
                   >
                     <div className="flex flex-col max-h-[70vh]">
-                      <div
-                        className="flex-1 overflow-y-auto p-4 space-y-4"
-                        style={{
-                          scrollbarWidth: 'thin',
-                          scrollbarColor: '#cbd5e1 transparent',
-                        }}
-                      >
+                      <div className="flex-1 overflow-y-auto p-4 space-y-4 modal-preview-scroll">
                         {/* Header */}
                         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                           <div className="flex items-center gap-2">
@@ -581,13 +582,7 @@ export function ModernCategoryModal({
                             <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
                           </div>
                           <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                            <div
-                              className="grid grid-cols-6 gap-2 max-h-40 overflow-y-auto pr-1"
-                              style={{
-                                scrollbarWidth: 'thin',
-                                scrollbarColor: '#cbd5e1 transparent',
-                              }}
-                            >
+                            <div className="icon-grid-responsive icon-grid-scroll">
                               {ICON_OPTIONS.filter((iconName) =>
                                 iconName.toLowerCase().includes(iconFilter.toLowerCase()),
                               )
@@ -603,7 +598,7 @@ export function ModernCategoryModal({
                                       })
                                     }
                                     className={cn(
-                                      'p-2 rounded-lg border transition-all duration-200 hover:scale-105 flex items-center justify-center group',
+                                      'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden',
                                       formData.icon === iconName
                                         ? 'border-blue-400 bg-blue-50 text-blue-700 shadow-md ring-2 ring-blue-200'
                                         : 'border-slate-200 hover:border-slate-300 hover:bg-white bg-white text-slate-600 hover:shadow-sm',
@@ -669,7 +664,7 @@ export function ModernCategoryModal({
                 </Popover>
               </div>
 
-              <div className="flex justify-center">
+              <div className="flex justify-center mb-4">
                 <Badge
                   variant="outline"
                   className="inline-flex items-center gap-3 font-semibold px-5 py-3 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-300"
@@ -679,7 +674,11 @@ export function ModernCategoryModal({
                     boxShadow: `0 4px 20px ${formData.fontColor}15, 0 2px 10px ${formData.fontColor}10`,
                   }}
                 >
-                  <span style={{ color: formData.iconColor }}>{renderIcon(formData.icon, 20)}</span>
+                  <span className="preview-icon">
+                    <span style={{ color: formData.iconColor }}>
+                      {renderIcon(formData.icon, 20)}
+                    </span>
+                  </span>
                   <span className="text-sm font-semibold">
                     {formData.name || 'Nome da Categoria'}
                   </span>
@@ -687,7 +686,7 @@ export function ModernCategoryModal({
               </div>
 
               {formData.description && (
-                <div className="text-center mt-4">
+                <div className="text-center">
                   <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
                     {formData.description}
                   </p>
