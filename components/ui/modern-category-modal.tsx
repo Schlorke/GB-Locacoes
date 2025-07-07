@@ -497,156 +497,158 @@ export function ModernCategoryModal({
             <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-slate-700">Preview da Categoria</h3>
-                <div className="flex justify-center w-full absolute left-0 top-0 pointer-events-none">
-                  <div className="pointer-events-auto">
-                    <Popover open={isDesignOpen} onOpenChange={setIsDesignOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-8 px-3 text-xs font-medium border-slate-300 hover:border-slate-400 hover:bg-white transition-all duration-200 rounded-lg shadow-sm bg-transparent relative z-10"
-                          style={{ marginTop: "16px" }}
-                        >
-                          <Edit className="w-3.5 h-3.5 mr-1.5" />
-                          Editar
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] modal-centered-popover"
-                        align="center"
-                        side="bottom"
-                        sideOffset={8}
-                        alignOffset={0}
-                        avoidCollisions={false}
-                        collisionPadding={0}
-                        sticky="always"
-                        onOpenAutoFocus={(e) => e.preventDefault()}
-                        onCloseAutoFocus={(e) => e.preventDefault()}
-                      >
-                        <div className="flex flex-col max-h-[70vh]">
-                          <div className="flex-1 overflow-y-auto p-4 space-y-4 modal-preview-scroll">
-                            {/* Header */}
-                            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                              <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                                  <Palette className="w-3.5 h-3.5 text-white" />
-                                </div>
-                                <h4 className="font-semibold text-base text-slate-800">Personalizar Design</h4>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => {
-                                    setFormData({ ...formData, icon: "" as keyof typeof LucideIcons })
-                                  }}
-                                  className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs"
-                                  title="Remover ícone"
-                                >
-                                  Remove
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => setIsDesignOpen(false)}
-                                  className="text-slate-400 hover:text-slate-600 h-7 px-2 rounded-lg"
-                                >
-                                  <X className="w-4 h-4" />
-                                </Button>
-                              </div>
+                <Popover open={isDesignOpen} onOpenChange={setIsDesignOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 px-3 text-xs font-medium border-slate-300 hover:border-slate-400 hover:bg-white transition-all duration-200 rounded-lg shadow-sm bg-transparent"
+                    >
+                      <Edit className="w-3.5 h-3.5 mr-1.5" />
+                      Editar
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999]"
+                    align="center"
+                    side="bottom"
+                    sideOffset={8}
+                    alignOffset={0}
+                    avoidCollisions={false}
+                    collisionPadding={0}
+                    sticky="always"
+                    onOpenAutoFocus={(e) => e.preventDefault()}
+                    onCloseAutoFocus={(e) => e.preventDefault()}
+                    style={{
+                      position: "fixed",
+                      left: "50%",
+                      top: "50%",
+                      transform: "translate(-50%, -50%)",
+                      zIndex: 99999,
+                    }}
+                  >
+                    <div className="flex flex-col max-h-[70vh]">
+                      <div className="flex-1 overflow-y-auto p-4 space-y-4 modal-preview-scroll">
+                        {/* Header */}
+                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                              <Palette className="w-3.5 h-3.5 text-white" />
                             </div>
-
-                            {/* Search Filter */}
-                            <div className="relative">
-                              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                              <Input
-                                placeholder="Buscar ícone..."
-                                value={iconFilter}
-                                onChange={(e) => setIconFilter(e.target.value)}
-                                className="pl-9 bg-slate-50 border-slate-200 h-9 text-sm placeholder:text-slate-400 rounded-lg focus:bg-white transition-colors"
-                              />
-                            </div>
-
-                            {/* Icons Grid */}
-                            <div className="space-y-3">
-                              <div className="flex items-center justify-between">
-                                <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
-                              </div>
-                              <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                                <div className="icon-grid-responsive icon-grid-scroll">
-                                  {ICON_OPTIONS.filter((iconName) =>
-                                    iconName.toLowerCase().includes(iconFilter.toLowerCase()),
-                                  )
-                                    .slice(0, 48)
-                                    .map((iconName) => (
-                                      <button
-                                        key={iconName}
-                                        type="button"
-                                        onClick={() =>
-                                          setFormData({
-                                            ...formData,
-                                            icon: iconName as keyof typeof LucideIcons,
-                                          })
-                                        }
-                                        className={cn(
-                                          "w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden",
-                                          formData.icon === iconName
-                                            ? "border-blue-400 bg-blue-50 text-blue-700 shadow-md ring-2 ring-blue-200"
-                                            : "border-slate-200 hover:border-slate-300 hover:bg-white bg-white text-slate-600 hover:shadow-sm",
-                                        )}
-                                        title={iconName}
-                                      >
-                                        {renderIcon(iconName as keyof typeof LucideIcons, 16)}
-                                      </button>
-                                    ))}
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Color Sections */}
-                            <div className="space-y-3">
-                              <h5 className="text-sm font-medium text-slate-700">Cores</h5>
-                              <div className="flex gap-4 justify-center">
-                                {/* Background Color */}
-                                <div className="flex flex-col items-center gap-2">
-                                  <input
-                                    type="color"
-                                    value={formData.backgroundColor}
-                                    onChange={(e) => setFormData({ ...formData, backgroundColor: e.target.value })}
-                                    className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
-                                    title="Selecionar cor de fundo"
-                                  />
-                                  <span className="font-medium text-slate-700 text-xs text-center">Cor de Fundo</span>
-                                </div>
-
-                                {/* Font Color */}
-                                <div className="flex flex-col items-center gap-2">
-                                  <input
-                                    type="color"
-                                    value={formData.fontColor}
-                                    onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
-                                    className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
-                                    title="Selecionar cor da fonte"
-                                  />
-                                  <span className="font-medium text-slate-700 text-xs text-center">Cor da Fonte</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Save Button */}
+                            <h4 className="font-semibold text-base text-slate-800">Personalizar Design</h4>
+                          </div>
+                          <div className="flex items-center gap-1">
                             <Button
-                              onClick={() => setIsDesignOpen(false)}
-                              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setFormData({ ...formData, icon: "" as keyof typeof LucideIcons })
+                              }}
+                              className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs"
+                              title="Remover ícone"
                             >
-                              <Save className="w-4 h-4 mr-2" />
-                              Save
+                              Remove
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setIsDesignOpen(false)}
+                              className="text-slate-400 hover:text-slate-600 h-7 px-2 rounded-lg"
+                            >
+                              <X className="w-4 h-4" />
                             </Button>
                           </div>
                         </div>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                </div>
+
+                        {/* Search Filter */}
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <Input
+                            placeholder="Buscar ícone..."
+                            value={iconFilter}
+                            onChange={(e) => setIconFilter(e.target.value)}
+                            className="pl-9 bg-slate-50 border-slate-200 h-9 text-sm placeholder:text-slate-400 rounded-lg focus:bg-white transition-colors"
+                          />
+                        </div>
+
+                        {/* Icons Grid */}
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
+                          </div>
+                          <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
+                            <div className="icon-grid-responsive icon-grid-scroll">
+                              {ICON_OPTIONS.filter((iconName) =>
+                                iconName.toLowerCase().includes(iconFilter.toLowerCase()),
+                              )
+                                .slice(0, 48)
+                                .map((iconName) => (
+                                  <button
+                                    key={iconName}
+                                    type="button"
+                                    onClick={() =>
+                                      setFormData({
+                                        ...formData,
+                                        icon: iconName as keyof typeof LucideIcons,
+                                      })
+                                    }
+                                    className={cn(
+                                      "w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden",
+                                      formData.icon === iconName
+                                        ? "border-blue-400 bg-blue-50 text-blue-700 shadow-md ring-2 ring-blue-200"
+                                        : "border-slate-200 hover:border-slate-300 hover:bg-white bg-white text-slate-600 hover:shadow-sm",
+                                    )}
+                                    title={iconName}
+                                  >
+                                    {renderIcon(iconName as keyof typeof LucideIcons, 16)}
+                                  </button>
+                                ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Color Sections */}
+                        <div className="space-y-3">
+                          <h5 className="text-sm font-medium text-slate-700">Cores</h5>
+                          <div className="flex gap-4 justify-center">
+                            {/* Background Color */}
+                            <div className="flex flex-col items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.backgroundColor}
+                                onChange={(e) => setFormData({ ...formData, backgroundColor: e.target.value })}
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                title="Selecionar cor de fundo"
+                              />
+                              <span className="font-medium text-slate-700 text-xs text-center">Cor de Fundo</span>
+                            </div>
+
+                            {/* Font Color */}
+                            <div className="flex flex-col items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.fontColor}
+                                onChange={(e) => setFormData({ ...formData, fontColor: e.target.value })}
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                title="Selecionar cor da fonte"
+                              />
+                              <span className="font-medium text-slate-700 text-xs text-center">Cor da Fonte</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Save Button */}
+                        <Button
+                          onClick={() => setIsDesignOpen(false)}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                        >
+                          <Save className="w-4 h-4 mr-2" />
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
 
               <div className="flex justify-center mb-4">
