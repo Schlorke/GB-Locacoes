@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import * as LucideIcons from "lucide-react"
 import { AlertTriangle, Edit, Palette, Save, Search, Tag, X } from "lucide-react"
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 export interface CategoryData {
   id?: string
@@ -415,6 +415,10 @@ export function ModernCategoryModal({
   const [isDesignOpen, setIsDesignOpen] = useState(false)
   const [iconFilter, setIconFilter] = useState("")
 
+  // Refs para controle de scroll
+  const popoverContentRef = useRef<HTMLDivElement>(null)
+  const iconGridRef = useRef<HTMLDivElement>(null)
+
   // Inicializar dados quando a modal abre
   useEffect(() => {
     if (isOpen) {
@@ -436,6 +440,30 @@ export function ModernCategoryModal({
       setIconFilter("")
     }
   }, [isOpen, initialData])
+
+  // Função para garantir que o scroll funcione
+  useEffect(() => {
+    if (isDesignOpen && popoverContentRef.current) {
+      const popoverElement = popoverContentRef.current
+
+      // Força a aplicação das propriedades de scroll
+      popoverElement.style.overflowY = "auto"
+      popoverElement.style.overflowX = "hidden"
+      popoverElement.style.pointerEvents = "auto"
+      popoverElement.style.touchAction = "pan-y"
+      popoverElement.style.overscrollBehavior = "contain"
+
+      // Aplica as mesmas propriedades para o grid de ícones
+      if (iconGridRef.current) {
+        const iconGrid = iconGridRef.current
+        iconGrid.style.overflowY = "auto"
+        iconGrid.style.overflowX = "hidden"
+        iconGrid.style.pointerEvents = "auto"
+        iconGrid.style.touchAction = "pan-y"
+        iconGrid.style.overscrollBehavior = "contain"
+      }
+    }
+  }, [isDesignOpen])
 
   const validateForm = (): boolean => {
     const newErrors: typeof errors = {}
@@ -509,7 +537,8 @@ export function ModernCategoryModal({
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999]"
+                    ref={popoverContentRef}
+                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] scrollable-content"
                     align="center"
                     side="bottom"
                     sideOffset={8}
@@ -525,10 +554,15 @@ export function ModernCategoryModal({
                       top: "50%",
                       transform: "translate(-50%, -50%)",
                       zIndex: 99999,
+                      overflowY: "auto",
+                      overflowX: "hidden",
+                      pointerEvents: "auto",
+                      touchAction: "pan-y",
+                      overscrollBehavior: "contain",
                     }}
                   >
-                    <div className="flex flex-col max-h-[70vh]">
-                      <div className="flex-1 overflow-y-auto p-4 space-y-4 modal-preview-scroll">
+                    <div className="flex flex-col max-h-[70vh] popover-scroll-container">
+                      <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4 scrollable-content">
                         {/* Header */}
                         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                           <div className="flex items-center gap-2">
@@ -577,7 +611,24 @@ export function ModernCategoryModal({
                             <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
                           </div>
                           <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                            <div className="icon-grid-responsive icon-grid-scroll">
+                            <div
+                              ref={iconGridRef}
+                              className="scrollable-content"
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns: "repeat(auto-fill, minmax(40px, 1fr))",
+                                gap: "8px",
+                                maxHeight: "200px",
+                                overflowY: "auto",
+                                overflowX: "hidden",
+                                padding: "4px",
+                                pointerEvents: "auto",
+                                touchAction: "pan-y",
+                                overscrollBehavior: "contain",
+                                scrollBehavior: "smooth",
+                                WebkitOverflowScrolling: "touch",
+                              }}
+                            >
                               {ICON_OPTIONS.filter((iconName) =>
                                 iconName.toLowerCase().includes(iconFilter.toLowerCase()),
                               )
@@ -599,6 +650,7 @@ export function ModernCategoryModal({
                                         : "border-slate-200 hover:border-slate-300 hover:bg-white bg-white text-slate-600 hover:shadow-sm",
                                     )}
                                     title={iconName}
+                                    style={{ pointerEvents: "auto" }}
                                   >
                                     {renderIcon(iconName as keyof typeof LucideIcons, 16)}
                                   </button>
