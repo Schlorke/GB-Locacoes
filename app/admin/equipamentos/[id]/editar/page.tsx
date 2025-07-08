@@ -2,13 +2,12 @@
 
 import type React from 'react';
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CurrencyInput } from '@/components/ui/currency-input';
+import { ImageUpload } from '@/components/ui/image-upload';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -17,18 +16,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { CurrencyInput } from '@/components/ui/currency-input';
-import { ImageUpload } from '@/components/ui/image-upload';
+import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
-import { ArrowLeft, Save, PlusCircle, Trash2, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, PlusCircle, Save, Trash2 } from 'lucide-react';
 import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 interface Category {
   id: string;
   name: string;
 }
 
-interface Equipment {
+interface _Equipment {
   id: string;
   name: string;
   description: string;
@@ -53,7 +53,7 @@ export default function EditarEquipamento() {
   const params = useParams();
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, _setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -68,46 +68,30 @@ export default function EditarEquipamento() {
   const [specValue, setSpecValue] = useState('');
 
   useEffect(() => {
-    if (params.id) {
-      fetchEquipment(params.id as string);
-      fetchCategories();
-    }
-  }, [params.id]);
+    if (!params.id) return;
 
-  const fetchEquipment = async (id: string) => {
-    try {
-      const response = await fetch(`/api/admin/equipments/${id}`);
-      if (response.ok) {
-        const equipment: Equipment = await response.json();
-        setFormData({
-          name: equipment.name,
-          description: equipment.description,
-          pricePerDay: equipment.pricePerDay,
-          categoryId: equipment.categoryId,
-          images: equipment.images,
-          isAvailable: equipment.isAvailable,
-          specifications: equipment.specifications || {},
-        });
-      } else {
-        toast({
-          title: 'Erro',
-          description: 'Equipamento não encontrado.',
-          variant: 'destructive',
-        });
-        router.push('/admin/equipamentos');
+    const fetchEquipment = async (id: string) => {
+      try {
+        const response = await fetch(`/api/admin/equipments/${id}`);
+        if (response.ok) {
+          const equipment = await response.json();
+          setFormData({
+            name: equipment.name || '',
+            description: equipment.description || '',
+            pricePerDay: equipment.pricePerDay || 0,
+            categoryId: equipment.categoryId || '',
+            images: equipment.images || [],
+            isAvailable: equipment.available ?? true,
+          });
+        }
+      } catch (error) {
+        console.error('Erro ao buscar equipamento:', error);
       }
-    } catch (error) {
-      console.error('Erro ao carregar equipamento:', error);
-      toast({
-        title: 'Erro',
-        description: 'Falha ao carregar equipamento.',
-        variant: 'destructive',
-      });
-      router.push('/admin/equipamentos');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+
+    fetchEquipment(params.id as string);
+    fetchCategories();
+  }, [params.id]);
 
   const fetchCategories = async () => {
     try {

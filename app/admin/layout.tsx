@@ -1,10 +1,10 @@
 'use client';
 
-import { SessionProvider, useSession } from 'next-auth/react';
-import { type ReactNode, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import AdminSidebar from '@/components/admin/admin-sidebar';
 import AdminMobileHeader from '@/components/admin/admin-mobile-header';
+import AdminSidebar from '@/components/admin/admin-sidebar';
+import { SessionProvider, useSession } from 'next-auth/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { type ReactNode, useEffect } from 'react';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -32,7 +32,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
       return;
     }
 
-    // @ts-ignore
+    // @ts-expect-error - role property will be added to session type
     const userRole = session.user?.role;
     if (!['ADMIN', 'OPERATOR', 'FINANCIAL'].includes(userRole)) {
       router.push('/admin/login?error=unauthorized');

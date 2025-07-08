@@ -1,24 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import {
-  LayoutDashboard,
-  PackageSearch,
-  ListChecks,
+  Building,
   FileText,
+  LayoutDashboard,
+  ListChecks,
   LogOut,
   Menu,
+  PackageSearch,
   UserCircle,
-  Building,
 } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Separator } from '@/components/ui/separator';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 const navItems = [
   { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -108,7 +108,6 @@ export default function AdminMobileHeader() {
                     <p className="font-medium text-slate-900 truncate">
                       {session?.user?.name || 'Administrador'}
                     </p>
-                    {/* @ts-ignore */}
                     <p className="text-sm text-slate-500 truncate">
                       {session?.user?.role || 'ADMIN'}
                     </p>

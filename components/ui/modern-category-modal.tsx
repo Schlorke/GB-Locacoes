@@ -1,7 +1,5 @@
 'use client';
 
-/* eslint-disable no-inline-styles */
-
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,7 +19,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
 import { AlertTriangle, Edit, Palette, Save, Search, Tag, X } from 'lucide-react';
 import type React from 'react';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export interface CategoryData {
   id?: string;
@@ -487,16 +485,16 @@ export function ModernCategoryModal({
 
   const badgeStyles = useMemo(
     () => ({
-      backgroundColor: formData.backgroundColor,
-      color: formData.fontColor,
-      boxShadow: `0 4px 20px ${formData.fontColor}15, 0 2px 10px ${formData.fontColor}10`,
+      '--badge-bg': formData.backgroundColor,
+      '--badge-color': formData.fontColor,
+      '--badge-shadow': `0 4px 20px ${formData.fontColor}15, 0 2px 10px ${formData.fontColor}10`,
     }),
     [formData.backgroundColor, formData.fontColor],
   );
 
   const iconStyle = useMemo(
     () => ({
-      color: formData.iconColor,
+      '--icon-color': formData.iconColor,
     }),
     [formData.iconColor],
   );
@@ -681,7 +679,7 @@ export function ModernCategoryModal({
               <div className="flex justify-center mb-4">
                 <Badge
                   variant="outline"
-                  className="inline-flex items-center gap-3 font-semibold px-5 py-3 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="inline-flex items-center gap-3 font-semibold px-5 py-3 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-300 category-badge"
                   data-bg-color={formData.backgroundColor}
                   data-text-color={formData.fontColor}
                   data-icon-color={formData.iconColor}
@@ -689,7 +687,7 @@ export function ModernCategoryModal({
                 >
                   <span className="preview-icon">
                     <span
-                      className="inline-flex items-center justify-center"
+                      className="inline-flex items-center justify-center category-icon"
                       style={iconStyle as React.CSSProperties}
                     >
                       {renderIcon(formData.icon, 20)}

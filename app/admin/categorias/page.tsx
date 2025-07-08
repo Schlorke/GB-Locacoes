@@ -21,7 +21,7 @@ import {
   Tag,
   Trash2,
 } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface Category {
   id: string;
@@ -75,22 +75,13 @@ export default function AdminCategoriesPage() {
     iconColor: categoryData.iconColor,
   });
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    filterCategories();
-  }, [categories, searchTerm]);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/admin/categories');
       const data = await response.json();
 
       const categoriesArray = Array.isArray(data) ? data : data?.categories || [];
-      console.log('Categories API response:', categoriesArray);
 
       setCategories(categoriesArray);
     } catch (error) {
@@ -104,15 +95,15 @@ export default function AdminCategoriesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
-  const filterCategories = () => {
+  const filterCategories = useCallback(() => {
     if (!Array.isArray(categories)) {
       setFilteredCategories([]);
       return;
     }
 
-    let filtered = categories.filter((category) => {
+    const filtered = categories.filter((category: Category) => {
       const matchesSearch =
         category.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         category.description?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -121,7 +112,15 @@ export default function AdminCategoriesPage() {
     });
 
     setFilteredCategories(filtered);
-  };
+  }, [categories, searchTerm]);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
+    filterCategories();
+  }, [categories, searchTerm, filterCategories]);
 
   // Novas funções para o ModernCategoryModal
   const openNewCategoryModal = () => {
@@ -205,7 +204,11 @@ export default function AdminCategoriesPage() {
   const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
     if (!iconName || !LucideIcons[iconName]) return <Tag className="h-4 w-4 text-gray-400" />;
 
-    const IconComponent = LucideIcons[iconName] as React.ComponentType<any>;
+    const IconComponent = LucideIcons[iconName] as React.ComponentType<{
+      size?: number;
+      color?: string;
+      className?: string;
+    }>;
     return <IconComponent size={16} color={color || '#3b82f6'} className="flex-shrink-0" />;
   };
 

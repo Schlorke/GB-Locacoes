@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import * as LucideIcons from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 
 interface ApiCategory {
   id: string;
@@ -17,7 +17,7 @@ interface ApiCategory {
 }
 
 interface Category {
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   title: string;
   description: string;
   color: string;
@@ -88,7 +88,15 @@ export default function Categories() {
         if (!res.ok) return;
         const data: ApiCategory[] = await res.json();
         const mapped: Category[] = data.map((cat) => ({
-          icon: (cat.icon && (LucideIcons as any)[cat.icon]) || LucideIcons.Package,
+          icon:
+            (cat.icon &&
+              (
+                LucideIcons as unknown as Record<
+                  string,
+                  React.ComponentType<{ className?: string }>
+                >
+              )[cat.icon]) ||
+            LucideIcons.Package,
           title: cat.name,
           description: cat.description || '',
           color: 'from-orange-500 to-orange-600',
@@ -103,7 +111,13 @@ export default function Categories() {
 
     const runFetch = () => {
       if ('requestIdleCallback' in window) {
-        (window as any).requestIdleCallback(fetchCategories);
+        if ('requestIdleCallback' in window) {
+          (
+            window as Window & { requestIdleCallback: (callback: () => void) => void }
+          ).requestIdleCallback(fetchCategories);
+        } else {
+          setTimeout(fetchCategories, 0);
+        }
       } else {
         setTimeout(fetchCategories, 0);
       }

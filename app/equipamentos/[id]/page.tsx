@@ -1,11 +1,11 @@
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prisma } from '@/lib/prisma';
-import { notFound } from 'next/navigation';
+import { ArrowLeft, Clock, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, Star, Clock, MapPin } from 'lucide-react';
+import { notFound } from 'next/navigation';
 
 interface Props {
   params: { id: string };
@@ -32,21 +32,12 @@ export default async function EquipmentDetailPage({ params }: Props) {
     where: { id: params.id },
     include: {
       category: true,
-      reviews: {
-        orderBy: { createdAt: 'desc' },
-        take: 5,
-      },
     },
   });
 
   if (!equipment) {
     notFound();
   }
-
-  const averageRating =
-    equipment.reviews.length > 0
-      ? equipment.reviews.reduce((acc, review) => acc + review.rating, 0) / equipment.reviews.length
-      : 0;
 
   return (
     <main className="pt-32 min-h-screen bg-gray-50">
@@ -73,7 +64,7 @@ export default async function EquipmentDetailPage({ params }: Props) {
                 className="object-cover"
                 priority
               />
-              {!equipment.isAvailable && (
+              {!equipment.available && (
                 <div className="absolute top-4 right-4">
                   <Badge variant="destructive">Indisponível</Badge>
                 </div>
@@ -116,19 +107,19 @@ export default async function EquipmentDetailPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Avaliações */}
-            {equipment.reviews.length > 0 && (
-              <div className="flex items-center gap-2 mb-6">
-                <div className="flex items-center gap-1">
-                  <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                  <span className="font-semibold">{averageRating.toFixed(1)}</span>
-                </div>
-                <span className="text-gray-500">
-                  ({equipment.reviews.length}{' '}
-                  {equipment.reviews.length === 1 ? 'avaliação' : 'avaliações'})
-                </span>
+            {/* Avaliações - Feature not implemented yet */}
+            {/* 
+            <div className="flex items-center gap-2 mb-6">
+              <div className="flex items-center gap-1">
+                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                <span className="font-semibold">{averageRating.toFixed(1)}</span>
               </div>
-            )}
+              <span className="text-gray-500">
+                ({equipment.reviews.length}{' '}
+                {equipment.reviews.length === 1 ? 'avaliação' : 'avaliações'})
+              </span>
+            </div>
+            */}
 
             <Card className="mb-6">
               <CardHeader>
@@ -139,36 +130,29 @@ export default async function EquipmentDetailPage({ params }: Props) {
               </CardContent>
             </Card>
 
-            {/* Especificações */}
-            {equipment.specifications && (
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle>Especificações Técnicas</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Object.entries(equipment.specifications as Record<string, any>).map(
-                      ([key, value]) => (
-                        <div key={key} className="flex justify-between">
-                          <span className="font-medium">{key}:</span>
-                          <span>{String(value)}</span>
-                        </div>
-                      ),
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
+            {/* Especificações - Feature not implemented yet */}
+            {/* 
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Especificações Técnicas</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  ...specifications content...
+                </div>
+              </CardContent>
+            </Card>
+            */}
 
             {/* Ações */}
             <div className="space-y-4">
               <Button
                 size="lg"
                 className="w-full"
-                disabled={!equipment.isAvailable}
-                asChild={equipment.isAvailable}
+                disabled={!equipment.available}
+                asChild={equipment.available}
               >
-                {equipment.isAvailable ? (
+                {equipment.available ? (
                   <Link href={`/orcamento?equipmentId=${equipment.id}`}>Solicitar Orçamento</Link>
                 ) : (
                   <span>Equipamento Indisponível</span>
@@ -183,40 +167,19 @@ export default async function EquipmentDetailPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Avaliações */}
-        {equipment.reviews.length > 0 && (
-          <Card className="mt-12">
-            <CardHeader>
-              <CardTitle>Avaliações dos Clientes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {equipment.reviews.map((review) => (
-                  <div key={review.id} className="border-b pb-4 last:border-b-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`h-4 w-4 ${
-                              i < review.rating
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-sm text-gray-500">
-                        {new Date(review.createdAt).toLocaleDateString('pt-BR')}
-                      </span>
-                    </div>
-                    {review.comment && <p className="text-gray-700">{review.comment}</p>}
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        {/* Reviews section - Feature not implemented yet */}
+        {/* 
+        <Card className="mt-12">
+          <CardHeader>
+            <CardTitle>Avaliações dos Clientes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              ...review content...
+            </div>
+          </CardContent>
+        </Card>
+        */}
       </div>
     </main>
   );

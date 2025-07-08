@@ -1,22 +1,22 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import {
-  LayoutDashboard,
-  PackageSearch,
-  ListChecks,
-  FileText,
-  LogOut,
   ChevronsLeft,
   ChevronsRight,
+  FileText,
+  LayoutDashboard,
+  ListChecks,
+  LogOut,
+  PackageSearch,
   UserCircle,
 } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export interface AdminSidebarProps {
   onCollapseChange?: (_collapsed: boolean) => void;
@@ -137,7 +137,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
               <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
                 {session?.user?.name || 'Administrador'}
               </p>
-              {/* @ts-ignore */}
+              {/* @ts-expect-error - role property will be added to session type */}
               <p className="text-xs text-slate-400 truncate">{session?.user?.role || 'ADMIN'}</p>
             </div>
           )}

@@ -1,8 +1,8 @@
 'use client';
 
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { Menu, Search, Bell, UserCircle, Building } from 'lucide-react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Bell, Building, Menu, Search, UserCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import AdminSidebar from './admin-sidebar';
 
@@ -65,7 +65,7 @@ export default function AdminHeader() {
               <p className="text-xs sm:text-sm font-medium text-slate-200 truncate max-w-24 lg:max-w-none">
                 {session?.user?.name || 'Admin'}
               </p>
-              {/* @ts-ignore */}
+              {/* @ts-expect-error - role property will be added to session type */}
               <p className="text-xs text-slate-400 truncate max-w-24 lg:max-w-none">
                 {session?.user?.role}
               </p>

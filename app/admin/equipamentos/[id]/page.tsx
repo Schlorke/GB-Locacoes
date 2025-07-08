@@ -1,25 +1,24 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { ImageCarouselZoom } from '@/components/image-carousel-zoom';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import * as LucideIcons from 'lucide-react';
 import {
   ArrowLeft,
-  Edit,
-  Trash2,
-  Package,
   Calendar,
   DollarSign,
+  Edit,
   Info,
   Loader2,
+  Package,
+  Trash2,
 } from 'lucide-react';
 import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import * as LucideIcons from 'lucide-react';
-import React from 'react';
 
 interface Equipment {
   id: string;
@@ -53,29 +52,28 @@ export default function EquipmentDetailsPage() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    if (params.id) {
-      fetchEquipment(params.id as string);
-    }
-  }, [params.id]);
+    if (!params.id) return;
 
-  const fetchEquipment = async (id: string) => {
-    try {
-      const response = await fetch(`/api/admin/equipments/${id}`);
-      if (response.ok) {
-        const data = await response.json();
-        setEquipment(data);
-      } else {
-        toast.error('Equipamento não encontrado');
-        router.push('/admin/equipamentos');
+    const fetchEquipment = async (id: string) => {
+      try {
+        const response = await fetch(`/api/admin/equipments/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setEquipment(data);
+        } else {
+          toast.error('Equipamento não encontrado.');
+          router.push('/admin/equipamentos');
+        }
+      } catch (error) {
+        console.error('Erro ao carregar equipamento:', error);
+        toast.error('Falha ao carregar equipamento.');
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Erro ao carregar equipamento:', error);
-      toast.error('Erro ao carregar equipamento');
-      router.push('/admin/equipamentos');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
+
+    fetchEquipment(params.id as string);
+  }, [params.id, router]);
 
   const handleDelete = async () => {
     if (!equipment) return;

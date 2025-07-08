@@ -2,18 +2,18 @@
 
 import type React from 'react';
 
-import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Minus, Plus, Trash2, ShoppingCart, Package } from 'lucide-react';
-import { formatCurrency } from '@/lib/utils';
+import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
+import { formatCurrency } from '@/lib/utils';
+import { Minus, Package, Plus, ShoppingCart, Trash2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
 interface Equipment {
   id: string;
@@ -55,34 +55,37 @@ function QuotePage() {
     window.scrollTo(0, 0);
   }, []);
 
+  const fetchEquipmentAndAdd = useCallback(
+    async (equipmentId: string) => {
+      try {
+        const response = await fetch(`/api/equipments`);
+        const data = await response.json();
+        const equipments = Array.isArray(data) ? data : [];
+        const equipment = equipments.find((eq: Equipment) => eq.id === equipmentId);
+
+        if (equipment && !selectedEquipments.find((eq) => eq.id === equipmentId)) {
+          const price = Number(equipment.pricePerDay) || 0;
+          const equipmentToAdd = {
+            ...equipment,
+            pricePerDay: price,
+            quantity: 1,
+            days: 1,
+          };
+          setSelectedEquipments((prev) => [...prev, equipmentToAdd]);
+        }
+      } catch {
+        // Error handled silently for user experience
+      }
+    },
+    [selectedEquipments],
+  );
+
   useEffect(() => {
     const equipmentId = searchParams.get('equipmentId');
     if (equipmentId) {
       fetchEquipmentAndAdd(equipmentId);
     }
-  }, [searchParams]);
-
-  const fetchEquipmentAndAdd = async (equipmentId: string) => {
-    try {
-      const response = await fetch(`/api/equipments`);
-      const data = await response.json();
-      const equipments = Array.isArray(data) ? data : [];
-      const equipment = equipments.find((eq: any) => eq.id === equipmentId);
-
-      if (equipment && !selectedEquipments.find((eq) => eq.id === equipmentId)) {
-        const price = Number(equipment.pricePerDay) || 0;
-        const equipmentToAdd = {
-          ...equipment,
-          pricePerDay: price,
-          quantity: 1,
-          days: 1,
-        };
-        setSelectedEquipments((prev) => [...prev, equipmentToAdd]);
-      }
-    } catch {
-      console.error('Erro ao buscar equipamento');
-    }
-  };
+  }, [searchParams, fetchEquipmentAndAdd]);
 
   const updateQuantity = (id: string, quantity: number) => {
     if (quantity < 1) return;

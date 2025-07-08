@@ -1,12 +1,9 @@
-import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    console.log('=== BUSCANDO EQUIPAMENTOS COM IMAGENS ===');
-
     await prisma.$connect();
-    console.log('Conexão com banco estabelecida');
 
     const equipments = await prisma.equipment.findMany({
       include: {
@@ -17,10 +14,7 @@ export async function GET() {
       },
     });
 
-    console.log(`Encontrados ${equipments.length} equipamentos no banco`);
-
     if (equipments.length === 0) {
-      console.log('Nenhum equipamento encontrado, retornando dados mock');
       const mockEquipments = [
         {
           id: 'mock-1',
@@ -42,15 +36,9 @@ export async function GET() {
 
     // Formatar os dados do banco garantindo que as imagens sejam incluídas
     const formattedEquipments = equipments.map((equipment) => {
-      console.log(`Processando equipamento: ${equipment.name}`);
-      console.log(`Imagens do banco:`, equipment.images);
-      console.log(`ImageUrl do banco:`, equipment.imageUrl);
-
-      // Priorizar imageUrl se existir, senão usar primeira imagem do array
+      // Priorizar primeira imagem do array ou usar placeholder
       let primaryImage = null;
-      if (equipment.imageUrl && equipment.imageUrl.trim() !== '') {
-        primaryImage = equipment.imageUrl;
-      } else if (equipment.images && equipment.images.length > 0) {
+      if (equipment.images && equipment.images.length > 0) {
         primaryImage = equipment.images[0];
       }
 
@@ -66,20 +54,13 @@ export async function GET() {
             : primaryImage
               ? [primaryImage]
               : [],
-        isAvailable: (equipment as any).available ?? (equipment as any).isAvailable,
+        isAvailable: equipment.available ?? true,
         category: {
           id: equipment.category.id,
           name: equipment.category.name,
         },
         reviews: [],
       };
-
-      console.log(`Equipamento formatado:`, {
-        id: formattedEquipment.id,
-        name: formattedEquipment.name,
-        imageUrl: formattedEquipment.imageUrl,
-        images: formattedEquipment.images,
-      });
 
       return formattedEquipment;
     });

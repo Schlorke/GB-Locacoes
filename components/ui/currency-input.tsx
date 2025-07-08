@@ -1,7 +1,7 @@
 'use client';
 
 import type * as React from 'react';
-import { forwardRef, useState, useEffect } from 'react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { Input } from './input';
 
 interface CurrencyInputProps
@@ -17,20 +17,23 @@ const CurrencyInput = forwardRef<HTMLInputElement, CurrencyInputProps>(
     const [displayValue, setDisplayValue] = useState('');
     const [isFocused, setIsFocused] = useState(false);
 
+    const formatCurrency = useCallback(
+      (num: number): string => {
+        return new Intl.NumberFormat(locale, {
+          style: 'currency',
+          currency: currency,
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(num);
+      },
+      [locale, currency],
+    );
+
     useEffect(() => {
       if (!isFocused) {
         setDisplayValue(formatCurrency(value || 0));
       }
-    }, [value, isFocused]);
-
-    const formatCurrency = (num: number): string => {
-      return new Intl.NumberFormat(locale, {
-        style: 'currency',
-        currency: currency,
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(num);
-    };
+    }, [value, isFocused, formatCurrency]);
 
     const parseCurrency = (str: string): number => {
       // Remove tudo exceto números, vírgula e ponto

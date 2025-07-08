@@ -1,12 +1,10 @@
-import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
     const { email, password } = await request.json();
-
-    console.log('🧪 [TEST-LOGIN] Testando credenciais para:', email);
 
     const user = await prisma.user.findUnique({
       where: { email },
@@ -20,13 +18,6 @@ export async function POST(request: Request) {
       });
     }
 
-    console.log('🧪 [TEST-LOGIN] Usuário encontrado:', {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-      hasPassword: !!user.password,
-    });
-
     if (!user.password) {
       return NextResponse.json({
         success: false,
@@ -36,7 +27,6 @@ export async function POST(request: Request) {
     }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
-    console.log('🧪 [TEST-LOGIN] Validação da senha:', isValidPassword);
 
     return NextResponse.json({
       success: isValidPassword,

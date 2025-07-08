@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 export default function ScrollRevealInit() {
   const [isHydrated, setIsHydrated] = useState(false);
   const pathname = usePathname();
@@ -277,7 +277,9 @@ export default function ScrollRevealInit() {
         });
       };
       if ('requestIdleCallback' in window) {
-        (window as any).requestIdleCallback(start);
+        (
+          window as Window & { requestIdleCallback: (callback: () => void) => void }
+        ).requestIdleCallback(start);
       } else {
         setTimeout(start, 0);
       }

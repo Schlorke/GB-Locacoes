@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
-import { Hammer, Truck, HardHat, Wrench, Building, Zap, Shield, Container } from 'lucide-react';
+import { Building, Container, Hammer, HardHat, Shield, Truck, Wrench, Zap } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useRef } from 'react';
 
 const categories = [
   {
@@ -81,13 +81,10 @@ export default function CategoriesWithAnimation() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            console.log('🎬 Seção de categorias entrou na viewport');
-
             // Animar os cards um por vez com delay
             cardsRef.current.forEach((card, index) => {
               if (card) {
                 setTimeout(() => {
-                  console.log(`🎬 Animando category card ${index}`);
                   card.style.opacity = '1';
                   card.style.transform = 'translateY(0)';
                   card.style.transition = 'all 0.8s ease-out';
@@ -105,13 +102,14 @@ export default function CategoriesWithAnimation() {
       },
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentSection) {
+        observer.unobserve(currentSection);
       }
     };
   }, []);

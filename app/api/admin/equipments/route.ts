@@ -1,12 +1,10 @@
-import { type NextRequest, NextResponse } from 'next/server';
-import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
+import { type NextRequest, NextResponse } from 'next/server';
 
 // GET /api/admin/equipments - List all equipments with pagination and filtering
 export async function GET(request: NextRequest) {
   try {
-    console.log('[API GET /admin/equipments] Iniciando requisição...');
-
     // Verifica se as variáveis de ambiente para o banco estão configuradas
     if (!process.env.DATABASE_URL) {
       console.error('[API GET /admin/equipments] DATABASE_URL não definido');
@@ -24,14 +22,6 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search');
     const categoryId = searchParams.get('categoryId');
     const isAvailableParam = searchParams.get('isAvailable');
-
-    console.log('[API GET /admin/equipments] Parâmetros:', {
-      page,
-      limit,
-      search,
-      categoryId,
-      isAvailableParam,
-    });
 
     if (isNaN(page) || page < 1) {
       return NextResponse.json({ error: "Parâmetro 'page' inválido." }, { status: 400 });
@@ -58,12 +48,8 @@ export async function GET(request: NextRequest) {
       where.available = isAvailableParam === 'true';
     }
 
-    console.log('[API GET /admin/equipments] Filtros aplicados:', JSON.stringify(where, null, 2));
-
     // Teste de conexão com o banco
-    console.log('[API GET /admin/equipments] Testando conexão com banco...');
     await prisma.$connect();
-    console.log('[API GET /admin/equipments] Conexão estabelecida!');
 
     const equipments = await prisma.equipment.findMany({
       where,
@@ -83,8 +69,6 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    console.log(`[API GET /admin/equipments] Equipamentos encontrados: ${equipments.length}`);
-
     const equipmentsFormatted = equipments.map((equip) => ({
       ...equip,
       isAvailable: equip.available,
@@ -92,10 +76,6 @@ export async function GET(request: NextRequest) {
 
     const totalItems = await prisma.equipment.count({ where });
     const totalPages = Math.ceil(totalItems / limit);
-
-    console.log(
-      `[API GET /admin/equipments] Total de itens: ${totalItems}, Total de páginas: ${totalPages}`,
-    );
 
     const response = {
       equipments: equipmentsFormatted,
@@ -140,20 +120,8 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/equipments - Create new equipment
 export async function POST(request: NextRequest) {
   try {
-    console.log('[API POST /admin/equipments] Iniciando criação de equipamento...');
-
     const body = await request.json();
-    const { name, description, pricePerDay, categoryId, images, isAvailable, specifications } =
-      body;
-
-    console.log('[API POST /admin/equipments] Dados recebidos:', {
-      name,
-      description,
-      pricePerDay,
-      categoryId,
-      images,
-      isAvailable,
-    });
+    const { name, description, pricePerDay, categoryId, images, isAvailable } = body;
 
     // Validações
     if (!name || typeof name !== 'string' || name.trim() === '') {
@@ -196,15 +164,12 @@ export async function POST(request: NextRequest) {
           ? images.filter((img) => typeof img === 'string' && img.trim() !== '')
           : [],
         available: typeof isAvailable === 'boolean' ? isAvailable : true,
-        specifications:
-          specifications && typeof specifications === 'object' ? specifications : Prisma.JsonNull,
       },
       include: {
         category: true,
       },
     });
 
-    console.log('[API POST /admin/equipments] Equipamento criado com sucesso:', equipment.id);
     return NextResponse.json({ ...equipment, isAvailable: equipment.available }, { status: 201 });
   } catch (error) {
     console.error('[API POST /admin/equipments] ERRO ao criar equipamento:', error);

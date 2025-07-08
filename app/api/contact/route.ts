@@ -13,19 +13,9 @@ const contactSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    console.log('Dados recebidos no formulário de contato:', body);
 
     // Validar dados
-    const validatedData = contactSchema.parse(body);
-
-    // Por enquanto, vamos simular o envio e salvar no console
-    console.log('=== NOVO CONTATO RECEBIDO ===');
-    console.log('Nome:', validatedData.name);
-    console.log('Email:', validatedData.email);
-    console.log('Telefone:', validatedData.phone);
-    console.log('Equipamento:', validatedData.equipment || 'Não especificado');
-    console.log('Mensagem:', validatedData.message);
-    console.log('Data:', new Date().toISOString());
+    const _validatedData = contactSchema.parse(body);
 
     // TODO: Implementar envio de email real
     // TODO: Salvar no banco de dados se necessário

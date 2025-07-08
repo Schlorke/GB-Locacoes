@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -11,29 +12,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Search,
-  Filter,
-  Eye,
-  CheckCircle,
-  XCircle,
-  Clock,
-  User,
-  Mail,
-  Phone,
-  Calendar,
-  Package,
-  MessageSquare,
-  Building,
-  Hash,
   Briefcase,
+  Building,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Eye,
   FileText,
+  Filter,
+  Hash,
+  Mail,
+  MessageSquare,
+  Package,
+  Phone,
+  Search,
+  User,
+  XCircle,
 } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface Quote {
   id: string;
@@ -95,13 +95,13 @@ export default function AdminQuotesPage() {
 
   useEffect(() => {
     fetchQuotes();
-  }, []);
+  }, [fetchQuotes]);
 
   useEffect(() => {
     filterQuotes();
-  }, [quotes, searchTerm, statusFilter]);
+  }, [quotes, searchTerm, statusFilter, filterQuotes]);
 
-  const fetchQuotes = async () => {
+  const fetchQuotes = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch('/api/admin/quotes');
@@ -109,7 +109,6 @@ export default function AdminQuotesPage() {
 
       // Verificação defensiva para garantir que data é um array
       const quotesArray = Array.isArray(data) ? data : data?.quotes || [];
-      console.log('Quotes API response:', quotesArray);
 
       setQuotes(quotesArray);
     } catch (error) {
@@ -123,15 +122,15 @@ export default function AdminQuotesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
-  const filterQuotes = () => {
+  const filterQuotes = useCallback(() => {
     if (!Array.isArray(quotes)) {
       setFilteredQuotes([]);
       return;
     }
 
-    let filtered = quotes.filter((quote) => {
+    const filtered = quotes.filter((quote) => {
       const matchesSearch =
         quote.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quote.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -144,7 +143,7 @@ export default function AdminQuotesPage() {
     });
 
     setFilteredQuotes(filtered);
-  };
+  }, [quotes, searchTerm, statusFilter]);
 
   const updateQuoteStatus = async (quoteId: string, newStatus: 'approved' | 'rejected') => {
     try {

@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
+import { Prisma, QuoteStatus } from '@prisma/client';
+import { getServerSession } from 'next-auth';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (status && status !== 'all') {
-      where.status = status.toUpperCase() as any;
+      where.status = status.toUpperCase() as QuoteStatus;
     }
 
     const quotes = await prisma.quote.findMany({

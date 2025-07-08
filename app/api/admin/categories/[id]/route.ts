@@ -1,5 +1,5 @@
-import { type NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { type NextRequest, NextResponse } from 'next/server';
 
 function slugify(text: string) {
   return text
@@ -18,7 +18,15 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const body = await request.json();
     const { name, description, icon, iconColor, bgColor, fontColor } = body;
 
-    const data: any = {};
+    const data: {
+      name?: string;
+      slug?: string;
+      description?: string;
+      icon?: string;
+      iconColor?: string;
+      bgColor?: string;
+      fontColor?: string;
+    } = {};
     if (name) {
       data.name = name.trim();
       data.slug = slugify(name);

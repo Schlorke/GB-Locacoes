@@ -1,11 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -14,7 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Star, Clock, Loader2, Search, Filter } from 'lucide-react';
+import { Clock, Filter, Loader2, Search, Star } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface Review {
   id: string;
@@ -57,7 +57,23 @@ export default function EquipmentsPage() {
   }, []);
 
   useEffect(() => {
-    filterEquipments();
+    // Garantir que equipments é sempre um array
+    const safeEquipments = Array.isArray(equipments) ? equipments : [];
+    let filtered = safeEquipments;
+
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (eq) =>
+          eq.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          eq.description.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    }
+
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter((eq) => eq.category.id === categoryFilter);
+    }
+
+    setFilteredEquipments(filtered);
   }, [searchTerm, categoryFilter, equipments]);
 
   const fetchData = async () => {
@@ -92,26 +108,6 @@ export default function EquipmentsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const filterEquipments = () => {
-    // Garantir que equipments é sempre um array
-    const safeEquipments = Array.isArray(equipments) ? equipments : [];
-    let filtered = safeEquipments;
-
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (eq) =>
-          eq.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          eq.description.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-    }
-
-    if (categoryFilter !== 'all') {
-      filtered = filtered.filter((eq) => eq.category.id === categoryFilter);
-    }
-
-    setFilteredEquipments(filtered);
   };
 
   if (isLoading) {

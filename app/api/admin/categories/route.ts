@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from 'next/server';
-import { Prisma } from '@prisma/client';
-import { z } from 'zod';
-import crypto from 'node:crypto';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
+import { type NextRequest, NextResponse } from 'next/server';
+import crypto from 'node:crypto';
+import { z } from 'zod';
 
 function slugify(text: string) {
   return text
@@ -68,10 +68,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (!raw.icon) delete raw.icon;
-
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('[CATEGORY_PAYLOAD]', raw);
-    }
 
     let parsed;
     try {

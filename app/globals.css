@@ -747,20 +747,19 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* Garantir scroll especificamente no popover de categoria */
 .popover-centered-in-modal {
   overflow-y: auto !important;
-  pointer-events: auto !important;
-  touch-action: pan-y !important;
-  overscroll-behavior: contain !important;
 }
 
-/* Garantir que elementos filhos não bloqueiem o scroll */
-.popover-centered-in-modal * {
-  pointer-events: auto !important;
+/* Category badge dynamic styling */
+.category-badge {
+  background-color: var(--badge-bg, #3b82f6) !important;
+  color: var(--badge-color, #ffffff) !important;
+  box-shadow: var(
+    --badge-shadow,
+    0 4px 20px rgba(59, 130, 246, 0.15),
+    0 2px 10px rgba(59, 130, 246, 0.1)
+  ) !important;
 }
 
-/* Forçar scroll em qualquer container de ícones */
-.icon-grid-responsive,
-.icon-grid-scroll,
-.modal-preview-scroll {
-  -webkit-overflow-scrolling: touch !important;
-  will-change: scroll-position !important;
+.category-icon {
+  color: var(--icon-color, #ffffff) !important;
 }
