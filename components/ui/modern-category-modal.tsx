@@ -525,7 +525,7 @@ export function ModernCategoryModal({
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+                    className="modal-centered-popover w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white"
                     align="center"
                     side="bottom"
                     sideOffset={8}
