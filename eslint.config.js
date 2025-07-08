@@ -12,7 +12,18 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig({
-  ignores: ['**/*.css', '**/*.module.css', '**/node_modules/**', '**/.next/**', 'eslint.config.js'],
+  ignores: [
+    '**/*.css',
+    '**/*.module.css',
+    '**/node_modules/**',
+    '**/.next/**',
+    '**/out/**',
+    '**/dist/**',
+    '**/build/**',
+    '**/.vercel/**',
+    '**/.turbo/**',
+    'eslint.config.js',
+  ],
 
   files: ['**/*.{js,ts,jsx,tsx}'],
   languageOptions: {

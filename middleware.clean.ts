@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 // Middleware customizado que usa NextAuth para todas as rotas admin
 export default withAuth(
-  function middleware(req) {
+  function middleware(_req) {
     return NextResponse.next();
   },
   {

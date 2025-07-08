@@ -515,7 +515,7 @@ export function ModernCategoryModal({
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] design-popover-content"
+                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
                     align="center"
                     side="bottom"
                     sideOffset={8}
@@ -663,10 +663,25 @@ export function ModernCategoryModal({
               <div className="flex justify-center mb-4">
                 <Badge
                   variant="outline"
-                  className="inline-flex items-center gap-3 font-semibold px-5 py-3 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-300 preview-badge"
+                  className="inline-flex items-center gap-3 font-semibold px-5 py-3 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-300"
+                  data-bg-color={formData.backgroundColor}
+                  data-text-color={formData.fontColor}
+                  data-icon-color={formData.iconColor}
+                  style={
+                    {
+                      backgroundColor: formData.backgroundColor,
+                      color: formData.fontColor,
+                      boxShadow: `0 4px 20px ${formData.fontColor}15, 0 2px 10px ${formData.fontColor}10`,
+                    } as React.CSSProperties
+                  }
                 >
                   <span className="preview-icon">
-                    <span className="preview-icon-color">{renderIcon(formData.icon, 20)}</span>
+                    <span
+                      className="inline-flex items-center justify-center"
+                      style={{ color: formData.iconColor } as React.CSSProperties}
+                    >
+                      {renderIcon(formData.icon, 20)}
+                    </span>
                   </span>
                   <span className="text-sm font-semibold">
                     {formData.name || 'Nome da Categoria'}
@@ -788,25 +803,6 @@ export function ModernCategoryModal({
             </Button>
           </div>
         </DialogFooter>
-        <style jsx>{`
-          .design-popover-content {
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 99999;
-          }
-          .preview-badge {
-            background-color: ${formData.backgroundColor};
-            color: ${formData.fontColor};
-            box-shadow:
-              0 4px 20px ${formData.fontColor}15,
-              0 2px 10px ${formData.fontColor}10;
-          }
-          .preview-icon-color {
-            color: ${formData.iconColor};
-          }
-        `}</style>
       </DialogContent>
     </Dialog>
   );
