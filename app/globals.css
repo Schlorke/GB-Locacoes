@@ -911,3 +911,47 @@ Durante navegação interna, eles permanecem visíveis
 .animate-scale-in {
   animation: scale-in 0.4s ease-out;
 }
+
+/* FORÇAR SIDEBAR MOBILE NA DIREITA COM !IMPORTANT */
+[data-radix-dialog-content] {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: auto !important;
+  width: 320px !important;
+  max-width: 80vw !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  transform: none !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  z-index: 50 !important;
+}
+
+/* Animações para o sidebar */
+@keyframes slideInFromRightSidebar {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutToRightSidebar {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+[data-radix-dialog-content][data-state="open"] {
+  animation: slideInFromRightSidebar 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+[data-radix-dialog-content][data-state="closed"] {
+  animation: slideOutToRightSidebar 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}

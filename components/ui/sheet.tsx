@@ -40,7 +40,7 @@ const sheetVariants = cva(
           "inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
         left: "inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm",
         right:
-          "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm max-w-[320px]",
+          "inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm",
       },
     },
     defaultVariants: {
@@ -59,20 +59,11 @@ const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Con
       <SheetOverlay />
       <SheetPrimitive.Content
         ref={ref}
-        className={cn(sheetVariants({ side }), className)}
-        style={{
-          position: "fixed",
-          top: 0,
-          right: side === "right" ? 0 : "auto",
-          left: side === "left" ? 0 : "auto",
-          bottom: 0,
-          width: "320px",
-          maxWidth: "80vw",
-          height: "100vh",
-          transform: "none",
-          margin: 0,
-          borderRadius: 0,
-        }}
+        className={cn(
+          sheetVariants({ side }),
+          "!fixed !inset-y-0 !right-0 !left-auto !top-0 !bottom-0 !w-80 !max-w-[80vw] !h-screen !transform-none !translate-x-0 !translate-y-0 !m-0 !rounded-none",
+          className,
+        )}
         {...props}
       >
         {children}
