@@ -1,5 +1,7 @@
 'use client';
 
+/* eslint-disable no-inline-styles */
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
