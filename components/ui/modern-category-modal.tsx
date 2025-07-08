@@ -19,7 +19,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
 import { AlertTriangle, Edit, Palette, Save, Search, Tag, X } from 'lucide-react';
 import type React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 export interface CategoryData {
   id?: string;
@@ -483,6 +483,22 @@ export function ModernCategoryModal({
     return IconComponent ? <IconComponent size={size} /> : null;
   };
 
+  const badgeStyles = useMemo(
+    () => ({
+      backgroundColor: formData.backgroundColor,
+      color: formData.fontColor,
+      boxShadow: `0 4px 20px ${formData.fontColor}15, 0 2px 10px ${formData.fontColor}10`,
+    }),
+    [formData.backgroundColor, formData.fontColor],
+  );
+
+  const iconStyle = useMemo(
+    () => ({
+      color: formData.iconColor,
+    }),
+    [formData.iconColor],
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0">
@@ -667,18 +683,12 @@ export function ModernCategoryModal({
                   data-bg-color={formData.backgroundColor}
                   data-text-color={formData.fontColor}
                   data-icon-color={formData.iconColor}
-                  style={
-                    {
-                      backgroundColor: formData.backgroundColor,
-                      color: formData.fontColor,
-                      boxShadow: `0 4px 20px ${formData.fontColor}15, 0 2px 10px ${formData.fontColor}10`,
-                    } as React.CSSProperties
-                  }
+                  style={badgeStyles as React.CSSProperties}
                 >
                   <span className="preview-icon">
                     <span
                       className="inline-flex items-center justify-center"
-                      style={{ color: formData.iconColor } as React.CSSProperties}
+                      style={iconStyle as React.CSSProperties}
                     >
                       {renderIcon(formData.icon, 20)}
                     </span>
