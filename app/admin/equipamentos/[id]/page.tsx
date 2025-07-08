@@ -180,7 +180,7 @@ export default function EquipmentDetailsPage() {
                   ? equipment.images
                   : ['/placeholder.svg?height=400&width=400']
               }
-              alt={equipment.name}
+              altText={equipment.name}
             />
           </CardContent>
         </Card>
@@ -208,18 +208,24 @@ export default function EquipmentDetailsPage() {
                     }}
                   >
                     {equipment.category.icon &&
-                      LucideIcons[equipment.category.icon as keyof typeof LucideIcons] &&
-                      React.createElement(
-                        LucideIcons[equipment.category.icon as keyof typeof LucideIcons],
-                        {
-                          size: 14,
-                          color:
-                            equipment.category.iconColor ||
-                            equipment.category.fontColor ||
-                            'currentColor',
-                          className: 'mr-1.5 inline-block',
-                        },
-                      )}
+                      (() => {
+                        const IconComponent =
+                          LucideIcons[equipment.category.icon as keyof typeof LucideIcons];
+                        if (IconComponent && typeof IconComponent === 'function') {
+                          return (
+                            <IconComponent
+                              size={14}
+                              color={
+                                equipment.category.iconColor ||
+                                equipment.category.fontColor ||
+                                'currentColor'
+                              }
+                              className="mr-1.5 inline-block"
+                            />
+                          );
+                        }
+                        return null;
+                      })()}
                     {equipment.category.name}
                   </Badge>
                 </div>
