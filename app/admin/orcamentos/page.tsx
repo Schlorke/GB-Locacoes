@@ -93,14 +93,6 @@ export default function AdminQuotesPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    fetchQuotes();
-  }, [fetchQuotes]);
-
-  useEffect(() => {
-    filterQuotes();
-  }, [quotes, searchTerm, statusFilter, filterQuotes]);
-
   const fetchQuotes = useCallback(async () => {
     try {
       setLoading(true);
@@ -144,6 +136,14 @@ export default function AdminQuotesPage() {
 
     setFilteredQuotes(filtered);
   }, [quotes, searchTerm, statusFilter]);
+
+  useEffect(() => {
+    fetchQuotes();
+  }, [fetchQuotes]);
+
+  useEffect(() => {
+    filterQuotes();
+  }, [quotes, searchTerm, statusFilter, filterQuotes]);
 
   const updateQuoteStatus = async (quoteId: string, newStatus: 'approved' | 'rejected') => {
     try {
