@@ -80,34 +80,38 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         )}
       </div>
 
-      <nav className="flex-1 p-2 sm:p-3 space-y-1 overflow-y-auto">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname.startsWith(item.href);
+      <nav className="flex-1 p-2 sm:p-3 overflow-y-auto">
+        <ul className="space-y-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname.startsWith(item.href);
 
-          return (
-            <li key={item.href} className="list-none">
-              <Link
-                href={item.href}
-                title={item.label}
-                className={cn(
-                  'flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md transition-all duration-200 ease-in-out group text-sm sm:text-base',
-                  'text-slate-300 hover:bg-slate-800 hover:text-white',
-                  isActive && 'bg-primary text-primary-foreground shadow-md hover:bg-primary/90',
-                  isSidebarCollapsed && 'justify-center',
-                )}
-              >
-                <Icon
+            return (
+              <li key={item.href} className="list-none">
+                <Link
+                  href={item.href}
+                  title={item.label}
                   className={cn(
-                    'h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0',
-                    isActive ? 'text-white' : 'text-slate-400 group-hover:text-white',
+                    'flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md transition-all duration-200 ease-in-out group text-sm sm:text-base',
+                    'text-slate-300 hover:bg-slate-800 hover:text-white',
+                    isActive && 'bg-primary text-primary-foreground shadow-md hover:bg-primary/90',
+                    isSidebarCollapsed && 'justify-center',
                   )}
-                />
-                {!isSidebarCollapsed && <span className="font-medium truncate">{item.label}</span>}
-              </Link>
-            </li>
-          );
-        })}
+                >
+                  <Icon
+                    className={cn(
+                      'h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0',
+                      isActive ? 'text-white' : 'text-slate-400 group-hover:text-white',
+                    )}
+                  />
+                  {!isSidebarCollapsed && (
+                    <span className="font-medium truncate">{item.label}</span>
+                  )}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </nav>
 
       <div

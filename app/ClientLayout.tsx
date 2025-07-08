@@ -30,7 +30,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#334155" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
