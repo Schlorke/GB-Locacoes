@@ -1,13 +1,5 @@
-import dynamic from 'next/dynamic';
 import Hero from '@/components/hero';
-const Categories = dynamic(() => import('@/components/categories'), {
-  ssr: false,
-  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-});
-const FeaturedMaterials = dynamic(() => import('@/components/featured-materials'), {
-  ssr: false,
-  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
-});
+import HomePageClient from '@/components/home-page-client';
 import WhyChooseUs from '@/components/why-choose-us';
 import ContactSection from '@/components/contact-section';
 
@@ -29,8 +21,7 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
-      <Categories />
-      <FeaturedMaterials />
+      <HomePageClient />
       <WhyChooseUs />
       <ContactSection />
     </main>
