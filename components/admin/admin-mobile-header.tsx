@@ -44,7 +44,7 @@ export default function AdminMobileHeader() {
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-80 p-0 slide-in-from-right">
+          <SheetContent side="right" className="w-80 p-0">
             <div className="flex flex-col h-full">
               {/* Header do Sheet */}
               <SheetHeader className="p-6 pb-4 border-b">
