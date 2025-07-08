@@ -18,15 +18,15 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 
 - Variáveis de ambiente estão documentadas em `.env.example`.
 - Para rodar localmente:
-  ```bash
+  \`\`\`bash
   pnpm install
   pnpm dev
-  ```
+  \`\`\`
 - Testes e lint:
-  ```bash
+  \`\`\`bash
   pnpm lint
   pnpm test
-  ```
+  \`\`\`
 
 ---
 
@@ -79,7 +79,7 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 - PRs precisam de descrição clara do que foi feito e como testar.
 - Use o seguinte template:
 
-```md
+\`\`\`md
 ## Objetivo
 
 [Descreva brevemente o que foi feito.]
@@ -93,7 +93,7 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 - [ ] Código limpo
 - [ ] Testes passando
 - [ ] Sem alteração de design
-```
+\`\`\`
 
 ---
 
