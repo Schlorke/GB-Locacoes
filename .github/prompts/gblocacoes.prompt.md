@@ -18,7 +18,7 @@
 - Usar animações com Framer Motion
 - Utilizar ShadCN UI como base de componentes
 - Garantir modularidade, segurança (OWASP) e performance
-- Evitar bibliotecas não autorizadas (Neon, Upstash)
+- Evitar bibliotecas não autorizadas (Upstash)
 
 ## Estrutura do Projeto
 

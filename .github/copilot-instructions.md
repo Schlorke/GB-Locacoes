@@ -38,7 +38,7 @@ Este repositório é um sistema completo de e-commerce de locação de equipamen
 - **Jamais modifique o estilo visual, animações ou layout existentes.**  
   → Apenas estenda ou componha.
 - Código deve ser limpo, seguro, modular, performático e com tipagem estrita.
-- Não usar: **Neon**, **Upstash**, ou quaisquer libs deprecated.
+- Não usar: **Upstash** ou quaisquer libs deprecated.
 - Separar componentes, actions e hooks por responsabilidade.
 - Evitar lógica duplicada em múltiplas rotas.
 - Usar `zod` para validação de dados e formular entradas confiáveis.
