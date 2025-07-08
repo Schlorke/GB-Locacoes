@@ -168,6 +168,160 @@
   }
 }
 
+@keyframes fadeInUpSmooth {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes float-delayed {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scale-x {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes count-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* CSS-only animation classes to prevent hydration mismatches */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-on-scroll.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-on-scroll-delayed {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition-delay: 0.2s;
+}
+
+.animate-on-scroll-delayed.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Category cards animation */
+.category-card-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.category-card-animate.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered animation delays for category cards */
+.category-card-animate:nth-child(1) {
+  transition-delay: 0.1s;
+}
+.category-card-animate:nth-child(2) {
+  transition-delay: 0.2s;
+}
+.category-card-animate:nth-child(3) {
+  transition-delay: 0.3s;
+}
+.category-card-animate:nth-child(4) {
+  transition-delay: 0.4s;
+}
+.category-card-animate:nth-child(5) {
+  transition-delay: 0.5s;
+}
+.category-card-animate:nth-child(6) {
+  transition-delay: 0.6s;
+}
+.category-card-animate:nth-child(7) {
+  transition-delay: 0.7s;
+}
+.category-card-animate:nth-child(8) {
+  transition-delay: 0.8s;
+}
+
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out;
 }
@@ -182,6 +336,10 @@
 
 .animate-slide-in-right {
   animation: slideInFromRight 0.6s ease-out;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.8s ease-out forwards;
 }
 
 /* Hover effects */
@@ -310,4 +468,446 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Header que ocupa toda a largura da tela, incluindo área do scrollbar */
+header {
+  width: 100vw !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+}
+
+/* Garantir que o conteúdo do header não ultrapasse a área visível */
+header .max-w-7xl {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: max(1rem, calc((100vw - 100%) / 2 + 1rem));
+  padding-left: 1rem;
+}
+
+/* Compensar altura do header fixo */
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Ajuste para mobile */
+@media (max-width: 768px) {
+  header .max-w-7xl {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+
+/* Add these rules to prevent horizontal scrolling */
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ensure all sections respect container width */
+section {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Ensure container doesn't overflow */
+.container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Fix for absolute positioned elements */
+.absolute {
+  max-width: 100vw;
+}
+
+/* WhatsApp FAB Styles */
+.whatsapp-green {
+  background-color: #25d366;
+}
+
+.whatsapp-green:hover {
+  background-color: #128c7e;
+}
+
+.whatsapp-header {
+  background-color: #25d366;
+}
+
+/* WhatsApp Chat Window - garantir visibilidade */
+.whatsapp-chat-window {
+  max-height: 90vh;
+  min-height: 400px;
+  bottom: 90px !important;
+}
+
+/* Garantir que o input do WhatsApp seja sempre visível */
+.whatsapp-input-area {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+body.admin-body-layout {
+  padding-top: 0 !important;
+}
+
+/* Correção específica para transição de sombra do formulário de contato */
+.contact-form-hover {
+  transition: box-shadow 0.5s ease, transform 0.3s ease !important;
+}
+
+.contact-form-hover:hover {
+  transform: scale(1.02) !important;
+}
+
+/* Badge customizations - bordas mais arredondadas apenas para badges */
+div[class*="text-xs"][class*="inline-flex"][class*="items-center"][class*="gap-2"] {
+  border-radius: 9999px !important;
+}
+
+/* Garantir que elementos com animações mantenham transições de hover */
+.contact-form,
+.contact-card,
+.benefit-card,
+.category-card,
+.material-card {
+  transition: all 0.3s ease !important;
+}
+
+.contact-form:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.contact-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Modal e Popover - Centralização perfeita */
+[data-radix-popper-content-wrapper] {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 99999 !important;
+}
+
+/* Garantir centralização perfeita de modais */
+[role="dialog"] {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-height: 90vh !important;
+  max-width: min(90vw, 512px) !important;
+  margin: 0 !important;
+}
+
+/* Responsividade para telas pequenas */
+@media (max-width: 640px) {
+  [role="dialog"] {
+    max-width: 95vw !important;
+    max-height: 95vh !important;
+  }
+}
+
+/* Popover centralizado dentro da modal */
+.modal-centered-popover {
+  position: fixed !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 99999 !important;
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+}
+
+/* Garantir que o popover fique sempre embaixo do trigger */
+[role="dialog"] .modal-centered-popover[data-side="bottom"] {
+  position: fixed !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  top: auto !important;
+  margin-top: 8px !important;
+}
+
+/* Forçar que o popover nunca apareça em cima */
+[role="dialog"] .modal-centered-popover[data-side="top"] {
+  display: none !important;
+}
+
+/* Classes utilitárias para modal de categoria */
+.modal-preview-scroll {
+  /* Fallback para navegadores que não suportam scrollbar-width */
+  overflow-y: auto;
+
+  /* Firefox scrollbar styling */
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+
+  /* Garantir que o scroll do mouse funcione */
+  pointer-events: auto !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain;
+}
+
+.modal-preview-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-preview-scroll::-webkit-scrollbar-track {
+  background: #f8fafc;
+  border-radius: 3px;
+}
+
+.modal-preview-scroll::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 3px;
+}
+
+.modal-preview-scroll::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+.icon-grid-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.icon-grid-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.icon-grid-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.icon-grid-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Classe CSS para grid responsivo de ícones */
+.icon-grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.5rem;
+
+  /* Garantir que o scroll do mouse funcione no grid */
+  pointer-events: auto !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Responsividade específica para diferentes tamanhos */
+@media (max-width: 320px) {
+  .icon-grid-responsive {
+    grid-template-columns: repeat(auto-fit, minmax(35px, 1fr));
+    gap: 0.375rem;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 480px) {
+  .icon-grid-responsive {
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 481px) {
+  .icon-grid-responsive {
+    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+    max-width: 100%;
+  }
+}
+
+.preview-icon {
+  color: var(--icon-color, #64748b);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.preview-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Garantir scroll funcionando em popovers */
+[data-radix-popover-content] {
+  overflow-y: auto !important;
+  pointer-events: auto !important;
+  touch-action: pan-y !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Garantir scroll especificamente no popover de categoria */
+.popover-centered-in-modal {
+  overflow-y: auto !important;
+}
+
+/* Category badge dynamic styling */
+.category-badge {
+  background-color: var(--badge-bg, #3b82f6) !important;
+  color: var(--badge-color, #ffffff) !important;
+  box-shadow: var(--badge-shadow, 0 4px 20px rgba(59, 130, 246, 0.15), 0 2px 10px rgba(59, 130, 246, 0.1)) !important;
+}
+
+.category-icon {
+  color: var(--icon-color, #ffffff) !important;
+}
+
+/* Selection styles */
+::selection {
+  background-color: theme("colors.blue.200");
+  color: theme("colors.blue.900");
+}
+
+/* Form enhancements */
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 3px theme("colors.blue.100");
+}
+
+/* Button hover effects */
+.btn-hover-lift {
+  transition: all 0.3s ease;
+}
+
+.btn-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Card hover effects */
+.card-hover-float {
+  transition: all 0.3s ease;
+}
+
+.card-hover-float:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* 
+IMPORTANTE: Elementos animados começam invisíveis apenas na primeira visita
+Durante navegação interna, eles permanecem visíveis
+*/
+.category-card,
+.material-card,
+.benefit-card,
+.contact-form,
+.contact-info,
+.contact-card,
+.cta-section,
+.section-title,
+.section-subtitle,
+.hero-title,
+.hero-subtitle,
+.hero-search,
+.hero-buttons,
+.hero-contact,
+.hero-image {
+  /* Não definir opacity: 0 aqui, será controlado pelo JavaScript */
+}
+
+/* Para usuários que preferem movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .category-card,
+  .material-card,
+  .benefit-card,
+  .contact-form,
+  .contact-info,
+  .contact-card,
+  .cta-section,
+  .section-title,
+  .section-subtitle,
+  .hero-title,
+  .hero-subtitle,
+  .hero-search,
+  .hero-buttons,
+  .hero-contact,
+  .hero-image {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+/* Utility classes */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-scale-x {
+  animation: scale-x 1s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+.animate-count-up {
+  animation: count-up 1s ease-out forwards;
+}
+
+@layer utilities {
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+}
+
+/* Animações suaves para o login */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s ease-out;
 }
