@@ -488,15 +488,9 @@ export function ModernCategoryModal({
       '--badge-bg': formData.backgroundColor,
       '--badge-color': formData.fontColor,
       '--badge-shadow': `0 4px 20px ${formData.fontColor}15, 0 2px 10px ${formData.fontColor}10`,
-    }),
-    [formData.backgroundColor, formData.fontColor],
-  );
-
-  const iconStyle = useMemo(
-    () => ({
       '--icon-color': formData.iconColor,
     }),
-    [formData.iconColor],
+    [formData.backgroundColor, formData.fontColor, formData.iconColor],
   );
 
   return (
@@ -686,10 +680,7 @@ export function ModernCategoryModal({
                   style={badgeStyles as React.CSSProperties}
                 >
                   <span className="preview-icon">
-                    <span
-                      className="inline-flex items-center justify-center category-icon"
-                      style={iconStyle as React.CSSProperties}
-                    >
+                    <span className="inline-flex items-center justify-center category-icon">
                       {renderIcon(formData.icon, 20)}
                     </span>
                   </span>
