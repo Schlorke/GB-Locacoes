@@ -44,7 +44,7 @@ export default function AdminMobileHeader() {
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-80 p-0">
+          <SheetContent side="right" className="w-80 p-0 slide-in-from-right">
             <div className="flex flex-col h-full">
               {/* Header do Sheet */}
               <SheetHeader className="p-6 pb-4 border-b">
@@ -70,11 +70,11 @@ export default function AdminMobileHeader() {
                         href={item.href}
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-sm font-medium border",
+                          "flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-sm font-medium",
                           "hover:bg-slate-100 active:bg-slate-200",
                           isActive
-                            ? "bg-primary text-primary-foreground hover:bg-primary/90 border-primary/20"
-                            : "bg-slate-50/80 text-slate-700 border-slate-200/60 hover:border-slate-300/80",
+                            ? "bg-slate-900 text-white hover:bg-slate-800"
+                            : "bg-slate-50/80 text-slate-700 hover:bg-slate-100",
                         )}
                       >
                         <Icon className="h-5 w-5 flex-shrink-0" />
@@ -103,7 +103,7 @@ export default function AdminMobileHeader() {
                     setIsOpen(false)
                     signOut({ callbackUrl: "/admin/login" })
                   }}
-                  className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200/60 hover:border-red-300/80"
+                  className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50"
                 >
                   <LogOut className="h-5 w-5" />
                   <span>Sair do Sistema</span>
