@@ -912,42 +912,74 @@ Durante navegação interna, eles permanecem visíveis
   animation: scale-in 0.4s ease-out;
 }
 
-/* Custom animations for mobile sidebar */
-@keyframes slide-in-from-right {
-  from {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes slide-out-to-right {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(100%);
-  }
-}
-
-/* Force sidebar to slide from right edge */
-[data-radix-dialog-content] {
-  animation-duration: 300ms !important;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1) !important;
+/* SIDEBAR MOBILE - CORREÇÃO DEFINITIVA */
+/* Forçar o Sheet a aparecer na borda direita da tela */
+[data-radix-dialog-content][data-side="right"] {
   position: fixed !important;
-  right: 0 !important;
   top: 0 !important;
-  height: 100vh !important;
-  max-width: 320px !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: auto !important;
   width: 320px !important;
+  max-width: 80vw !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
   transform: translateX(0) !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
 }
 
-[data-radix-dialog-content][data-state="open"] {
-  animation-name: slide-in-from-right !important;
+/* Animações específicas para o sidebar mobile */
+@keyframes mobile-sidebar-slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
-[data-radix-dialog-content][data-state="closed"] {
-  animation-name: slide-out-to-right !important;
+@keyframes mobile-sidebar-slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Aplicar animações ao sidebar */
+[data-radix-dialog-content][data-side="right"][data-state="open"] {
+  animation: mobile-sidebar-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+[data-radix-dialog-content][data-side="right"][data-state="closed"] {
+  animation: mobile-sidebar-slide-out 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Garantir que o overlay funcione corretamente */
+[data-radix-dialog-overlay] {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 50 !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Garantir que o portal funcione */
+[data-radix-dialog-portal] {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 50 !important;
+}
+
+/* Sobrescrever qualquer estilo que force centralização */
+[data-radix-dialog-content][data-side="right"] {
+  left: auto !important;
+  top: 0 !important;
+  transform: none !important;
+}
+
+/* Garantir que não haja conflito com outros modais */
+[data-radix-dialog-content]:not([data-side="right"]) {
+  /* Manter comportamento padrão para outros modais */
 }
