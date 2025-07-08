@@ -7,7 +7,7 @@
     "Utilizar autenticação com NextAuth e 2FA",
     "Seguir arquitetura modular e com boas práticas (Clean Code, DX)",
     "Sugerir apenas componentes ShadCN, sem UI externas",
-    "Evitar dependências como Neon, Upstash ou bibliotecas legadas",
+    "Evitar dependências como Upstash ou bibliotecas legadas",
     "Preservar animações e identidade visual já implementadas"
   ]
 }

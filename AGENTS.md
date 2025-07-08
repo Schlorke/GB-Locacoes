@@ -103,7 +103,7 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 - `contract-agent`: Dispara assinatura digital com ZapSign
 - `email-agent`: Envia e-mails com Resend/SendGrid
 - `logger-agent`: Registra ações sensíveis (logs com Pino)
-- `cleanup-agent`: Remove resquícios de Neon/Upstash
+- `cleanup-agent`: Remove dependências obsoletas
 
 ---
 
