@@ -8,6 +8,8 @@ build/
 
 # 🔐 Variáveis de ambiente
 .env*
+!.env.example
+!.env.docker
 .vercel
 
 # 🧪 Arquivos de debug

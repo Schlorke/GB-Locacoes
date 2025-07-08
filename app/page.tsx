@@ -1,7 +1,13 @@
-import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import Hero from '@/components/hero';
-import FeaturedMaterials from '@/components/featured-materials';
-import Categories from '@/components/categories';
+const Categories = dynamic(() => import('@/components/categories'), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
+});
+const FeaturedMaterials = dynamic(() => import('@/components/featured-materials'), {
+  ssr: false,
+  loading: () => <div className="h-96 bg-gray-100 animate-pulse" />,
+});
 import WhyChooseUs from '@/components/why-choose-us';
 import ContactSection from '@/components/contact-section';
 
@@ -23,12 +29,8 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
-      <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse" />}>
-        <Categories />
-      </Suspense>
-      <Suspense fallback={<div className="h-96 bg-gray-100 animate-pulse" />}>
-        <FeaturedMaterials />
-      </Suspense>
+      <Categories />
+      <FeaturedMaterials />
       <WhyChooseUs />
       <ContactSection />
     </main>
