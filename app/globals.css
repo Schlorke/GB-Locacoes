@@ -912,8 +912,8 @@ Durante navegação interna, eles permanecem visíveis
   animation: scale-in 0.4s ease-out;
 }
 
-/* FORÇAR SIDEBAR MOBILE NA DIREITA COM !IMPORTANT */
-[data-radix-dialog-content] {
+/* SIDEBAR MOBILE - CORREÇÃO DEFINITIVA COM FORÇA BRUTA */
+.mobile-sidebar-force {
   position: fixed !important;
   top: 0 !important;
   right: 0 !important;
@@ -923,35 +923,34 @@ Durante navegação interna, eles permanecem visíveis
   max-width: 80vw !important;
   height: 100vh !important;
   max-height: 100vh !important;
-  transform: none !important;
+  transform: translateX(0) !important;
   margin: 0 !important;
   border-radius: 0 !important;
   z-index: 50 !important;
 }
 
-/* Animações para o sidebar */
-@keyframes slideInFromRightSidebar {
+.mobile-sidebar-force[data-state="open"] {
+  animation: slideInFromRightForce 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.mobile-sidebar-force[data-state="closed"] {
+  animation: slideOutToRightForce 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes slideInFromRightForce {
   from {
-    transform: translateX(100%);
+    transform: translateX(100%) !important;
   }
   to {
-    transform: translateX(0);
+    transform: translateX(0) !important;
   }
 }
 
-@keyframes slideOutToRightSidebar {
+@keyframes slideOutToRightForce {
   from {
-    transform: translateX(0);
+    transform: translateX(0) !important;
   }
   to {
-    transform: translateX(100%);
+    transform: translateX(100%) !important;
   }
-}
-
-[data-radix-dialog-content][data-state="open"] {
-  animation: slideInFromRightSidebar 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-}
-
-[data-radix-dialog-content][data-state="closed"] {
-  animation: slideOutToRightSidebar 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }

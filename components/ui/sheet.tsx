@@ -59,11 +59,7 @@ const SheetContent = React.forwardRef<React.ElementRef<typeof SheetPrimitive.Con
       <SheetOverlay />
       <SheetPrimitive.Content
         ref={ref}
-        className={cn(
-          sheetVariants({ side }),
-          "!fixed !inset-y-0 !right-0 !left-auto !top-0 !bottom-0 !w-80 !max-w-[80vw] !h-screen !transform-none !translate-x-0 !translate-y-0 !m-0 !rounded-none",
-          className,
-        )}
+        className={cn(sheetVariants({ side }), "mobile-sidebar-force", className)}
         {...props}
       >
         {children}
