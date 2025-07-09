@@ -525,11 +525,7 @@ export function ModernCategoryModal({
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="
-      w-[380px] max-w-[calc(100vw-3rem)]
-      p-0 shadow-2xl border rounded-lg bg-white z-[99999]
-      max-h-[70vh] overflow-y-auto
-    "
+                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] max-h-[70vh] overflow-y-auto"
                     align="center"
                     side="bottom"
                     sideOffset={8}
@@ -539,7 +535,7 @@ export function ModernCategoryModal({
                     onOpenAutoFocus={(e) => e.preventDefault()}
                     onCloseAutoFocus={(e) => e.preventDefault()}
                   >
-                    <div className="p-4 space-y-4">
+                    <div className="max-h-[70vh] overflow-y-auto p-4 space-y-4 modal-preview-scroll">
                       {/* Header */}
                       <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                         <div className="flex items-center gap-2">
@@ -554,11 +550,16 @@ export function ModernCategoryModal({
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() =>
-                              setFormData({ ...formData, icon: '' as keyof typeof LucideIcons })
-                            }
+                            onClick={() => {
+                              setFormData({ ...formData, icon: '' as keyof typeof LucideIcons });
+                            }}
                             className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs"
                             title="Remover ícone"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
                           >
                             Remove
                           </Button>
@@ -567,6 +568,11 @@ export function ModernCategoryModal({
                             size="sm"
                             onClick={() => setIsDesignOpen(false)}
                             className="text-slate-400 hover:text-slate-600 h-7 px-2 rounded-lg"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
                           >
                             <X className="w-3.5 h-3.5" />
                           </Button>
@@ -586,11 +592,13 @@ export function ModernCategoryModal({
 
                       {/* Icons Grid */}
                       <div className="space-y-3">
-                        <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
+                        <div className="flex items-center justify-between">
+                          <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
+                        </div>
                         <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
                           <div className="icon-grid-responsive icon-grid-scroll">
-                            {ICON_OPTIONS.filter((name) =>
-                              name.toLowerCase().includes(iconFilter.toLowerCase()),
+                            {ICON_OPTIONS.filter((iconName) =>
+                              iconName.toLowerCase().includes(iconFilter.toLowerCase()),
                             )
                               .slice(0, 48)
                               .map((iconName) => (
