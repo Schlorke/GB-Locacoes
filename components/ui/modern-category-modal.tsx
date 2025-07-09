@@ -520,7 +520,7 @@ export function ModernCategoryModal({
                       size="sm"
                       className="h-8 px-3 text-xs font-medium border-slate-300 hover:border-slate-400 hover:bg-white transition-all duration-200 rounded-lg shadow-sm bg-transparent"
                     >
-                      <Edit className="w-3.5 h-3.5 mr-1.5" />
+                      <Edit className="w-4 h-4 mr-2" />
                       Editar
                     </Button>
                   </PopoverTrigger>
@@ -557,6 +557,11 @@ export function ModernCategoryModal({
                               }}
                               className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs"
                               title="Remover ícone"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
                             >
                               Remove
                             </Button>
@@ -565,8 +570,13 @@ export function ModernCategoryModal({
                               size="sm"
                               onClick={() => setIsDesignOpen(false)}
                               className="text-slate-400 hover:text-slate-600 h-7 px-2 rounded-lg"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
                             >
-                              <X className="w-4 h-4" />
+                              <X className="w-3.5 h-3.5" />
                             </Button>
                           </div>
                         </div>

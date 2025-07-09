@@ -80,6 +80,7 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 - Use o seguinte template:
 
 \`\`\`md
+
 ## Objetivo
 
 [Descreva brevemente o que foi feito.]
@@ -93,7 +94,7 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 - [ ] Código limpo
 - [ ] Testes passando
 - [ ] Sem alteração de design
-\`\`\`
+      \`\`\`
 
 ---
 

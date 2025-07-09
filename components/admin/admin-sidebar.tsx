@@ -137,7 +137,6 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
               <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
                 {session?.user?.name || 'Administrador'}
               </p>
-              {/* @ts-expect-error - role property will be added to session type */}
               <p className="text-xs text-slate-400 truncate">{session?.user?.role || 'ADMIN'}</p>
             </div>
           )}
