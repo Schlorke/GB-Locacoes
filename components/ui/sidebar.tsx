@@ -1,18 +1,18 @@
 'use client';
 
-import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { type VariantProps, cva } from 'class-variance-authority';
 import { PanelLeft } from 'lucide-react';
+import * as React from 'react';
 
-import { useIsMobile } from '@/hooks/use-mobile';
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
+
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar:state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -366,38 +366,19 @@ const SidebarFooter = React.forwardRef<HTMLDivElement, React.ComponentProps<'div
 );
 SidebarFooter.displayName = 'SidebarFooter';
 
-const SidebarSeparator = React.forwardRef<
-  React.ElementRef<typeof Separator>,
-  React.ComponentProps<typeof Separator>
->(({ className, ...props }, ref) => {
-  return (
-    <Separator
-      ref={ref}
-      data-sidebar="separator"
-      className={cn('mx-2 w-auto bg-sidebar-border', className)}
-      {...props}
-    />
-  );
-});
-SidebarSeparator.displayName = 'SidebarSeparator';
-
 const SidebarContent = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ className, ...props }, ref) => {
     return (
       <div
         ref={ref}
         data-sidebar="content"
-        className={cn(
-          'flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
-          className,
-        )}
+        className={cn('flex flex-1 flex-col gap-2 p-2', className)}
         {...props}
       />
     );
   },
 );
 SidebarContent.displayName = 'SidebarContent';
-
 const SidebarGroup = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ className, ...props }, ref) => {
     return (
@@ -710,6 +691,7 @@ const SidebarMenuSubButton = React.forwardRef<
 SidebarMenuSubButton.displayName = 'SidebarMenuSubButton';
 
 // Lightweight wrapper for a linkable sidebar row.
+
 const SidebarItem = React.forwardRef<
   HTMLAnchorElement,
   {
@@ -719,8 +701,8 @@ const SidebarItem = React.forwardRef<
   } & React.ComponentPropsWithoutRef<'a'>
 >(({ href, icon: Icon, children, className, ...props }, ref) => (
   <SidebarMenuItem>
-    <SidebarMenuButton asChild className={cn('gap-3', className)} {...props} isActive={false}>
-      <a ref={ref} href={href}>
+    <SidebarMenuButton asChild className={cn('gap-3', className)} isActive={false}>
+      <a ref={ref} href={href} {...props}>
         <Icon className="h-4 w-4" />
         <span>{children}</span>
       </a>
@@ -740,6 +722,7 @@ export {
   SidebarHeader,
   SidebarInput,
   SidebarInset,
+  SidebarItem,
   SidebarMenu,
   SidebarMenuAction,
   SidebarMenuBadge,
@@ -751,8 +734,6 @@ export {
   SidebarMenuSubItem,
   SidebarProvider,
   SidebarRail,
-  SidebarSeparator,
   SidebarTrigger,
   useSidebar,
-  SidebarItem,
 };
