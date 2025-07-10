@@ -2,6 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { CloseButton } from '@/components/ui/close-button';
 import {
   Dialog,
   DialogContent,
@@ -495,7 +496,10 @@ export function ModernCategoryModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0">
+      <DialogContent
+        closeButtonClassName="hover:bg-white"
+        className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0"
+      >
         {/* Header */}
         <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg">
           <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
@@ -563,19 +567,12 @@ export function ModernCategoryModal({
                           >
                             Remove
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
+                          <CloseButton
                             onClick={() => setIsDesignOpen(false)}
-                            className="text-slate-400 hover:text-slate-600 h-7 px-2 rounded-lg"
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </Button>
+                            className="text-slate-400 hover:text-slate-600 h-7 w-7"
+                            size="sm"
+                            variant="ghost"
+                          />
                         </div>
                       </div>
 
