@@ -756,6 +756,7 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Garantir scroll funcionando em popovers */
 [data-radix-popover-content] {
+  max-height: 70vh;
   overflow-y: auto !important;
   pointer-events: auto !important;
   touch-action: pan-y !important;
@@ -789,9 +790,5 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 }
 
 /* Forçar scroll funcional dentro do Popover (ShadCN UI) */
-[data-radix-popover-content] {
-  max-height: 70vh;
-  overflow-y: auto !important;
-  touch-action: pan-y !important;
-  overscroll-behavior: contain !important;
-}
+/* (Reutiliza as mesmas regras definidas acima) */
+
