@@ -532,7 +532,6 @@ export function ModernCategoryModal({
                     avoidCollisions={false}
                     collisionPadding={0}
                     sticky="always"
-                    portal={false}
                     onOpenAutoFocus={(e) => e.preventDefault()}
                     onCloseAutoFocus={(e) => e.preventDefault()}
                   >
