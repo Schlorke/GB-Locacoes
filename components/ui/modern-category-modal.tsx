@@ -699,7 +699,7 @@ export function ModernCategoryModal({
               <div className="flex justify-center mb-4">
                 <Badge
                   variant="outline"
-                  className="text-xs focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-300 max-w-full"
+                  className="text-xs focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 hover:shadow-xl max-w-full"
                   style={{
                     backgroundColor: formData.backgroundColor,
                     color: formData.fontColor,
