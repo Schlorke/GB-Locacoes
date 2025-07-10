@@ -42,7 +42,11 @@ const DialogContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close asChild>
-        <CloseButton className="absolute right-4 top-4" variant="ghost" />
+        <CloseButton
+          className="absolute right-4 top-4 text-slate-400 hover:text-slate-600"
+          size="sm"
+          variant="ghost"
+        />
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
