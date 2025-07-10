@@ -111,11 +111,7 @@ export default function AdminLoginPage() {
     <div className="h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 overflow-hidden">
       <Header />
       <div
-        className="flex items-center justify-center px-4 relative"
-        style={{
-          height: `calc(100vh - ${headerHeight || 80}px)`,
-          marginTop: `${headerHeight || 80}px`,
-        }}
+        className={`flex items-center justify-center px-4 relative h-[calc(100vh_-_${headerHeight || 80}px)] mt-[${headerHeight || 80}px]`}
       >
         {/* Background decorativo */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -126,16 +122,10 @@ export default function AdminLoginPage() {
         {/* Container do login centralizado */}
         <div className="w-full max-w-md relative z-10">
           <Card
-            className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in"
-            style={{
-              maxHeight: `calc(100vh - ${(headerHeight || 80) + 80}px)`,
-            }}
+            className={`w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in max-h-[calc(100vh_-_${(headerHeight || 80) + 80}px)]`}
           >
             <div
-              className="overflow-y-auto rounded-2xl"
-              style={{
-                maxHeight: `calc(100vh - ${(headerHeight || 80) + 80}px)`,
-              }}
+              className={`overflow-y-auto rounded-2xl max-h-[calc(100vh_-_${(headerHeight || 80) + 80}px)]`}
             >
               <CardHeader className="text-center space-y-4 py-6 px-6 animate-fade-in-up">
                 {/* Logo melhorado com animação */}

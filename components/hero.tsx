@@ -35,7 +35,7 @@ export default function Hero() {
               <Input
                 type="search"
                 placeholder="Buscar equipamentos (ex: andaime, betoneira)"
-                className="border-0 bg-transparent text-gray-900 placeholder:text-gray-500 focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="border-0 bg-transparent text-gray-900 placeholder:text-gray-500 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                 aria-label="Buscar equipamentos de construção"
               />
               <Button

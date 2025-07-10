@@ -531,13 +531,8 @@ export function ModernCategoryModal({
                               onClick={() => {
                                 setFormData({ ...formData, icon: '' as keyof typeof LucideIcons });
                               }}
-                              className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs"
+                              className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs inline-flex items-center justify-center"
                               title="Remover ícone"
-                              style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}
                             >
                               Remove
                             </Button>
@@ -584,7 +579,7 @@ export function ModernCategoryModal({
                                           })
                                         }
                                         className={cn(
-                                          'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden focus:outline-none',
+                                          'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden',
                                           isSelected
                                             ? 'border-blue-400 shadow-md ring-2 ring-blue-200'
                                             : 'border-slate-200 hover:border-slate-300 hover:shadow-sm',
@@ -592,7 +587,7 @@ export function ModernCategoryModal({
                                         title={iconName}
                                         data-bg={formData.backgroundColor}
                                         data-icon-color={formData.iconColor}
-                                        style={{ backgroundColor: formData.backgroundColor }}
+                                        className={cn(`bg-[${formData.backgroundColor}]`)}
                                       >
                                         {renderIcon(
                                           iconName as keyof typeof LucideIcons,
@@ -673,14 +668,11 @@ export function ModernCategoryModal({
                   <Badge
                     variant="outline"
                     className={cn(
-                      'category-preview-badge text-xs focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
+                      'category-preview-badge text-xs focus:ring-2 focus:ring-ring focus:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
                       'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
                       'hover:scale-[1.07]',
                     )}
-                    style={{
-                      backgroundColor: formData.backgroundColor,
-                      color: formData.fontColor,
-                    }}
+                    className={cn(`bg-[${formData.backgroundColor}] text-[${formData.fontColor}]`)}
                   >
                     <span className="flex-shrink-0">{renderIcon(formData.icon, 16)}</span>
                     <span className="truncate font-semibold text-sm min-w-0">
@@ -782,7 +774,7 @@ export function ModernCategoryModal({
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting || !formData.name.trim()}
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4 flex-1"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4 flex-1"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

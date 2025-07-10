@@ -200,12 +200,7 @@ export default function EquipmentDetailsPage() {
                 <div className="mt-1">
                   <Badge
                     variant="outline"
-                    className="text-sm"
-                    style={{
-                      backgroundColor: equipment.category.bgColor || undefined,
-                      color: equipment.category.fontColor || undefined,
-                      borderColor: equipment.category.bgColor ? 'transparent' : undefined,
-                    }}
+                    className={`text-sm bg-[${equipment.category.bgColor || 'transparent'}] text-[${equipment.category.fontColor || 'inherit'}] ${equipment.category.bgColor ? 'border-transparent' : ''}`}
                   >
                     {equipment.category.icon &&
                       (() => {

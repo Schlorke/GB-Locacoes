@@ -304,11 +304,7 @@ export default function AdminEquipmentsPage() {
                       <TableCell className="hidden md:table-cell p-2 sm:p-4">
                         {equipment.category ? (
                           <Badge
-                            className="text-xs"
-                            style={{
-                              backgroundColor: equipment.category.bgColor || '#e0e0e0',
-                              color: equipment.category.fontColor || '#000000',
-                            }}
+                            className={`text-xs bg-[${equipment.category.bgColor || '#e0e0e0'}] text-[${equipment.category.fontColor || '#000000'}]`}
                           >
                             {equipment.category.name}
                           </Badge>

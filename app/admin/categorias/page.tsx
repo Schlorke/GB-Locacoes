@@ -216,12 +216,7 @@ export default function AdminCategoriesPage() {
     return (
       <Badge
         variant="outline"
-        className="inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-300 max-w-full"
-        style={{
-          backgroundColor: category.backgroundColor || category.bgColor || '#e0e7ff',
-          color: category.fontColor || '#1e40af',
-          boxShadow: `0 2px 8px ${category.fontColor || '#1e40af'}15, 0 1px 4px ${category.fontColor || '#1e40af'}08`,
-        }}
+        className={`inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-300 max-w-full bg-[${category.backgroundColor || category.bgColor || '#e0e7ff'}] text-[${category.fontColor || '#1e40af'}] shadow-[0_2px_8px_${category.fontColor || '#1e40af'}15,_0_1px_4px_${category.fontColor || '#1e40af'}08]`}
       >
         <span className="flex-shrink-0">{renderIcon(category.icon, category.iconColor)}</span>
         <span className="truncate font-semibold text-sm min-w-0">{category.name}</span>
