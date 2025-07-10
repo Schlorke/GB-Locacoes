@@ -1,6 +1,5 @@
 'use client';
 
-import '@/components/category-badge-3d.css';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CloseButton } from '@/components/ui/close-button';
