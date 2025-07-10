@@ -525,14 +525,13 @@ export function ModernCategoryModal({
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] max-h-[70vh] overflow-y-auto"
+                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] max-h-[70vh] overflow-y-auto left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
                     align="center"
                     side="bottom"
                     sideOffset={8}
                     avoidCollisions={false}
                     collisionPadding={0}
                     sticky="always"
-                    // portal removed to avoid passing a boolean to a non-boolean attribute
                     onOpenAutoFocus={(e) => e.preventDefault()}
                     onCloseAutoFocus={(e) => e.preventDefault()}
                   >
