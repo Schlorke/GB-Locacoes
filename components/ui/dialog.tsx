@@ -1,9 +1,8 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import CloseButton from '@/components/ui/close-button';
 import { cn } from '@/lib/utils';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
 import * as React from 'react';
 
 const Dialog = DialogPrimitive.Root;
@@ -40,30 +39,22 @@ const DialogContent = React.forwardRef<
     closeButtonClassName,
   );
   return (
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      className={cn(
-        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg',
-        className,
-      )}
-      {...props}
-    >
-      {children}
-      <DialogPrimitive.Close asChild>
-
-        <CloseButton
-          className={closeClasses}
-          size="sm"
-          variant="ghost"
-        />
-
-
-
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPortal>
+    <DialogPortal>
+      <DialogOverlay />
+      <DialogPrimitive.Content
+        ref={ref}
+        className={cn(
+          'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg',
+          className,
+        )}
+        {...props}
+      >
+        {children}
+        <DialogPrimitive.Close asChild>
+          <CloseButton className={closeClasses} size="md" variant="ghost" />
+        </DialogPrimitive.Close>
+      </DialogPrimitive.Content>
+    </DialogPortal>
   );
 });
 DialogContent.displayName = DialogPrimitive.Content.displayName;

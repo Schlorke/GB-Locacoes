@@ -1,5 +1,6 @@
 'use client';
 
+import '@/components/category-badge-3d.css';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { CloseButton } from '@/components/ui/close-button';
@@ -19,8 +20,7 @@ import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
 import { AlertTriangle, Edit, Palette, Save, Search, Tag, X } from 'lucide-react';
-import type React from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 export interface CategoryData {
   id?: string;
@@ -699,18 +699,20 @@ export function ModernCategoryModal({
               <div className="flex justify-center mb-4">
                 <Badge
                   variant="outline"
-                  className="inline-flex items-center gap-3 font-semibold px-5 py-3 rounded-lg border-0 shadow-lg hover:shadow-xl transition-all duration-300 category-badge"
-                  data-bg-color={formData.backgroundColor}
-                  data-text-color={formData.fontColor}
-                  data-icon-color={formData.iconColor}
-                  style={badgeStyles as React.CSSProperties}
+                  className="text-xs focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md hover:shadow-lg transition-all duration-300 max-w-full"
+                  style={{
+                    backgroundColor: formData.backgroundColor,
+                    color: formData.fontColor,
+                    boxShadow: `${formData.fontColor}15 0px 2px 8px, ${formData.fontColor}08 0px 1px 4px`,
+                  }}
                 >
-                  <span className="preview-icon">
-                    <span className="inline-flex items-center justify-center category-icon">
-                      {renderIcon(formData.icon, 20)}
-                    </span>
+                  <span className="flex-shrink-0">
+                    {renderIcon(formData.icon, 16) &&
+                      React.cloneElement(renderIcon(formData.icon, 16) as React.ReactElement, {
+                        color: formData.iconColor,
+                      })}
                   </span>
-                  <span className="text-sm font-semibold">
+                  <span className="truncate font-semibold text-sm min-w-0">
                     {formData.name || 'Nome da Categoria'}
                   </span>
                 </Badge>
