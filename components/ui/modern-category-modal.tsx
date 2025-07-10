@@ -532,7 +532,7 @@ export function ModernCategoryModal({
                     avoidCollisions={false}
                     collisionPadding={0}
                     sticky="always"
-                    portal={false}
+                    // portal removed to avoid passing a boolean to a non-boolean attribute
                     onOpenAutoFocus={(e) => e.preventDefault()}
                     onCloseAutoFocus={(e) => e.preventDefault()}
                   >
