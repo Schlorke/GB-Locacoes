@@ -513,7 +513,7 @@ export function ModernCategoryModal({
             <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-slate-700">Preview da Categoria</h3>
-                <Popover open={isDesignOpen} onOpenChange={setIsDesignOpen}>
+                <Popover modal open={isDesignOpen} onOpenChange={setIsDesignOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
