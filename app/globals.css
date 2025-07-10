@@ -783,6 +783,26 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   color: var(--icon-color, #ffffff) !important;
 }
 
+/* Categoria: grid de ícones com degradê no fundo */
+
+.category-icon-grid-container {
+  padding-bottom: 0 !important;
+  position: relative;
+}
+
+.category-icon-grid {
+  max-height: 132px;
+  min-height: 132px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  /* padding-bottom removido para não criar barra inferior */
+}
+
 @media (min-width: 640px) {
   :root {
     --header-height: 4.5rem;
