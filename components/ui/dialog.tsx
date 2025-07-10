@@ -1,10 +1,10 @@
 'use client';
 
-import * as React from 'react';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
-
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { CloseButton } from './close-button';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { X } from 'lucide-react';
+import * as React from 'react';
 
 const Dialog = DialogPrimitive.Root;
 
@@ -42,7 +42,15 @@ const DialogContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close asChild>
-        <CloseButton className="absolute right-4 top-4" variant="ghost" />
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          aria-label="Fechar"
+          className="flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-colors duration-300 h-7 w-7 p-0 text-slate-500 hover:text-slate-900 hover:bg-slate-100 absolute right-4 top-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 z-[99999] bg-transparent shadow-none border-0"
+        >
+          <X className="w-3.5 h-3.5" />
+        </Button>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
@@ -88,13 +96,13 @@ DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 export {
   Dialog,
-  DialogPortal,
-  DialogOverlay,
   DialogClose,
-  DialogTrigger,
   DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
 };
