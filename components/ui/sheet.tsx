@@ -62,7 +62,11 @@ const SheetContent = React.forwardRef<
     <SheetPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
       {children}
       <SheetPrimitive.Close asChild>
-        <CloseButton className="absolute right-4 top-4" />
+        <CloseButton
+          className="absolute right-4 top-4 text-slate-400 hover:text-slate-600"
+          size="sm"
+          variant="ghost"
+        />
       </SheetPrimitive.Close>
     </SheetPrimitive.Content>
   </SheetPortal>
