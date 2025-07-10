@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import * as LucideIcons from 'lucide-react';
 import { AlertTriangle, Edit, Palette, Save, Search, Tag, X } from 'lucide-react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 export interface CategoryData {
   id?: string;
@@ -401,438 +401,410 @@ export function ModernCategoryModal({
   onSave,
   initialData,
   title = 'Nova Categoria',
-  saveButtonText = 'Criar Categoria',
 }: ModernCategoryModalProps) {
-  const [formData, setFormData] = useState<CategoryData>({
-    name: '',
-    description: '',
-    backgroundColor: '#3b82f6',
-    fontColor: '#ffffff',
-    icon: 'Package',
-    iconColor: '#ffffff',
-  });
+  const [formData, setFormData] = useState<CategoryData>(
+    initialData ?? {
+      name: '',
+      description: '',
+      backgroundColor: '#3b82f6',
+      fontColor: '#ffffff',
+      icon: 'Package',
+      iconColor: '#ffffff',
+    },
+  );
+  // Preenche o formulário ao abrir para edição
+  React.useEffect(() => {
+    if (isOpen && initialData) {
+      setFormData(initialData);
+    } else if (isOpen && !initialData) {
+      setFormData({
+        name: '',
+        description: '',
+        backgroundColor: '#3b82f6',
+        fontColor: '#ffffff',
+        icon: 'Package',
+        iconColor: '#ffffff',
+      });
+    }
+  }, [isOpen, initialData]);
 
   const [errors, setErrors] = useState<{
     name?: string;
     description?: string;
     submit?: string;
   }>({});
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDesignOpen, setIsDesignOpen] = useState(false);
   const [iconFilter, setIconFilter] = useState('');
 
-  // Inicializar dados quando a modal abre
-  useEffect(() => {
-    if (isOpen) {
-      if (initialData) {
-        setFormData(initialData);
-      } else {
-        setFormData({
-          name: '',
-          description: '',
-          backgroundColor: '#3b82f6',
-          fontColor: '#ffffff',
-          icon: 'Package',
-          iconColor: '#ffffff',
-        });
-      }
-      setErrors({});
-      setIsSubmitting(false);
-      setIsDesignOpen(false);
-      setIconFilter('');
-    }
-  }, [isOpen, initialData]);
+  // ...existing code for useEffect, validateForm, handleSubmit...
 
-  const validateForm = (): boolean => {
-    const newErrors: typeof errors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Nome da categoria é obrigatório';
-    } else if (formData.name.length > 50) {
-      newErrors.name = 'Nome deve ter no máximo 50 caracteres';
-    }
-
-    if (formData.description.length > 200) {
-      newErrors.description = 'Descrição deve ter no máximo 200 caracteres';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
-
+  async function handleSubmit() {
     setIsSubmitting(true);
     setErrors({});
-
+    if (!formData.name.trim()) {
+      setErrors({ name: 'O nome da categoria é obrigatório.' });
+      setIsSubmitting(false);
+      return;
+    }
     try {
       await onSave(formData);
       onClose();
-    } catch (error) {
-      setErrors({
-        submit: error instanceof Error ? error.message : 'Erro ao salvar categoria',
-      });
-    } finally {
-      setIsSubmitting(false);
+    } catch (err: unknown) {
+      let message = 'Erro ao salvar categoria.';
+      if (
+        err &&
+        typeof err === 'object' &&
+        'message' in err &&
+        typeof (err as Record<string, unknown>).message === 'string'
+      ) {
+        message = String((err as Record<string, unknown>).message);
+      }
+      setErrors({ submit: message });
     }
-  };
+    setIsSubmitting(false);
+  }
 
-  const renderIcon = (iconName: keyof typeof LucideIcons, size = 20) => {
-    const IconComponent = LucideIcons[iconName] as React.ComponentType<{ size: number }>;
-    return IconComponent ? <IconComponent size={size} /> : null;
-  };
-
-  const badgeStyles = useMemo(
-    () => ({
-      '--badge-bg': formData.backgroundColor,
-      '--badge-color': formData.fontColor,
-      '--badge-shadow': `0 4px 20px ${formData.fontColor}15, 0 2px 10px ${formData.fontColor}10`,
-      '--icon-color': formData.iconColor,
-    }),
-    [formData.backgroundColor, formData.fontColor, formData.iconColor],
-  );
-
+  // Utilitário para renderizar ícones Lucide dinamicamente
+  function renderIcon(icon: keyof typeof LucideIcons, size = 20, color?: string) {
+    const LucideIcon = LucideIcons[icon] as React.ElementType;
+    return <LucideIcon size={size} color={color} />;
+  }
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent
-        closeButtonClassName="hover:bg-white"
-        className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0"
-      >
-        {/* Header */}
-        <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg">
-          <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
-              <Tag className="w-4 h-4" />
-            </div>
-            {title}
-          </DialogTitle>
-          {/* Removido botão de fechar customizado. O botão padrão do Dialog será exibido automaticamente. */}
-        </DialogHeader>
-
-        {/* Conteúdo */}
-        <ScrollArea className="flex-1 max-h-[calc(90vh-180px)]">
-          <div className="p-6 space-y-6">
-            {/* Preview da Categoria */}
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-slate-700">Preview da Categoria</h3>
-                <Popover modal open={isDesignOpen} onOpenChange={setIsDesignOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 px-3 text-xs font-medium border-slate-300 hover:border-slate-400 hover:bg-white transition-all duration-200 rounded-lg shadow-sm bg-transparent"
+    <React.Fragment>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent
+          closeButtonClassName="hover:bg-white"
+          className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0"
+        >
+          <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg">
+            <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
+                <Tag className="w-4 h-4" />
+              </div>
+              {title}
+            </DialogTitle>
+          </DialogHeader>
+          <ScrollArea className="flex-1 max-h-[calc(90vh-180px)]">
+            <div className="p-6 space-y-6">
+              {/* Preview da Categoria */}
+              <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-slate-700">Preview da Categoria</h3>
+                  <Popover modal open={isDesignOpen} onOpenChange={setIsDesignOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 px-3 text-xs font-medium border-slate-300 hover:border-slate-400 hover:bg-white transition-all duration-200 rounded-lg shadow-sm bg-transparent"
+                      >
+                        <Edit className="w-4 h-4 mr-2" />
+                        Editar
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] max-h-[70vh] overflow-y-auto left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+                      align="center"
+                      side="bottom"
+                      sideOffset={8}
+                      avoidCollisions={false}
+                      collisionPadding={0}
+                      sticky="always"
+                      onOpenAutoFocus={(e) => e.preventDefault()}
+                      onCloseAutoFocus={(e) => e.preventDefault()}
                     >
-                      <Edit className="w-4 h-4 mr-2" />
-                      Editar
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] max-h-[70vh] overflow-y-auto left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
-                    align="center"
-                    side="bottom"
-                    sideOffset={8}
-                    avoidCollisions={false}
-                    collisionPadding={0}
-                    sticky="always"
-                    onOpenAutoFocus={(e) => e.preventDefault()}
-                    onCloseAutoFocus={(e) => e.preventDefault()}
-                  >
-                    <div className="max-h-[70vh] overflow-y-auto p-4 space-y-4 modal-preview-scroll">
-                      {/* Header */}
-                      <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                        <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                            <Palette className="w-3.5 h-3.5 text-white" />
+                      <div className="max-h-[70vh] overflow-y-auto p-4 space-y-4 modal-preview-scroll">
+                        {/* Header */}
+                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                              <Palette className="w-3.5 h-3.5 text-white" />
+                            </div>
+                            <h4 className="font-semibold text-base text-slate-800">
+                              Personalizar Design
+                            </h4>
                           </div>
-                          <h4 className="font-semibold text-base text-slate-800">
-                            Personalizar Design
-                          </h4>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setFormData({ ...formData, icon: '' as keyof typeof LucideIcons });
+                              }}
+                              className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs"
+                              title="Remover ícone"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                            >
+                              Remove
+                            </Button>
+                            <CloseButton
+                              onClick={() => setIsDesignOpen(false)}
+                              className="text-slate-400 hover:text-slate-600 h-7 w-7"
+                              size="sm"
+                              variant="ghost"
+                            />
+                          </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setFormData({ ...formData, icon: '' as keyof typeof LucideIcons });
-                            }}
-                            className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs"
-                            title="Remover ícone"
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            Remove
-                          </Button>
-                          <CloseButton
-                            onClick={() => setIsDesignOpen(false)}
-                            className="text-slate-400 hover:text-slate-600 h-7 w-7"
-                            size="sm"
-                            variant="ghost"
+                        {/* Search Filter */}
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <Input
+                            placeholder="Buscar ícone..."
+                            value={iconFilter}
+                            onChange={(e) => setIconFilter(e.target.value)}
+                            className="pl-9 bg-slate-50 border-slate-200 h-9 text-sm placeholder:text-slate-400 rounded-lg focus:bg-white transition-colors"
                           />
                         </div>
-                      </div>
-
-                      {/* Search Filter */}
-                      <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <Input
-                          placeholder="Buscar ícone..."
-                          value={iconFilter}
-                          onChange={(e) => setIconFilter(e.target.value)}
-                          className="pl-9 bg-slate-50 border-slate-200 h-9 text-sm placeholder:text-slate-400 rounded-lg focus:bg-white transition-colors"
-                        />
-                      </div>
-
-                      {/* Icons Grid */}
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
-                        </div>
-                        <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                          <div className="relative pb-0 category-icon-grid-container">
-                            <div className="icon-grid-responsive icon-grid-scroll category-icon-grid">
-                              {ICON_OPTIONS.filter((iconName) =>
-                                iconName.toLowerCase().includes(iconFilter.toLowerCase()),
-                              )
-                                .slice(0, 48)
-                                .map((iconName) => (
-                                  <button
-                                    key={iconName}
-                                    type="button"
-                                    onClick={() =>
-                                      setFormData({
-                                        ...formData,
-                                        icon: iconName as keyof typeof LucideIcons,
-                                      })
-                                    }
-                                    className={cn(
-                                      'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden',
-                                      formData.icon === iconName
-                                        ? 'border-blue-400 bg-blue-50 text-blue-700 shadow-md ring-2 ring-blue-200'
-                                        : 'border-slate-200 hover:border-slate-300 hover:bg-white bg-white text-slate-600 hover:shadow-sm',
-                                    )}
-                                    title={iconName}
-                                  >
-                                    {renderIcon(iconName as keyof typeof LucideIcons, 16)}
-                                  </button>
-                                ))}
+                        {/* Icons Grid */}
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
+                          </div>
+                          <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
+                            <div className="relative pb-0 category-icon-grid-container">
+                              <div className="icon-grid-responsive icon-grid-scroll category-icon-grid">
+                                {ICON_OPTIONS.filter((iconName) =>
+                                  iconName.toLowerCase().includes(iconFilter.toLowerCase()),
+                                )
+                                  .slice(0, 48)
+                                  .map((iconName) => {
+                                    const isSelected = formData.icon === iconName;
+                                    return (
+                                      <button
+                                        key={iconName}
+                                        type="button"
+                                        onClick={() =>
+                                          setFormData({
+                                            ...formData,
+                                            icon: iconName as keyof typeof LucideIcons,
+                                          })
+                                        }
+                                        className={cn(
+                                          'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden focus:outline-none',
+                                          isSelected
+                                            ? 'border-blue-400 shadow-md ring-2 ring-blue-200'
+                                            : 'border-slate-200 hover:border-slate-300 hover:shadow-sm',
+                                        )}
+                                        title={iconName}
+                                        data-bg={formData.backgroundColor}
+                                        data-icon-color={formData.iconColor}
+                                        style={{ backgroundColor: formData.backgroundColor }}
+                                      >
+                                        {renderIcon(
+                                          iconName as keyof typeof LucideIcons,
+                                          16,
+                                          formData.iconColor,
+                                        )}
+                                      </button>
+                                    );
+                                  })}
+                              </div>
                             </div>
-                            {/* Degradê com a cor de fundo do grid na parte inferior para indicar rolagem */}
-                            <div
-                              aria-hidden="true"
-                              className="pointer-events-none absolute left-0 right-0 bottom-0 h-6 rounded-b-lg category-icon-grid-fade"
-                            ></div>
                           </div>
                         </div>
-                      </div>
-
-                      {/* Color Sections */}
-                      <div className="space-y-3">
-                        <h5 className="text-sm font-medium text-slate-700">Cores</h5>
-                        <div className="flex gap-4 justify-center">
-                          {/* Icon Color */}
-                          <div className="flex flex-col items-center gap-2">
-                            <input
-                              type="color"
-                              value={formData.iconColor}
-                              onChange={(e) =>
-                                setFormData({ ...formData, iconColor: e.target.value })
-                              }
-                              className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
-                              title="Selecionar cor do ícone"
-                            />
-                            <span className="font-medium text-slate-700 text-xs text-center">
-                              Cor do Ícone
-                            </span>
-                          </div>
-                          {/* Background Color */}
-                          <div className="flex flex-col items-center gap-2">
-                            <input
-                              type="color"
-                              value={formData.backgroundColor}
-                              onChange={(e) =>
-                                setFormData({ ...formData, backgroundColor: e.target.value })
-                              }
-                              className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
-                              title="Selecionar cor de fundo"
-                            />
-                            <span className="font-medium text-slate-700 text-xs text-center">
-                              Cor de Fundo
-                            </span>
-                          </div>
-                          {/* Font Color */}
-                          <div className="flex flex-col items-center gap-2">
-                            <input
-                              type="color"
-                              value={formData.fontColor}
-                              onChange={(e) =>
-                                setFormData({ ...formData, fontColor: e.target.value })
-                              }
-                              className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
-                              title="Selecionar cor da fonte"
-                            />
-                            <span className="font-medium text-slate-700 text-xs text-center">
-                              Cor da Fonte
-                            </span>
+                        {/* Color Sections */}
+                        <div className="space-y-3">
+                          <h5 className="text-sm font-medium text-slate-700">Cores</h5>
+                          <div className="flex gap-4 justify-center">
+                            {/* Icon Color */}
+                            <div className="flex flex-col items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.iconColor}
+                                onChange={(e) =>
+                                  setFormData({ ...formData, iconColor: e.target.value })
+                                }
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                title="Selecionar cor do ícone"
+                              />
+                              <span className="font-medium text-slate-700 text-xs text-center">
+                                Cor do Ícone
+                              </span>
+                            </div>
+                            {/* Background Color */}
+                            <div className="flex flex-col items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.backgroundColor}
+                                onChange={(e) =>
+                                  setFormData({ ...formData, backgroundColor: e.target.value })
+                                }
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                title="Selecionar cor de fundo"
+                              />
+                              <span className="font-medium text-slate-700 text-xs text-center">
+                                Cor de Fundo
+                              </span>
+                            </div>
+                            {/* Font Color */}
+                            <div className="flex flex-col items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.fontColor}
+                                onChange={(e) =>
+                                  setFormData({ ...formData, fontColor: e.target.value })
+                                }
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                title="Selecionar cor da fonte"
+                              />
+                              <span className="font-medium text-slate-700 text-xs text-center">
+                                Cor da Fonte
+                              </span>
+                            </div>
                           </div>
                         </div>
+                        {/* Save Button */}
+                        <Button
+                          onClick={() => setIsDesignOpen(false)}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                        >
+                          <Save className="w-4 h-4 mr-2" />
+                          Save
+                        </Button>
                       </div>
-
-                      {/* Save Button */}
-                      <Button
-                        onClick={() => setIsDesignOpen(false)}
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
-                      >
-                        <Save className="w-4 h-4 mr-2" />
-                        Save
-                      </Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              <div className="flex justify-center mb-4">
-                <Badge
-                  variant="outline"
-                  className="text-xs focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 shadow-md transition-all duration-300 transform hover:scale-105 hover:-translate-y-0.5 hover:shadow-xl max-w-full"
-                  style={{
-                    backgroundColor: formData.backgroundColor,
-                    color: formData.fontColor,
-                    boxShadow: `${formData.fontColor}15 0px 2px 8px, ${formData.fontColor}08 0px 1px 4px`,
-                  }}
-                >
-                  <span className="flex-shrink-0">
-                    {renderIcon(formData.icon, 16) &&
-                      React.cloneElement(renderIcon(formData.icon, 16) as React.ReactElement, {
-                        color: formData.iconColor,
-                      })}
-                  </span>
-                  <span className="truncate font-semibold text-sm min-w-0">
-                    {formData.name || 'Nome da Categoria'}
-                  </span>
-                </Badge>
-              </div>
-
-              {formData.description && (
-                <div className="text-center">
-                  <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
-                    {formData.description}
-                  </p>
+                    </PopoverContent>
+                  </Popover>
                 </div>
-              )}
-            </div>
-
-            {/* Nome */}
-            <div className="space-y-3">
-              <Label htmlFor="name" className="text-sm font-semibold text-slate-700">
-                Nome da Categoria *
-              </Label>
-              <Input
-                id="name"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Ex: Ferramentas de Construção"
-                className={cn(
-                  'h-11 text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors rounded-lg focus:ring-2 focus:ring-slate-500/20',
-                  errors.name && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
-                )}
-              />
-              {errors.name && (
-                <div className="flex items-center gap-2 text-red-600 text-xs">
-                  <AlertTriangle className="w-4 h-4" />
-                  {errors.name}
+                <div className="flex justify-center mb-4">
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      'category-preview-badge text-xs focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
+                      'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
+                      'hover:scale-[1.07]',
+                    )}
+                    style={{
+                      backgroundColor: formData.backgroundColor,
+                      color: formData.fontColor,
+                    }}
+                  >
+                    <span className="flex-shrink-0">{renderIcon(formData.icon, 16)}</span>
+                    <span className="truncate font-semibold text-sm min-w-0">
+                      {formData.name || 'Nome da Categoria'}
+                    </span>
+                  </Badge>
                 </div>
-              )}
-              <p className="text-xs text-slate-500">{formData.name.length}/50 caracteres</p>
-            </div>
-
-            {/* Descrição */}
-            <div className="space-y-3">
-              <Label htmlFor="description" className="text-sm font-semibold text-slate-700">
-                Descrição (Opcional)
-              </Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Descreva brevemente esta categoria..."
-                rows={3}
-                className={cn(
-                  'text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none rounded-lg focus:ring-2 focus:ring-slate-500/20',
-                  errors.description && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
-                )}
-              />
-              {errors.description && (
-                <div className="flex items-center gap-2 text-red-600 text-xs">
-                  <AlertTriangle className="w-4 h-4" />
-                  {errors.description}
-                </div>
-              )}
-              <p className="text-xs text-slate-500">{formData.description.length}/200 caracteres</p>
-            </div>
-
-            {/* Erro de Envio */}
-            <AnimatePresence>
-              {errors.submit && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="p-3 rounded-lg border border-red-200 bg-red-50"
-                >
-                  <div className="flex items-center gap-2 text-red-600">
-                    <AlertTriangle className="w-4 h-4" />
-                    <span className="text-sm font-medium">{errors.submit}</span>
+                {formData.description && (
+                  <div className="text-center">
+                    <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
+                      {formData.description}
+                    </p>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </ScrollArea>
-
-        {/* Footer */}
-        <DialogFooter className="p-6 border-t bg-gray-50 rounded-b-lg">
-          <div className="flex gap-4 w-full">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              disabled={isSubmitting}
-              className="flex-1 h-11 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-sm"
-            >
-              <X className="w-4 h-4 mr-2" />
-              Cancelar
-            </Button>
-            <Button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !formData.name.trim()}
-              className="flex-1 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all"
-            >
-              {isSubmitting ? (
-                <>
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
-                    className="w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"
-                  />
-                  Salvando...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  {saveButtonText}
-                </>
-              )}
-            </Button>
-          </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+                )}
+              </div>
+              {/* Nome */}
+              <div className="space-y-3">
+                <Label htmlFor="name" className="text-sm font-semibold text-slate-700">
+                  Nome da Categoria *
+                </Label>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  placeholder="Ex: Ferramentas de Construção"
+                  className={cn(
+                    'h-11 text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors rounded-lg focus:ring-2 focus:ring-slate-500/20',
+                    errors.name && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
+                  )}
+                />
+                {errors.name && (
+                  <div className="flex items-center gap-2 text-red-600 text-xs">
+                    <AlertTriangle className="w-4 h-4" />
+                    {errors.name}
+                  </div>
+                )}
+                <p className="text-xs text-slate-500">{formData.name.length}/50 caracteres</p>
+              </div>
+              {/* Descrição */}
+              <div className="space-y-3">
+                <Label htmlFor="description" className="text-sm font-semibold text-slate-700">
+                  Descrição (Opcional)
+                </Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder="Descreva brevemente esta categoria..."
+                  rows={3}
+                  className={cn(
+                    'text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none rounded-lg focus:ring-2 focus:ring-slate-500/20',
+                    errors.description &&
+                      'border-red-500 focus:border-red-500 focus:ring-red-500/20',
+                  )}
+                />
+                {errors.description && (
+                  <div className="flex items-center gap-2 text-red-600 text-xs">
+                    <AlertTriangle className="w-4 h-4" />
+                    {errors.description}
+                  </div>
+                )}
+                <p className="text-xs text-slate-500">
+                  {formData.description.length}/200 caracteres
+                </p>
+              </div>
+              {/* Erro de Envio */}
+              <React.Fragment>
+                <AnimatePresence>
+                  {errors.submit && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="p-3 rounded-lg border border-red-200 bg-red-50"
+                    >
+                      <div className="flex items-center gap-2 text-red-600">
+                        <AlertTriangle className="w-4 h-4" />
+                        <span className="text-sm font-medium">{errors.submit}</span>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </React.Fragment>
+            </div>
+          </ScrollArea>
+          <DialogFooter className="p-6 border-t bg-gray-50 rounded-b-lg">
+            <div className="flex gap-4 w-full">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                disabled={isSubmitting}
+                className="flex-1 h-11 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-sm"
+              >
+                <X className="w-4 h-4 mr-2" />
+                Cancelar
+              </Button>
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={isSubmitting || !formData.name.trim()}
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4 flex-1"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="lucide lucide-plus w-4 h-4 mr-2"
+                >
+                  <path d="M5 12h14"></path>
+                  <path d="M12 5v14"></path>
+                </svg>
+                Nova Categoria
+              </button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </React.Fragment>
   );
 }
