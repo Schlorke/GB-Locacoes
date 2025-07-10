@@ -42,15 +42,13 @@ const DialogContent = React.forwardRef<
     >
       {children}
       <DialogPrimitive.Close asChild>
-        <Button
-          type="button"
-          variant="ghost"
+
+        <CloseButton
+          className="absolute right-4 top-4 text-slate-400 hover:text-slate-600"
           size="sm"
-          aria-label="Fechar"
-          className="flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-colors duration-300 h-7 w-7 p-0 text-slate-500 hover:text-slate-900 hover:bg-slate-100 absolute right-4 top-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 z-[99999] bg-transparent shadow-none border-0"
-        >
-          <X className="w-3.5 h-3.5" />
-        </Button>
+          variant="ghost"
+        />
+
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
