@@ -538,7 +538,7 @@ export function ModernCategoryModal({
                                 justifyContent: 'center',
                               }}
                             >
-                              Remove
+                              Remover
                             </Button>
                             <CloseButton
                               onClick={() => setIsDesignOpen(false)}
@@ -662,7 +662,7 @@ export function ModernCategoryModal({
                           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
                         >
                           <Save className="w-4 h-4 mr-2" />
-                          Save
+                          Salvar
                         </Button>
                       </div>
                     </PopoverContent>
