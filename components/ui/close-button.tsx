@@ -1,14 +1,12 @@
+'use client';
+
 import React from 'react';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-interface CloseButtonProps {
-  onClick?: () => void;
-  className?: string;
+interface CloseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'ghost' | 'outline';
-  disabled?: boolean;
-  'aria-label'?: string;
 }
 
 const sizeClasses = {
@@ -31,41 +29,31 @@ const iconSizes = {
   lg: 'h-5 w-5',
 };
 
-export const CloseButton: React.FC<CloseButtonProps> = ({
-  onClick,
-  className,
-  size = 'md',
-  variant = 'default',
-  disabled = false,
-  'aria-label': ariaLabel = 'Close',
-}) => {
-  return (
+export const CloseButton = React.forwardRef<HTMLButtonElement, CloseButtonProps>(
+  (
+    { className, size = 'md', variant = 'default', 'aria-label': ariaLabel = 'Close', ...props },
+    ref,
+  ) => (
     <button
       type="button"
-      onClick={onClick}
-      disabled={disabled}
+      ref={ref}
       aria-label={ariaLabel}
       className={cn(
-        // Base styles
         'inline-flex items-center justify-center rounded-lg transition-all',
         'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
         'disabled:pointer-events-none disabled:opacity-50',
-
-        // Size classes
         sizeClasses[size],
-
-        // Variant classes
         variantClasses[variant],
-
-        // Custom className
         className,
       )}
+      {...props}
     >
       <X className={iconSizes[size]} />
       <span className="sr-only">{ariaLabel}</span>
     </button>
-  );
-};
+  ),
+);
+CloseButton.displayName = 'CloseButton';
 
 // Export para facilitar o uso
 export default CloseButton;

@@ -2,6 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { CloseButton } from '@/components/ui/close-button';
 import {
   Dialog,
   DialogContent,
@@ -563,19 +564,12 @@ export function ModernCategoryModal({
                           >
                             Remove
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
+                          <CloseButton
                             onClick={() => setIsDesignOpen(false)}
-                            className="text-slate-400 hover:text-slate-600 h-7 px-2 rounded-lg"
-                            style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </Button>
+                            className="text-slate-400 hover:text-slate-600 h-7 w-7"
+                            size="sm"
+                            variant="ghost"
+                          />
                         </div>
                       </div>
 
