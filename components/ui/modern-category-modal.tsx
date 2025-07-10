@@ -497,7 +497,9 @@ export function ModernCategoryModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
+
         closeButtonVariant="ghostWhite"
+
         className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0"
       >
         {/* Header */}
@@ -508,6 +510,7 @@ export function ModernCategoryModal({
             </div>
             {title}
           </DialogTitle>
+          {/* Removido botão de fechar customizado. O botão padrão do Dialog será exibido automaticamente. */}
         </DialogHeader>
 
         {/* Conteúdo */}
@@ -593,32 +596,39 @@ export function ModernCategoryModal({
                           <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
                         </div>
                         <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                          <div className="icon-grid-responsive icon-grid-scroll">
-                            {ICON_OPTIONS.filter((iconName) =>
-                              iconName.toLowerCase().includes(iconFilter.toLowerCase()),
-                            )
-                              .slice(0, 48)
-                              .map((iconName) => (
-                                <button
-                                  key={iconName}
-                                  type="button"
-                                  onClick={() =>
-                                    setFormData({
-                                      ...formData,
-                                      icon: iconName as keyof typeof LucideIcons,
-                                    })
-                                  }
-                                  className={cn(
-                                    'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden',
-                                    formData.icon === iconName
-                                      ? 'border-blue-400 bg-blue-50 text-blue-700 shadow-md ring-2 ring-blue-200'
-                                      : 'border-slate-200 hover:border-slate-300 hover:bg-white bg-white text-slate-600 hover:shadow-sm',
-                                  )}
-                                  title={iconName}
-                                >
-                                  {renderIcon(iconName as keyof typeof LucideIcons, 16)}
-                                </button>
-                              ))}
+                          <div className="relative pb-0 category-icon-grid-container">
+                            <div className="icon-grid-responsive icon-grid-scroll category-icon-grid">
+                              {ICON_OPTIONS.filter((iconName) =>
+                                iconName.toLowerCase().includes(iconFilter.toLowerCase()),
+                              )
+                                .slice(0, 48)
+                                .map((iconName) => (
+                                  <button
+                                    key={iconName}
+                                    type="button"
+                                    onClick={() =>
+                                      setFormData({
+                                        ...formData,
+                                        icon: iconName as keyof typeof LucideIcons,
+                                      })
+                                    }
+                                    className={cn(
+                                      'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden',
+                                      formData.icon === iconName
+                                        ? 'border-blue-400 bg-blue-50 text-blue-700 shadow-md ring-2 ring-blue-200'
+                                        : 'border-slate-200 hover:border-slate-300 hover:bg-white bg-white text-slate-600 hover:shadow-sm',
+                                    )}
+                                    title={iconName}
+                                  >
+                                    {renderIcon(iconName as keyof typeof LucideIcons, 16)}
+                                  </button>
+                                ))}
+                            </div>
+                            {/* Degradê com a cor de fundo do grid na parte inferior para indicar rolagem */}
+                            <div
+                              aria-hidden="true"
+                              className="pointer-events-none absolute left-0 right-0 bottom-0 h-6 rounded-b-lg category-icon-grid-fade"
+                            ></div>
                           </div>
                         </div>
                       </div>
@@ -627,6 +637,21 @@ export function ModernCategoryModal({
                       <div className="space-y-3">
                         <h5 className="text-sm font-medium text-slate-700">Cores</h5>
                         <div className="flex gap-4 justify-center">
+                          {/* Icon Color */}
+                          <div className="flex flex-col items-center gap-2">
+                            <input
+                              type="color"
+                              value={formData.iconColor}
+                              onChange={(e) =>
+                                setFormData({ ...formData, iconColor: e.target.value })
+                              }
+                              className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                              title="Selecionar cor do ícone"
+                            />
+                            <span className="font-medium text-slate-700 text-xs text-center">
+                              Cor do Ícone
+                            </span>
+                          </div>
                           {/* Background Color */}
                           <div className="flex flex-col items-center gap-2">
                             <input
@@ -778,7 +803,7 @@ export function ModernCategoryModal({
               variant="outline"
               onClick={onClose}
               disabled={isSubmitting}
-              className="flex-1 h-11 rounded-lg border-slate-300 hover:bg-slate-50 bg-transparent"
+              className="flex-1 h-11 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-sm"
             >
               <X className="w-4 h-4 mr-2" />
               Cancelar
