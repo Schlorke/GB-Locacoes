@@ -131,16 +131,12 @@ export default function CategoriesWithAnimation() {
           {categories.map((category, index) => {
             const IconComponent = category.icon;
             return (
-              <Link
-                key={category.name}
-                href={category.href}
-                className="group focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
+              <Link key={category.name} href={category.href} className="group">
                 <Card
                   ref={(el) => {
                     cardsRef.current[index] = el;
                   }}
-                  className="h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 group-focus-visible:ring-2 group-focus-visible:ring-orange-500 overflow-hidden relative"
+                  className="h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden relative"
                   style={{
                     opacity: 0,
                     transform: 'translateY(60px)',

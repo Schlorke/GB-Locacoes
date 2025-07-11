@@ -265,13 +265,13 @@ export default function AdminQuotesPage() {
                     placeholder="Buscar por nome, email, empresa..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 border-gray-200 focus:border-blue-500 focus-visible:ring-blue-500"
+                    className="pl-10 border-gray-200 focus:border-blue-500"
                   />
                 </div>
                 <div className="flex items-center gap-2">
                   <Filter className="w-4 h-4 text-gray-500" />
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-48 border-gray-200 focus:border-blue-500 focus-visible:ring-blue-500">
+                    <SelectTrigger className="w-48 border-gray-200 focus:border-blue-500">
                       <SelectValue placeholder="Filtrar por status" />
                     </SelectTrigger>
                     <SelectContent>

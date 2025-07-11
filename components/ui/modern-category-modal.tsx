@@ -584,9 +584,9 @@ export function ModernCategoryModal({
                                           })
                                         }
                                         className={cn(
-                                          'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                                          'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden',
                                           isSelected
-                                            ? 'border-blue-400 shadow-md ring-2 ring-blue-200'
+                                            ? 'border-blue-400 shadow-md'
                                             : 'border-slate-200 hover:border-slate-300 hover:shadow-sm',
                                         )}
                                         title={iconName}
@@ -618,7 +618,7 @@ export function ModernCategoryModal({
                                 onChange={(e) =>
                                   setFormData({ ...formData, iconColor: e.target.value })
                                 }
-                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
                                 title="Selecionar cor do ícone"
                               />
                               <span className="font-medium text-slate-700 text-xs text-center">
@@ -633,7 +633,7 @@ export function ModernCategoryModal({
                                 onChange={(e) =>
                                   setFormData({ ...formData, backgroundColor: e.target.value })
                                 }
-                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
                                 title="Selecionar cor de fundo"
                               />
                               <span className="font-medium text-slate-700 text-xs text-center">
@@ -648,7 +648,7 @@ export function ModernCategoryModal({
                                 onChange={(e) =>
                                   setFormData({ ...formData, fontColor: e.target.value })
                                 }
-                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
                                 title="Selecionar cor da fonte"
                               />
                               <span className="font-medium text-slate-700 text-xs text-center">
@@ -673,7 +673,7 @@ export function ModernCategoryModal({
                   <Badge
                     variant="outline"
                     className={cn(
-                      'category-preview-badge text-xs focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
+                      'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
                       'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
                       'hover:scale-[1.07]',
                     )}
@@ -709,9 +709,8 @@ export function ModernCategoryModal({
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Ex: Ferramentas de Construção"
                   className={cn(
-                    'h-11 text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors rounded-lg focus-visible:ring-2 focus-visible:ring-slate-500/20',
-                    errors.name &&
-                      'border-red-500 focus:border-red-500 focus-visible:ring-red-500/20',
+                    'h-11 text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors rounded-lg',
+                    errors.name && 'border-red-500 focus:border-red-500',
                   )}
                 />
                 {errors.name && (
@@ -734,9 +733,8 @@ export function ModernCategoryModal({
                   placeholder="Descreva brevemente esta categoria..."
                   rows={3}
                   className={cn(
-                    'text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none rounded-lg focus-visible:ring-2 focus-visible:ring-slate-500/20',
-                    errors.description &&
-                      'border-red-500 focus:border-red-500 focus-visible:ring-red-500/20',
+                    'text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none rounded-lg',
+                    errors.description && 'border-red-500 focus:border-red-500',
                   )}
                 />
                 {errors.description && (
@@ -785,7 +783,7 @@ export function ModernCategoryModal({
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting || !formData.name.trim()}
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4 flex-1"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4 flex-1"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

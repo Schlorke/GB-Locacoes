@@ -103,7 +103,7 @@ export default function AdminLoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={isLoading}
-                  className="h-11 border-slate-300 focus:border-orange-500 focus-visible:ring-orange-500/20"
+                  className="h-11 border-slate-300 focus:border-orange-500"
                 />
               </div>
 
@@ -120,7 +120,7 @@ export default function AdminLoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="h-11 pr-10 border-slate-300 focus:border-orange-500 focus-visible:ring-orange-500/20"
+                    className="h-11 pr-10 border-slate-300 focus:border-orange-500"
                   />
                   <Button
                     type="button"

@@ -66,10 +66,7 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
         </div>
 
         <div className="flex flex-col gap-2">
-          <Link
-            href={`/equipamentos/${equipment.id}`}
-            className="w-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          >
+          <Link href={`/equipamentos/${equipment.id}`} className="w-full">
             <Button variant="outline" className="w-full" size="sm">
               <Eye className="mr-2 h-4 w-4" />
               Ver Detalhes
@@ -78,7 +75,7 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
 
           <Link
             href={`/orcamento?equipmentId=${equipment.id}`}
-            className="w-full focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="w-full"
             onClick={() => {
               // Força scroll para o topo após navegação
               setTimeout(() => window.scrollTo(0, 0), 100);
