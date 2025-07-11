@@ -35,7 +35,7 @@ export default function Hero() {
               <Input
                 type="search"
                 placeholder="Buscar equipamentos (ex: andaime, betoneira)"
-                className="border-0 bg-transparent text-gray-900 placeholder:text-gray-500 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="border-0 bg-transparent text-gray-900 placeholder:text-gray-500"
                 aria-label="Buscar equipamentos de construção"
               />
               <Button
@@ -52,7 +52,7 @@ export default function Hero() {
               {/* Botão Ver Catálogo - Altura padronizada */}
               <Link
                 href="/equipamentos"
-                className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group text-sm"
               >
                 Ver Catálogo de Equipamentos
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -61,7 +61,7 @@ export default function Hero() {
               {/* Botão Solicitar Orçamento - Altura padronizada */}
               <Link
                 href="/orcamento"
-                className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-white text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-white text-sm"
               >
                 <Play className="h-4 w-4 group-hover:scale-110 transition-transform" />
                 Solicitar Orçamento

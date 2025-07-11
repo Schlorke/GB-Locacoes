@@ -123,7 +123,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                     href={item.href}
                     onClick={onClose}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-sm font-medium border focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                      'flex items-center gap-3 px-3 py-3 rounded-lg transition-colors text-sm font-medium border',
                       'hover:bg-slate-100 active:bg-slate-200',
                       isActive
                         ? 'bg-primary text-primary-foreground hover:bg-primary/90 border-primary/20'

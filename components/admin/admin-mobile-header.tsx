@@ -14,10 +14,7 @@ export default function AdminMobileHeader() {
       <header className="sticky top-0 z-50 w-full border-b border-slate-700 bg-slate-900 md:hidden">
         <div className="flex h-16 items-center justify-between px-4">
           {/* Logo e Título */}
-          <Link
-            href="/"
-            className="flex items-center gap-2 min-w-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          >
+          <Link href="/" className="flex items-center gap-2 min-w-0">
             <Building className="h-6 w-6 text-orange-500 flex-shrink-0" />
             <span className="font-semibold text-white truncate">GB Admin</span>
           </Link>
