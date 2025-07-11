@@ -37,7 +37,7 @@ interface ModernCategoryModalProps {
   onSave: (
     _data: Omit<CategoryData, 'backgroundColor'> & {
       bgColor: string;
-      icon?: keyof typeof LucideIcons | null | undefined;
+      icon: keyof typeof LucideIcons | null | undefined;
     },
   ) => Promise<void>;
   initialData?: CategoryData;
@@ -441,7 +441,10 @@ export function ModernCategoryModal({
   const [isDesignOpen, setIsDesignOpen] = useState(false);
   const [iconFilter, setIconFilter] = useState('');
 
-  // ...existing code for useEffect, validateForm, handleSubmit...
+  // Limpa erro de submit ao abrir modal ou ao mudar nome
+  React.useEffect(() => {
+    setErrors((prev) => ({ ...prev, submit: undefined }));
+  }, [isOpen, formData.name, initialData]);
 
   async function handleSubmit() {
     setIsSubmitting(true);
@@ -695,11 +698,11 @@ export function ModernCategoryModal({
                       color: formData.fontColor,
                     }}
                   >
-                    {formData.icon && (
+                    {formData.icon ? (
                       <span className="flex-shrink-0">
                         {renderIcon(formData.icon, 16, formData.iconColor)}
                       </span>
-                    )}
+                    ) : null}
                     <span className="truncate font-semibold text-sm min-w-0">
                       {formData.name || 'Nome da Categoria'}
                     </span>

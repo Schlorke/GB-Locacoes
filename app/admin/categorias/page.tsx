@@ -60,7 +60,7 @@ export default function AdminCategoriesPage() {
     description: category.description || '',
     backgroundColor: category.backgroundColor || category.bgColor || '#f0f9ff',
     fontColor: category.fontColor || '#0c4a6e',
-    icon: category.icon || 'Package',
+    icon: category.icon ?? undefined,
     iconColor: category.iconColor || '#0ea5e9',
   });
 
@@ -134,8 +134,14 @@ export default function AdminCategoriesPage() {
       : '/api/admin/categories';
     const method = isEditing ? 'PUT' : 'POST';
 
-    // categoryData já está no formato correto para o backend
-    const categoryPayload = categoryData;
+    // Corrige para garantir que icon: null seja enviado ao remover ícone
+    const categoryPayload = {
+      ...categoryData,
+      icon:
+        categoryData.icon === undefined || categoryData.icon === null || categoryData.icon === ''
+          ? null
+          : categoryData.icon,
+    };
 
     const response = await fetch(url, {
       method,
@@ -217,7 +223,7 @@ export default function AdminCategoriesPage() {
           color: category.fontColor || '#1e40af',
         }}
       >
-        {category.icon && (
+        {category.icon !== undefined && category.icon !== null && (
           <span className="flex-shrink-0">{renderIcon(category.icon, category.iconColor)}</span>
         )}
         <span className="truncate font-semibold text-sm min-w-0">{category.name}</span>
