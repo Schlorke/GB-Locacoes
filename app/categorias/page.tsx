@@ -56,11 +56,7 @@ export default function CategoriesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.isArray(categories) &&
             categories.map((category) => (
-              <Link
-                key={category.id}
-                href={`/equipamentos?category=${category.id}`}
-                className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              >
+              <Link key={category.id} href={`/equipamentos?category=${category.id}`}>
                 <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">

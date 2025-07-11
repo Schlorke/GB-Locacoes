@@ -52,7 +52,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Catálogo de Equipamentos
                 </Link>
@@ -60,7 +60,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/categorias"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Categorias
                 </Link>
@@ -68,7 +68,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/orcamento"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Solicitar Orçamento
                 </Link>
@@ -76,7 +76,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/sobre"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Sobre Nós
                 </Link>
@@ -84,7 +84,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/contato"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Contato
                 </Link>
@@ -92,7 +92,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/login"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Área do Cliente
                 </Link>
@@ -107,7 +107,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/andaimes-suspensos"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Andaimes Suspensos
                 </Link>
@@ -115,7 +115,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/cadeiras-eletricas"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Cadeiras Elétricas
                 </Link>
@@ -123,7 +123,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/andaimes-tubulares"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Andaimes Tubulares
                 </Link>
@@ -131,7 +131,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/betoneiras"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Betoneiras
                 </Link>
@@ -139,7 +139,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/rompedores"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Rompedores
                 </Link>
@@ -147,7 +147,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/compressores"
-                  className="text-gray-300 hover:text-orange-500 transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="text-gray-300 hover:text-orange-500 transition-colors"
                 >
                   Compressores
                 </Link>
@@ -209,19 +209,19 @@ export default function Footer() {
             <div className="flex space-x-6 mt-4 md:mt-0">
               <Link
                 href="/privacidade"
-                className="text-gray-400 hover:text-orange-500 text-small transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="text-gray-400 hover:text-orange-500 text-small transition-colors"
               >
                 Política de Privacidade
               </Link>
               <Link
                 href="/termos"
-                className="text-gray-400 hover:text-orange-500 text-small transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="text-gray-400 hover:text-orange-500 text-small transition-colors"
               >
                 Termos de Uso
               </Link>
               <Link
                 href="/cookies"
-                className="text-gray-400 hover:text-orange-500 text-small transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="text-gray-400 hover:text-orange-500 text-small transition-colors"
               >
                 Cookies
               </Link>
