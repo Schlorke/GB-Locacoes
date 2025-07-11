@@ -138,9 +138,7 @@ export default function AdminCategoriesPage() {
     const categoryPayload = {
       ...categoryData,
       icon:
-        categoryData.icon === undefined || categoryData.icon === null || categoryData.icon === ''
-          ? null
-          : categoryData.icon,
+        categoryData.icon === undefined || categoryData.icon === null ? null : categoryData.icon,
     };
 
     const response = await fetch(url, {

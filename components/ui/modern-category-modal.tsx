@@ -27,7 +27,7 @@ export interface CategoryData {
   description: string;
   backgroundColor: string;
   fontColor: string;
-  icon?: keyof typeof LucideIcons;
+  icon?: keyof typeof LucideIcons | null;
   iconColor: string;
 }
 
