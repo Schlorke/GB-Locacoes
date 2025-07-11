@@ -583,7 +583,7 @@ export function ModernCategoryModal({
                                           })
                                         }
                                         className={cn(
-                                          'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden focus:outline-none',
+                                          'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                                           isSelected
                                             ? 'border-blue-400 shadow-md ring-2 ring-blue-200'
                                             : 'border-slate-200 hover:border-slate-300 hover:shadow-sm',
@@ -617,7 +617,7 @@ export function ModernCategoryModal({
                                 onChange={(e) =>
                                   setFormData({ ...formData, iconColor: e.target.value })
                                 }
-                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                 title="Selecionar cor do ícone"
                               />
                               <span className="font-medium text-slate-700 text-xs text-center">
@@ -632,7 +632,7 @@ export function ModernCategoryModal({
                                 onChange={(e) =>
                                   setFormData({ ...formData, backgroundColor: e.target.value })
                                 }
-                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                 title="Selecionar cor de fundo"
                               />
                               <span className="font-medium text-slate-700 text-xs text-center">
@@ -647,7 +647,7 @@ export function ModernCategoryModal({
                                 onChange={(e) =>
                                   setFormData({ ...formData, fontColor: e.target.value })
                                 }
-                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                 title="Selecionar cor da fonte"
                               />
                               <span className="font-medium text-slate-700 text-xs text-center">
