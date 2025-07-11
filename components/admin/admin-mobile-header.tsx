@@ -16,7 +16,7 @@ export default function AdminMobileHeader() {
           {/* Logo e Título */}
           <Link
             href="/"
-            className="flex items-center gap-2 min-w-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="flex items-center gap-2 min-w-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <Building className="h-6 w-6 text-orange-500 flex-shrink-0" />
             <span className="font-semibold text-white truncate">GB Admin</span>
