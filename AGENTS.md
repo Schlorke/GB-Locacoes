@@ -10,7 +10,8 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 - Nomes de arquivos e pastas devem estar em inglês e minúsculo.
 - Execute eslint e prettier antes de enviar pull requests.
 - Utilize TailwindCSS conforme os padrões já existentes no projeto.
-- Não alterar design, animações ou responsividade já implementados.
+- ❌ NÃO alterar design, animações ou responsividade já implementados.
+- ❌❌❌ NUNCA adicionar qualquer tipo de `outline` — isso destrói o visual do projeto.
 
 ---
 
@@ -18,15 +19,15 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 
 - Variáveis de ambiente estão documentadas em `.env.example`.
 - Para rodar localmente:
-  \`\`\`bash
+  ```bash
   pnpm install
   pnpm dev
-  \`\`\`
+  ```
 - Testes e lint:
-  \`\`\`bash
+  ```bash
   pnpm lint
   pnpm test
-  \`\`\`
+  ```
 
 ---
 
@@ -79,8 +80,7 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 - PRs precisam de descrição clara do que foi feito e como testar.
 - Use o seguinte template:
 
-\`\`\`md
-
+```md
 ## Objetivo
 
 [Descreva brevemente o que foi feito.]
@@ -94,7 +94,8 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 - [ ] Código limpo
 - [ ] Testes passando
 - [ ] Sem alteração de design
-      \`\`\`
+- [ ] Nenhum uso de outline
+```
 
 ---
 
@@ -110,6 +111,7 @@ Este documento orienta colaboradores humanos e agentes automatizados sobre como 
 
 ## 🔒 Regras obrigatórias para agentes de IA
 
+- 🚫 **PROIBIDO QUALQUER USO DE `outline`** em qualquer parte do código. Isso inclui `outline: none`, `outline: auto`, `outline: 1px solid`, `outline: 0` — qualquer forma será rejeitada.
 - NÃO modificar estilos, animações, delays ou identidades visuais existentes
 - NÃO sobrescrever componentes reutilizáveis
 - NÃO adicionar dependências sem justificativa clara
