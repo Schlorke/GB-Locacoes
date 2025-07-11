@@ -43,12 +43,6 @@ Este repositório é um sistema completo de e-commerce de locação de equipamen
 - Evitar lógica duplicada em múltiplas rotas.
 - Usar `zod` para validação de dados e formular entradas confiáveis.
 - Utilizar middlewares para controle de permissão (admin/cliente).
-- ❌ **É terminantemente proibido o uso de `outline` padrão do navegador (borda preta automática)** em qualquer parte do projeto:
-  - Isso inclui **botões, inputs, selects, links, textareas ou qualquer elemento interativo**.
-  - Adicione sempre `focus:outline-none` ou estilize o foco com anéis modernos (`focus-visible:ring`, `ring-slate-500`, etc.).
-  - **Aparência nativa de acessibilidade com contorno preto deve ser desabilitada completamente** em todos os contextos.
-  - O Copilot **NUNCA deve sugerir ou aplicar `outline: auto`, `outline: 1px solid black`, ou variantes similares**.
-
 ---
 
 ## 🔐 Segurança
