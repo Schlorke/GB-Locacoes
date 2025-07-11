@@ -869,3 +869,9 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Forçar scroll funcional dentro do Popover (ShadCN UI) */
 /* (Reutiliza as mesmas regras definidas acima) */
+
+*:focus,
+*:focus-visible,
+*:focus-within {
+  outline: none !important;
+}
