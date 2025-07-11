@@ -6,7 +6,9 @@ import { cn } from '@/lib/utils';
 
 interface CloseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'ghost' | 'outline';
+
+  variant?: 'default' | 'ghost' | 'ghostWhite' | 'outline';
+
 }
 
 const sizeClasses = {
@@ -19,6 +21,7 @@ const variantClasses = {
   default:
     'border border-slate-300 bg-slate-100 text-slate-900 shadow-lg hover:bg-slate-200 hover:text-orange-500 hover:shadow-xl transition-all duration-300',
   ghost: 'text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-all duration-300',
+  ghostWhite: 'text-slate-500 hover:text-slate-900 hover:bg-white transition-all duration-300',
   outline:
     'border border-slate-200 bg-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900 shadow-sm hover:shadow-md transition-all duration-300',
 };

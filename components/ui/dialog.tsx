@@ -28,33 +28,46 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 interface DialogContentProps
   extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
   closeButtonClassName?: string;
+
+  closeButtonVariant?: 'default' | 'ghost' | 'ghostWhite' | 'outline';
+
 }
 
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DialogContentProps
->(({ className, children, closeButtonClassName, ...props }, ref) => {
+
+>(({ className, children, closeButtonClassName, closeButtonVariant = 'ghost', ...props }, ref) => {
+
   const closeClasses = cn(
     'absolute right-4 top-4 text-slate-400 hover:text-slate-600',
     closeButtonClassName,
   );
   return (
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogPrimitive.Content
-        ref={ref}
-        className={cn(
-          'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg',
-          className,
-        )}
-        {...props}
-      >
-        {children}
-        <DialogPrimitive.Close asChild>
-          <CloseButton className={closeClasses} size="md" variant="ghost" />
-        </DialogPrimitive.Close>
-      </DialogPrimitive.Content>
-    </DialogPortal>
+
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      <DialogPrimitive.Close asChild>
+
+        <CloseButton
+          className={closeClasses}
+          size="sm"
+          variant={closeButtonVariant}
+        />
+
+      </DialogPrimitive.Close>
+    </DialogPrimitive.Content>
+  </DialogPortal>
+
   );
 });
 DialogContent.displayName = DialogPrimitive.Content.displayName;
