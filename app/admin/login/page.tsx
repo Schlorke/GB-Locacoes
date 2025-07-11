@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, type FormEvent, useEffect } from 'react';
-import { signIn, getSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import Header from '@/components/header';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import Header from '@/components/header';
 import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
+import { getSession, signIn } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, type FormEvent } from 'react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -118,10 +118,7 @@ export default function AdminLoginPage() {
         }}
       >
         {/* Background decorativo */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse animation-delay-1000"></div>
-        </div>
+        {/* Sombra decorativa removida conforme solicitado */}
 
         {/* Container do login centralizado */}
         <div className="w-full max-w-md relative z-10">
@@ -186,7 +183,7 @@ export default function AdminLoginPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={isLoading}
-                      className="h-12 border-slate-300 focus:border-slate-500 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-lg"
+                      className="h-12 border-slate-300 focus:border-slate-500 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-md shadow-sm hover:shadow-md focus:shadow-lg"
                       aria-label="Digite seu e-mail de administrador"
                     />
                   </div>
@@ -207,14 +204,14 @@ export default function AdminLoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         disabled={isLoading}
-                        className="h-12 border-slate-300 focus:border-slate-500 pr-12 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-lg"
+                        className="h-12 border-slate-300 focus:border-slate-500 pr-12 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-md shadow-sm hover:shadow-md focus:shadow-lg"
                         aria-label="Digite sua senha de administrador"
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100 rounded-2xl transition-all duration-200"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100 rounded-md transition-all duration-200"
                         onClick={() => setShowPassword(!showPassword)}
                         disabled={isLoading}
                         aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
@@ -231,7 +228,7 @@ export default function AdminLoginPage() {
                   <div className="pt-1">
                     <Button
                       type="submit"
-                      className="w-full h-12 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none rounded-2xl"
+                      className="w-full h-12 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none rounded-md"
                       disabled={isLoading}
                       aria-label="Entrar no Painel Administrativo"
                     >
@@ -253,7 +250,7 @@ export default function AdminLoginPage() {
                     <p className="font-semibold mb-2 text-slate-600 text-sm">
                       Credenciais padrão para teste:
                     </p>
-                    <div className="font-mono text-xs bg-gradient-to-r from-slate-100 to-slate-50 px-3 py-2.5 rounded-2xl text-slate-700 border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <div className="font-mono text-xs bg-gradient-to-r from-slate-100 to-slate-50 px-3 py-2.5 rounded-md text-slate-700 border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow duration-200">
                       <div className="font-medium">admin@gblocacoes.com.br</div>
                       <div className="font-medium mt-1">admin123</div>
                     </div>
