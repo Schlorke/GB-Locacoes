@@ -188,7 +188,7 @@ export default function WhatsAppFAB() {
                     <button
                       key={index}
                       onClick={() => handleQuickMessage(quickMsg)}
-                      className="block w-full text-left text-xs p-2 hover:bg-green-50 hover:text-green-700 rounded transition-colors border border-gray-200 hover:border-green-300"
+                      className="block w-full text-left text-xs p-2 hover:bg-green-50 hover:text-green-700 rounded transition-colors border border-gray-200 hover:border-green-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     >
                       • {quickMsg}
                     </button>
@@ -241,7 +241,7 @@ export default function WhatsAppFAB() {
         ) : (
           <button
             onClick={() => setIsOpen(true)}
-            className="whatsapp-green w-14 h-14 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+            className="whatsapp-green w-14 h-14 rounded-full text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             aria-label="Abrir chat do WhatsApp"
           >
             <MessageCircle className="h-6 w-6" />

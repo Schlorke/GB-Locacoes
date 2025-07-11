@@ -1,9 +1,8 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import CloseButton from '@/components/ui/close-button';
 import { cn } from '@/lib/utils';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
 import * as React from 'react';
 
 const Dialog = DialogPrimitive.Root;
@@ -45,6 +44,7 @@ const DialogContent = React.forwardRef<
     closeButtonClassName,
   );
   return (
+
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -67,6 +67,7 @@ const DialogContent = React.forwardRef<
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
+
   );
 });
 DialogContent.displayName = DialogPrimitive.Content.displayName;
