@@ -27,7 +27,7 @@ export interface CategoryData {
   description: string;
   backgroundColor: string;
   fontColor: string;
-  icon: keyof typeof LucideIcons;
+  icon?: keyof typeof LucideIcons;
   iconColor: string;
 }
 
@@ -407,7 +407,7 @@ export function ModernCategoryModal({
       description: '',
       backgroundColor: '#3b82f6',
       fontColor: '#ffffff',
-      icon: 'Package',
+      icon: undefined,
       iconColor: '#ffffff',
     },
   );
@@ -421,7 +421,7 @@ export function ModernCategoryModal({
         description: '',
         backgroundColor: '#3b82f6',
         fontColor: '#ffffff',
-        icon: 'Package',
+        icon: undefined,
         iconColor: '#ffffff',
       });
     }
@@ -466,43 +466,52 @@ export function ModernCategoryModal({
 
   // Utilitário para renderizar ícones Lucide dinamicamente
   function renderIcon(icon: keyof typeof LucideIcons, size = 20, color?: string) {
+    if (!icon) return null;
     const LucideIcon = LucideIcons[icon] as React.ElementType;
-    return <LucideIcon size={size} color={color} />;
+    return LucideIcon ? <LucideIcon size={size} color={color} /> : null;
   }
   return (
-
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent
-
-        closeButtonVariant="ghostWhite"
-
-        className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0"
-      >
-        {/* Header */}
-        <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg">
-          <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
-              <Tag className="w-4 h-4" />
-            </div>
-            {title}
-          </DialogTitle>
-          {/* Removido botão de fechar customizado. O botão padrão do Dialog será exibido automaticamente. */}
-        </DialogHeader>
-
-        {/* Conteúdo */}
-        <ScrollArea className="flex-1 max-h-[calc(90vh-180px)]">
-          <div className="p-6 space-y-6">
-            {/* Preview da Categoria */}
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-slate-700">Preview da Categoria</h3>
-                <Popover modal open={isDesignOpen} onOpenChange={setIsDesignOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 px-3 text-xs font-medium border-slate-300 hover:border-slate-400 hover:bg-white transition-all duration-200 rounded-lg shadow-sm bg-transparent"
-
+    <React.Fragment>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent
+          closeButtonClassName="hover:bg-white"
+          className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0"
+        >
+          <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg">
+            <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
+                <Tag className="w-4 h-4" />
+              </div>
+              {title}
+            </DialogTitle>
+          </DialogHeader>
+          <ScrollArea className="flex-1 max-h-[calc(90vh-180px)]">
+            <div className="p-6 space-y-6">
+              {/* Preview da Categoria */}
+              <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-sm font-semibold text-slate-700">Preview da Categoria</h3>
+                  <Popover modal open={isDesignOpen} onOpenChange={setIsDesignOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 px-3 text-xs font-medium border-slate-300 hover:border-slate-400 hover:bg-white transition-all duration-200 rounded-lg shadow-sm bg-transparent"
+                      >
+                        <Edit className="w-4 h-4 mr-2" />
+                        Editar
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-[380px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] max-h-[70vh] overflow-y-auto left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+                      align="center"
+                      side="bottom"
+                      sideOffset={8}
+                      avoidCollisions={false}
+                      collisionPadding={0}
+                      sticky="always"
+                      onOpenAutoFocus={(e) => e.preventDefault()}
+                      onCloseAutoFocus={(e) => e.preventDefault()}
                     >
                       <div className="max-h-[70vh] overflow-y-auto p-4 space-y-4 modal-preview-scroll">
                         {/* Header */}
@@ -520,7 +529,7 @@ export function ModernCategoryModal({
                               variant="ghost"
                               size="sm"
                               onClick={() => {
-                                setFormData({ ...formData, icon: '' as keyof typeof LucideIcons });
+                                setFormData({ ...formData, icon: undefined });
                               }}
                               className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs"
                               title="Remover ícone"
@@ -673,7 +682,9 @@ export function ModernCategoryModal({
                       color: formData.fontColor,
                     }}
                   >
-                    <span className="flex-shrink-0">{renderIcon(formData.icon, 16)}</span>
+                    {formData.icon && (
+                      <span className="flex-shrink-0">{renderIcon(formData.icon, 16)}</span>
+                    )}
                     <span className="truncate font-semibold text-sm min-w-0">
                       {formData.name || 'Nome da Categoria'}
                     </span>

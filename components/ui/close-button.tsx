@@ -8,7 +8,6 @@ interface CloseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
   size?: 'sm' | 'md' | 'lg';
 
   variant?: 'default' | 'ghost' | 'ghostWhite' | 'outline';
-
 }
 
 const sizeClasses = {
