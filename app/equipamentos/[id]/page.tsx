@@ -46,7 +46,7 @@ export default async function EquipmentDetailPage({ params }: Props) {
         <nav className="mb-8">
           <Link
             href="/equipamentos"
-            className="inline-flex items-center text-orange-600 hover:text-orange-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="inline-flex items-center text-orange-600 hover:text-orange-700 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Voltar aos Equipamentos

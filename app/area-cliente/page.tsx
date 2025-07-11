@@ -102,7 +102,7 @@ export default function AreaClientePage() {
                 <div className="space-y-2">
                   <Link
                     href="/contato"
-                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
                     <Button variant="outline" className="w-full">
                       Falar com Suporte
@@ -110,7 +110,7 @@ export default function AreaClientePage() {
                   </Link>
                   <Link
                     href="/orcamento"
-                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
                     <Button className="w-full">Novo Orçamento</Button>
                   </Link>

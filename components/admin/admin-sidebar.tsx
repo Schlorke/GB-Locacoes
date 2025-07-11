@@ -53,7 +53,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         {!isSidebarCollapsed && (
           <Link
             href="/"
-            className="flex items-center gap-2 min-w-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="flex items-center gap-2 min-w-0 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <Image
               src="/placeholder-logo.svg"
@@ -72,7 +72,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         {isSidebarCollapsed && (
           <Link
             href="/"
-            className="flex items-center justify-center w-full py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="flex items-center justify-center w-full py-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             <Image
               src="/placeholder-logo.svg"
@@ -98,7 +98,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
                   href={item.href}
                   title={item.label}
                   className={cn(
-                    'flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md transition-all duration-200 ease-in-out group text-sm sm:text-base focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                    'flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md transition-all duration-200 ease-in-out group text-sm sm:text-base focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                     'text-slate-300 hover:bg-slate-800 hover:text-white',
                     isActive && 'bg-primary text-primary-foreground shadow-md hover:bg-primary/90',
                     isSidebarCollapsed && 'justify-center',

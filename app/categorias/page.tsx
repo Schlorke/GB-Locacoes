@@ -59,7 +59,7 @@ export default function CategoriesPage() {
               <Link
                 key={category.id}
                 href={`/equipamentos?category=${category.id}`}
-                className="focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <Card className="hover:shadow-lg transition-shadow cursor-pointer">
                   <CardHeader>

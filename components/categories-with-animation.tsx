@@ -134,7 +134,7 @@ export default function CategoriesWithAnimation() {
               <Link
                 key={category.name}
                 href={category.href}
-                className="group focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="group focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <Card
                   ref={(el) => {
