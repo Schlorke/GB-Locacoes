@@ -673,7 +673,7 @@ export function ModernCategoryModal({
                   <Badge
                     variant="outline"
                     className={cn(
-                      'category-preview-badge text-xs focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
+                      'category-preview-badge text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
                       'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
                       'hover:scale-[1.07]',
                     )}
@@ -709,8 +709,9 @@ export function ModernCategoryModal({
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Ex: Ferramentas de Construção"
                   className={cn(
-                    'h-11 text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors rounded-lg focus:ring-2 focus:ring-slate-500/20',
-                    errors.name && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
+                    'h-11 text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors rounded-lg focus-visible:ring-2 focus-visible:ring-slate-500/20',
+                    errors.name &&
+                      'border-red-500 focus:border-red-500 focus-visible:ring-red-500/20',
                   )}
                 />
                 {errors.name && (
@@ -733,9 +734,9 @@ export function ModernCategoryModal({
                   placeholder="Descreva brevemente esta categoria..."
                   rows={3}
                   className={cn(
-                    'text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none rounded-lg focus:ring-2 focus:ring-slate-500/20',
+                    'text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none rounded-lg focus-visible:ring-2 focus-visible:ring-slate-500/20',
                     errors.description &&
-                      'border-red-500 focus:border-red-500 focus:ring-red-500/20',
+                      'border-red-500 focus:border-red-500 focus-visible:ring-red-500/20',
                   )}
                 />
                 {errors.description && (

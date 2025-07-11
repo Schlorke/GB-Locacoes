@@ -294,7 +294,7 @@ export default function AdminCategoriesPage() {
                     placeholder="Buscar categorias..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                    className="pl-10 border-gray-200 focus:border-blue-500 focus-visible:ring-blue-500"
                   />
                 </div>
                 <Button

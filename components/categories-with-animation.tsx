@@ -140,7 +140,7 @@ export default function CategoriesWithAnimation() {
                   ref={(el) => {
                     cardsRef.current[index] = el;
                   }}
-                  className="h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 group-focus:ring-2 group-focus:ring-orange-500 overflow-hidden relative"
+                  className="h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 group-focus-visible:ring-2 group-focus-visible:ring-orange-500 overflow-hidden relative"
                   style={{
                     opacity: 0,
                     transform: 'translateY(60px)',
