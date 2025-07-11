@@ -186,7 +186,7 @@ export default function AdminLoginPage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={isLoading}
-                      className="h-12 border-slate-300 focus:border-slate-500 focus:ring-slate-500 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-lg"
+                      className="h-12 border-slate-300 focus:border-slate-500 focus-visible:ring-slate-500 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-lg"
                       aria-label="Digite seu e-mail de administrador"
                     />
                   </div>
@@ -207,7 +207,7 @@ export default function AdminLoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         disabled={isLoading}
-                        className="h-12 border-slate-300 focus:border-slate-500 focus:ring-slate-500 pr-12 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-lg"
+                        className="h-12 border-slate-300 focus:border-slate-500 focus-visible:ring-slate-500 pr-12 text-sm placeholder:text-slate-400 bg-white/90 backdrop-blur-sm transition-all duration-200 rounded-2xl shadow-sm hover:shadow-md focus:shadow-lg"
                         aria-label="Digite sua senha de administrador"
                       />
                       <Button
@@ -231,7 +231,7 @@ export default function AdminLoginPage() {
                   <div className="pt-1">
                     <Button
                       type="submit"
-                      className="w-full h-12 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 transform hover:scale-[1.02] disabled:transform-none rounded-2xl"
+                      className="w-full h-12 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 transform hover:scale-[1.02] disabled:transform-none rounded-2xl"
                       disabled={isLoading}
                       aria-label="Entrar no Painel Administrativo"
                     >
