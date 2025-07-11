@@ -40,14 +40,14 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <Link
                 href="/login"
-                className="text-slate-200 hover:text-white transition-all duration-200 font-medium hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="text-slate-200 hover:text-white transition-all duration-200 font-medium hover:scale-105"
                 onClick={handleInternalNavigation}
               >
                 Área do Cliente
               </Link>
               <Link
                 href="/admin/login"
-                className="text-slate-200 hover:text-white transition-all duration-200 font-medium hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="text-slate-200 hover:text-white transition-all duration-200 font-medium hover:scale-105"
                 onClick={handleInternalNavigation}
               >
                 Admin
@@ -63,10 +63,10 @@ export default function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center space-x-3 group focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="flex items-center space-x-3 group"
             onClick={handleInternalNavigation}
           >
-            <div className="bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg ring-2 ring-slate-200/20 group-hover:ring-slate-300/30 transition-all duration-200 group-hover:scale-105">
+            <div className="bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg transition-all duration-200 group-hover:scale-105">
               GB
             </div>
             <div>
@@ -85,7 +85,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="relative text-slate-700 hover:text-orange-600 font-medium transition-all duration-200 group py-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="relative text-slate-700 hover:text-orange-600 font-medium transition-all duration-200 group py-2"
                 onClick={handleInternalNavigation}
               >
                 {item.name}
@@ -152,7 +152,7 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 mx-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 mx-2"
                   onClick={handleInternalNavigation}
                 >
                   {item.name}
