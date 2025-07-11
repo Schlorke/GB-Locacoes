@@ -65,15 +65,7 @@ export default function AdminCategoriesPage() {
   });
 
   // Função para converter CategoryData para Category
-  const categoryDataToCategory = (categoryData: CategoryData): Partial<Category> => ({
-    name: categoryData.name,
-    description: categoryData.description,
-    backgroundColor: categoryData.backgroundColor,
-    bgColor: categoryData.backgroundColor, // Mantém compatibilidade
-    fontColor: categoryData.fontColor,
-    icon: categoryData.icon,
-    iconColor: categoryData.iconColor,
-  });
+  // Removido: função não utilizada
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -133,14 +125,17 @@ export default function AdminCategoriesPage() {
     setIsModernModalOpen(true);
   };
 
-  const handleCategorySave = async (categoryData: CategoryData) => {
+  const handleCategorySave = async (
+    categoryData: Omit<CategoryData, 'backgroundColor'> & { bgColor: string },
+  ) => {
     const isEditing = !!editingCategoryData?.id;
     const url = isEditing
       ? `/api/admin/categories/${editingCategoryData.id}`
       : '/api/admin/categories';
     const method = isEditing ? 'PUT' : 'POST';
 
-    const categoryPayload = categoryDataToCategory(categoryData);
+    // categoryData já está no formato correto para o backend
+    const categoryPayload = categoryData;
 
     const response = await fetch(url, {
       method,
