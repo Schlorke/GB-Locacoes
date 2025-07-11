@@ -683,7 +683,9 @@ export function ModernCategoryModal({
                     }}
                   >
                     {formData.icon && (
-                      <span className="flex-shrink-0">{renderIcon(formData.icon, 16)}</span>
+                      <span className="flex-shrink-0">
+                        {renderIcon(formData.icon, 16, formData.iconColor)}
+                      </span>
                     )}
                     <span className="truncate font-semibold text-sm min-w-0">
                       {formData.name || 'Nome da Categoria'}
@@ -800,7 +802,7 @@ export function ModernCategoryModal({
                   <path d="M5 12h14"></path>
                   <path d="M12 5v14"></path>
                 </svg>
-                Nova Categoria
+                {initialData?.id ? 'Atualizar Categoria' : 'Nova Categoria'}
               </button>
             </div>
           </DialogFooter>
