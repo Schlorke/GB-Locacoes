@@ -100,12 +100,18 @@ export default function AreaClientePage() {
               <CardContent>
                 <p className="text-slate-600 mb-4">Precisa de ajuda? Entre em contato conosco</p>
                 <div className="space-y-2">
-                  <Link href="/contato">
+                  <Link
+                    href="/contato"
+                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
                     <Button variant="outline" className="w-full">
                       Falar com Suporte
                     </Button>
                   </Link>
-                  <Link href="/orcamento">
+                  <Link
+                    href="/orcamento"
+                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
                     <Button className="w-full">Novo Orçamento</Button>
                   </Link>
                 </div>

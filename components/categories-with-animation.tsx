@@ -131,7 +131,11 @@ export default function CategoriesWithAnimation() {
           {categories.map((category, index) => {
             const IconComponent = category.icon;
             return (
-              <Link key={category.name} href={category.href} className="group">
+              <Link
+                key={category.name}
+                href={category.href}
+                className="group focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
                 <Card
                   ref={(el) => {
                     cardsRef.current[index] = el;
