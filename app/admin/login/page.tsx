@@ -250,7 +250,10 @@ export default function AdminLoginPage() {
                     <p className="font-semibold mb-2 text-slate-600 text-sm">
                       Credenciais padrão para teste:
                     </p>
-                    <div className="font-mono text-xs bg-gradient-to-r from-slate-100 to-slate-50 px-3 py-2.5 rounded-md text-slate-700 border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <div
+                      className="font-mono text-xs bg-gradient-to-r from-slate-100 to-slate-50 px-3 py-2.5 rounded-md text-slate-700 border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow duration-200"
+                      style={{ boxShadow: '0 1px 4px 0 rgba(0,0,0,0.06)' }}
+                    >
                       <div className="font-medium">admin@gblocacoes.com.br</div>
                       <div className="font-medium mt-1">admin123</div>
                     </div>
