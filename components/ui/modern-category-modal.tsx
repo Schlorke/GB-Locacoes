@@ -673,7 +673,7 @@ export function ModernCategoryModal({
                   <Badge
                     variant="outline"
                     className={cn(
-                      'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full w-full transition-all duration-300',
+                      'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
                       'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
                       'hover:scale-[1.07]',
                       'xs:text-[10px] xs:px-1 xs:py-1 xs:rounded-md',
