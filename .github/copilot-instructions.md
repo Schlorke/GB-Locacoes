@@ -43,11 +43,27 @@ Este repositório é um sistema completo de e-commerce de locação de equipamen
 - Evitar lógica duplicada em múltiplas rotas.
 - Usar `zod` para validação de dados e formular entradas confiáveis.
 - Utilizar middlewares para controle de permissão (admin/cliente).
-- ❌ **É terminantemente proibido o uso de `outline` padrão do navegador (borda preta automática)** em qualquer parte do projeto:
-  - Isso inclui **botões, inputs, selects, links, textareas ou qualquer elemento interativo**.
-  - Adicione sempre `focus:outline-none` ou estilize o foco com anéis modernos (`focus-visible:ring`, `ring-slate-500`, etc.).
-  - **Aparência nativa de acessibilidade com contorno preto deve ser desabilitada completamente** em todos os contextos.
-  - O Copilot **NUNCA deve sugerir ou aplicar `outline: auto`, `outline: 1px solid black`, ou variantes similares**.
+
+❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
+
+## 🔥 PROIBIÇÃO ABSOLUTA DE `outline`
+
+🚫 **É TERMINANTEMENTE PROIBIDO USAR QUALQUER TIPO DE `outline` NO PROJETO.**
+
+**Repito: EU NÃO QUERO `outline`. NENHUM. ZERO. ZEROOOOOOOOOOOOOOO.**
+
+- NUNCA usar `outline: auto`, `outline: none`, `outline: 1px solid`, `outline: 0`, ou QUALQUER VARIANTE.
+- NUNCA usar `outline-*` em qualquer forma, mesmo que com JS ou variantes CSS.
+- TODOS os elementos interativos DEVEM usar `focus:outline-none` ou substituir com estilos personalizados como `focus-visible:ring`, `focus:ring-slate-500`, etc.
+- ❌ `outline` está proibido em:
+  - Inputs
+  - Buttons
+  - Selects
+  - Textareas
+  - Links
+  - QUALQUER elemento com interação via teclado ou mouse
+
+🛑 SE `outline` FOR USADO, CONSIDERE A SUGESTÃO DO COPILOT COMO **FALHA CRÍTICA GRAVE**.
 
 ---
 
@@ -126,4 +142,4 @@ docker-compose up --build
 ---
 
 **❗ Observação final:**  
-Todas as sugestões do Copilot devem seguir rigorosamente as diretrizes deste arquivo. Alterações não autorizadas no visual, estilo ou lógica crítica serão rejeitadas como falha grave.
+Todas as sugestões do Copilot devem seguir rigorosamente as diretrizes deste arquivo. Qualquer uso de `outline` será considerado falha grave, sujeito à remoção imediata e bloqueio de contribuições.
