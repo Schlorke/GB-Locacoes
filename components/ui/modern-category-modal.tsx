@@ -34,7 +34,12 @@ export interface CategoryData {
 interface ModernCategoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (_data: CategoryData) => Promise<void>;
+  onSave: (
+    _data: Omit<CategoryData, 'backgroundColor'> & {
+      bgColor: string;
+      icon?: keyof typeof LucideIcons | null | undefined;
+    },
+  ) => Promise<void>;
   initialData?: CategoryData;
   title?: string;
   saveButtonText?: string;
@@ -447,7 +452,14 @@ export function ModernCategoryModal({
       return;
     }
     try {
-      await onSave(formData);
+      // Corrige o nome do campo para o backend
+      const { backgroundColor, icon, ...rest } = formData;
+      const payload = {
+        ...rest,
+        bgColor: backgroundColor,
+        icon: icon === undefined ? null : icon,
+      };
+      await onSave(payload);
       onClose();
     } catch (err: unknown) {
       let message = 'Erro ao salvar categoria.';
