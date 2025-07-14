@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Phone, MapPin, Play, ArrowRight } from 'lucide-react';
+import { ArrowRight, MapPin, Phone, Play, Search } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Hero() {
   return (
@@ -31,11 +31,11 @@ export default function Hero() {
             </p>
 
             {/* Animated Search Bar */}
-            <div className="hero-search bg-white rounded-2xl p-2 flex gap-2 max-w-md border border-white/20 hover:bg-white/95 transition-all duration-300 opacity-0">
+            <div className="hero-search bg-white rounded-2xl p-2 flex gap-2 max-w-md border border-white/20 transition-all duration-300 opacity-0">
               <Input
                 type="search"
                 placeholder="Buscar equipamentos (ex: andaime, betoneira)"
-                className="border-0 bg-transparent text-gray-900 placeholder:text-gray-500"
+                className=" border-gray-200 focus:border-blue-500 bg-transparent text-gray-900 placeholder:text-gray-500"
                 aria-label="Buscar equipamentos de construção"
               />
               <Button

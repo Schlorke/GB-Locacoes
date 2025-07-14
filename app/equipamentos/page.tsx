@@ -149,7 +149,7 @@ export default function EquipmentsPage() {
                   placeholder="Buscar equipamentos..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 border-gray-200 focus:border-blue-500"
                 />
               </div>
               <div className="md:w-64">
