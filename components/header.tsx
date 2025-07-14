@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Menu, Phone, Search, User, ShoppingCart } from 'lucide-react';
 import { CloseButton } from '@/components/ui/close-button';
+import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -25,7 +25,15 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-screen z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-slate-200/50">
       {/* Top Bar */}
-      <div className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-700 text-white py-2.5 w-full shadow-sm">
+      <div
+        className="text-white py-2.5 w-full"
+        style={{
+          backgroundColor: '#334155', // azul igual ao theme-color
+          backgroundImage: 'none',
+          boxShadow: 'none',
+          border: 'none',
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center gap-4">
