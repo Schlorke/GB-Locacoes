@@ -1,15 +1,15 @@
 'use client';
 
-import { useState, type FormEvent, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { signIn } from 'next-auth/react';
+import Header from '@/components/header';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import Header from '@/components/header';
 import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
+import { signIn } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, type FormEvent } from 'react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -103,7 +103,7 @@ export default function AdminLoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={isLoading}
-                  className="h-11 border-slate-300 focus:border-orange-500"
+                  className="h-11 border-gray-200 focus:border-blue-500"
                 />
               </div>
 
@@ -120,7 +120,7 @@ export default function AdminLoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     disabled={isLoading}
-                    className="h-11 pr-10 border-slate-300 focus:border-orange-500"
+                    className="h-11 pr-10 border-gray-200 focus:border-blue-500"
                   />
                   <Button
                     type="button"

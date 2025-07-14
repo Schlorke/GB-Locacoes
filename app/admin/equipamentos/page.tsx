@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -20,9 +20,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Eye, Edit, Trash2, Package, Loader2, AlertCircle } from 'lucide-react';
+import { AlertCircle, Edit, Eye, Loader2, Package, Plus, Search, Trash2 } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface Equipment {
@@ -186,7 +186,7 @@ export default function AdminEquipmentsPage() {
                   placeholder="Pesquisar equipamentos..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 border-gray-200 focus:border-blue-500"
                 />
               </div>
             </div>

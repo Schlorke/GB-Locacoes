@@ -571,7 +571,7 @@ export function ModernCategoryModal({
                             placeholder="Buscar ícone..."
                             value={iconFilter}
                             onChange={(e) => setIconFilter(e.target.value)}
-                            className="pl-9 bg-slate-50 border-slate-200 h-9 text-sm placeholder:text-slate-400 rounded-lg focus:bg-white transition-colors"
+                            className="pl-10 border-gray-200 focus:border-blue-500 h-9 text-sm placeholder:text-slate-400 rounded-lg"
                           />
                         </div>
                         {/* Icons Grid */}
@@ -727,7 +727,7 @@ export function ModernCategoryModal({
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Ex: Ferramentas de Construção"
                   className={cn(
-                    'h-11 text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors rounded-lg xs:h-9 xs:text-xs w-full max-w-full',
+                    'h-11 text-sm border-gray-200 focus:border-blue-500 rounded-lg xs:h-9 xs:text-xs w-full max-w-full',
                     errors.name && 'border-red-500 focus:border-red-500',
                   )}
                 />
@@ -751,7 +751,7 @@ export function ModernCategoryModal({
                   placeholder="Descreva brevemente esta categoria..."
                   rows={3}
                   className={cn(
-                    'text-sm bg-slate-50 border-slate-200 focus:bg-white transition-colors resize-none rounded-lg xs:text-xs xs:h-16 w-full max-w-full',
+                    'text-sm border-gray-200 focus:border-blue-500 resize-none rounded-lg xs:text-xs xs:h-16 w-full max-w-full',
                     errors.description && 'border-red-500 focus:border-red-500',
                   )}
                 />
