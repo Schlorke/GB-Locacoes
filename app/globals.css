@@ -8,23 +8,7 @@
 /* =============================== */
 /* 2. Variáveis e Temas Globais    */
 /* =============================== */
-
-/* 3D Badge for Category */
-.category-badge-3d {
-  box-shadow:
-    0 8px 32px 0 rgba(0, 0, 0, 0.18),
-    0 1.5px 6px 0 rgba(0, 0, 0, 0.12),
-    0 0.5px 2px 0 rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px) scale(1.04);
-  transition:
-    box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-    transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-
 @layer base {
-  /* =============================== */
-  /* 3. Resets, Tipografia e Base    */
-  /* =============================== */
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -61,7 +45,6 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -96,46 +79,82 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-}
-
-@layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground font-sans text-base;
+    margin: 0;
+    overflow-x: hidden;
   }
-
   h1 {
     @apply text-h1 font-heading font-bold tracking-tight;
   }
-
   h2 {
     @apply text-h2 font-heading font-semibold tracking-tight;
   }
-
   h3 {
     @apply text-h3 font-heading font-semibold;
   }
-
   p {
     @apply text-base;
   }
-
   small {
     @apply text-small;
   }
-
   button {
     @apply text-base;
   }
-
   html {
     scroll-behavior: smooth;
     scrollbar-width: thin;
     scrollbar-color: #64748b #334155;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 }
+
+/* =============================== */
+/* 3. Layout e Containers          */
+/* =============================== */
+header {
+  width: 100vw !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+}
+header .max-w-7xl {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: max(1rem, calc((100vw - 100%) / 2 + 1rem));
+  padding-left: 1rem;
+}
+@media (max-width: 768px) {
+  header .max-w-7xl {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+section,
+.container {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+.absolute {
+  max-width: 100vw;
+}
+
+/* =============================== */
+/* 4. Keyframes e Animações        */
+/* =============================== */
+/* ...existing code... */
 
 /* =============================== */
 /* 4. Header, Layout e Containers   */
@@ -661,6 +680,7 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 }
 
 /* Garantir centralização perfeita de modais */
+
 [role='dialog'] {
   position: fixed !important;
   left: 50% !important;
@@ -668,7 +688,11 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   transform: translate(-50%, -50%) !important;
   max-height: 90vh !important;
   max-width: min(90vw, 512px) !important;
+  height: auto !important;
   margin: 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* Responsividade para telas pequenas */
@@ -677,30 +701,6 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
     max-width: 95vw !important;
     max-height: 95vh !important;
   }
-}
-
-/* Popover centralizado dentro da modal */
-.modal-centered-popover {
-  position: fixed !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  z-index: 99999 !important;
-  max-height: 70vh !important;
-  overflow-y: auto !important;
-}
-
-/* Garantir que o popover fique sempre embaixo do trigger */
-[role='dialog'] .modal-centered-popover[data-side='bottom'] {
-  position: fixed !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  top: auto !important;
-  margin-top: 8px !important;
-}
-
-/* Forçar que o popover nunca apareça em cima */
-[role='dialog'] .modal-centered-popover[data-side='top'] {
-  display: none !important;
 }
 
 /* =============================== */
@@ -813,11 +813,6 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   pointer-events: auto !important;
   touch-action: pan-y !important;
   overscroll-behavior: contain !important;
-}
-
-/* Garantir scroll especificamente no popover de categoria */
-.popover-centered-in-modal {
-  overflow-y: auto !important;
 }
 
 /* =============================== */

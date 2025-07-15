@@ -490,9 +490,13 @@ export function ModernCategoryModal({
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent
           closeButtonClassName="hover:bg-white"
-          className="w-full max-w-lg max-h-[90vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 grid !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
+          className="w-full max-w-lg h-[100svh] max-h-[100svh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
+          style={{
+            paddingTop: 'env(safe-area-inset-top)',
+            paddingBottom: 'env(safe-area-inset-bottom)',
+          }}
         >
-          <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg">
+          <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
             <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
                 <Tag className="w-4 h-4" />
@@ -500,7 +504,7 @@ export function ModernCategoryModal({
               {title}
             </DialogTitle>
           </DialogHeader>
-          <ScrollArea className="flex-1 max-h-[calc(90vh-180px)] w-full">
+          <ScrollArea className="flex-1 min-h-0 max-h-full w-full overflow-y-auto">
             <div className="p-6 space-y-6 xs:p-1 xs:space-y-3 w-full max-w-full">
               {/* Preview da Categoria */}
               <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-2 xs:rounded-md">
@@ -528,7 +532,7 @@ export function ModernCategoryModal({
                       onOpenAutoFocus={(e) => e.preventDefault()}
                       onCloseAutoFocus={(e) => e.preventDefault()}
                     >
-                      <div className="max-h-[70vh] overflow-y-auto p-4 space-y-4 modal-preview-scroll">
+                      <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 modal-preview-scroll">
                         {/* Header */}
                         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                           <div className="flex items-center gap-2">
@@ -785,7 +789,7 @@ export function ModernCategoryModal({
               </React.Fragment>
             </div>
           </ScrollArea>
-          <DialogFooter className="p-6 border-t bg-gray-50 rounded-b-lg xs:p-1 xs:rounded-b-md w-full max-w-full">
+          <DialogFooter className="p-6 border-t bg-gray-50 rounded-b-lg xs:p-1 xs:rounded-b-md w-full max-w-full flex-shrink-0">
             <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
               <Button
                 type="button"
