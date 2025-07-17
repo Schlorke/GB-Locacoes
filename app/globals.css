@@ -681,7 +681,10 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Garantir centralização perfeita de modais */
 
-[role='dialog'] {
+
+[role='dialog'][data-dialog-content] {
+
+
   position: fixed !important;
   left: 50% !important;
   top: 50% !important;
@@ -698,6 +701,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* Responsividade para telas pequenas */
 @media (max-width: 640px) {
   [role='dialog']:not([data-radix-popover-content]) {
+
+
     max-width: 95vw !important;
     height: 100% !important;
     max-height: 95vh !important;
