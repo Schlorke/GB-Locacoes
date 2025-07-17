@@ -524,8 +524,10 @@ export function ModernCategoryModal({
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent
+
                       className="popover-content fixed left-1/2 top-1/2 w-full p-0 shadow-2xl border rounded-lg bg-white z-[99999] overflow-y-auto -translate-x-1/2 -translate-y-1/2"
                       style={{ maxWidth: 'min(calc(100vw - 3rem), 32rem)', maxHeight: '90vh' }}
+
                       align="center"
                       side="bottom"
                       sideOffset={8}
