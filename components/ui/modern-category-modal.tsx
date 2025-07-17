@@ -490,12 +490,14 @@ export function ModernCategoryModal({
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent
           closeButtonClassName="hover:bg-white"
+
           className="fixed left-1/2 -translate-x-1/2 z-50 flex flex-col w-full max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 m-0 xs:max-w-[98vw] xs:p-0"
           style={{
             top: 'env(safe-area-inset-top)',
             bottom: 'env(safe-area-inset-bottom)',
             paddingTop: 'env(safe-area-inset-top)',
             paddingBottom: 'env(safe-area-inset-bottom)',
+
           }}
         >
           <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
