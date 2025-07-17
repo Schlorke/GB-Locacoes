@@ -31,7 +31,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
         <meta name="theme-color" content="#334155" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
       <body className={`${inter.className} antialiased overflow-x-hidden`}>
         {!isAdminRoute && <Header />}
