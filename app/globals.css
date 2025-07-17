@@ -682,8 +682,7 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* Garantir centralização perfeita de modais */
 
 
-[role='dialog'][data-dialog-content] {
-
+[role='dialog']:not(.popover-content) {
 
   position: fixed !important;
   left: 50% !important;
@@ -700,7 +699,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Responsividade para telas pequenas */
 @media (max-width: 640px) {
-  [role='dialog']:not([data-radix-popover-content]) {
+
+  [role='dialog']:not([data-radix-popover-content]):not(.popover-content) {
 
     max-width: 95vw !important;
     height: 100% !important;
@@ -812,7 +812,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 }
 
 /* Garantir scroll funcionando em popovers */
-[data-radix-popover-content] {
+[data-radix-popover-content],
+.popover-content {
   max-height: 70vh;
   overflow-y: auto !important;
   pointer-events: auto !important;
