@@ -814,7 +814,9 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* Garantir scroll funcionando em popovers */
 [data-radix-popover-content],
 .popover-content {
-  max-height: 70vh;
+
+  max-height: 90vh;
+
   overflow-y: auto !important;
   pointer-events: auto !important;
   touch-action: pan-y !important;
