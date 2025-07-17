@@ -494,6 +494,8 @@ export function ModernCategoryModal({
           style={{
             paddingTop: 'env(safe-area-inset-top)',
             paddingBottom: 'env(safe-area-inset-bottom)',
+            height: 'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+            maxHeight: 'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
           }}
         >
           <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
