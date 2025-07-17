@@ -699,6 +699,7 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 @media (max-width: 640px) {
   [role='dialog'] {
     max-width: 95vw !important;
+    height: 100% !important;
     max-height: 95vh !important;
   }
 }
