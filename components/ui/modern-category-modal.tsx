@@ -490,11 +490,14 @@ export function ModernCategoryModal({
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent
           closeButtonClassName="hover:bg-white"
-          className="fixed inset-0 z-50 flex flex-col w-full max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 m-0 xs:max-w-[98vw] xs:p-0"
+
+          className="fixed left-1/2 -translate-x-1/2 z-50 flex flex-col w-full max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 m-0 xs:max-w-[98vw] xs:p-0"
           style={{
-            insetBlockStart: 'env(safe-area-inset-top)',
-            insetBlockEnd: 'env(safe-area-inset-bottom)',
-            blockSize: `calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))`,
+            top: 'env(safe-area-inset-top)',
+            bottom: 'env(safe-area-inset-bottom)',
+            paddingTop: 'env(safe-area-inset-top)',
+            paddingBottom: 'env(safe-area-inset-bottom)',
+
           }}
         >
           <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
@@ -505,7 +508,7 @@ export function ModernCategoryModal({
               {title}
             </DialogTitle>
           </DialogHeader>
-          <ScrollArea className="flex-1 min-h-0 max-h-full w-full overflow-y-auto">
+          <ScrollArea className="flex-1 overflow-y-auto">
             <div className="p-6 space-y-6 xs:p-1 xs:space-y-3 w-full max-w-full">
               {/* Preview da Categoria */}
               <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-2 xs:rounded-md">
