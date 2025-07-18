@@ -818,6 +818,9 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   max-height: none !important;
   height: auto !important;
   overflow: visible !important;
+  /* em mobile Safari: limitar pelo viewport descontando safe areas */
+  /* para casos extremos, usar overflow-y:auto e definir max-height */
+  /* max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important; */
   pointer-events: auto !important;
   touch-action: pan-y !important;
   overscroll-behavior: contain !important;
