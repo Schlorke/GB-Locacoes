@@ -764,7 +764,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
   gap: 8px;
   max-height: 200px;
-  overflow-y: auto;
+  overflow-y: scroll; /* scrollbar sempre visível */
+  scrollbar-gutter: stable;
   padding: 0.5rem;
 
   /* Garantir que o scroll do mouse funcione no grid */
@@ -854,7 +855,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 .category-icon-grid {
   max-height: 132px;
   min-height: 132px;
-  overflow-y: auto;
+  overflow-y: scroll; /* sempre mostra a barra de rolagem */
+  scrollbar-gutter: stable;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 0.5rem;
