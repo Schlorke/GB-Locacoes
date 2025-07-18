@@ -524,7 +524,7 @@ export function ModernCategoryModal({
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent
-                      className="popover-content fixed left-1/2 top-1/2 w-[512px] max-w-[calc(100vw-3rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] overflow-y-auto -translate-x-1/2 -translate-y-1/2"
+                      className="popover-content fixed left-1/2 top-1/2 w-[512px] max-w-[calc(100vw-1rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] overflow-y-auto -translate-x-1/2 -translate-y-1/2"
                       style={{ maxHeight: '90vh' }}
                       align="center"
                       side="bottom"
