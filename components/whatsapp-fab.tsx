@@ -144,7 +144,7 @@ export default function WhatsAppFAB() {
             </div>
             <CloseButton
               onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-green-600"
+              className="text-white hover:bg-green-600 hover:text-white"
               variant="ghost"
               size="sm"
             />

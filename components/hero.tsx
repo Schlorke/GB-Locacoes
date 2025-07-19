@@ -40,7 +40,7 @@ export default function Hero() {
               />
               <Button
                 size="sm"
-                className="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-xl hover:scale-105 transition-transform h-10"
+                className="bg-yellow-500 hover:bg-yellow-600 hover:text-white text-gray-900 font-semibold rounded-xl hover:scale-105 transition-all h-10"
               >
                 <Search className="h-4 w-4" />
                 <span className="sr-only">Buscar</span>
@@ -52,7 +52,7 @@ export default function Hero() {
               {/* Botão Ver Catálogo - Altura padronizada */}
               <Link
                 href="/equipamentos"
-                className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group text-sm"
+                className="inline-flex items-center justify-center hover:bg-yellow-600 gap-2 px-6 h-12 bg-yellow-500 hover:text-white text-gray-900 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group text-sm"
               >
                 Ver Catálogo de Equipamentos
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
