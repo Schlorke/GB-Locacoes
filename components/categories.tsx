@@ -128,6 +128,7 @@ export default function Categories() {
               title.style.transform = 'translateY(0)';
               title.style.transition = 'all 0.8s ease-out';
               title.style.visibility = 'visible';
+
             }
 
             if (subtitle) {
@@ -149,6 +150,7 @@ export default function Categories() {
                     card.style.transform = 'translateY(0)';
                     card.style.transition = 'all 0.8s ease-out';
                     card.style.visibility = 'visible';
+
                   },
                   idx * 150 + 200,
                 );
