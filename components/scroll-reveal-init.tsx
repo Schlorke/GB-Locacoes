@@ -228,11 +228,12 @@ export default function ScrollRevealInit() {
       };
 
       // Lógica principal
+      let observer: IntersectionObserver | null = null;
+      let mutation: MutationObserver | null = null;
+
       if (shouldExecuteAnimations) {
         // EXECUTAR ANIMAÇÕES: Refresh, URL digitada, nova aba, etc.
         // Aguardar a hidratação antes de manipular o DOM
-        let observer: IntersectionObserver | null;
-        let mutation: MutationObserver | null;
 
         setTimeout(() => {
           initializeElementsForAnimation();
