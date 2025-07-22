@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import * as LucideIcons from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface ApiCategory {
   id: string;
@@ -80,6 +80,8 @@ const fallbackCategories: Category[] = [
 
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>(fallbackCategories);
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -111,8 +113,41 @@ export default function Categories() {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            cardsRef.current.forEach((card, index) => {
+              if (card) {
+                setTimeout(() => {
+                  card.style.opacity = '1';
+                  card.style.transform = 'translateY(0)';
+                  card.style.transition = 'all 0.8s ease-out';
+                }, index * 150);
+              }
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' },
+    );
+
+    const currentSection = sectionRef.current;
+    if (currentSection) {
+      observer.observe(currentSection);
+    }
+
+    return () => {
+      if (currentSection) {
+        observer.unobserve(currentSection);
+      }
+    };
+  }, [categories]);
+
   return (
-    <section className="py-16 bg-gray-50">
+    <section ref={sectionRef} className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4 opacity-0">
@@ -129,6 +164,9 @@ export default function Categories() {
             return (
               <Card
                 key={index}
+                ref={(el) => {
+                  cardsRef.current[index] = el;
+                }}
                 className="benefit-card bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0"
               >
                 <div
