@@ -2,7 +2,8 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import * as LucideIcons from 'lucide-react';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
 
 interface ApiCategory {
   id: string;
@@ -118,53 +119,21 @@ export default function Categories() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const title = sectionRef.current?.querySelector('.section-title') as HTMLElement | null;
-            const subtitle = sectionRef.current?.querySelector(
-              '.section-subtitle',
-            ) as HTMLElement | null;
-
-            if (title) {
-              title.style.opacity = '1';
-              title.style.transform = 'translateY(0)';
-              title.style.transition = 'all 0.8s ease-out';
-              title.style.visibility = 'visible';
-
-            }
-
-            if (subtitle) {
-              setTimeout(() => {
-                if (subtitle) {
-                  subtitle.style.opacity = '1';
-                  subtitle.style.transform = 'translateY(0)';
-                  subtitle.style.transition = 'all 0.6s ease-out';
-                  subtitle.style.visibility = 'visible';
-                }
-              }, 200);
-            }
-
-            cardsRef.current.forEach((card, idx) => {
+            cardsRef.current.forEach((card, index) => {
               if (card) {
-                setTimeout(
-                  () => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                    card.style.transition = 'all 0.8s ease-out';
-                    card.style.visibility = 'visible';
-
-                  },
-                  idx * 150 + 200,
-                );
+                setTimeout(() => {
+                  card.style.opacity = '1';
+                  card.style.transform = 'translateY(0)';
+                  card.style.transition = 'all 0.8s ease-out';
+                }, index * 150);
               }
             });
-
             observer.unobserve(entry.target);
           }
         });
       },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px',
-      },
+
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' },
     );
 
     const currentSection = sectionRef.current;
