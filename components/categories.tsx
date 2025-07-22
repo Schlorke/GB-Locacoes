@@ -127,6 +127,8 @@ export default function Categories() {
               title.style.opacity = '1';
               title.style.transform = 'translateY(0)';
               title.style.transition = 'all 0.8s ease-out';
+              title.style.visibility = 'visible';
+
             }
 
             if (subtitle) {
@@ -135,6 +137,7 @@ export default function Categories() {
                   subtitle.style.opacity = '1';
                   subtitle.style.transform = 'translateY(0)';
                   subtitle.style.transition = 'all 0.6s ease-out';
+                  subtitle.style.visibility = 'visible';
                 }
               }, 200);
             }
@@ -146,6 +149,8 @@ export default function Categories() {
                     card.style.opacity = '1';
                     card.style.transform = 'translateY(0)';
                     card.style.transition = 'all 0.8s ease-out';
+                    card.style.visibility = 'visible';
+
                   },
                   idx * 150 + 200,
                 );
@@ -180,13 +185,13 @@ export default function Categories() {
         <div className="text-center mb-12">
           <h2
             className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4 opacity-0"
-            style={{ opacity: 0, transform: 'translateY(60px)' }}
+            style={{ opacity: 0, transform: 'translateY(60px)', visibility: 'hidden' }}
           >
             Categorias de Equipamentos
           </h2>
           <p
             className="section-subtitle text-xl text-gray-600 max-w-2xl mx-auto opacity-0"
-            style={{ opacity: 0, transform: 'translateY(60px)' }}
+            style={{ opacity: 0, transform: 'translateY(60px)', visibility: 'hidden' }}
           >
             Encontre rapidamente o equipamento especializado que você precisa para sua obra
           </p>
@@ -202,7 +207,7 @@ export default function Categories() {
                   cardsRef.current[index] = el;
                 }}
                 className="benefit-card bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0"
-                style={{ opacity: 0, transform: 'translateY(60px)' }}
+                style={{ opacity: 0, transform: 'translateY(60px)', visibility: 'hidden' }}
               >
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
