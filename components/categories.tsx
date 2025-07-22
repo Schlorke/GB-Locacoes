@@ -172,11 +172,8 @@ export default function Categories() {
             return (
               <Card
                 key={index}
-                ref={(el) => {
-                  cardsRef.current[index] = el;
-                }}
-                className="benefit-card bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0"
-                style={{ opacity: 0, transform: 'translateY(60px)', visibility: 'hidden' }}
+                className="benefit-card category-card bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0"
+
               >
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
