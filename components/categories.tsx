@@ -152,16 +152,12 @@ export default function Categories() {
     <section ref={sectionRef} className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2
-            className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4 opacity-0"
-            style={{ opacity: 0, transform: 'translateY(60px)', visibility: 'hidden' }}
-          >
+
+          <h2 className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-on-scroll">
             Categorias de Equipamentos
           </h2>
-          <p
-            className="section-subtitle text-xl text-gray-600 max-w-2xl mx-auto opacity-0"
-            style={{ opacity: 0, transform: 'translateY(60px)', visibility: 'hidden' }}
-          >
+          <p className="section-subtitle text-xl text-gray-600 max-w-2xl mx-auto animate-on-scroll-delayed">
+
             Encontre rapidamente o equipamento especializado que você precisa para sua obra
           </p>
         </div>
@@ -172,7 +168,8 @@ export default function Categories() {
             return (
               <Card
                 key={index}
-                className="benefit-card category-card bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0"
+
+                className="benefit-card category-card category-card-animate bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative"
 
               >
                 <div
