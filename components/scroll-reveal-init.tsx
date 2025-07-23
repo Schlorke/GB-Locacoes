@@ -36,17 +36,12 @@ export default function ScrollRevealInit() {
 
       // Verificar se é navegação interna (clique em link do próprio site)
       const isInternalNavigation = () => {
-        const navigationType = getNavigationType();
         const wasInternalClick = sessionStorage.getItem('internalNavigation') === 'true';
 
         // Limpar flag de navegação interna
         sessionStorage.removeItem('internalNavigation');
 
-        // Se foi um clique interno OU se o tipo é 'navigate' e temos histórico de estar no site
-        return (
-          wasInternalClick ||
-          (navigationType === 'navigate' && sessionStorage.getItem('hasVisitedSite') === 'true')
-        );
+        return wasInternalClick;
       };
 
       // Detectar se é dispositivo móvel
