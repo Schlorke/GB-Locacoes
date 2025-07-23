@@ -2,7 +2,8 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import * as LucideIcons from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
 
 interface ApiCategory {
   id: string;
@@ -79,7 +80,10 @@ const fallbackCategories: Category[] = [
 ];
 
 export default function Categories() {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const [categories, setCategories] = useState<Category[]>(fallbackCategories);
+  const sectionRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -111,8 +115,37 @@ export default function Categories() {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const elements = section.querySelectorAll<HTMLElement>(
+      '.animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
+    );
+
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const target = entry.target as HTMLElement;
+            target.classList.add('animate-in');
+            observer.unobserve(target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -100px 0px' },
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [categories]);
+
   return (
-    <section className="py-16 bg-gray-50">
+    <section ref={sectionRef} className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-on-scroll">
@@ -129,7 +162,9 @@ export default function Categories() {
             return (
               <Card
                 key={index}
+
                 className="benefit-card category-card category-card-animate bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative"
+
               >
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
