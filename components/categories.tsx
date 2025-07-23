@@ -4,7 +4,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import * as LucideIcons from 'lucide-react';
 import React, { useEffect, useState, useRef } from 'react';
 
-
 interface ApiCategory {
   id: string;
   name: string;
@@ -83,8 +82,6 @@ export default function Categories() {
   const sectionRef = useRef<HTMLElement | null>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [categories, setCategories] = useState<Category[]>(fallbackCategories);
-  const sectionRef = useRef<HTMLElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -163,9 +160,10 @@ export default function Categories() {
             return (
               <Card
                 key={index}
-
+                ref={(el) => {
+                  cardsRef.current[index] = el;
+                }}
                 className="benefit-card category-card category-card-animate bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative"
-
               >
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
