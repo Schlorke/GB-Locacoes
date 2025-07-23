@@ -74,7 +74,7 @@ export default function Hero() {
               </div>
             </div>
           </div>
-          <div className="hero-image relative opacity-0">
+          <div className="hero-image relative opacity-0 px-4">
             <div className="relative group bg-transparent">
               <img
                 src="/placeholder.svg?height=500&width=600"
@@ -91,7 +91,7 @@ export default function Hero() {
                 <div className="text-2xl font-bold">10+</div>
                 <div className="text-sm font-medium">Anos de Experiência</div>
               </div>
-              {/* Decorative elements - LINHA ALTERADA AQUI */}
+              {/* Decorative elements */}
               <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-500"></div>
             </div>
           </div>
@@ -109,9 +109,10 @@ export default function Hero() {
           <path
             d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
             className="fill-gray-50"
-          ></path>
+          />
         </svg>
       </div>
     </section>
   )
 }
+</merged_code>
