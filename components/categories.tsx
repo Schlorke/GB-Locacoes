@@ -81,6 +81,7 @@ const fallbackCategories: Category[] = [
 
 export default function Categories() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const [categories, setCategories] = useState<Category[]>(fallbackCategories);
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -118,30 +119,30 @@ export default function Categories() {
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
-
-    const elements = section.querySelectorAll<HTMLElement>(
-      '.animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
-    );
-
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const target = entry.target as HTMLElement;
-            target.classList.add('animate-in');
-            observer.unobserve(target);
+            section
+              .querySelectorAll<HTMLElement>(
+                '.animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
+              )
+              .forEach((el, idx) => {
+                if (el.classList.contains('category-card-animate')) {
+                  setTimeout(() => el.classList.add('animate-in'), idx * 150);
+                } else {
+                  el.classList.add('animate-in');
+                }
+              });
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.15, rootMargin: '0px 0px -100px 0px' },
+      { threshold: 0.2 },
     );
 
-    elements.forEach((el) => observer.observe(el));
-
-    return () => {
-      observer.disconnect();
-    };
+    observer.observe(section);
+    return () => observer.disconnect();
   }, [categories]);
 
   return (
@@ -162,7 +163,9 @@ export default function Categories() {
             return (
               <Card
                 key={index}
-
+                ref={(el) => {
+                  cardsRef.current[index] = el;
+                }}
                 className="benefit-card category-card category-card-animate bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative"
 
               >
