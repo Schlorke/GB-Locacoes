@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowRight, MapPin, Phone, Play, Search } from 'lucide-react'
+import { ArrowRight, MapPin, Phone, Play, Search } from "lucide-react"
 import Link from "next/link"
 
 export default function Hero() {
@@ -82,6 +82,7 @@ export default function Hero() {
           </div>
 
           <div className="hero-image relative opacity-0">
+            {/* LINHA ALTERADA: As classes de transformação e transição foram movidas para este div */}
             <div className="relative group bg-transparent transform group-hover:scale-105 transition-transform duration-500">
               <img
                 src="/placeholder.svg?height=500&width=600"
