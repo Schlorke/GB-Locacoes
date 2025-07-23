@@ -80,6 +80,7 @@ const fallbackCategories: Category[] = [
 ];
 
 export default function Categories() {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const [categories, setCategories] = useState<Category[]>(fallbackCategories);
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -115,36 +116,31 @@ export default function Categories() {
   }, []);
 
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const elements = section.querySelectorAll<HTMLElement>(
+      '.animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
+    );
+
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            cardsRef.current.forEach((card, index) => {
-              if (card) {
-                setTimeout(() => {
-                  card.style.opacity = '1';
-                  card.style.transform = 'translateY(0)';
-                  card.style.transition = 'all 0.8s ease-out';
-                }, index * 150);
-              }
-            });
-            observer.unobserve(entry.target);
+            const target = entry.target as HTMLElement;
+            target.classList.add('animate-in');
+            observer.unobserve(target);
           }
         });
       },
-
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' },
+      { threshold: 0.15, rootMargin: '0px 0px -100px 0px' },
     );
 
-    const currentSection = sectionRef.current;
-    if (currentSection) {
-      observer.observe(currentSection);
-    }
+    elements.forEach((el) => observer.observe(el));
 
     return () => {
-      if (currentSection) {
-        observer.unobserve(currentSection);
-      }
+      observer.disconnect();
     };
   }, [categories]);
 
@@ -152,12 +148,10 @@ export default function Categories() {
     <section ref={sectionRef} className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-
           <h2 className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4 animate-on-scroll">
             Categorias de Equipamentos
           </h2>
           <p className="section-subtitle text-xl text-gray-600 max-w-2xl mx-auto animate-on-scroll-delayed">
-
             Encontre rapidamente o equipamento especializado que você precisa para sua obra
           </p>
         </div>
