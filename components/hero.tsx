@@ -82,27 +82,27 @@ export default function Hero() {
           </div>
 
           <div className="hero-image relative opacity-0">
-            <div className="relative group bg-transparent">
+            <div className="relative group bg-transparent transform group-hover:scale-105 transition-transform duration-500">
               <img
                 src="/placeholder.svg?height=500&width=600"
                 alt="Equipamentos de construção civil para locação - andaimes suspensos e cadeiras elétricas"
-                className="rounded-2xl shadow-2xl w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
+                className="rounded-2xl shadow-2xl w-full h-auto"
                 loading="eager"
               />
 
               {/* Floating Stats */}
-              <div className="absolute -bottom-4 -left-4 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+              <div className="absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                 <div className="text-2xl font-bold animate-count-up">+200</div>
                 <div className="text-sm font-medium">Equipamentos Disponíveis</div>
               </div>
 
-              <div className="absolute -top-4 -right-4 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+              <div className="absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                 <div className="text-2xl font-bold">10+</div>
                 <div className="text-sm font-medium">Anos de Experiência</div>
               </div>
 
               {/* Decorative elements */}
-              <div className="absolute inset-[-2rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none"></div>
+              <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none"></div>
             </div>
           </div>
         </div>
