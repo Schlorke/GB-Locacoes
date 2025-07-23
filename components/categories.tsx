@@ -163,9 +163,7 @@ export default function Categories() {
             return (
               <Card
                 key={index}
-                ref={(el) => {
-                  cardsRef.current[index] = el;
-                }}
+
                 className="benefit-card category-card category-card-animate bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative"
 
               >
