@@ -90,9 +90,9 @@ Este repositório é um sistema completo de e-commerce de locação de equipamen
 
 - Projeto pode ser iniciado com:
 
-```bash
+\`\`\`bash
 docker-compose up --build
-```
+\`\`\`
 
 - Imagens configuradas com multi-stage para build otimizado
 - `.env.docker` define ambiente de execução para container
