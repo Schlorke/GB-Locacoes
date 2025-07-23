@@ -60,16 +60,31 @@ export default function ScrollRevealInit() {
       const shouldExecuteAnimations = !isInternalNavigation();
       const isOnMobile = isMobile();
 
+      const selectors =
+        '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
+        '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
+        '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate';
+
+      const initializeElement = (element: HTMLElement) => {
+        if (
+          element.classList.contains('animate-on-scroll') ||
+          element.classList.contains('animate-on-scroll-delayed') ||
+          element.classList.contains('category-card-animate')
+        ) {
+          element.classList.remove('animate-in');
+        } else {
+          element.style.opacity = '0';
+          element.style.transform = 'translateY(60px)';
+          element.style.transition = 'none';
+        }
+      };
+
       // Marcar que o usuário já visitou o site
       sessionStorage.setItem('hasVisitedSite', 'true');
 
       // Função para mostrar todos os elementos imediatamente (sem animação)
       const showAllElementsImmediately = () => {
-        const animatedElements = document.querySelectorAll(
-          '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
-            '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
-            '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
-        );
+        const animatedElements = document.querySelectorAll(selectors);
 
         animatedElements.forEach((element) => {
           const htmlElement = element as HTMLElement;
@@ -102,17 +117,10 @@ export default function ScrollRevealInit() {
 
       // Função para inicializar elementos como invisíveis (para animação)
       const initializeElementsForAnimation = () => {
-        const animatedElements = document.querySelectorAll(
-          '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
-            '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
-            '.contact-form, .contact-info, .cta-section',
-        );
+        const animatedElements = document.querySelectorAll(selectors);
 
         animatedElements.forEach((element) => {
-          const htmlElement = element as HTMLElement;
-          htmlElement.style.opacity = '0';
-          htmlElement.style.transform = 'translateY(60px)';
-          htmlElement.style.transition = 'none';
+          initializeElement(element as HTMLElement);
         });
       };
 
@@ -220,24 +228,42 @@ export default function ScrollRevealInit() {
       };
 
       // Lógica principal
+      let observer: IntersectionObserver | null = null;
+      let mutation: MutationObserver | null = null;
+
       if (shouldExecuteAnimations) {
         // EXECUTAR ANIMAÇÕES: Refresh, URL digitada, nova aba, etc.
         // Aguardar a hidratação antes de manipular o DOM
+
         setTimeout(() => {
           initializeElementsForAnimation();
 
           requestAnimationFrame(() => {
-            const observer = setupObserver();
+            observer = setupObserver();
+            mutation = new MutationObserver((records) => {
+              records.forEach((record) => {
+                record.addedNodes.forEach((node) => {
+                  if (node.nodeType === 1) {
+                    const el = node as HTMLElement;
+                    if (el.matches(selectors)) {
+                      initializeElement(el);
+                      observer?.observe(el);
+                    }
+                    el.querySelectorAll(selectors).forEach((child) => {
+                      initializeElement(child as HTMLElement);
+                      observer?.observe(child as HTMLElement);
+                    });
+                  }
+                });
+              });
+            });
+            mutation.observe(document.body, { childList: true, subtree: true });
 
             // Delay menor para mobile para animações mais rápidas
             const observerDelay = isOnMobile ? 50 : 100;
 
             setTimeout(() => {
-              const elementsToObserve = document.querySelectorAll(
-                '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
-                  '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
-                  '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
-              );
+              const elementsToObserve = document.querySelectorAll(selectors);
 
               elementsToObserve.forEach((element) => {
                 observer.observe(element);
@@ -255,12 +281,10 @@ export default function ScrollRevealInit() {
       // Cleanup function
       return () => {
         if (shouldExecuteAnimations) {
-          const allElements = document.querySelectorAll(
-            '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
-              '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
-              '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate',
-          );
+          observer?.disconnect();
+          mutation?.disconnect();
 
+          const allElements = document.querySelectorAll(selectors);
           allElements.forEach((element) => {
             const htmlElement = element as HTMLElement;
             htmlElement.style.animation = 'none';
