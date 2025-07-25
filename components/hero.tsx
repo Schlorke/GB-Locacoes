@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { ArrowRight, MapPin, Phone, Play, Search } from "lucide-react"
-import Link from "next/link"
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ArrowRight, MapPin, Phone, Play, Search } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Hero() {
   return (
@@ -17,15 +17,15 @@ export default function Hero() {
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           <div className="space-y-6">
             <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold leading-tight opacity-0">
-              Locação de Equipamentos para{" "}
+              Locação de Equipamentos para{' '}
               <span className="text-yellow-300 relative">
                 Construção Civil
                 <div className="absolute -bottom-2 left-0 w-full h-1 bg-yellow-300 rounded-full transform scale-x-0 animate-scale-x"></div>
               </span>
             </h1>
             <p className="hero-subtitle text-xl md:text-2xl text-orange-100 leading-relaxed opacity-0">
-              Há 10 anos oferecendo soluções em locação de equipamentos para obras e serviços em altura. Segurança,
-              qualidade e manutenção constante.
+              Há 10 anos oferecendo soluções em locação de equipamentos para obras e serviços em
+              altura. Segurança, qualidade e manutenção constante.
             </p>
             {/* Animated Search Bar */}
             <div className="hero-search bg-white rounded-2xl p-2 flex gap-2 max-w-md border border-white/20 transition-all duration-300 opacity-0">
@@ -113,6 +113,5 @@ export default function Hero() {
         </svg>
       </div>
     </section>
-  )
+  );
 }
-</merged_code>

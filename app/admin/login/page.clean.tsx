@@ -1,72 +1,72 @@
-"use client"
+'use client';
 
-import Header from "@/components/header"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { AlertTriangle, Eye, EyeOff } from "lucide-react"
-import { signIn } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect, useState, type FormEvent, Suspense } from "react"
+import Header from '@/components/header';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
+import { signIn } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, type FormEvent, Suspense } from 'react';
 
 function AdminLoginPage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const error = searchParams.get("error")
-    if (error === "unauthorized") {
-      setError("Você não tem permissão para acessar esta área.")
-    } else if (error === "CredentialsSignin") {
-      setError("Credenciais inválidas. Verifique seu email e senha.")
+    const error = searchParams.get('error');
+    if (error === 'unauthorized') {
+      setError('Você não tem permissão para acessar esta área.');
+    } else if (error === 'CredentialsSignin') {
+      setError('Credenciais inválidas. Verifique seu email e senha.');
     }
-  }, [searchParams])
+  }, [searchParams]);
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault()
-    setIsLoading(true)
-    setError(null)
+    event.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
     if (!email || !password) {
-      setError("Por favor, preencha todos os campos.")
-      setIsLoading(false)
-      return
+      setError('Por favor, preencha todos os campos.');
+      setIsLoading(false);
+      return;
     }
 
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn('credentials', {
         redirect: false,
         email,
         password,
-        callbackUrl: "/admin/dashboard",
-      })
+        callbackUrl: '/admin/dashboard',
+      });
 
       if (result?.error) {
-        setError("Credenciais inválidas ou usuário não autorizado.")
-        setIsLoading(false)
-        return
+        setError('Credenciais inválidas ou usuário não autorizado.');
+        setIsLoading(false);
+        return;
       }
 
       if (result?.ok) {
-        router.push("/admin/dashboard")
-        return
+        router.push('/admin/dashboard');
+        return;
       }
 
-      setError("Erro inesperado durante o login. Tente novamente.")
+      setError('Erro inesperado durante o login. Tente novamente.');
     } catch (error) {
-      console.error("Erro no login:", error)
-      setError("Erro de conexão. Tente novamente.")
+      console.error('Erro no login:', error);
+      setError('Erro de conexão. Tente novamente.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200">
@@ -114,7 +114,7 @@ function AdminLoginPage() {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Digite sua senha"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -150,19 +150,21 @@ function AdminLoginPage() {
                     Entrando...
                   </div>
                 ) : (
-                  "Entrar no Sistema"
+                  'Entrar no Sistema'
                 )}
               </Button>
             </form>
 
             <div className="pt-4 border-t border-slate-200">
-              <p className="text-center text-sm text-slate-500">Acesso restrito a administradores autorizados</p>
+              <p className="text-center text-sm text-slate-500">
+                Acesso restrito a administradores autorizados
+              </p>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 export default function AdminLoginPageWrapper() {
@@ -170,5 +172,5 @@ export default function AdminLoginPageWrapper() {
     <Suspense fallback={null}>
       <AdminLoginPage />
     </Suspense>
-  )
+  );
 }

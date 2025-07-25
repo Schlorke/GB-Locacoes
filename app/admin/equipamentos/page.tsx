@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import { useState, useEffect, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
   Grid3X3,
@@ -18,44 +18,55 @@ import {
   Clock,
   SortAsc,
   SortDesc,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Skeleton } from "@/components/ui/skeleton"
-import { toast } from "sonner"
-import Link from "next/link"
-import Image from "next/image"
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from 'sonner';
+import Link from 'next/link';
+import Image from 'next/image';
 
 interface Equipment {
-  id: string
-  name: string
-  description: string
-  category: string
-  dailyPrice: number
-  weeklyPrice?: number
-  monthlyPrice?: number
-  status: "available" | "rented" | "maintenance"
-  imageUrl?: string
-  images?: string[]
-  specifications?: Record<string, string>
-  createdAt: string
-  updatedAt: string
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  dailyPrice: number;
+  weeklyPrice?: number;
+  monthlyPrice?: number;
+  status: 'available' | 'rented' | 'maintenance';
+  imageUrl?: string;
+  images?: string[];
+  specifications?: Record<string, string>;
+  createdAt: string;
+  updatedAt: string;
 }
 
 function AdminEquipmentsPage() {
-  const searchParams = useSearchParams()
-  const [equipments, setEquipments] = useState<Equipment[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "")
-  const [categoryFilter, setCategoryFilter] = useState(searchParams.get("category") || "all")
-  const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "all")
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const [sortBy, setSortBy] = useState<"name" | "price" | "date">("name")
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc")
+  const searchParams = useSearchParams();
+  const [equipments, setEquipments] = useState<Equipment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+  const [categoryFilter, setCategoryFilter] = useState(searchParams.get('category') || 'all');
+  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || 'all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState<'name' | 'price' | 'date'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   // Animation variants
   const containerVariants = {
@@ -66,7 +77,7 @@ function AdminEquipmentsPage() {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -77,103 +88,103 @@ function AdminEquipmentsPage() {
         duration: 0.3,
       },
     },
-  }
+  };
 
   // Fetch equipments
   useEffect(() => {
-    fetchEquipments()
-  }, [])
+    fetchEquipments();
+  }, []);
 
   const fetchEquipments = async () => {
     try {
-      setLoading(true)
-      const response = await fetch("/api/admin/equipments")
+      setLoading(true);
+      const response = await fetch('/api/admin/equipments');
       if (response.ok) {
-        const data = await response.json()
-        setEquipments(data.equipments || data || [])
+        const data = await response.json();
+        setEquipments(data.equipments || data || []);
       } else {
-        toast.error("Erro ao carregar equipamentos")
+        toast.error('Erro ao carregar equipamentos');
       }
     } catch (error) {
-      console.error("Error fetching equipments:", error)
-      toast.error("Erro ao carregar equipamentos")
+      console.error('Error fetching equipments:', error);
+      toast.error('Erro ao carregar equipamentos');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Tem certeza que deseja excluir este equipamento?")) return
+    if (!confirm('Tem certeza que deseja excluir este equipamento?')) return;
 
     try {
       const response = await fetch(`/api/admin/equipments/${id}`, {
-        method: "DELETE",
-      })
+        method: 'DELETE',
+      });
 
       if (response.ok) {
-        setEquipments((prev) => prev.filter((eq) => eq.id !== id))
-        toast.success("Equipamento excluído com sucesso")
+        setEquipments((prev) => prev.filter((eq) => eq.id !== id));
+        toast.success('Equipamento excluído com sucesso');
       } else {
-        toast.error("Erro ao excluir equipamento")
+        toast.error('Erro ao excluir equipamento');
       }
     } catch (error) {
-      console.error("Error deleting equipment:", error)
-      toast.error("Erro ao excluir equipamento")
+      console.error('Error deleting equipment:', error);
+      toast.error('Erro ao excluir equipamento');
     }
-  }
+  };
 
   // Filter and sort equipments
   const filteredAndSortedEquipments = equipments
     .filter((equipment) => {
       const matchesSearch =
         equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        equipment.description.toLowerCase().includes(searchTerm.toLowerCase())
-      const matchesCategory = categoryFilter === "all" || equipment.category === categoryFilter
-      const matchesStatus = statusFilter === "all" || equipment.status === statusFilter
+        equipment.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = categoryFilter === 'all' || equipment.category === categoryFilter;
+      const matchesStatus = statusFilter === 'all' || equipment.status === statusFilter;
 
-      return matchesSearch && matchesCategory && matchesStatus
+      return matchesSearch && matchesCategory && matchesStatus;
     })
     .sort((a, b) => {
-      let comparison = 0
+      let comparison = 0;
       switch (sortBy) {
-        case "name":
-          comparison = a.name.localeCompare(b.name)
-          break
-        case "price":
-          comparison = a.dailyPrice - b.dailyPrice
-          break
-        case "date":
-          comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-          break
+        case 'name':
+          comparison = a.name.localeCompare(b.name);
+          break;
+        case 'price':
+          comparison = a.dailyPrice - b.dailyPrice;
+          break;
+        case 'date':
+          comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          break;
       }
-      return sortOrder === "asc" ? comparison : -comparison
-    })
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "available":
-        return <CheckCircle className="h-4 w-4 text-green-500" />
-      case "rented":
-        return <Clock className="h-4 w-4 text-yellow-500" />
-      case "maintenance":
-        return <AlertCircle className="h-4 w-4 text-red-500" />
+      case 'available':
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
+      case 'rented':
+        return <Clock className="h-4 w-4 text-yellow-500" />;
+      case 'maintenance':
+        return <AlertCircle className="h-4 w-4 text-red-500" />;
       default:
-        return <Package className="h-4 w-4 text-gray-500" />
+        return <Package className="h-4 w-4 text-gray-500" />;
     }
-  }
+  };
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      available: "bg-green-100 text-green-800 border-green-200",
-      rented: "bg-yellow-100 text-yellow-800 border-yellow-200",
-      maintenance: "bg-red-100 text-red-800 border-red-200",
-    }
+      available: 'bg-green-100 text-green-800 border-green-200',
+      rented: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+      maintenance: 'bg-red-100 text-red-800 border-red-200',
+    };
 
     const labels = {
-      available: "Disponível",
-      rented: "Alugado",
-      maintenance: "Manutenção",
-    }
+      available: 'Disponível',
+      rented: 'Alugado',
+      maintenance: 'Manutenção',
+    };
 
     return (
       <Badge className={`${variants[status as keyof typeof variants]} border`}>
@@ -182,23 +193,23 @@ function AdminEquipmentsPage() {
           {labels[status as keyof typeof labels]}
         </span>
       </Badge>
-    )
-  }
+    );
+  };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(price)
-  }
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(price);
+  };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    })
-  }
+    return new Date(dateString).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  };
 
   if (loading) {
     return (
@@ -239,7 +250,7 @@ function AdminEquipmentsPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -254,13 +265,17 @@ function AdminEquipmentsPage() {
 
       <div className="relative container mx-auto px-4 py-8">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Gerenciar Equipamentos</h1>
               <p className="text-gray-600">
-                Gerencie o catálogo de equipamentos disponíveis para locação ({filteredAndSortedEquipments.length}{" "}
-                equipamentos)
+                Gerencie o catálogo de equipamentos disponíveis para locação (
+                {filteredAndSortedEquipments.length} equipamentos)
               </p>
             </div>
             <Button
@@ -327,7 +342,10 @@ function AdminEquipmentsPage() {
                     </SelectContent>
                   </Select>
 
-                  <Select value={sortBy} onValueChange={(value: "name" | "price" | "date") => setSortBy(value)}>
+                  <Select
+                    value={sortBy}
+                    onValueChange={(value: 'name' | 'price' | 'date') => setSortBy(value)}
+                  >
                     <SelectTrigger className="w-32 bg-white/50">
                       <SelectValue placeholder="Ordenar" />
                     </SelectTrigger>
@@ -341,26 +359,30 @@ function AdminEquipmentsPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
                     className="bg-white/50"
                   >
-                    {sortOrder === "asc" ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+                    {sortOrder === 'asc' ? (
+                      <SortAsc className="h-4 w-4" />
+                    ) : (
+                      <SortDesc className="h-4 w-4" />
+                    )}
                   </Button>
 
                   {/* View Mode Toggle */}
                   <div className="flex border rounded-lg bg-white/50">
                     <Button
-                      variant={viewMode === "grid" ? "default" : "ghost"}
+                      variant={viewMode === 'grid' ? 'default' : 'ghost'}
                       size="sm"
-                      onClick={() => setViewMode("grid")}
+                      onClick={() => setViewMode('grid')}
                       className="rounded-r-none"
                     >
                       <Grid3X3 className="h-4 w-4" />
                     </Button>
                     <Button
-                      variant={viewMode === "list" ? "default" : "ghost"}
+                      variant={viewMode === 'list' ? 'default' : 'ghost'}
                       size="sm"
-                      onClick={() => setViewMode("list")}
+                      onClick={() => setViewMode('list')}
                       className="rounded-l-none"
                     >
                       <List className="h-4 w-4" />
@@ -378,11 +400,13 @@ function AdminEquipmentsPage() {
             <Card className="backdrop-blur-sm bg-white/80 border-white/20 shadow-xl">
               <CardContent className="p-12 text-center">
                 <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Nenhum equipamento encontrado</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Nenhum equipamento encontrado
+                </h3>
                 <p className="text-gray-600 mb-6">
-                  {searchTerm || categoryFilter !== "all" || statusFilter !== "all"
-                    ? "Tente ajustar os filtros de busca para encontrar equipamentos."
-                    : "Comece adicionando seu primeiro equipamento ao catálogo."}
+                  {searchTerm || categoryFilter !== 'all' || statusFilter !== 'all'
+                    ? 'Tente ajustar os filtros de busca para encontrar equipamentos.'
+                    : 'Comece adicionando seu primeiro equipamento ao catálogo.'}
                 </p>
                 <Button asChild className="bg-blue-600 hover:bg-blue-700">
                   <Link href="/admin/equipamentos/novo">
@@ -394,7 +418,7 @@ function AdminEquipmentsPage() {
             </Card>
           ) : (
             <AnimatePresence mode="wait">
-              {viewMode === "grid" ? (
+              {viewMode === 'grid' ? (
                 <motion.div
                   key="grid"
                   variants={containerVariants}
@@ -407,9 +431,12 @@ function AdminEquipmentsPage() {
                     <motion.div key={equipment.id} variants={itemVariants}>
                       <Card className="group hover:shadow-xl transition-all duration-300 backdrop-blur-sm bg-white/80 border-white/20 overflow-hidden h-full">
                         <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
-                          {equipment.imageUrl || (equipment.images && equipment.images.length > 0) ? (
+                          {equipment.imageUrl ||
+                          (equipment.images && equipment.images.length > 0) ? (
                             <Image
-                              src={equipment.imageUrl || equipment.images?.[0] || "/placeholder.svg"}
+                              src={
+                                equipment.imageUrl || equipment.images?.[0] || '/placeholder.svg'
+                              }
                               alt={equipment.name}
                               fill
                               className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -420,11 +447,17 @@ function AdminEquipmentsPage() {
                               <Package className="h-12 w-12 text-gray-400" />
                             </div>
                           )}
-                          <div className="absolute top-3 right-3">{getStatusBadge(equipment.status)}</div>
+                          <div className="absolute top-3 right-3">
+                            {getStatusBadge(equipment.status)}
+                          </div>
                           <div className="absolute top-3 left-3">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <Button variant="secondary" size="sm" className="bg-white/90 hover:bg-white">
+                                <Button
+                                  variant="secondary"
+                                  size="sm"
+                                  className="bg-white/90 hover:bg-white"
+                                >
                                   <MoreVertical className="h-4 w-4" />
                                 </Button>
                               </DropdownMenuTrigger>
@@ -457,7 +490,9 @@ function AdminEquipmentsPage() {
                             <h3 className="font-semibold text-lg text-gray-900 group-hover:text-blue-600 transition-colors mb-2 line-clamp-1">
                               {equipment.name}
                             </h3>
-                            <p className="text-gray-600 text-sm mb-3 line-clamp-2">{equipment.description}</p>
+                            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                              {equipment.description}
+                            </p>
                           </div>
                           <div className="space-y-3">
                             <div className="flex justify-between items-center">
@@ -471,7 +506,9 @@ function AdminEquipmentsPage() {
                                 {equipment.category}
                               </Badge>
                             </div>
-                            <div className="text-xs text-gray-500">Criado em {formatDate(equipment.createdAt)}</div>
+                            <div className="text-xs text-gray-500">
+                              Criado em {formatDate(equipment.createdAt)}
+                            </div>
                           </div>
                         </CardContent>
                       </Card>
@@ -493,9 +530,14 @@ function AdminEquipmentsPage() {
                         <CardContent className="p-4">
                           <div className="flex items-center gap-4">
                             <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                              {equipment.imageUrl || (equipment.images && equipment.images.length > 0) ? (
+                              {equipment.imageUrl ||
+                              (equipment.images && equipment.images.length > 0) ? (
                                 <Image
-                                  src={equipment.imageUrl || equipment.images?.[0] || "/placeholder.svg"}
+                                  src={
+                                    equipment.imageUrl ||
+                                    equipment.images?.[0] ||
+                                    '/placeholder.svg'
+                                  }
                                   alt={equipment.name}
                                   width={80}
                                   height={80}
@@ -512,7 +554,9 @@ function AdminEquipmentsPage() {
                                 </h3>
                                 {getStatusBadge(equipment.status)}
                               </div>
-                              <p className="text-gray-600 text-sm truncate mb-2">{equipment.description}</p>
+                              <p className="text-gray-600 text-sm truncate mb-2">
+                                {equipment.description}
+                              </p>
                               <div className="flex items-center gap-4">
                                 <span className="text-xl font-bold text-green-600">
                                   {formatPrice(equipment.dailyPrice)}/dia
@@ -565,7 +609,7 @@ function AdminEquipmentsPage() {
         </motion.div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function AdminEquipmentsPageWrapper() {
@@ -573,5 +617,5 @@ export default function AdminEquipmentsPageWrapper() {
     <Suspense fallback={null}>
       <AdminEquipmentsPage />
     </Suspense>
-  )
+  );
 }

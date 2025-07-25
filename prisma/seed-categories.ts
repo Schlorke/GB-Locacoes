@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function seedCategories() {
-  console.log('Seeding categories...');
+  console.error('Seeding categories...');
 
   const categories = [
     {
@@ -52,7 +52,7 @@ async function seedCategories() {
     });
   }
 
-  console.log('Categories seeded successfully!');
+  console.warn('Categories seeded successfully!');
 }
 
 seedCategories()

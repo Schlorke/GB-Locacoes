@@ -1,7 +1,13 @@
 // Utilitário para dados seguros
-export function safeAccess<T>(obj: any, path: string, defaultValue: T): T {
+export function safeAccess<T>(obj: Record<string, unknown>, path: string, defaultValue: T): T {
   try {
-    return path.split('.').reduce((current, key) => current?.[key], obj) ?? defaultValue;
+    const result = path.split('.').reduce<unknown>((current, key) => {
+      if (current && typeof current === 'object' && key in current) {
+        return (current as Record<string, unknown>)[key];
+      }
+      return undefined;
+    }, obj);
+    return (result as T) ?? defaultValue;
   } catch {
     return defaultValue;
   }

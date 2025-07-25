@@ -1,14 +1,20 @@
-"use client"
+'use client';
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/hooks/use-toast"
-import { AnimatePresence, motion } from "framer-motion"
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Briefcase,
   Building,
@@ -26,94 +32,94 @@ import {
   Search,
   User,
   XCircle,
-} from "lucide-react"
-import { useCallback, useEffect, useState, Suspense } from "react"
+} from 'lucide-react';
+import { useCallback, useEffect, useState, Suspense } from 'react';
 
 interface Quote {
-  id: string
-  name: string
-  email: string
-  phone: string
-  company?: string
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  company?: string;
   equipments: Array<{
-    id: string
-    name: string
-    quantity: number
-    dailyPrice: number
-  }>
-  startDate: string
-  endDate: string
-  totalPrice: number
-  status: "pending" | "approved" | "rejected"
-  message?: string
+    id: string;
+    name: string;
+    quantity: number;
+    dailyPrice: number;
+  }>;
+  startDate: string;
+  endDate: string;
+  totalPrice: number;
+  status: 'pending' | 'approved' | 'rejected';
+  message?: string;
   address?: {
-    street: string
-    city: string
-    state: string
-    zipCode: string
-  }
-  createdAt: string
-  updatedAt: string
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
+  createdAt: string;
+  updatedAt: string;
 }
 
 const statusConfig = {
   pending: {
-    label: "Pendente",
-    color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    label: 'Pendente',
+    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     icon: Clock,
-    gradient: "from-yellow-400 to-orange-500",
+    gradient: 'from-yellow-400 to-orange-500',
   },
   approved: {
-    label: "Aprovado",
-    color: "bg-green-100 text-green-800 border-green-200",
+    label: 'Aprovado',
+    color: 'bg-green-100 text-green-800 border-green-200',
     icon: CheckCircle,
-    gradient: "from-green-400 to-emerald-500",
+    gradient: 'from-green-400 to-emerald-500',
   },
   rejected: {
-    label: "Rejeitado",
-    color: "bg-red-100 text-red-800 border-red-200",
+    label: 'Rejeitado',
+    color: 'bg-red-100 text-red-800 border-red-200',
     icon: XCircle,
-    gradient: "from-red-400 to-rose-500",
+    gradient: 'from-red-400 to-rose-500',
   },
-}
+};
 
 function AdminQuotesPage() {
-  const [quotes, setQuotes] = useState<Quote[]>([])
-  const [filteredQuotes, setFilteredQuotes] = useState<Quote[]>([])
-  const [loading, setLoading] = useState(true)
-  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [isUpdating, setIsUpdating] = useState(false)
-  const { toast } = useToast()
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+  const [filteredQuotes, setFilteredQuotes] = useState<Quote[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [isUpdating, setIsUpdating] = useState(false);
+  const { toast } = useToast();
 
   const fetchQuotes = useCallback(async () => {
     try {
-      setLoading(true)
-      const response = await fetch("/api/admin/quotes")
-      const data = await response.json()
+      setLoading(true);
+      const response = await fetch('/api/admin/quotes');
+      const data = await response.json();
 
       // Verificação defensiva para garantir que data é um array
-      const quotesArray = Array.isArray(data) ? data : data?.quotes || []
+      const quotesArray = Array.isArray(data) ? data : data?.quotes || [];
 
-      setQuotes(quotesArray)
+      setQuotes(quotesArray);
     } catch (error) {
-      console.error("Error fetching quotes:", error)
+      console.error('Error fetching quotes:', error);
       toast({
-        title: "Erro",
-        description: "Erro ao carregar orçamentos. Tente novamente.",
-        variant: "destructive",
-      })
-      setQuotes([])
+        title: 'Erro',
+        description: 'Erro ao carregar orçamentos. Tente novamente.',
+        variant: 'destructive',
+      });
+      setQuotes([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [toast])
+  }, [toast]);
 
   const filterQuotes = useCallback(() => {
     if (!Array.isArray(quotes)) {
-      setFilteredQuotes([])
-      return
+      setFilteredQuotes([]);
+      return;
     }
 
     const filtered = quotes.filter((quote) => {
@@ -121,97 +127,101 @@ function AdminQuotesPage() {
         quote.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quote.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         quote.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        quote.phone?.includes(searchTerm)
+        quote.phone?.includes(searchTerm);
 
-      const matchesStatus = statusFilter === "all" || quote.status === statusFilter
+      const matchesStatus = statusFilter === 'all' || quote.status === statusFilter;
 
-      return matchesSearch && matchesStatus
-    })
+      return matchesSearch && matchesStatus;
+    });
 
-    setFilteredQuotes(filtered)
-  }, [quotes, searchTerm, statusFilter])
-
-  useEffect(() => {
-    fetchQuotes()
-  }, [fetchQuotes])
+    setFilteredQuotes(filtered);
+  }, [quotes, searchTerm, statusFilter]);
 
   useEffect(() => {
-    filterQuotes()
-  }, [quotes, searchTerm, statusFilter, filterQuotes])
+    fetchQuotes();
+  }, [fetchQuotes]);
 
-  const updateQuoteStatus = async (quoteId: string, newStatus: "approved" | "rejected") => {
+  useEffect(() => {
+    filterQuotes();
+  }, [quotes, searchTerm, statusFilter, filterQuotes]);
+
+  const updateQuoteStatus = async (quoteId: string, newStatus: 'approved' | 'rejected') => {
     try {
-      setIsUpdating(true)
+      setIsUpdating(true);
       const response = await fetch(`/api/admin/quotes/${quoteId}`, {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ status: newStatus }),
-      })
+      });
 
       if (!response.ok) {
-        throw new Error("Erro ao atualizar status")
+        throw new Error('Erro ao atualizar status');
       }
 
-      await fetchQuotes()
-      setSelectedQuote(null)
+      await fetchQuotes();
+      setSelectedQuote(null);
 
       toast({
-        title: "Sucesso",
-        description: `Orçamento ${newStatus === "approved" ? "aprovado" : "rejeitado"} com sucesso!`,
-      })
+        title: 'Sucesso',
+        description: `Orçamento ${newStatus === 'approved' ? 'aprovado' : 'rejeitado'} com sucesso!`,
+      });
     } catch (error) {
-      console.error("Error updating quote:", error)
+      console.error('Error updating quote:', error);
       toast({
-        title: "Erro",
-        description: "Erro ao atualizar status do orçamento.",
-        variant: "destructive",
-      })
+        title: 'Erro',
+        description: 'Erro ao atualizar status do orçamento.',
+        variant: 'destructive',
+      });
     } finally {
-      setIsUpdating(false)
+      setIsUpdating(false);
     }
-  }
+  };
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value)
-  }
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+  };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("pt-BR")
-  }
+    return new Date(dateString).toLocaleDateString('pt-BR');
+  };
 
-  const getStatusBadge = (status: Quote["status"]) => {
-    const config = statusConfig[status]
-    const Icon = config.icon
+  const getStatusBadge = (status: Quote['status']) => {
+    const config = statusConfig[status];
+    const Icon = config.icon;
 
     return (
       <Badge variant="outline" className={`${config.color} flex items-center gap-1.5 font-medium`}>
         <Icon className="w-3.5 h-3.5" />
         {config.label}
       </Badge>
-    )
-  }
+    );
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
           className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
         />
       </div>
-    )
+    );
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
           <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
             {/* Clean depth layers without decorative elements */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
@@ -219,7 +229,9 @@ function AdminQuotesPage() {
 
             {/* Content */}
             <div className="relative z-10">
-              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">Gerenciar Orçamentos</h1>
+              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
+                Gerenciar Orçamentos
+              </h1>
               <p className="text-orange-50 mb-4 font-medium">
                 Visualize, analise e gerencie todos os orçamentos solicitados
               </p>
@@ -276,7 +288,11 @@ function AdminQuotesPage() {
         </motion.div>
 
         {/* Tabela de Orçamentos */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
             {/* Clean depth layers for table card */}
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
@@ -328,7 +344,8 @@ function AdminQuotesPage() {
                               <div className="flex items-center gap-2">
                                 <Package className="w-4 h-4 text-gray-400" />
                                 <span className="text-sm font-medium">
-                                  {Array.isArray(quote.equipments) ? quote.equipments.length : 0} equipamentos
+                                  {Array.isArray(quote.equipments) ? quote.equipments.length : 0}{' '}
+                                  equipamentos
                                 </span>
                               </div>
                             </td>
@@ -338,7 +355,9 @@ function AdminQuotesPage() {
                                   <Calendar className="w-3 h-3" />
                                   {formatDate(quote.startDate)}
                                 </div>
-                                <div className="text-gray-500 ml-4">até {formatDate(quote.endDate)}</div>
+                                <div className="text-gray-500 ml-4">
+                                  até {formatDate(quote.endDate)}
+                                </div>
                               </div>
                             </td>
                             <td className="p-4">
@@ -369,7 +388,9 @@ function AdminQuotesPage() {
                     <div className="text-gray-400 mb-4">
                       <FileText className="w-12 h-12 mx-auto mb-3" />
                       <p className="text-lg font-medium">Nenhum orçamento encontrado</p>
-                      <p className="text-sm">Tente ajustar os filtros ou aguarde novos orçamentos</p>
+                      <p className="text-sm">
+                        Tente ajustar os filtros ou aguarde novos orçamentos
+                      </p>
                     </div>
                   </div>
                 )}
@@ -447,11 +468,15 @@ function AdminQuotesPage() {
                       <div className="space-y-2">
                         <div>
                           <span className="text-sm text-gray-500">Início:</span>
-                          <span className="ml-2 font-medium">{formatDate(selectedQuote.startDate)}</span>
+                          <span className="ml-2 font-medium">
+                            {formatDate(selectedQuote.startDate)}
+                          </span>
                         </div>
                         <div>
                           <span className="text-sm text-gray-500">Fim:</span>
-                          <span className="ml-2 font-medium">{formatDate(selectedQuote.endDate)}</span>
+                          <span className="ml-2 font-medium">
+                            {formatDate(selectedQuote.endDate)}
+                          </span>
                         </div>
                       </div>
                     </CardContent>
@@ -490,11 +515,15 @@ function AdminQuotesPage() {
                     <div className="space-y-3">
                       {Array.isArray(selectedQuote.equipments) &&
                         selectedQuote.equipments.map((equipment, index) => (
-                          <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                          >
                             <div>
                               <div className="font-medium">{equipment.name}</div>
                               <div className="text-sm text-gray-500">
-                                Quantidade: {equipment.quantity} • {formatCurrency(equipment.dailyPrice)}/dia
+                                Quantidade: {equipment.quantity} •{' '}
+                                {formatCurrency(equipment.dailyPrice)}/dia
                               </div>
                             </div>
                             <div className="text-right">
@@ -529,7 +558,7 @@ function AdminQuotesPage() {
                 )}
 
                 {/* Ações Administrativas */}
-                {selectedQuote.status === "pending" && (
+                {selectedQuote.status === 'pending' && (
                   <Card className="border-l-4 border-l-yellow-500">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg">
@@ -541,21 +570,21 @@ function AdminQuotesPage() {
                     <CardContent>
                       <div className="flex gap-3">
                         <Button
-                          onClick={() => updateQuoteStatus(selectedQuote.id, "approved")}
+                          onClick={() => updateQuoteStatus(selectedQuote.id, 'approved')}
                           disabled={isUpdating}
                           className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
                         >
                           <CheckCircle className="w-4 h-4 mr-2" />
-                          {isUpdating ? "Aprovando..." : "Aprovar Orçamento"}
+                          {isUpdating ? 'Aprovando...' : 'Aprovar Orçamento'}
                         </Button>
                         <Button
-                          onClick={() => updateQuoteStatus(selectedQuote.id, "rejected")}
+                          onClick={() => updateQuoteStatus(selectedQuote.id, 'rejected')}
                           disabled={isUpdating}
                           variant="outline"
                           className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
                         >
                           <XCircle className="w-4 h-4 mr-2" />
-                          {isUpdating ? "Rejeitando..." : "Rejeitar Orçamento"}
+                          {isUpdating ? 'Rejeitando...' : 'Rejeitar Orçamento'}
                         </Button>
                       </div>
                     </CardContent>
@@ -567,7 +596,7 @@ function AdminQuotesPage() {
         </Dialog>
       </div>
     </div>
-  )
+  );
 }
 
 export default function AdminQuotesPageWrapper() {
@@ -575,5 +604,5 @@ export default function AdminQuotesPageWrapper() {
     <Suspense fallback={null}>
       <AdminQuotesPage />
     </Suspense>
-  )
+  );
 }
