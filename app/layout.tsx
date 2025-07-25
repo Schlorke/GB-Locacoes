@@ -1,6 +1,6 @@
-import type React from 'react';
-import type { Metadata } from 'next';
 import { SpeedInsights } from '@vercel/speed-insights/next'; // ✅ Importado aqui
+import type { Metadata } from 'next';
+import type React from 'react';
 import ClientLayout from './ClientLayout';
 import './globals.css';
 
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
   creator: 'GB Locações',
   publisher: 'GB Locações',
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
   },
   robots: {
     index: true,

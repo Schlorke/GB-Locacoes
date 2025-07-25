@@ -1,13 +1,13 @@
 'use client';
 
-import type React from 'react';
-import { Inter, Jost } from 'next/font/google';
-import './globals.css';
-import Header from '@/components/header';
 import Footer from '@/components/footer';
-import WhatsAppFAB from '@/components/whatsapp-fab';
+import Header from '@/components/header';
 import ScrollRevealInit from '@/components/scroll-reveal-init';
+import WhatsAppFAB from '@/components/whatsapp-fab';
+import { Inter, Jost } from 'next/font/google';
 import { usePathname } from 'next/navigation';
+import type React from 'react';
+import './globals.css';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -28,7 +28,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <html lang="pt-BR" className={`${inter.variable} ${jost.variable}`}>
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
         <meta name="theme-color" content="#334155" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
