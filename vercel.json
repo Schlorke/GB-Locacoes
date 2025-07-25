@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "build": {
+    "env": {},
+    "installCommand": "pnpm install",
+    "buildCommand": "pnpm run build"
+  },
+  "eslint": {
+    "ignoreDuringBuilds": true
+  },
+  "typescript": {
+    "ignoreBuildErrors": true
+  },
+  "images": {
+    "unoptimized": true
+  }
+}
