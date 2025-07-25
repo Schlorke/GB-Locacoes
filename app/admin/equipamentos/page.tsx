@@ -1,4 +1,3 @@
-'use client';
 // ...existing code...
 
 import { prisma } from '@/lib/prisma';
