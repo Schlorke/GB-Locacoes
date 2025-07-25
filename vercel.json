@@ -1,18 +1,5 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "build": {
-    "env": {},
-    "installCommand": "pnpm install",
-    "buildCommand": "pnpm run build"
-  },
-  "eslint": {
-    "ignoreDuringBuilds": true
-  },
-  "typescript": {
-    "ignoreBuildErrors": true
-  },
   "images": {
-    "formats": ["image/avif", "image/webp"],
-    "sizes": [16, 32, 48, 64, 96, 128, 256, 512]
+    "formats": ["image/avif", "image/webp"]
   }
 }
