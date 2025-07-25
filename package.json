@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "codex:setup": "npm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'",
+    "codex:setup": "pnpm install && npx prisma generate && echo 'Ambiente inicializado com sucesso!'",
     "dev": "next dev --turbopack",
     "format": "prettier --write \"**/*.{js,ts,tsx,json,md,css}\" --ignore-path .gitignore",
     "format:check": "prettier --check \"**/*.{js,ts,tsx,json,md,css}\" --ignore-path .gitignore",
@@ -133,6 +133,7 @@
     "vite-plugin-node-stdlib-browser": "^0.2.1",
     "vitest": "^3.2.4"
   },
+  "packageManager": "pnpm@8.8.0",
   "engines": {
     "npm": "please-use-pnpm",
     "pnpm": ">=8.0.0"
