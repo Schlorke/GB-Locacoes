@@ -2,11 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "build": {
     "env": {},
-    "installCommand": "pnpm install",
     "buildCommand": "npm run lint && npm run build"
-  },
-  "typescript": {
-    "ignoreBuildErrors": true
   },
   "images": {
     "formats": ["image/avif", "image/webp"],
