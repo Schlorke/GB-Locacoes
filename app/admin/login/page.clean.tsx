@@ -9,9 +9,9 @@ import { Label } from '@/components/ui/label';
 import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent, Suspense } from 'react';
 
-export default function AdminLoginPage() {
+function AdminLoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
@@ -164,5 +164,13 @@ export default function AdminLoginPage() {
         </Card>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPageWrapper() {
+  return (
+    <Suspense fallback={null}>
+      <AdminLoginPage />
+    </Suspense>
   );
 }

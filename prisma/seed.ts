@@ -1,10 +1,16 @@
-import { PrismaClient, UserRole } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+
+// Se UserRole não existir, defina manualmente:
+enum UserRole {
+  ADMIN = 'ADMIN',
+  CLIENT = 'CLIENT',
+}
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Start seeding...');
+  console.error('Start seeding...');
 
   const adminEmail = 'admin@gblocacoes.com.br';
   const adminPassword = 'admin123'; // Use a strong password in production!
@@ -15,7 +21,7 @@ async function main() {
   });
 
   if (existingAdmin) {
-    console.log('Admin user already exists. Skipping...');
+    console.error('Admin user already exists. Skipping...');
   } else {
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
@@ -28,11 +34,11 @@ async function main() {
         emailVerified: new Date(), // Pre-verify the admin email
       },
     });
-    console.log(`✅ Admin user created with email: ${adminEmail}`);
-    console.log(`🤫 Password: ${adminPassword}`);
+    console.error(`✅ Admin user created with email: ${adminEmail}`);
+    console.error(`🤫 Password: ${adminPassword}`);
   }
 
-  console.log('Seeding finished.');
+  console.warn('Seeding finished.');
 }
 
 main()

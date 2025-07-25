@@ -1,7 +1,10 @@
+export enum Role {
+  ADMIN = 'ADMIN',
+  CLIENT = 'CLIENT',
+}
+import bcrypt from 'bcryptjs';
 import NextAuth, { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { UserRole } from '@prisma/client';
-import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
 
 export const authOptions: NextAuthOptions = {
@@ -13,26 +16,26 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        console.log('🔐 [AUTH] Iniciando autenticação');
+        console.warn('🔐 [AUTH] Iniciando autenticação');
 
         if (!credentials?.email || !credentials.password) {
-          console.log('❌ [AUTH] Credenciais ausentes');
+          console.warn('❌ [AUTH] Credenciais ausentes');
           return null;
         }
 
         try {
-          console.log('🔍 [AUTH] Buscando usuário:', credentials.email);
+          console.warn('🔍 [AUTH] Buscando usuário:', credentials.email);
 
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
           });
 
           if (!user) {
-            console.log('❌ [AUTH] Usuário não encontrado');
+            console.warn('❌ [AUTH] Usuário não encontrado');
             return null;
           }
 
-          console.log('👤 [AUTH] Usuário encontrado:', {
+          console.warn('👤 [AUTH] Usuário encontrado:', {
             id: user.id,
             email: user.email,
             role: user.role,
@@ -40,23 +43,23 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (!user.password) {
-            console.log('❌ [AUTH] Usuário sem senha');
+            console.warn('❌ [AUTH] Usuário sem senha');
             return null;
           }
 
           const isValidPassword = await bcrypt.compare(credentials.password, user.password);
-          console.log('🔑 [AUTH] Senha válida:', isValidPassword);
+          console.warn('🔑 [AUTH] Senha válida:', isValidPassword);
 
           if (!isValidPassword) {
             return null;
           }
 
-          if (user.role === UserRole.CUSTOMER) {
-            console.log('❌ [AUTH] Role não autorizada:', user.role);
+          if (user.role === Role.CLIENT) {
+            console.warn('❌ [AUTH] Role não autorizada:', user.role);
             return null;
           }
 
-          console.log('✅ [AUTH] Autenticação bem-sucedida');
+          console.warn('✅ [AUTH] Autenticação bem-sucedida');
 
           return {
             id: user.id,
@@ -86,7 +89,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.role = token.role as UserRole;
+        session.user.role = token.role as Role;
       }
       return session;
     },

@@ -447,7 +447,7 @@ function QuotePage() {
 
 export default function QuotePageWrapper() {
   return (
-    <Suspense fallback={<div>Carregando...</div>}>
+    <Suspense fallback={null}>
       <QuotePage />
     </Suspense>
   );

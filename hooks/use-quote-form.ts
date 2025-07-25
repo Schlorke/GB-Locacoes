@@ -2,11 +2,18 @@
 
 import type React from 'react';
 
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 // Supondo que 'materials' venha de props ou context, ou seja buscado aqui
-const initialMaterials = [
-  /* ... seus materiais ... */
+export interface Material {
+  id: number;
+  name: string;
+  price: number;
+}
+
+const initialMaterials: Material[] = [
+  // Exemplo:
+  // { id: 1, name: 'Andaime', price: 100 },
 ];
 
 export interface SelectedMaterial {
@@ -96,7 +103,7 @@ export function useQuoteForm(materialsData = initialMaterials) {
         // Aqui você faria a chamada para sua API de criação de orçamento
         // Ex: await fetch('/api/quotes', { method: 'POST', body: JSON.stringify({ formData, selectedMaterials }) });
         await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulação
-        console.log('Form submitted:', { formData, selectedMaterials, total: calculateTotal() });
+        console.warn('Form submitted:', { formData, selectedMaterials, total: calculateTotal() });
         // Idealmente, usar toast aqui
         alert('Orçamento enviado com sucesso! Entraremos em contato em breve.');
         // Limpar formulário ou redirecionar

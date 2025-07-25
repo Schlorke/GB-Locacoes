@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "build": {
+    "env": {},
+    "buildCommand": "npm run lint && npm run build"
+  },
+  "images": {
+    "formats": ["image/avif", "image/webp"],
+    "sizes": [16, 32, 48, 64, 96, 128, 256, 512]
+  }
+}

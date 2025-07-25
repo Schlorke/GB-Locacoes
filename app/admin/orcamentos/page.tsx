@@ -33,7 +33,7 @@ import {
   User,
   XCircle,
 } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, Suspense } from 'react';
 
 interface Quote {
   id: string;
@@ -83,7 +83,7 @@ const statusConfig = {
   },
 };
 
-export default function AdminQuotesPage() {
+function AdminQuotesPage() {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [filteredQuotes, setFilteredQuotes] = useState<Quote[]>([]);
   const [loading, setLoading] = useState(true);
@@ -207,7 +207,7 @@ export default function AdminQuotesPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
           className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
         />
       </div>
@@ -596,5 +596,13 @@ export default function AdminQuotesPage() {
         </Dialog>
       </div>
     </div>
+  );
+}
+
+export default function AdminQuotesPageWrapper() {
+  return (
+    <Suspense fallback={null}>
+      <AdminQuotesPage />
+    </Suspense>
   );
 }
