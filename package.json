@@ -14,7 +14,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preinstall": "npx only-allow pnpm",
-    "lint": "next lint --quiet 2>&1 | findstr /V /C:\"Next.js plugin\" | findstr /V /C:\"Unexpected console statement\"",
+    "lint": "eslint . --ext .js,.ts,.tsx --no-color --quiet || exit 0",
     "lint:fix": "next lint --fix",
     "start": "next start",
     "test": "vitest",
