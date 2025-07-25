@@ -14,7 +14,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preinstall": "npx only-allow pnpm",
-    "lint": "eslint . --ext .js,.ts,.tsx --no-color --quiet || exit 0",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "lint:fix": "next lint --fix",
     "start": "next start",
     "test": "vitest",
