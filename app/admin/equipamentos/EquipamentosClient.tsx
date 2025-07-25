@@ -1,8 +1,12 @@
 'use client';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { formatCurrency } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { AlertCircle, CheckCircle, Clock, Package, Plus } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock, Edit, Eye, Package, Plus } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
 
@@ -125,9 +129,7 @@ export default function EquipamentosClient({ equipments }: EquipamentosClientPro
     },
   };
 
-  // ...existing code...
-  // Renderização igual ao seu JSX anterior, usando filteredAndSortedEquipments, searchTerm, etc.
-  // Garanta que não há outline.
+  // Renderização dos equipamentos
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Background Pattern */}
@@ -164,8 +166,72 @@ export default function EquipamentosClient({ equipments }: EquipamentosClientPro
             </Button>
           </div>
         </motion.div>
-        {/* Filters and Controls, Equipment Grid/List... igual ao seu código atual */}
-        {/* ...existing code... */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 max-w-md"
+        >
+          <Input
+            placeholder="Buscar equipamentos..."
+            value={searchTerm}
+            onChange={(e) => _setSearchTerm(e.target.value)}
+            className="bg-white"
+          />
+        </motion.div>
+
+        <motion.div
+          variants={_containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredAndSortedEquipments.length > 0 ? (
+            filteredAndSortedEquipments.map((equipment) => (
+              <motion.div key={equipment.id} variants={_itemVariants}>
+                <Card className="overflow-hidden shadow-lg">
+                  <CardHeader className="p-0 relative h-40 bg-gray-100">
+                    <Image
+                      src={equipment.imageUrl || '/placeholder.svg?height=200&width=300'}
+                      alt={equipment.name}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute top-2 left-2">{_getStatusBadge(equipment.status)}</div>
+                  </CardHeader>
+                  <CardContent className="p-4 space-y-2">
+                    <CardTitle className="text-lg font-semibold line-clamp-1">
+                      {equipment.name}
+                    </CardTitle>
+                    <p className="text-sm text-muted-foreground line-clamp-2">
+                      {equipment.description}
+                    </p>
+                    <div className="text-sm text-gray-500">{equipment.category}</div>
+                    <div className="font-semibold text-primary">
+                      {formatCurrency(equipment.dailyPrice)}{' '}
+                      <span className="text-xs font-normal text-gray-500">/dia</span>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="p-4 pt-0 flex justify-end gap-2">
+                    <Button asChild variant="outline" size="icon" className="bg-transparent">
+                      <Link href={`/admin/equipamentos/${equipment.id}`}>
+                        <Eye className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="icon" className="bg-transparent">
+                      <Link href={`/admin/equipamentos/${equipment.id}/editar`}>
+                        <Edit className="h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            ))
+          ) : (
+            <p className="col-span-full text-center text-gray-600">
+              Nenhum equipamento encontrado.
+            </p>
+          )}
+        </motion.div>
       </div>
     </div>
   );
