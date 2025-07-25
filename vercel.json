@@ -1,9 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run lint && npm run build",
-  "build": {
-    "installCommand": "pnpm install --no-frozen-lockfile"
-  },
+  "installCommand": "pnpm install --no-frozen-lockfile",
   "images": {
     "formats": ["image/avif", "image/webp"],
     "sizes": [16, 32, 48, 64, 96, 128, 256, 512]
