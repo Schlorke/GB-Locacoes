@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "next build",
+    "build": "prisma generate && next build",
     "codex:setup": "pnpm install && pnpm db:generate && pnpm db:push",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
