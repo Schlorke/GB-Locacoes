@@ -1,3 +1,15 @@
+
+packages:
+  - 'app'
+  - 'components'
+  - 'hooks'
+  - 'lib'
+  - 'middlewares'
+  - 'prisma'
+  - 'schemas'
+  - 'types'
+  - 'tests'
+
 onlyBuiltDependencies:
   - '@prisma/client'
   - '@prisma/engines'
