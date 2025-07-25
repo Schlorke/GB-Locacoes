@@ -149,8 +149,13 @@ export default function EquipmentsPage() {
         className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white"
       >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 via-blue-700/90 to-indigo-800/90"></div>
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fillRule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fillOpacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
-        
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%23ffffff' fillOpacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}
+        ></div>
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <motion.div
@@ -161,9 +166,7 @@ export default function EquipmentsPage() {
               <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
                 Equipamentos
               </h1>
-              <p className="text-blue-100 text-lg max-w-2xl">
-                Gerencie todos os equipamentos disponíveis para locação
-              </p>
+              <p className="text-blue-100 text-lg max-w-2xl">Gerencie todos os equipamentos disponíveis para locação</p>
             </motion.div>
 
             <motion.div
@@ -248,13 +251,11 @@ export default function EquipmentsPage() {
           >
             <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-white/20 shadow-xl max-w-md mx-auto">
               <Package className="h-16 w-16 text-slate-400 mx-auto mb-6" />
-              <h3 className="text-xl font-semibold text-slate-700 mb-3">
-                Nenhum equipamento encontrado
-              </h3>
+              <h3 className="text-xl font-semibold text-slate-700 mb-3">Nenhum equipamento encontrado</h3>
               <p className="text-slate-500 mb-6">
                 {equipments.length === 0
-                  ? 'Comece adicionando seu primeiro equipamento'
-                  : 'Tente ajustar os filtros de busca'}
+                  ? "Comece adicionando seu primeiro equipamento"
+                  : "Tente ajustar os filtros de busca"}
               </p>
               <Button asChild className="bg-blue-600 hover:bg-blue-700">
                 <Link href="/admin/equipamentos/novo">
@@ -275,20 +276,17 @@ export default function EquipmentsPage() {
               >
                 <Card className="group bg-white/70 backdrop-blur-sm border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 overflow-hidden relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
+
                   <div className="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden">
                     <Image
-                      src={equipment.images?.[0] || '/placeholder.svg?height=200&width=300'}
+                      src={equipment.images?.[0] || "/placeholder.svg?height=200&width=300"}
                       alt={equipment.name}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute top-3 left-3">
-                      <Badge
-                        variant={equipment.isAvailable ? 'default' : 'destructive'}
-                        className="shadow-lg"
-                      >
-                        {equipment.isAvailable ? 'Disponível' : 'Indisponível'}
+                      <Badge variant={equipment.isAvailable ? "default" : "destructive"} className="shadow-lg">
+                        {equipment.isAvailable ? "Disponível" : "Indisponível"}
                       </Badge>
                     </div>
                     <div className="absolute top-3 right-3">
@@ -302,10 +300,8 @@ export default function EquipmentsPage() {
                     <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors duration-300">
                       {equipment.name}
                     </h3>
-                    
-                    <p className="text-slate-600 text-sm mb-4 line-clamp-2">
-                      {equipment.description}
-                    </p>
+
+                    <p className="text-slate-600 text-sm mb-4 line-clamp-2">{equipment.description}</p>
 
                     <div className="flex items-center justify-between mb-4">
                       <div className="text-2xl font-bold text-blue-600">
@@ -316,7 +312,7 @@ export default function EquipmentsPage() {
 
                     <div className="flex items-center text-xs text-slate-500 mb-4">
                       <Calendar className="h-3 w-3 mr-1" />
-                      Criado em {new Date(equipment.createdAt).toLocaleDateString('pt-BR')}
+                      Criado em {new Date(equipment.createdAt).toLocaleDateString("pt-BR")}
                     </div>
 
                     {/* Botões de Ação - Aparecem no Hover */}
@@ -332,7 +328,7 @@ export default function EquipmentsPage() {
                           Ver
                         </Link>
                       </Button>
-                      
+
                       <Button
                         variant="outline"
                         size="sm"
@@ -344,7 +340,7 @@ export default function EquipmentsPage() {
                           Editar
                         </Link>
                       </Button>
-                      
+
                       <Button
                         variant="outline"
                         size="sm"
