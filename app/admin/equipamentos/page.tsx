@@ -1,98 +1,71 @@
 "use client"
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { toast } from "@/hooks/use-toast"
-import { formatCurrency } from "@/lib/utils"
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { motion } from "framer-motion"
-import { Calendar, Edit, Eye, Filter, Loader2, Package, Plus, Search, Trash2 } from "lucide-react"
-import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Search, Plus, Edit, Trash2, Eye, SortAsc, SortDesc, Grid, List } from "lucide-react"
 import Link from "next/link"
-import { useEffect, useState } from "react"
-
-interface Category {
-  id: string
-  name: string
-  color?: string
-}
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Equipment {
   id: string
   name: string
   description: string
-  pricePerDay: number
+  category: string
+  dailyPrice: number
+  weeklyPrice: number
+  monthlyPrice: number
+  available: boolean
   images: string[]
-  category: Category
-  isAvailable: boolean
+  specifications: Record<string, string>
   createdAt: string
+  updatedAt: string
 }
 
-export default function EquipmentsPage() {
+function AdminEquipmentsPage() {
+  const searchParams = useSearchParams()
   const [equipments, setEquipments] = useState<Equipment[]>([])
-  const [filteredEquipments, setFilteredEquipments] = useState<Equipment[]>([])
-  const [categories, setCategories] = useState<Category[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [categoryFilter, setCategoryFilter] = useState("all")
-  const [availabilityFilter, setAvailabilityFilter] = useState("all")
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "")
+  const [categoryFilter, setCategoryFilter] = useState(searchParams.get("category") || "all")
+  const [sortBy, setSortBy] = useState(searchParams.get("sort") || "name")
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">((searchParams.get("order") as "asc" | "desc") || "asc")
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const [categories, setCategories] = useState<string[]>([])
 
   useEffect(() => {
-    fetchData()
+    fetchEquipments()
+    fetchCategories()
   }, [])
 
-  useEffect(() => {
-    let filtered = equipments
-
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (eq) =>
-          eq.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          eq.description.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
-    }
-
-    if (categoryFilter !== "all") {
-      filtered = filtered.filter((eq) => eq.category.id === categoryFilter)
-    }
-
-    if (availabilityFilter !== "all") {
-      const isAvailable = availabilityFilter === "available"
-      filtered = filtered.filter((eq) => eq.isAvailable === isAvailable)
-    }
-
-    setFilteredEquipments(filtered)
-  }, [searchTerm, categoryFilter, availabilityFilter, equipments])
-
-  const fetchData = async () => {
+  const fetchEquipments = async () => {
     try {
-      setIsLoading(true)
-      const [equipmentsRes, categoriesRes] = await Promise.all([
-        fetch("/api/admin/equipments"),
-        fetch("/api/admin/categories"),
-      ])
-
-      if (equipmentsRes.ok) {
-        const equipmentsData = await equipmentsRes.json()
-        setEquipments(equipmentsData)
-        setFilteredEquipments(equipmentsData)
-      }
-
-      if (categoriesRes.ok) {
-        const categoriesData = await categoriesRes.json()
-        setCategories(categoriesData)
+      setLoading(true)
+      const response = await fetch("/api/admin/equipments")
+      if (response.ok) {
+        const data = await response.json()
+        setEquipments(data)
       }
     } catch (error) {
-      console.error("Erro ao carregar dados:", error)
-      toast({
-        title: "Erro",
-        description: "Erro ao carregar equipamentos",
-        variant: "destructive",
-      })
+      console.error("Erro ao carregar equipamentos:", error)
     } finally {
-      setIsLoading(false)
+      setLoading(false)
+    }
+  }
+
+  const fetchCategories = async () => {
+    try {
+      const response = await fetch("/api/admin/categories")
+      if (response.ok) {
+        const data = await response.json()
+        setCategories(data.map((cat: any) => cat.name))
+      }
+    } catch (error) {
+      console.error("Erro ao carregar categorias:", error)
     }
   }
 
@@ -105,34 +78,68 @@ export default function EquipmentsPage() {
       })
 
       if (response.ok) {
-        setEquipments((prev) => prev.filter((eq) => eq.id !== id))
-        toast({
-          title: "Sucesso",
-          description: "Equipamento excluído com sucesso",
-        })
-      } else {
-        throw new Error("Erro ao excluir equipamento")
+        setEquipments(equipments.filter((eq) => eq.id !== id))
       }
     } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao excluir equipamento",
-        variant: "destructive",
-      })
+      console.error("Erro ao excluir equipamento:", error)
     }
   }
 
-  if (isLoading) {
+  const filteredAndSortedEquipments = equipments
+    .filter((equipment) => {
+      const matchesSearch =
+        equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        equipment.description.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesCategory = categoryFilter === "all" || equipment.category === categoryFilter
+      return matchesSearch && matchesCategory
+    })
+    .sort((a, b) => {
+      let aValue: any = a[sortBy as keyof Equipment]
+      let bValue: any = b[sortBy as keyof Equipment]
+
+      if (sortBy === "dailyPrice" || sortBy === "weeklyPrice" || sortBy === "monthlyPrice") {
+        aValue = Number(aValue)
+        bValue = Number(bValue)
+      }
+
+      if (typeof aValue === "string") {
+        aValue = aValue.toLowerCase()
+        bValue = bValue.toLowerCase()
+      }
+
+      if (sortOrder === "asc") {
+        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0
+      } else {
+        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0
+      }
+    })
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  }
+
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="text-center">
-            <div className="relative">
-              <Loader2 className="h-16 w-16 animate-spin text-blue-600 mx-auto mb-4" />
-              <div className="absolute inset-0 h-16 w-16 animate-ping rounded-full bg-blue-400/20 mx-auto"></div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        <div className="container mx-auto px-4 py-8">
+          <div className="animate-pulse space-y-6">
+            <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-64 bg-gray-200 rounded-lg"></div>
+              ))}
             </div>
-            <p className="text-lg font-medium text-slate-700">Carregando equipamentos...</p>
-            <p className="text-sm text-slate-500 mt-2">Aguarde um momento</p>
           </div>
         </div>
       </div>
@@ -140,226 +147,307 @@ export default function EquipmentsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
-      {/* Header com Gradiente */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-800 text-white"
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 via-blue-700/90 to-indigo-800/90"></div>
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%23ffffff' fillOpacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        ></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* Background Pattern */}
+      <div
+        className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fillRule='evenodd'%3E%3Cg fill='%23000000' fillOpacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <h1 className="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-                Equipamentos
-              </h1>
-              <p className="text-blue-100 text-lg max-w-2xl">Gerencie todos os equipamentos disponíveis para locação</p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <Button
-                asChild
-                size="lg"
-                className="bg-white text-blue-700 hover:bg-blue-50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              >
-                <Link href="/admin/equipamentos/novo">
-                  <Plus className="h-5 w-5 mr-2" />
-                  Novo Equipamento
-                </Link>
+      <div className="relative container mx-auto px-4 py-8">
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Gerenciar Equipamentos</h1>
+              <p className="text-gray-600">Gerencie o catálogo de equipamentos disponíveis para locação</p>
+            </div>
+            <Link href="/admin/equipamentos/novo">
+              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                <Plus className="w-4 h-4 mr-2" />
+                Novo Equipamento
               </Button>
-            </motion.div>
+            </Link>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Filtros */}
+        {/* Filters and Search */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-8"
+          transition={{ delay: 0.1 }}
+          className="mb-6"
         >
-          <Card className="bg-white/70 backdrop-blur-sm border-white/20 shadow-xl">
+          <Card className="backdrop-blur-sm bg-white/80 border-white/20 shadow-xl">
             <CardContent className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                {/* Search */}
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
                     placeholder="Buscar equipamentos..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 border-slate-200 focus:border-blue-500 bg-white/80"
+                    className="pl-10"
                   />
                 </div>
 
+                {/* Category Filter */}
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger className="bg-white/80">
-                    <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Filtrar por categoria" />
+                  <SelectTrigger>
+                    <SelectValue placeholder="Categoria" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todas as Categorias</SelectItem>
                     {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
+                      <SelectItem key={category} value={category}>
+                        {category}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
 
-                <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
-                  <SelectTrigger className="bg-white/80">
-                    <Package className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Disponibilidade" />
+                {/* Sort By */}
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Ordenar por" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="available">Disponíveis</SelectItem>
-                    <SelectItem value="unavailable">Indisponíveis</SelectItem>
+                    <SelectItem value="name">Nome</SelectItem>
+                    <SelectItem value="category">Categoria</SelectItem>
+                    <SelectItem value="dailyPrice">Preço Diário</SelectItem>
+                    <SelectItem value="createdAt">Data de Criação</SelectItem>
                   </SelectContent>
                 </Select>
+
+                {/* Sort Order */}
+                <Button
+                  variant="outline"
+                  onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+                  className="flex items-center gap-2"
+                >
+                  {sortOrder === "asc" ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
+                  {sortOrder === "asc" ? "Crescente" : "Decrescente"}
+                </Button>
+
+                {/* View Mode */}
+                <div className="flex gap-2">
+                  <Button
+                    variant={viewMode === "grid" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setViewMode("grid")}
+                  >
+                    <Grid className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === "list" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setViewMode("list")}
+                  >
+                    <List className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
-        {/* Grid de Equipamentos */}
-        {filteredEquipments.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            className="text-center py-16"
-          >
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-12 border border-white/20 shadow-xl max-w-md mx-auto">
-              <Package className="h-16 w-16 text-slate-400 mx-auto mb-6" />
-              <h3 className="text-xl font-semibold text-slate-700 mb-3">Nenhum equipamento encontrado</h3>
-              <p className="text-slate-500 mb-6">
-                {equipments.length === 0
-                  ? "Comece adicionando seu primeiro equipamento"
-                  : "Tente ajustar os filtros de busca"}
-              </p>
-              <Button asChild className="bg-blue-600 hover:bg-blue-700">
-                <Link href="/admin/equipamentos/novo">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Adicionar Equipamento
-                </Link>
-              </Button>
-            </div>
-          </motion.div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredEquipments.map((equipment, index) => (
-              <motion.div
-                key={equipment.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <Card className="group bg-white/70 backdrop-blur-sm border-white/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        {/* Equipment Grid/List */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}
+        >
+          {filteredAndSortedEquipments.map((equipment) => (
+            <motion.div key={equipment.id} variants={itemVariants}>
+              <Card className="group hover:shadow-2xl transition-all duration-300 backdrop-blur-sm bg-white/90 border-white/20 overflow-hidden">
+                {viewMode === "grid" ? (
+                  <>
+                    {/* Equipment Image */}
+                    <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+                      {equipment.images && equipment.images.length > 0 ? (
+                        <img
+                          src={equipment.images[0] || "/placeholder.svg"}
+                          alt={equipment.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                          <div className="text-center">
+                            <div className="w-16 h-16 mx-auto mb-2 bg-gray-300 rounded-full flex items-center justify-center">
+                              <span className="text-2xl">📦</span>
+                            </div>
+                            <p className="text-sm">Sem imagem</p>
+                          </div>
+                        </div>
+                      )}
 
-                  <div className="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden">
-                    <Image
-                      src={equipment.images?.[0] || "/placeholder.svg?height=200&width=300"}
-                      alt={equipment.name}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <Badge variant={equipment.isAvailable ? "default" : "destructive"} className="shadow-lg">
-                        {equipment.isAvailable ? "Disponível" : "Indisponível"}
-                      </Badge>
-                    </div>
-                    <div className="absolute top-3 right-3">
-                      <Badge variant="secondary" className="shadow-lg">
-                        {equipment.category.name}
-                      </Badge>
-                    </div>
-                  </div>
-
-                  <CardContent className="p-6 relative z-10">
-                    <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors duration-300">
-                      {equipment.name}
-                    </h3>
-
-                    <p className="text-slate-600 text-sm mb-4 line-clamp-2">{equipment.description}</p>
-
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="text-2xl font-bold text-blue-600">
-                        {formatCurrency(equipment.pricePerDay)}
-                        <span className="text-sm font-normal text-slate-500">/dia</span>
+                      {/* Status Badge */}
+                      <div className="absolute top-3 right-3">
+                        <Badge variant={equipment.available ? "default" : "destructive"}>
+                          {equipment.available ? "Disponível" : "Indisponível"}
+                        </Badge>
                       </div>
                     </div>
 
-                    <div className="flex items-center text-xs text-slate-500 mb-4">
-                      <Calendar className="h-3 w-3 mr-1" />
-                      Criado em {new Date(equipment.createdAt).toLocaleDateString("pt-BR")}
-                    </div>
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <CardTitle className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                            {equipment.name}
+                          </CardTitle>
+                          <p className="text-sm text-gray-500 mt-1">{equipment.category}</p>
+                        </div>
+                      </div>
+                    </CardHeader>
 
-                    {/* Botões de Ação - Aparecem no Hover */}
-                    <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        asChild
-                        className="flex-1 hover:bg-blue-50 hover:border-blue-300 bg-transparent"
-                      >
-                        <Link href={`/admin/equipamentos/${equipment.id}`}>
-                          <Eye className="h-4 w-4 mr-1" />
-                          Ver
+                    <CardContent className="pt-0">
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">{equipment.description}</p>
+
+                      {/* Pricing */}
+                      <div className="space-y-2 mb-4">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Diária:</span>
+                          <span className="font-semibold text-green-600">R$ {equipment.dailyPrice.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Semanal:</span>
+                          <span className="font-semibold text-green-600">R$ {equipment.weeklyPrice.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-500">Mensal:</span>
+                          <span className="font-semibold text-green-600">R$ {equipment.monthlyPrice.toFixed(2)}</span>
+                        </div>
+                      </div>
+
+                      {/* Actions */}
+                      <div className="flex gap-2">
+                        <Link href={`/admin/equipamentos/${equipment.id}`} className="flex-1">
+                          <Button variant="outline" size="sm" className="w-full bg-transparent">
+                            <Eye className="w-4 h-4 mr-2" />
+                            Ver
+                          </Button>
                         </Link>
-                      </Button>
-
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        asChild
-                        className="flex-1 hover:bg-green-50 hover:border-green-300 bg-transparent"
-                      >
-                        <Link href={`/admin/equipamentos/${equipment.id}/editar`}>
-                          <Edit className="h-4 w-4 mr-1" />
-                          Editar
+                        <Link href={`/admin/equipamentos/${equipment.id}/editar`} className="flex-1">
+                          <Button variant="outline" size="sm" className="w-full bg-transparent">
+                            <Edit className="w-4 h-4 mr-2" />
+                            Editar
+                          </Button>
                         </Link>
-                      </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(equipment.id)}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </>
+                ) : (
+                  /* List View */
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4">
+                      {/* Equipment Image */}
+                      <div className="w-20 h-20 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                        {equipment.images && equipment.images.length > 0 ? (
+                          <img
+                            src={equipment.images[0] || "/placeholder.svg"}
+                            alt={equipment.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-400">📦</div>
+                        )}
+                      </div>
 
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(equipment.id)}
-                        className="hover:bg-red-50 hover:border-red-300 hover:text-red-600"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      {/* Equipment Info */}
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <div>
+                            <h3 className="font-semibold text-gray-900">{equipment.name}</h3>
+                            <p className="text-sm text-gray-500">{equipment.category}</p>
+                          </div>
+                          <Badge variant={equipment.available ? "default" : "destructive"}>
+                            {equipment.available ? "Disponível" : "Indisponível"}
+                          </Badge>
+                        </div>
+                        <p className="text-gray-600 text-sm mb-3 line-clamp-1">{equipment.description}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex gap-4 text-sm">
+                            <span className="text-green-600 font-semibold">
+                              R$ {equipment.dailyPrice.toFixed(2)}/dia
+                            </span>
+                            <span className="text-green-600 font-semibold">
+                              R$ {equipment.weeklyPrice.toFixed(2)}/sem
+                            </span>
+                            <span className="text-green-600 font-semibold">
+                              R$ {equipment.monthlyPrice.toFixed(2)}/mês
+                            </span>
+                          </div>
+                          <div className="flex gap-2">
+                            <Link href={`/admin/equipamentos/${equipment.id}`}>
+                              <Button variant="outline" size="sm">
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                            </Link>
+                            <Link href={`/admin/equipamentos/${equipment.id}/editar`}>
+                              <Button variant="outline" size="sm">
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                            </Link>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDelete(equipment.id)}
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
+                )}
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
 
-                  {/* Borda Animada */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+        {/* Empty State */}
+        {filteredAndSortedEquipments.length === 0 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-12">
+            <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+              <span className="text-4xl">📦</span>
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Nenhum equipamento encontrado</h3>
+            <p className="text-gray-600 mb-6">
+              {searchTerm || categoryFilter !== "all"
+                ? "Tente ajustar os filtros de busca"
+                : "Comece adicionando seu primeiro equipamento"}
+            </p>
+            <Link href="/admin/equipamentos/novo">
+              <Button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                <Plus className="w-4 h-4 mr-2" />
+                Adicionar Equipamento
+              </Button>
+            </Link>
+          </motion.div>
         )}
       </div>
     </div>
+  )
+}
+
+export default function AdminEquipmentsPageWrapper() {
+  return (
+    <Suspense fallback={null}>
+      <AdminEquipmentsPage />
+    </Suspense>
   )
 }
