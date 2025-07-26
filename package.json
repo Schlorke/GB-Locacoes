@@ -116,6 +116,7 @@
     "@types/react": "^19.1.8",
     "@vitest/browser": "^3.2.4",
     "@vitest/ui": "^3.2.4",
+    "autoprefixer": "^10.4.21",
     "eslint-config-next": "15.4.4",
     "jsdom": "^26.1.0",
     "postcss": "^8.5",
