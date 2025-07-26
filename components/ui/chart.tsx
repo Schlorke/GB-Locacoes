@@ -6,7 +6,6 @@ import type {
   NameType,
   Payload as TooltipPayload,
   ValueType,
-  Props as DefaultTooltipContentProps,
 } from 'recharts/types/component/DefaultTooltipContent';
 import type {
   LegendPayload,
@@ -103,9 +102,20 @@ ${colorConfig
   );
 };
 
-interface ChartTooltipContentProps
-  extends DefaultTooltipContentProps<ValueType, NameType>,
-    React.ComponentProps<'div'> {
+interface ChartTooltipContentProps extends React.ComponentProps<'div'> {
+  active?: boolean;
+  payload?: TooltipPayload<ValueType, NameType>[];
+  label?: NameType;
+  labelFormatter?: (
+    label: NameType,
+    payload: TooltipPayload<ValueType, NameType>[],
+  ) => React.ReactNode;
+  labelClassName?: string;
+  formatter?: (
+    value: ValueType,
+    name: NameType,
+    payload: TooltipPayload<ValueType, NameType>,
+  ) => React.ReactNode;
   hideLabel?: boolean;
   hideIndicator?: boolean;
   indicator?: 'line' | 'dot' | 'dashed';
@@ -151,7 +161,9 @@ const ChartTooltipContent = React.forwardRef<HTMLDivElement, ChartTooltipContent
 
       if (labelFormatter) {
         return (
-          <div className={cn('font-medium', labelClassName)}>{labelFormatter(value, payload)}</div>
+          <div className={cn('font-medium', labelClassName)}>
+            {labelFormatter && label && payload && labelFormatter(label, payload)}
+          </div>
         );
       }
 
@@ -185,14 +197,14 @@ const ChartTooltipContent = React.forwardRef<HTMLDivElement, ChartTooltipContent
 
             return (
               <div
-                key={item.dataKey}
+                key={String(item.dataKey) || index}
                 className={cn(
                   'flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground',
                   indicator === 'dot' && 'items-center',
                 )}
               >
                 {formatter && item?.value !== undefined && item.name ? (
-                  formatter(item.value, item.name, item, index, item.payload)
+                  formatter(item.value, item.name, item)
                 ) : (
                   <>
                     {itemConfig?.icon ? (

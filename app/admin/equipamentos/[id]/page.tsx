@@ -212,8 +212,13 @@ export default function EquipmentDetailsPage() {
                         const IconComponent =
                           LucideIcons[equipment.category.icon as keyof typeof LucideIcons];
                         if (IconComponent && typeof IconComponent === 'function') {
+                          const Icon = IconComponent as React.ComponentType<{
+                            size?: number;
+                            color?: string;
+                            className?: string;
+                          }>;
                           return (
-                            <IconComponent
+                            <Icon
                               size={14}
                               color={
                                 equipment.category.iconColor ||
