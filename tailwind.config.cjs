@@ -1,12 +1,15 @@
-import colors from 'tailwindcss/colors';
+// tailwind.config.cjs
+// Converted from ESM to CJS for compatibility with PostCSS in Next.js
+const colors = require('tailwindcss/colors');
 
-const config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: ['class'],
   content: [
-    './app/**/*.{ts,tsx,js,jsx,mdx}',
-    './components/**/*.{ts,tsx,js,jsx,mdx}',
-    './lib/**/*.{ts,tsx,js,jsx}',
-    './hooks/**/*.{ts,tsx,js,jsx}',
+    './app/**/*.{js,jsx,ts,tsx,mdx}',
+    './components/**/*.{js,jsx,ts,tsx,mdx}',
+    './lib/**/*.{js,jsx,ts,tsx}',
+    './hooks/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     extend: {
@@ -86,30 +89,16 @@ const config = {
       },
       keyframes: {
         'accordion-down': {
-          from: {
-            height: '0',
-          },
-          to: {
-            height: 'var(--radix-accordion-content-height)',
-          },
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
         },
         'accordion-up': {
-          from: {
-            height: 'var(--radix-accordion-content-height)',
-          },
-          to: {
-            height: '0',
-          },
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
         },
         slideInUp: {
-          from: {
-            opacity: '0',
-            transform: 'translateY(30px)',
-          },
-          to: {
-            opacity: '1',
-            transform: 'translateY(0)',
-          },
+          from: { opacity: '0', transform: 'translateY(30px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
         },
       },
       animation: {
@@ -119,9 +108,5 @@ const config = {
       },
     },
   },
-  plugins: [
-    (await import('tailwindcss-animate')).default,
-    (await import('tailwind-scrollbar')).default,
-  ],
+  plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar')],
 };
-export default config;
