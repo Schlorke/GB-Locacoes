@@ -30,7 +30,7 @@ module.exports = {
         wide: '0.015em',
       },
       colors: {
-        ...colors,
+        // Remove deprecated color names and use new ones
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
