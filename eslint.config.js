@@ -26,7 +26,7 @@ export default [
       'eslint.config.js',
       'next.config.mjs',
       'postcss.config.mjs',
-      'tailwind.config.ts',
+      'tailwind.config.js',
       'vitest.config.ts',
     ],
   },
