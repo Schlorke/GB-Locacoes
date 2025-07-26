@@ -519,15 +519,15 @@ section {
 
 /* Selection styles */
 ::selection {
-  background-color: theme('colors.blue.200');
-  color: theme('colors.blue.900');
+  background-color: oklch(88.2% 0.059 254.128);
+  color: oklch(37.9% 0.146 265.522);
 }
 
 /* Form enhancements */
 input:focus,
 textarea:focus,
 select:focus {
-  box-shadow: 0 0 0 3px theme('colors.blue.100');
+  box-shadow: 0 0 0 3px oklch(93.2% 0.032 255.585);
 }
 
 /* =============================== */

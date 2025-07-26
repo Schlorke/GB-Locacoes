@@ -1,6 +1,6 @@
-import type { Config } from 'tailwindcss';
+import colors from 'tailwindcss/colors';
 
-const config: Config = {
+const config = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -27,6 +27,7 @@ const config: Config = {
         wide: '0.015em',
       },
       colors: {
+        ...colors,
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -61,11 +62,11 @@ const config: Config = {
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
+          1: 'hsl(var(--chart-1))',
+          2: 'hsl(var(--chart-2))',
+          3: 'hsl(var(--chart-3))',
+          4: 'hsl(var(--chart-4))',
+          5: 'hsl(var(--chart-5))',
         },
         sidebar: {
           DEFAULT: 'hsl(var(--sidebar-background))',
@@ -118,6 +119,9 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar')],
+  plugins: [
+    (await import('tailwindcss-animate')).default,
+    (await import('tailwind-scrollbar')).default,
+  ],
 };
 export default config;
