@@ -3,14 +3,14 @@
 import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
 import type {
+  Props as DefaultLegendContentProps,
+  LegendPayload,
+} from 'recharts/types/component/DefaultLegendContent';
+import type {
   NameType,
   Payload as TooltipPayload,
   ValueType,
 } from 'recharts/types/component/DefaultTooltipContent';
-import type {
-  LegendPayload,
-  Props as DefaultLegendContentProps,
-} from 'recharts/types/component/DefaultLegendContent';
 
 import { cn } from '@/lib/utils';
 
@@ -346,9 +346,9 @@ function getPayloadConfigFromPayload(config: ChartConfig, payload: unknown, key:
 
 export {
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
   ChartLegend,
   ChartLegendContent,
   ChartStyle,
+  ChartTooltip,
+  ChartTooltipContent,
 };
