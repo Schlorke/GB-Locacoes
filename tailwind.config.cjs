@@ -1,12 +1,11 @@
-import colors from 'tailwindcss/colors';
-
-const config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: ['class'],
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    '*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,jsx,ts,tsx,mdx}',
+    './components/**/*.{js,jsx,ts,tsx,mdx}',
+    './lib/**/*.{js,jsx,ts,tsx}',
+    './hooks/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     extend: {
@@ -27,7 +26,7 @@ const config = {
         wide: '0.015em',
       },
       colors: {
-        ...colors,
+        ...require('tailwindcss/colors'),
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
@@ -120,8 +119,7 @@ const config = {
     },
   },
   plugins: [
-    (await import('tailwindcss-animate')).default,
-    (await import('tailwind-scrollbar')).default,
+    require('tailwindcss-animate'),
+    require('tailwind-scrollbar'),
   ],
 };
-export default config;
