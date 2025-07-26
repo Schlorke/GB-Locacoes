@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const CreateEquipmentSchema = z.object({
   name: z.string().min(3, 'Nome deve ter pelo menos 3 caracteres').max(255),
   description: z.string().min(10, 'Descrição deve ter pelo menos 10 caracteres'),
-  specifications: z.record(z.any()).optional(), // Ou um schema mais específico se souber a estrutura
+  specifications: z.record(z.string(), z.any()).optional(), // Zod 4: record agora requer key e value types
   pricePerDay: z.number().positive('Preço por dia deve ser positivo'),
   categoryId: z.string().cuid('ID da categoria inválido'),
   images: z.array(z.string().url('URL da imagem inválida')).optional().default([]),

@@ -65,7 +65,7 @@ export default function AdminHeader() {
               <p className="text-xs sm:text-sm font-medium text-slate-200 truncate max-w-24 lg:max-w-none">
                 {session?.user?.name || 'Admin'}
               </p>
-              {/* @ts-expect-error - role property will be added to session type */}
+              {/* Role property is now correctly typed in session type */}
               <p className="text-xs text-slate-400 truncate max-w-24 lg:max-w-none">
                 {session?.user?.role}
               </p>

@@ -32,7 +32,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
       return;
     }
 
-    // @ts-expect-error - role property will be added to session type
+    // Role property is now correctly typed in session type
     const userRole = session.user?.role;
     if (!['ADMIN', 'OPERATOR', 'FINANCIAL'].includes(userRole)) {
       router.push('/admin/login?error=unauthorized');

@@ -266,7 +266,7 @@ export default function ScrollRevealInit() {
               const elementsToObserve = document.querySelectorAll(selectors);
 
               elementsToObserve.forEach((element) => {
-                observer.observe(element);
+                observer?.observe(element);
               });
             }, observerDelay);
           });

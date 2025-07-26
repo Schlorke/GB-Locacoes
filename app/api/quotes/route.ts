@@ -1,21 +1,11 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {
-      customerName,
-      customerEmail,
-      customerPhone,
-      customerCompany,
-      projectAddress,
-      startDate,
-      endDate,
-      deliveryType,
-      message,
-      items,
-    } = body;
+    const { customerName, customerEmail, customerPhone, customerCompany, message, items } = body;
 
     // Validação básica
     if (!customerName || !customerEmail || !customerPhone || !items || items.length === 0) {
@@ -38,31 +28,30 @@ export async function POST(request: Request) {
         );
       }
 
-      const itemTotal = equipment.pricePerDay * item.quantity * (item.days || 1);
+      const pricePerDay = Number(equipment.pricePerDay);
+      const itemTotal = pricePerDay * item.quantity * (item.days || 1);
       totalAmount += itemTotal;
 
       quoteItems.push({
         equipmentId: item.equipmentId,
         quantity: item.quantity,
         days: item.days || 1,
+        pricePerDay: equipment.pricePerDay,
         priceAtTime: equipment.pricePerDay,
+        total: new Prisma.Decimal(itemTotal),
       });
     }
 
     // Criar orçamento
     const quote = await prisma.quote.create({
       data: {
-        customerName,
-        customerEmail,
-        customerPhone,
-        customerCompany,
-        projectAddress,
-        startDate: startDate ? new Date(startDate) : null,
-        endDate: endDate ? new Date(endDate) : null,
-        deliveryType,
+        name: customerName,
+        email: customerEmail,
+        phone: customerPhone,
+        company: customerCompany,
         message,
-        totalAmount,
-        status: 'pending',
+        total: new Prisma.Decimal(totalAmount),
+        status: 'PENDING', // Fixed: using correct enum value
         items: {
           create: quoteItems,
         },

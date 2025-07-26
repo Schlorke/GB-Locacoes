@@ -30,10 +30,11 @@ async function getCatalogoItem(slug: string) {
 }
 
 type Props = {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   try {
     const item = await getCatalogoItem(params.slug);
     return {
@@ -50,7 +51,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function CatalogoItemPage({ params }: Props) {
+export default async function CatalogoItemPage(props: Props) {
+  const params = await props.params;
   const item = await getCatalogoItem(params.slug);
 
   return (

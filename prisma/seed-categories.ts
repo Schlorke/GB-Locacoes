@@ -45,10 +45,18 @@ async function seedCategories() {
   ];
 
   for (const category of categories) {
+    const category_with_slug = {
+      ...category,
+      slug: category.name
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, ''),
+    };
+
     await prisma.category.upsert({
-      where: { name: category.name },
-      update: {},
-      create: category,
+      where: { slug: category_with_slug.slug },
+      create: category_with_slug,
+      update: category_with_slug,
     });
   }
 

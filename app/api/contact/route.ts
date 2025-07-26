@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           message: 'Dados inválidos',
-          errors: error.errors,
+          errors: error.issues, // Zod 4: 'errors' renamed to 'issues'
         },
         { status: 400 },
       );

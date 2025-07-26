@@ -8,10 +8,11 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
-export async function generateMetadata({ params }: Props) {
+export async function generateMetadata(props: Props) {
+  const params = await props.params;
   const equipment = await prisma.equipment.findUnique({
     where: { id: params.id },
     include: { category: true },
@@ -27,7 +28,8 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
-export default async function EquipmentDetailPage({ params }: Props) {
+export default async function EquipmentDetailPage(props: Props) {
+  const params = await props.params;
   const equipment = await prisma.equipment.findUnique({
     where: { id: params.id },
     include: {
