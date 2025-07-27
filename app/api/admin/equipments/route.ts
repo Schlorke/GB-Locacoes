@@ -1,10 +1,16 @@
 import { prisma } from '@/lib/prisma';
+import { requireAdmin } from '@/middlewares/require-admin';
 import { Prisma } from '@prisma/client';
 import { type NextRequest, NextResponse } from 'next/server';
 
 // GET /api/admin/equipments - List all equipments with pagination and filtering
 export async function GET(request: NextRequest) {
   try {
+    // Verificar autenticação de admin
+    const adminResult = await requireAdmin(request);
+    if (!adminResult.success) {
+      return NextResponse.json({ error: adminResult.error }, { status: adminResult.status });
+    }
     // Verifica se as variáveis de ambiente para o banco estão configuradas
     if (!process.env.DATABASE_URL) {
       console.error('[API GET /admin/equipments] DATABASE_URL não definido');
@@ -120,6 +126,12 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/equipments - Create new equipment
 export async function POST(request: NextRequest) {
   try {
+    // Verificar autenticação de admin
+    const adminResult = await requireAdmin(request);
+    if (!adminResult.success) {
+      return NextResponse.json({ error: adminResult.error }, { status: adminResult.status });
+    }
+
     const body = await request.json();
     const { name, description, pricePerDay, categoryId, images, isAvailable } = body;
 
