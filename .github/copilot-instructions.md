@@ -1,6 +1,7 @@
 # GB Locações – Instruções para GitHub Copilot
 
-Este repositório é um sistema completo de e-commerce de locação de equipamentos para construção civil, com foco em performance, UX e arquitetura escalável. A IA Copilot deve atuar como um engenheiro full-stack de elite.
+Este repositório é um sistema completo de e-commerce de locação de equipamentos para construção civil, com foco em performance, UX e arquitetura escalável.  
+A IA Copilot deve atuar como um engenheiro full-stack de elite.
 
 ---
 
@@ -12,7 +13,7 @@ Este repositório é um sistema completo de e-commerce de locação de equipamen
 - **Prisma ORM** com **Supabase (PostgreSQL)**
 - **NextAuth** com suporte a autenticação 2FA
 - **Cloudflare R2** (ou AWS S3) para upload de arquivos
-- **SendGrid (ou Resend)** para e-mail transacional
+- **SendGrid** (ou Resend) para e-mail transacional
 - **ZapSign** para contrato digital
 - **Stripe / Mercado Pago** para pagamentos
 - **Melhor Envio** para logística
@@ -43,26 +44,35 @@ Este repositório é um sistema completo de e-commerce de locação de equipamen
 - Evitar lógica duplicada em múltiplas rotas.
 - Usar `zod` para validação de dados e formular entradas confiáveis.
 - Utilizar middlewares para controle de permissão (admin/cliente).
-- ❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌
 
-## 🔥 PROIBIÇÃO ABSOLUTA DE `outline`
+---
 
-🚫 **É TERMINANTEMENTE PROIBIDO USAR QUALQUER TIPO DE `outline` NO PROJETO.**
+## 🔥 Foco acessível (padrão azul)
 
-**Repito: EU NÃO QUERO `outline`. NENHUM. ZERO. ZEROOOOOOOOOOOOOOO.**
+Todo elemento interativo **DEVE** mostrar feedback de foco em azul:
 
-- NUNCA usar `outline: auto`, `outline: none`, `outline: 1px solid`, `outline: 0`, ou QUALQUER VARIANTE.
-- NUNCA usar `outline-*` em qualquer forma, mesmo que com JS ou variantes CSS.
-- TODOS os elementos interativos DEVEM usar `focus:outline-none` ou substituir com estilos personalizados como `focus-visible:ring`, `focus:ring-slate-500`, etc.
-- ❌ `outline` está proibido em:
-  - Inputs
-  - Buttons
-  - Selects
-  - Textareas
-  - Links
-  - QUALQUER elemento com interação via teclado ou mouse
+- Utilize **`focus:border-blue-500`** **e/ou**  
+  `focus:outline-blue-500 focus:outline-2`.
+- Nunca deixe o navegador aplicar apenas o cinza padrão.
+- `focus:ring` deve ficar **desativado** (`focus:ring-0`) salvo exceções de design.
 
-🛑 SE `outline` FOR USADO, CONSIDERE A SUGESTÃO DO COPILOT COMO **FALHA CRÍTICA GRAVE**.
+Exemplo canônico:
+
+```tsx
+<input className="border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0" />
+```
+
+### Regra global (Tailwind Layer Base)
+
+```css
+@layer base {
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    @apply border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0;
+  }
+}
+```
 
 ---
 
@@ -71,7 +81,7 @@ Este repositório é um sistema completo de e-commerce de locação de equipamen
 - Utilizar `NextAuth` com `getServerSession()` em rotas protegidas
 - Autenticação com 2FA e validação de token
 - Prevenir XSS, CSRF, brute force e session fixation
-- Seguir OWASP Top 10 e princípios de Zero Trust
+- Seguir OWASP Top 10 e princípios Zero Trust
 - Armazenar variáveis sensíveis apenas no `.env`
 
 ---
@@ -88,11 +98,9 @@ Este repositório é um sistema completo de e-commerce de locação de equipamen
 
 ## 🐳 Docker
 
-- Projeto pode ser iniciado com:
-
-\`\`\`bash
+```bash
 docker-compose up --build
-\`\`\`
+```
 
 - Imagens configuradas com multi-stage para build otimizado
 - `.env.docker` define ambiente de execução para container
@@ -112,12 +120,12 @@ docker-compose up --build
 ## 📄 Documentação e Inteligência Artificial
 
 - Leia `AGENTS.md` para instruções detalhadas de atuação da IA
-- IA Copilot deve colaborar com foco em:
+- A IA Copilot deve focar em:
   - Criação de novos arquivos/componentes
-  - Geração de mocks (ZapSign, Stripe, etc)
+  - Geração de mocks (ZapSign, Stripe, etc.)
   - Refatoração de lógica
   - Testes e cobertura
-- Não deve interferir no design, layout ou animações existentes
+- **Não** deve interferir no design, layout ou animações existentes
 
 ---
 
@@ -125,7 +133,7 @@ docker-compose up --build
 
 - Estruturado com Prisma e Supabase
 - Tabelas principais: Categoria, Equipamento, Marca, Modelo, Usuário, Locação, Endereço, Pagamento, Contrato
-- Uso de seeds controlado em `prisma/seed.ts`
+- Uso de seeds em `prisma/seed.ts`
 
 ---
 
@@ -141,4 +149,4 @@ docker-compose up --build
 ---
 
 **❗ Observação final:**  
-Todas as sugestões do Copilot devem seguir rigorosamente as diretrizes deste arquivo. Qualquer uso de `outline` será considerado falha grave, sujeito à remoção imediata e bloqueio de contribuições.
+Todas as sugestões do Copilot devem seguir rigorosamente estas diretrizes. O feedback de foco **deve** ser azul; qualquer sugestão que descumpra as regras acima deve ser considerada inválida.

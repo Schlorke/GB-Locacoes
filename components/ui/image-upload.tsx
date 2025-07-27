@@ -150,7 +150,7 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
             onChange={(e) => setUrlInput(e.target.value)}
             placeholder="https://exemplo.com/imagem.jpg"
             disabled={images.length >= maxImages}
-            className="flex-1"
+            className="flex-1 focus:border-blue-500"
           />
           <Button
             type="button"
