@@ -191,21 +191,21 @@ export default function AdminEquipmentsPage() {
     <div className="space-y-6 p-6">
       {/* Header com gradiente */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-        <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-2xl p-6 text-white shadow-xl">
           {/* Clean depth layers without decorative elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-400/12 via-transparent to-black/15"></div>
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-500/6 to-blue-700/8"></div>
 
           {/* Content */}
           <div className="relative z-10">
             <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
               Gerenciar Equipamentos
             </h1>
-            <p className="text-orange-50 mb-4 font-medium">
+            <p className="text-blue-50 mb-4 font-medium">
               Controle todo o catálogo de equipamentos para locação
             </p>
             <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
-              <Package className="w-5 h-5 text-orange-50" />
+              <Package className="w-5 h-5 text-blue-50" />
               <span className="font-semibold text-white">
                 {Array.isArray(filteredEquipments) ? filteredEquipments.length : 0} equipamentos
                 encontrados
@@ -265,7 +265,7 @@ export default function AdminEquipmentsPage() {
               </div>
               <Button
                 asChild
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300"
+                className="bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 w-full lg:w-auto"
               >
                 <Link href="/admin/equipamentos/novo">
                   <Plus className="w-4 h-4 mr-2" />
@@ -303,10 +303,7 @@ export default function AdminEquipmentsPage() {
               <p className="text-gray-500 mb-6 text-center">
                 Comece adicionando o primeiro equipamento ao catálogo
               </p>
-              <Button
-                asChild
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300"
-              >
+              <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white">
                 <Link href="/admin/equipamentos/novo">
                   <Plus className="w-4 h-4 mr-2" />
                   Adicionar Equipamento
