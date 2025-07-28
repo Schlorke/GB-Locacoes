@@ -72,7 +72,7 @@ export default function ContatoPage() {
               </div>
             </div>
 
-            <div className="mt-8 p-6 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-lg text-white">
+            <div className="mt-8 p-6 bg-linear-to-br from-orange-500 to-yellow-500 rounded-lg text-white">
               <h3 className="text-h3 font-bold mb-2">Atendimento Especializado</h3>
               <p className="mb-4">
                 Nossa equipe técnica está pronta para orientar sobre o melhor equipamento para seu

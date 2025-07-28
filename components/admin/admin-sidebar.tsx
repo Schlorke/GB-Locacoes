@@ -58,7 +58,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
               width={40}
               height={40}
               priority
-              className="flex-shrink-0 w-auto h-auto"
+              className="shrink-0 w-auto h-auto"
             />
             <div className="flex flex-col min-w-0">
               <h2 className="text-base sm:text-lg font-bold text-white truncate">GB Locações</h2>
@@ -100,7 +100,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
                 >
                   <Icon
                     className={cn(
-                      'h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0',
+                      'h-4 w-4 sm:h-5 sm:w-5 shrink-0',
                       isActive ? 'text-white' : 'text-slate-400 group-hover:text-white',
                     )}
                   />
@@ -128,7 +128,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         >
           <UserCircle
             className={cn(
-              'h-10 w-10 text-slate-400 flex-shrink-0',
+              'h-10 w-10 text-slate-400 shrink-0',
               isSidebarCollapsed && '-ml-[2px]',
             )}
           />
@@ -171,7 +171,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           size="icon"
           onClick={toggleSidebarCollapse}
-          className="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-600 hover:from-slate-700 hover:via-slate-600 hover:to-slate-500 text-white rounded-full h-10 w-10 border-2 border-slate-500/30 shadow-xl transition-all duration-300 hover:scale-110 hover:shadow-2xl backdrop-blur-sm hover:border-slate-400/50"
+          className="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-linear-to-br from-slate-800 via-slate-700 to-slate-600 hover:from-slate-700 hover:via-slate-600 hover:to-slate-500 text-white rounded-full h-10 w-10 border-2 border-slate-500/30 shadow-xl transition-all duration-300 hover:scale-110 hover:shadow-2xl backdrop-blur-sm hover:border-slate-400/50"
           title={isSidebarCollapsed ? 'Expandir sidebar' : 'Recolher sidebar'}
         >
           {isSidebarCollapsed ? (

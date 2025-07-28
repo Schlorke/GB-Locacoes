@@ -164,10 +164,10 @@ export default function NovoEquipamento() {
     <div className="space-y-6 p-6">
       {/* Header com gradiente */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-        <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+        <div className="relative overflow-hidden bg-linear-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
           {/* Clean depth layers without decorative elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
+          <div className="absolute inset-0 bg-linear-to-br from-orange-400/12 via-transparent to-black/15"></div>
+          <div className="absolute inset-0 bg-linear-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
           {/* Content */}
           <div className="relative z-10">
@@ -208,8 +208,8 @@ export default function NovoEquipamento() {
           transition={{ delay: 0.1 }}
         >
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
             <CardHeader className="relative z-10">
               <CardTitle className="text-xl font-semibold text-gray-900">
                 Informações Básicas
@@ -308,8 +308,8 @@ export default function NovoEquipamento() {
           transition={{ delay: 0.2 }}
         >
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
             <CardHeader className="relative z-10">
               <CardTitle className="text-xl font-semibold text-gray-900">
                 Imagens do Equipamento
@@ -332,8 +332,8 @@ export default function NovoEquipamento() {
           transition={{ delay: 0.3 }}
         >
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
             <CardHeader className="relative z-10">
               <CardTitle className="text-xl font-semibold text-gray-900">
                 Especificações Técnicas (Opcional)

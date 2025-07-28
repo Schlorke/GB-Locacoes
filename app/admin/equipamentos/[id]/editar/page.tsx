@@ -209,7 +209,7 @@ export default function EditarEquipamento() {
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
       <div className="flex items-center gap-3 sm:gap-4">
-        <Button variant="outline" size="icon" asChild className="flex-shrink-0 bg-transparent">
+        <Button variant="outline" size="icon" asChild className="shrink-0 bg-transparent">
           <Link href={`/admin/equipamentos/${params.id}`}>
             <ArrowLeft className="h-4 w-4" />
             <span className="sr-only">Voltar</span>
@@ -341,14 +341,14 @@ export default function EditarEquipamento() {
                   variant="ghost"
                   size="icon"
                   onClick={() => handleRemoveSpecification(key)}
-                  className="flex-shrink-0 ml-2"
+                  className="shrink-0 ml-2"
                 >
                   <Trash2 className="h-4 w-4 text-red-500" />
                 </Button>
               </div>
             ))}
             <div className="flex flex-col sm:flex-row items-end gap-2">
-              <div className="flex-grow w-full sm:w-auto">
+              <div className="grow w-full sm:w-auto">
                 <Label htmlFor="specKey" className="text-sm font-medium">
                   Nome da Especificação
                 </Label>
@@ -360,7 +360,7 @@ export default function EditarEquipamento() {
                   className="mt-1"
                 />
               </div>
-              <div className="flex-grow w-full sm:w-auto">
+              <div className="grow w-full sm:w-auto">
                 <Label htmlFor="specValue" className="text-sm font-medium">
                   Valor
                 </Label>

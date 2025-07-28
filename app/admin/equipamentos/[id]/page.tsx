@@ -137,7 +137,7 @@ export default function EquipmentDetailsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
         <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-          <Button variant="outline" size="icon" asChild className="flex-shrink-0 bg-transparent">
+          <Button variant="outline" size="icon" asChild className="shrink-0 bg-transparent">
             <Link href="/admin/equipamentos">
               <ArrowLeft className="h-4 w-4" />
               <span className="sr-only">Voltar</span>

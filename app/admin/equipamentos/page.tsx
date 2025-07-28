@@ -191,10 +191,10 @@ export default function AdminEquipmentsPage() {
     <div className="space-y-6 p-6">
       {/* Header com gradiente */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-        <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+        <div className="relative overflow-hidden bg-linear-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
           {/* Clean depth layers without decorative elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
+          <div className="absolute inset-0 bg-linear-to-br from-orange-400/12 via-transparent to-black/15"></div>
+          <div className="absolute inset-0 bg-linear-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
           {/* Content */}
           <div className="relative z-10">
@@ -224,8 +224,8 @@ export default function AdminEquipmentsPage() {
       >
         <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
           {/* Clean depth layers for filter card */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+          <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+          <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
           <CardContent className="relative z-10 p-6">
             <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
@@ -292,7 +292,7 @@ export default function AdminEquipmentsPage() {
 
         {!loading && filteredEquipments.length === 0 && equipments.length === 0 ? (
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <CardContent className="relative z-10 flex flex-col items-center justify-center py-16">
               <div className="bg-gray-100 rounded-full p-4 mb-4">
                 <Package className="w-8 h-8 text-gray-400" />
@@ -316,7 +316,7 @@ export default function AdminEquipmentsPage() {
           </Card>
         ) : !loading && filteredEquipments.length === 0 ? (
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <CardContent className="relative z-10 flex flex-col items-center justify-center py-16">
               <div className="bg-orange-100 rounded-full p-4 mb-4">
                 <AlertCircle className="w-8 h-8 text-orange-400" />
@@ -344,8 +344,8 @@ export default function AdminEquipmentsPage() {
                 >
                   <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full">
                     {/* Clean depth layers for equipment card */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+                    <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                    <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
                     <CardHeader className="relative z-10 pb-3">
                       <div className="flex flex-col">
@@ -395,7 +395,7 @@ export default function AdminEquipmentsPage() {
 
                         {/* Preço */}
                         <div className="flex items-center gap-2 text-sm">
-                          <DollarSign className="w-4 h-4 text-green-500 flex-shrink-0" />
+                          <DollarSign className="w-4 h-4 text-green-500 shrink-0" />
                           <span className="font-bold text-green-600">
                             {formatPrice(equipment.pricePerDay)}/dia
                           </span>
@@ -405,12 +405,12 @@ export default function AdminEquipmentsPage() {
                         <div className="flex items-center gap-2 text-sm">
                           {equipment.isAvailable ? (
                             <>
-                              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                              <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
                               <span className="text-green-600 font-medium">Disponível</span>
                             </>
                           ) : (
                             <>
-                              <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                              <XCircle className="w-4 h-4 text-red-500 shrink-0" />
                               <span className="text-red-600 font-medium">Indisponível</span>
                             </>
                           )}
@@ -418,7 +418,7 @@ export default function AdminEquipmentsPage() {
 
                         {/* Data de criação */}
                         <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <Calendar className="w-4 h-4 flex-shrink-0" />
+                          <Calendar className="w-4 h-4 shrink-0" />
                           <span className="truncate">
                             Criado em {formatDate(equipment.createdAt)}
                           </span>
@@ -427,12 +427,12 @@ export default function AdminEquipmentsPage() {
 
                       {/* Botões de ação */}
                       <div className="flex items-center justify-end gap-1 mt-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button variant="ghost" size="sm" asChild className="flex-shrink-0">
+                        <Button variant="ghost" size="sm" asChild className="shrink-0">
                           <Link href={`/admin/equipamentos/${equipment.id}`}>
                             <Eye className="w-4 h-4" />
                           </Link>
                         </Button>
-                        <Button variant="ghost" size="sm" asChild className="flex-shrink-0">
+                        <Button variant="ghost" size="sm" asChild className="shrink-0">
                           <Link href={`/admin/equipamentos/${equipment.id}/editar`}>
                             <Edit className="w-4 h-4" />
                           </Link>
@@ -441,7 +441,7 @@ export default function AdminEquipmentsPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => deleteEquipment(equipment.id)}
-                          className="text-red-500 hover:text-red-600 flex-shrink-0"
+                          className="text-red-500 hover:text-red-600 shrink-0"
                           disabled={isDeleting}
                         >
                           <Trash2 className="w-4 h-4" />

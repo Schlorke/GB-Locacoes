@@ -137,7 +137,7 @@ export default function FeaturedMaterials() {
                   </div>
 
                   {/* Bottom accent line - sempre no fundo */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-linear-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
                 </CardContent>
               </Card>
             ))}

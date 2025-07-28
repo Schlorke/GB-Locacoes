@@ -212,7 +212,7 @@ export function IconPicker({
                   value={iconColor}
                   onChange={(e) => setIconColor(e.target.value)}
                   placeholder="#000000"
-                  className="flex-grow text-sm"
+                  className="grow text-sm"
                 />
               </div>
             </div>
@@ -253,7 +253,7 @@ export function IconPicker({
               </div>
             </div>
 
-            <ScrollArea className="flex-grow p-4 overflow-y-auto">
+            <ScrollArea className="grow p-4 overflow-y-auto">
               {filteredIcons.length > 0 ? (
                 <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
                   {filteredIcons.map((iconName) => {

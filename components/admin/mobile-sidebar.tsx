@@ -92,7 +92,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                   alt="Logo"
                   width={32}
                   height={32}
-                  className="flex-shrink-0"
+                  className="shrink-0"
                 />
                 <div className="text-left">
                   <h2 className="text-lg font-bold">GB Locações</h2>
@@ -130,7 +130,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                         : 'bg-slate-50/80 text-slate-700 border-slate-200/60 hover:border-slate-300/80',
                     )}
                   >
-                    <Icon className="h-5 w-5 flex-shrink-0" />
+                    <Icon className="h-5 w-5 shrink-0" />
                     <span>{item.label}</span>
                   </Link>
                 );
@@ -141,7 +141,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
           {/* Seção do Usuário */}
           <div className="p-4 border-t">
             <div className="flex items-center gap-3 mb-4">
-              <UserCircle className="h-10 w-10 ml-[0.2rem] text-slate-400 flex-shrink-0" />
+              <UserCircle className="h-10 w-10 ml-[0.2rem] text-slate-400 shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-slate-900 truncate">
                   {session?.user?.name || 'Administrador'}

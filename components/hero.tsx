@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function Hero() {
   return (
-    <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden">
+    <section className="relative bg-linear-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
@@ -92,7 +92,7 @@ export default function Hero() {
                 <div className="text-sm font-medium">Anos de Experiência</div>
               </div>
               {/* Decorative elements */}
-              <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-500"></div>
+              <div className="absolute -inset-4 border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-500"></div>
             </div>
           </div>
         </div>

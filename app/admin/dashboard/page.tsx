@@ -171,7 +171,7 @@ export default function AdminDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-        <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
+        <Card className="bg-linear-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -181,12 +181,12 @@ export default function AdminDashboard() {
                   {stats?.availableEquipments || 0} disponíveis
                 </p>
               </div>
-              <Package className="h-6 w-6 sm:h-8 sm:w-8 text-blue-200 flex-shrink-0" />
+              <Package className="h-6 w-6 sm:h-8 sm:w-8 text-blue-200 shrink-0" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
+        <Card className="bg-linear-to-br from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -194,12 +194,12 @@ export default function AdminDashboard() {
                 <p className="text-xl sm:text-2xl font-bold">{stats?.totalCategories || 0}</p>
                 <p className="text-green-200 text-xs mt-1 truncate">Organizadas</p>
               </div>
-              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-green-200 flex-shrink-0" />
+              <BarChart3 className="h-6 w-6 sm:h-8 sm:w-8 text-green-200 shrink-0" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
+        <Card className="bg-linear-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -209,12 +209,12 @@ export default function AdminDashboard() {
                   {stats?.pendingQuotes || 0} pendentes
                 </p>
               </div>
-              <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-purple-200 flex-shrink-0" />
+              <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-purple-200 shrink-0" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
+        <Card className="bg-linear-to-br from-orange-500 to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0">
           <CardContent className="p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="min-w-0 flex-1">
@@ -224,7 +224,7 @@ export default function AdminDashboard() {
                 </p>
                 <p className="text-orange-200 text-xs mt-1 truncate">Este mês</p>
               </div>
-              <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-orange-200 flex-shrink-0" />
+              <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-orange-200 shrink-0" />
             </div>
           </CardContent>
         </Card>
@@ -241,7 +241,7 @@ export default function AdminDashboard() {
                   {stats?.pendingQuotes || 0}
                 </p>
               </div>
-              <Clock className="h-5 w-5 text-yellow-500 flex-shrink-0" />
+              <Clock className="h-5 w-5 text-yellow-500 shrink-0" />
             </div>
           </CardContent>
         </Card>
@@ -255,7 +255,7 @@ export default function AdminDashboard() {
                   {stats?.approvedQuotes || 0}
                 </p>
               </div>
-              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+              <CheckCircle className="h-5 w-5 text-green-500 shrink-0" />
             </div>
           </CardContent>
         </Card>
@@ -269,7 +269,7 @@ export default function AdminDashboard() {
                   {stats?.rejectedQuotes || 0}
                 </p>
               </div>
-              <XCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+              <XCircle className="h-5 w-5 text-red-500 shrink-0" />
             </div>
           </CardContent>
         </Card>
@@ -283,7 +283,7 @@ export default function AdminDashboard() {
                   {stats?.completedQuotes || 0}
                 </p>
               </div>
-              <CheckCircle className="h-5 w-5 text-blue-500 flex-shrink-0" />
+              <CheckCircle className="h-5 w-5 text-blue-500 shrink-0" />
             </div>
           </CardContent>
         </Card>
@@ -401,7 +401,7 @@ export default function AdminDashboard() {
                         >
                           <TableCell className="p-2 sm:p-4">
                             <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+                              <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center shrink-0">
                                 <User className="h-4 w-4 text-white" />
                               </div>
                               <div className="min-w-0 flex-1">
@@ -414,7 +414,7 @@ export default function AdminDashboard() {
                           </TableCell>
                           <TableCell className="hidden sm:table-cell p-2 sm:p-4">
                             <div className="flex items-center gap-2">
-                              <Building className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                              <Building className="h-4 w-4 text-gray-400 shrink-0" />
                               <span className="text-sm truncate">
                                 {quote.customerCompany || '-'}
                               </span>

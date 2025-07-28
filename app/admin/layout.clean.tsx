@@ -67,7 +67,7 @@ function AuthWrapper({ children }: { children: ReactNode }) {
       <AdminSidebar />
       <div className="flex flex-col flex-1 overflow-hidden min-w-0">
         <AdminMobileHeader />
-        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">{children}</main>
+        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-screen">{children}</main>
       </div>
     </div>
   );

@@ -69,12 +69,12 @@ function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-slate-100 to-slate-200">
       <Header />
       <div className="flex items-center justify-center px-4 py-8 min-h-[calc(100vh-80px)]">
         <Card className="w-full max-w-md shadow-xl border-0 bg-white/95 backdrop-blur-sm">
           <CardHeader className="text-center space-y-3 pb-6">
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 bg-clip-text text-transparent">
+            <CardTitle className="text-2xl font-bold bg-linear-to-r from-slate-700 via-slate-800 to-slate-900 bg-clip-text text-transparent">
               Painel Administrativo
             </CardTitle>
             <CardDescription className="text-slate-600 text-base">
@@ -142,7 +142,7 @@ function AdminLoginPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-11 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
+                className="w-full h-11 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200"
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">

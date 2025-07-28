@@ -108,7 +108,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 overflow-hidden">
+    <div className="h-screen bg-linear-to-br from-slate-50 via-slate-100 to-slate-200 overflow-hidden">
       <Header />
       <div
         className="flex items-center justify-center px-4 relative"
@@ -136,8 +136,8 @@ export default function AdminLoginPage() {
             >
               <CardHeader className="text-center space-y-4 py-6 px-6 animate-fade-in-up">
                 {/* Logo melhorado com animação */}
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white shadow-xl animate-scale-in relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-60"></div>
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br from-slate-700 via-slate-800 to-slate-900 text-white shadow-xl animate-scale-in relative overflow-hidden">
+                  <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/10 to-transparent opacity-60"></div>
                   <span className="text-2xl font-bold tracking-tight relative z-10">GB</span>
                 </div>
                 {/* Título e descrição centralizados */}
@@ -228,7 +228,7 @@ export default function AdminLoginPage() {
                   <div className="pt-1">
                     <Button
                       type="submit"
-                      className="w-full h-12 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none rounded-md"
+                      className="w-full h-12 bg-linear-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none rounded-md"
                       disabled={isLoading}
                       aria-label="Entrar no Painel Administrativo"
                     >
@@ -251,7 +251,7 @@ export default function AdminLoginPage() {
                       Credenciais padrão para teste:
                     </p>
                     <div
-                      className="font-mono text-xs bg-gradient-to-r from-slate-100 to-slate-50 px-3 py-2.5 rounded-md text-slate-700 border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow duration-200"
+                      className="font-mono text-xs bg-linear-to-r from-slate-100 to-slate-50 px-3 py-2.5 rounded-md text-slate-700 border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow duration-200"
                       style={{ boxShadow: '0 1px 4px 0 rgba(0,0,0,0.06)' }}
                     >
                       <div className="font-medium">admin@gblocacoes.com.br</div>

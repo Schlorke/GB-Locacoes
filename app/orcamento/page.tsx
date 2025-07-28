@@ -217,7 +217,7 @@ function QuotePage() {
                           <div key={equipment.id} className="border rounded-lg p-4">
                             <div className="flex flex-col sm:flex-row gap-4">
                               {/* Imagem */}
-                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden mx-auto sm:mx-0">
+                              <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 bg-gray-100 rounded-md overflow-hidden mx-auto sm:mx-0">
                                 <img
                                   src={imageUrl || '/placeholder.svg'}
                                   alt={equipment.name}
@@ -303,7 +303,7 @@ function QuotePage() {
                               </div>
 
                               {/* Preço e Ações */}
-                              <div className="text-center sm:text-right flex-shrink-0">
+                              <div className="text-center sm:text-right shrink-0">
                                 <p className="text-base font-semibold text-primary mb-2">
                                   {formatCurrency(calculateSubtotal(equipment))}
                                 </p>

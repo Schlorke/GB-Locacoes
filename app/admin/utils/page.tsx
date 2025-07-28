@@ -183,7 +183,7 @@ export default function AdminUtilsPage() {
                   tabelas
                 </p>
               </div>
-              <div className="flex-shrink-0 ml-3">
+              <div className="shrink-0 ml-3">
                 <Database className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
               </div>
             </div>
@@ -202,7 +202,7 @@ export default function AdminUtilsPage() {
                 </p>
                 <p className="text-xs text-muted-foreground">de {systemInfo.storage.total} usado</p>
               </div>
-              <div className="flex-shrink-0 ml-3">
+              <div className="shrink-0 ml-3">
                 <HardDrive className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
               </div>
             </div>
@@ -223,7 +223,7 @@ export default function AdminUtilsPage() {
                   {systemInfo.users.admins} admins, {systemInfo.users.operators} operadores
                 </p>
               </div>
-              <div className="flex-shrink-0 ml-3">
+              <div className="shrink-0 ml-3">
                 <Users className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
               </div>
             </div>
@@ -235,7 +235,7 @@ export default function AdminUtilsPage() {
       <Card>
         <CardHeader className="pb-3 sm:pb-4">
           <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-            <Database className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <Database className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
             <span className="truncate">Operações do Banco de Dados</span>
           </CardTitle>
         </CardHeader>
@@ -248,7 +248,7 @@ export default function AdminUtilsPage() {
               className="w-full justify-start h-auto p-4 bg-transparent"
             >
               <div className="flex items-center gap-3 w-full">
-                <RefreshCw className="h-5 w-5 flex-shrink-0 text-blue-600" />
+                <RefreshCw className="h-5 w-5 shrink-0 text-blue-600" />
                 <div className="text-left min-w-0 flex-1">
                   <p className="font-medium text-sm">Popular Banco</p>
                   <p className="text-xs text-muted-foreground">Adicionar dados de exemplo</p>
@@ -263,7 +263,7 @@ export default function AdminUtilsPage() {
               className="w-full justify-start h-auto p-4 bg-transparent"
             >
               <div className="flex items-center gap-3 w-full">
-                <Download className="h-5 w-5 flex-shrink-0 text-green-600" />
+                <Download className="h-5 w-5 shrink-0 text-green-600" />
                 <div className="text-left min-w-0 flex-1">
                   <p className="font-medium text-sm">Criar Backup</p>
                   <p className="text-xs text-muted-foreground">Exportar dados do sistema</p>
@@ -278,7 +278,7 @@ export default function AdminUtilsPage() {
               className="w-full justify-start h-auto p-4 bg-transparent"
             >
               <div className="flex items-center gap-3 w-full">
-                <Trash2 className="h-5 w-5 flex-shrink-0 text-orange-600" />
+                <Trash2 className="h-5 w-5 shrink-0 text-orange-600" />
                 <div className="text-left min-w-0 flex-1">
                   <p className="font-medium text-sm">Limpar Cache</p>
                   <p className="text-xs text-muted-foreground">Remover arquivos temporários</p>
@@ -291,7 +291,7 @@ export default function AdminUtilsPage() {
 
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5" />
               <div className="min-w-0 flex-1">
                 <h4 className="text-sm font-medium text-yellow-800 mb-1">
                   Atenção - Operações Críticas
@@ -310,7 +310,7 @@ export default function AdminUtilsPage() {
       <Card>
         <CardHeader className="pb-3 sm:pb-4">
           <CardTitle className="text-base sm:text-lg flex items-center gap-2">
-            <Settings className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <Settings className="h-4 w-4 sm:h-5 sm:w-5 shrink-0" />
             <span className="truncate">Manutenção do Sistema</span>
           </CardTitle>
         </CardHeader>
@@ -318,7 +318,7 @@ export default function AdminUtilsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="p-4 border rounded-lg">
               <div className="flex items-center gap-3 mb-3">
-                <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+                <CheckCircle className="h-5 w-5 text-green-600 shrink-0" />
                 <h4 className="font-medium text-sm">Última Verificação</h4>
               </div>
               <p className="text-xs sm:text-sm text-muted-foreground mb-2">
@@ -332,7 +332,7 @@ export default function AdminUtilsPage() {
 
             <div className="p-4 border rounded-lg">
               <div className="flex items-center gap-3 mb-3">
-                <FileText className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                <FileText className="h-5 w-5 text-blue-600 shrink-0" />
                 <h4 className="font-medium text-sm">Logs do Sistema</h4>
               </div>
               <p className="text-xs sm:text-sm text-muted-foreground mb-2">
@@ -348,7 +348,7 @@ export default function AdminUtilsPage() {
 
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+              <CheckCircle className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
               <div className="min-w-0 flex-1">
                 <h4 className="text-sm font-medium text-green-800 mb-1">
                   Sistema Funcionando Normalmente

@@ -204,7 +204,7 @@ function AdminQuotesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: 'linear' }}
@@ -214,7 +214,7 @@ function AdminQuotesPage() {
     );
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
       <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -222,10 +222,10 @@ function AdminQuotesPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+          <div className="relative overflow-hidden bg-linear-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
             {/* Clean depth layers without decorative elements */}
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-orange-400/12 via-transparent to-black/15"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
             {/* Content */}
             <div className="relative z-10">
@@ -254,8 +254,8 @@ function AdminQuotesPage() {
         >
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
             {/* Clean depth layers for filter card */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
             <CardContent className="relative z-10 p-6">
               <div className="flex flex-col sm:flex-row gap-4">
@@ -295,8 +295,8 @@ function AdminQuotesPage() {
         >
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
             {/* Clean depth layers for table card */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
             <CardContent className="relative z-10 p-0">
               <div className="overflow-x-auto">
@@ -325,7 +325,7 @@ function AdminQuotesPage() {
                           >
                             <td className="p-4">
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
                                   {quote.name?.charAt(0).toUpperCase()}
                                 </div>
                                 <div>
@@ -404,7 +404,7 @@ function AdminQuotesPage() {
           <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-3 text-xl">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
+                <div className="w-8 h-8 bg-linear-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
                   {selectedQuote?.name?.charAt(0).toUpperCase()}
                 </div>
                 Detalhes do Orçamento - {selectedQuote?.name}
@@ -572,7 +572,7 @@ function AdminQuotesPage() {
                         <Button
                           onClick={() => updateQuoteStatus(selectedQuote.id, 'approved')}
                           disabled={isUpdating}
-                          className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                          className="flex-1 bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
                         >
                           <CheckCircle className="w-4 h-4 mr-2" />
                           {isUpdating ? 'Aprovando...' : 'Aprovar Orçamento'}

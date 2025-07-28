@@ -76,11 +76,11 @@ export default function WhyChooseUs() {
               >
                 {/* Gradient overlay */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${benefit.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                  className={`absolute inset-0 bg-linear-to-br ${benefit.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
                 ></div>
 
                 <CardContent className="p-6 text-center relative z-10">
-                  <div className="mb-4 inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-600 to-orange-700 rounded-full group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 relative">
+                  <div className="mb-4 inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-orange-600 to-orange-700 rounded-full group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 relative">
                     <IconComponent className="h-8 w-8 text-white group-hover:scale-110 transition-transform duration-300" />
 
                     {/* Pulse ring */}
@@ -97,13 +97,13 @@ export default function WhyChooseUs() {
                 </CardContent>
 
                 {/* Bottom accent line - sempre no fundo */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-linear-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
               </Card>
             );
           })}
         </div>
 
-        <div className="cta-section mt-16 bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden opacity-0">
+        <div className="cta-section mt-16 bg-linear-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden opacity-0">
           {/* Animated background elements */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full blur-xl animate-pulse delay-1000"></div>

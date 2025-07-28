@@ -74,7 +74,7 @@ export default function Header() {
             className="flex items-center space-x-3 group"
             onClick={handleInternalNavigation}
           >
-            <div className="bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg transition-all duration-200 group-hover:scale-105">
+            <div className="bg-linear-to-br from-slate-700 via-slate-800 to-slate-900 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg transition-all duration-200 group-hover:scale-105">
               GB
             </div>
             <div>
@@ -97,7 +97,7 @@ export default function Header() {
                 onClick={handleInternalNavigation}
               >
                 {item.name}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center rounded-full"></span>
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-linear-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center rounded-full"></span>
               </Link>
             ))}
           </nav>

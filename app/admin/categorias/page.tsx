@@ -208,7 +208,7 @@ export default function AdminCategoriesPage() {
       color?: string;
       className?: string;
     }>;
-    return <IconComponent size={16} color={color || '#3b82f6'} className="flex-shrink-0" />;
+    return <IconComponent size={16} color={color || '#3b82f6'} className="shrink-0" />;
   };
 
   const getCategoryBadge = (category: Category) => {
@@ -222,7 +222,7 @@ export default function AdminCategoriesPage() {
         }}
       >
         {category.icon !== undefined && category.icon !== null && (
-          <span className="flex-shrink-0">{renderIcon(category.icon, category.iconColor)}</span>
+          <span className="shrink-0">{renderIcon(category.icon, category.iconColor)}</span>
         )}
         <span className="truncate font-semibold text-sm min-w-0">{category.name}</span>
       </Badge>
@@ -231,7 +231,7 @@ export default function AdminCategoriesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
@@ -242,7 +242,7 @@ export default function AdminCategoriesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
       <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -250,10 +250,10 @@ export default function AdminCategoriesPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+          <div className="relative overflow-hidden bg-linear-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
             {/* Clean depth layers without decorative elements */}
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-orange-400/12 via-transparent to-black/15"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
             {/* Content */}
             <div className="relative z-10">
@@ -283,8 +283,8 @@ export default function AdminCategoriesPage() {
         >
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
             {/* Clean depth layers for filter card */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
             <CardContent className="relative z-10 p-6">
               <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
@@ -318,8 +318,8 @@ export default function AdminCategoriesPage() {
           {!Array.isArray(filteredCategories) || filteredCategories.length === 0 ? (
             <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
               {/* Clean depth layers for empty state card */}
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
               <CardContent className="relative z-10 text-center py-12">
                 <div className="text-gray-400 mb-4">
@@ -334,7 +334,7 @@ export default function AdminCategoriesPage() {
                 {!searchTerm && (
                   <Button
                     onClick={openNewCategoryModal}
-                    className="mt-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white hover:scale-105 transition-all duration-300"
+                    className="mt-4 bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white hover:scale-105 transition-all duration-300"
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Criar Primeira Categoria
@@ -357,8 +357,8 @@ export default function AdminCategoriesPage() {
                   >
                     <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
                       {/* Clean depth layers for category card */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+                      <div className="absolute inset-0 bg-linear-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                      <div className="absolute inset-0 bg-linear-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
                       <CardHeader className="relative z-10 pb-3">
                         <div className="flex flex-col">
@@ -379,7 +379,7 @@ export default function AdminCategoriesPage() {
                         <div className="space-y-3">
                           {/* Linha 1: Equipamentos (sempre à esquerda) */}
                           <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <Package className="w-4 h-4 flex-shrink-0" />
+                            <Package className="w-4 h-4 shrink-0" />
                             <span className="truncate">
                               {category._count?.equipments || 0} equipamentos
                             </span>
@@ -391,7 +391,7 @@ export default function AdminCategoriesPage() {
                               variant="ghost"
                               size="sm"
                               onClick={() => setSelectedCategory(category)}
-                              className="flex-shrink-0"
+                              className="shrink-0"
                             >
                               <Eye className="w-4 h-4" />
                             </Button>
@@ -399,7 +399,7 @@ export default function AdminCategoriesPage() {
                               variant="ghost"
                               size="sm"
                               onClick={() => openEditCategoryModal(category)}
-                              className="flex-shrink-0"
+                              className="shrink-0"
                             >
                               <Edit className="w-4 h-4" />
                             </Button>
@@ -408,7 +408,7 @@ export default function AdminCategoriesPage() {
                               size="sm"
                               onClick={() => deleteCategory(category.id)}
                               disabled={(category._count?.equipments || 0) > 0 || isSubmitting}
-                              className="hover:bg-red-100 hover:text-red-700 disabled:opacity-50 flex-shrink-0"
+                              className="hover:bg-red-100 hover:text-red-700 disabled:opacity-50 shrink-0"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
@@ -428,7 +428,7 @@ export default function AdminCategoriesPage() {
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-3 text-xl">
-                <div className="w-8 h-8 bg-gradient-to-br from-orange-600 to-orange-700 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
+                <div className="w-8 h-8 bg-linear-to-br from-orange-600 to-orange-700 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
                   {selectedCategory?.icon ? (
                     renderIcon(selectedCategory.icon, selectedCategory.iconColor)
                   ) : (

@@ -132,7 +132,7 @@ export default function WhatsAppFAB() {
       {isOpen && (
         <div className="whatsapp-chat-window fixed bottom-24 right-4 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border z-50 h-[500px] flex flex-col overflow-hidden">
           {/* Header - cor verde WhatsApp e sem bordas brancas */}
-          <div className="whatsapp-header text-white p-4 flex items-center justify-between rounded-t-xl flex-shrink-0">
+          <div className="whatsapp-header text-white p-4 flex items-center justify-between rounded-t-xl shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
                 <span className="text-gray-900 font-bold text-lg">GB</span>
@@ -181,7 +181,7 @@ export default function WhatsAppFAB() {
 
             {/* Quick Messages - apenas quando não há conversa */}
             {showQuickMessages && messages.length === 1 && (
-              <div className="flex-shrink-0 p-3 border-t bg-white">
+              <div className="shrink-0 p-3 border-t bg-white">
                 <p className="text-xs text-gray-600 mb-2 font-medium">Mensagens rápidas:</p>
                 <div className="space-y-1 max-h-20 overflow-y-auto whatsapp-chat-scroll">
                   {quickMessages.map((quickMsg, index) => (
@@ -199,7 +199,7 @@ export default function WhatsAppFAB() {
           </div>
 
           {/* Input - sempre visível no fundo */}
-          <div className="whatsapp-input-area flex-shrink-0 p-4 border-t bg-white">
+          <div className="whatsapp-input-area shrink-0 p-4 border-t bg-white">
             <div className="flex gap-3 items-end">
               <Input
                 value={message}
@@ -235,7 +235,7 @@ export default function WhatsAppFAB() {
             onClick={() => setIsOpen(false)}
             variant="ghost"
             size="md"
-            className="!w-14 !h-14 !rounded-full !text-white !shadow-lg hover:!shadow-xl !transition-all !duration-300 hover:!scale-110 !border-0 !bg-green-500 hover:!bg-green-600"
+            className="w-14! h-14! rounded-full! text-white! shadow-lg! hover:shadow-xl! transition-all! duration-300! hover:scale-110! border-0! bg-green-500! hover:bg-green-600!"
             aria-label="Fechar chat do WhatsApp"
           />
         ) : (
