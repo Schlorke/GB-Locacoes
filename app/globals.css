@@ -115,7 +115,7 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: hsl(var(--border, 214.3 31.8% 91.4%));
   }
 }
 
