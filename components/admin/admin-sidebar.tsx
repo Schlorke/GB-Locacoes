@@ -127,10 +127,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           )}
         >
           <UserCircle
-            className={cn(
-              'h-10 w-10 text-slate-400 shrink-0',
-              isSidebarCollapsed && '-ml-[2px]',
-            )}
+            className={cn('h-10 w-10 text-slate-400 shrink-0', isSidebarCollapsed && '-ml-[2px]')}
           />
           {!isSidebarCollapsed && (
             <div className="flex flex-col min-w-0">
