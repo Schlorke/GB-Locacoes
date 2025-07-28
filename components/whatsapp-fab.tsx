@@ -188,7 +188,7 @@ export default function WhatsAppFAB() {
                     <button
                       key={index}
                       onClick={() => handleQuickMessage(quickMsg)}
-                      className="block w-full text-left text-xs p-2 hover:bg-green-50 hover:text-green-700 rounded transition-colors border border-gray-200 hover:border-green-300"
+                      className="block w-full text-left text-xs p-2 hover:bg-green-50 hover:text-green-700 rounded-sm transition-colors border border-gray-200 hover:border-green-300"
                     >
                       • {quickMsg}
                     </button>
