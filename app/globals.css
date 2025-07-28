@@ -1,9 +1,7 @@
-@import 'tailwindcss';
-
 @plugin 'tailwindcss-animate';
 @plugin 'tailwind-scrollbar';
-
-@custom-variant dark (&:is(.dark *));
+@variant dark (&:is(.dark *));
+@import 'tailwindcss';
 
 @theme {
   --font-sans: var(--font-inter), sans-serif;
@@ -118,6 +116,20 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled),
+  [type='button']:not(:disabled),
+  [type='submit']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: hsl(var(--muted-foreground));
   }
 }
 

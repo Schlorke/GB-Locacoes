@@ -190,7 +190,7 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
                   size="sm"
                 />
                 {index === 0 && (
-                  <div className="absolute bottom-1 left-1 bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded">
+                  <div className="absolute bottom-1 left-1 bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded-sm">
                     Principal
                   </div>
                 )}
