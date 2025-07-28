@@ -117,9 +117,7 @@
   ::file-selector-button {
     border-color: hsl(var(--border, 214.3 31.8% 91.4%));
   }
-}
 
-@layer base {
   button:not(:disabled),
   [role='button']:not(:disabled),
   [type='button']:not(:disabled),
@@ -131,19 +129,11 @@
   textarea::placeholder {
     color: hsl(var(--muted-foreground));
   }
-}
 
-@layer base {
-  button:not(:disabled),
-  [role='button']:not(:disabled),
-  [type='button']:not(:disabled),
-  [type='submit']:not(:disabled) {
-    cursor: pointer;
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    color: hsl(var(--muted-foreground));
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    @apply border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0;
   }
 }
 
@@ -1033,9 +1023,3 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Forçar scroll funcional dentro do Popover (ShadCN UI) */
 /* (Reutiliza as mesmas regras definidas acima) */
-
-*:focus,
-*:focus-visible,
-*:focus-within {
-  outline: none !important;
-}
