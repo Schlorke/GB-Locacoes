@@ -115,7 +115,21 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: hsl(var(--border, 214.3 31.8% 91.4%));
+  }
+}
+
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled),
+  [type='button']:not(:disabled),
+  [type='submit']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: hsl(var(--muted-foreground));
   }
 }
 
