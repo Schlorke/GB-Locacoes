@@ -124,6 +124,11 @@
     max-width: 100%;
     overflow-x: hidden;
   }
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    @apply border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0;
+  }
 }
 
 /* =============================== */
@@ -891,4 +896,36 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 *:focus-visible,
 *:focus-within {
   outline: none !important;
+}
+
+/* Correções TailwindCSS 4.x */
+/* Forçar cor branca em botões escuros */
+.bg-blue-600,
+.bg-slate-700,
+button[class*='bg-blue'],
+button[class*='bg-slate-7'] {
+  background-color: #334155 !important;
+  color: #ffffff !important;
+}
+
+/* Resolver text-primary-foreground */
+.text-primary-foreground {
+  color: hsl(var(--primary-foreground)) !important;
+}
+
+/* Centralizar modais */
+[role='dialog'],
+[data-dialog-content] {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 9999 !important;
+}
+
+/* Fallback de hover em mobile */
+@media (hover: none) and (pointer: coarse) {
+  .group:active .opacity-0 {
+    opacity: 1 !important;
+  }
 }
