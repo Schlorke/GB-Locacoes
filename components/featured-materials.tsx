@@ -57,9 +57,9 @@ export default function FeaturedMaterials() {
               <div key={i} className="animate-pulse">
                 <div className="bg-gray-200 aspect-video rounded-t-lg"></div>
                 <div className="bg-white p-6 rounded-b-lg space-y-3">
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-3 bg-gray-200 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 rounded w-2/3"></div>
+                  <div className="h-4 bg-gray-200 rounded-sm w-3/4"></div>
+                  <div className="h-3 bg-gray-200 rounded-sm w-full"></div>
+                  <div className="h-3 bg-gray-200 rounded-sm w-2/3"></div>
                 </div>
               </div>
             ))}

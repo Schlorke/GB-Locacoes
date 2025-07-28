@@ -77,7 +77,7 @@ export default async function EquipmentDetailPage(props: Props) {
             {equipment.images && equipment.images.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
                 {equipment.images.slice(1, 5).map((image, index) => (
-                  <div key={index} className="relative h-20 bg-gray-200 rounded overflow-hidden">
+                  <div key={index} className="relative h-20 bg-gray-200 rounded-sm overflow-hidden">
                     <Image
                       src={image || '/placeholder.svg'}
                       alt={`${equipment.name} ${index + 2}`}
