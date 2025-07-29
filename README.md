@@ -3,7 +3,7 @@
 ![Logo](public/placeholder-logo.png)
 
 [![CI](https://img.shields.io/github/actions/workflow/status/GBLocacoes/GB-Locacoes/test.yml?label=CI)](https://github.com/GBLocacoes/GB-Locacoes/actions)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](#licenca)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](#licença)
 
 Plataforma completa para locação de equipamentos de construção civil utilizando **Next.js 15**, **TypeScript** e **Prisma**.
 
@@ -16,17 +16,18 @@ O projeto visa facilitar a gestão de catálogo, orçamentos e locações de equ
 Coloque capturas de tela ou GIFs em `docs/assets/` e referencie aqui.
 
 ## Tabela de Conteúdo
+
 - [Arquitetura](#arquitetura)
 - [Pré-requisitos](#pré-requisitos)
 - [Instalação](#instalação)
-- [Configuração](#configuracao)
-- [Uso Rápido](#uso-rapido)
-- [Estrutura de Diretórios](#estrutura-de-diretorios)
+- [Configuração](#configuração)
+- [Uso Rápido](#uso-rápido)
+- [Estrutura de Diretórios](#estrutura-de-diretórios)
 - [Scripts](#scripts)
 - [Testes](#testes)
 - [Roadmap](#roadmap)
 - [Contribuindo](#contribuindo)
-- [Licença](#licenca)
+- [Licença](#licença)
 - [Autores](#autores)
 
 ## Arquitetura
@@ -47,6 +48,7 @@ Supabase (PostgreSQL & Storage)
 <!-- prettier-ignore-end -->
 
 Principais tecnologias:
+
 - **Next.js 15** com App Router
 - **ShadCN UI** e **TailwindCSS**
 - **Prisma ORM** conectado ao **Supabase**
@@ -73,9 +75,10 @@ pnpm db:generate
 pnpm db:push
 pnpm dev
 ```
+
 A aplicação ficará disponível em `http://localhost:3000`.
 
-## Configuracao
+## Configuração
 
 Copie `.env.example` para `.env` e ajuste cada chave:
 
@@ -98,6 +101,7 @@ Variáveis adicionais utilizadas no código:
 ```bash
 pnpm dev
 ```
+
 Acesse `http://localhost:3000` e realize um orçamento pelo catálogo.
 
 ## Estrutura de Diretórios
@@ -150,11 +154,10 @@ Relate bugs e sugestões via [Issues](https://github.com/GBLocacoes/GB-Locacoes/
 Siga o padrão de commits `feat:`, `fix:`, `test:` etc. Rode `pnpm lint` e `pnpm vitest run` antes de enviar PR.
 Consulte [AGENTS.md](AGENTS.md) para detalhes de estilo e fluxos.
 
-## Licenca
+## Licença
 
 Este projeto utiliza a licença [MIT](LICENSE) © GB Locações.
 
 ## Autores
 
 Equipe **GB Locações** – contato profissional via [website](https://gblocacoes.com.br).
-
