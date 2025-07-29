@@ -438,7 +438,7 @@ export default function AdminEquipmentsPage() {
                           variant="ghost"
                           size="sm"
                           onClick={() => deleteEquipment(equipment.id)}
-                          className="text-red-500 hover:text-red-600 flex-shrink-0"
+                          className="text-red-500 hover:text-red-600 hover:bg-red-50 flex-shrink-0"
                           disabled={isDeleting}
                         >
                           <Trash2 className="w-4 h-4" />

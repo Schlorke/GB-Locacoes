@@ -5,16 +5,10 @@ import type React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CurrencyInput } from '@/components/ui/currency-input';
+import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
 import { ImageUpload } from '@/components/ui/image-upload';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
@@ -226,179 +220,226 @@ export default function EditarEquipamento() {
       <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base sm:text-lg">Informações Básicas</CardTitle>
+            <CardTitle className="text-base sm:text-lg">Dados do Equipamento</CardTitle>
+            <p className="text-sm text-gray-600 mt-1">
+              Atualize as informações necessárias do equipamento
+            </p>
           </CardHeader>
-          <CardContent className="space-y-4 sm:space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <Label htmlFor="name" className="text-sm font-medium">
-                  Nome do Equipamento *
-                </Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                  placeholder="Ex: Betoneira 400L"
-                  required
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="category" className="text-sm font-medium">
-                  Categoria *
-                </Label>
-                <Select
-                  value={formData.categoryId}
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, categoryId: value }))}
-                  required
-                >
-                  <SelectTrigger className="mt-1">
-                    <SelectValue placeholder="Selecione uma categoria" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div>
-              <Label htmlFor="description" className="text-sm font-medium">
-                Descrição *
-              </Label>
-              <Textarea
-                id="description"
-                value={formData.description}
-                onChange={(e) => setFormData((prev) => ({ ...prev, description: e.target.value }))}
-                placeholder="Descreva as características e usos do equipamento..."
-                rows={4}
-                required
-                className="mt-1"
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              <div>
-                <Label htmlFor="pricePerDay" className="text-sm font-medium">
-                  Preço por Dia (R$) *
-                </Label>
-                <CurrencyInput
-                  id="pricePerDay"
-                  value={formData.pricePerDay}
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({ ...prev, pricePerDay: value || 0 }))
-                  }
-                  required
-                  className="mt-1"
-                />
-              </div>
-              <div className="flex items-center space-x-3 pt-6">
-                <Switch
-                  id="isAvailable"
-                  checked={formData.isAvailable}
-                  onCheckedChange={(checked) =>
-                    setFormData((prev) => ({ ...prev, isAvailable: checked }))
-                  }
-                />
-                <Label htmlFor="isAvailable" className="cursor-pointer text-sm">
-                  Equipamento disponível para locação
-                </Label>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          <CardContent className="space-y-8">
+            {/* Layout Principal: Informações Básicas + Especificações (Esquerda) + Imagens (Direita) */}
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+              {/* Coluna Esquerda: Informações Básicas + Especificações Técnicas */}
+              <div className="space-y-8">
+                {/* Seção: Informações Básicas */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-medium text-blue-600">1</span>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900">Informações Básicas</h3>
+                  </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base sm:text-lg">Imagens do Equipamento</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ImageUpload
-              images={formData.images}
-              onImagesChange={(images) => setFormData((prev) => ({ ...prev, images }))}
-              maxImages={5}
-            />
-          </CardContent>
-        </Card>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="name" className="text-sm font-medium">
+                        Nome do Equipamento *
+                      </Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                        placeholder="Ex: Betoneira 400L"
+                        required
+                        className="mt-1"
+                      />
+                    </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base sm:text-lg">
-              Especificações Técnicas (Opcional)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {Object.entries(formData.specifications || {}).map(([key, value]) => (
-              <div key={key} className="flex items-center justify-between p-3 border rounded-md">
-                <div className="min-w-0 flex-1">
-                  <span className="font-medium text-sm">{key}:</span>{' '}
-                  <span className="text-sm">{String(value)}</span>
+                    <div>
+                      <Label htmlFor="category" className="text-sm font-medium">
+                        Categoria *
+                      </Label>
+                      <CustomSelect
+                        value={formData.categoryId}
+                        onValueChange={(value: string) =>
+                          setFormData((prev) => ({ ...prev, categoryId: value }))
+                        }
+                        placeholder="Selecione uma categoria"
+                      >
+                        {categories.map((category) => (
+                          <CustomSelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </CustomSelectItem>
+                        ))}
+                      </CustomSelect>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="description" className="text-sm font-medium">
+                        Descrição *
+                      </Label>
+                      <Textarea
+                        id="description"
+                        value={formData.description}
+                        onChange={(e) =>
+                          setFormData((prev) => ({ ...prev, description: e.target.value }))
+                        }
+                        placeholder="Descreva as características e usos do equipamento..."
+                        rows={4}
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="pricePerDay" className="text-sm font-medium">
+                        Preço por Dia (R$) *
+                      </Label>
+                      <CurrencyInput
+                        id="pricePerDay"
+                        value={formData.pricePerDay}
+                        onValueChange={(value) =>
+                          setFormData((prev) => ({ ...prev, pricePerDay: value || 0 }))
+                        }
+                        required
+                        className="mt-1"
+                      />
+                    </div>
+
+                    <div className="flex items-center space-x-3 pt-2">
+                      <Switch
+                        id="isAvailable"
+                        checked={formData.isAvailable}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({ ...prev, isAvailable: checked }))
+                        }
+                        className="data-[state=checked]:bg-slate-700 data-[state=unchecked]:bg-input hover:data-[state=checked]:bg-slate-600 transition-colors duration-200"
+                      />
+                      <Label htmlFor="isAvailable" className="cursor-pointer text-sm">
+                        Equipamento disponível para locação
+                      </Label>
+                    </div>
+                  </div>
                 </div>
+
+                {/* Seção: Especificações Técnicas */}
+                <div className="space-y-6 border-t border-gray-100 pt-6">
+                  <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                    <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-medium text-purple-600">3</span>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900">Especificações Técnicas</h3>
+                    <span className="text-sm text-gray-500">(Opcional)</span>
+                  </div>
+
+                  <div className="space-y-4">
+                    {Object.entries(formData.specifications || {}).length > 0 && (
+                      <div className="space-y-3">
+                        {Object.entries(formData.specifications || {}).map(([key, value]) => (
+                          <div
+                            key={key}
+                            className="flex items-center justify-between p-3 border rounded-md"
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="font-medium text-sm">{key}</div>
+                              <div className="text-sm mt-1">{String(value)}</div>
+                            </div>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleRemoveSpecification(key)}
+                              className="flex-shrink-0 ml-2"
+                            >
+                              <Trash2 className="h-4 w-4 text-red-500" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="bg-white/50 border-2 border-dashed border-gray-300 rounded-lg p-4">
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-1 gap-3">
+                          <div>
+                            <Label htmlFor="specKey" className="text-sm font-medium">
+                              Nome da Especificação
+                            </Label>
+                            <Input
+                              id="specKey"
+                              value={specKey}
+                              onChange={(e) => setSpecKey(e.target.value)}
+                              placeholder="Ex: Peso"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="specValue" className="text-sm font-medium">
+                              Valor
+                            </Label>
+                            <Input
+                              id="specValue"
+                              value={specValue}
+                              onChange={(e) => setSpecValue(e.target.value)}
+                              placeholder="Ex: 150kg"
+                              className="mt-1"
+                            />
+                          </div>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={handleAddSpecification}
+                          className="w-fit px-4 bg-transparent border-gray-200 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
+                        >
+                          <PlusCircle className="h-4 w-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
+                          <span className="group-hover:text-orange-500 transition-colors duration-200">
+                            Adicionar Especificação
+                          </span>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Coluna Direita: Imagens do Equipamento (Ocupando toda a altura) */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                  <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-medium text-green-600">2</span>
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900">Imagens do Equipamento</h3>
+                </div>
+
+                <div className="min-h-[500px]">
+                  <ImageUpload
+                    images={formData.images}
+                    onImagesChange={(images) => setFormData((prev) => ({ ...prev, images }))}
+                    maxImages={5}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Botões de Ação - Posicionados no canto inferior direito */}
+            <div className="flex justify-end pt-6 mt-8 border-t border-gray-100">
+              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                 <Button
+                  variant="outline"
                   type="button"
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleRemoveSpecification(key)}
-                  className="flex-shrink-0 ml-2"
+                  asChild
+                  className="w-full sm:w-auto bg-transparent"
                 >
-                  <Trash2 className="h-4 w-4 text-red-500" />
+                  <Link href={`/admin/equipamentos/${params.id}`}>Cancelar</Link>
+                </Button>
+                <Button type="submit" disabled={isSaving} className="w-full sm:w-auto">
+                  <Save className="h-4 w-4 mr-2" />
+                  {isSaving ? 'Salvando...' : 'Salvar Alterações'}
                 </Button>
               </div>
-            ))}
-            <div className="flex flex-col sm:flex-row items-end gap-2">
-              <div className="flex-grow w-full sm:w-auto">
-                <Label htmlFor="specKey" className="text-sm font-medium">
-                  Nome da Especificação
-                </Label>
-                <Input
-                  id="specKey"
-                  value={specKey}
-                  onChange={(e) => setSpecKey(e.target.value)}
-                  placeholder="Ex: Peso"
-                  className="mt-1"
-                />
-              </div>
-              <div className="flex-grow w-full sm:w-auto">
-                <Label htmlFor="specValue" className="text-sm font-medium">
-                  Valor
-                </Label>
-                <Input
-                  id="specValue"
-                  value={specValue}
-                  onChange={(e) => setSpecValue(e.target.value)}
-                  placeholder="Ex: 150kg"
-                  className="mt-1"
-                />
-              </div>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleAddSpecification}
-                className="w-full sm:w-auto mt-2 sm:mt-0 bg-transparent"
-              >
-                <PlusCircle className="h-4 w-4 mr-2" />
-                Adicionar
-              </Button>
             </div>
           </CardContent>
         </Card>
-
-        <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
-          <Button
-            variant="outline"
-            type="button"
-            asChild
-            className="w-full sm:w-auto bg-transparent"
-          >
-            <Link href={`/admin/equipamentos/${params.id}`}>Cancelar</Link>
-          </Button>
-          <Button type="submit" disabled={isSaving} className="w-full sm:w-auto">
-            <Save className="h-4 w-4 mr-2" />
-            {isSaving ? 'Salvando...' : 'Salvar Alterações'}
-          </Button>
-        </div>
       </form>
     </div>
   );

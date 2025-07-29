@@ -3,16 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CurrencyInput } from '@/components/ui/currency-input';
+import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
 import { ImageUpload } from '@/components/ui/image-upload';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
@@ -201,7 +195,7 @@ export default function NovoEquipamento() {
       </motion.div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Informações Básicas */}
+        {/* Formulário Completo do Equipamento */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -210,218 +204,244 @@ export default function NovoEquipamento() {
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
-            <CardHeader className="relative z-10">
-              <CardTitle className="text-xl font-semibold text-gray-900">
-                Informações Básicas
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="relative z-10 space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                    Nome do Equipamento *
-                  </Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                    placeholder="Ex: Betoneira 400L"
-                    required
-                    className="mt-2 border-gray-200 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="category" className="text-sm font-medium text-gray-700">
-                    Categoria *
-                  </Label>
-                  <Select
-                    value={formData.categoryId}
-                    onValueChange={(value) =>
-                      setFormData((prev) => ({ ...prev, categoryId: value }))
-                    }
-                    required
-                  >
-                    <SelectTrigger className="mt-2 border-gray-200 focus:border-blue-500">
-                      <SelectValue placeholder="Selecione uma categoria" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="description" className="text-sm font-medium text-gray-700">
-                  Descrição *
-                </Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, description: e.target.value }))
-                  }
-                  placeholder="Descreva as características e usos do equipamento..."
-                  rows={4}
-                  required
-                  className="mt-2 border-gray-200 focus:border-blue-500"
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="pricePerDay" className="text-sm font-medium text-gray-700">
-                    Preço por Dia (R$) *
-                  </Label>
-                  <CurrencyInput
-                    id="pricePerDay"
-                    value={formData.pricePerDay}
-                    onValueChange={(value) =>
-                      setFormData((prev) => ({ ...prev, pricePerDay: value || 0 }))
-                    }
-                    required
-                    className="mt-2 border-gray-200 focus:border-blue-500"
-                  />
-                </div>
-                <div className="flex items-center space-x-3 pt-8">
-                  <Switch
-                    id="isAvailable"
-                    checked={formData.isAvailable}
-                    onCheckedChange={(checked) =>
-                      setFormData((prev) => ({ ...prev, isAvailable: checked }))
-                    }
-                  />
-                  <Label htmlFor="isAvailable" className="cursor-pointer text-sm text-gray-700">
-                    Equipamento disponível para locação
-                  </Label>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-        {/* Imagens do Equipamento */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
-            <CardHeader className="relative z-10">
-              <CardTitle className="text-xl font-semibold text-gray-900">
-                Imagens do Equipamento
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="relative z-10">
-              <ImageUpload
-                images={formData.images}
-                onImagesChange={(images) => setFormData((prev) => ({ ...prev, images }))}
-                maxImages={5}
-              />
-            </CardContent>
-          </Card>
-        </motion.div>
 
-        {/* Especificações Técnicas */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
             <CardHeader className="relative z-10">
               <CardTitle className="text-xl font-semibold text-gray-900">
-                Especificações Técnicas (Opcional)
+                Dados do Equipamento
               </CardTitle>
+              <p className="text-sm text-gray-600 mt-1">
+                Preencha todas as informações necessárias para cadastrar o equipamento
+              </p>
             </CardHeader>
-            <CardContent className="relative z-10 space-y-4">
-              {Object.entries(formData.specifications || {}).map(([key, value]) => (
-                <div
-                  key={key}
-                  className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-gray-50/50"
-                >
-                  <div>
-                    <span className="font-medium text-gray-900">{key}:</span>{' '}
-                    <span className="text-gray-700">{String(value)}</span>
+
+            <CardContent className="relative z-10 space-y-8">
+              {/* Layout Principal: Informações Básicas + Especificações (Esquerda) + Imagens (Direita) */}
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                {/* Coluna Esquerda: Informações Básicas + Especificações Técnicas */}
+                <div className="space-y-8">
+                  {/* Seção: Informações Básicas */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                      <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-medium text-blue-600">1</span>
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900">Informações Básicas</h3>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                          Nome do Equipamento *
+                        </Label>
+                        <Input
+                          id="name"
+                          value={formData.name}
+                          onChange={(e) =>
+                            setFormData((prev) => ({ ...prev, name: e.target.value }))
+                          }
+                          placeholder="Ex: Betoneira 400L"
+                          required
+                          className="mt-2 border-gray-200 focus:border-blue-500"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="category" className="text-sm font-medium text-gray-700">
+                          Categoria *
+                        </Label>
+                        <CustomSelect
+                          value={formData.categoryId}
+                          onValueChange={(value: string) =>
+                            setFormData((prev) => ({ ...prev, categoryId: value }))
+                          }
+                          placeholder="Selecione uma categoria"
+                        >
+                          {categories.map((category) => (
+                            <CustomSelectItem key={category.id} value={category.id}>
+                              {category.name}
+                            </CustomSelectItem>
+                          ))}
+                        </CustomSelect>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="description" className="text-sm font-medium text-gray-700">
+                          Descrição *
+                        </Label>
+                        <Textarea
+                          id="description"
+                          value={formData.description}
+                          onChange={(e) =>
+                            setFormData((prev) => ({ ...prev, description: e.target.value }))
+                          }
+                          placeholder="Descreva as características e usos do equipamento..."
+                          rows={4}
+                          required
+                          className="mt-2 border-gray-200 focus:border-blue-500"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="pricePerDay" className="text-sm font-medium text-gray-700">
+                          Preço por Dia (R$) *
+                        </Label>
+                        <CurrencyInput
+                          id="pricePerDay"
+                          value={formData.pricePerDay}
+                          onValueChange={(value) =>
+                            setFormData((prev) => ({ ...prev, pricePerDay: value || 0 }))
+                          }
+                          required
+                          className="mt-2 border-gray-200 focus:border-blue-500"
+                        />
+                      </div>
+
+                      <div className="flex items-center space-x-3 pt-2">
+                        <Switch
+                          id="isAvailable"
+                          checked={formData.isAvailable}
+                          onCheckedChange={(checked) =>
+                            setFormData((prev) => ({ ...prev, isAvailable: checked }))
+                          }
+                          className="data-[state=checked]:bg-slate-700 data-[state=unchecked]:bg-input hover:data-[state=checked]:bg-slate-600 transition-colors duration-200"
+                        />
+                        <Label
+                          htmlFor="isAvailable"
+                          className="cursor-pointer text-sm text-gray-700"
+                        >
+                          Equipamento disponível para locação
+                        </Label>
+                      </div>
+                    </div>
                   </div>
+
+                  {/* Seção: Especificações Técnicas */}
+                  <div className="space-y-6 border-t border-gray-100 pt-6">
+                    <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                      <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-medium text-purple-600">3</span>
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900">Especificações Técnicas</h3>
+                      <span className="text-sm text-gray-500">(Opcional)</span>
+                    </div>
+
+                    <div className="space-y-4">
+                      {Object.entries(formData.specifications || {}).length > 0 && (
+                        <div className="space-y-3">
+                          {Object.entries(formData.specifications || {}).map(([key, value]) => (
+                            <div
+                              key={key}
+                              className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-gray-50/50"
+                            >
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-medium text-gray-900">{key}</div>
+                                <div className="text-sm text-gray-700 mt-1">{String(value)}</div>
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleRemoveSpecification(key)}
+                                className="text-red-500 hover:text-red-600 hover:bg-red-50 flex-shrink-0 ml-2"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <div className="bg-white/50 border-2 border-dashed border-gray-300 rounded-lg p-4">
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-1 gap-3">
+                            <div>
+                              <Label
+                                htmlFor="specKey"
+                                className="text-sm font-medium text-gray-700"
+                              >
+                                Nome da Especificação
+                              </Label>
+                              <Input
+                                id="specKey"
+                                value={specKey}
+                                onChange={(e) => setSpecKey(e.target.value)}
+                                placeholder="Ex: Peso"
+                                className="mt-2 border-gray-200 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <Label
+                                htmlFor="specValue"
+                                className="text-sm font-medium text-gray-700"
+                              >
+                                Valor
+                              </Label>
+                              <Input
+                                id="specValue"
+                                value={specValue}
+                                onChange={(e) => setSpecValue(e.target.value)}
+                                placeholder="Ex: 150kg"
+                                className="mt-2 border-gray-200 focus:border-blue-500"
+                              />
+                            </div>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleAddSpecification}
+                            className="w-fit px-4 border-gray-200 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
+                          >
+                            <PlusCircle className="h-4 w-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
+                            <span className="group-hover:text-orange-500 transition-colors duration-200">
+                              Adicionar Especificação
+                            </span>
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Coluna Direita: Imagens do Equipamento (Ocupando toda a altura) */}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                    <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-medium text-green-600">2</span>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900">Imagens do Equipamento</h3>
+                  </div>
+
+                  <ImageUpload
+                    images={formData.images}
+                    onImagesChange={(images) => setFormData((prev) => ({ ...prev, images }))}
+                    maxImages={5}
+                  />
+                </div>
+              </div>
+
+              {/* Botões de Ação - Posicionados no canto inferior direito */}
+              <div className="flex justify-end pt-6 mt-8 border-t border-gray-100">
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                   <Button
+                    variant="outline"
                     type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleRemoveSpecification(key)}
-                    className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                    asChild
+                    className="w-full sm:w-auto border-gray-200 hover:bg-gray-50"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Link href="/admin/equipamentos">Cancelar</Link>
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto"
+                  >
+                    <Save className="h-4 w-4 mr-2" />
+                    {isLoading ? 'Salvando...' : 'Salvar Equipamento'}
                   </Button>
                 </div>
-              ))}
-              <div className="flex flex-col md:flex-row items-end gap-3">
-                <div className="flex-1 w-full">
-                  <Label htmlFor="specKey" className="text-sm font-medium text-gray-700">
-                    Nome da Especificação
-                  </Label>
-                  <Input
-                    id="specKey"
-                    value={specKey}
-                    onChange={(e) => setSpecKey(e.target.value)}
-                    placeholder="Ex: Peso"
-                    className="mt-2 border-gray-200 focus:border-blue-500"
-                  />
-                </div>
-                <div className="flex-1 w-full">
-                  <Label htmlFor="specValue" className="text-sm font-medium text-gray-700">
-                    Valor
-                  </Label>
-                  <Input
-                    id="specValue"
-                    value={specValue}
-                    onChange={(e) => setSpecValue(e.target.value)}
-                    placeholder="Ex: 150kg"
-                    className="mt-2 border-gray-200 focus:border-blue-500"
-                  />
-                </div>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleAddSpecification}
-                  className="w-full md:w-auto border-gray-200 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-600"
-                >
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  Adicionar
-                </Button>
               </div>
             </CardContent>
           </Card>
-        </motion.div>
-
-        {/* Botões de Ação */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex flex-col sm:flex-row justify-end gap-3 pt-4"
-        >
-          <Button
-            variant="outline"
-            type="button"
-            asChild
-            className="w-full sm:w-auto border-gray-200 hover:bg-gray-50"
-          >
-            <Link href="/admin/equipamentos">Cancelar</Link>
-          </Button>
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 w-full sm:w-auto"
-          >
-            <Save className="h-4 w-4 mr-2" />
-            {isLoading ? 'Salvando...' : 'Salvar Equipamento'}
-          </Button>
         </motion.div>
       </form>
     </div>

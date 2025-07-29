@@ -408,7 +408,7 @@ export default function AdminCategoriesPage() {
                               size="sm"
                               onClick={() => deleteCategory(category.id)}
                               disabled={(category._count?.equipments || 0) > 0 || isSubmitting}
-                              className="hover:bg-red-100 hover:text-red-700 disabled:opacity-50 flex-shrink-0"
+                              className="hover:bg-red-50 hover:text-red-600 disabled:opacity-50 flex-shrink-0"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>

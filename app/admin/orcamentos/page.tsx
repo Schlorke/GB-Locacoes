@@ -33,7 +33,7 @@ import {
   User,
   XCircle,
 } from 'lucide-react';
-import { useCallback, useEffect, useState, Suspense } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
 interface Quote {
   id: string;
@@ -581,7 +581,7 @@ function AdminQuotesPage() {
                           onClick={() => updateQuoteStatus(selectedQuote.id, 'rejected')}
                           disabled={isUpdating}
                           variant="outline"
-                          className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300"
+                          className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:border-red-400 hover:text-red-700"
                         >
                           <XCircle className="w-4 h-4 mr-2" />
                           {isUpdating ? 'Rejeitando...' : 'Rejeitar Orçamento'}
