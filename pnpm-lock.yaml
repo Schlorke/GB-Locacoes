@@ -278,8 +278,8 @@ importers:
         specifier: latest
         version: 4.5.1(vue@3.5.18)
       zod:
-        specifier: ^4.0.10
-        version: 4.0.10
+        specifier: ^4.0.11
+        version: 4.0.11
       zustand:
         specifier: ^5.0.2
         version: 5.0.6(@types/react@19.1.8)(react@19.1.1)
@@ -10547,10 +10547,10 @@ packages:
       }
     dev: false
 
-  /zod@4.0.10:
+  /zod@4.0.11:
     resolution:
       {
-        integrity: sha512-3vB+UU3/VmLL2lvwcY/4RV2i9z/YU0DTV/tDuYjrwmx5WeJ7hwy+rGEEx8glHp6Yxw7ibRbKSaIFBgReRPe5KA==,
+        integrity: sha512-LVrgstTaQJek72n6ZGxhAhH/Q24PhGx4lIAcgBmjtvjRq0qYjiH9U0o3hfuC2vfExsnpoHElc4XOJjMKQjUQxg==,
       }
     dev: false
 

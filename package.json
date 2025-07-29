@@ -112,7 +112,7 @@
     "vaul": "latest",
     "vue": "latest",
     "vue-router": "latest",
-    "zod": "^4.0.10",
+    "zod": "^4.0.11",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
