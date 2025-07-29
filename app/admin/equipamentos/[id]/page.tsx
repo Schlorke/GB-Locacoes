@@ -38,7 +38,7 @@ interface Equipment {
     bgColor?: string;
     fontColor?: string;
   };
-  _count: {
+  _count?: {
     quoteItems: number;
     reviews: number;
   };
@@ -261,11 +261,11 @@ export default function EquipmentDetailsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Orçamentos</label>
-                  <p className="text-lg font-semibold">{equipment._count.quoteItems}</p>
+                  <p className="text-lg font-semibold">{equipment._count?.quoteItems || 0}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-muted-foreground">Avaliações</label>
-                  <p className="text-lg font-semibold">{equipment._count.reviews}</p>
+                  <p className="text-lg font-semibold">{equipment._count?.reviews || 0}</p>
                 </div>
               </div>
             </CardContent>

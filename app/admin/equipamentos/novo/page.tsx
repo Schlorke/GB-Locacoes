@@ -342,7 +342,7 @@ export default function NovoEquipamento() {
                                 variant="ghost"
                                 size="icon"
                                 onClick={() => handleRemoveSpecification(key)}
-                                className="text-red-500 hover:text-red-600 hover:bg-red-50 flex-shrink-0 ml-2"
+                                className="text-red-500 hover:text-red-700 hover:bg-red-100 flex-shrink-0 ml-2"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>

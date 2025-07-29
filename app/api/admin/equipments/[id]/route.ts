@@ -2,21 +2,24 @@ import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/middlewares/require-admin';
 import { NextRequest, NextResponse } from 'next/server';
 
-interface RouteParams {
-  params: { id: string };
-}
-
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const adminResult = await requireAdmin(request);
     if (!adminResult.success) {
       return NextResponse.json({ error: adminResult.error }, { status: adminResult.status });
     }
 
+    const { id } = await params;
     const equipment = await prisma.equipment.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         category: true,
+        _count: {
+          select: {
+            quoteItems: true,
+            rental_items: true,
+          },
+        },
       },
     });
 
@@ -24,14 +27,25 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ error: 'Equipamento não encontrado' }, { status: 404 });
     }
 
-    return NextResponse.json(equipment);
+    // Converter Decimal para number para compatibilidade com o frontend
+    const equipmentResponse = {
+      ...equipment,
+      pricePerDay: Number(equipment.pricePerDay),
+      isAvailable: equipment.available, // Mapear available para isAvailable
+      _count: {
+        quoteItems: equipment._count.quoteItems,
+        reviews: 0, // Campo não implementado ainda, usar 0 como padrão
+      },
+    };
+
+    return NextResponse.json(equipmentResponse);
   } catch (error) {
     console.error('Erro ao buscar equipamento:', error);
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
   }
 }
 
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const adminResult = await requireAdmin(request);
     if (!adminResult.success) {
@@ -42,38 +56,75 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     const { name, description, specifications, pricePerDay, categoryId, images, isAvailable } =
       body;
 
+    console.error('Dados recebidos:', {
+      name,
+      description,
+      pricePerDay,
+      categoryId,
+      images,
+      isAvailable,
+    });
+
+    const { id } = await params;
+
+    // Preparar dados para atualização
+    const updateData: Record<string, unknown> = {};
+
+    if (name) updateData.name = name;
+    if (description) updateData.description = description;
+    if (specifications) updateData.specifications = specifications;
+    if (pricePerDay) updateData.pricePerDay = parseFloat(pricePerDay);
+    if (categoryId) updateData.categoryId = categoryId;
+    if (images && images.length > 0) updateData.images = { set: images };
+    if (isAvailable !== undefined) updateData.available = isAvailable;
+
+    console.error('Dados para update:', updateData);
+
     const equipment = await prisma.equipment.update({
-      where: { id: params.id },
-      data: {
-        ...(name && { name }),
-        ...(description && { description }),
-        ...(specifications && { specifications }),
-        ...(pricePerDay && { pricePerDay: parseFloat(pricePerDay) }),
-        ...(categoryId && { categoryId }),
-        ...(images && images.length > 0 && { images: { set: images } }),
-        ...(isAvailable !== undefined && { isAvailable }),
-      },
+      where: { id },
+      data: updateData,
       include: {
         category: true,
+        _count: {
+          select: {
+            quoteItems: true,
+            rental_items: true,
+          },
+        },
       },
     });
 
-    return NextResponse.json(equipment);
+    // Converter Decimal para number para compatibilidade com o frontend
+    const equipmentResponse = {
+      ...equipment,
+      pricePerDay: Number(equipment.pricePerDay),
+      isAvailable: equipment.available, // Mapear available para isAvailable
+      _count: {
+        quoteItems: equipment._count.quoteItems,
+        reviews: 0, // Campo não implementado ainda, usar 0 como padrão
+      },
+    };
+
+    return NextResponse.json(equipmentResponse);
   } catch (error) {
     console.error('Erro ao atualizar equipamento:', error);
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const adminResult = await requireAdmin(request);
     if (!adminResult.success) {
       return NextResponse.json({ error: adminResult.error }, { status: adminResult.status });
     }
 
+    const { id } = await params;
     await prisma.equipment.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Equipamento removido com sucesso' });

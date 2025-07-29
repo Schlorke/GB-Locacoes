@@ -46,7 +46,7 @@ export async function GET() {
         id: equipment.id,
         name: equipment.name,
         description: equipment.description,
-        pricePerDay: equipment.pricePerDay,
+        pricePerDay: Number(equipment.pricePerDay), // Converter Decimal para number
         imageUrl: primaryImage, // Campo principal para imagem
         images:
           equipment.images && equipment.images.length > 0

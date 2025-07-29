@@ -77,6 +77,7 @@ export async function GET(request: NextRequest) {
 
     const equipmentsFormatted = equipments.map((equip) => ({
       ...equip,
+      pricePerDay: Number(equip.pricePerDay), // Converter Decimal para number
       isAvailable: equip.available,
     }));
 
@@ -182,7 +183,14 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ ...equipment, isAvailable: equipment.available }, { status: 201 });
+    // Converter Decimal para number para compatibilidade com o frontend
+    const equipmentResponse = {
+      ...equipment,
+      pricePerDay: Number(equipment.pricePerDay),
+      isAvailable: equipment.available,
+    };
+
+    return NextResponse.json(equipmentResponse, { status: 201 });
   } catch (error) {
     console.error('[API POST /admin/equipments] ERRO ao criar equipamento:', error);
 
