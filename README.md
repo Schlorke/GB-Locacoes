@@ -66,7 +66,7 @@ Principais tecnologias:
 ## Instalação
 
 ```bash
-git clone https://github.com/GBLocacoes/GB-Locacoes.git
+git clone https://github.com/Schlorke/GB-Locacoes.git
 cd GB-Locacoes
 pnpm install
 pnpm db:generate
