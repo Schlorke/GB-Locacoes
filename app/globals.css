@@ -710,13 +710,7 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* 12. Modal, Popover, e Layouts   */
 /* =============================== */
 /* Modal e Popover - Centralização perfeita */
-[data-radix-popper-content-wrapper] {
-  position: fixed !important;
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  z-index: 99999 !important;
-}
+/* Centralização de modais e popovers será controlada pelos próprios componentes */
 
 /* Garantir centralização perfeita de modais */
 
