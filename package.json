@@ -13,7 +13,6 @@
     "dev": "next dev --turbopack",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "preinstall": "npx only-allow pnpm",
     "lint": "eslint . --ext .js,.ts,.tsx --no-color --quiet || exit 0",
     "lint:fix": "next lint --fix",
     "start": "next start",
@@ -137,12 +136,12 @@
   },
   "packageManager": "pnpm@8.8.0",
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=20.19.0",
     "pnpm": ">=8.0.0"
   },
   "pnpm": {
     "overrides": {
-      "@types/react": "19.1.8"
+      "@types/react": "19.1.9"
     }
   }
 }
