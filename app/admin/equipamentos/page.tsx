@@ -273,11 +273,12 @@ export default function AdminEquipmentsPage() {
 
   if (loading && equipments.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="flex items-center gap-2">
-          <Loader2 className="h-6 w-6 animate-spin" />
-          <span>Carregando equipamentos...</span>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
+        />
       </div>
     );
   }
@@ -322,7 +323,7 @@ export default function AdminEquipmentsPage() {
           transition={{ delay: 0.1 }}
           className="mb-6"
         >
-          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
+          <Card className="relative overflow-visible border-0 shadow-xl bg-white backdrop-blur-sm">
             {/* Clean depth layers for filter card */}
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
