@@ -126,6 +126,79 @@
     max-width: 100%;
     overflow-x: hidden;
   }
+
+  /* Inputs com efeito hover shadow e foco azul obrigatório */
+  input:not([type='checkbox']):not([type='radio']),
+  select,
+  textarea,
+  button[role='combobox'],
+  button[aria-controls],
+  [data-radix-select-trigger],
+  .select-trigger {
+    @apply border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 transition-all duration-200;
+    box-shadow:
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  }
+
+  input:not([type='checkbox']):not([type='radio']):hover,
+  select:hover,
+  textarea:hover,
+  button[role='combobox']:hover,
+  button[aria-controls]:hover,
+  [data-radix-select-trigger]:hover,
+  .select-trigger:hover {
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  }
+
+  input:not([type='checkbox']):not([type='radio']):focus,
+  select:focus,
+  textarea:focus,
+  button[role='combobox']:focus,
+  button[aria-controls]:focus,
+  [data-radix-select-trigger]:focus,
+  .select-trigger:focus {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05),
+      0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+  }
+}
+
+/* =============================== */
+/* 2.0. Regras específicas para ShadCN UI Textarea */
+/* =============================== */
+/* Forçar o estilo nos componentes ShadCN UI */
+textarea.flex,
+textarea[class*='border-input'],
+textarea[class*='bg-background'] {
+  border-color: #e5e7eb !important; /* gray-200 */
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
+}
+
+textarea.flex:hover,
+textarea[class*='border-input']:hover,
+textarea[class*='bg-background']:hover {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+textarea.flex:focus,
+textarea[class*='border-input']:focus,
+textarea[class*='bg-background']:focus {
+  border-color: #3b82f6 !important; /* blue-500 */
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
 /* =============================== */
@@ -560,13 +633,6 @@ section {
 ::selection {
   background-color: oklch(88.2% 0.059 254.128);
   color: oklch(37.9% 0.146 265.522);
-}
-
-/* Form enhancements */
-input:focus,
-textarea:focus,
-select:focus {
-  box-shadow: 0 0 0 3px oklch(93.2% 0.032 255.585);
 }
 
 /* =============================== */

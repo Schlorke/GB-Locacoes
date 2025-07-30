@@ -327,7 +327,7 @@ export default function EditarEquipamento() {
                             }
                             placeholder="Ex: Betoneira 400L"
                             required
-                            className="mt-1  focus:border-blue-500"
+                            className="mt-1 focus:border-blue-500"
                           />
                         </div>
 

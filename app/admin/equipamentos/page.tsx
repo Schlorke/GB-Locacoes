@@ -332,7 +332,7 @@ export default function AdminEquipmentsPage() {
               <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
                 <div className="flex flex-col md:flex-row gap-4 flex-1 w-full">
                   <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 " />
                     <Input
                       placeholder="Buscar equipamentos..."
                       value={searchTerm}
