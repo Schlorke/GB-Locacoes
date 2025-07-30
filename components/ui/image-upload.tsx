@@ -19,7 +19,9 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { GripVertical, Link, Upload } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight, GripVertical, Link, Upload } from 'lucide-react';
+import Image from 'next/image';
 import type * as React from 'react';
 import { useState } from 'react';
 import { Button } from './button';
@@ -31,6 +33,12 @@ interface ImageUploadProps {
   images: string[];
   onImagesChange: (_images: string[]) => void;
   maxImages?: number;
+  currentImageIndex?: number;
+  onImageIndexChange?: (index: number) => void;
+  onImageZoom?: () => void;
+  nextImage?: () => void;
+  prevImage?: () => void;
+  goToImage?: (index: number) => void;
 }
 
 interface SortableImageProps {
@@ -127,7 +135,17 @@ function SortableImage({
   );
 }
 
-export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUploadProps) {
+export function ImageUpload({
+  images,
+  onImagesChange,
+  maxImages = 5,
+  currentImageIndex = 0,
+  onImageIndexChange: _onImageIndexChange,
+  onImageZoom,
+  nextImage,
+  prevImage,
+  goToImage,
+}: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [urlInput, setUrlInput] = useState('');
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -244,13 +262,172 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
 
   return (
     <div
-      className="space-y-4 rounded-lg p-5 border shadow-sm min-h-[200px]"
+      className="space-y-4 rounded-xl p-6 border shadow-xl backdrop-blur-sm min-h-[200px] transition-all duration-300 hover:shadow-2xl"
       style={{
-        backgroundColor: 'hsl(210, 40%, 96%)',
-        borderColor: '#e2e8f0',
-        boxShadow: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+        backgroundColor: 'hsl(210, 40%, 98%)',
+        borderColor: 'hsl(210, 20%, 90%)',
+        borderWidth: '1.5px',
+        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
       }}
     >
+      {/* Carrossel de Imagens Atuais */}
+      {images && images.length > 0 && (
+        <div className="space-y-4 mb-6">
+          {/* Header com indicador */}
+          {images.length > 1 && (
+            <div className="flex items-center justify-between mb-4 w-full">
+              <h3 className="text-sm font-semibold text-slate-700">Preview do Equipamento</h3>
+              <div className="text-xs text-slate-500 bg-white/70 px-2 py-1 rounded-full">
+                {currentImageIndex + 1} de {images.length}
+              </div>
+            </div>
+          )}
+
+          {/* Imagem Principal */}
+          <div className="relative bg-gray-50 rounded-lg overflow-hidden group border border-gray-200">
+            <div className="aspect-[16/10] relative">
+              <motion.div
+                key={currentImageIndex}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={images[currentImageIndex] || '/placeholder.jpg'}
+                  alt={`Equipamento - Imagem ${currentImageIndex + 1}`}
+                  fill
+                  className="object-cover cursor-pointer transition-all duration-500"
+                  onClick={() => onImageZoom?.()}
+                />
+              </motion.div>
+
+              {/* Navegação entre imagens */}
+              {images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (prevImage) {
+                        prevImage();
+                      } else if (currentImageIndex > 0) {
+                        // Fallback interno caso a função não seja passada
+                        const newIndex = currentImageIndex - 1;
+                        if (_onImageIndexChange) _onImageIndexChange(newIndex);
+                      }
+                    }}
+                    title="Imagem anterior"
+                    aria-label="Navegar para imagem anterior"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-gray-700" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (nextImage) {
+                        nextImage();
+                      } else if (currentImageIndex < images.length - 1) {
+                        // Fallback interno caso a função não seja passada
+                        const newIndex = currentImageIndex + 1;
+                        if (_onImageIndexChange) _onImageIndexChange(newIndex);
+                      }
+                    }}
+                    title="Próxima imagem"
+                    aria-label="Navegar para próxima imagem"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0"
+                  >
+                    <ChevronRight className="w-5 h-5 text-gray-700" />
+                  </button>
+                </>
+              )}
+
+              {/* Indicadores */}
+              {images.length > 1 && (
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                  {images.map((_: string, index: number) => (
+                    <motion.button
+                      key={index}
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (goToImage) {
+                          goToImage(index);
+                        } else {
+                          if (_onImageIndexChange) _onImageIndexChange(index);
+                        }
+                      }}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                      title={`Ir para imagem ${index + 1}`}
+                      aria-label={`Navegar para imagem ${index + 1}`}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 ${
+                        index === currentImageIndex
+                          ? 'bg-white shadow-lg scale-125'
+                          : 'bg-white/60 hover:bg-white/80'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Miniaturas */}
+          {images.length > 1 && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
+            >
+              {images.slice(0, 6).map((image: string, index: number) => (
+                <motion.button
+                  key={index}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (goToImage) {
+                      goToImage(index);
+                    } else {
+                      if (_onImageIndexChange) _onImageIndexChange(index);
+                    }
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  title={`Visualizar imagem ${index + 1}`}
+                  aria-label={`Selecionar imagem ${index + 1}`}
+                  className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 ${
+                    index === currentImageIndex
+                      ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <Image
+                    src={image}
+                    alt={`Miniatura ${index + 1}`}
+                    width={64}
+                    height={48}
+                    className="w-full h-full object-cover"
+                  />
+                </motion.button>
+              ))}
+              {images.length > 6 && (
+                <div className="flex-shrink-0 w-16 h-12 rounded-lg bg-gray-100 border-2 border-gray-200 flex items-center justify-center">
+                  <span className="text-xs font-medium text-gray-500">+{images.length - 6}</span>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </div>
+      )}
+
       {/* Upload de arquivos */}
       <div>
         <Label htmlFor="file-upload" className="block text-sm font-medium mb-2">
@@ -271,11 +448,37 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
             variant="outline"
             onClick={() => document.getElementById('file-upload')?.click()}
             disabled={isUploading || images.length >= maxImages}
-            className="w-fit px-4 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
+            className="w-fit px-4 bg-transparent border-gray-200 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
           >
             <Upload className="h-4 w-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
             <span className="group-hover:text-orange-500 transition-colors duration-200">
-              {isUploading ? 'Enviando...' : 'Escolher Arquivos'}
+              {isUploading ? (
+                <span className="flex items-center">
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-blue-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  Enviando...
+                </span>
+              ) : (
+                'Escolher Arquivos'
+              )}
             </span>
           </Button>
         </div>
@@ -295,7 +498,7 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
             variant="outline"
             onClick={handleUrlAdd}
             disabled={!urlInput.trim() || images.length >= maxImages}
-            className="w-fit px-4 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
+            className="w-fit px-4 bg-transparent border-gray-200  hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
           >
             <Link className="h-4 w-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
             <span className="group-hover:text-orange-500 transition-colors duration-200">
@@ -309,7 +512,7 @@ export function ImageUpload({ images, onImagesChange, maxImages = 5 }: ImageUplo
             onChange={(e) => setUrlInput(e.target.value)}
             placeholder="https://exemplo.com/imagem.jpg"
             disabled={images.length >= maxImages}
-            className="flex-1 focus:border-blue-500"
+            className="flex-1  border-gray-200 focus:border-blue-500"
           />
         </div>
       </div>
