@@ -79,7 +79,7 @@ export function AdminFilterCard({
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-      <CardContent className="relative z-10 p-6">
+      <CardContent className="relative z-[99990] p-6">
         <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
           {/* Left Side - Search and Filters */}
           <div className="flex flex-col md:flex-row gap-4 flex-1 w-full items-center">
