@@ -54,12 +54,12 @@ export function FilterResetButton({
 
   return (
     <Button
-      variant="ghost"
+      variant="reset"
       size="sm"
       onClick={handleClick}
       disabled={disabled}
       className={cn(
-        'admin-reset-button flex items-center justify-center p-0 group hover:scale-100 hover:shadow-md',
+        'filter-reset-button flex items-center justify-center p-0 group hover:scale-100 hover:shadow-md',
         sizeClasses[size],
         className,
       )}
