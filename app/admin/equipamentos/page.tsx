@@ -1,5 +1,7 @@
 'use client';
 
+import { AdminFilterCard } from '@/components/admin/admin-filter-card';
+import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -10,15 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -36,7 +30,6 @@ import {
   Loader2,
   Package,
   Plus,
-  Search,
   Tag,
   Trash2,
   X,
@@ -292,28 +285,11 @@ export default function AdminEquipmentsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
-            {/* Clean depth layers without decorative elements */}
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
-
-            {/* Content */}
-            <div className="relative z-10">
-              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
-                Gerenciar Equipamentos
-              </h1>
-              <p className="text-orange-50 mb-4 font-medium">
-                Controle todo o catálogo de equipamentos para locação
-              </p>
-              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
-                <Package className="w-5 h-5 text-orange-50" />
-                <span className="font-semibold text-white">
-                  {Array.isArray(filteredEquipments) ? filteredEquipments.length : 0} equipamentos
-                  encontrados
-                </span>
-              </div>
-            </div>
-          </div>
+          <AdminPageHeader
+            title="Gerenciar Equipamentos"
+            subtitle="Controle todo o catálogo de equipamentos para locação"
+            icon={<Package className="w-6 h-6 text-orange-200" />}
+          />
         </motion.div>
 
         {/* Filtros e Ações */}
@@ -323,59 +299,48 @@ export default function AdminEquipmentsPage() {
           transition={{ delay: 0.1 }}
           className="mb-6"
         >
-          <Card className="relative overflow-visible border-0 shadow-xl bg-white backdrop-blur-sm">
-            {/* Clean depth layers for filter card */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
-
-            <CardContent className="relative z-10 p-6">
-              <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
-                <div className="flex flex-col md:flex-row gap-4 flex-1 w-full">
-                  <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 " />
-                    <Input
-                      placeholder="Buscar equipamentos..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 border-gray-200 focus:border-blue-500"
-                    />
-                  </div>
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="w-full md:w-[200px]">
-                      <SelectValue placeholder="Categoria" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todas as categorias</SelectItem>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={availabilityFilter} onValueChange={setAvailabilityFilter}>
-                    <SelectTrigger className="w-full md:w-[180px]">
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos os status</SelectItem>
-                      <SelectItem value="available">Disponível</SelectItem>
-                      <SelectItem value="unavailable">Indisponível</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button
-                  asChild
-                  className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300"
-                >
-                  <Link href="/admin/equipamentos/novo">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Novo Equipamento
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <AdminFilterCard
+            searchPlaceholder="Buscar equipamentos..."
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            filters={[
+              {
+                label: 'Categoria',
+                value: selectedCategory,
+                onValueChange: setSelectedCategory,
+                placeholder: 'Categoria',
+                options: [
+                  { value: 'all', label: 'Todas as categorias' },
+                  ...categories.map((category) => ({
+                    value: category.id,
+                    label: category.name,
+                  })),
+                ],
+              },
+              {
+                label: 'Status',
+                value: availabilityFilter,
+                onValueChange: setAvailabilityFilter,
+                placeholder: 'Status',
+                options: [
+                  { value: 'all', label: 'Todos os status' },
+                  { value: 'available', label: 'Disponível' },
+                  { value: 'unavailable', label: 'Indisponível' },
+                ],
+              },
+            ]}
+            actionButtons={
+              <Button
+                asChild
+                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg shadow-md transition-all duration-300"
+              >
+                <Link href="/admin/equipamentos/novo">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo Equipamento
+                </Link>
+              </Button>
+            }
+          />
         </motion.div>
 
         {/* Grid de Equipamentos */}

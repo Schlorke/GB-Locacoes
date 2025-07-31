@@ -45,10 +45,6 @@ export function CustomSelect({
     const handleClickOutside = (event: MouseEvent) => {
       if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
         setIsOpen(false);
-        // Remove outline quando fecha
-        if (buttonRef.current) {
-          buttonRef.current.style.boxShadow = '';
-        }
       }
     };
 
@@ -68,26 +64,14 @@ export function CustomSelect({
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
-    // Adiciona outline quando abre ou remove quando fecha
-    if (buttonRef.current) {
-      if (!isOpen) {
-        buttonRef.current.style.boxShadow = '0 0 0 3px oklch(93.2% 0.032 255.585)';
-      } else {
-        buttonRef.current.style.boxShadow = '';
-      }
-    }
   };
 
   const handleFocus = () => {
-    if (buttonRef.current) {
-      buttonRef.current.style.boxShadow = '0 0 0 3px oklch(93.2% 0.032 255.585)';
-    }
+    // Foco será tratado pelas classes CSS
   };
 
   const handleBlur = () => {
-    if (buttonRef.current && !isOpen) {
-      buttonRef.current.style.boxShadow = '';
-    }
+    // Blur será tratado pelas classes CSS
   };
 
   return (
@@ -103,7 +87,7 @@ export function CustomSelect({
           onClick={handleToggle}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 mt-2 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0"
+          className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 admin-filter-element"
         >
           <span className={cn(value ? 'text-foreground' : 'text-muted-foreground')}>
             {selectedText}
@@ -137,13 +121,6 @@ export function CustomSelectItem({ value, children }: CustomSelectItemProps) {
   const handleClick = () => {
     onValueChange?.(value);
     setIsOpen(false);
-    // Remove outline do button quando seleciona um item
-    setTimeout(() => {
-      const button = document.querySelector('[role="combobox"]') as HTMLButtonElement;
-      if (button) {
-        button.style.boxShadow = '';
-      }
-    }, 0);
   };
 
   return (

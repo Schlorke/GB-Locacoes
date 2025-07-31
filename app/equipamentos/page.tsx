@@ -3,15 +3,9 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Clock, Filter, Loader2, Search, Star } from 'lucide-react';
+import { Clock, Loader2, Search, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -153,20 +147,18 @@ export default function EquipmentsPage() {
                 />
               </div>
               <div className="md:w-64">
-                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger>
-                    <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder="Filtrar por categoria" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todas as Categorias</SelectItem>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <CustomSelect
+                  value={categoryFilter}
+                  onValueChange={setCategoryFilter}
+                  placeholder="Filtrar por categoria"
+                >
+                  <CustomSelectItem value="all">Todas as Categorias</CustomSelectItem>
+                  {categories.map((category) => (
+                    <CustomSelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </CustomSelectItem>
+                  ))}
+                </CustomSelect>
               </div>
             </div>
           </CardContent>

@@ -3,15 +3,9 @@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -270,17 +264,17 @@ function AdminQuotesPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Filter className="w-4 h-4 text-gray-500" />
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-48 border-gray-200 focus:border-blue-500">
-                      <SelectValue placeholder="Filtrar por status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos os status</SelectItem>
-                      <SelectItem value="pending">Pendentes</SelectItem>
-                      <SelectItem value="approved">Aprovados</SelectItem>
-                      <SelectItem value="rejected">Rejeitados</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <CustomSelect
+                    value={statusFilter}
+                    onValueChange={setStatusFilter}
+                    placeholder="Filtrar por status"
+                    className="w-48"
+                  >
+                    <CustomSelectItem value="all">Todos os status</CustomSelectItem>
+                    <CustomSelectItem value="pending">Pendentes</CustomSelectItem>
+                    <CustomSelectItem value="approved">Aprovados</CustomSelectItem>
+                    <CustomSelectItem value="rejected">Rejeitados</CustomSelectItem>
+                  </CustomSelect>
                 </div>
               </div>
             </CardContent>

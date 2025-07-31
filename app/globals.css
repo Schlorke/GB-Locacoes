@@ -983,3 +983,58 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 *:focus-within {
   outline: none !important;
 }
+
+/* =============================== */
+/* 7. Estilos Padronizados Admin   */
+/* =============================== */
+
+/* Estilos padrão para elementos de filtro e cards admin */
+.admin-filter-element {
+  border-color: rgb(229 231 235) !important; /* border-gray-200 */
+  transition: all 0.2s ease-in-out !important;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.admin-filter-element:focus {
+  border-color: rgb(59 130 246) !important; /* border-blue-500 */
+  outline-offset: 0 !important;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Botões padrão admin com hover shadow */
+.admin-button {
+  transition: all 0.3s ease-in-out !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important; /* shadow-md */
+}
+
+.admin-button:hover {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; /* hover:shadow-lg */
+  transform: translateY(-1px) !important;
+}
+
+/* Animação de reset */
+@keyframes reset-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-reset {
+  animation: reset-spin 0.6s ease-in-out;
+}
+
+/* Estilos para selects ativos com filtro */
+.filter-active {
+  border-color: rgb(251 146 60) !important; /* border-orange-300 */
+  background-color: rgb(255 247 237) !important; /* bg-orange-50 */
+}
