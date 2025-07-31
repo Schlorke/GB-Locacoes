@@ -141,13 +141,24 @@
       0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
   }
 
+  /* Botão de reset - sem foco azul, mas com outras propriedades */
+  .admin-reset-button,
+  button[title='Resetar filtros'] {
+    @apply border-gray-200 focus:ring-0 transition-all duration-200;
+    box-shadow:
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  }
+
   input:not([type='checkbox']):not([type='radio']):hover,
   select:hover,
   textarea:hover,
   button[role='combobox']:hover,
   button[aria-controls]:hover,
   [data-radix-select-trigger]:hover,
-  .select-trigger:hover {
+  .select-trigger:hover,
+  .admin-reset-button:hover,
+  button[title='Resetar filtros']:hover {
     box-shadow:
       0 4px 6px -1px rgba(0, 0, 0, 0.1),
       0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
@@ -164,6 +175,14 @@
       0 10px 15px -3px rgba(0, 0, 0, 0.1),
       0 4px 6px -2px rgba(0, 0, 0, 0.05),
       0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+  }
+
+  /* Botão de reset - foco com sombra mas sem borda/outline azul */
+  .admin-reset-button:focus,
+  button[title='Resetar filtros']:focus {
+    box-shadow:
+      0 10px 15px -3px rgba(0, 0, 0, 0.1),
+      0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   }
 }
 

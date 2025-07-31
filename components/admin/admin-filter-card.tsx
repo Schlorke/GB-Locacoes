@@ -1,18 +1,15 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
+import { FilterIndicator } from '@/components/ui/filter-indicator';
+import { FilterResetButton } from '@/components/ui/filter-reset-button';
+import { FilterSelectGroup } from '@/components/ui/filter-select-group';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { Funnel, RotateCcw, Search } from 'lucide-react';
+import type { FilterOption } from '@/types/filters';
+import { Search } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useState } from 'react';
-
-interface FilterOption {
-  value: string;
-  label: string;
-}
 
 interface AdminFilterCardProps {
   searchPlaceholder?: string;
@@ -38,7 +35,6 @@ export function AdminFilterCard({
   className,
 }: AdminFilterCardProps) {
   const [isFiltered, setIsFiltered] = useState(false);
-  const [resetAnimation, setResetAnimation] = useState(false);
 
   // Check if any filter is active (not "all" or empty)
   useEffect(() => {
@@ -49,9 +45,6 @@ export function AdminFilterCard({
   }, [filters, searchValue]);
 
   const handleReset = () => {
-    // Trigger animation
-    setResetAnimation(true);
-
     // Reset all filters
     filters.forEach((filter) => {
       filter.onValueChange('all');
@@ -61,11 +54,6 @@ export function AdminFilterCard({
     if (onSearchChange) {
       onSearchChange('');
     }
-
-    // Remove animation class after animation completes
-    setTimeout(() => {
-      setResetAnimation(false);
-    }, 600);
   };
 
   return (
@@ -80,12 +68,12 @@ export function AdminFilterCard({
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
       <CardContent className="relative z-10 p-6">
-        <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+        <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
           {/* Left Side - Search and Filters */}
-          <div className="flex flex-col md:flex-row gap-4 flex-1 w-full items-center">
+          <div className="flex flex-col md:flex-row gap-5 flex-1 w-full items-center">
             {/* Search Input */}
             {onSearchChange && (
-              <div className="relative flex-1 max-w-md w-full md:w-auto">
+              <div className="relative flex-1  w-full md:w-auto">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   placeholder={searchPlaceholder}
@@ -101,60 +89,23 @@ export function AdminFilterCard({
             )}
 
             {/* Filters Row */}
-            <div className="flex items-center justify-center gap-3 w-full md:w-auto">
+            <div className="flex items-center gap-4 w-full md:w-auto">
               {/* Filter Icon */}
-              {filters.length > 0 && (
-                <Funnel
-                  className={cn(
-                    'w-4 h-4 transition-colors duration-300 flex-shrink-0',
-                    isFiltered ? 'text-orange-500' : 'text-gray-500',
-                  )}
-                />
-              )}
+              {filters.length > 0 && <FilterIndicator isFiltered={isFiltered} />}
 
               {/* Filter Selects */}
-              <div className="flex items-center justify-center gap-2 flex-wrap">
-                {filters.map((filter, index) => (
-                  <CustomSelect
-                    key={index}
-                    value={filter.value}
-                    onValueChange={filter.onValueChange}
-                    placeholder={filter.placeholder || filter.label}
-                    className={cn(
-                      'w-full md:w-[200px]',
-                      filter.value && filter.value !== 'all' && 'border-orange-300 bg-orange-50',
-                    )}
-                  >
-                    {filter.options.map((option) => (
-                      <CustomSelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </CustomSelectItem>
-                    ))}
-                  </CustomSelect>
-                ))}
-              </div>
+              <FilterSelectGroup filters={filters} gap="md" />
 
               {/* Reset Button - SEMPRE VISÍVEL e ALINHADO */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleReset}
-                className="flex items-center border justify-center w-10 h-10 p-0 hover:shadow-lg shadow-md transition-all duration-300 border-gray-200 flex-shrink-0 group"
-                title="Resetar filtros"
-              >
-                <RotateCcw
-                  className={cn(
-                    'w-4 h-4 transition-all duration-300 group-hover:text-orange-500',
-                    resetAnimation && 'animate-reset',
-                  )}
-                />
-              </Button>
+              <div className="flex items-center justify-center flex-shrink-0">
+                <FilterResetButton onClick={handleReset} title="Resetar filtros" size="md" />
+              </div>
             </div>
           </div>
 
           {/* Right Side - Action Buttons */}
           {actionButtons && (
-            <div className="flex items-center justify-center gap-2 w-full lg:w-auto">
+            <div className="flex items-center justify-center gap-3 w-full lg:w-auto">
               {actionButtons}
             </div>
           )}
