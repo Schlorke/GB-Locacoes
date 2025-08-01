@@ -2,6 +2,7 @@
 
 import { getSettings, updateSettings } from '@/app/api/admin/settings/actions';
 import { SettingsBlock } from '@/components/admin/settings-block';
+import { SettingsNavigationBar } from '@/components/admin/settings-navigation-bar';
 import {
   CompanyInfoPreview,
   CustomSettingsPreview,
@@ -25,6 +26,7 @@ export default function SettingsPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [activeSection, setActiveSection] = useState<string>('company');
   const [formData, setFormData] = useState<SettingsInput>({
     companyPhone: '',
     companyIconUrl: '',
@@ -188,347 +190,370 @@ export default function SettingsPage() {
           </div>
         </motion.div>
 
+        {/* Barra de Navegação das Configurações */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+        >
+          <SettingsNavigationBar onSectionSelect={setActiveSection} activeSection={activeSection} />
+        </motion.div>
+
         {/* Formulário com previews */}
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Informações da Empresa */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <SettingsBlock
-              title="Informações da Empresa"
-              description="Dados básicos da empresa e informações de contato"
-              icon={Building2}
-              form={
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="companyPhone">Telefone da Empresa</Label>
-                    <Input
-                      id="companyPhone"
-                      value={formData.companyPhone || ''}
-                      onChange={(e) => updateField('companyPhone', e.target.value)}
-                      placeholder="(11) 99999-9999"
-                      className="mt-1"
-                    />
-                  </div>
+          {/* Renderização condicional das seções */}
+          {activeSection === 'company' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <SettingsBlock
+                title="Informações da Empresa"
+                description="Dados básicos da empresa e informações de contato"
+                icon={Building2}
+                form={
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="companyPhone">Telefone da Empresa</Label>
+                      <Input
+                        id="companyPhone"
+                        value={formData.companyPhone || ''}
+                        onChange={(e) => updateField('companyPhone', e.target.value)}
+                        placeholder="(11) 99999-9999"
+                        className="mt-1"
+                      />
+                    </div>
 
-                  <div>
-                    <Label htmlFor="contactEmail">E-mail de Contato</Label>
-                    <Input
-                      id="contactEmail"
-                      type="email"
-                      value={formData.contactEmail || ''}
-                      onChange={(e) => updateField('contactEmail', e.target.value)}
-                      placeholder="contato@gblocacoes.com.br"
-                      className="mt-1"
-                    />
-                  </div>
+                    <div>
+                      <Label htmlFor="contactEmail">E-mail de Contato</Label>
+                      <Input
+                        id="contactEmail"
+                        type="email"
+                        value={formData.contactEmail || ''}
+                        onChange={(e) => updateField('contactEmail', e.target.value)}
+                        placeholder="contato@gblocacoes.com.br"
+                        className="mt-1"
+                      />
+                    </div>
 
-                  <div>
-                    <Label htmlFor="companyAddress">Endereço</Label>
-                    <Textarea
-                      id="companyAddress"
-                      value={formData.companyAddress || ''}
-                      onChange={(e) => updateField('companyAddress', e.target.value)}
-                      placeholder="Endereço completo da empresa"
-                      className="mt-1"
-                      rows={3}
-                    />
-                  </div>
+                    <div>
+                      <Label htmlFor="companyAddress">Endereço</Label>
+                      <Textarea
+                        id="companyAddress"
+                        value={formData.companyAddress || ''}
+                        onChange={(e) => updateField('companyAddress', e.target.value)}
+                        placeholder="Endereço completo da empresa"
+                        className="mt-1"
+                        rows={3}
+                      />
+                    </div>
 
-                  <div>
-                    <Label htmlFor="aboutUsText">Sobre Nós</Label>
-                    <Textarea
-                      id="aboutUsText"
-                      value={formData.aboutUsText || ''}
-                      onChange={(e) => updateField('aboutUsText', e.target.value)}
-                      placeholder="Descrição da empresa"
-                      className="mt-1"
-                      rows={4}
-                    />
-                  </div>
+                    <div>
+                      <Label htmlFor="aboutUsText">Sobre Nós</Label>
+                      <Textarea
+                        id="aboutUsText"
+                        value={formData.aboutUsText || ''}
+                        onChange={(e) => updateField('aboutUsText', e.target.value)}
+                        placeholder="Descrição da empresa"
+                        className="mt-1"
+                        rows={4}
+                      />
+                    </div>
 
-                  <div>
-                    <Label htmlFor="companyIconUrl">URL do Logo</Label>
-                    <Input
-                      id="companyIconUrl"
-                      value={formData.companyIconUrl || ''}
-                      onChange={(e) => updateField('companyIconUrl', e.target.value)}
-                      placeholder="https://exemplo.com/logo.png"
-                      className="mt-1"
-                    />
+                    <div>
+                      <Label htmlFor="companyIconUrl">URL do Logo</Label>
+                      <Input
+                        id="companyIconUrl"
+                        value={formData.companyIconUrl || ''}
+                        onChange={(e) => updateField('companyIconUrl', e.target.value)}
+                        placeholder="https://exemplo.com/logo.png"
+                        className="mt-1"
+                      />
+                    </div>
                   </div>
-                </div>
-              }
-              preview={
-                <CompanyInfoPreview
-                  data={{
-                    name: 'GB Locações',
-                    description: formData.aboutUsText,
-                    address: formData.companyAddress,
-                    phone: formData.companyPhone,
-                    email: formData.contactEmail,
-                  }}
-                />
-              }
-            />
-          </motion.div>
+                }
+                preview={
+                  <CompanyInfoPreview
+                    data={{
+                      name: 'GB Locações',
+                      description: formData.aboutUsText,
+                      address: formData.companyAddress,
+                      phone: formData.companyPhone,
+                      email: formData.contactEmail,
+                    }}
+                  />
+                }
+              />
+            </motion.div>
+          )}
 
           {/* Hero Carousel */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <SettingsBlock
-              title="Carousel Principal"
-              description="Configure as imagens e conteúdo do carousel da página inicial"
-              icon={Images}
-              form={
-                <div className="space-y-4">
-                  <p className="text-sm text-gray-600">
-                    Gerencie as imagens e conteúdo do carousel principal da página inicial.
-                  </p>
-                  <div className="bg-gray-50 p-4 rounded-lg text-center">
-                    <p className="text-sm text-gray-500">
-                      Componente de gerenciamento do carousel em desenvolvimento
+          {activeSection === 'hero' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <SettingsBlock
+                title="Carousel Principal"
+                description="Configure as imagens e conteúdo do carousel da página inicial"
+                icon={Images}
+                form={
+                  <div className="space-y-4">
+                    <p className="text-sm text-gray-600">
+                      Gerencie as imagens e conteúdo do carousel principal da página inicial.
                     </p>
+                    <div className="bg-gray-50 p-4 rounded-lg text-center">
+                      <p className="text-sm text-gray-500">
+                        Componente de gerenciamento do carousel em desenvolvimento
+                      </p>
+                    </div>
                   </div>
-                </div>
-              }
-              preview={<HeroCarouselPreview data={{ heroCarousel: [] }} />}
-            />
-          </motion.div>
+                }
+                preview={<HeroCarouselPreview data={{ heroCarousel: [] }} />}
+              />
+            </motion.div>
+          )}
 
           {/* Redes Sociais */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <SettingsBlock
-              title="Redes Sociais"
-              description="Configure os links das redes sociais da empresa"
-              icon={Share2}
-              form={
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="whatsappNumber">WhatsApp</Label>
-                    <Input
-                      id="whatsappNumber"
-                      value={formData.whatsappNumber || ''}
-                      onChange={(e) => updateField('whatsappNumber', e.target.value)}
-                      placeholder="5511999999999"
-                      className="mt-1"
-                    />
-                  </div>
+          {activeSection === 'social' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <SettingsBlock
+                title="Redes Sociais"
+                description="Configure os links das redes sociais da empresa"
+                icon={Share2}
+                form={
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="whatsappNumber">WhatsApp</Label>
+                      <Input
+                        id="whatsappNumber"
+                        value={formData.whatsappNumber || ''}
+                        onChange={(e) => updateField('whatsappNumber', e.target.value)}
+                        placeholder="5511999999999"
+                        className="mt-1"
+                      />
+                    </div>
 
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <p className="text-sm text-gray-500">
-                      Campos para Instagram, Facebook, LinkedIn em desenvolvimento
-                    </p>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-sm text-gray-500">
+                        Campos para Instagram, Facebook, LinkedIn em desenvolvimento
+                      </p>
+                    </div>
                   </div>
-                </div>
-              }
-              preview={<SocialLinksPreview data={{ socialLinks: [] }} />}
-            />
-          </motion.div>
+                }
+                preview={<SocialLinksPreview data={{ socialLinks: [] }} />}
+              />
+            </motion.div>
+          )}
 
           {/* SEO */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <SettingsBlock
-              title="SEO e Metadados"
-              description="Configure informações para otimização de motores de busca"
-              icon={Search}
-              form={
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="seoTitle">Título SEO</Label>
-                    <Input
-                      id="seoTitle"
-                      value={formData.seoTitle || ''}
-                      onChange={(e) => updateField('seoTitle', e.target.value)}
-                      placeholder="GB Locações - Equipamentos para Construção"
-                      className="mt-1"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">Máximo 60 caracteres recomendado</p>
-                  </div>
+          {activeSection === 'seo' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <SettingsBlock
+                title="SEO e Metadados"
+                description="Configure informações para otimização de motores de busca"
+                icon={Search}
+                form={
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="seoTitle">Título SEO</Label>
+                      <Input
+                        id="seoTitle"
+                        value={formData.seoTitle || ''}
+                        onChange={(e) => updateField('seoTitle', e.target.value)}
+                        placeholder="GB Locações - Equipamentos para Construção"
+                        className="mt-1"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Máximo 60 caracteres recomendado</p>
+                    </div>
 
-                  <div>
-                    <Label htmlFor="seoDescription">Meta Descrição</Label>
-                    <Textarea
-                      id="seoDescription"
-                      value={formData.seoDescription || ''}
-                      onChange={(e) => updateField('seoDescription', e.target.value)}
-                      placeholder="Descrição que aparece nos resultados de busca"
-                      className="mt-1"
-                      rows={3}
-                    />
-                    <p className="text-xs text-gray-500 mt-1">Máximo 160 caracteres recomendado</p>
-                  </div>
+                    <div>
+                      <Label htmlFor="seoDescription">Meta Descrição</Label>
+                      <Textarea
+                        id="seoDescription"
+                        value={formData.seoDescription || ''}
+                        onChange={(e) => updateField('seoDescription', e.target.value)}
+                        placeholder="Descrição que aparece nos resultados de busca"
+                        className="mt-1"
+                        rows={3}
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Máximo 160 caracteres recomendado
+                      </p>
+                    </div>
 
-                  <div>
-                    <Label htmlFor="favicon">Favicon URL</Label>
-                    <Input
-                      id="favicon"
-                      value={formData.favicon || ''}
-                      onChange={(e) => updateField('favicon', e.target.value)}
-                      placeholder="https://exemplo.com/favicon.ico"
-                      className="mt-1"
-                    />
+                    <div>
+                      <Label htmlFor="favicon">Favicon URL</Label>
+                      <Input
+                        id="favicon"
+                        value={formData.favicon || ''}
+                        onChange={(e) => updateField('favicon', e.target.value)}
+                        placeholder="https://exemplo.com/favicon.ico"
+                        className="mt-1"
+                      />
+                    </div>
                   </div>
-                </div>
-              }
-              preview={
-                <SeoPreview
-                  data={{
-                    seoTitle: formData.seoTitle,
-                    seoDescription: formData.seoDescription,
-                    favicon: formData.favicon,
-                  }}
-                />
-              }
-            />
-          </motion.div>
+                }
+                preview={
+                  <SeoPreview
+                    data={{
+                      seoTitle: formData.seoTitle,
+                      seoDescription: formData.seoDescription,
+                      favicon: formData.favicon,
+                    }}
+                  />
+                }
+              />
+            </motion.div>
+          )}
 
           {/* Sistema */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <SettingsBlock
-              title="Configurações do Sistema"
-              description="Configurações gerais de funcionamento da plataforma"
-              icon={Settings}
-              form={
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label>Modo Manutenção</Label>
-                      <p className="text-sm text-gray-500">Ativar para manutenção do sistema</p>
+          {activeSection === 'system' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <SettingsBlock
+                title="Configurações do Sistema"
+                description="Configurações gerais de funcionamento da plataforma"
+                icon={Settings}
+                form={
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Label>Modo Manutenção</Label>
+                        <p className="text-sm text-gray-500">Ativar para manutenção do sistema</p>
+                      </div>
+                      <Switch
+                        checked={formData.maintenanceMode}
+                        onCheckedChange={(checked) => updateField('maintenanceMode', checked)}
+                      />
                     </div>
-                    <Switch
-                      checked={formData.maintenanceMode}
-                      onCheckedChange={(checked) => updateField('maintenanceMode', checked)}
-                    />
-                  </div>
 
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <Label>Chat de Suporte</Label>
-                      <p className="text-sm text-gray-500">Exibir widget de chat no site</p>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <Label>Chat de Suporte</Label>
+                        <p className="text-sm text-gray-500">Exibir widget de chat no site</p>
+                      </div>
+                      <Switch
+                        checked={formData.supportChat}
+                        onCheckedChange={(checked) => updateField('supportChat', checked)}
+                      />
                     </div>
-                    <Switch
-                      checked={formData.supportChat}
-                      onCheckedChange={(checked) => updateField('supportChat', checked)}
-                    />
-                  </div>
 
-                  <div>
-                    <Label htmlFor="defaultLanguage">Idioma Padrão</Label>
-                    <Input
-                      id="defaultLanguage"
-                      value={formData.defaultLanguage || ''}
-                      onChange={(e) => updateField('defaultLanguage', e.target.value)}
-                      placeholder="pt-BR"
-                      className="mt-1"
-                    />
-                  </div>
+                    <div>
+                      <Label htmlFor="defaultLanguage">Idioma Padrão</Label>
+                      <Input
+                        id="defaultLanguage"
+                        value={formData.defaultLanguage || ''}
+                        onChange={(e) => updateField('defaultLanguage', e.target.value)}
+                        placeholder="pt-BR"
+                        className="mt-1"
+                      />
+                    </div>
 
-                  <div>
-                    <Label htmlFor="baseCurrency">Moeda Base</Label>
-                    <Input
-                      id="baseCurrency"
-                      value={formData.baseCurrency || ''}
-                      onChange={(e) => updateField('baseCurrency', e.target.value)}
-                      placeholder="BRL"
-                      className="mt-1"
-                    />
+                    <div>
+                      <Label htmlFor="baseCurrency">Moeda Base</Label>
+                      <Input
+                        id="baseCurrency"
+                        value={formData.baseCurrency || ''}
+                        onChange={(e) => updateField('baseCurrency', e.target.value)}
+                        placeholder="BRL"
+                        className="mt-1"
+                      />
+                    </div>
                   </div>
-                </div>
-              }
-              preview={
-                <SystemPreview
-                  data={{
-                    maintenanceMode: formData.maintenanceMode,
-                    defaultCurrency: formData.baseCurrency,
-                    timezone: 'America/Sao_Paulo',
-                    allowRegistration: true,
-                    requireEmailVerification: true,
-                    maxQuoteItems: 50,
-                  }}
-                />
-              }
-            />
-          </motion.div>
+                }
+                preview={
+                  <SystemPreview
+                    data={{
+                      maintenanceMode: formData.maintenanceMode,
+                      defaultCurrency: formData.baseCurrency,
+                      timezone: 'America/Sao_Paulo',
+                      allowRegistration: true,
+                      requireEmailVerification: true,
+                      maxQuoteItems: 50,
+                    }}
+                  />
+                }
+              />
+            </motion.div>
+          )}
 
           {/* Configurações Avançadas */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <SettingsBlock
-              title="Configurações Avançadas"
-              description="CSS/JS customizado e códigos de rastreamento"
-              icon={Code}
-              form={
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="analyticsTrackingId">Google Analytics ID</Label>
-                    <Input
-                      id="analyticsTrackingId"
-                      value={formData.analyticsTrackingId || ''}
-                      onChange={(e) => updateField('analyticsTrackingId', e.target.value)}
-                      placeholder="GA_TRACKING_ID"
-                      className="mt-1"
-                    />
-                  </div>
+          {activeSection === 'custom' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <SettingsBlock
+                title="Configurações Avançadas"
+                description="CSS/JS customizado e códigos de rastreamento"
+                icon={Code}
+                form={
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="analyticsTrackingId">Google Analytics ID</Label>
+                      <Input
+                        id="analyticsTrackingId"
+                        value={formData.analyticsTrackingId || ''}
+                        onChange={(e) => updateField('analyticsTrackingId', e.target.value)}
+                        placeholder="GA_TRACKING_ID"
+                        className="mt-1"
+                      />
+                    </div>
 
-                  <div>
-                    <Label htmlFor="customCss">CSS Customizado</Label>
-                    <Textarea
-                      id="customCss"
-                      value={formData.customCss || ''}
-                      onChange={(e) => updateField('customCss', e.target.value)}
-                      placeholder="/* CSS customizado */"
-                      className="mt-1 font-mono text-sm"
-                      rows={5}
-                    />
-                  </div>
+                    <div>
+                      <Label htmlFor="customCss">CSS Customizado</Label>
+                      <Textarea
+                        id="customCss"
+                        value={formData.customCss || ''}
+                        onChange={(e) => updateField('customCss', e.target.value)}
+                        placeholder="/* CSS customizado */"
+                        className="mt-1 font-mono text-sm"
+                        rows={5}
+                      />
+                    </div>
 
-                  <div>
-                    <Label htmlFor="customJs">JavaScript Customizado</Label>
-                    <Textarea
-                      id="customJs"
-                      value={formData.customJs || ''}
-                      onChange={(e) => updateField('customJs', e.target.value)}
-                      placeholder="// JavaScript customizado"
-                      className="mt-1 font-mono text-sm"
-                      rows={5}
-                    />
+                    <div>
+                      <Label htmlFor="customJs">JavaScript Customizado</Label>
+                      <Textarea
+                        id="customJs"
+                        value={formData.customJs || ''}
+                        onChange={(e) => updateField('customJs', e.target.value)}
+                        placeholder="// JavaScript customizado"
+                        className="mt-1 font-mono text-sm"
+                        rows={5}
+                      />
+                    </div>
                   </div>
-                </div>
-              }
-              preview={
-                <CustomSettingsPreview
-                  data={{
-                    customCss: formData.customCss,
-                    customJs: formData.customJs,
-                    gtmId: formData.analyticsTrackingId,
-                  }}
-                />
-              }
-            />
-          </motion.div>
+                }
+                preview={
+                  <CustomSettingsPreview
+                    data={{
+                      customCss: formData.customCss,
+                      customJs: formData.customJs,
+                      gtmId: formData.analyticsTrackingId,
+                    }}
+                  />
+                }
+              />
+            </motion.div>
+          )}
 
-          {/* Botão de Salvar */}
+          {/* Botão de Salvar - sempre visível */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
