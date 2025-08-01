@@ -18,6 +18,8 @@ export default [
       '**/out/**',
       '**/dist/**',
       '**/build/**',
+      '**/next-env.d.ts',
+      '**/scripts/**/*.mjs',
       '**/.vercel/**',
       '**/.turbo/**',
       '**/coverage/**',

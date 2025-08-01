@@ -218,7 +218,9 @@ async function seedEquipments() {
   ];
 
   for (const equipment of equipments) {
-    const category = categories.find((cat) => cat.slug === equipment.categorySlug);
+    const category = categories.find(
+      (cat: { slug: string; id: string; name: string }) => cat.slug === equipment.categorySlug,
+    );
 
     if (!category) {
       console.error(`Category not found for slug: ${equipment.categorySlug}`);

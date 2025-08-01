@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "prisma generate && next build",
+    "check:equipments": "node scripts/check-equipments.mjs",
     "codex:setup": "pnpm install && pnpm db:generate && pnpm db:push",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
