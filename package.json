@@ -84,12 +84,12 @@
     "eslint-plugin-prettier": "latest",
     "eslint-plugin-react": "latest",
     "eslint-plugin-react-hooks": "latest",
-    "framer-motion": "^12.23.11",
+    "framer-motion": "^12.23.12",
     "globals": "latest",
     "happy-dom": "latest",
     "input-otp": "latest",
     "jsonwebtoken": "^9.0.2",
-    "lucide-react": "^0.534.0",
+    "lucide-react": "^0.536.0",
     "next": "15.4.5",
     "next-auth": "4.24.11",
     "next-themes": "latest",
@@ -106,15 +106,15 @@
     "scrollreveal": "^4.0.9",
     "sonner": "latest",
     "stripe": "latest",
-    "svelte": "^5.37.1",
+    "svelte": "^5.37.2",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "typescript-eslint": "latest",
     "vaul": "latest",
     "vue": "latest",
     "vue-router": "latest",
-    "zod": "^4.0.13",
-    "zustand": "^5.0.2"
+    "zod": "^4.0.14",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.4",
@@ -133,12 +133,12 @@
     "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.2",
-    "typescript": "^5",
+    "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
   "packageManager": "pnpm@10.13.1",
   "engines": {
-    "node": "20.x",
+    "node": ">=20.0.0",
     "pnpm": ">=10.0.0"
   },
   "pnpm": {

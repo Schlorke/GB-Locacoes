@@ -80,7 +80,16 @@ export default function SettingsPage() {
             maintenanceMode: result.data.maintenanceMode || false,
             analyticsTrackingId: result.data.analyticsTrackingId || '',
             footerText: result.data.footerText || '',
-            businessHours: result.data.businessHours || {},
+            businessHours:
+              (result.data.businessHours as {
+                monday?: { closed: boolean; open?: string; close?: string };
+                tuesday?: { closed: boolean; open?: string; close?: string };
+                wednesday?: { closed: boolean; open?: string; close?: string };
+                thursday?: { closed: boolean; open?: string; close?: string };
+                friday?: { closed: boolean; open?: string; close?: string };
+                saturday?: { closed: boolean; open?: string; close?: string };
+                sunday?: { closed: boolean; open?: string; close?: string };
+              }) || {},
             supportChat: result.data.supportChat !== false,
             whatsappNumber: result.data.whatsappNumber || '',
             favicon: result.data.favicon || '',
@@ -88,9 +97,31 @@ export default function SettingsPage() {
             defaultLanguage: result.data.defaultLanguage || 'pt-BR',
             baseCurrency: result.data.baseCurrency || 'BRL',
             maintenanceMessage: result.data.maintenanceMessage || '',
-            smtpConfig: result.data.smtpConfig || {},
-            uploadLimits: result.data.uploadLimits || {},
-            securityConfig: result.data.securityConfig || {},
+            smtpConfig:
+              (result.data.smtpConfig as {
+                host?: string;
+                port?: number;
+                secure?: boolean;
+                username?: string;
+                password?: string;
+                fromEmail?: string;
+                fromName?: string;
+              }) || {},
+            uploadLimits:
+              (result.data.uploadLimits as {
+                maxFileSize?: number;
+                allowedTypes?: string[];
+                maxFiles?: number;
+              }) || {},
+            securityConfig:
+              (result.data.securityConfig as {
+                enableRecaptcha?: boolean;
+                recaptchaSiteKey?: string;
+                recaptchaSecretKey?: string;
+                enable2FA?: boolean;
+                sessionTimeout?: number;
+                maxLoginAttempts?: number;
+              }) || {},
             customCss: result.data.customCss || '',
             customJs: result.data.customJs || '',
           });
