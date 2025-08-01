@@ -11,7 +11,6 @@ import {
   SocialLinksPreview,
   SystemPreview,
 } from '@/components/admin/settings-previews';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -27,6 +26,27 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [activeSection, setActiveSection] = useState<string>('company');
+
+  // Estados de loading por seção
+  const [sectionLoading, setSectionLoading] = useState({
+    company: false,
+    hero: false,
+    social: false,
+    seo: false,
+    system: false,
+    custom: false,
+  });
+
+  // Estados de reset por seção
+  const [sectionResetting, setSectionResetting] = useState({
+    company: false,
+    hero: false,
+    social: false,
+    seo: false,
+    system: false,
+    custom: false,
+  });
+
   const [formData, setFormData] = useState<SettingsInput>({
     companyPhone: '',
     companyIconUrl: '',
@@ -146,6 +166,126 @@ export default function SettingsPage() {
     }));
   };
 
+  // Funções específicas para salvar cada seção
+  const saveSection = async (section: keyof typeof sectionLoading) => {
+    setSectionLoading((prev) => ({ ...prev, [section]: true }));
+
+    try {
+      const result = await updateSettings(formData);
+
+      if (result.success) {
+        toast({
+          title: 'Sucesso!',
+          description: `Configurações de ${getSectionName(section)} atualizadas com sucesso.`,
+        });
+      } else {
+        toast({
+          title: 'Erro',
+          description: result.error || 'Erro ao atualizar configurações.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao salvar:', error);
+      toast({
+        title: 'Erro',
+        description: 'Erro interno do servidor.',
+        variant: 'destructive',
+      });
+    } finally {
+      setSectionLoading((prev) => ({ ...prev, [section]: false }));
+    }
+  };
+
+  const getSectionName = (section: string) => {
+    const names = {
+      company: 'empresa',
+      hero: 'carrossel',
+      social: 'redes sociais',
+      seo: 'SEO',
+      system: 'sistema',
+      custom: 'personalização',
+    };
+    return names[section as keyof typeof names] || section;
+  };
+
+  // Funções de reset por seção
+  const resetSection = async (section: keyof typeof sectionResetting) => {
+    setSectionResetting((prev) => ({ ...prev, [section]: true }));
+
+    try {
+      // Simula um delay para mostrar a animação
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      const defaults = getDefaultValues(section);
+      setFormData((prev) => ({ ...prev, ...defaults }));
+
+      toast({
+        title: 'Configurações resetadas',
+        description: `Configurações de ${getSectionName(section)} foram restauradas para os valores padrão.`,
+      });
+    } catch (error) {
+      toast({
+        title: 'Erro ao resetar',
+        description: 'Ocorreu um erro ao restaurar as configurações.',
+        variant: 'destructive',
+      });
+    } finally {
+      setSectionResetting((prev) => ({ ...prev, [section]: false }));
+    }
+  };
+
+  const getDefaultValues = (section: string): Partial<SettingsInput> => {
+    switch (section) {
+      case 'company':
+        return {
+          companyPhone: '',
+          contactEmail: '',
+          companyAddress: '',
+          aboutUsText: '',
+          companyIconUrl: '',
+        };
+      case 'hero':
+        return {
+          heroCarousel: [],
+        };
+      case 'social':
+        return {
+          whatsappNumber: '',
+          socialLinks: {},
+        };
+      case 'seo':
+        return {
+          seoTitle: 'GB Locações - Equipamentos para Construção',
+          seoDescription: 'Locação de equipamentos para construção civil com qualidade e segurança',
+          favicon: '',
+        };
+      case 'system':
+        return {
+          maintenanceMode: false,
+          supportChat: true,
+          defaultLanguage: 'pt-BR',
+          baseCurrency: 'BRL',
+        };
+      case 'custom':
+        return {
+          analyticsTrackingId: '',
+          customCss: '',
+          customJs: '',
+        };
+      default:
+        return {};
+    }
+  };
+
+  // Funções específicas de save para cada seção
+  const saveCompanySettings = () => saveSection('company');
+  const saveHeroSettings = () => saveSection('hero');
+  const saveSocialSettings = () => saveSection('social');
+  const saveSeoSettings = () => saveSection('seo');
+  const saveSystemSettings = () => saveSection('system');
+  const saveCustomSettings = () => saveSection('custom');
+
   if (isLoadingData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -199,8 +339,8 @@ export default function SettingsPage() {
           <SettingsNavigationBar onSectionSelect={setActiveSection} activeSection={activeSection} />
         </motion.div>
 
-        {/* Formulário com previews */}
-        <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Conteúdo das configurações */}
+        <div className="space-y-8">
           {/* Renderização condicional das seções */}
           {activeSection === 'company' && (
             <motion.div
@@ -284,6 +424,10 @@ export default function SettingsPage() {
                     }}
                   />
                 }
+                onSave={saveCompanySettings}
+                onReset={() => resetSection('company')}
+                isSaving={sectionLoading.company}
+                isResetting={sectionResetting.company}
               />
             </motion.div>
           )}
@@ -312,6 +456,10 @@ export default function SettingsPage() {
                   </div>
                 }
                 preview={<HeroCarouselPreview data={{ heroCarousel: [] }} />}
+                onSave={saveHeroSettings}
+                onReset={() => resetSection('hero')}
+                isSaving={sectionLoading.hero}
+                isResetting={sectionResetting.hero}
               />
             </motion.div>
           )}
@@ -348,6 +496,10 @@ export default function SettingsPage() {
                   </div>
                 }
                 preview={<SocialLinksPreview data={{ socialLinks: [] }} />}
+                onSave={saveSocialSettings}
+                onReset={() => resetSection('social')}
+                isSaving={sectionLoading.social}
+                isResetting={sectionResetting.social}
               />
             </motion.div>
           )}
@@ -413,6 +565,10 @@ export default function SettingsPage() {
                     }}
                   />
                 }
+                onSave={saveSeoSettings}
+                onReset={() => resetSection('seo')}
+                isSaving={sectionLoading.seo}
+                isResetting={sectionResetting.seo}
               />
             </motion.div>
           )}
@@ -487,6 +643,10 @@ export default function SettingsPage() {
                     }}
                   />
                 }
+                onSave={saveSystemSettings}
+                onReset={() => resetSection('system')}
+                isSaving={sectionLoading.system}
+                isResetting={sectionResetting.system}
               />
             </motion.div>
           )}
@@ -549,33 +709,14 @@ export default function SettingsPage() {
                     }}
                   />
                 }
+                onSave={saveCustomSettings}
+                onReset={() => resetSection('custom')}
+                isSaving={sectionLoading.custom}
+                isResetting={sectionResetting.custom}
               />
             </motion.div>
           )}
-
-          {/* Botão de Salvar - sempre visível */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="flex justify-end pt-6"
-          >
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg transition-all duration-200"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Salvando...
-                </>
-              ) : (
-                'Salvar Configurações'
-              )}
-            </Button>
-          </motion.div>
-        </form>
+        </div>
       </div>
     </div>
   );

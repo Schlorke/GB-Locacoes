@@ -346,13 +346,12 @@ export default function AdminEquipmentsPage() {
               },
             ]}
             actionButtons={
-              <Button
-                asChild
-                className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg shadow-md transition-all duration-300"
-              >
+              <Button asChild variant="default">
                 <Link href="/admin/equipamentos/novo">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Novo Equipamento
+                  <Plus className="w-4 h-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
+                  <span className="group-hover:text-orange-500 transition-colors duration-200">
+                    Novo Equipamento
+                  </span>
                 </Link>
               </Button>
             }
@@ -385,13 +384,12 @@ export default function AdminEquipmentsPage() {
                 <p className="text-gray-500 mb-6 text-center">
                   Comece adicionando o primeiro equipamento ao catálogo
                 </p>
-                <Button
-                  asChild
-                  className="bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300"
-                >
+                <Button asChild variant="default">
                   <Link href="/admin/equipamentos/novo">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Adicionar Equipamento
+                    <Plus className="w-4 h-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
+                    <span className="group-hover:text-orange-500 transition-colors duration-200">
+                      Adicionar Equipamento
+                    </span>
                   </Link>
                 </Button>
               </CardContent>
@@ -853,16 +851,19 @@ export default function AdminEquipmentsPage() {
                   Fechar
                 </Button>
                 <Button
+                  variant="default"
                   onClick={() => {
                     if (selectedEquipment) {
                       setSelectedEquipment(null);
                       window.location.href = `/admin/equipamentos/${selectedEquipment.id}/editar`;
                     }
                   }}
-                  className="flex-1 h-10 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300"
+                  className="flex-1"
                 >
-                  <Edit className="w-4 h-4 mr-2" />
-                  Editar Equipamento
+                  <Edit className="w-4 h-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
+                  <span className="group-hover:text-orange-500 transition-colors duration-200">
+                    Editar Equipamento
+                  </span>
                 </Button>
               </div>
             </DialogFooter>

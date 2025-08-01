@@ -68,7 +68,7 @@ export function AdminFilterCard({
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
       <CardContent className="relative z-10 p-4 sm:p-6">
-        <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 items-center justify-between">
+        <div className="flex flex-col xl:flex-row gap-2 sm:gap-3 items-center justify-between">
           {/* Left Side - Search and Filters */}
           <div className="flex flex-col md:flex-row gap-3 sm:gap-5 flex-1 w-full items-center">
             {/* Search Input */}
@@ -95,12 +95,12 @@ export function AdminFilterCard({
 
               {/* Filter Selects */}
               <FilterSelectGroup filters={filters} gap="md" />
-
-              {/* Reset Button - SEMPRE VISÍVEL e ALINHADO */}
-              <div className="flex items-center justify-center flex-shrink-0">
-                <FilterResetButton onClick={handleReset} title="Resetar filtros" size="md" />
-              </div>
             </div>
+          </div>
+
+          {/* Reset Button - Separado entre filtros e botão */}
+          <div className="flex items-center justify-center flex-shrink-0 h-10">
+            <FilterResetButton onClick={handleReset} title="Resetar filtros" size="md" />
           </div>
 
           {/* Right Side - Action Buttons */}

@@ -25,7 +25,7 @@ export function FilterIndicator({
   };
 
   return (
-    <div className="flex items-center justify-center flex-shrink-0">
+    <div className="flex items-center justify-center flex-shrink-0 h-10">
       <Funnel
         className={cn(
           'transition-colors duration-300',

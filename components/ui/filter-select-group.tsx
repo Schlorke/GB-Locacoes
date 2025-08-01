@@ -34,7 +34,7 @@ export function FilterSelectGroup({
           onValueChange={filter.onValueChange}
           placeholder={filter.placeholder || filter.label}
           className={cn(
-            'w-full md:w-[200px]',
+            'w-full md:w-[200px] h-10',
             filter.value && filter.value !== 'all' && activeClassName,
             selectClassName,
           )}

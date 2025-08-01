@@ -1,8 +1,10 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import type { LucideIcon } from 'lucide-react';
+import { Loader2, RotateCcw, Save } from 'lucide-react';
 
 interface SettingsBlockProps {
   title: string;
@@ -11,6 +13,10 @@ interface SettingsBlockProps {
   form: React.ReactNode;
   preview: React.ReactNode;
   delay?: number;
+  onSave?: () => void | Promise<void>;
+  onReset?: () => void | Promise<void>;
+  isSaving?: boolean;
+  isResetting?: boolean;
 }
 
 export function SettingsBlock({
@@ -20,6 +26,10 @@ export function SettingsBlock({
   form,
   preview,
   delay = 0,
+  onSave,
+  onReset,
+  isSaving = false,
+  isResetting = false,
 }: SettingsBlockProps) {
   return (
     <motion.div
@@ -69,6 +79,46 @@ export function SettingsBlock({
                 </CardContent>
               </Card>
             </div>
+          </div>
+
+          {/* Botões de ação no canto inferior direito do bloco principal */}
+          <div className="flex items-center justify-end gap-2 mt-6 pt-4 border-t border-gray-200/60">
+            {/* Botão Reset */}
+            <Button
+              type="button"
+              variant="reset"
+              size="default"
+              onClick={onReset}
+              disabled={isSaving || isResetting}
+              title="Restaurar configurações padrão"
+            >
+              {isResetting ? (
+                <Loader2 className="w-4 h-4 animate-spin -rotate-180 group-hover:text-orange-500 transition-colors duration-200" />
+              ) : (
+                <RotateCcw className="w-4 h-4 group-hover:text-orange-500 transition-colors duration-200" />
+              )}
+              <span className="group-hover:text-orange-500 transition-colors duration-200">
+                {isResetting ? 'Resetando...' : 'Resetar'}
+              </span>
+            </Button>
+
+            {/* Botão Salvar */}
+            <Button
+              type="button"
+              variant="default"
+              size="default"
+              onClick={onSave}
+              disabled={isSaving}
+            >
+              {isSaving ? (
+                <Loader2 className="w-4 h-4 animate-spin group-hover:text-orange-500 transition-colors duration-200" />
+              ) : (
+                <Save className="w-4 h-4 group-hover:text-orange-500 transition-colors duration-200" />
+              )}
+              <span className="group-hover:text-orange-500 transition-colors duration-200">
+                {isSaving ? 'Salvando...' : 'Salvar Alterações'}
+              </span>
+            </Button>
           </div>
         </CardContent>
       </Card>
