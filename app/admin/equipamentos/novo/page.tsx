@@ -475,7 +475,7 @@ export default function NovoEquipamento() {
                       variant="outline"
                       type="button"
                       asChild
-                      className="w-full sm:w-auto border-gray-200 hover:bg-gray-50"
+                      className="w-full sm:w-auto hover:text-orange-500 border-gray-200 hover:bg-gray-50"
                     >
                       <Link href="/admin/equipamentos">Cancelar</Link>
                     </Button>

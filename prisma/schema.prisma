@@ -250,3 +250,37 @@ enum user_role {
   FINANCIAL
   CUSTOMER
 }
+
+model Setting {
+  id                   String   @id @default(uuid())
+  companyPhone         String   @default("")
+  companyIconUrl       String   @default("")
+  aboutUsText          String   @default("")
+  companyAddress       String   @default("")
+  heroCarousel         Json     @default("[]")
+  contactEmail         String   @default("")
+  socialLinks          Json     @default("{}")
+  seoTitle             String   @default("GB Locações - Equipamentos para Construção")
+  seoDescription       String   @default("Locação de equipamentos para construção civil com qualidade e segurança")
+  themeColorPrimary    String   @default("#ea580c")
+  maintenanceMode      Boolean  @default(false)
+  analyticsTrackingId  String   @default("")
+  footerText           String   @default("")
+  businessHours        Json     @default("{}")
+  supportChat          Boolean  @default(true)
+  whatsappNumber       String   @default("")
+  favicon              String   @default("")
+  logoSecondary        String   @default("")
+  defaultLanguage      String   @default("pt-BR")
+  baseCurrency         String   @default("BRL")
+  maintenanceMessage   String   @default("Site em manutenção. Voltamos em breve!")
+  smtpConfig           Json     @default("{}")
+  uploadLimits         Json     @default("{}")
+  securityConfig       Json     @default("{}")
+  customCss            String   @default("")
+  customJs             String   @default("")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@map("settings")
+}
