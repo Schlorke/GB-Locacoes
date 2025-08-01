@@ -67,13 +67,13 @@ export function AdminFilterCard({
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-      <CardContent className="relative z-10 p-6">
-        <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
+      <CardContent className="relative z-10 p-4 sm:p-6">
+        <div className="flex flex-col xl:flex-row gap-4 sm:gap-6 items-center justify-between">
           {/* Left Side - Search and Filters */}
-          <div className="flex flex-col md:flex-row gap-5 flex-1 w-full items-center">
+          <div className="flex flex-col md:flex-row gap-3 sm:gap-5 flex-1 w-full items-center">
             {/* Search Input */}
             {onSearchChange && (
-              <div className="relative flex-1  w-full md:w-auto">
+              <div className="relative flex-1 w-full md:w-auto">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   placeholder={searchPlaceholder}
@@ -89,7 +89,7 @@ export function AdminFilterCard({
             )}
 
             {/* Filters Row */}
-            <div className="flex items-center gap-4 w-full md:w-auto">
+            <div className="flex items-center gap-2 sm:gap-4 w-full md:w-auto">
               {/* Filter Icon */}
               {filters.length > 0 && <FilterIndicator isFiltered={isFiltered} />}
 
@@ -105,7 +105,7 @@ export function AdminFilterCard({
 
           {/* Right Side - Action Buttons */}
           {actionButtons && (
-            <div className="flex items-center justify-center gap-3 w-full lg:w-auto">
+            <div className="flex items-center justify-center gap-3 w-full xl:w-auto">
               {actionButtons}
             </div>
           )}

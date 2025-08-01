@@ -278,12 +278,12 @@ export default function AdminEquipmentsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+      <div className="p-3 sm:p-4 lg:p-6 xl:p-8 max-w-none xl:max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
+          className="mb-6 lg:mb-8"
         >
           <AdminPageHeader
             title="Gerenciar Equipamentos"
@@ -396,7 +396,7 @@ export default function AdminEquipmentsPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-6 xl:gap-6">
               <AnimatePresence>
                 {filteredEquipments.map((equipment, index) => (
                   <motion.div
@@ -420,7 +420,7 @@ export default function AdminEquipmentsPage() {
                       <CardHeader className="relative z-10 pb-3">
                         <div className="flex flex-col">
                           {/* Imagem do equipamento */}
-                          <div className="w-full h-48 mb-4 bg-gray-100 rounded-lg overflow-hidden">
+                          <div className="w-full h-48 mb-6 md:mb-4 bg-gray-100 rounded-lg overflow-hidden">
                             {equipment.images && equipment.images.length > 0 ? (
                               <Image
                                 src={equipment.images[0]}
@@ -440,14 +440,14 @@ export default function AdminEquipmentsPage() {
                             <h3 className="font-semibold text-lg text-gray-900 truncate">
                               {equipment.name}
                             </h3>
-                            <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                            <p className="text-sm text-gray-500 mt-2 md:mt-1 line-clamp-2">
                               {equipment.description || 'Sem descrição'}
                             </p>
                           </div>
                         </div>
                       </CardHeader>
                       <CardContent className="relative z-10 pt-0 flex-1 flex flex-col justify-between">
-                        <div className="grid grid-cols-2 grid-rows-2">
+                        <div className="grid grid-cols-2 grid-rows-2 gap-y-4 md:gap-y-2">
                           {/* Linha 1, Coluna 1 - Categoria */}
                           <div className="flex items-center justify-start">
                             {equipment.category ? (
@@ -503,7 +503,7 @@ export default function AdminEquipmentsPage() {
 
                         {/* Botões de ação */}
                         <div
-                          className={`flex items-center justify-end gap-1 mt-4 transition-all duration-300 ${
+                          className={`flex items-center justify-end gap-1 mt-6 md:mt-4 transition-all duration-300 ${
                             isMobile
                               ? activeCardId === equipment.id
                                 ? 'opacity-100'

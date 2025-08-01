@@ -69,7 +69,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
       {/* Overlay */}
       <div
         className={cn(
-          'fixed inset-0 z-50 bg-black/80 transition-opacity duration-300',
+          'fixed inset-0 z-[9998] bg-black/80 transition-opacity duration-300',
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
         )}
         onClick={onClose}
@@ -78,7 +78,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
       {/* Sidebar */}
       <div
         className={cn(
-          'fixed inset-y-0 right-0 z-50 w-80 bg-background border-l shadow-lg transform transition-transform duration-300 ease-in-out',
+          'fixed inset-y-0 right-0 z-[9999] w-80 bg-background border-l shadow-lg transform transition-transform duration-300 ease-in-out',
           isOpen ? 'translate-x-0' : 'translate-x-full',
         )}
       >
