@@ -1,11 +1,10 @@
 'use client';
 
+import { AdminFilterCard } from '@/components/admin/admin-filter-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -17,13 +16,11 @@ import {
   Clock,
   Eye,
   FileText,
-  Filter,
   Hash,
   Mail,
   MessageSquare,
   Package,
   Phone,
-  Search,
   User,
   XCircle,
 } from 'lucide-react';
@@ -84,6 +81,8 @@ function AdminQuotesPage() {
   const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [periodFilter, setPeriodFilter] = useState<string>('all');
+  const [valueFilter, setValueFilter] = useState<string>('all');
   const [isUpdating, setIsUpdating] = useState(false);
   const { toast } = useToast();
 
@@ -125,11 +124,52 @@ function AdminQuotesPage() {
 
       const matchesStatus = statusFilter === 'all' || quote.status === statusFilter;
 
-      return matchesSearch && matchesStatus;
+      // Filtro por período
+      let matchesPeriod = true;
+      if (periodFilter !== 'all') {
+        const now = new Date();
+        const startDate = new Date(quote.startDate);
+
+        switch (periodFilter) {
+          case 'today': {
+            matchesPeriod = startDate.toDateString() === now.toDateString();
+            break;
+          }
+          case 'week': {
+            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            matchesPeriod = startDate >= weekAgo;
+            break;
+          }
+          case 'month': {
+            const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+            matchesPeriod = startDate >= monthAgo;
+            break;
+          }
+        }
+      }
+
+      // Filtro por valor
+      let matchesValue = true;
+      if (valueFilter !== 'all') {
+        const totalPrice = quote.totalPrice || 0;
+        switch (valueFilter) {
+          case 'low':
+            matchesValue = totalPrice < 500;
+            break;
+          case 'medium':
+            matchesValue = totalPrice >= 500 && totalPrice < 2000;
+            break;
+          case 'high':
+            matchesValue = totalPrice >= 2000;
+            break;
+        }
+      }
+
+      return matchesSearch && matchesStatus && matchesPeriod && matchesValue;
     });
 
     setFilteredQuotes(filtered);
-  }, [quotes, searchTerm, statusFilter]);
+  }, [quotes, searchTerm, statusFilter, periodFilter, valueFilter]);
 
   useEffect(() => {
     fetchQuotes();
@@ -137,7 +177,7 @@ function AdminQuotesPage() {
 
   useEffect(() => {
     filterQuotes();
-  }, [quotes, searchTerm, statusFilter, filterQuotes]);
+  }, [quotes, searchTerm, statusFilter, periodFilter, valueFilter, filterQuotes]);
 
   const updateQuoteStatus = async (quoteId: string, newStatus: 'approved' | 'rejected') => {
     try {
@@ -246,39 +286,49 @@ function AdminQuotesPage() {
           transition={{ delay: 0.1 }}
           className="mb-6"
         >
-          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            {/* Clean depth layers for filter card */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
-
-            <CardContent className="relative z-10 p-6">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <Input
-                    placeholder="Buscar por nome, email, empresa..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 border-gray-200 focus:border-blue-500"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <Filter className="w-4 h-4 text-gray-500" />
-                  <CustomSelect
-                    value={statusFilter}
-                    onValueChange={setStatusFilter}
-                    placeholder="Filtrar por status"
-                    className="w-48"
-                  >
-                    <CustomSelectItem value="all">Todos os status</CustomSelectItem>
-                    <CustomSelectItem value="pending">Pendentes</CustomSelectItem>
-                    <CustomSelectItem value="approved">Aprovados</CustomSelectItem>
-                    <CustomSelectItem value="rejected">Rejeitados</CustomSelectItem>
-                  </CustomSelect>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <AdminFilterCard
+            searchPlaceholder="Buscar por nome, email, empresa..."
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            filters={[
+              {
+                label: 'Status',
+                value: statusFilter,
+                onValueChange: setStatusFilter,
+                placeholder: 'Filtrar por status',
+                options: [
+                  { value: 'all', label: 'Todos os status' },
+                  { value: 'pending', label: 'Pendentes' },
+                  { value: 'approved', label: 'Aprovados' },
+                  { value: 'rejected', label: 'Rejeitados' },
+                ],
+              },
+              {
+                label: 'Período',
+                value: periodFilter,
+                onValueChange: setPeriodFilter,
+                placeholder: 'Filtrar por período',
+                options: [
+                  { value: 'all', label: 'Todos os períodos' },
+                  { value: 'today', label: 'Hoje' },
+                  { value: 'week', label: 'Última semana' },
+                  { value: 'month', label: 'Último mês' },
+                ],
+              },
+              {
+                label: 'Valor',
+                value: valueFilter,
+                onValueChange: setValueFilter,
+                placeholder: 'Filtrar por valor',
+                options: [
+                  { value: 'all', label: 'Todos os valores' },
+                  { value: 'low', label: 'Até R$ 500' },
+                  { value: 'medium', label: 'R$ 500 - R$ 2.000' },
+                  { value: 'high', label: 'Acima de R$ 2.000' },
+                ],
+              },
+            ]}
+          />
         </motion.div>
 
         {/* Tabela de Orçamentos */}
