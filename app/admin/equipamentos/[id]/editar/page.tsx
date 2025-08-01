@@ -513,7 +513,7 @@ export default function EditarEquipamento() {
                       variant="outline"
                       type="button"
                       asChild
-                      className="w-full sm:w-auto bg-transparent"
+                      className="w-full sm:w-auto hover:text-orange-500 bg-transparent"
                     >
                       <Link href="/admin/equipamentos">Cancelar</Link>
                     </Button>

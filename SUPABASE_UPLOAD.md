@@ -97,4 +97,5 @@ Certifique-se de que o bucket está marcado como **público** no dashboard do Su
 
 ## 🚀 Deploy
 
-As variáveis de ambiente devem ser configuradas no seu provedor de hosting (Vercel, Netlify, etc.) para funcionamento em produção.
+As variáveis de ambiente devem ser configuradas no seu provedor de hosting
+(Vercel, Netlify, etc.) para funcionamento em produção.

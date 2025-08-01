@@ -9,7 +9,9 @@ Plataforma completa para locação de equipamentos de construção civil utiliza
 
 ## Visão Geral
 
-O projeto visa facilitar a gestão de catálogo, orçamentos e locações de equipamentos. Conta com painel administrativo, área do cliente e integrações para pagamentos, logística e assinaturas digitais.
+O projeto visa facilitar a gestão de catálogo, orçamentos e locações de
+equipamentos. Conta com painel administrativo, área do cliente e integrações
+para pagamentos, logística e assinaturas digitais.
 
 ## Demonstração
 
