@@ -1,7 +1,6 @@
 'use client';
 
 import { AdminFilterCard } from '@/components/admin/admin-filter-card';
-import { AdminPageHeader } from '@/components/admin/admin-page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -285,11 +284,28 @@ export default function AdminEquipmentsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 lg:mb-8"
         >
-          <AdminPageHeader
-            title="Gerenciar Equipamentos"
-            subtitle="Controle todo o catálogo de equipamentos para locação"
-            icon={<Package className="w-6 h-6 text-orange-200" />}
-          />
+          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+            {/* Clean depth layers without decorative elements */}
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
+
+            {/* Content */}
+            <div className="relative z-10">
+              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
+                Gerenciar Equipamentos
+              </h1>
+              <p className="text-orange-50 mb-4 font-medium">
+                Controle todo o catálogo de equipamentos para locação
+              </p>
+              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
+                <Package className="w-5 h-5 text-orange-50" />
+                <span className="font-semibold text-white">
+                  {Array.isArray(filteredEquipments) ? filteredEquipments.length : 0} equipamentos
+                  encontrados
+                </span>
+              </div>
+            </div>
+          </div>
         </motion.div>
 
         {/* Filtros e Ações */}
