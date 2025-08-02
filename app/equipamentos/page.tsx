@@ -5,7 +5,19 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
 import { Input } from '@/components/ui/input';
-import { Clock, Loader2, Search, Star } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Building,
+  Container,
+  Hammer,
+  Loader2,
+  Package,
+  Search,
+  Star,
+  Truck,
+  Wrench,
+  Zap,
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -27,6 +39,10 @@ interface Equipment {
     id: string;
     name: string;
     color?: string;
+    bgColor?: string;
+    fontColor?: string;
+    icon?: string;
+    iconColor?: string;
   };
   isAvailable: boolean;
   reviews?: Review[];
@@ -35,6 +51,10 @@ interface Equipment {
 interface Category {
   id: string;
   name: string;
+  bgColor?: string;
+  fontColor?: string;
+  icon?: string;
+  iconColor?: string;
 }
 
 export default function EquipmentsPage() {
@@ -45,6 +65,35 @@ export default function EquipmentsPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
+
+  // Mapeamento de ícones disponíveis
+  const iconMap = {
+    Building,
+    Container,
+    Hammer,
+    Package,
+    Truck,
+    Wrench,
+    Zap,
+  } as const;
+
+  // Função para renderizar ícones dinamicamente
+  const renderIcon = (iconName?: string, color?: string) => {
+    if (!iconName) return null;
+
+    try {
+      const IconComponent = iconMap[iconName as keyof typeof iconMap];
+      if (IconComponent && typeof IconComponent === 'function') {
+        return <IconComponent size={14} color={color || 'currentColor'} className="mr-1.5" />;
+      }
+    } catch (_error) {
+      // Fallback se o ícone não existir
+      return <Package size={14} color={color || 'currentColor'} className="mr-1.5" />;
+    }
+
+    // Fallback se o ícone não for encontrado
+    return <Package size={14} color={color || 'currentColor'} className="mr-1.5" />;
+  };
 
   useEffect(() => {
     fetchData();
@@ -106,22 +155,38 @@ export default function EquipmentsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
           <Loader2 className="h-12 w-12 animate-spin text-orange-600 mx-auto mb-4" />
-          <p className="text-gray-600">Carregando equipamentos...</p>
-        </div>
+          <p className="text-lg text-muted-foreground">Carregando equipamentos...</p>
+        </motion.div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Erro: {error}</p>
-          <Button onClick={fetchData}>Tentar Novamente</Button>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center"
+        >
+          <div className="bg-red-100 rounded-full p-4 mb-4 w-fit mx-auto">
+            <Package className="w-8 h-8 text-red-400" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            Erro ao carregar equipamentos
+          </h3>
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={fetchData} className="hover:scale-105 transition-transform duration-200">
+            Tentar Novamente
+          </Button>
+        </motion.div>
       </div>
     );
   }
@@ -129,163 +194,227 @@ export default function EquipmentsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl mb-12">
-          {/* Clean depth layers without decorative elements */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
+        {/* Header com gradiente */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+            {/* Clean depth layers without decorative elements */}
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
-          {/* Content */}
-          <div className="relative z-10 text-center">
-            <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
-              Catálogo de Equipamentos
-            </h1>
-            <p className="text-orange-50 mb-4 font-medium">
-              Encontre o equipamento ideal para sua obra
-            </p>
-            <div className="flex items-center justify-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit mx-auto">
-              <Search className="w-5 h-5 text-orange-50" />
-              <span className="font-semibold text-white">
-                {Array.isArray(filteredEquipments) ? filteredEquipments.length : 0} equipamentos
-                encontrados
-              </span>
+            {/* Content */}
+            <div className="relative z-10 text-center">
+              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
+                Catálogo de Equipamentos
+              </h1>
+              <p className="text-orange-50 mb-4 font-medium">
+                Encontre o equipamento ideal para sua obra
+              </p>
+              <div className="flex items-center justify-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit mx-auto">
+                <Search className="w-5 h-5 text-orange-50" />
+                <span className="font-semibold text-white">
+                  {Array.isArray(filteredEquipments) ? filteredEquipments.length : 0} equipamentos
+                  encontrados
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <Card className="mb-8">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  placeholder="Buscar equipamentos..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-gray-200 focus:border-blue-500"
-                />
+        {/* Filtros */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="mb-8 relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <CardContent className="p-6 relative z-10">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    placeholder="Buscar equipamentos..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0"
+                  />
+                </div>
+                <div className="md:w-64">
+                  <CustomSelect
+                    value={categoryFilter}
+                    onValueChange={setCategoryFilter}
+                    placeholder="Filtrar por categoria"
+                  >
+                    <CustomSelectItem value="all">Todas as Categorias</CustomSelectItem>
+                    {categories.map((category) => (
+                      <CustomSelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </CustomSelectItem>
+                    ))}
+                  </CustomSelect>
+                </div>
               </div>
-              <div className="md:w-64">
-                <CustomSelect
-                  value={categoryFilter}
-                  onValueChange={setCategoryFilter}
-                  placeholder="Filtrar por categoria"
-                >
-                  <CustomSelectItem value="all">Todas as Categorias</CustomSelectItem>
-                  {categories.map((category) => (
-                    <CustomSelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </CustomSelectItem>
-                  ))}
-                </CustomSelect>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </motion.div>
 
-        {filteredEquipments.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredEquipments.map((equipment) => {
-              const averageRating =
-                equipment.reviews && equipment.reviews.length > 0
-                  ? equipment.reviews.reduce((acc, review) => acc + review.rating, 0) /
-                    equipment.reviews.length
-                  : 0;
-              const reviewCount = equipment.reviews ? equipment.reviews.length : 0;
+        {/* Grid de Equipamentos */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          {filteredEquipments.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <AnimatePresence>
+                {filteredEquipments.map((equipment, index) => {
+                  const averageRating =
+                    equipment.reviews && equipment.reviews.length > 0
+                      ? equipment.reviews.reduce((acc, review) => acc + review.rating, 0) /
+                        equipment.reviews.length
+                      : 0;
+                  const reviewCount = equipment.reviews ? equipment.reviews.length : 0;
 
-              return (
-                <Card
-                  key={equipment.id}
-                  className="flex flex-col h-full hover:shadow-lg transition-shadow"
-                >
-                  <div className="relative h-48 bg-gray-200">
-                    <Image
-                      src={equipment.images?.[0] || '/placeholder.svg?height=200&width=300'}
-                      alt={equipment.name}
-                      fill
-                      className="object-cover rounded-t-lg"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <Badge variant="secondary">
-                        {equipment.category?.name || 'Sem categoria'}
-                      </Badge>
-                    </div>
-                    {!equipment.isAvailable && (
-                      <div className="absolute top-3 right-3">
-                        <Badge variant="destructive">Indisponível</Badge>
-                      </div>
-                    )}
-                  </div>
+                  return (
+                    <motion.div
+                      key={equipment.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="group"
+                    >
+                      <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02] flex flex-col">
+                        {/* Clean depth layers for equipment card */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-                  <CardContent className="flex-1 p-4">
-                    <h3 className="font-semibold text-lg text-gray-900 mb-2">{equipment.name}</h3>
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                      {equipment.description}
-                    </p>
+                        <div className="relative h-48 bg-gray-200 z-10">
+                          <Image
+                            src={equipment.images?.[0] || '/placeholder.svg?height=200&width=300'}
+                            alt={equipment.name}
+                            fill
+                            className="object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
+                          />
+                          {!equipment.isAvailable && (
+                            <div className="absolute top-3 right-3">
+                              <Badge
+                                variant="destructive"
+                                className="bg-red-500/90 backdrop-blur-sm"
+                              >
+                                Indisponível
+                              </Badge>
+                            </div>
+                          )}
+                        </div>
 
-                    <div className="flex items-center gap-2 mb-4">
-                      {reviewCount > 0 ? (
-                        <>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                            <span className="text-sm font-medium">{averageRating.toFixed(1)}</span>
+                        <CardContent className="flex-1 p-4 relative z-10 flex flex-col">
+                          <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-1">
+                            {equipment.name}
+                          </h3>
+                          <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                            {equipment.description}
+                          </p>
+
+                          <div className="flex items-center gap-2 mb-4">
+                            {reviewCount > 0 ? (
+                              <>
+                                <div className="flex items-center gap-1">
+                                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                  <span className="text-sm font-medium">
+                                    {averageRating.toFixed(1)}
+                                  </span>
+                                </div>
+                                <span className="text-sm text-gray-500">
+                                  ({reviewCount} {reviewCount === 1 ? 'avaliação' : 'avaliações'})
+                                </span>
+                              </>
+                            ) : (
+                              <span className="text-sm text-gray-500">Nenhuma avaliação</span>
+                            )}
                           </div>
-                          <span className="text-sm text-gray-500">
-                            ({reviewCount} {reviewCount === 1 ? 'avaliação' : 'avaliações'})
-                          </span>
-                        </>
-                      ) : (
-                        <span className="text-sm text-gray-500">Nenhuma avaliação</span>
-                      )}
-                    </div>
 
-                    <div className="flex items-center justify-between">
-                      <div className="text-2xl font-bold text-orange-600">
-                        R$ {equipment.pricePerDay?.toFixed(2) || '0.00'}
-                        <span className="text-sm font-normal text-gray-500">/dia</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-sm text-gray-500">
-                        <Clock className="h-4 w-4" />
-                        <span>Diária</span>
-                      </div>
-                    </div>
-                  </CardContent>
+                          <div className="mb-4">
+                            <div className="text-2xl font-bold text-orange-600">
+                              R$ {equipment.pricePerDay?.toFixed(2) || '0.00'}
+                              <span className="text-sm font-normal text-gray-500">/dia</span>
+                            </div>
+                          </div>
 
-                  <CardFooter className="p-4 pt-0 mt-auto">
-                    <div className="flex flex-col gap-2 w-full">
-                      <Button variant="outline" size="sm" asChild className="w-full">
-                        <Link href={`/equipamentos/${equipment.id}`}>Ver Detalhes</Link>
-                      </Button>
-                      <Button
-                        size="sm"
-                        disabled={!equipment.isAvailable}
-                        asChild={equipment.isAvailable}
-                        className="w-full"
-                      >
-                        {equipment.isAvailable ? (
-                          <Link href={`/orcamento?equipmentId=${equipment.id}`}>
-                            Solicitar Orçamento
-                          </Link>
-                        ) : (
-                          <span>Indisponível</span>
-                        )}
-                      </Button>
-                    </div>
-                  </CardFooter>
-                </Card>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-lg text-gray-600">Nenhum equipamento encontrado.</p>
-            <p className="text-sm text-gray-500 mt-2">
-              {equipments.length === 0
-                ? 'Adicione equipamentos no painel administrativo.'
-                : 'Tente ajustar os filtros.'}
-            </p>
-          </div>
-        )}
+                          <div className="flex justify-end mt-auto">
+                            <Badge
+                              variant="secondary"
+                              className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors backdrop-blur-sm"
+                              style={{
+                                backgroundColor: equipment.category?.bgColor || '#f3f4f6',
+                                color: equipment.category?.fontColor || '#374151',
+                                borderColor: 'transparent',
+                              }}
+                            >
+                              {renderIcon(
+                                equipment.category?.icon,
+                                equipment.category?.iconColor || equipment.category?.fontColor,
+                              )}
+                              {equipment.category?.name || 'Sem categoria'}
+                            </Badge>
+                          </div>
+                        </CardContent>
+
+                        <CardFooter className="p-4 pt-0 relative z-10">
+                          <div className="flex flex-col gap-2 w-full">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              asChild
+                              className="w-full bg-transparent border-gray-200 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
+                            >
+                              <Link href={`/equipamentos/${equipment.id}`}>
+                                <span className="group-hover:text-orange-500 transition-colors duration-200">
+                                  Ver Detalhes
+                                </span>
+                              </Link>
+                            </Button>
+                            <Button
+                              size="sm"
+                              disabled={!equipment.isAvailable}
+                              asChild={equipment.isAvailable}
+                              className="w-full hover:scale-105 transition-transform duration-200"
+                            >
+                              {equipment.isAvailable ? (
+                                <Link href={`/orcamento?equipmentId=${equipment.id}`}>
+                                  Solicitar Orçamento
+                                </Link>
+                              ) : (
+                                <span>Indisponível</span>
+                              )}
+                            </Button>
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <CardContent className="relative z-10 flex flex-col items-center justify-center py-16">
+                <div className="bg-orange-100 rounded-full p-4 mb-4">
+                  <Package className="w-8 h-8 text-orange-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Nenhum equipamento encontrado
+                </h3>
+                <p className="text-gray-500 text-center">
+                  {equipments.length === 0
+                    ? 'Nosso catálogo está sendo atualizado. Volte em breve!'
+                    : 'Tente ajustar os filtros para encontrar outros equipamentos.'}
+                </p>
+              </CardContent>
+            </Card>
+          )}
+        </motion.div>
       </div>
     </div>
   );

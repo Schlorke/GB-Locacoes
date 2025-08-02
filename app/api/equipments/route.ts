@@ -27,6 +27,10 @@ export async function GET() {
           category: {
             id: 'mock-cat-1',
             name: 'Equipamentos',
+            icon: 'Wrench',
+            iconColor: '#3B82F6',
+            bgColor: '#EFF6FF',
+            fontColor: '#1E40AF',
           },
           reviews: [],
         },
@@ -58,6 +62,10 @@ export async function GET() {
         category: {
           id: equipment.category.id,
           name: equipment.category.name,
+          icon: equipment.category.icon,
+          iconColor: equipment.category.iconColor,
+          bgColor: equipment.category.bgColor,
+          fontColor: equipment.category.fontColor,
         },
         reviews: [],
       };
@@ -81,6 +89,10 @@ export async function GET() {
         category: {
           id: 'fallback-cat-1',
           name: 'Equipamentos',
+          icon: 'Wrench',
+          iconColor: '#3B82F6',
+          bgColor: '#EFF6FF',
+          fontColor: '#1E40AF',
         },
         reviews: [],
       },

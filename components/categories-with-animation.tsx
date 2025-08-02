@@ -136,7 +136,7 @@ export default function CategoriesWithAnimation() {
                   ref={(el) => {
                     cardsRef.current[index] = el;
                   }}
-                  className="h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden relative"
+                  className="h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden relative flex flex-col"
                   style={{
                     opacity: 0,
                     transform: 'translateY(60px)',
@@ -147,23 +147,25 @@ export default function CategoriesWithAnimation() {
                     className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
                   ></div>
 
-                  <CardContent className="p-6 text-center relative z-10">
-                    <div className="mb-4 inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 relative">
-                      <IconComponent className="h-8 w-8 text-orange-600 group-hover:scale-110 transition-transform duration-300" />
+                  <CardContent className="p-6 text-center relative z-10 flex flex-col flex-1">
+                    <div className="mb-4 flex justify-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 relative">
+                        <IconComponent className="h-8 w-8 text-orange-600 group-hover:scale-110 transition-transform duration-300" />
 
-                      {/* Pulse effect */}
-                      <div className="absolute inset-0 bg-orange-200 rounded-full animate-ping opacity-0 group-hover:opacity-75"></div>
+                        {/* Pulse effect */}
+                        <div className="absolute inset-0 bg-orange-200 rounded-full animate-ping opacity-0 group-hover:opacity-75"></div>
+                      </div>
                     </div>
 
                     <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors duration-300">
                       {category.name}
                     </h3>
 
-                    <p className="text-sm text-gray-600 mb-3 group-hover:text-gray-700 transition-colors duration-300">
+                    <p className="text-sm text-gray-600 mb-3 group-hover:text-gray-700 transition-colors duration-300 flex-1">
                       {category.description}
                     </p>
 
-                    <div className="text-sm font-medium text-orange-600 group-hover:text-orange-700 transition-colors duration-300">
+                    <div className="text-sm font-medium text-orange-600 group-hover:text-orange-700 transition-colors duration-300 mt-auto">
                       <span className="inline-block group-hover:scale-110 transition-transform duration-300">
                         {category.count} equipamentos disponíveis
                       </span>

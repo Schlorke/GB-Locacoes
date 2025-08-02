@@ -171,27 +171,29 @@ export default function Categories() {
             return (
               <Card
                 key={index}
-                className="benefit-card category-card bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0"
+                className="benefit-card category-card bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0 flex flex-col h-full"
               >
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
                 ></div>
 
-                <CardContent className="p-6 text-center relative z-10">
-                  <div className="mb-4 inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-600 to-orange-700 rounded-full group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 relative">
-                    <IconComponent className="h-8 w-8 text-white group-hover:scale-110 transition-transform duration-300" />
-                    <div className="absolute inset-0 bg-orange-500 rounded-full animate-ping opacity-0 group-hover:opacity-30"></div>
+                <CardContent className="p-6 text-center relative z-10 flex flex-col flex-1">
+                  <div className="mb-4 flex justify-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-600 to-orange-700 rounded-full group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 relative">
+                      <IconComponent className="h-8 w-8 text-white group-hover:scale-110 transition-transform duration-300" />
+                      <div className="absolute inset-0 bg-orange-500 rounded-full animate-ping opacity-0 group-hover:opacity-30"></div>
+                    </div>
                   </div>
 
                   <h3 className="text-xl font-semibold text-gray-900 mb-3 group-hover:text-orange-600 transition-colors duration-300">
                     {category.title}
                   </h3>
 
-                  <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 mb-3">
+                  <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 mb-3 flex-1">
                     {category.description}
                   </p>
 
-                  <div className="text-sm font-medium text-orange-600 group-hover:text-orange-700 transition-colors duration-300">
+                  <div className="text-sm font-medium text-orange-600 group-hover:text-orange-700 transition-colors duration-300 mt-auto">
                     {category.count} equipamentos disponíveis
                   </div>
                 </CardContent>
