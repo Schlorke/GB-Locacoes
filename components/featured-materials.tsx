@@ -2,7 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Package } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -180,12 +180,21 @@ export default function FeaturedMaterials() {
                       </Badge>
                     </div>
                   </div>
+                </CardContent>
 
-                  <div className="mt-auto"></div>
-
-                  <div className="flex gap-2 relative z-10">
-                    <Button variant="outline" size="sm" asChild className="flex-1">
-                      <Link href={`/equipamentos/${equipment.id}`}>Ver Detalhes</Link>
+                <CardFooter className="p-4 pt-0 relative z-10">
+                  <div className="flex gap-2 w-full">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      asChild
+                      className="flex-1 bg-transparent border-gray-200 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
+                    >
+                      <Link href={`/equipamentos/${equipment.id}`}>
+                        <span className="group-hover:text-orange-500 transition-colors duration-200">
+                          Ver Detalhes
+                        </span>
+                      </Link>
                     </Button>
                     <Button
                       size="sm"
@@ -200,10 +209,10 @@ export default function FeaturedMaterials() {
                       )}
                     </Button>
                   </div>
+                </CardFooter>
 
-                  {/* Bottom accent line - sempre no fundo */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left z-0"></div>
-                </CardContent>
+                {/* Bottom accent line - sempre no fundo do card */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center z-10"></div>
               </Card>
             ))}
           </div>
