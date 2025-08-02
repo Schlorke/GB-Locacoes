@@ -880,6 +880,30 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   background: #94a3b8;
 }
 
+/* Scrollbar para dropdown de filtros */
+.filter-dropdown-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filter-dropdown-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-dropdown-scroll::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.filter-dropdown-scroll::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Firefox scrollbar for filter dropdown */
+.filter-dropdown-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
 /* Classe CSS para grid responsivo de ícones */
 .icon-grid-responsive {
   display: grid;

@@ -1,18 +1,19 @@
 'use client';
 
+import { AdminFilterCard } from '@/components/admin/admin-filter-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
-import { Input } from '@/components/ui/input';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Building,
   Container,
   Hammer,
+  HardHat,
   Loader2,
   Package,
   Search,
+  Shield,
   Star,
   Truck,
   Wrench,
@@ -21,6 +22,19 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+
+// Icon mapping
+const iconMap = {
+  Package,
+  Building,
+  Container,
+  Hammer,
+  HardHat,
+  Shield,
+  Truck,
+  Wrench,
+  Zap,
+};
 
 interface Review {
   id: string;
@@ -65,17 +79,6 @@ export default function EquipmentsPage() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-
-  // Mapeamento de ícones disponíveis
-  const iconMap = {
-    Building,
-    Container,
-    Hammer,
-    Package,
-    Truck,
-    Wrench,
-    Zap,
-  } as const;
 
   // Função para renderizar ícones dinamicamente
   const renderIcon = (iconName?: string, color?: string) => {
@@ -225,37 +228,28 @@ export default function EquipmentsPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
+          className="mb-8"
         >
-          <Card className="mb-8 relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <CardContent className="p-6 relative z-10">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Buscar equipamentos..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0"
-                  />
-                </div>
-                <div className="md:w-64">
-                  <CustomSelect
-                    value={categoryFilter}
-                    onValueChange={setCategoryFilter}
-                    placeholder="Filtrar por categoria"
-                  >
-                    <CustomSelectItem value="all">Todas as Categorias</CustomSelectItem>
-                    {categories.map((category) => (
-                      <CustomSelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </CustomSelectItem>
-                    ))}
-                  </CustomSelect>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <AdminFilterCard
+            searchPlaceholder="Buscar equipamentos..."
+            searchValue={searchTerm}
+            onSearchChange={setSearchTerm}
+            filters={[
+              {
+                label: 'Categoria',
+                value: categoryFilter,
+                onValueChange: setCategoryFilter,
+                placeholder: 'Categoria',
+                options: [
+                  { value: 'all', label: 'Todas as categorias' },
+                  ...categories.map((category) => ({
+                    value: category.id,
+                    label: category.name,
+                  })),
+                ],
+              },
+            ]}
+          />
         </motion.div>
 
         {/* Grid de Equipamentos */}
@@ -289,7 +283,7 @@ export default function EquipmentsPage() {
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-                        <div className="relative h-48 bg-gray-200 z-10">
+                        <div className="relative h-48 bg-gray-200 z-0">
                           <Image
                             src={equipment.images?.[0] || '/placeholder.svg?height=200&width=300'}
                             alt={equipment.name}
@@ -308,7 +302,7 @@ export default function EquipmentsPage() {
                           )}
                         </div>
 
-                        <CardContent className="flex-1 p-4 relative z-10 flex flex-col">
+                        <CardContent className="flex-1 p-4 relative z-0 flex flex-col">
                           <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-1">
                             {equipment.name}
                           </h3>
@@ -361,7 +355,7 @@ export default function EquipmentsPage() {
                           <div className="mt-auto"></div>
                         </CardContent>
 
-                        <CardFooter className="p-4 pt-0 relative z-10">
+                        <CardFooter className="p-4 pt-0 relative z-0">
                           <div className="flex flex-col gap-2 w-full">
                             <Button
                               variant="outline"
@@ -400,7 +394,7 @@ export default function EquipmentsPage() {
           ) : (
             <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-              <CardContent className="relative z-10 flex flex-col items-center justify-center py-16">
+              <CardContent className="relative z-0 flex flex-col items-center justify-center py-16">
                 <div className="bg-orange-100 rounded-full p-4 mb-4">
                   <Package className="w-8 h-8 text-orange-400" />
                 </div>

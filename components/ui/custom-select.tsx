@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 import { Check, ChevronDown } from 'lucide-react';
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 
 interface CustomSelectProps {
   value?: string;
@@ -38,19 +37,15 @@ export function CustomSelect({
   children,
 }: Omit<CustomSelectProps, 'required'>) {
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
   const selectRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  // Fechar quando clicar fora e reposicionar no scroll
+  // Fechar quando clicar fora e calcular posição
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      // Verifica se clicou fora do select E fora do dropdown
-      const clickedOutsideSelect = selectRef.current && !selectRef.current.contains(target);
-      const clickedOutsideDropdown = !document.getElementById('dropdown-content')?.contains(target);
-
-      if (clickedOutsideSelect && clickedOutsideDropdown) {
+      if (selectRef.current && !selectRef.current.contains(target)) {
         setIsOpen(false);
       }
     };
@@ -58,7 +53,7 @@ export function CustomSelect({
     const updatePosition = () => {
       if (isOpen && buttonRef.current) {
         const rect = buttonRef.current.getBoundingClientRect();
-        setPosition({
+        setDropdownPosition({
           top: rect.bottom + window.scrollY + 4,
           left: rect.left + window.scrollX,
           width: rect.width,
@@ -67,6 +62,7 @@ export function CustomSelect({
     };
 
     if (isOpen) {
+      updatePosition();
       document.addEventListener('mousedown', handleClickOutside);
       window.addEventListener('scroll', updatePosition, true);
       window.addEventListener('resize', updatePosition);
@@ -90,14 +86,6 @@ export function CustomSelect({
   const selectedText = selectedItem?.props?.children || placeholder;
 
   const handleToggle = () => {
-    if (!isOpen && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setPosition({
-        top: rect.bottom + window.scrollY + 4,
-        left: rect.left + window.scrollX,
-        width: rect.width,
-      });
-    }
     setIsOpen(!isOpen);
   };
 
@@ -135,24 +123,20 @@ export function CustomSelect({
           />
         </button>
 
-        {/* Dropdown Content via Portal para escapar z-index hierarchy */}
-        {isOpen &&
-          typeof window !== 'undefined' &&
-          createPortal(
-            <div
-              id="dropdown-content"
-              className="fixed z-[99999] mt-1 max-h-96 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 p-1"
-              style={{
-                top: position.top,
-                left: position.left,
-                width: position.width,
-                minWidth: '8rem',
-              }}
-            >
+        {/* Dropdown Content - Posicionamento absoluto simples */}
+        {isOpen && (
+          <div
+            id="dropdown-content"
+            className="absolute z-[9999] mt-1 w-full rounded-md border bg-white shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 overflow-hidden"
+            style={{
+              maxHeight: '300px',
+            }}
+          >
+            <div className="max-h-full overflow-y-auto overscroll-contain p-1 filter-dropdown-scroll">
               {children}
-            </div>,
-            document.body,
-          )}
+            </div>
+          </div>
+        )}
       </div>
     </CustomSelectContext.Provider>
   );
