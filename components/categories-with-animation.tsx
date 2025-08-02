@@ -136,12 +136,15 @@ export default function CategoriesWithAnimation() {
                   ref={(el) => {
                     cardsRef.current[index] = el;
                   }}
-                  className="h-full transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden relative flex flex-col"
+                  className="h-full relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col"
                   style={{
                     opacity: 0,
                     transform: 'translateY(60px)',
                   }}
                 >
+                  {/* Clean depth layers matching equipments page */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
                   {/* Gradient overlay on hover */}
                   <div
                     className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}

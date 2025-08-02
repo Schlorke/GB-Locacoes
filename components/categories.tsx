@@ -171,8 +171,11 @@ export default function Categories() {
             return (
               <Card
                 key={index}
-                className="benefit-card category-card bg-white/90 backdrop-blur-sm border-gray-200 hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0 flex flex-col h-full"
+                className="benefit-card category-card relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-500 hover:scale-105 group opacity-0 flex flex-col h-full"
               >
+                {/* Clean depth layers matching equipments page */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
                 <div
                   className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
                 ></div>

@@ -265,7 +265,7 @@ export default function EquipmentsPage() {
           transition={{ delay: 0.2 }}
         >
           {filteredEquipments.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AnimatePresence>
                 {filteredEquipments.map((equipment, index) => {
                   const averageRating =
@@ -335,29 +335,30 @@ export default function EquipmentsPage() {
                           </div>
 
                           <div className="mb-4">
-                            <div className="text-2xl font-bold text-orange-600">
-                              R$ {equipment.pricePerDay?.toFixed(2) || '0.00'}
-                              <span className="text-sm font-normal text-gray-500">/dia</span>
+                            <div className="flex items-center justify-between">
+                              <div className="text-2xl font-bold text-orange-600">
+                                R$ {equipment.pricePerDay?.toFixed(2) || '0.00'}
+                                <span className="text-sm font-normal text-gray-500">/dia</span>
+                              </div>
+                              <Badge
+                                variant="secondary"
+                                className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors backdrop-blur-sm"
+                                style={{
+                                  backgroundColor: equipment.category?.bgColor || '#f3f4f6',
+                                  color: equipment.category?.fontColor || '#374151',
+                                  borderColor: 'transparent',
+                                }}
+                              >
+                                {renderIcon(
+                                  equipment.category?.icon,
+                                  equipment.category?.iconColor || equipment.category?.fontColor,
+                                )}
+                                {equipment.category?.name || 'Sem categoria'}
+                              </Badge>
                             </div>
                           </div>
 
-                          <div className="flex justify-end mt-auto">
-                            <Badge
-                              variant="secondary"
-                              className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors backdrop-blur-sm"
-                              style={{
-                                backgroundColor: equipment.category?.bgColor || '#f3f4f6',
-                                color: equipment.category?.fontColor || '#374151',
-                                borderColor: 'transparent',
-                              }}
-                            >
-                              {renderIcon(
-                                equipment.category?.icon,
-                                equipment.category?.iconColor || equipment.category?.fontColor,
-                              )}
-                              {equipment.category?.name || 'Sem categoria'}
-                            </Badge>
-                          </div>
+                          <div className="mt-auto"></div>
                         </CardContent>
 
                         <CardFooter className="p-4 pt-0 relative z-10">

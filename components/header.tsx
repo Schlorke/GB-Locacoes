@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button';
 import { CloseButton } from '@/components/ui/close-button';
 import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const handleInternalNavigation = () => {
     sessionStorage.setItem('internalNavigation', 'true');
@@ -21,6 +23,14 @@ export default function Header() {
     { name: 'Sobre', href: '/sobre' },
     { name: 'Contato', href: '/contato' },
   ];
+
+  // Função para verificar se é a página ativa
+  const isActivePage = (href: string) => {
+    if (href === '/') {
+      return pathname === '/';
+    }
+    return pathname.startsWith(href);
+  };
 
   return (
     <header className="fixed top-0 left-0 w-screen z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-slate-200/50">
@@ -89,17 +99,28 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="relative text-slate-700 hover:text-orange-600 font-medium transition-all duration-200 group py-2"
-                onClick={handleInternalNavigation}
-              >
-                {item.name}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center rounded-full"></span>
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const isActive = isActivePage(item.href);
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`relative font-medium transition-all duration-200 group py-2 ${
+                    isActive ? 'text-orange-600' : 'text-slate-700 hover:text-orange-600'
+                  }`}
+                  onClick={handleInternalNavigation}
+                >
+                  {item.name}
+                  <span
+                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-full transition-transform duration-300 origin-center ${
+                      isActive
+                        ? 'transform scale-x-100'
+                        : 'transform scale-x-0 group-hover:scale-x-100'
+                    }`}
+                  ></span>
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Desktop Actions */}
@@ -156,16 +177,23 @@ export default function Header() {
         {isMenuOpen && (
           <div className="lg:hidden border-t border-slate-200/50 py-4 bg-white/95 backdrop-blur-sm">
             <nav className="space-y-1">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="block px-4 py-3 rounded-xl text-base font-medium text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 mx-2"
-                  onClick={handleInternalNavigation}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {navigation.map((item) => {
+                const isActive = isActivePage(item.href);
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 mx-2 ${
+                      isActive
+                        ? 'text-orange-600 bg-orange-50'
+                        : 'text-slate-700 hover:text-orange-600 hover:bg-orange-50'
+                    }`}
+                    onClick={handleInternalNavigation}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </nav>
             <div className="mt-6 pt-4 border-t border-slate-200/50 px-2 space-y-2">
               <Button

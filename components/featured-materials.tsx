@@ -1,12 +1,37 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Package } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+// Icon mapping
+import {
+  Building,
+  Container,
+  Hammer,
+  HardHat,
+  Package as PackageIcon,
+  Shield,
+  Truck,
+  Wrench,
+  Zap,
+} from 'lucide-react';
+
+const iconMap = {
+  Package: PackageIcon,
+  Building,
+  Container,
+  Hammer,
+  HardHat,
+  Shield,
+  Truck,
+  Wrench,
+  Zap,
+};
 
 interface Equipment {
   id: string;
@@ -17,6 +42,10 @@ interface Equipment {
   category: {
     id: string;
     name: string;
+    bgColor?: string;
+    fontColor?: string;
+    icon?: string;
+    iconColor?: string;
   };
   isAvailable: boolean;
 }
@@ -24,6 +53,24 @@ interface Equipment {
 export default function FeaturedMaterials() {
   const [equipments, setEquipments] = useState<Equipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Função para renderizar ícones dinamicamente
+  const renderIcon = (iconName?: string, color?: string) => {
+    if (!iconName) return null;
+
+    try {
+      const IconComponent = iconMap[iconName as keyof typeof iconMap];
+      if (IconComponent && typeof IconComponent === 'function') {
+        return <IconComponent size={14} color={color || 'currentColor'} className="mr-1.5" />;
+      }
+    } catch (_error) {
+      // Fallback se o ícone não existir
+      return <Package size={14} color={color || 'currentColor'} className="mr-1.5" />;
+    }
+
+    // Fallback se o ícone não for encontrado
+    return <Package size={14} color={color || 'currentColor'} className="mr-1.5" />;
+  };
 
   useEffect(() => {
     fetchFeaturedEquipments();
@@ -82,43 +129,61 @@ export default function FeaturedMaterials() {
             {equipments.map((equipment) => (
               <Card
                 key={equipment.id}
-                className="group hover:shadow-xl transition-all duration-300 overflow-hidden relative"
+                className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02] flex flex-col group"
               >
-                <div className="relative h-64 overflow-hidden rounded-t-lg">
+                {/* Clean depth layers for equipment card */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+                <div className="relative h-48 bg-gray-200 z-10">
                   <Image
-                    src={equipment.images?.[0] || '/placeholder.svg?height=300&width=400'}
+                    src={equipment.images?.[0] || '/placeholder.svg?height=200&width=300'}
                     alt={equipment.name}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute top-4 left-4">
-                    <Badge variant="secondary">{equipment.category.name}</Badge>
-                  </div>
                   {!equipment.isAvailable && (
-                    <div className="absolute top-4 right-4">
-                      <Badge variant="destructive">Indisponível</Badge>
+                    <div className="absolute top-3 right-3">
+                      <Badge variant="destructive" className="bg-red-500/90 backdrop-blur-sm">
+                        Indisponível
+                      </Badge>
                     </div>
                   )}
                 </div>
 
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                <CardContent className="flex-1 p-4 relative z-10 flex flex-col">
+                  <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-1">
                     {equipment.name}
                   </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2">{equipment.description}</p>
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">{equipment.description}</p>
 
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="text-2xl font-bold text-orange-600">
-                      R$ {equipment.pricePerDay.toFixed(2)}
-                      <span className="text-sm font-normal text-gray-500">/dia</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm text-gray-500">
-                      <Clock className="h-4 w-4" />
-                      <span>Diária</span>
+                  <div className="mb-4">
+                    <div className="flex items-center justify-between">
+                      <div className="text-2xl font-bold text-orange-600">
+                        R$ {equipment.pricePerDay?.toFixed(2) || '0.00'}
+                        <span className="text-sm font-normal text-gray-500">/dia</span>
+                      </div>
+                      <Badge
+                        variant="secondary"
+                        className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors backdrop-blur-sm"
+                        style={{
+                          backgroundColor: equipment.category?.bgColor || '#f3f4f6',
+                          color: equipment.category?.fontColor || '#374151',
+                          borderColor: 'transparent',
+                        }}
+                      >
+                        {renderIcon(
+                          equipment.category?.icon,
+                          equipment.category?.iconColor || equipment.category?.fontColor,
+                        )}
+                        {equipment.category?.name || 'Sem categoria'}
+                      </Badge>
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
+                  <div className="mt-auto"></div>
+
+                  <div className="flex gap-2 relative z-10">
                     <Button variant="outline" size="sm" asChild className="flex-1">
                       <Link href={`/equipamentos/${equipment.id}`}>Ver Detalhes</Link>
                     </Button>
@@ -137,7 +202,7 @@ export default function FeaturedMaterials() {
                   </div>
 
                   {/* Bottom accent line - sempre no fundo */}
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left z-0"></div>
                 </CardContent>
               </Card>
             ))}
