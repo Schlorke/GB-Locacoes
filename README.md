@@ -25,6 +25,7 @@ Coloque capturas de tela ou GIFs em `docs/assets/` e referencie aqui.
 - [Configuração](#configuração)
 - [Uso Rápido](#uso-rápido)
 - [Estrutura de Diretórios](#estrutura-de-diretórios)
+- [Design System](#-design-system)
 - [Scripts](#scripts)
 - [Testes](#testes)
 - [Roadmap](#roadmap)
@@ -121,6 +122,10 @@ Acesse `http://localhost:3000` e realize um orçamento pelo catálogo.
 ├── tests/              # testes Vitest
 └── types/
 ```
+
+## 🔱 Design System
+
+Consulte o [Design System](docs/design-system.md) para padrões de cores, tipografia e componentes reutilizáveis.
 
 ## Scripts
 
