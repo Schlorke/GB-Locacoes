@@ -1,21 +1,21 @@
-'use client';
+'use client'
 
-import type React from 'react';
+import React from 'react'
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { toast } from '@/hooks/use-toast'
+import { Loader2 } from 'lucide-react'
+import { useState } from 'react'
 
 interface ContactFormData {
-  name: string;
-  email: string;
-  phone: string;
-  equipment: string;
-  message: string;
+  name: string
+  email: string
+  phone: string
+  equipment: string
+  message: string
 }
 
 export default function ContactForm() {
@@ -25,12 +25,12 @@ export default function ContactForm() {
     phone: '',
     equipment: '',
     message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    e.preventDefault()
+    setIsSubmitting(true)
 
     try {
       const response = await fetch('/api/contact', {
@@ -39,15 +39,15 @@ export default function ContactForm() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (data.success) {
         toast({
           title: 'Sucesso!',
           description: data.message,
-        });
+        })
 
         // Limpar formulário
         setFormData({
@@ -56,22 +56,24 @@ export default function ContactForm() {
           phone: '',
           equipment: '',
           message: '',
-        });
+        })
       } else {
-        throw new Error(data.message || 'Erro ao enviar mensagem');
+        throw new Error(data.message || 'Erro ao enviar mensagem')
       }
     } catch (error) {
-      console.error('Erro ao enviar formulário:', error);
+      console.error('Erro ao enviar formulário:', error)
       toast({
         title: 'Erro',
         description:
-          error instanceof Error ? error.message : 'Erro ao enviar mensagem. Tente novamente.',
+          error instanceof Error
+            ? error.message
+            : 'Erro ao enviar mensagem. Tente novamente.',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -81,7 +83,9 @@ export default function ContactForm() {
           <Input
             id="name"
             value={formData.name}
-            onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, name: e.target.value }))
+            }
             placeholder="Seu nome completo"
             required
           />
@@ -92,7 +96,9 @@ export default function ContactForm() {
             id="phone"
             type="tel"
             value={formData.phone}
-            onChange={(e) => setFormData((prev) => ({ ...prev, phone: e.target.value }))}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, phone: e.target.value }))
+            }
             placeholder="(51) 99999-9999"
             required
           />
@@ -105,7 +111,9 @@ export default function ContactForm() {
           id="email"
           type="email"
           value={formData.email}
-          onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, email: e.target.value }))
+          }
           placeholder="seu@email.com"
           required
         />
@@ -116,7 +124,9 @@ export default function ContactForm() {
         <Input
           id="equipment"
           value={formData.equipment}
-          onChange={(e) => setFormData((prev) => ({ ...prev, equipment: e.target.value }))}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, equipment: e.target.value }))
+          }
           placeholder="Ex: Betoneira, Andaime, etc."
         />
       </div>
@@ -126,7 +136,9 @@ export default function ContactForm() {
         <Textarea
           id="message"
           value={formData.message}
-          onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
+          onChange={(e) =>
+            setFormData((prev) => ({ ...prev, message: e.target.value }))
+          }
           placeholder="Descreva seu projeto e necessidades..."
           rows={4}
           required
@@ -148,5 +160,5 @@ export default function ContactForm() {
         )}
       </Button>
     </form>
-  );
+  )
 }

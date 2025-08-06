@@ -4,7 +4,9 @@
 
 ### 🎯 Objetivo
 
-Resolver problemas de acessibilidade e consistência identificados na documentação do design system e README, garantindo conformidade com WCAG 2.1 e melhor experiência para usuários com necessidades especiais.
+Resolver problemas de acessibilidade e consistência identificados na
+documentação do design system e README, garantindo conformidade com WCAG 2.1 e
+melhor experiência para usuários com necessidades especiais.
 
 ### 📊 Status Geral: ✅ CONCLUÍDO
 
@@ -12,8 +14,8 @@ Resolver problemas de acessibilidade e consistência identificados na documenta�
 
 **Problema**: Incompatibilidade de versões entre pacotes do Storybook
 
-- Storybook core: 9.1.1
-- @storybook/addon-essentials: 8.6.14 (incompatível)
+- **Storybook core**: 9.1.1
+- **@storybook/addon-essentials**: 8.6.14 (incompatível)
 
 **Solução**: Atualização para versão compatível
 
@@ -25,25 +27,26 @@ pnpm add -D @storybook/addon-essentials@next -w
 
 ### 2. Consistência de Cores no Design System ✅
 
-**Problema**: Button variant `ghost` usava cores cinza inconsistentes com a paleta da marca
+**Problema**: Button variant `ghost` usava cores cinza inconsistentes com a
+paleta da marca
 
 **Antes**:
 
 ```tsx
-ghost: 'hover:bg-gray-200 hover:text-gray-900 hover:text-slate-900';
+ghost: "hover:bg-gray-200 hover:text-gray-900 hover:text-slate-900"
 ```
 
 **Depois**:
 
 ```tsx
-ghost: 'hover:bg-accent hover:text-accent-foreground';
+ghost: "hover:bg-accent hover:text-accent-foreground"
 ```
 
 **Benefícios**:
 
-- Consistência com as variáveis CSS do design system
-- Melhor integração com temas claro/escuro
-- Alinhamento com a paleta de cores da marca
+- **Consistência**: Com as variáveis CSS do design system
+- **Integração**: Melhor integração com temas claro/escuro
+- **Alinhamento**: Com a paleta de cores da marca
 
 ### 3. Padrão de Foco para Acessibilidade ✅
 
@@ -66,14 +69,15 @@ focus:outline-none focus:ring-2 focus:ring-ring
 
 **Benefícios**:
 
-- Melhor navegação por teclado
-- Conformidade com WCAG 2.1
-- Experiência visual consistente
-- Usa variável CSS `--ring` para consistência com tema
+- **Navegação**: Melhor navegação por teclado
+- **Conformidade**: Com WCAG 2.1
+- **Experiência**: Visual consistente
+- **Consistência**: Usa variável CSS `--ring` para consistência com tema
 
 ### 4. Padronização de Foco Implementada ✅
 
-**Problema**: Componentes usavam padrões de foco inconsistentes (alguns com `focus:border-blue-500`, outros sem foco visível)
+**Problema**: Componentes usavam padrões de foco inconsistentes (alguns com
+`focus:border-blue-500`, outros sem foco visível)
 
 **Solução**: Padronização completa para todos os componentes interativos
 
@@ -83,7 +87,8 @@ focus:outline-none focus:ring-2 focus:ring-ring
 - `components/ui/filter-reset-button.tsx` - ✅ Padrão de foco consistente
 - `components/ui/close-button.tsx` - ✅ Padrão de foco adicionado
 - `components/ui/custom-select.tsx` - ✅ Padrão de foco padronizado
-- `components/ui/image-upload.tsx` - ✅ Todos os botões de navegação padronizados
+- `components/ui/image-upload.tsx` - ✅ Todos os botões de navegação
+  padronizados
 
 **Padrão Unificado**:
 
@@ -105,36 +110,36 @@ O projeto já possui um padrão global de foco definido em `app/globals.css`:
 
 **Componentes com Estilos de Foco Específicos**:
 
-- Inputs: `box-shadow` com borda azul
-- Textareas: `border-color` azul com sombra
-- Botões admin: sombra sem borda azul
-- Elementos de filtro: borda azul com sombra
+- **Inputs**: `box-shadow` com borda azul
+- **Textareas**: `border-color` azul com sombra
+- **Botões admin**: sombra sem borda azul
+- **Elementos de filtro**: borda azul com sombra
 
 ## Diretrizes de Acessibilidade
 
 ### 1. Contraste de Cores
 
-- Mínimo 4.5:1 para texto normal
-- Mínimo 3:1 para texto grande
-- Usar ferramentas como axe-core para verificação
+- **Mínimo**: 4.5:1 para texto normal
+- **Mínimo**: 3:1 para texto grande
+- **Ferramentas**: Usar ferramentas como axe-core para verificação
 
 ### 2. Navegação por Teclado
 
-- Todos os elementos interativos devem ser focáveis
-- Ordem de tabulação lógica
-- Indicadores visuais de foco
+- **Focabilidade**: Todos os elementos interativos devem ser focáveis
+- **Ordem**: Ordem de tabulação lógica
+- **Indicadores**: Indicadores visuais de foco
 
 ### 3. Semântica HTML
 
-- Usar elementos HTML apropriados
-- Atributos ARIA quando necessário
-- Labels associados a controles
+- **Elementos**: Usar elementos HTML apropriados
+- **ARIA**: Atributos ARIA quando necessário
+- **Labels**: Labels associados a controles
 
 ### 4. Anúncios de Estado
 
-- `aria-live` para toasts e notificações
-- `aria-busy` para estados de carregamento
-- `aria-label` para elementos sem texto visível
+- **aria-live**: Para toasts e notificações
+- **aria-busy**: Para estados de carregamento
+- **aria-label**: Para elementos sem texto visível
 
 ## Testes de Acessibilidade
 
@@ -146,9 +151,11 @@ O projeto já possui um padrão global de foco definido em `app/globals.css`:
 
 ### Ferramentas Recomendadas
 
-- [axe-core](https://github.com/dequelabs/axe-core)
-- [WAVE](https://wave.webaim.org/)
-- [Lighthouse](https://developers.google.com/web/tools/lighthouse)
+- **[axe-core](https://github.com/dequelabs/axe-core)**: Testes de
+  acessibilidade automatizados
+- **[WAVE](https://wave.webaim.org/)**: Avaliação de acessibilidade web
+- **[Lighthouse](https://developers.google.com/web/tools/lighthouse)**:
+  Auditoria de performance e acessibilidade
 
 ## Próximos Passos
 
@@ -161,13 +168,15 @@ O projeto já possui um padrão global de foco definido em `app/globals.css`:
 
 ### 🔄 Em Andamento
 
-1. **Auditoria Completa**: Revisar componentes restantes para padrões de acessibilidade
+1. **Auditoria Completa**: Revisar componentes restantes para padrões de
+   acessibilidade
 2. **Testes Automatizados**: Implementar testes de acessibilidade no CI/CD
 3. **Monitoramento**: Implementar métricas de acessibilidade
 
 ### 📋 Pendente
 
-1. **Componentes Específicos**: Verificar componentes de terceiros e customizados
+1. **Componentes Específicos**: Verificar componentes de terceiros e
+   customizados
 2. **Validação de Contraste**: Auditoria completa de contraste de cores
 3. **Navegação por Teclado**: Testes completos de navegação
 

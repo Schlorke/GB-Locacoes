@@ -1,86 +1,94 @@
-'use client';
+'use client'
 
-import Header from '@/components/header';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
-import { getSession, signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState, type FormEvent } from 'react';
+import Header from '@/components/header'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { AlertTriangle, Eye, EyeOff } from 'lucide-react'
+import { getSession, signIn } from 'next-auth/react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState, type FormEvent } from 'react'
 
 export default function AdminLoginPage() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [headerHeight, setHeaderHeight] = useState(0);
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [headerHeight, setHeaderHeight] = useState(0)
 
   // Measure header height to properly center the login block
   useEffect(() => {
     const measureHeader = () => {
-      const headerEl = document.querySelector('header');
+      const headerEl = document.querySelector('header')
       if (headerEl) {
-        const height = headerEl.getBoundingClientRect().height;
-        setHeaderHeight(height);
+        const height = headerEl.getBoundingClientRect().height
+        setHeaderHeight(height)
       }
-    };
+    }
 
     // Measure on mount
-    measureHeader();
+    measureHeader()
     // Measure on resize
-    window.addEventListener('resize', measureHeader);
+    window.addEventListener('resize', measureHeader)
     // Measure after a short delay to ensure header is fully rendered
-    const timer = setTimeout(measureHeader, 100);
+    const timer = setTimeout(measureHeader, 100)
 
     return () => {
-      window.removeEventListener('resize', measureHeader);
-      clearTimeout(timer);
-    };
-  }, []);
+      window.removeEventListener('resize', measureHeader)
+      clearTimeout(timer)
+    }
+  }, [])
 
   // Check if user is already authenticated
   useEffect(() => {
     const checkAuth = async () => {
-      const session = await getSession();
+      const session = await getSession()
       if (session) {
-        router.push('/admin/dashboard');
+        router.push('/admin/dashboard')
       }
-    };
-    checkAuth();
-  }, [router]);
+    }
+    checkAuth()
+  }, [router])
 
   // Handle URL error parameters
   useEffect(() => {
-    const errorParam = searchParams.get('error');
+    const errorParam = searchParams.get('error')
     if (errorParam) {
       switch (errorParam) {
         case 'CredentialsSignin':
-          setError('Credenciais inválidas. Verifique seu email e senha.');
-          break;
+          setError('Credenciais inválidas. Verifique seu email e senha.')
+          break
         case 'unauthorized':
-          setError('Usuário não autorizado para acessar o painel administrativo.');
-          break;
+          setError(
+            'Usuário não autorizado para acessar o painel administrativo.'
+          )
+          break
         default:
-          setError('Erro ao fazer login. Tente novamente.');
+          setError('Erro ao fazer login. Tente novamente.')
       }
     }
-  }, [searchParams]);
+  }, [searchParams])
 
   const handleSubmit = async (event: FormEvent) => {
-    event.preventDefault();
-    setIsLoading(true);
-    setError(null);
+    event.preventDefault()
+    setIsLoading(true)
+    setError(null)
 
     if (!email || !password) {
-      setError('Por favor, preencha todos os campos.');
-      setIsLoading(false);
-      return;
+      setError('Por favor, preencha todos os campos.')
+      setIsLoading(false)
+      return
     }
 
     try {
@@ -88,24 +96,24 @@ export default function AdminLoginPage() {
         redirect: false,
         email,
         password,
-      });
+      })
 
       if (result?.error) {
-        setError('Credenciais inválidas ou usuário não autorizado.');
+        setError('Credenciais inválidas ou usuário não autorizado.')
       } else if (result?.ok) {
         // Successful login, redirect to dashboard
-        router.push('/admin/dashboard');
-        router.refresh();
+        router.push('/admin/dashboard')
+        router.refresh()
       } else {
-        setError('Ocorreu um erro desconhecido. Tente novamente.');
+        setError('Ocorreu um erro desconhecido. Tente novamente.')
       }
     } catch (err) {
-      console.error('Login error:', err);
-      setError('Falha ao tentar fazer login. Verifique sua conexão.');
+      console.error('Login error:', err)
+      setError('Falha ao tentar fazer login. Verifique sua conexão.')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 overflow-hidden">
@@ -138,7 +146,9 @@ export default function AdminLoginPage() {
                 {/* Logo melhorado com animação */}
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white shadow-xl animate-scale-in relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-60"></div>
-                  <span className="text-2xl font-bold tracking-tight relative z-10">GB</span>
+                  <span className="text-2xl font-bold tracking-tight relative z-10">
+                    GB
+                  </span>
                 </div>
                 {/* Título e descrição centralizados */}
                 <div className="space-y-2 max-w-sm mx-auto">
@@ -152,7 +162,10 @@ export default function AdminLoginPage() {
               </CardHeader>
 
               <CardContent className="px-6 pb-6 space-y-6">
-                <form onSubmit={handleSubmit} className="space-y-5 max-w-sm mx-auto">
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-5 max-w-sm mx-auto"
+                >
                   {error && (
                     <Alert
                       variant="destructive"
@@ -214,7 +227,9 @@ export default function AdminLoginPage() {
                         className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 hover:bg-slate-100 rounded-md transition-all duration-200"
                         onClick={() => setShowPassword(!showPassword)}
                         disabled={isLoading}
-                        aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                        aria-label={
+                          showPassword ? 'Ocultar senha' : 'Mostrar senha'
+                        }
                       >
                         {showPassword ? (
                           <EyeOff className="h-4 w-4 text-slate-500" />
@@ -268,5 +283,5 @@ export default function AdminLoginPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

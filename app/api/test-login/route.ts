@@ -1,21 +1,21 @@
-import { prisma } from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
-import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma'
+import bcrypt from 'bcryptjs'
+import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   try {
-    const { email, password } = await request.json();
+    const { email, password } = await request.json()
 
     const user = await prisma.user.findUnique({
       where: { email },
-    });
+    })
 
     if (!user) {
       return NextResponse.json({
         success: false,
         message: 'Usuário não encontrado',
         debug: { userExists: false },
-      });
+      })
     }
 
     if (!user.password) {
@@ -23,10 +23,10 @@ export async function POST(request: Request) {
         success: false,
         message: 'Usuário sem senha',
         debug: { userExists: true, hasPassword: false },
-      });
+      })
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.password)
 
     return NextResponse.json({
       success: isValidPassword,
@@ -41,16 +41,16 @@ export async function POST(request: Request) {
           role: user.role,
         },
       },
-    });
+    })
   } catch (error) {
-    console.error('🧪 [TEST-LOGIN] Erro:', error);
+    console.error('🧪 [TEST-LOGIN] Erro:', error)
     return NextResponse.json(
       {
         success: false,
         message: 'Erro interno',
         error: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
-    );
+      { status: 500 }
+    )
   }
 }

@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
 import {
   Database,
   Trash2,
@@ -18,29 +18,29 @@ import {
   HardDrive,
   Users,
   FileText,
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from 'lucide-react'
+import { toast } from 'sonner'
 
 interface SystemInfo {
   database: {
-    status: 'connected' | 'disconnected';
-    totalTables: number;
-    totalRecords: number;
-  };
+    status: 'connected' | 'disconnected'
+    totalTables: number
+    totalRecords: number
+  }
   storage: {
-    used: string;
-    available: string;
-    total: string;
-  };
+    used: string
+    available: string
+    total: string
+  }
   users: {
-    total: number;
-    admins: number;
-    operators: number;
-  };
+    total: number
+    admins: number
+    operators: number
+  }
 }
 
 export default function AdminUtilsPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const [systemInfo] = useState<SystemInfo>({
     database: {
       status: 'connected',
@@ -57,80 +57,82 @@ export default function AdminUtilsPage() {
       admins: 3,
       operators: 12,
     },
-  });
+  })
 
   const handleSeedDatabase = async () => {
     if (
       !confirm(
-        'Tem certeza que deseja popular o banco de dados? Esta ação irá adicionar dados de exemplo.',
+        'Tem certeza que deseja popular o banco de dados? Esta ação irá adicionar dados de exemplo.'
       )
     )
-      return;
+      return
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const response = await fetch('/api/admin/seed-admin', {
         method: 'POST',
-      });
+      })
 
       if (response.ok) {
-        toast.success('Banco de dados populado com sucesso!');
+        toast.success('Banco de dados populado com sucesso!')
       } else {
-        toast.error('Erro ao popular banco de dados');
+        toast.error('Erro ao popular banco de dados')
       }
     } catch (error) {
-      console.error('Error seeding database:', error);
-      toast.error('Erro ao popular banco de dados');
+      console.error('Error seeding database:', error)
+      toast.error('Erro ao popular banco de dados')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleClearCache = async () => {
     if (
       !confirm(
-        'Tem certeza que deseja limpar o cache? Esta ação pode afetar a performance temporariamente.',
+        'Tem certeza que deseja limpar o cache? Esta ação pode afetar a performance temporariamente.'
       )
     )
-      return;
+      return
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       // Simulate cache clearing
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      toast.success('Cache limpo com sucesso!');
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      toast.success('Cache limpo com sucesso!')
     } catch (_error) {
-      toast.error('Erro ao limpar cache');
+      toast.error('Erro ao limpar cache')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleBackupDatabase = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       // Simulate backup creation
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      toast.success('Backup criado com sucesso!');
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      toast.success('Backup criado com sucesso!')
     } catch (_error) {
-      toast.error('Erro ao criar backup');
+      toast.error('Erro ao criar backup')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleSystemCheck = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       // Simulate system check
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      toast.success('Verificação do sistema concluída - Tudo funcionando corretamente!');
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+      toast.success(
+        'Verificação do sistema concluída - Tudo funcionando corretamente!'
+      )
     } catch (_error) {
-      toast.error('Erro na verificação do sistema');
+      toast.error('Erro na verificação do sistema')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="space-y-4 sm:space-y-6 p-3 sm:p-4 md:p-6 overflow-x-hidden">
@@ -171,16 +173,20 @@ export default function AdminUtilsPage() {
                 <div className="flex items-center gap-2 mt-1">
                   <div
                     className={`w-2 h-2 rounded-full ${
-                      systemInfo.database.status === 'connected' ? 'bg-green-500' : 'bg-red-500'
+                      systemInfo.database.status === 'connected'
+                        ? 'bg-green-500'
+                        : 'bg-red-500'
                     }`}
                   />
                   <span className="text-sm sm:text-base font-medium">
-                    {systemInfo.database.status === 'connected' ? 'Conectado' : 'Desconectado'}
+                    {systemInfo.database.status === 'connected'
+                      ? 'Conectado'
+                      : 'Desconectado'}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {systemInfo.database.totalRecords} registros em {systemInfo.database.totalTables}{' '}
-                  tabelas
+                  {systemInfo.database.totalRecords} registros em{' '}
+                  {systemInfo.database.totalTables} tabelas
                 </p>
               </div>
               <div className="flex-shrink-0 ml-3">
@@ -200,7 +206,9 @@ export default function AdminUtilsPage() {
                 <p className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100">
                   {systemInfo.storage.used}
                 </p>
-                <p className="text-xs text-muted-foreground">de {systemInfo.storage.total} usado</p>
+                <p className="text-xs text-muted-foreground">
+                  de {systemInfo.storage.total} usado
+                </p>
               </div>
               <div className="flex-shrink-0 ml-3">
                 <HardDrive className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
@@ -220,7 +228,8 @@ export default function AdminUtilsPage() {
                   {systemInfo.users.total}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {systemInfo.users.admins} admins, {systemInfo.users.operators} operadores
+                  {systemInfo.users.admins} admins, {systemInfo.users.operators}{' '}
+                  operadores
                 </p>
               </div>
               <div className="flex-shrink-0 ml-3">
@@ -251,7 +260,9 @@ export default function AdminUtilsPage() {
                 <RefreshCw className="h-5 w-5 flex-shrink-0 text-blue-600" />
                 <div className="text-left min-w-0 flex-1">
                   <p className="font-medium text-sm">Popular Banco</p>
-                  <p className="text-xs text-muted-foreground">Adicionar dados de exemplo</p>
+                  <p className="text-xs text-muted-foreground">
+                    Adicionar dados de exemplo
+                  </p>
                 </div>
               </div>
             </Button>
@@ -266,7 +277,9 @@ export default function AdminUtilsPage() {
                 <Download className="h-5 w-5 flex-shrink-0 text-green-600" />
                 <div className="text-left min-w-0 flex-1">
                   <p className="font-medium text-sm">Criar Backup</p>
-                  <p className="text-xs text-muted-foreground">Exportar dados do sistema</p>
+                  <p className="text-xs text-muted-foreground">
+                    Exportar dados do sistema
+                  </p>
                 </div>
               </div>
             </Button>
@@ -281,7 +294,9 @@ export default function AdminUtilsPage() {
                 <Trash2 className="h-5 w-5 flex-shrink-0 text-orange-600" />
                 <div className="text-left min-w-0 flex-1">
                   <p className="font-medium text-sm">Limpar Cache</p>
-                  <p className="text-xs text-muted-foreground">Remover arquivos temporários</p>
+                  <p className="text-xs text-muted-foreground">
+                    Remover arquivos temporários
+                  </p>
                 </div>
               </div>
             </Button>
@@ -297,8 +312,9 @@ export default function AdminUtilsPage() {
                   Atenção - Operações Críticas
                 </h4>
                 <p className="text-xs sm:text-sm text-yellow-700">
-                  As operações acima podem afetar o funcionamento do sistema. Certifique-se de ter
-                  um backup antes de executar operações críticas.
+                  As operações acima podem afetar o funcionamento do sistema.
+                  Certifique-se de ter um backup antes de executar operações
+                  críticas.
                 </p>
               </div>
             </div>
@@ -322,8 +338,12 @@ export default function AdminUtilsPage() {
                 <h4 className="font-medium text-sm">Última Verificação</h4>
               </div>
               <p className="text-xs sm:text-sm text-muted-foreground mb-2">
-                Sistema verificado em: {new Date().toLocaleDateString('pt-BR')} às{' '}
-                {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                Sistema verificado em: {new Date().toLocaleDateString('pt-BR')}{' '}
+                às{' '}
+                {new Date().toLocaleTimeString('pt-BR', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
               </p>
               <Badge variant="outline" className="text-xs">
                 Todos os serviços funcionando
@@ -338,7 +358,11 @@ export default function AdminUtilsPage() {
               <p className="text-xs sm:text-sm text-muted-foreground mb-2">
                 Últimos eventos registrados no sistema
               </p>
-              <Button variant="outline" size="sm" className="w-full bg-transparent">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full bg-transparent"
+              >
                 Ver Logs Completos
               </Button>
             </div>
@@ -354,7 +378,8 @@ export default function AdminUtilsPage() {
                   Sistema Funcionando Normalmente
                 </h4>
                 <p className="text-xs sm:text-sm text-green-700">
-                  Todos os serviços estão operacionais. Última verificação realizada com sucesso.
+                  Todos os serviços estão operacionais. Última verificação
+                  realizada com sucesso.
                 </p>
               </div>
             </div>
@@ -372,5 +397,5 @@ export default function AdminUtilsPage() {
         </div>
       )}
     </div>
-  );
+  )
 }

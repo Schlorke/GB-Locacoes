@@ -1,23 +1,26 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { HeroCarouselItem } from '@/schemas/settings.schema';
-import { motion } from 'framer-motion';
-import { GripVertical, Plus, Trash2, Upload } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import { HeroCarouselItem } from '@/schemas/settings.schema'
+import { motion } from 'framer-motion'
+import { GripVertical, Plus, Trash2, Upload } from 'lucide-react'
+import Image from 'next/image'
+import { useState } from 'react'
 
 interface HeroCarouselManagerProps {
-  items: HeroCarouselItem[];
-  onChange: (items: HeroCarouselItem[]) => void;
+  items: HeroCarouselItem[]
+  onChange: (items: HeroCarouselItem[]) => void
 }
 
-export function HeroCarouselManager({ items, onChange }: HeroCarouselManagerProps) {
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+export function HeroCarouselManager({
+  items,
+  onChange,
+}: HeroCarouselManagerProps) {
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
 
   const addItem = () => {
     const newItem: HeroCarouselItem = {
@@ -27,48 +30,52 @@ export function HeroCarouselManager({ items, onChange }: HeroCarouselManagerProp
       description: '',
       link: '',
       order: items.length,
-    };
-    onChange([...items, newItem]);
-  };
+    }
+    onChange([...items, newItem])
+  }
 
   const removeItem = (index: number) => {
-    const newItems = items.filter((_, i) => i !== index);
-    onChange(newItems);
-  };
+    const newItems = items.filter((_, i) => i !== index)
+    onChange(newItems)
+  }
 
   const updateItem = (index: number, updates: Partial<HeroCarouselItem>) => {
-    const newItems = items.map((item, i) => (i === index ? { ...item, ...updates } : item));
-    onChange(newItems);
-  };
+    const newItems = items.map((item, i) =>
+      i === index ? { ...item, ...updates } : item
+    )
+    onChange(newItems)
+  }
 
   const moveItem = (fromIndex: number, toIndex: number) => {
-    const newItems = [...items];
-    const [movedItem] = newItems.splice(fromIndex, 1);
-    newItems.splice(toIndex, 0, movedItem);
-    onChange(newItems);
-  };
+    const newItems = [...items]
+    const [movedItem] = newItems.splice(fromIndex, 1)
+    newItems.splice(toIndex, 0, movedItem)
+    onChange(newItems)
+  }
 
   const handleDragStart = (index: number) => {
-    setDraggedIndex(index);
-  };
+    setDraggedIndex(index)
+  }
 
   const handleDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
+    e.preventDefault()
     if (draggedIndex !== null && draggedIndex !== index) {
-      moveItem(draggedIndex, index);
-      setDraggedIndex(index);
+      moveItem(draggedIndex, index)
+      setDraggedIndex(index)
     }
-  };
+  }
 
   const handleDragEnd = () => {
-    setDraggedIndex(null);
-  };
+    setDraggedIndex(null)
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-medium text-gray-900">Carousel do Hero</h3>
+          <h3 className="text-lg font-medium text-gray-900">
+            Carousel do Hero
+          </h3>
           <p className="text-sm text-gray-600 mt-1">
             Gerencie as imagens e conteúdo do carousel principal
           </p>
@@ -83,7 +90,9 @@ export function HeroCarouselManager({ items, onChange }: HeroCarouselManagerProp
         <Card className="border-2 border-dashed border-gray-300">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Upload className="h-12 w-12 text-gray-400 mb-4" />
-            <p className="text-lg font-medium text-gray-900 mb-2">Nenhum item no carousel</p>
+            <p className="text-lg font-medium text-gray-900 mb-2">
+              Nenhum item no carousel
+            </p>
             <p className="text-sm text-gray-600 mb-4">
               Adicione imagens para criar o carousel principal do site
             </p>
@@ -105,7 +114,9 @@ export function HeroCarouselManager({ items, onChange }: HeroCarouselManagerProp
             >
               <Card
                 className={`border transition-all duration-200 ${
-                  draggedIndex === index ? 'opacity-50 scale-95' : 'hover:shadow-md'
+                  draggedIndex === index
+                    ? 'opacity-50 scale-95'
+                    : 'hover:shadow-md'
                 }`}
                 draggable
                 onDragStart={() => handleDragStart(index)}
@@ -140,13 +151,18 @@ export function HeroCarouselManager({ items, onChange }: HeroCarouselManagerProp
                     {/* Coluna da Imagem */}
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor={`image-${index}`} className="text-sm font-medium">
+                        <Label
+                          htmlFor={`image-${index}`}
+                          className="text-sm font-medium"
+                        >
                           URL da Imagem *
                         </Label>
                         <Input
                           id={`image-${index}`}
                           value={item.imageUrl || ''}
-                          onChange={(e) => updateItem(index, { imageUrl: e.target.value })}
+                          onChange={(e) =>
+                            updateItem(index, { imageUrl: e.target.value })
+                          }
                           placeholder="https://exemplo.com/imagem.jpg"
                           className="mt-1"
                         />
@@ -169,26 +185,36 @@ export function HeroCarouselManager({ items, onChange }: HeroCarouselManagerProp
                     {/* Coluna do Conteúdo */}
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor={`title-${index}`} className="text-sm font-medium">
+                        <Label
+                          htmlFor={`title-${index}`}
+                          className="text-sm font-medium"
+                        >
                           Título
                         </Label>
                         <Input
                           id={`title-${index}`}
                           value={item.title || ''}
-                          onChange={(e) => updateItem(index, { title: e.target.value })}
+                          onChange={(e) =>
+                            updateItem(index, { title: e.target.value })
+                          }
                           placeholder="Título do slide"
                           className="mt-1"
                         />
                       </div>
 
                       <div>
-                        <Label htmlFor={`description-${index}`} className="text-sm font-medium">
+                        <Label
+                          htmlFor={`description-${index}`}
+                          className="text-sm font-medium"
+                        >
                           Descrição
                         </Label>
                         <Textarea
                           id={`description-${index}`}
                           value={item.description || ''}
-                          onChange={(e) => updateItem(index, { description: e.target.value })}
+                          onChange={(e) =>
+                            updateItem(index, { description: e.target.value })
+                          }
                           placeholder="Descrição ou chamada para ação"
                           rows={3}
                           className="mt-1"
@@ -196,13 +222,18 @@ export function HeroCarouselManager({ items, onChange }: HeroCarouselManagerProp
                       </div>
 
                       <div>
-                        <Label htmlFor={`link-${index}`} className="text-sm font-medium">
+                        <Label
+                          htmlFor={`link-${index}`}
+                          className="text-sm font-medium"
+                        >
                           Link de Destino
                         </Label>
                         <Input
                           id={`link-${index}`}
                           value={item.link || ''}
-                          onChange={(e) => updateItem(index, { link: e.target.value })}
+                          onChange={(e) =>
+                            updateItem(index, { link: e.target.value })
+                          }
                           placeholder="/catalogo ou https://exemplo.com"
                           className="mt-1"
                         />
@@ -216,5 +247,5 @@ export function HeroCarouselManager({ items, onChange }: HeroCarouselManagerProp
         </div>
       )}
     </div>
-  );
+  )
 }

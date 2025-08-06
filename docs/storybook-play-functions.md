@@ -2,40 +2,42 @@
 
 ## O que são Play Functions?
 
-As funções `play` são pequenos trechos de código que são executados após a renderização da story. Elas permitem interagir com seus componentes e testar cenários que normalmente requerem intervenção do usuário.
+As funções `play` são pequenos trechos de código que são executados após a
+renderização da story. Elas permitem interagir com seus componentes e testar
+cenários que normalmente requerem intervenção do usuário.
 
 ## Como usar
 
 ### Estrutura básica
 
 ```tsx
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { Button } from './button';
+import type { Meta, StoryObj } from "@storybook/nextjs"
+import { Button } from "./button"
 
 const meta: Meta<typeof Button> = {
-  title: 'Atoms/Button',
-  component: Button,
-};
+  title: "Atoms/Button",
+  component: Button
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const InteractiveButton: Story = {
   args: {
-    children: 'Clique em mim!',
+    children: "Clique em mim!"
   },
   play: async ({ canvas, userEvent }) => {
     // Aguarda a renderização
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100))
 
     // Encontra o botão
-    const button = canvas.getByRole('button', { name: /clique em mim!/i });
+    const button = canvas.getByRole("button", { name: /clique em mim!/i })
 
     // Simula interações
-    await userEvent.hover(button);
-    await userEvent.click(button);
-  },
-};
+    await userEvent.hover(button)
+    await userEvent.click(button)
+  }
+}
 ```
 
 ### Parâmetros disponíveis
@@ -52,21 +54,21 @@ export const InteractiveButton: Story = {
 export const FormInteraction: Story = {
   play: async ({ canvas, userEvent }) => {
     // Preenche campos
-    const nameInput = canvas.getByLabelText('Nome Completo *', {
-      selector: 'input',
-    });
-    await userEvent.type(nameInput, 'João Silva', { delay: 50 });
+    const nameInput = canvas.getByLabelText("Nome Completo *", {
+      selector: "input"
+    })
+    await userEvent.type(nameInput, "João Silva", { delay: 50 })
 
-    const emailInput = canvas.getByLabelText('E-mail *', {
-      selector: 'input',
-    });
-    await userEvent.type(emailInput, 'joao@exemplo.com', { delay: 50 });
+    const emailInput = canvas.getByLabelText("E-mail *", {
+      selector: "input"
+    })
+    await userEvent.type(emailInput, "joao@exemplo.com", { delay: 50 })
 
     // Clica no botão de enviar
-    const submitButton = canvas.getByRole('button', { name: /enviar/i });
-    await userEvent.click(submitButton);
-  },
-};
+    const submitButton = canvas.getByRole("button", { name: /enviar/i })
+    await userEvent.click(submitButton)
+  }
+}
 ```
 
 ### 2. Validação de formulários
@@ -75,20 +77,20 @@ export const FormInteraction: Story = {
 export const FormValidation: Story = {
   play: async ({ canvas, userEvent }) => {
     // Tenta enviar sem preencher campos obrigatórios
-    const submitButton = canvas.getByRole('button', { name: /enviar/i });
-    await userEvent.click(submitButton);
+    const submitButton = canvas.getByRole("button", { name: /enviar/i })
+    await userEvent.click(submitButton)
 
     // Aguarda para ver os erros
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500))
 
     // Preenche apenas um campo
-    const nameInput = canvas.getByLabelText('Nome *');
-    await userEvent.type(nameInput, 'João Teste', { delay: 50 });
+    const nameInput = canvas.getByLabelText("Nome *")
+    await userEvent.type(nameInput, "João Teste", { delay: 50 })
 
     // Tenta enviar novamente
-    await userEvent.click(submitButton);
-  },
-};
+    await userEvent.click(submitButton)
+  }
+}
 ```
 
 ### 3. Múltiplas interações
@@ -104,20 +106,20 @@ export const MultipleInteractions: Story = {
   ),
   play: async ({ canvas, userEvent }) => {
     // Clica em cada botão em sequência
-    const primaryButton = canvas.getByRole('button', { name: /primário/i });
-    await userEvent.click(primaryButton);
+    const primaryButton = canvas.getByRole("button", { name: /primário/i })
+    await userEvent.click(primaryButton)
 
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 200))
 
-    const secondaryButton = canvas.getByRole('button', { name: /secundário/i });
-    await userEvent.click(secondaryButton);
+    const secondaryButton = canvas.getByRole("button", { name: /secundário/i })
+    await userEvent.click(secondaryButton)
 
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 200))
 
-    const outlineButton = canvas.getByRole('button', { name: /outline/i });
-    await userEvent.click(outlineButton);
-  },
-};
+    const outlineButton = canvas.getByRole("button", { name: /outline/i })
+    await userEvent.click(outlineButton)
+  }
+}
 ```
 
 ## Métodos do userEvent
@@ -140,7 +142,7 @@ export const MultipleInteractions: Story = {
 ### Opções de delay
 
 ```tsx
-await userEvent.type(input, 'texto', { delay: 50 }); // 50ms entre cada caractere
+await userEvent.type(input, "texto", { delay: 50 }) // 50ms entre cada caractere
 ```
 
 ## Consultando elementos
@@ -157,18 +159,18 @@ await userEvent.type(input, 'texto', { delay: 50 }); // 50ms entre cada caracter
 
 ```tsx
 // Por role
-const button = canvas.getByRole('button', { name: /enviar/i });
+const button = canvas.getByRole("button", { name: /enviar/i })
 
 // Por label
-const input = canvas.getByLabelText('Nome Completo *', {
-  selector: 'input',
-});
+const input = canvas.getByLabelText("Nome Completo *", {
+  selector: "input"
+})
 
 // Por placeholder
-const searchInput = canvas.getByPlaceholderText('Pesquisar...');
+const searchInput = canvas.getByPlaceholderText("Pesquisar...")
 
 // Por valor
-const filledInput = canvas.getByDisplayValue('João Silva');
+const filledInput = canvas.getByDisplayValue("João Silva")
 ```
 
 ## Combinando Play Functions
@@ -179,13 +181,13 @@ Você pode combinar play functions de outras stories:
 export const CombinedStory: Story = {
   play: async ({ context, canvas, userEvent }) => {
     // Executa a play function de outra story
-    await FirstStory.play(context);
-    await SecondStory.play(context);
+    await FirstStory.play(context)
+    await SecondStory.play(context)
 
     // Adiciona interações específicas
-    await userEvent.click(canvas.getByRole('button'));
-  },
-};
+    await userEvent.click(canvas.getByRole("button"))
+  }
+}
 ```
 
 ## Boas práticas
@@ -195,36 +197,36 @@ export const CombinedStory: Story = {
 ```tsx
 play: async ({ canvas, userEvent }) => {
   // Sempre aguarde um pouco para garantir que o componente foi renderizado
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await new Promise((resolve) => setTimeout(resolve, 100))
 
   // Suas interações aqui...
-};
+}
 ```
 
 ### 2. Use delays apropriados
 
 ```tsx
 // Para digitação natural
-await userEvent.type(input, 'texto', { delay: 50 });
+await userEvent.type(input, "texto", { delay: 50 })
 
 // Para digitação rápida
-await userEvent.type(input, 'texto', { delay: 10 });
+await userEvent.type(input, "texto", { delay: 10 })
 ```
 
 ### 3. Aguarde entre interações
 
 ```tsx
-await userEvent.click(button1);
-await new Promise((resolve) => setTimeout(resolve, 200));
-await userEvent.click(button2);
+await userEvent.click(button1)
+await new Promise((resolve) => setTimeout(resolve, 200))
+await userEvent.click(button2)
 ```
 
 ### 4. Trate elementos desabilitados
 
 ```tsx
 // Teste se elementos desabilitados não respondem
-const disabledButton = canvas.getByRole('button', { name: /desabilitado/i });
-await userEvent.click(disabledButton); // Não deve fazer nada
+const disabledButton = canvas.getByRole("button", { name: /desabilitado/i })
+await userEvent.click(disabledButton) // Não deve fazer nada
 ```
 
 ## Exemplos no projeto
@@ -259,23 +261,23 @@ await userEvent.click(disabledButton); // Não deve fazer nada
 
 ```tsx
 // ❌ Errado
-const button = canvas.getByRole('button');
+const button = canvas.getByRole("button")
 
 // ✅ Correto - seja mais específico
-const button = canvas.getByRole('button', { name: /enviar/i });
+const button = canvas.getByRole("button", { name: /enviar/i })
 ```
 
 ### Problema: Interação muito rápida
 
 ```tsx
 // ❌ Errado
-await userEvent.click(button1);
-await userEvent.click(button2);
+await userEvent.click(button1)
+await userEvent.click(button2)
 
 // ✅ Correto - aguarde entre interações
-await userEvent.click(button1);
-await new Promise((resolve) => setTimeout(resolve, 200));
-await userEvent.click(button2);
+await userEvent.click(button1)
+await new Promise((resolve) => setTimeout(resolve, 200))
+await userEvent.click(button2)
 ```
 
 ### Problema: Componente não renderizado
@@ -283,7 +285,7 @@ await userEvent.click(button2);
 ```tsx
 // ✅ Sempre aguarde a renderização
 play: async ({ canvas, userEvent }) => {
-  await new Promise((resolve) => setTimeout(resolve, 100));
+  await new Promise((resolve) => setTimeout(resolve, 100))
   // Suas interações aqui...
-};
+}
 ```

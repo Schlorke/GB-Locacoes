@@ -1,29 +1,33 @@
-'use client';
+'use client'
 
-import type React from 'react';
-import { Inter, Jost } from 'next/font/google';
-import './globals.css';
-import Header from '@/components/header';
-import Footer from '@/components/footer';
-import WhatsAppFAB from '@/components/whatsapp-fab';
-import ScrollRevealInit from '@/components/scroll-reveal-init';
-import { usePathname } from 'next/navigation';
+import Footer from '@/components/footer'
+import Header from '@/components/header'
+import ScrollRevealInit from '@/components/scroll-reveal-init'
+import WhatsAppFAB from '@/components/whatsapp-fab'
+import { Inter, Jost } from 'next/font/google'
+import { usePathname } from 'next/navigation'
+import React from 'react'
+import './globals.css'
 
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
-});
+})
 
 const jost = Jost({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-jost',
-});
+})
 
-export default function ClientLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const isAdminRoute = pathname.startsWith('/admin');
+export default function ClientLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const pathname = usePathname()
+  const isAdminRoute = pathname.startsWith('/admin')
 
   return (
     <html lang="pt-BR" className={`${inter.variable} ${jost.variable}`}>
@@ -45,5 +49,5 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <ScrollRevealInit />
       </body>
     </html>
-  );
+  )
 }

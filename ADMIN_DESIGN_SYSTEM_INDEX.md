@@ -1,6 +1,7 @@
 # 🎨 Admin Dashboard Design System - GB Locações
 
-Sistema de design completo para o painel administrativo, baseado na análise das páginas existentes de equipamentos e categorias.
+Sistema de design completo para o painel administrativo, baseado na análise das
+páginas existentes de equipamentos e categorias.
 
 ## 📚 Documentação
 

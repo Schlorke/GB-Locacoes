@@ -1,8 +1,8 @@
-import type { UserRole } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-import NextAuth, { type NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { prisma } from './prisma';
+import type { UserRole } from '@prisma/client'
+import bcrypt from 'bcryptjs'
+import NextAuth, { type NextAuthOptions } from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { prisma } from './prisma'
 
 export enum Role {
   ADMIN = 'ADMIN',
@@ -18,23 +18,23 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        console.warn('🔐 [AUTH] Iniciando autenticação');
+        console.warn('🔐 [AUTH] Iniciando autenticação')
 
         if (!credentials?.email || !credentials.password) {
-          console.warn('❌ [AUTH] Credenciais ausentes');
-          return null;
+          console.warn('❌ [AUTH] Credenciais ausentes')
+          return null
         }
 
         try {
-          console.warn('🔍 [AUTH] Buscando usuário:', credentials.email);
+          console.warn('🔍 [AUTH] Buscando usuário:', credentials.email)
 
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
-          });
+          })
 
           if (!user) {
-            console.warn('❌ [AUTH] Usuário não encontrado');
-            return null;
+            console.warn('❌ [AUTH] Usuário não encontrado')
+            return null
           }
 
           console.warn('👤 [AUTH] Usuário encontrado:', {
@@ -42,36 +42,39 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             role: user.role,
             hasPassword: !!user.password,
-          });
+          })
 
           if (!user.password) {
-            console.warn('❌ [AUTH] Usuário sem senha');
-            return null;
+            console.warn('❌ [AUTH] Usuário sem senha')
+            return null
           }
 
-          const isValidPassword = await bcrypt.compare(credentials.password, user.password);
-          console.warn('🔑 [AUTH] Senha válida:', isValidPassword);
+          const isValidPassword = await bcrypt.compare(
+            credentials.password,
+            user.password
+          )
+          console.warn('🔑 [AUTH] Senha válida:', isValidPassword)
 
           if (!isValidPassword) {
-            return null;
+            return null
           }
 
           if (user.role === Role.CLIENT) {
-            console.warn('❌ [AUTH] Role não autorizada:', user.role);
-            return null;
+            console.warn('❌ [AUTH] Role não autorizada:', user.role)
+            return null
           }
 
-          console.warn('✅ [AUTH] Autenticação bem-sucedida');
+          console.warn('✅ [AUTH] Autenticação bem-sucedida')
 
           return {
             id: user.id,
             email: user.email,
             name: user.name,
             role: user.role,
-          };
+          }
         } catch (error) {
-          console.error('💥 [AUTH] Erro:', error);
-          return null;
+          console.error('💥 [AUTH] Erro:', error)
+          return null
         }
       },
     }),
@@ -83,17 +86,17 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
-        token.role = user.role;
+        token.id = user.id
+        token.role = user.role
       }
-      return token;
+      return token
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as UserRole;
+        session.user.id = token.id as string
+        session.user.role = token.role as UserRole
       }
-      return session;
+      return session
     },
   },
   pages: {
@@ -101,6 +104,6 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: true,
-};
+}
 
-export default NextAuth(authOptions);
+export default NextAuth(authOptions)

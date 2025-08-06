@@ -1,9 +1,15 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { User, FileText, Clock, Phone } from 'lucide-react';
-import Link from 'next/link';
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { User, FileText, Clock, Phone } from 'lucide-react'
+import Link from 'next/link'
 
 export default function AreaClientePage() {
   return (
@@ -13,7 +19,8 @@ export default function AreaClientePage() {
         <div className="container mx-auto px-4 text-center">
           <h1 className="font-bold text-h1 mb-4">Área do Cliente</h1>
           <p className="text-base text-slate-200 max-w-2xl mx-auto">
-            Acompanhe seus orçamentos, histórico de locações e gerencie suas solicitações
+            Acompanhe seus orçamentos, histórico de locações e gerencie suas
+            solicitações
           </p>
         </div>
       </section>
@@ -27,7 +34,9 @@ export default function AreaClientePage() {
                 <User className="h-5 w-5" />
                 Acesso do Cliente
               </CardTitle>
-              <CardDescription>Entre com seus dados para acessar sua área</CardDescription>
+              <CardDescription>
+                Entre com seus dados para acessar sua área
+              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -83,7 +92,9 @@ export default function AreaClientePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 mb-4">Visualize todas as suas locações anteriores</p>
+                <p className="text-slate-600 mb-4">
+                  Visualize todas as suas locações anteriores
+                </p>
                 <Button variant="outline" className="w-full">
                   Ver Histórico Completo
                 </Button>
@@ -98,7 +109,9 @@ export default function AreaClientePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-600 mb-4">Precisa de ajuda? Entre em contato conosco</p>
+                <p className="text-slate-600 mb-4">
+                  Precisa de ajuda? Entre em contato conosco
+                </p>
                 <div className="space-y-2">
                   <Link href="/contato">
                     <Button variant="outline" className="w-full">
@@ -115,5 +128,5 @@ export default function AreaClientePage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

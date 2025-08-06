@@ -1,6 +1,7 @@
 # AGENTS.md
 
-Este documento orienta colaboradores humanos **e agentes automatizados** sobre como trabalhar neste repositório GB Locações.
+Este documento orienta colaboradores humanos **e agentes automatizados** sobre
+como trabalhar neste repositório GB Locações.
 
 ---
 
@@ -9,9 +10,11 @@ Este documento orienta colaboradores humanos **e agentes automatizados** sobre c
 - Projeto em **Next.js 15** (App Router) e **TypeScript**.
 - Nomes de arquivos e pastas sempre em inglês e minúsculo.
 - Rode **eslint** e **prettier** antes de enviar pull requests.
-- Siga os utilitários **TailwindCSS** e o design system **ShadCN UI** já presentes.
+- Siga os utilitários **TailwindCSS** e o design system **ShadCN UI** já
+  presentes.
 - ❌ **NÃO** alterar design, animações ou responsividade já implementados.
-- ✅ Padrão de foco: `focus:border-blue-500` **e/ou** `focus:outline-blue-500 focus:outline-2` para todos os elementos interativos.
+- ✅ Padrão de foco: `focus:border-blue-500` **e/ou**
+  `focus:outline-blue-500 focus:outline-2` para todos os elementos interativos.
 
 ---
 
@@ -118,8 +121,10 @@ pnpm test
 ## 🔒 Regras obrigatórias para **agentes de IA**
 
 1. **Foco acessível em azul:**
-   - Implementar `focus:border-blue-500` **e/ou** `focus:outline-blue-500 focus:outline-2`.
-   - `focus:ring` deve permanecer **desativado** (`focus:ring-0`), salvo exceções aprovadas.
+   - Implementar `focus:border-blue-500` **e/ou**
+     `focus:outline-blue-500 focus:outline-2`.
+   - `focus:ring` deve permanecer **desativado** (`focus:ring-0`), salvo
+     exceções aprovadas.
 2. **Proibição de alteração visual existente:**
    - Não modificar estilos, animações, delays ou identidade já aplicada.
 3. **Não sobrescrever componentes reutilizáveis existentes.**
@@ -132,7 +137,7 @@ pnpm test
 
 ```css
 @layer base {
-  input:not([type='checkbox']):not([type='radio']),
+  input:not([type="checkbox"]):not([type="radio"]),
   select,
   textarea {
     @apply border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0;

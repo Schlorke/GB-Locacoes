@@ -1,18 +1,22 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import Image from 'next/image'
+import { useState } from 'react'
 
 interface MiniCarouselProps {
-  images: string[];
-  height?: number;
-  className?: string;
+  images: string[]
+  height?: number
+  className?: string
 }
 
-export function MiniCarousel({ images, height = 200, className = '' }: MiniCarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export function MiniCarousel({
+  images,
+  height = 200,
+  className = '',
+}: MiniCarouselProps) {
+  const [currentIndex, setCurrentIndex] = useState(0)
 
   if (!images || images.length === 0) {
     return (
@@ -22,19 +26,22 @@ export function MiniCarousel({ images, height = 200, className = '' }: MiniCarou
       >
         <span className="text-gray-400 text-sm">Nenhuma imagem</span>
       </div>
-    );
+    )
   }
 
   const nextImage = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
+    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
+  }
 
   const prevImage = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
+    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
+  }
 
   return (
-    <div className={`relative rounded-lg overflow-hidden ${className}`} style={{ height }}>
+    <div
+      className={`relative rounded-lg overflow-hidden ${className}`}
+      style={{ height }}
+    >
       <Image
         src={images[currentIndex]}
         alt={`Preview ${currentIndex + 1}`}
@@ -42,10 +49,10 @@ export function MiniCarousel({ images, height = 200, className = '' }: MiniCarou
         className="object-cover"
         onError={() => {
           // Remove imagem com erro da lista
-          const newImages = images.filter((_, index) => index !== currentIndex);
-          if (newImages.length === 0) return;
+          const newImages = images.filter((_, index) => index !== currentIndex)
+          if (newImages.length === 0) return
           if (currentIndex >= newImages.length) {
-            setCurrentIndex(newImages.length - 1);
+            setCurrentIndex(newImages.length - 1)
           }
         }}
       />
@@ -93,5 +100,5 @@ export function MiniCarousel({ images, height = 200, className = '' }: MiniCarou
         </div>
       )}
     </div>
-  );
+  )
 }

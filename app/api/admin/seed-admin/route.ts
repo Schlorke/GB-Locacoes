@@ -1,45 +1,48 @@
-import { prisma } from '@/lib/prisma';
-import { UserRole } from '@prisma/client';
-import bcrypt from 'bcryptjs';
-import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma'
+import { UserRole } from '@prisma/client'
+import bcrypt from 'bcryptjs'
+import { NextResponse } from 'next/server'
 
 export async function POST() {
   try {
-    const adminEmail = 'admin@gblocacoes.com.br';
-    const adminPassword = 'admin123';
-    const adminName = 'Admin';
+    const adminEmail = 'admin@gblocacoes.com.br'
+    const adminPassword = 'admin123'
+    const adminName = 'Admin'
 
     // Test database connection first
     try {
-      await prisma.$connect();
+      await prisma.$connect()
     } catch (connectError) {
-      console.error('❌ [SEED-ADMIN] Erro na conexão Prisma:', connectError);
+      console.error('❌ [SEED-ADMIN] Erro na conexão Prisma:', connectError)
       throw new Error(
-        `Falha na conexão: ${connectError instanceof Error ? connectError.message : 'Unknown error'}`,
-      );
+        `Falha na conexão: ${connectError instanceof Error ? connectError.message : 'Unknown error'}`
+      )
     }
 
     // Test basic query
     try {
-      await prisma.user.count();
+      await prisma.user.count()
     } catch (queryError) {
-      console.error('❌ [SEED-ADMIN] Erro na query básica:', queryError);
+      console.error('❌ [SEED-ADMIN] Erro na query básica:', queryError)
       throw new Error(
-        `Falha na query: ${queryError instanceof Error ? queryError.message : 'Unknown error'}`,
-      );
+        `Falha na query: ${queryError instanceof Error ? queryError.message : 'Unknown error'}`
+      )
     }
 
     // Check if admin user already exists
-    let existingAdmin;
+    let existingAdmin
     try {
       existingAdmin = await prisma.user.findUnique({
         where: { email: adminEmail },
-      });
+      })
     } catch (findError) {
-      console.error('❌ [SEED-ADMIN] Erro ao buscar admin existente:', findError);
+      console.error(
+        '❌ [SEED-ADMIN] Erro ao buscar admin existente:',
+        findError
+      )
       throw new Error(
-        `Falha ao verificar admin: ${findError instanceof Error ? findError.message : 'Unknown error'}`,
-      );
+        `Falha ao verificar admin: ${findError instanceof Error ? findError.message : 'Unknown error'}`
+      )
     }
 
     if (existingAdmin) {
@@ -54,23 +57,23 @@ export async function POST() {
             createdAt: existingAdmin.createdAt,
           },
         },
-        { status: 409 },
-      );
+        { status: 409 }
+      )
     }
 
     // Hash the password
-    let hashedPassword;
+    let hashedPassword
     try {
-      hashedPassword = await bcrypt.hash(adminPassword, 12);
+      hashedPassword = await bcrypt.hash(adminPassword, 12)
     } catch (hashError) {
-      console.error('❌ [SEED-ADMIN] Erro ao gerar hash:', hashError);
+      console.error('❌ [SEED-ADMIN] Erro ao gerar hash:', hashError)
       throw new Error(
-        `Falha no hash: ${hashError instanceof Error ? hashError.message : 'Unknown error'}`,
-      );
+        `Falha no hash: ${hashError instanceof Error ? hashError.message : 'Unknown error'}`
+      )
     }
 
     // Create admin user
-    let adminUser;
+    let adminUser
     try {
       adminUser = await prisma.user.create({
         data: {
@@ -88,9 +91,9 @@ export async function POST() {
           createdAt: true,
           emailVerified: true,
         },
-      });
+      })
     } catch (createError) {
-      console.error('❌ [SEED-ADMIN] Erro ao criar admin:', createError);
+      console.error('❌ [SEED-ADMIN] Erro ao criar admin:', createError)
       const errorDetails =
         createError instanceof Error
           ? {
@@ -101,11 +104,11 @@ export async function POST() {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               meta: (createError as any).meta,
             }
-          : { message: 'Unknown error' };
-      console.error('❌ [SEED-ADMIN] Detalhes do erro:', errorDetails);
+          : { message: 'Unknown error' }
+      console.error('❌ [SEED-ADMIN] Detalhes do erro:', errorDetails)
       throw new Error(
-        `Falha ao criar admin: ${createError instanceof Error ? createError.message : 'Unknown error'}`,
-      );
+        `Falha ao criar admin: ${createError instanceof Error ? createError.message : 'Unknown error'}`
+      )
     }
 
     return NextResponse.json(
@@ -125,12 +128,12 @@ export async function POST() {
           password: adminPassword,
         },
       },
-      { status: 201 },
-    );
+      { status: 201 }
+    )
   } catch (error) {
-    console.error('💥 [SEED-ADMIN] ERRO GERAL:', error);
+    console.error('💥 [SEED-ADMIN] ERRO GERAL:', error)
     if (error instanceof Error) {
-      console.error('💥 [SEED-ADMIN] Stack trace:', error.stack);
+      console.error('💥 [SEED-ADMIN] Stack trace:', error.stack)
     }
 
     const errorDetails =
@@ -140,15 +143,16 @@ export async function POST() {
             message: error.message,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             code: (error as any).code || 'NO_CODE',
-            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+            stack:
+              process.env.NODE_ENV === 'development' ? error.stack : undefined,
           }
         : {
             name: 'Unknown',
             message: 'Unknown error',
             code: 'NO_CODE',
-          };
+          }
 
-    console.error('📋 [SEED-ADMIN] Detalhes completos do erro:', errorDetails);
+    console.error('📋 [SEED-ADMIN] Detalhes completos do erro:', errorDetails)
 
     return NextResponse.json(
       {
@@ -157,13 +161,16 @@ export async function POST() {
         error: 'INTERNAL_SERVER_ERROR',
         details: errorDetails,
       },
-      { status: 500 },
-    );
+      { status: 500 }
+    )
   } finally {
     try {
-      await prisma.$disconnect();
+      await prisma.$disconnect()
     } catch (disconnectError) {
-      console.error('⚠️ [SEED-ADMIN] Erro ao desconectar Prisma:', disconnectError);
+      console.error(
+        '⚠️ [SEED-ADMIN] Erro ao desconectar Prisma:',
+        disconnectError
+      )
     }
   }
 }
@@ -171,9 +178,9 @@ export async function POST() {
 // GET method remains the same
 export async function GET() {
   try {
-    const adminEmail = 'admin@gblocacoes.com.br';
+    const adminEmail = 'admin@gblocacoes.com.br'
 
-    await prisma.$connect();
+    await prisma.$connect()
 
     const existingAdmin = await prisma.user.findUnique({
       where: { email: adminEmail },
@@ -185,7 +192,7 @@ export async function GET() {
         createdAt: true,
         emailVerified: true,
       },
-    });
+    })
 
     if (existingAdmin) {
       return NextResponse.json({
@@ -193,17 +200,17 @@ export async function GET() {
         message: 'Admin encontrado',
         exists: true,
         data: existingAdmin,
-      });
+      })
     } else {
       return NextResponse.json({
         status: 'info',
         message: 'Admin não encontrado',
         exists: false,
         data: null,
-      });
+      })
     }
   } catch (error) {
-    console.error('❌ [SEED-ADMIN-GET] Erro ao verificar admin:', error);
+    console.error('❌ [SEED-ADMIN-GET] Erro ao verificar admin:', error)
 
     const errorDetails =
       error instanceof Error
@@ -217,7 +224,7 @@ export async function GET() {
             name: 'Unknown',
             message: 'Unknown error',
             code: 'NO_CODE',
-          };
+          }
 
     return NextResponse.json(
       {
@@ -226,9 +233,9 @@ export async function GET() {
         error: 'VERIFICATION_ERROR',
         details: errorDetails,
       },
-      { status: 500 },
-    );
+      { status: 500 }
+    )
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect()
   }
 }

@@ -5,7 +5,8 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/GBLocacoes/GB-Locacoes/test.yml?label=CI)](https://github.com/GBLocacoes/GB-Locacoes/actions)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](#licença)
 
-Plataforma completa para locação de equipamentos de construção civil utilizando **Next.js 15**, **TypeScript** e **Prisma**.
+Plataforma completa para locação de equipamentos de construção civil utilizando
+**Next.js 15**, **TypeScript** e **Prisma**.
 
 ## Visão Geral
 
@@ -51,7 +52,7 @@ Supabase (PostgreSQL & Storage)
 ```
 <!-- prettier-ignore-end -->
 
-Principais tecnologias:
+**Principais tecnologias**:
 
 - **Next.js 15** com App Router
 - **ShadCN UI** e **TailwindCSS**
@@ -71,20 +72,28 @@ Principais tecnologias:
 
 ## Instalação
 
+**Clone** o repositório:
+
 ```bash
 git clone https://github.com/Schlorke/GB-Locacoes.git
 cd GB-Locacoes
+```
+
+```bash
 pnpm install
 pnpm db:generate
 pnpm db:push
+```
+
+```bash
 pnpm dev
 ```
 
-A aplicação ficará disponível em `http://localhost:3000`.
+**A aplicação** ficará disponível em `http://localhost:3000`.
 
 ## Configuração
 
-Copie `.env.example` para `.env` e ajuste cada chave:
+**Copie** `.env.example` para `.env` e ajuste cada chave:
 
 ```env
 DATABASE_URL="postgresql://username:password@host:port/database?schema=public"
@@ -97,8 +106,8 @@ STRIPE_SECRET_KEY="your-stripe-secret-key"
 MERCADO_PAGO_TOKEN="your-mercado-pago-token"
 ```
 
-Variáveis adicionais utilizadas no código:
-`DIRECT_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ZAPSIGN_TOKEN`, `MELHOR_ENVIO_TOKEN`, `LOG_LEVEL`.
+**Variáveis adicionais** utilizadas no código: `DIRECT_URL`,
+`SUPABASE_SERVICE_ROLE_KEY`, `ZAPSIGN_TOKEN`, `MELHOR_ENVIO_TOKEN`, `LOG_LEVEL`.
 
 ## Uso Rápido
 
@@ -106,7 +115,7 @@ Variáveis adicionais utilizadas no código:
 pnpm dev
 ```
 
-Acesse `http://localhost:3000` e realize um orçamento pelo catálogo.
+**Acesse** `http://localhost:3000` e realize um orçamento pelo catálogo.
 
 ## Estrutura de Diretórios
 
@@ -126,17 +135,22 @@ Acesse `http://localhost:3000` e realize um orçamento pelo catálogo.
 
 ## 🔱 Design System
 
-Consulte o [Design System](docs/design-system.md) para padrões de cores, tipografia e componentes reutilizáveis.
+Consulte o [Design System](docs/design-system.md) para padrões de cores,
+tipografia e componentes reutilizáveis.
 
 ### ✅ Melhorias Recentes
 
-- **Acessibilidade**: Padrão de foco consistente em todos os componentes interativos
-- **Consistência**: Variantes de botão alinhadas com a paleta de cores do design system
+- **Acessibilidade**: Padrão de foco consistente em todos os componentes
+  interativos
+- **Consistência**: Variantes de botão alinhadas com a paleta de cores do design
+  system
 - **Storybook**: Compatibilidade corrigida com versões mais recentes
 
 ## 🔧 Storybook
 
-O projeto utiliza **Storybook** para documentação e desenvolvimento de componentes. Todos os componentes estão organizados seguindo a metodologia **Atomic Design**.
+O projeto utiliza **Storybook** para documentação e desenvolvimento de
+componentes. Todos os componentes estão organizados seguindo a metodologia
+**Atomic Design**.
 
 ### Executando o Storybook
 
@@ -169,7 +183,8 @@ pnpm chromatic
 
 ### CI/CD
 
-O Storybook é automaticamente buildado no GitHub Actions e pode ser integrado com Chromatic para visual regression testing.
+O Storybook é automaticamente buildado no GitHub Actions e pode ser integrado
+com Chromatic para visual regression testing.
 
 ## Scripts
 
@@ -183,13 +198,14 @@ O Storybook é automaticamente buildado no GitHub Actions e pode ser integrado c
 
 ## Testes
 
-Execute:
+**Execute**:
 
 ```bash
 pnpm vitest run
 ```
 
-O relatório de cobertura estará em `coverage/` quando rodado com `pnpm test:coverage`.
+**O relatório** de cobertura estará em `coverage/` quando rodado com
+`pnpm test:coverage`.
 
 ## Roadmap
 
@@ -198,12 +214,14 @@ O relatório de cobertura estará em `coverage/` quando rodado com `pnpm test:co
 - [ ] Upload otimizado em produção
 - [ ] Traduções (i18n) para EN/ES
 
-Relate bugs e sugestões via [Issues](https://github.com/GBLocacoes/GB-Locacoes/issues).
+Relate bugs e sugestões via
+[Issues](https://github.com/GBLocacoes/GB-Locacoes/issues).
 
 ## Contribuindo
 
-Siga o padrão de commits `feat:`, `fix:`, `test:` etc. Rode `pnpm lint` e `pnpm vitest run` antes de enviar PR.
-Consulte [AGENTS.md](AGENTS.md) para detalhes de estilo e fluxos.
+Siga o padrão de commits `feat:`, `fix:`, `test:` etc. Rode `pnpm lint` e
+`pnpm vitest run` antes de enviar PR. Consulte [AGENTS.md](AGENTS.md) para
+detalhes de estilo e fluxos.
 
 ## Licença
 
@@ -211,4 +229,5 @@ Este projeto utiliza a licença [MIT](LICENSE) © GB Locações.
 
 ## Autores
 
-Equipe **GB Locações** – contato profissional via [website](https://gblocacoes.com.br).
+Equipe **GB Locações** – contato profissional via
+[website](https://gblocacoes.com.br).

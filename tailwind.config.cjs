@@ -1,6 +1,6 @@
 // tailwind.config.cjs
 // Converted from ESM to CJS for compatibility with PostCSS in Next.js
-const colors = require('tailwindcss/colors');
+const colors = require('tailwindcss/colors')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -109,4 +109,4 @@ module.exports = {
     },
   },
   plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar')],
-};
+}

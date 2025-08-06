@@ -1,50 +1,56 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { useState } from 'react'
 
 export default function TestUploadPage() {
-  const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [file, setFile] = useState<File | null>(null)
+  const [uploading, setUploading] = useState(false)
   const [result, setResult] = useState<{
-    url?: string;
-    filename?: string;
-    size?: number;
-    success?: boolean;
-    error?: string;
-  } | null>(null);
+    url?: string
+    filename?: string
+    size?: number
+    success?: boolean
+    error?: string
+  } | null>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
-      setFile(e.target.files[0]);
-      setResult(null);
+      setFile(e.target.files[0])
+      setResult(null)
     }
-  };
+  }
 
   const handleUpload = async () => {
-    if (!file) return;
+    if (!file) return
 
-    setUploading(true);
-    setResult(null);
+    setUploading(true)
+    setResult(null)
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
+      const formData = new FormData()
+      formData.append('file', file)
 
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
-      });
+      })
 
-      const data = await response.json();
-      setResult(data);
+      const data = await response.json()
+      setResult(data)
     } catch (error) {
-      setResult({ error: 'Erro no upload: ' + String(error) });
+      setResult({ error: 'Erro no upload: ' + String(error) })
     } finally {
-      setUploading(false);
+      setUploading(false)
     }
-  };
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -52,12 +58,16 @@ export default function TestUploadPage() {
         <CardHeader>
           <CardTitle>🧪 Teste de Upload - Supabase Storage</CardTitle>
           <CardDescription>
-            Teste se o sistema de upload de imagens está funcionando corretamente.
+            Teste se o sistema de upload de imagens está funcionando
+            corretamente.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <label htmlFor="file-upload" className="block text-sm font-medium mb-2">
+            <label
+              htmlFor="file-upload"
+              className="block text-sm font-medium mb-2"
+            >
               Selecionar imagem:
             </label>
             <input
@@ -75,12 +85,17 @@ export default function TestUploadPage() {
                 <strong>Arquivo selecionado:</strong> {file.name}
               </p>
               <p className="text-sm text-gray-600">
-                Tamanho: {(file.size / 1024 / 1024).toFixed(2)} MB | Tipo: {file.type}
+                Tamanho: {(file.size / 1024 / 1024).toFixed(2)} MB | Tipo:{' '}
+                {file.type}
               </p>
             </div>
           )}
 
-          <Button onClick={handleUpload} disabled={!file || uploading} className="w-full">
+          <Button
+            onClick={handleUpload}
+            disabled={!file || uploading}
+            className="w-full"
+          >
             {uploading ? 'Fazendo upload...' : 'Testar Upload'}
           </Button>
 
@@ -106,5 +121,5 @@ export default function TestUploadPage() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

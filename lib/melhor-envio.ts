@@ -1,8 +1,8 @@
 export interface MelhorEnvioClient {
-  token: string;
+  token: string
 }
 
 export const createMelhorEnvioClient = (): MelhorEnvioClient => {
-  const token = process.env.MELHOR_ENVIO_TOKEN ?? '';
-  return { token };
-};
+  const token = process.env.MELHOR_ENVIO_TOKEN ?? ''
+  return { token }
+}

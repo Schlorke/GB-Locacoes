@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import type React from 'react';
+import React from 'react'
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CurrencyInput } from '@/components/ui/currency-input';
-import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
-import { ImageUpload } from '@/components/ui/image-upload';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/hooks/use-toast';
-import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { CurrencyInput } from '@/components/ui/currency-input'
+import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select'
+import { ImageUpload } from '@/components/ui/image-upload'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Textarea } from '@/components/ui/textarea'
+import { toast } from '@/hooks/use-toast'
+import { motion } from 'framer-motion'
 import {
   ArrowLeft,
   ChevronLeft,
@@ -22,44 +22,44 @@ import {
   PlusCircle,
   Save,
   Trash2,
-} from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+} from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useParams, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 
 interface Category {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 interface _Equipment {
-  id: string;
-  name: string;
-  description: string;
-  pricePerDay: number;
-  categoryId: string;
-  images: string[];
-  isAvailable: boolean;
-  specifications?: Record<string, string>;
+  id: string
+  name: string
+  description: string
+  pricePerDay: number
+  categoryId: string
+  images: string[]
+  isAvailable: boolean
+  specifications?: Record<string, string>
 }
 
 interface FormData {
-  name: string;
-  description: string;
-  pricePerDay: number;
-  categoryId: string;
-  images: string[];
-  isAvailable: boolean;
-  specifications?: Record<string, string>;
+  name: string
+  description: string
+  pricePerDay: number
+  categoryId: string
+  images: string[]
+  isAvailable: boolean
+  specifications?: Record<string, string>
 }
 
 export default function EditarEquipamento() {
-  const params = useParams();
-  const router = useRouter();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
+  const params = useParams()
+  const router = useRouter()
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     name: '',
     description: '',
@@ -68,22 +68,22 @@ export default function EditarEquipamento() {
     images: [],
     isAvailable: true,
     specifications: {},
-  });
-  const [specKey, setSpecKey] = useState('');
-  const [specValue, setSpecValue] = useState('');
+  })
+  const [specKey, setSpecKey] = useState('')
+  const [specValue, setSpecValue] = useState('')
 
   // Estados do carrossel
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isImageZoomed, setIsImageZoomed] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isImageZoomed, setIsImageZoomed] = useState(false)
 
   useEffect(() => {
-    if (!params.id) return;
+    if (!params.id) return
 
     const fetchEquipment = async (id: string) => {
       try {
-        const response = await fetch(`/api/admin/equipments/${id}`);
+        const response = await fetch(`/api/admin/equipments/${id}`)
         if (response.ok) {
-          const equipment = await response.json();
+          const equipment = await response.json()
           setFormData({
             name: equipment.name || '',
             description: equipment.description || '',
@@ -91,35 +91,35 @@ export default function EditarEquipamento() {
             categoryId: equipment.categoryId || '',
             images: equipment.images || [],
             isAvailable: equipment.available ?? true,
-          });
+          })
         }
       } catch (error) {
-        console.error('Erro ao buscar equipamento:', error);
+        console.error('Erro ao buscar equipamento:', error)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    fetchEquipment(params.id as string);
-    fetchCategories();
-  }, [params.id]);
+    fetchEquipment(params.id as string)
+    fetchCategories()
+  }, [params.id])
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/admin/categories');
+      const response = await fetch('/api/admin/categories')
       if (response.ok) {
-        const data = await response.json();
-        setCategories(data);
+        const data = await response.json()
+        setCategories(data)
       }
     } catch (error) {
-      console.error('Erro ao carregar categorias:', error);
+      console.error('Erro ao carregar categorias:', error)
       toast({
         title: 'Erro',
         description: 'Falha ao carregar categorias.',
         variant: 'destructive',
-      });
+      })
     }
-  };
+  }
 
   const handleAddSpecification = () => {
     if (specKey && specValue) {
@@ -129,55 +129,59 @@ export default function EditarEquipamento() {
           ...prev.specifications,
           [specKey]: specValue,
         },
-      }));
-      setSpecKey('');
-      setSpecValue('');
+      }))
+      setSpecKey('')
+      setSpecValue('')
     } else {
       toast({
         title: 'Atenção',
         description: 'Preencha a chave e o valor da especificação.',
         variant: 'default',
-      });
+      })
     }
-  };
+  }
 
   const handleRemoveSpecification = (keyToRemove: string) => {
     setFormData((prev) => {
-      const newSpecifications = { ...prev.specifications };
-      delete newSpecifications[keyToRemove];
-      return { ...prev, specifications: newSpecifications };
-    });
-  };
+      const newSpecifications = { ...prev.specifications }
+      delete newSpecifications[keyToRemove]
+      return { ...prev, specifications: newSpecifications }
+    })
+  }
 
   // Funções do carrossel
   const nextImage = useCallback(() => {
     if (formData.images.length > 0) {
-      setCurrentImageIndex((prev) => (prev === formData.images.length - 1 ? 0 : prev + 1));
+      setCurrentImageIndex((prev) =>
+        prev === formData.images.length - 1 ? 0 : prev + 1
+      )
     }
-  }, [formData.images.length]);
+  }, [formData.images.length])
 
   const prevImage = useCallback(() => {
     if (formData.images.length > 0) {
-      setCurrentImageIndex((prev) => (prev === 0 ? formData.images.length - 1 : prev - 1));
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? formData.images.length - 1 : prev - 1
+      )
     }
-  }, [formData.images.length]);
+  }, [formData.images.length])
 
   const goToImage = useCallback((index: number) => {
-    setCurrentImageIndex(index);
-  }, []);
+    setCurrentImageIndex(index)
+  }, [])
 
   // Reset carrossel quando as imagens mudarem
   useEffect(() => {
     if (formData.images.length === 0) {
-      setCurrentImageIndex(0);
-      setIsImageZoomed(false);
+      setCurrentImageIndex(0)
+      setIsImageZoomed(false)
     } else if (currentImageIndex >= formData.images.length) {
-      setCurrentImageIndex(formData.images.length - 1);
+      setCurrentImageIndex(formData.images.length - 1)
     }
-  }, [formData.images, currentImageIndex]);
+  }, [formData.images, currentImageIndex])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (
       !formData.name ||
@@ -187,10 +191,11 @@ export default function EditarEquipamento() {
     ) {
       toast({
         title: 'Erro de Validação',
-        description: 'Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.',
+        description:
+          'Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.',
         variant: 'destructive',
-      });
-      return;
+      })
+      return
     }
 
     if (formData.images.length === 0) {
@@ -198,57 +203,65 @@ export default function EditarEquipamento() {
         title: 'Erro de Validação',
         description: 'Adicione pelo menos uma imagem do equipamento.',
         variant: 'destructive',
-      });
-      return;
+      })
+      return
     }
 
-    setIsSaving(true);
+    setIsSaving(true)
     try {
       const response = await fetch(`/api/admin/equipments/${params.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-      });
+      })
 
       if (response.ok) {
         toast({
           title: 'Sucesso!',
           description: 'Equipamento atualizado com sucesso.',
-        });
-        router.push('/admin/equipamentos');
+        })
+        router.push('/admin/equipamentos')
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Erro ao atualizar equipamento');
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erro ao atualizar equipamento')
       }
     } catch (error) {
-      console.error('Erro ao atualizar equipamento:', error);
+      console.error('Erro ao atualizar equipamento:', error)
       toast({
         title: 'Erro',
         description:
-          error instanceof Error ? error.message : 'Ocorreu um erro ao atualizar o equipamento.',
+          error instanceof Error
+            ? error.message
+            : 'Ocorreu um erro ao atualizar o equipamento.',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
-  };
+  }
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-200px)]">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-lg text-muted-foreground">Carregando equipamento...</p>
+          <p className="text-lg text-muted-foreground">
+            Carregando equipamento...
+          </p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto space-y-6 p-6">
         {/* Header com gradiente */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
           <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
             {/* Clean depth layers without decorative elements */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
@@ -279,7 +292,9 @@ export default function EditarEquipamento() {
               </div>
               <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
                 <Package className="w-5 h-5 text-orange-50" />
-                <span className="font-semibold text-white">Preencha os dados do equipamento</span>
+                <span className="font-semibold text-white">
+                  Preencha os dados do equipamento
+                </span>
               </div>
             </div>
           </div>
@@ -309,9 +324,13 @@ export default function EditarEquipamento() {
                     <div className="space-y-6">
                       <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
                         <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-medium text-blue-600">1</span>
+                          <span className="text-xs font-medium text-blue-600">
+                            1
+                          </span>
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900">Informações Básicas</h3>
+                        <h3 className="text-lg font-medium text-gray-900">
+                          Informações Básicas
+                        </h3>
                       </div>
 
                       <div className="space-y-4">
@@ -323,7 +342,10 @@ export default function EditarEquipamento() {
                             id="name"
                             value={formData.name}
                             onChange={(e) =>
-                              setFormData((prev) => ({ ...prev, name: e.target.value }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                name: e.target.value,
+                              }))
                             }
                             placeholder="Ex: Betoneira 400L"
                             required
@@ -332,18 +354,27 @@ export default function EditarEquipamento() {
                         </div>
 
                         <div>
-                          <Label htmlFor="category" className="text-sm font-medium">
+                          <Label
+                            htmlFor="category"
+                            className="text-sm font-medium"
+                          >
                             Categoria *
                           </Label>
                           <CustomSelect
                             value={formData.categoryId}
                             onValueChange={(value: string) =>
-                              setFormData((prev) => ({ ...prev, categoryId: value }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                categoryId: value,
+                              }))
                             }
                             placeholder="Selecione uma categoria"
                           >
                             {categories.map((category) => (
-                              <CustomSelectItem key={category.id} value={category.id}>
+                              <CustomSelectItem
+                                key={category.id}
+                                value={category.id}
+                              >
                                 {category.name}
                               </CustomSelectItem>
                             ))}
@@ -351,14 +382,20 @@ export default function EditarEquipamento() {
                         </div>
 
                         <div>
-                          <Label htmlFor="description" className="text-sm font-medium">
+                          <Label
+                            htmlFor="description"
+                            className="text-sm font-medium"
+                          >
                             Descrição *
                           </Label>
                           <Textarea
                             id="description"
                             value={formData.description}
                             onChange={(e) =>
-                              setFormData((prev) => ({ ...prev, description: e.target.value }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                description: e.target.value,
+                              }))
                             }
                             placeholder="Descreva as características e usos do equipamento..."
                             rows={4}
@@ -368,14 +405,20 @@ export default function EditarEquipamento() {
                         </div>
 
                         <div>
-                          <Label htmlFor="pricePerDay" className="text-sm font-medium">
+                          <Label
+                            htmlFor="pricePerDay"
+                            className="text-sm font-medium"
+                          >
                             Preço por Dia (R$) *
                           </Label>
                           <CurrencyInput
                             id="pricePerDay"
                             value={formData.pricePerDay}
                             onValueChange={(value) =>
-                              setFormData((prev) => ({ ...prev, pricePerDay: value || 0 }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                pricePerDay: value || 0,
+                              }))
                             }
                             required
                             className="mt-1 focus:border-blue-500"
@@ -387,11 +430,17 @@ export default function EditarEquipamento() {
                             id="isAvailable"
                             checked={formData.isAvailable}
                             onCheckedChange={(checked) =>
-                              setFormData((prev) => ({ ...prev, isAvailable: checked }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                isAvailable: checked,
+                              }))
                             }
                             className="data-[state=checked]:bg-slate-700 data-[state=unchecked]:bg-input hover:data-[state=checked]:bg-slate-600 transition-colors duration-200"
                           />
-                          <Label htmlFor="isAvailable" className="cursor-pointer text-sm">
+                          <Label
+                            htmlFor="isAvailable"
+                            className="cursor-pointer text-sm"
+                          >
                             Equipamento disponível para locação
                           </Label>
                         </div>
@@ -402,37 +451,50 @@ export default function EditarEquipamento() {
                     <div className="space-y-6 border-t border-gray-100 pt-6">
                       <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
                         <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-medium text-purple-600">3</span>
+                          <span className="text-xs font-medium text-purple-600">
+                            3
+                          </span>
                         </div>
                         <h3 className="text-lg font-medium text-gray-900">
                           Especificações Técnicas
                         </h3>
-                        <span className="text-sm text-gray-500">(Opcional)</span>
+                        <span className="text-sm text-gray-500">
+                          (Opcional)
+                        </span>
                       </div>
 
                       <div className="space-y-4">
-                        {Object.entries(formData.specifications || {}).length > 0 && (
+                        {Object.entries(formData.specifications || {}).length >
+                          0 && (
                           <div className="space-y-3">
-                            {Object.entries(formData.specifications || {}).map(([key, value]) => (
-                              <div
-                                key={key}
-                                className="flex items-center justify-between p-3 border rounded-md"
-                              >
-                                <div className="min-w-0 flex-1">
-                                  <div className="font-medium text-sm">{key}</div>
-                                  <div className="text-sm mt-1">{String(value)}</div>
-                                </div>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleRemoveSpecification(key)}
-                                  className="flex-shrink-0 ml-2"
+                            {Object.entries(formData.specifications || {}).map(
+                              ([key, value]) => (
+                                <div
+                                  key={key}
+                                  className="flex items-center justify-between p-3 border rounded-md"
                                 >
-                                  <Trash2 className="h-4 w-4 text-red-500" />
-                                </Button>
-                              </div>
-                            ))}
+                                  <div className="min-w-0 flex-1">
+                                    <div className="font-medium text-sm">
+                                      {key}
+                                    </div>
+                                    <div className="text-sm mt-1">
+                                      {String(value)}
+                                    </div>
+                                  </div>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() =>
+                                      handleRemoveSpecification(key)
+                                    }
+                                    className="flex-shrink-0 ml-2"
+                                  >
+                                    <Trash2 className="h-4 w-4 text-red-500" />
+                                  </Button>
+                                </div>
+                              )
+                            )}
                           </div>
                         )}
 
@@ -440,7 +502,10 @@ export default function EditarEquipamento() {
                           <div className="space-y-4">
                             <div className="grid grid-cols-1 gap-3">
                               <div>
-                                <Label htmlFor="specKey" className="text-sm font-medium">
+                                <Label
+                                  htmlFor="specKey"
+                                  className="text-sm font-medium"
+                                >
                                   Nome da Especificação
                                 </Label>
                                 <Input
@@ -452,7 +517,10 @@ export default function EditarEquipamento() {
                                 />
                               </div>
                               <div>
-                                <Label htmlFor="specValue" className="text-sm font-medium">
+                                <Label
+                                  htmlFor="specValue"
+                                  className="text-sm font-medium"
+                                >
                                   Valor
                                 </Label>
                                 <Input
@@ -485,15 +553,21 @@ export default function EditarEquipamento() {
                   <div className="space-y-6">
                     <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-green-600">2</span>
+                        <span className="text-xs font-medium text-green-600">
+                          2
+                        </span>
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900">Imagens do Equipamento</h3>
+                      <h3 className="text-lg font-medium text-gray-900">
+                        Imagens do Equipamento
+                      </h3>
                     </div>
 
                     <div className="min-h-[500px]">
                       <ImageUpload
                         images={formData.images}
-                        onImagesChange={(images) => setFormData((prev) => ({ ...prev, images }))}
+                        onImagesChange={(images) =>
+                          setFormData((prev) => ({ ...prev, images }))
+                        }
                         maxImages={5}
                         currentImageIndex={currentImageIndex}
                         onImageIndexChange={setCurrentImageIndex}
@@ -517,7 +591,11 @@ export default function EditarEquipamento() {
                     >
                       <Link href="/admin/equipamentos">Cancelar</Link>
                     </Button>
-                    <Button type="submit" disabled={isSaving} className="w-full sm:w-auto">
+                    <Button
+                      type="submit"
+                      disabled={isSaving}
+                      className="w-full sm:w-auto"
+                    >
                       <Save className="h-4 w-4 mr-2" />
                       {isSaving ? 'Salvando...' : 'Salvar Alterações'}
                     </Button>
@@ -549,9 +627,9 @@ export default function EditarEquipamento() {
               <>
                 <button
                   onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    prevImage();
+                    e.preventDefault()
+                    e.stopPropagation()
+                    prevImage()
                   }}
                   title="Imagem anterior"
                   aria-label="Navegar para imagem anterior"
@@ -561,9 +639,9 @@ export default function EditarEquipamento() {
                 </button>
                 <button
                   onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    nextImage();
+                    e.preventDefault()
+                    e.stopPropagation()
+                    nextImage()
                   }}
                   title="Próxima imagem"
                   aria-label="Navegar para próxima imagem"
@@ -586,7 +664,12 @@ export default function EditarEquipamento() {
               aria-label="Fechar visualização"
               className="absolute top-4 right-4 bg-white/90 hover:bg-white text-gray-700 rounded-full p-2 shadow-lg hover:scale-110 transition-all duration-200"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -599,5 +682,5 @@ export default function EditarEquipamento() {
         </div>
       )}
     </div>
-  );
+  )
 }

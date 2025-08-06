@@ -1,21 +1,26 @@
-'use client';
+'use client'
 
-import { cn } from '@/lib/utils';
-import type React from 'react';
+import { cn } from '@/lib/utils'
+import React from 'react'
 
 interface AdminPageHeaderProps {
-  title: string;
-  subtitle?: string;
-  icon?: React.ReactNode;
-  className?: string;
+  title: string
+  subtitle?: string
+  icon?: React.ReactNode
+  className?: string
 }
 
-export function AdminPageHeader({ title, subtitle, icon, className }: AdminPageHeaderProps) {
+export function AdminPageHeader({
+  title,
+  subtitle,
+  icon,
+  className,
+}: AdminPageHeaderProps) {
   return (
     <div
       className={cn(
         'relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl',
-        className,
+        className
       )}
     >
       {/* Gradient overlay for depth */}
@@ -29,7 +34,9 @@ export function AdminPageHeader({ title, subtitle, icon, className }: AdminPageH
         )}
         <div>
           <h1 className="text-2xl md:text-3xl font-bold mb-1">{title}</h1>
-          {subtitle && <p className="text-orange-100 text-base opacity-90">{subtitle}</p>}
+          {subtitle && (
+            <p className="text-orange-100 text-base opacity-90">{subtitle}</p>
+          )}
         </div>
       </div>
 
@@ -37,5 +44,5 @@ export function AdminPageHeader({ title, subtitle, icon, className }: AdminPageH
       <div className="absolute top-2 right-2 w-20 h-20 bg-white/10 rounded-full blur-2xl"></div>
       <div className="absolute bottom-2 left-2 w-16 h-16 bg-yellow-300/20 rounded-full blur-xl"></div>
     </div>
-  );
+  )
 }

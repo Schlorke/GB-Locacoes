@@ -1,29 +1,28 @@
-'use client';
+'use client'
 
-import { Card, CardContent } from '@/components/ui/card';
-import { FilterIndicator } from '@/components/ui/filter-indicator';
-import { FilterResetButton } from '@/components/ui/filter-reset-button';
-import { FilterSelectGroup } from '@/components/ui/filter-select-group';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
-import type { FilterOption } from '@/types/filters';
-import { Search } from 'lucide-react';
-import type React from 'react';
-import { useEffect, useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card'
+import { FilterIndicator } from '@/components/ui/filter-indicator'
+import { FilterResetButton } from '@/components/ui/filter-reset-button'
+import { FilterSelectGroup } from '@/components/ui/filter-select-group'
+import { Input } from '@/components/ui/input'
+import { cn } from '@/lib/utils'
+import type { FilterOption } from '@/types/filters'
+import { Search } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 
 interface AdminFilterCardProps {
-  searchPlaceholder?: string;
-  searchValue?: string;
-  onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string
+  searchValue?: string
+  onSearchChange?: (value: string) => void
   filters?: {
-    label: string;
-    value: string;
-    options: FilterOption[];
-    onValueChange: (value: string) => void;
-    placeholder?: string;
-  }[];
-  actionButtons?: React.ReactNode;
-  className?: string;
+    label: string
+    value: string
+    options: FilterOption[]
+    onValueChange: (value: string) => void
+    placeholder?: string
+  }[]
+  actionButtons?: React.ReactNode
+  className?: string
 }
 
 export function AdminFilterCard({
@@ -34,33 +33,35 @@ export function AdminFilterCard({
   actionButtons,
   className,
 }: AdminFilterCardProps) {
-  const [isFiltered, setIsFiltered] = useState(false);
+  const [isFiltered, setIsFiltered] = useState(false)
 
   // Check if any filter is active (not "all" or empty)
   useEffect(() => {
     const hasActiveFilters =
-      filters.some((filter) => filter.value && filter.value !== 'all' && filter.value !== '') ||
-      Boolean(searchValue && searchValue.trim() !== '');
-    setIsFiltered(hasActiveFilters);
-  }, [filters, searchValue]);
+      filters.some(
+        (filter) =>
+          filter.value && filter.value !== 'all' && filter.value !== ''
+      ) || Boolean(searchValue && searchValue.trim() !== '')
+    setIsFiltered(hasActiveFilters)
+  }, [filters, searchValue])
 
   const handleReset = () => {
     // Reset all filters
     filters.forEach((filter) => {
-      filter.onValueChange('all');
-    });
+      filter.onValueChange('all')
+    })
 
     // Reset search
     if (onSearchChange) {
-      onSearchChange('');
+      onSearchChange('')
     }
-  };
+  }
 
   return (
     <Card
       className={cn(
         'relative overflow-visible border-0 shadow-xl bg-white backdrop-blur-sm transition-all duration-300',
-        className,
+        className
       )}
     >
       {/* Clean depth layers for filter card */}
@@ -91,7 +92,9 @@ export function AdminFilterCard({
             {/* Filters Row */}
             <div className="flex items-center gap-2 sm:gap-4 w-full md:w-auto">
               {/* Filter Icon */}
-              {filters.length > 0 && <FilterIndicator isFiltered={isFiltered} />}
+              {filters.length > 0 && (
+                <FilterIndicator isFiltered={isFiltered} />
+              )}
 
               {/* Filter Selects */}
               <FilterSelectGroup filters={filters} gap="md" />
@@ -100,7 +103,11 @@ export function AdminFilterCard({
 
           {/* Reset Button - Separado entre filtros e botão */}
           <div className="flex items-center justify-center flex-shrink-0 h-10">
-            <FilterResetButton onClick={handleReset} title="Resetar filtros" size="md" />
+            <FilterResetButton
+              onClick={handleReset}
+              title="Resetar filtros"
+              size="md"
+            />
           </div>
 
           {/* Right Side - Action Buttons */}
@@ -112,5 +119,5 @@ export function AdminFilterCard({
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

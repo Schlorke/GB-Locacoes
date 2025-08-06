@@ -1,61 +1,74 @@
-import { prisma } from '@/lib/prisma';
-import { requireAdmin } from '@/middlewares/require-admin';
-import { Prisma } from '@prisma/client';
-import { type NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma'
+import { requireAdmin } from '@/middlewares/require-admin'
+import { Prisma } from '@prisma/client'
+import { type NextRequest, NextResponse } from 'next/server'
 
 // GET /api/admin/equipments - List all equipments with pagination and filtering
 export async function GET(request: NextRequest) {
   try {
     // Verificar autenticação de admin
-    const adminResult = await requireAdmin(request);
+    const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
-      return NextResponse.json({ error: adminResult.error }, { status: adminResult.status });
+      return NextResponse.json(
+        { error: adminResult.error },
+        { status: adminResult.status }
+      )
     }
     // Verifica se as variáveis de ambiente para o banco estão configuradas
     if (!process.env.DATABASE_URL) {
-      console.error('[API GET /admin/equipments] DATABASE_URL não definido');
+      console.error('[API GET /admin/equipments] DATABASE_URL não definido')
       return NextResponse.json(
         {
           error: 'Configuração do banco de dados ausente.',
         },
-        { status: 500 },
-      );
+        { status: 500 }
+      )
     }
 
-    const { searchParams } = new URL(request.url);
-    const page = Number.parseInt(searchParams.get('page') || '1');
-    const limit = Number.parseInt(searchParams.get('limit') || '10');
-    const search = searchParams.get('search');
-    const categoryId = searchParams.get('categoryId');
-    const isAvailableParam = searchParams.get('isAvailable');
+    const { searchParams } = new URL(request.url)
+    const page = Number.parseInt(searchParams.get('page') || '1')
+    const limit = Number.parseInt(searchParams.get('limit') || '10')
+    const search = searchParams.get('search')
+    const categoryId = searchParams.get('categoryId')
+    const isAvailableParam = searchParams.get('isAvailable')
 
     if (isNaN(page) || page < 1) {
-      return NextResponse.json({ error: "Parâmetro 'page' inválido." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Parâmetro 'page' inválido." },
+        { status: 400 }
+      )
     }
     if (isNaN(limit) || limit < 1) {
-      return NextResponse.json({ error: "Parâmetro 'limit' inválido." }, { status: 400 });
+      return NextResponse.json(
+        { error: "Parâmetro 'limit' inválido." },
+        { status: 400 }
+      )
     }
 
-    const skip = (page - 1) * limit;
-    const where: Prisma.EquipmentWhereInput = {};
+    const skip = (page - 1) * limit
+    const where: Prisma.EquipmentWhereInput = {}
 
     if (search) {
       where.OR = [
         { name: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
-      ];
+      ]
     }
 
     if (categoryId && categoryId !== 'all') {
-      where.categoryId = categoryId;
+      where.categoryId = categoryId
     }
 
-    if (isAvailableParam !== null && isAvailableParam !== undefined && isAvailableParam !== 'all') {
-      where.available = isAvailableParam === 'true';
+    if (
+      isAvailableParam !== null &&
+      isAvailableParam !== undefined &&
+      isAvailableParam !== 'all'
+    ) {
+      where.available = isAvailableParam === 'true'
     }
 
     // Teste de conexão com o banco
-    await prisma.$connect();
+    await prisma.$connect()
 
     const equipments = await prisma.equipment.findMany({
       where,
@@ -73,16 +86,16 @@ export async function GET(request: NextRequest) {
       orderBy: {
         createdAt: 'desc',
       },
-    });
+    })
 
     const equipmentsFormatted = equipments.map((equip) => ({
       ...equip,
       pricePerDay: Number(equip.pricePerDay), // Converter Decimal para number
       isAvailable: equip.available,
-    }));
+    }))
 
-    const totalItems = await prisma.equipment.count({ where });
-    const totalPages = Math.ceil(totalItems / limit);
+    const totalItems = await prisma.equipment.count({ where })
+    const totalPages = Math.ceil(totalItems / limit)
 
     const response = {
       equipments: equipmentsFormatted,
@@ -92,21 +105,30 @@ export async function GET(request: NextRequest) {
         totalItems,
         totalPages,
       },
-    };
+    }
 
-    return NextResponse.json(response);
+    return NextResponse.json(response)
   } catch (error) {
-    console.error('[API GET /admin/equipments] ERRO CRÍTICO:', error);
+    console.error('[API GET /admin/equipments] ERRO CRÍTICO:', error)
 
     // Log detalhado do erro
     if (error instanceof Error) {
-      console.error('[API GET /admin/equipments] Mensagem do erro:', error.message);
-      console.error('[API GET /admin/equipments] Stack trace:', error.stack);
+      console.error(
+        '[API GET /admin/equipments] Mensagem do erro:',
+        error.message
+      )
+      console.error('[API GET /admin/equipments] Stack trace:', error.stack)
     }
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      console.error('[API GET /admin/equipments] Erro do Prisma - Código:', error.code);
-      console.error('[API GET /admin/equipments] Erro do Prisma - Meta:', error.meta);
+      console.error(
+        '[API GET /admin/equipments] Erro do Prisma - Código:',
+        error.code
+      )
+      console.error(
+        '[API GET /admin/equipments] Erro do Prisma - Meta:',
+        error.meta
+      )
     }
 
     return NextResponse.json(
@@ -119,8 +141,8 @@ export async function GET(request: NextRequest) {
               : String(error)
             : undefined,
       },
-      { status: 500 },
-    );
+      { status: 500 }
+    )
   }
 }
 
@@ -128,43 +150,65 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // Verificar autenticação de admin
-    const adminResult = await requireAdmin(request);
+    const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
-      return NextResponse.json({ error: adminResult.error }, { status: adminResult.status });
+      return NextResponse.json(
+        { error: adminResult.error },
+        { status: adminResult.status }
+      )
     }
 
-    const body = await request.json();
-    const { name, description, pricePerDay, categoryId, images, isAvailable } = body;
+    const body = await request.json()
+    const { name, description, pricePerDay, categoryId, images, isAvailable } =
+      body
 
     // Validações
     if (!name || typeof name !== 'string' || name.trim() === '') {
-      return NextResponse.json({ error: 'Nome do equipamento é obrigatório.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Nome do equipamento é obrigatório.' },
+        { status: 400 }
+      )
     }
-    if (!description || typeof description !== 'string' || description.trim() === '') {
+    if (
+      !description ||
+      typeof description !== 'string' ||
+      description.trim() === ''
+    ) {
       return NextResponse.json(
         { error: 'Descrição do equipamento é obrigatória.' },
-        { status: 400 },
-      );
+        { status: 400 }
+      )
     }
     if (!categoryId || typeof categoryId !== 'string') {
-      return NextResponse.json({ error: 'ID da categoria é obrigatório.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'ID da categoria é obrigatório.' },
+        { status: 400 }
+      )
     }
     if (pricePerDay === undefined || pricePerDay === null) {
-      return NextResponse.json({ error: 'Preço por dia é obrigatório.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Preço por dia é obrigatório.' },
+        { status: 400 }
+      )
     }
 
-    const parsedPrice = Number.parseFloat(String(pricePerDay));
+    const parsedPrice = Number.parseFloat(String(pricePerDay))
     if (isNaN(parsedPrice) || parsedPrice < 0) {
       return NextResponse.json(
         { error: 'Preço por dia inválido. Deve ser um número positivo.' },
-        { status: 400 },
-      );
+        { status: 400 }
+      )
     }
 
     // Verificar se a categoria existe
-    const categoryExists = await prisma.category.findUnique({ where: { id: categoryId } });
+    const categoryExists = await prisma.category.findUnique({
+      where: { id: categoryId },
+    })
     if (!categoryExists) {
-      return NextResponse.json({ error: 'Categoria não encontrada.' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Categoria não encontrada.' },
+        { status: 404 }
+      )
     }
 
     const equipment = await prisma.equipment.create({
@@ -181,21 +225,27 @@ export async function POST(request: NextRequest) {
       include: {
         category: true,
       },
-    });
+    })
 
     // Converter Decimal para number para compatibilidade com o frontend
     const equipmentResponse = {
       ...equipment,
       pricePerDay: Number(equipment.pricePerDay),
       isAvailable: equipment.available,
-    };
+    }
 
-    return NextResponse.json(equipmentResponse, { status: 201 });
+    return NextResponse.json(equipmentResponse, { status: 201 })
   } catch (error) {
-    console.error('[API POST /admin/equipments] ERRO ao criar equipamento:', error);
+    console.error(
+      '[API POST /admin/equipments] ERRO ao criar equipamento:',
+      error
+    )
 
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      console.error('[API POST /admin/equipments] Erro do Prisma - Código:', error.code);
+      console.error(
+        '[API POST /admin/equipments] Erro do Prisma - Código:',
+        error.code
+      )
       return NextResponse.json(
         {
           error: 'Erro ao processar dados do equipamento.',
@@ -204,8 +254,8 @@ export async function POST(request: NextRequest) {
               ? `Prisma Error ${error.code}: ${error.message}`
               : undefined,
         },
-        { status: 400 },
-      );
+        { status: 400 }
+      )
     }
 
     return NextResponse.json(
@@ -218,7 +268,7 @@ export async function POST(request: NextRequest) {
               : String(error)
             : undefined,
       },
-      { status: 500 },
-    );
+      { status: 500 }
+    )
   }
 }

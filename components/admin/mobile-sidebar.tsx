@@ -1,8 +1,8 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
 import {
   FileText,
   LayoutDashboard,
@@ -11,58 +11,58 @@ import {
   PackageSearch,
   UserCircle,
   X,
-} from 'lucide-react';
-import { signOut, useSession } from 'next-auth/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+} from 'lucide-react'
+import { signOut, useSession } from 'next-auth/react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 
 const navItems = [
   { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/admin/equipamentos', icon: PackageSearch, label: 'Equipamentos' },
   { href: '/admin/categorias', icon: ListChecks, label: 'Categorias' },
   { href: '/admin/orcamentos', icon: FileText, label: 'Orçamentos' },
-];
+]
 
 interface MobileSidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
 }
 
 export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
-  const pathname = usePathname();
-  const { data: session } = useSession();
+  const pathname = usePathname()
+  const { data: session } = useSession()
 
   // Bloquear scroll do body quando o sidebar estiver aberto
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = 'auto'
     }
 
     return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [isOpen]);
+      document.body.style.overflow = 'auto'
+    }
+  }, [isOpen])
 
   // Fechar ao pressionar ESC
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onClose()
       }
-    };
+    }
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener('keydown', handleEscape)
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, onClose]);
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [isOpen, onClose])
 
   return (
     <>
@@ -70,7 +70,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
       <div
         className={cn(
           'fixed inset-0 z-[9998] bg-black/80 transition-opacity duration-300',
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
+          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
         onClick={onClose}
       />
@@ -79,7 +79,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
       <div
         className={cn(
           'fixed inset-y-0 right-0 z-[9999] w-80 bg-background border-l shadow-lg transform transition-transform duration-300 ease-in-out',
-          isOpen ? 'translate-x-0' : 'translate-x-full',
+          isOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
         <div className="flex flex-col h-full">
@@ -96,7 +96,9 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                 />
                 <div className="text-left">
                   <h2 className="text-lg font-bold">GB Locações</h2>
-                  <p className="text-sm text-muted-foreground">Painel Administrativo</p>
+                  <p className="text-sm text-muted-foreground">
+                    Painel Administrativo
+                  </p>
                 </div>
               </div>
               <Button
@@ -114,8 +116,8 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
           <nav className="flex-1 p-4">
             <div className="space-y-2">
               {navItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = pathname.startsWith(item.href);
+                const Icon = item.icon
+                const isActive = pathname.startsWith(item.href)
 
                 return (
                   <Link
@@ -127,13 +129,13 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                       'hover:bg-slate-100 active:bg-slate-200',
                       isActive
                         ? 'bg-primary text-primary-foreground hover:bg-primary/90 border-primary/20'
-                        : 'bg-slate-50/80 text-slate-700 border-slate-200/60 hover:border-slate-300/80',
+                        : 'bg-slate-50/80 text-slate-700 border-slate-200/60 hover:border-slate-300/80'
                     )}
                   >
                     <Icon className="h-5 w-5 flex-shrink-0" />
                     <span>{item.label}</span>
                   </Link>
-                );
+                )
               })}
             </div>
           </nav>
@@ -146,7 +148,9 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                 <p className="font-medium text-slate-900 truncate">
                   {session?.user?.name || 'Administrador'}
                 </p>
-                <p className="text-sm text-slate-500 truncate">{session?.user?.role || 'ADMIN'}</p>
+                <p className="text-sm text-slate-500 truncate">
+                  {session?.user?.role || 'ADMIN'}
+                </p>
               </div>
             </div>
 
@@ -155,8 +159,8 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
             <Button
               variant="ghost"
               onClick={() => {
-                onClose();
-                signOut({ callbackUrl: '/admin/login' });
+                onClose()
+                signOut({ callbackUrl: '/admin/login' })
               }}
               className="w-full justify-start gap-3 text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200/60 hover:border-red-300/80"
             >
@@ -167,5 +171,5 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
         </div>
       </div>
     </>
-  );
+  )
 }

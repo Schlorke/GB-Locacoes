@@ -1,5 +1,13 @@
-import Link from 'next/link';
-import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Linkedin } from 'lucide-react';
+import Link from 'next/link'
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Facebook,
+  Instagram,
+  Linkedin,
+} from 'lucide-react'
 
 export default function Footer() {
   return (
@@ -9,16 +17,20 @@ export default function Footer() {
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-orange-600 text-white p-2 rounded-lg font-bold text-h3">GB</div>
+              <div className="bg-orange-600 text-white p-2 rounded-lg font-bold text-h3">
+                GB
+              </div>
               <div>
                 <div className="font-bold text-h3">GB Locações</div>
-                <div className="text-small text-gray-400">Equipamentos para Construção</div>
+                <div className="text-small text-gray-400">
+                  Equipamentos para Construção
+                </div>
               </div>
             </div>
             <p className="text-gray-300 mb-4">
-              Há 10 anos oferecendo soluções em locação de equipamentos para construção civil.
-              Especializada em equipamentos para obras e serviços em altura com segurança e
-              qualidade.
+              Há 10 anos oferecendo soluções em locação de equipamentos para
+              construção civil. Especializada em equipamentos para obras e
+              serviços em altura com segurança e qualidade.
             </p>
             <div className="flex space-x-4">
               <a
@@ -164,7 +176,9 @@ export default function Footer() {
                 <div>
                   <p className="text-gray-300">(51) 2313-6262</p>
                   <p className="text-gray-300">(51) 99820-5163</p>
-                  <p className="text-small text-gray-400">Atendimento especializado</p>
+                  <p className="text-small text-gray-400">
+                    Atendimento especializado
+                  </p>
                 </div>
               </div>
 
@@ -172,7 +186,9 @@ export default function Footer() {
                 <Mail className="h-5 w-5 text-orange-500 mt-0.5" />
                 <div>
                   <p className="text-gray-300">contato@gblocacoes.com.br</p>
-                  <p className="text-small text-gray-400">Resposta rápida garantida</p>
+                  <p className="text-small text-gray-400">
+                    Resposta rápida garantida
+                  </p>
                 </div>
               </div>
 
@@ -184,7 +200,9 @@ export default function Footer() {
                     <br />
                     Humaitá - Porto Alegre/RS
                   </p>
-                  <p className="text-small text-gray-400">Entregamos em toda região</p>
+                  <p className="text-small text-gray-400">
+                    Entregamos em toda região
+                  </p>
                 </div>
               </div>
 
@@ -193,7 +211,9 @@ export default function Footer() {
                 <div>
                   <p className="text-gray-300">Seg-Sex: 8h às 18h</p>
                   <p className="text-gray-300">Sáb: 8h às 12h</p>
-                  <p className="text-small text-gray-400">CNPJ: 34.780.330/0001-69</p>
+                  <p className="text-small text-gray-400">
+                    CNPJ: 34.780.330/0001-69
+                  </p>
                 </div>
               </div>
             </div>
@@ -230,5 +250,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  );
+  )
 }

@@ -1,22 +1,22 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { motion } from 'framer-motion';
-import type { LucideIcon } from 'lucide-react';
-import { Loader2, RotateCcw, Save } from 'lucide-react';
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { motion } from 'framer-motion'
+import type { LucideIcon } from 'lucide-react'
+import { Loader2, RotateCcw, Save } from 'lucide-react'
 
 interface SettingsBlockProps {
-  title: string;
-  icon: LucideIcon;
-  description?: string;
-  form: React.ReactNode;
-  preview: React.ReactNode;
-  delay?: number;
-  onSave?: () => void | Promise<void>;
-  onReset?: () => void | Promise<void>;
-  isSaving?: boolean;
-  isResetting?: boolean;
+  title: string
+  icon: LucideIcon
+  description?: string
+  form: React.ReactNode
+  preview: React.ReactNode
+  delay?: number
+  onSave?: () => void | Promise<void>
+  onReset?: () => void | Promise<void>
+  isSaving?: boolean
+  isResetting?: boolean
 }
 
 export function SettingsBlock({
@@ -51,10 +51,14 @@ export function SettingsBlock({
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white">
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    {title}
+                  </h3>
                 </div>
                 {description && (
-                  <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {description}
+                  </p>
                 )}
               </div>
 
@@ -123,5 +127,5 @@ export function SettingsBlock({
         </CardContent>
       </Card>
     </motion.div>
-  );
+  )
 }

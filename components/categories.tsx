@@ -1,28 +1,28 @@
-'use client';
+'use client'
 
-import { Card, CardContent } from '@/components/ui/card';
-import * as LucideIcons from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card'
+import * as LucideIcons from 'lucide-react'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface ApiCategory {
-  id: string;
-  name: string;
-  description?: string;
-  icon?: keyof typeof LucideIcons;
-  iconColor?: string;
-  bgColor?: string;
-  fontColor?: string;
-  slug: string;
-  _count?: { equipments: number };
+  id: string
+  name: string
+  description?: string
+  icon?: keyof typeof LucideIcons
+  iconColor?: string
+  bgColor?: string
+  fontColor?: string
+  slug: string
+  _count?: { equipments: number }
 }
 
 interface Category {
-  icon: React.ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
-  color: string;
-  count: number;
-  href: string;
+  icon: React.ComponentType<{ className?: string }>
+  title: string
+  description: string
+  color: string
+  count: number
+  href: string
 }
 
 const fallbackCategories: Category[] = [
@@ -47,7 +47,8 @@ const fallbackCategories: Category[] = [
   {
     icon: LucideIcons.Wrench,
     title: 'Andaimes Tubulares',
-    description: 'Andaimes tubulares para diversas alturas com certificação e estrutura robusta.',
+    description:
+      'Andaimes tubulares para diversas alturas com certificação e estrutura robusta.',
     color: 'from-red-500 to-red-600',
     count: 35,
     href: '/catalogo/andaimes-tubulares',
@@ -55,7 +56,8 @@ const fallbackCategories: Category[] = [
   {
     icon: LucideIcons.Truck,
     title: 'Betoneiras',
-    description: 'Betoneiras de diversos tamanhos para preparo de concreto com eficiência máxima.',
+    description:
+      'Betoneiras de diversos tamanhos para preparo de concreto com eficiência máxima.',
     color: 'from-green-500 to-green-600',
     count: 22,
     href: '/catalogo/betoneiras',
@@ -63,7 +65,8 @@ const fallbackCategories: Category[] = [
   {
     icon: LucideIcons.Hammer,
     title: 'Rompedores',
-    description: 'Rompedores pneumáticos e elétricos para demolição e quebra de concreto.',
+    description:
+      'Rompedores pneumáticos e elétricos para demolição e quebra de concreto.',
     color: 'from-purple-500 to-purple-600',
     count: 28,
     href: '/catalogo/rompedores',
@@ -71,24 +74,25 @@ const fallbackCategories: Category[] = [
   {
     icon: LucideIcons.Container,
     title: 'Compressores',
-    description: 'Compressores de ar para obras com alta pressão e durabilidade comprovada.',
+    description:
+      'Compressores de ar para obras com alta pressão e durabilidade comprovada.',
     color: 'from-indigo-500 to-indigo-600',
     count: 15,
     href: '/catalogo/compressores',
   },
-];
+]
 
 export default function Categories() {
-  const [categories, setCategories] = useState<Category[]>(fallbackCategories);
-  const sectionRef = useRef<HTMLElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [categories, setCategories] = useState<Category[]>(fallbackCategories)
+  const sectionRef = useRef<HTMLElement>(null)
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch('/api/categories');
-        if (!res.ok) return;
-        const data: ApiCategory[] = await res.json();
+        const res = await fetch('/api/categories')
+        if (!res.ok) return
+        const data: ApiCategory[] = await res.json()
         const mapped: Category[] = data.map((cat) => ({
           icon:
             (cat.icon &&
@@ -104,14 +108,14 @@ export default function Categories() {
           color: 'from-orange-500 to-orange-600',
           count: cat._count?.equipments ?? 0,
           href: `/catalogo/${cat.slug}`,
-        }));
-        setCategories(mapped);
+        }))
+        setCategories(mapped)
       } catch (err) {
-        console.error('Erro ao buscar categorias', err);
+        console.error('Erro ao buscar categorias', err)
       }
-    };
-    fetchCategories();
-  }, []);
+    }
+    fetchCategories()
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -121,31 +125,31 @@ export default function Categories() {
             cardsRef.current.forEach((card, index) => {
               if (card) {
                 setTimeout(() => {
-                  card.style.opacity = '1';
-                  card.style.transform = 'translateY(0)';
-                  card.style.transition = 'all 0.8s ease-out';
-                }, index * 150);
+                  card.style.opacity = '1'
+                  card.style.transform = 'translateY(0)'
+                  card.style.transition = 'all 0.8s ease-out'
+                }, index * 150)
               }
-            });
-            observer.unobserve(entry.target);
+            })
+            observer.unobserve(entry.target)
           }
-        });
+        })
       },
 
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' },
-    );
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    )
 
-    const currentSection = sectionRef.current;
+    const currentSection = sectionRef.current
     if (currentSection) {
-      observer.observe(currentSection);
+      observer.observe(currentSection)
     }
 
     return () => {
       if (currentSection) {
-        observer.unobserve(currentSection);
+        observer.unobserve(currentSection)
       }
-    };
-  }, [categories]);
+    }
+  }, [categories])
 
   return (
     <section ref={sectionRef} className="py-16 bg-gray-50">
@@ -161,13 +165,14 @@ export default function Categories() {
             className="section-subtitle text-xl text-gray-600 max-w-2xl mx-auto opacity-0"
             style={{ opacity: 0, transform: 'translateY(60px)' }}
           >
-            Encontre rapidamente o equipamento especializado que você precisa para sua obra
+            Encontre rapidamente o equipamento especializado que você precisa
+            para sua obra
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category, index) => {
-            const IconComponent = category.icon;
+            const IconComponent = category.icon
             return (
               <Card
                 key={category.title}
@@ -203,10 +208,10 @@ export default function Categories() {
 
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
               </Card>
-            );
+            )
           })}
         </div>
       </div>
     </section>
-  );
+  )
 }

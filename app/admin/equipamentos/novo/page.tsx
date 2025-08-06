@@ -1,16 +1,16 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CurrencyInput } from '@/components/ui/currency-input';
-import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
-import { ImageUpload } from '@/components/ui/image-upload';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/hooks/use-toast';
-import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { CurrencyInput } from '@/components/ui/currency-input'
+import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select'
+import { ImageUpload } from '@/components/ui/image-upload'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Textarea } from '@/components/ui/textarea'
+import { toast } from '@/hooks/use-toast'
+import { motion } from 'framer-motion'
 import {
   ArrowLeft,
   ChevronLeft,
@@ -19,34 +19,34 @@ import {
   PlusCircle,
   Save,
   Trash2,
-} from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import type * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+} from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import type * as React from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface Category {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 interface FormData {
-  name: string;
-  description: string;
-  pricePerDay: number;
-  categoryId: string;
-  images: string[];
-  isAvailable: boolean;
-  specifications?: Record<string, string>;
+  name: string
+  description: string
+  pricePerDay: number
+  categoryId: string
+  images: string[]
+  isAvailable: boolean
+  specifications?: Record<string, string>
 }
 
 export default function NovoEquipamento() {
-  const router = useRouter();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isImageZoomed, setIsImageZoomed] = useState(false);
+  const router = useRouter()
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [isImageZoomed, setIsImageZoomed] = useState(false)
   const [formData, setFormData] = useState<FormData>({
     name: '',
     description: '',
@@ -55,30 +55,30 @@ export default function NovoEquipamento() {
     images: [],
     isAvailable: true,
     specifications: {},
-  });
-  const [specKey, setSpecKey] = useState('');
-  const [specValue, setSpecValue] = useState('');
+  })
+  const [specKey, setSpecKey] = useState('')
+  const [specValue, setSpecValue] = useState('')
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    fetchCategories()
+  }, [])
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('/api/admin/categories');
+      const response = await fetch('/api/admin/categories')
       if (response.ok) {
-        const data = await response.json();
-        setCategories(data);
+        const data = await response.json()
+        setCategories(data)
       }
     } catch (error) {
-      console.error('Erro ao carregar categorias:', error);
+      console.error('Erro ao carregar categorias:', error)
       toast({
         title: 'Erro',
         description: 'Falha ao carregar categorias.',
         variant: 'destructive',
-      });
+      })
     }
-  };
+  }
 
   const handleAddSpecification = () => {
     if (specKey && specValue) {
@@ -88,28 +88,28 @@ export default function NovoEquipamento() {
           ...prev.specifications,
           [specKey]: specValue,
         },
-      }));
-      setSpecKey('');
-      setSpecValue('');
+      }))
+      setSpecKey('')
+      setSpecValue('')
     } else {
       toast({
         title: 'Atenção',
         description: 'Preencha a chave e o valor da especificação.',
         variant: 'default',
-      });
+      })
     }
-  };
+  }
 
   const handleRemoveSpecification = (keyToRemove: string) => {
     setFormData((prev) => {
-      const newSpecifications = { ...prev.specifications };
-      delete newSpecifications[keyToRemove];
-      return { ...prev, specifications: newSpecifications };
-    });
-  };
+      const newSpecifications = { ...prev.specifications }
+      delete newSpecifications[keyToRemove]
+      return { ...prev, specifications: newSpecifications }
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
 
     if (
       !formData.name ||
@@ -119,10 +119,11 @@ export default function NovoEquipamento() {
     ) {
       toast({
         title: 'Erro de Validação',
-        description: 'Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.',
+        description:
+          'Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.',
         variant: 'destructive',
-      });
-      return;
+      })
+      return
     }
 
     if (formData.images.length === 0) {
@@ -130,72 +131,82 @@ export default function NovoEquipamento() {
         title: 'Erro de Validação',
         description: 'Adicione pelo menos uma imagem do equipamento.',
         variant: 'destructive',
-      });
-      return;
+      })
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const response = await fetch('/api/admin/equipments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-      });
+      })
 
       if (response.ok) {
         toast({
           title: 'Sucesso!',
           description: 'Equipamento criado com sucesso.',
-        });
-        router.push('/admin/equipamentos');
+        })
+        router.push('/admin/equipamentos')
       } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Erro ao criar equipamento');
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erro ao criar equipamento')
       }
     } catch (error) {
-      console.error('Erro ao criar equipamento:', error);
+      console.error('Erro ao criar equipamento:', error)
       toast({
         title: 'Erro',
         description:
-          error instanceof Error ? error.message : 'Ocorreu um erro ao criar o equipamento.',
+          error instanceof Error
+            ? error.message
+            : 'Ocorreu um erro ao criar o equipamento.',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   // Funções do carrossel
   const nextImage = useCallback(() => {
     if (formData.images.length > 0) {
-      setCurrentImageIndex((prev) => (prev === formData.images.length - 1 ? 0 : prev + 1));
+      setCurrentImageIndex((prev) =>
+        prev === formData.images.length - 1 ? 0 : prev + 1
+      )
     }
-  }, [formData.images.length]);
+  }, [formData.images.length])
 
   const prevImage = useCallback(() => {
     if (formData.images.length > 0) {
-      setCurrentImageIndex((prev) => (prev === 0 ? formData.images.length - 1 : prev - 1));
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? formData.images.length - 1 : prev - 1
+      )
     }
-  }, [formData.images.length]);
+  }, [formData.images.length])
 
   const goToImage = useCallback((index: number) => {
-    setCurrentImageIndex(index);
-  }, []);
+    setCurrentImageIndex(index)
+  }, [])
 
   // Reset carrossel quando as imagens mudarem
   useEffect(() => {
     if (formData.images.length === 0) {
-      setCurrentImageIndex(0);
-      setIsImageZoomed(false);
+      setCurrentImageIndex(0)
+      setIsImageZoomed(false)
     } else if (currentImageIndex >= formData.images.length) {
-      setCurrentImageIndex(formData.images.length - 1);
+      setCurrentImageIndex(formData.images.length - 1)
     }
-  }, [formData.images, currentImageIndex]);
+  }, [formData.images, currentImageIndex])
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
         {/* Header com gradiente */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
           <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
             {/* Clean depth layers without decorative elements */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
@@ -226,7 +237,9 @@ export default function NovoEquipamento() {
               </div>
               <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
                 <Package className="w-5 h-5 text-orange-50" />
-                <span className="font-semibold text-white">Preencha os dados do equipamento</span>
+                <span className="font-semibold text-white">
+                  Preencha os dados do equipamento
+                </span>
               </div>
             </div>
           </div>
@@ -245,7 +258,8 @@ export default function NovoEquipamento() {
                   Dados do Equipamento
                 </CardTitle>
                 <p className="text-sm text-gray-600 mt-1">
-                  Preencha todas as informações necessárias para cadastrar o equipamento
+                  Preencha todas as informações necessárias para cadastrar o
+                  equipamento
                 </p>
               </CardHeader>
 
@@ -258,21 +272,31 @@ export default function NovoEquipamento() {
                     <div className="space-y-6">
                       <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
                         <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-medium text-blue-600">1</span>
+                          <span className="text-xs font-medium text-blue-600">
+                            1
+                          </span>
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900">Informações Básicas</h3>
+                        <h3 className="text-lg font-medium text-gray-900">
+                          Informações Básicas
+                        </h3>
                       </div>
 
                       <div className="space-y-4">
                         <div>
-                          <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                          <Label
+                            htmlFor="name"
+                            className="text-sm font-medium text-gray-700"
+                          >
                             Nome do Equipamento *
                           </Label>
                           <Input
                             id="name"
                             value={formData.name}
                             onChange={(e) =>
-                              setFormData((prev) => ({ ...prev, name: e.target.value }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                name: e.target.value,
+                              }))
                             }
                             placeholder="Ex: Betoneira 400L"
                             required
@@ -281,18 +305,27 @@ export default function NovoEquipamento() {
                         </div>
 
                         <div>
-                          <Label htmlFor="category" className="text-sm font-medium text-gray-700">
+                          <Label
+                            htmlFor="category"
+                            className="text-sm font-medium text-gray-700"
+                          >
                             Categoria *
                           </Label>
                           <CustomSelect
                             value={formData.categoryId}
                             onValueChange={(value: string) =>
-                              setFormData((prev) => ({ ...prev, categoryId: value }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                categoryId: value,
+                              }))
                             }
                             placeholder="Selecione uma categoria"
                           >
                             {categories.map((category) => (
-                              <CustomSelectItem key={category.id} value={category.id}>
+                              <CustomSelectItem
+                                key={category.id}
+                                value={category.id}
+                              >
                                 {category.name}
                               </CustomSelectItem>
                             ))}
@@ -310,7 +343,10 @@ export default function NovoEquipamento() {
                             id="description"
                             value={formData.description}
                             onChange={(e) =>
-                              setFormData((prev) => ({ ...prev, description: e.target.value }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                description: e.target.value,
+                              }))
                             }
                             placeholder="Descreva as características e usos do equipamento..."
                             rows={4}
@@ -330,7 +366,10 @@ export default function NovoEquipamento() {
                             id="pricePerDay"
                             value={formData.pricePerDay}
                             onValueChange={(value) =>
-                              setFormData((prev) => ({ ...prev, pricePerDay: value || 0 }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                pricePerDay: value || 0,
+                              }))
                             }
                             required
                             className="mt-2 border-gray-200 focus:border-blue-500"
@@ -342,7 +381,10 @@ export default function NovoEquipamento() {
                             id="isAvailable"
                             checked={formData.isAvailable}
                             onCheckedChange={(checked) =>
-                              setFormData((prev) => ({ ...prev, isAvailable: checked }))
+                              setFormData((prev) => ({
+                                ...prev,
+                                isAvailable: checked,
+                              }))
                             }
                             className="data-[state=checked]:bg-slate-700 data-[state=unchecked]:bg-input hover:data-[state=checked]:bg-slate-600 transition-colors duration-200"
                           />
@@ -360,37 +402,50 @@ export default function NovoEquipamento() {
                     <div className="space-y-6 border-t border-gray-100 pt-6">
                       <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
                         <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
-                          <span className="text-xs font-medium text-purple-600">3</span>
+                          <span className="text-xs font-medium text-purple-600">
+                            3
+                          </span>
                         </div>
                         <h3 className="text-lg font-medium text-gray-900">
                           Especificações Técnicas
                         </h3>
-                        <span className="text-sm text-gray-500">(Opcional)</span>
+                        <span className="text-sm text-gray-500">
+                          (Opcional)
+                        </span>
                       </div>
 
                       <div className="space-y-4">
-                        {Object.entries(formData.specifications || {}).length > 0 && (
+                        {Object.entries(formData.specifications || {}).length >
+                          0 && (
                           <div className="space-y-3">
-                            {Object.entries(formData.specifications || {}).map(([key, value]) => (
-                              <div
-                                key={key}
-                                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-gray-50/50"
-                              >
-                                <div className="flex-1 min-w-0">
-                                  <div className="text-sm font-medium text-gray-900">{key}</div>
-                                  <div className="text-sm text-gray-700 mt-1">{String(value)}</div>
-                                </div>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleRemoveSpecification(key)}
-                                  className="text-red-500 hover:text-red-700 hover:bg-red-100 flex-shrink-0 ml-2"
+                            {Object.entries(formData.specifications || {}).map(
+                              ([key, value]) => (
+                                <div
+                                  key={key}
+                                  className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-gray-50/50"
                                 >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            ))}
+                                  <div className="flex-1 min-w-0">
+                                    <div className="text-sm font-medium text-gray-900">
+                                      {key}
+                                    </div>
+                                    <div className="text-sm text-gray-700 mt-1">
+                                      {String(value)}
+                                    </div>
+                                  </div>
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() =>
+                                      handleRemoveSpecification(key)
+                                    }
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-100 flex-shrink-0 ml-2"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              )
+                            )}
                           </div>
                         )}
 
@@ -449,14 +504,20 @@ export default function NovoEquipamento() {
                   <div className="space-y-6">
                     <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-green-600">2</span>
+                        <span className="text-xs font-medium text-green-600">
+                          2
+                        </span>
                       </div>
-                      <h3 className="text-lg font-medium text-gray-900">Imagens do Equipamento</h3>
+                      <h3 className="text-lg font-medium text-gray-900">
+                        Imagens do Equipamento
+                      </h3>
                     </div>
 
                     <ImageUpload
                       images={formData.images}
-                      onImagesChange={(images) => setFormData((prev) => ({ ...prev, images }))}
+                      onImagesChange={(images) =>
+                        setFormData((prev) => ({ ...prev, images }))
+                      }
                       maxImages={5}
                       currentImageIndex={currentImageIndex}
                       onImageIndexChange={setCurrentImageIndex}
@@ -515,9 +576,9 @@ export default function NovoEquipamento() {
               <>
                 <button
                   onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    prevImage();
+                    e.preventDefault()
+                    e.stopPropagation()
+                    prevImage()
                   }}
                   title="Imagem anterior"
                   aria-label="Navegar para imagem anterior"
@@ -527,9 +588,9 @@ export default function NovoEquipamento() {
                 </button>
                 <button
                   onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    nextImage();
+                    e.preventDefault()
+                    e.stopPropagation()
+                    nextImage()
                   }}
                   title="Próxima imagem"
                   aria-label="Navegar para próxima imagem"
@@ -552,7 +613,12 @@ export default function NovoEquipamento() {
               aria-label="Fechar visualização"
               className="absolute top-4 right-4 bg-white/90 hover:bg-white text-gray-700 rounded-full p-2 shadow-lg hover:scale-110 transition-all duration-200"
             >
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -565,5 +631,5 @@ export default function NovoEquipamento() {
         </div>
       )}
     </div>
-  );
+  )
 }

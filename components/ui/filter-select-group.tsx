@@ -1,15 +1,15 @@
-'use client';
+'use client'
 
-import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select';
-import { cn } from '@/lib/utils';
-import type { Filter } from '@/types/filters';
+import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select'
+import { cn } from '@/lib/utils'
+import type { Filter } from '@/types/filters'
 
 interface FilterSelectGroupProps {
-  filters: Filter[];
-  className?: string;
-  selectClassName?: string;
-  activeClassName?: string;
-  gap?: 'sm' | 'md' | 'lg';
+  filters: Filter[]
+  className?: string
+  selectClassName?: string
+  activeClassName?: string
+  gap?: 'sm' | 'md' | 'lg'
 }
 
 export function FilterSelectGroup({
@@ -23,10 +23,16 @@ export function FilterSelectGroup({
     sm: 'gap-2',
     md: 'gap-3',
     lg: 'gap-4',
-  };
+  }
 
   return (
-    <div className={cn('flex items-center flex-wrap flex-1', gapClasses[gap], className)}>
+    <div
+      className={cn(
+        'flex items-center flex-wrap flex-1',
+        gapClasses[gap],
+        className
+      )}
+    >
       {filters.map((filter, index) => (
         <CustomSelect
           key={index}
@@ -36,7 +42,7 @@ export function FilterSelectGroup({
           className={cn(
             'w-full md:w-[200px] h-10',
             filter.value && filter.value !== 'all' && activeClassName,
-            selectClassName,
+            selectClassName
           )}
         >
           {filter.options.map((option) => (
@@ -47,5 +53,5 @@ export function FilterSelectGroup({
         </CustomSelect>
       ))}
     </div>
-  );
+  )
 }

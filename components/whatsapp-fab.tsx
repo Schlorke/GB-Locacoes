@@ -1,18 +1,18 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import { MessageCircle, Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { CloseButton } from '@/components/ui/close-button';
+import { useState, useEffect } from 'react'
+import { MessageCircle, Send } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { CloseButton } from '@/components/ui/close-button'
 
-type MessageSender = 'bot' | 'user';
+type MessageSender = 'bot' | 'user'
 
 interface ChatMessage {
-  id: number;
-  text: string;
-  sender: MessageSender;
-  timestamp: Date;
+  id: number
+  text: string
+  sender: MessageSender
+  timestamp: Date
 }
 
 const scrollbarStyles = `
@@ -40,11 +40,11 @@ const scrollbarStyles = `
     scrollbar-width: thin;
     scrollbar-color: #25D366 #f0f0f0;
   }
-`;
+`
 
 export default function WhatsAppFAB() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState('');
+  const [isOpen, setIsOpen] = useState(false)
+  const [message, setMessage] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 1,
@@ -52,21 +52,21 @@ export default function WhatsAppFAB() {
       sender: 'bot' as MessageSender,
       timestamp: new Date(),
     },
-  ]);
-  const [unreadCount, setUnreadCount] = useState(1); // Contador de mensagens não lidas
-  const [showQuickMessages, setShowQuickMessages] = useState(true);
+  ])
+  const [unreadCount, setUnreadCount] = useState(1) // Contador de mensagens não lidas
+  const [showQuickMessages, setShowQuickMessages] = useState(true)
 
-  const whatsappNumber = '5551998205163'; // WhatsApp da GB Locações
+  const whatsappNumber = '5551998205163' // WhatsApp da GB Locações
 
   useEffect(() => {
     // Quando o chat é aberto, marcar mensagens como lidas
     if (isOpen) {
-      setUnreadCount(0);
+      setUnreadCount(0)
     }
-  }, [isOpen]);
+  }, [isOpen])
 
   const handleSendMessage = () => {
-    if (!message.trim()) return;
+    if (!message.trim()) return
 
     // Add user message to chat
     const userMessage: ChatMessage = {
@@ -74,10 +74,10 @@ export default function WhatsAppFAB() {
       text: message,
       sender: 'user' as MessageSender,
       timestamp: new Date(),
-    };
+    }
 
-    setMessages([...messages, userMessage]);
-    setShowQuickMessages(false); // Hide quick messages after user sends a message
+    setMessages([...messages, userMessage])
+    setShowQuickMessages(false) // Hide quick messages after user sends a message
 
     // Simulate bot response
     setTimeout(() => {
@@ -86,44 +86,50 @@ export default function WhatsAppFAB() {
         text: 'Obrigado pela mensagem! Vou te redirecionar para o WhatsApp onde nossos especialistas podem te atender melhor. 📱',
         sender: 'bot' as MessageSender,
         timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, botResponse]);
+      }
+      setMessages((prev) => [...prev, botResponse])
 
       // Se o chat não estiver aberto, incrementar contador de não lidas
       if (!isOpen) {
-        setUnreadCount((prev) => prev + 1);
+        setUnreadCount((prev) => prev + 1)
       }
 
       // Redirect to WhatsApp after bot response
       setTimeout(() => {
         const whatsappMessage = encodeURIComponent(
-          `Olá! Vim do site da GB Locações e gostaria de solicitar informações sobre locação de equipamentos para construção civil. Minha mensagem: ${message}`,
-        );
-        window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
-        setIsOpen(false);
-        setMessage('');
-        setShowQuickMessages(true); // Reset for next time
-      }, 1500);
-    }, 1000);
+          `Olá! Vim do site da GB Locações e gostaria de solicitar informações sobre locação de equipamentos para construção civil. Minha mensagem: ${message}`
+        )
+        window.open(
+          `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
+          '_blank'
+        )
+        setIsOpen(false)
+        setMessage('')
+        setShowQuickMessages(true) // Reset for next time
+      }, 1500)
+    }, 1000)
 
-    setMessage('');
-  };
+    setMessage('')
+  }
 
   const handleQuickMessage = (quickMessage: string) => {
     const whatsappMessage = encodeURIComponent(
-      `Olá! Vim do site da GB Locações e gostaria de ${quickMessage}`,
-    );
-    window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, '_blank');
-    setIsOpen(false);
-    setShowQuickMessages(true); // Reset for next time
-  };
+      `Olá! Vim do site da GB Locações e gostaria de ${quickMessage}`
+    )
+    window.open(
+      `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
+      '_blank'
+    )
+    setIsOpen(false)
+    setShowQuickMessages(true) // Reset for next time
+  }
 
   const quickMessages = [
     'solicitar um orçamento de equipamentos',
     'saber sobre andaimes suspensos',
     'informações sobre cadeiras elétricas',
     'conhecer todos os equipamentos disponíveis',
-  ];
+  ]
 
   return (
     <>
@@ -139,7 +145,9 @@ export default function WhatsAppFAB() {
               </div>
               <div>
                 <h3 className="font-semibold text-lg">GB Locações</h3>
-                <p className="text-sm text-green-100">Equipamentos para Construção</p>
+                <p className="text-sm text-green-100">
+                  Equipamentos para Construção
+                </p>
               </div>
             </div>
             <CloseButton
@@ -169,10 +177,15 @@ export default function WhatsAppFAB() {
                     {msg.text}
                     <div
                       className={`text-xs mt-1 opacity-70 ${
-                        msg.sender === 'user' ? 'text-green-100' : 'text-gray-500'
+                        msg.sender === 'user'
+                          ? 'text-green-100'
+                          : 'text-gray-500'
                       }`}
                     >
-                      {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {msg.timestamp.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
                     </div>
                   </div>
                 </div>
@@ -182,7 +195,9 @@ export default function WhatsAppFAB() {
             {/* Quick Messages - apenas quando não há conversa */}
             {showQuickMessages && messages.length === 1 && (
               <div className="flex-shrink-0 p-3 border-t bg-white">
-                <p className="text-xs text-gray-600 mb-2 font-medium">Mensagens rápidas:</p>
+                <p className="text-xs text-gray-600 mb-2 font-medium">
+                  Mensagens rápidas:
+                </p>
                 <div className="space-y-1 max-h-20 overflow-y-auto whatsapp-chat-scroll">
                   {quickMessages.map((quickMsg, index) => (
                     <button
@@ -249,5 +264,5 @@ export default function WhatsAppFAB() {
         )}
       </div>
     </>
-  );
+  )
 }

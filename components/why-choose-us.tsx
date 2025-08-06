@@ -1,5 +1,5 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Shield, Truck, Clock, Users, Award, Headphones } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card'
+import { Shield, Truck, Clock, Users, Award, Headphones } from 'lucide-react'
 
 const benefits = [
   {
@@ -44,7 +44,7 @@ const benefits = [
       'Sistema de rastreamento que identifica onde cada equipamento está e quando foi feita a última manutenção.',
     color: 'from-red-500 to-red-600',
   },
-];
+]
 
 export default function WhyChooseUs() {
   return (
@@ -62,13 +62,14 @@ export default function WhyChooseUs() {
             Por que Escolher a GB Locações?
           </h2>
           <p className="section-subtitle text-xl text-gray-300 max-w-2xl mx-auto opacity-0">
-            Especializada em locação de equipamentos para obras e serviços em altura
+            Especializada em locação de equipamentos para obras e serviços em
+            altura
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => {
-            const IconComponent = benefit.icon;
+            const IconComponent = benefit.icon
             return (
               <Card
                 key={benefit.title}
@@ -99,7 +100,7 @@ export default function WhyChooseUs() {
                 {/* Bottom accent line - sempre no fundo */}
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
               </Card>
-            );
+            )
           })}
         </div>
 
@@ -113,15 +114,18 @@ export default function WhyChooseUs() {
               Pronto para Começar seu Projeto?
             </h3>
             <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-              Solicite um orçamento gratuito e receba nossa proposta personalizada. Atendimento com
-              segurança, qualidade e manutenção constante dos equipamentos.
+              Solicite um orçamento gratuito e receba nossa proposta
+              personalizada. Atendimento com segurança, qualidade e manutenção
+              constante dos equipamentos.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="tel:+5551231362"
                 className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group"
               >
-                <span className="group-hover:animate-pulse">(51) 2313-6262</span>
+                <span className="group-hover:animate-pulse">
+                  (51) 2313-6262
+                </span>
               </a>
               <a
                 href="/orcamento"
@@ -134,5 +138,5 @@ export default function WhyChooseUs() {
         </div>
       </div>
     </section>
-  );
+  )
 }

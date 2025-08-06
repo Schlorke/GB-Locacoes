@@ -1,13 +1,14 @@
-import type React from 'react';
-import type { Metadata } from 'next';
-import { SpeedInsights } from '@vercel/speed-insights/next'; // ✅ Importado aqui
-import ClientLayout from './ClientLayout';
-import './globals.css';
+import { SpeedInsights } from '@vercel/speed-insights/next' // ✅ Importado aqui
+import type { Metadata } from 'next'
+import React from 'react'
+import ClientLayout from './ClientLayout'
+import './globals.css'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gblocacoes.com.br'),
   title: {
-    default: 'GB Locações - Especializada em Locação de Equipamentos para Construção Civil',
+    default:
+      'GB Locações - Especializada em Locação de Equipamentos para Construção Civil',
     template: '%s | GB Locações',
   },
   description:
@@ -45,7 +46,8 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
     url: 'https://gblocacoes.com.br',
     siteName: 'GB Locações',
-    title: 'GB Locações - Especializada em Locação de Equipamentos para Construção Civil',
+    title:
+      'GB Locações - Especializada em Locação de Equipamentos para Construção Civil',
     description:
       'Há 10 anos oferecendo soluções em locação de equipamentos para construção civil com segurança, qualidade e manutenção constante.',
     images: [
@@ -59,7 +61,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'GB Locações - Especializada em Locação de Equipamentos para Construção Civil',
+    title:
+      'GB Locações - Especializada em Locação de Equipamentos para Construção Civil',
     description:
       'Há 10 anos oferecendo soluções em locação de equipamentos para construção civil com segurança, qualidade e manutenção constante.',
     images: ['/og-image.jpg'],
@@ -68,13 +71,18 @@ export const metadata: Metadata = {
     google: 'google-site-verification-code',
   },
   generator: 'v0.dev',
-};
+}
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <ClientLayout>
       {children}
-      <SpeedInsights /> {/* ✅ Aqui dentro do ClientLayout, depois dos children */}
+      <SpeedInsights />{' '}
+      {/* ✅ Aqui dentro do ClientLayout, depois dos children */}
     </ClientLayout>
-  );
+  )
 }

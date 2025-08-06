@@ -1,44 +1,44 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { prisma } from '@/lib/prisma';
-import { ArrowLeft, Clock, MapPin } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { prisma } from '@/lib/prisma'
+import { ArrowLeft, Clock, MapPin } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }
 
 export async function generateMetadata(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   const equipment = await prisma.equipment.findUnique({
     where: { id: params.id },
     include: { category: true },
-  });
+  })
 
   if (!equipment) {
-    return { title: 'Equipamento não encontrado' };
+    return { title: 'Equipamento não encontrado' }
   }
 
   return {
     title: `${equipment.name} | GB Locações`,
     description: equipment.description,
-  };
+  }
 }
 
 export default async function EquipmentDetailPage(props: Props) {
-  const params = await props.params;
+  const params = await props.params
   const equipment = await prisma.equipment.findUnique({
     where: { id: params.id },
     include: {
       category: true,
     },
-  });
+  })
 
   if (!equipment) {
-    notFound();
+    notFound()
   }
 
   return (
@@ -60,7 +60,10 @@ export default async function EquipmentDetailPage(props: Props) {
           <div>
             <div className="relative h-96 bg-gray-200 rounded-lg overflow-hidden mb-4">
               <Image
-                src={equipment.images?.[0] || '/placeholder.svg?height=400&width=600'}
+                src={
+                  equipment.images?.[0] ||
+                  '/placeholder.svg?height=400&width=600'
+                }
                 alt={equipment.name}
                 fill
                 className="object-cover"
@@ -77,7 +80,10 @@ export default async function EquipmentDetailPage(props: Props) {
             {equipment.images && equipment.images.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
                 {equipment.images.slice(1, 5).map((image, index) => (
-                  <div key={index} className="relative h-20 bg-gray-200 rounded overflow-hidden">
+                  <div
+                    key={index}
+                    className="relative h-20 bg-gray-200 rounded overflow-hidden"
+                  >
                     <Image
                       src={image || '/placeholder.svg'}
                       alt={`${equipment.name} ${index + 2}`}
@@ -96,12 +102,16 @@ export default async function EquipmentDetailPage(props: Props) {
               {equipment.category.name}
             </Badge>
 
-            <h1 className="font-bold text-h1 text-gray-900 mb-4">{equipment.name}</h1>
+            <h1 className="font-bold text-h1 text-gray-900 mb-4">
+              {equipment.name}
+            </h1>
 
             <div className="flex items-center gap-4 mb-6">
               <div className="text-h2 font-bold text-orange-600">
                 R$ {equipment.pricePerDay.toFixed(2)}
-                <span className="text-base font-normal text-gray-500">/dia</span>
+                <span className="text-base font-normal text-gray-500">
+                  /dia
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <Clock className="h-4 w-4 text-gray-500" />
@@ -128,7 +138,9 @@ export default async function EquipmentDetailPage(props: Props) {
                 <CardTitle>Descrição</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700 leading-relaxed">{equipment.description}</p>
+                <p className="text-gray-700 leading-relaxed">
+                  {equipment.description}
+                </p>
               </CardContent>
             </Card>
 
@@ -155,7 +167,9 @@ export default async function EquipmentDetailPage(props: Props) {
                 asChild={equipment.available}
               >
                 {equipment.available ? (
-                  <Link href={`/orcamento?equipmentId=${equipment.id}`}>Solicitar Orçamento</Link>
+                  <Link href={`/orcamento?equipmentId=${equipment.id}`}>
+                    Solicitar Orçamento
+                  </Link>
                 ) : (
                   <span>Equipamento Indisponível</span>
                 )}
@@ -163,7 +177,9 @@ export default async function EquipmentDetailPage(props: Props) {
 
               <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                 <MapPin className="h-4 w-4" />
-                <span>Entrega em toda região metropolitana de Porto Alegre</span>
+                <span>
+                  Entrega em toda região metropolitana de Porto Alegre
+                </span>
               </div>
             </div>
           </div>
@@ -184,5 +200,5 @@ export default async function EquipmentDetailPage(props: Props) {
         */}
       </div>
     </main>
-  );
+  )
 }

@@ -4,7 +4,8 @@
 
 ### 1. "React is not defined" Error
 
-**Problema**: Erro `ReferenceError: React is not defined` ao renderizar componentes no Storybook.
+**Problema**: Erro `ReferenceError: React is not defined` ao renderizar
+componentes no Storybook.
 
 **Causa**: React não está sendo importado corretamente nos arquivos de stories.
 
@@ -12,11 +13,11 @@
 
 ```tsx
 // ❌ Errado - React não importado
-const [state, setState] = React.useState();
+const [state, setState] = React.useState()
 
 // ✅ Correto - React importado
-import React from 'react';
-const [state, setState] = React.useState();
+import React from "react"
+const [state, setState] = React.useState()
 ```
 
 **Arquivos Corrigidos**:
@@ -25,18 +26,20 @@ const [state, setState] = React.useState();
 
 ### 2. ESLint "storybook/no-renderer-packages" Error
 
-**Problema**: Erro `Do not import renderer package "@storybook/react" directly` no ESLint.
+**Problema**: Erro `Do not import renderer package "@storybook/react" directly`
+no ESLint.
 
-**Causa**: Importação incorreta do pacote do Storybook. Deve-se usar o framework específico.
+**Causa**: Importação incorreta do pacote do Storybook. Deve-se usar o framework
+específico.
 
 **Solução**:
 
 ```tsx
 // ❌ Errado - Importação genérica
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from "@storybook/react"
 
 // ✅ Correto - Framework específico (Next.js)
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import type { Meta, StoryObj } from "@storybook/nextjs"
 ```
 
 **Arquivos Corrigidos**:
@@ -53,7 +56,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 
 ### 3. Conflitos de Case-Sensitivity
 
-**Problema**: Erro `Prevent writing to file that only differs in casing` no Windows.
+**Problema**: Erro `Prevent writing to file that only differs in casing` no
+Windows.
 
 **Causa**: Arquivos com nomes que diferem apenas na capitalização.
 
@@ -94,30 +98,30 @@ viteFinal: async (config) => {
 **Estrutura Recomendada**:
 
 ```tsx
-import React from 'react'; // ✅ Sempre importar React
-import type { Meta, StoryObj } from '@storybook/nextjs';
-import { Component } from './component';
+import React from "react" // ✅ Sempre importar React
+import type { Meta, StoryObj } from "@storybook/nextjs"
+import { Component } from "./component"
 
 const meta: Meta<typeof Component> = {
-  title: 'Category/ComponentName',
-  component: Component,
+  title: "Category/ComponentName",
+  component: Component
   // ... outras configurações
-};
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
+export const Default: Story = {}
 
 // Story com função play para interações automáticas
 export const Interactive: Story = {
   play: async ({ canvas, userEvent }) => {
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100))
 
-    const element = canvas.getByRole('button');
-    await userEvent.click(element);
-  },
-};
+    const element = canvas.getByRole("button")
+    await userEvent.click(element)
+  }
+}
 ```
 
 **Boas Práticas**:

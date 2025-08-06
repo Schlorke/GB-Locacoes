@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(_request: NextRequest) {
   try {
@@ -22,36 +22,36 @@ export async function GET(_request: NextRequest) {
         image: '/placeholder.jpg',
         available: true,
       },
-    ];
+    ]
 
     return NextResponse.json({
       success: true,
       data: mockEquipments,
       total: mockEquipments.length,
-    });
+    })
   } catch (error) {
-    console.error('Error in equipments-mock API:', error);
+    console.error('Error in equipments-mock API:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to fetch equipments' },
-      { status: 500 },
-    );
+      { status: 500 }
+    )
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body = await request.json()
 
     return NextResponse.json({
       success: true,
       message: 'Equipment created successfully (mock)',
       data: { id: Date.now().toString(), ...body },
-    });
+    })
   } catch (error) {
-    console.error('Error creating equipment (mock):', error);
+    console.error('Error creating equipment (mock):', error)
     return NextResponse.json(
       { success: false, error: 'Failed to create equipment' },
-      { status: 500 },
-    );
+      { status: 500 }
+    )
   }
 }

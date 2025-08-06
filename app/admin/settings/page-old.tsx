@@ -1,16 +1,20 @@
-'use client';
+'use client'
 
-import { getSettings, updateSettings } from '@/app/api/admin/settings/actions';
-import { HeroCarouselManager } from '@/components/admin/hero-carousel-manager';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { HeroCarouselItem, SettingsInput, SocialLinks } from '@/schemas/settings.schema';
-import { motion } from 'framer-motion';
+import { getSettings, updateSettings } from '@/app/api/admin/settings/actions'
+import { HeroCarouselManager } from '@/components/admin/hero-carousel-manager'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '@/hooks/use-toast'
+import {
+  HeroCarouselItem,
+  SettingsInput,
+  SocialLinks,
+} from '@/schemas/settings.schema'
+import { motion } from 'framer-motion'
 import {
   Building2,
   Globe,
@@ -21,14 +25,14 @@ import {
   Shield,
   Smartphone,
   Users,
-} from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+} from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export default function SettingsPage() {
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingData, setIsLoadingData] = useState(true);
+  const { toast } = useToast()
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingData, setIsLoadingData] = useState(true)
   const [formData, setFormData] = useState<SettingsInput>({
     companyPhone: '',
     companyIconUrl: '',
@@ -38,7 +42,8 @@ export default function SettingsPage() {
     contactEmail: '',
     socialLinks: {},
     seoTitle: 'GB Locações - Equipamentos para Construção',
-    seoDescription: 'Locação de equipamentos para construção civil com qualidade e segurança',
+    seoDescription:
+      'Locação de equipamentos para construção civil com qualidade e segurança',
     themeColorPrimary: '#ea580c',
     maintenanceMode: false,
     analyticsTrackingId: '',
@@ -56,23 +61,26 @@ export default function SettingsPage() {
     securityConfig: {},
     customCss: '',
     customJs: '',
-  });
+  })
 
   // Carregar dados iniciais
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        const result = await getSettings();
+        const result = await getSettings()
         if (result.success && result.data) {
           setFormData({
             companyPhone: result.data.companyPhone || '',
             companyIconUrl: result.data.companyIconUrl || '',
             aboutUsText: result.data.aboutUsText || '',
             companyAddress: result.data.companyAddress || '',
-            heroCarousel: (result.data.heroCarousel as HeroCarouselItem[]) || [],
+            heroCarousel:
+              (result.data.heroCarousel as HeroCarouselItem[]) || [],
             contactEmail: result.data.contactEmail || '',
             socialLinks: (result.data.socialLinks as SocialLinks) || {},
-            seoTitle: result.data.seoTitle || 'GB Locações - Equipamentos para Construção',
+            seoTitle:
+              result.data.seoTitle ||
+              'GB Locações - Equipamentos para Construção',
             seoDescription:
               result.data.seoDescription ||
               'Locação de equipamentos para construção civil com qualidade e segurança',
@@ -82,13 +90,13 @@ export default function SettingsPage() {
             footerText: result.data.footerText || '',
             businessHours:
               (result.data.businessHours as {
-                monday?: { closed: boolean; open?: string; close?: string };
-                tuesday?: { closed: boolean; open?: string; close?: string };
-                wednesday?: { closed: boolean; open?: string; close?: string };
-                thursday?: { closed: boolean; open?: string; close?: string };
-                friday?: { closed: boolean; open?: string; close?: string };
-                saturday?: { closed: boolean; open?: string; close?: string };
-                sunday?: { closed: boolean; open?: string; close?: string };
+                monday?: { closed: boolean; open?: string; close?: string }
+                tuesday?: { closed: boolean; open?: string; close?: string }
+                wednesday?: { closed: boolean; open?: string; close?: string }
+                thursday?: { closed: boolean; open?: string; close?: string }
+                friday?: { closed: boolean; open?: string; close?: string }
+                saturday?: { closed: boolean; open?: string; close?: string }
+                sunday?: { closed: boolean; open?: string; close?: string }
               }) || {},
             supportChat: result.data.supportChat !== false,
             whatsappNumber: result.data.whatsappNumber || '',
@@ -99,85 +107,86 @@ export default function SettingsPage() {
             maintenanceMessage: result.data.maintenanceMessage || '',
             smtpConfig:
               (result.data.smtpConfig as {
-                host?: string;
-                port?: number;
-                secure?: boolean;
-                username?: string;
-                password?: string;
-                fromEmail?: string;
-                fromName?: string;
+                host?: string
+                port?: number
+                secure?: boolean
+                username?: string
+                password?: string
+                fromEmail?: string
+                fromName?: string
               }) || {},
             uploadLimits:
               (result.data.uploadLimits as {
-                maxFileSize?: number;
-                allowedTypes?: string[];
-                maxFiles?: number;
+                maxFileSize?: number
+                allowedTypes?: string[]
+                maxFiles?: number
               }) || {},
             securityConfig:
               (result.data.securityConfig as {
-                enableRecaptcha?: boolean;
-                recaptchaSiteKey?: string;
-                recaptchaSecretKey?: string;
-                enable2FA?: boolean;
-                sessionTimeout?: number;
-                maxLoginAttempts?: number;
+                enableRecaptcha?: boolean
+                recaptchaSiteKey?: string
+                recaptchaSecretKey?: string
+                enable2FA?: boolean
+                sessionTimeout?: number
+                maxLoginAttempts?: number
               }) || {},
             customCss: result.data.customCss || '',
             customJs: result.data.customJs || '',
-          });
+          })
         }
       } catch (error) {
-        console.error('Erro ao carregar configurações:', error);
+        console.error('Erro ao carregar configurações:', error)
         toast({
           title: 'Erro',
           description: 'Não foi possível carregar as configurações.',
           variant: 'destructive',
-        });
+        })
       } finally {
-        setIsLoadingData(false);
+        setIsLoadingData(false)
       }
-    };
+    }
 
-    loadSettings();
-  }, [toast]);
+    loadSettings()
+  }, [toast])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+    e.preventDefault()
+    setIsLoading(true)
 
     try {
-      const result = await updateSettings(formData);
+      const result = await updateSettings(formData)
 
       if (result.success) {
         toast({
           title: 'Sucesso!',
-          description: result.message || 'Configurações atualizadas com sucesso.',
-        });
+          description:
+            result.message || 'Configurações atualizadas com sucesso.',
+        })
       } else {
         toast({
           title: 'Erro',
           description: result.error || 'Erro ao atualizar configurações.',
           variant: 'destructive',
-        });
+        })
       }
     } catch (error) {
-      console.error('Erro ao salvar:', error);
+      console.error('Erro ao salvar:', error)
       toast({
         title: 'Erro',
         description: 'Erro interno do servidor.',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const updateField = (field: keyof SettingsInput, value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
-    }));
-  };
+    }))
+  }
 
   const updateSocialLinks = (field: keyof SocialLinks, value: string) => {
     setFormData((prev) => ({
@@ -186,8 +195,8 @@ export default function SettingsPage() {
         ...prev.socialLinks,
         [field]: value,
       },
-    }));
-  };
+    }))
+  }
 
   if (isLoadingData) {
     return (
@@ -195,11 +204,13 @@ export default function SettingsPage() {
         <div className="flex items-center justify-center h-[calc(100vh-200px)]">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-            <p className="text-lg text-muted-foreground">Carregando configurações...</p>
+            <p className="text-lg text-muted-foreground">
+              Carregando configurações...
+            </p>
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -231,7 +242,9 @@ export default function SettingsPage() {
 
               <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
                 <Settings className="w-5 h-5 text-orange-50" />
-                <span className="font-semibold text-white">Configurações Globais</span>
+                <span className="font-semibold text-white">
+                  Configurações Globais
+                </span>
               </div>
             </div>
           </div>
@@ -265,40 +278,55 @@ export default function SettingsPage() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="companyPhone" className="text-sm font-medium">
+                      <Label
+                        htmlFor="companyPhone"
+                        className="text-sm font-medium"
+                      >
                         Telefone da Empresa
                       </Label>
                       <Input
                         id="companyPhone"
                         value={formData.companyPhone || ''}
-                        onChange={(e) => updateField('companyPhone', e.target.value)}
+                        onChange={(e) =>
+                          updateField('companyPhone', e.target.value)
+                        }
                         placeholder="(11) 99999-9999"
                         className="mt-1 focus:border-blue-500"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="contactEmail" className="text-sm font-medium">
+                      <Label
+                        htmlFor="contactEmail"
+                        className="text-sm font-medium"
+                      >
                         E-mail de Contato
                       </Label>
                       <Input
                         id="contactEmail"
                         type="email"
                         value={formData.contactEmail || ''}
-                        onChange={(e) => updateField('contactEmail', e.target.value)}
+                        onChange={(e) =>
+                          updateField('contactEmail', e.target.value)
+                        }
                         placeholder="contato@gblocacoes.com"
                         className="mt-1 focus:border-blue-500"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="whatsappNumber" className="text-sm font-medium">
+                      <Label
+                        htmlFor="whatsappNumber"
+                        className="text-sm font-medium"
+                      >
                         WhatsApp
                       </Label>
                       <Input
                         id="whatsappNumber"
                         value={formData.whatsappNumber || ''}
-                        onChange={(e) => updateField('whatsappNumber', e.target.value)}
+                        onChange={(e) =>
+                          updateField('whatsappNumber', e.target.value)
+                        }
                         placeholder="5511999999999"
                         className="mt-1 focus:border-blue-500"
                       />
@@ -307,13 +335,18 @@ export default function SettingsPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="companyAddress" className="text-sm font-medium">
+                      <Label
+                        htmlFor="companyAddress"
+                        className="text-sm font-medium"
+                      >
                         Endereço da Empresa
                       </Label>
                       <Textarea
                         id="companyAddress"
                         value={formData.companyAddress || ''}
-                        onChange={(e) => updateField('companyAddress', e.target.value)}
+                        onChange={(e) =>
+                          updateField('companyAddress', e.target.value)
+                        }
                         placeholder="Rua exemplo, 123 - Bairro - Cidade - UF"
                         rows={3}
                         className="mt-1 focus:border-blue-500"
@@ -321,13 +354,18 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="aboutUsText" className="text-sm font-medium">
+                      <Label
+                        htmlFor="aboutUsText"
+                        className="text-sm font-medium"
+                      >
                         Sobre a Empresa
                       </Label>
                       <Textarea
                         id="aboutUsText"
                         value={formData.aboutUsText || ''}
-                        onChange={(e) => updateField('aboutUsText', e.target.value)}
+                        onChange={(e) =>
+                          updateField('aboutUsText', e.target.value)
+                        }
                         placeholder="Descrição da empresa para a página Sobre Nós"
                         rows={3}
                         className="mt-1 focus:border-blue-500"
@@ -387,7 +425,9 @@ export default function SettingsPage() {
                   </div>
                   Redes Sociais
                 </CardTitle>
-                <p className="text-sm text-gray-600 mt-1">Links para as redes sociais da empresa</p>
+                <p className="text-sm text-gray-600 mt-1">
+                  Links para as redes sociais da empresa
+                </p>
               </CardHeader>
 
               <CardContent className="relative z-10 space-y-6">
@@ -399,7 +439,9 @@ export default function SettingsPage() {
                     <Input
                       id="facebook"
                       value={formData.socialLinks?.facebook || ''}
-                      onChange={(e) => updateSocialLinks('facebook', e.target.value)}
+                      onChange={(e) =>
+                        updateSocialLinks('facebook', e.target.value)
+                      }
                       placeholder="https://facebook.com/gblocacoes"
                       className="mt-1 focus:border-blue-500"
                     />
@@ -412,7 +454,9 @@ export default function SettingsPage() {
                     <Input
                       id="instagram"
                       value={formData.socialLinks?.instagram || ''}
-                      onChange={(e) => updateSocialLinks('instagram', e.target.value)}
+                      onChange={(e) =>
+                        updateSocialLinks('instagram', e.target.value)
+                      }
                       placeholder="https://instagram.com/gblocacoes"
                       className="mt-1 focus:border-blue-500"
                     />
@@ -425,7 +469,9 @@ export default function SettingsPage() {
                     <Input
                       id="linkedin"
                       value={formData.socialLinks?.linkedin || ''}
-                      onChange={(e) => updateSocialLinks('linkedin', e.target.value)}
+                      onChange={(e) =>
+                        updateSocialLinks('linkedin', e.target.value)
+                      }
                       placeholder="https://linkedin.com/company/gblocacoes"
                       className="mt-1 focus:border-blue-500"
                     />
@@ -438,7 +484,9 @@ export default function SettingsPage() {
                     <Input
                       id="youtube"
                       value={formData.socialLinks?.youtube || ''}
-                      onChange={(e) => updateSocialLinks('youtube', e.target.value)}
+                      onChange={(e) =>
+                        updateSocialLinks('youtube', e.target.value)
+                      }
                       placeholder="https://youtube.com/@gblocacoes"
                       className="mt-1 focus:border-blue-500"
                     />
@@ -451,7 +499,9 @@ export default function SettingsPage() {
                     <Input
                       id="twitter"
                       value={formData.socialLinks?.twitter || ''}
-                      onChange={(e) => updateSocialLinks('twitter', e.target.value)}
+                      onChange={(e) =>
+                        updateSocialLinks('twitter', e.target.value)
+                      }
                       placeholder="https://twitter.com/gblocacoes"
                       className="mt-1 focus:border-blue-500"
                     />
@@ -493,7 +543,9 @@ export default function SettingsPage() {
                       <Input
                         id="seoTitle"
                         value={formData.seoTitle}
-                        onChange={(e) => updateField('seoTitle', e.target.value)}
+                        onChange={(e) =>
+                          updateField('seoTitle', e.target.value)
+                        }
                         placeholder="GB Locações - Equipamentos para Construção"
                         maxLength={60}
                         className="mt-1 focus:border-blue-500"
@@ -505,13 +557,18 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="seoDescription" className="text-sm font-medium">
+                      <Label
+                        htmlFor="seoDescription"
+                        className="text-sm font-medium"
+                      >
                         Descrição SEO *
                       </Label>
                       <Textarea
                         id="seoDescription"
                         value={formData.seoDescription}
-                        onChange={(e) => updateField('seoDescription', e.target.value)}
+                        onChange={(e) =>
+                          updateField('seoDescription', e.target.value)
+                        }
                         placeholder="Locação de equipamentos para construção civil..."
                         maxLength={160}
                         rows={3}
@@ -526,7 +583,10 @@ export default function SettingsPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="themeColorPrimary" className="text-sm font-medium">
+                      <Label
+                        htmlFor="themeColorPrimary"
+                        className="text-sm font-medium"
+                      >
                         Cor Primária do Tema
                       </Label>
                       <div className="flex items-center gap-3 mt-1">
@@ -534,12 +594,16 @@ export default function SettingsPage() {
                           id="themeColorPrimary"
                           type="color"
                           value={formData.themeColorPrimary}
-                          onChange={(e) => updateField('themeColorPrimary', e.target.value)}
+                          onChange={(e) =>
+                            updateField('themeColorPrimary', e.target.value)
+                          }
                           className="w-16 h-10 p-1 border rounded-lg focus:border-blue-500"
                         />
                         <Input
                           value={formData.themeColorPrimary}
-                          onChange={(e) => updateField('themeColorPrimary', e.target.value)}
+                          onChange={(e) =>
+                            updateField('themeColorPrimary', e.target.value)
+                          }
                           placeholder="#ea580c"
                           className="flex-1 focus:border-blue-500"
                         />
@@ -560,13 +624,18 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="logoSecondary" className="text-sm font-medium">
+                      <Label
+                        htmlFor="logoSecondary"
+                        className="text-sm font-medium"
+                      >
                         Logo Secundária (URL)
                       </Label>
                       <Input
                         id="logoSecondary"
                         value={formData.logoSecondary || ''}
-                        onChange={(e) => updateField('logoSecondary', e.target.value)}
+                        onChange={(e) =>
+                          updateField('logoSecondary', e.target.value)
+                        }
                         placeholder="https://exemplo.com/logo-alt.png"
                         className="mt-1 focus:border-blue-500"
                       />
@@ -604,7 +673,10 @@ export default function SettingsPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 border rounded-lg">
                       <div>
-                        <Label htmlFor="maintenanceMode" className="text-sm font-medium">
+                        <Label
+                          htmlFor="maintenanceMode"
+                          className="text-sm font-medium"
+                        >
                           Modo Manutenção
                         </Label>
                         <p className="text-xs text-gray-600 mt-1">
@@ -614,13 +686,18 @@ export default function SettingsPage() {
                       <Switch
                         id="maintenanceMode"
                         checked={formData.maintenanceMode || false}
-                        onCheckedChange={(checked) => updateField('maintenanceMode', checked)}
+                        onCheckedChange={(checked) =>
+                          updateField('maintenanceMode', checked)
+                        }
                       />
                     </div>
 
                     <div className="flex items-center justify-between p-4 border rounded-lg">
                       <div>
-                        <Label htmlFor="supportChat" className="text-sm font-medium">
+                        <Label
+                          htmlFor="supportChat"
+                          className="text-sm font-medium"
+                        >
                           Chat de Suporte
                         </Label>
                         <p className="text-xs text-gray-600 mt-1">
@@ -630,19 +707,26 @@ export default function SettingsPage() {
                       <Switch
                         id="supportChat"
                         checked={formData.supportChat !== false}
-                        onCheckedChange={(checked) => updateField('supportChat', checked)}
+                        onCheckedChange={(checked) =>
+                          updateField('supportChat', checked)
+                        }
                       />
                     </div>
 
                     {formData.maintenanceMode && (
                       <div>
-                        <Label htmlFor="maintenanceMessage" className="text-sm font-medium">
+                        <Label
+                          htmlFor="maintenanceMessage"
+                          className="text-sm font-medium"
+                        >
                           Mensagem de Manutenção
                         </Label>
                         <Textarea
                           id="maintenanceMessage"
                           value={formData.maintenanceMessage || ''}
-                          onChange={(e) => updateField('maintenanceMessage', e.target.value)}
+                          onChange={(e) =>
+                            updateField('maintenanceMessage', e.target.value)
+                          }
                           placeholder="Site em manutenção. Voltamos em breve!"
                           rows={2}
                           className="mt-1 focus:border-blue-500"
@@ -653,26 +737,36 @@ export default function SettingsPage() {
 
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="analyticsTrackingId" className="text-sm font-medium">
+                      <Label
+                        htmlFor="analyticsTrackingId"
+                        className="text-sm font-medium"
+                      >
                         Google Analytics ID
                       </Label>
                       <Input
                         id="analyticsTrackingId"
                         value={formData.analyticsTrackingId || ''}
-                        onChange={(e) => updateField('analyticsTrackingId', e.target.value)}
+                        onChange={(e) =>
+                          updateField('analyticsTrackingId', e.target.value)
+                        }
                         placeholder="G-XXXXXXXXXX"
                         className="mt-1 focus:border-blue-500"
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="footerText" className="text-sm font-medium">
+                      <Label
+                        htmlFor="footerText"
+                        className="text-sm font-medium"
+                      >
                         Texto do Rodapé
                       </Label>
                       <Textarea
                         id="footerText"
                         value={formData.footerText || ''}
-                        onChange={(e) => updateField('footerText', e.target.value)}
+                        onChange={(e) =>
+                          updateField('footerText', e.target.value)
+                        }
                         placeholder="© 2024 GB Locações. Todos os direitos reservados."
                         rows={2}
                         className="mt-1 focus:border-blue-500"
@@ -681,26 +775,36 @@ export default function SettingsPage() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="defaultLanguage" className="text-sm font-medium">
+                        <Label
+                          htmlFor="defaultLanguage"
+                          className="text-sm font-medium"
+                        >
                           Idioma Padrão
                         </Label>
                         <Input
                           id="defaultLanguage"
                           value={formData.defaultLanguage || 'pt-BR'}
-                          onChange={(e) => updateField('defaultLanguage', e.target.value)}
+                          onChange={(e) =>
+                            updateField('defaultLanguage', e.target.value)
+                          }
                           placeholder="pt-BR"
                           className="mt-1 focus:border-blue-500"
                         />
                       </div>
 
                       <div>
-                        <Label htmlFor="baseCurrency" className="text-sm font-medium">
+                        <Label
+                          htmlFor="baseCurrency"
+                          className="text-sm font-medium"
+                        >
                           Moeda Base
                         </Label>
                         <Input
                           id="baseCurrency"
                           value={formData.baseCurrency || 'BRL'}
-                          onChange={(e) => updateField('baseCurrency', e.target.value)}
+                          onChange={(e) =>
+                            updateField('baseCurrency', e.target.value)
+                          }
                           placeholder="BRL"
                           className="mt-1 focus:border-blue-500"
                         />
@@ -779,7 +883,11 @@ export default function SettingsPage() {
               >
                 <Link href="/admin">Cancelar</Link>
               </Button>
-              <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full sm:w-auto"
+              >
                 <Save className="h-4 w-4 mr-2" />
                 {isLoading ? 'Salvando...' : 'Salvar Configurações'}
               </Button>
@@ -788,5 +896,5 @@ export default function SettingsPage() {
         </form>
       </div>
     </div>
-  );
+  )
 }

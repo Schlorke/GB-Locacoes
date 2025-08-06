@@ -1,37 +1,55 @@
-'use client';
+'use client'
 
-import { AdminCard } from '@/components/admin/admin-card';
-import { AdminFilterCard } from '@/components/admin/admin-filter-card';
-import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Package, Plus, Settings, Users } from 'lucide-react';
-import { useState } from 'react';
+import { AdminCard } from '@/components/admin/admin-card'
+import { AdminFilterCard } from '@/components/admin/admin-filter-card'
+import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Package, Plus, Settings, Users } from 'lucide-react'
+import { useState } from 'react'
 
 // Dados de exemplo
 const mockData = [
-  { id: '1', name: 'Betoneira 400L', category: 'Construção', status: 'available' },
-  { id: '2', name: 'Andaime Metálico', category: 'Acesso', status: 'unavailable' },
-  { id: '3', name: 'Compressor 20HP', category: 'Pneumático', status: 'available' },
-];
+  {
+    id: '1',
+    name: 'Betoneira 400L',
+    category: 'Construção',
+    status: 'available',
+  },
+  {
+    id: '2',
+    name: 'Andaime Metálico',
+    category: 'Acesso',
+    status: 'unavailable',
+  },
+  {
+    id: '3',
+    name: 'Compressor 20HP',
+    category: 'Pneumático',
+    status: 'available',
+  },
+]
 
 const categories = [
   { id: 'construcao', name: 'Construção' },
   { id: 'acesso', name: 'Acesso' },
   { id: 'pneumatico', name: 'Pneumático' },
-];
+]
 
 export default function AdminExamplePage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [statusFilter, setStatusFilter] = useState('all')
 
   const filteredData = mockData.filter((item) => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-    const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
+    const matchesSearch = item.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+    const matchesCategory =
+      selectedCategory === 'all' || item.category === selectedCategory
+    const matchesStatus = statusFilter === 'all' || item.status === statusFilter
+    return matchesSearch && matchesCategory && matchesStatus
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -108,8 +126,9 @@ export default function AdminExamplePage() {
             icon={<Package className="w-5 h-5 text-orange-600" />}
           >
             <p className="text-gray-600">
-              Este é o conteúdo do card. O componente AdminCard permite criar cards padronizados com
-              diferentes variantes e estilos consistentes.
+              Este é o conteúdo do card. O componente AdminCard permite criar
+              cards padronizados com diferentes variantes e estilos
+              consistentes.
             </p>
           </AdminCard>
 
@@ -126,14 +145,30 @@ export default function AdminExamplePage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredData.map((item) => (
-                  <AdminCard key={item.id} variant="elevated" className="h-full">
+                  <AdminCard
+                    key={item.id}
+                    variant="elevated"
+                    className="h-full"
+                  >
                     <div className="flex justify-between items-start mb-3">
-                      <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                      <Badge variant={item.status === 'available' ? 'default' : 'destructive'}>
-                        {item.status === 'available' ? 'Disponível' : 'Indisponível'}
+                      <h3 className="font-semibold text-gray-900">
+                        {item.name}
+                      </h3>
+                      <Badge
+                        variant={
+                          item.status === 'available'
+                            ? 'default'
+                            : 'destructive'
+                        }
+                      >
+                        {item.status === 'available'
+                          ? 'Disponível'
+                          : 'Indisponível'}
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">Categoria: {item.category}</p>
+                    <p className="text-sm text-gray-600 mb-3">
+                      Categoria: {item.category}
+                    </p>
                     <div className="flex gap-2">
                       <Button
                         size="sm"
@@ -163,8 +198,8 @@ export default function AdminExamplePage() {
             icon={<Settings className="w-5 h-5 text-white" />}
           >
             <p className="text-white/90">
-              A variante glass é ideal para overlays ou quando você quer um efeito mais sutil e
-              transparente no design.
+              A variante glass é ideal para overlays ou quando você quer um
+              efeito mais sutil e transparente no design.
             </p>
           </AdminCard>
 
@@ -172,10 +207,12 @@ export default function AdminExamplePage() {
           <AdminCard>
             <div className="text-center">
               <Package className="w-12 h-12 text-orange-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Card sem Título</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Card sem Título
+              </h3>
               <p className="text-gray-600">
-                Este é um exemplo de AdminCard sem título no header. Útil quando você quer total
-                controle sobre o conteúdo.
+                Este é um exemplo de AdminCard sem título no header. Útil quando
+                você quer total controle sobre o conteúdo.
               </p>
             </div>
           </AdminCard>
@@ -190,35 +227,44 @@ export default function AdminExamplePage() {
           >
             <div className="space-y-4">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">AdminPageHeader</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  AdminPageHeader
+                </h4>
                 <p className="text-gray-600 text-sm">
-                  Header padronizado para páginas admin com título, subtítulo e ícone opcional.
-                  Inclui gradiente laranja e efeitos visuais consistentes.
+                  Header padronizado para páginas admin com título, subtítulo e
+                  ícone opcional. Inclui gradiente laranja e efeitos visuais
+                  consistentes.
                 </p>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">AdminFilterCard</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  AdminFilterCard
+                </h4>
                 <p className="text-gray-600 text-sm">
-                  Card de filtros com busca, seletores múltiplos e botões de ação. Inclui ícone de
-                  filtro que muda de cor quando filtros estão ativos e botão de reset com animação
-                  de rotação.
+                  Card de filtros com busca, seletores múltiplos e botões de
+                  ação. Inclui ícone de filtro que muda de cor quando filtros
+                  estão ativos e botão de reset com animação de rotação.
                 </p>
               </div>
 
               <div>
                 <h4 className="font-semibold text-gray-900 mb-2">AdminCard</h4>
                 <p className="text-gray-600 text-sm">
-                  Card padronizado com três variantes: default, elevated e glass. Suporte a título,
-                  subtítulo, ícone e diferentes estilos visuais.
+                  Card padronizado com três variantes: default, elevated e
+                  glass. Suporte a título, subtítulo, ícone e diferentes estilos
+                  visuais.
                 </p>
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Estilos CSS Padronizados</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  Estilos CSS Padronizados
+                </h4>
                 <p className="text-gray-600 text-sm">
-                  Classes CSS globais para elementos de filtro (.admin-filter-element) e botões
-                  (.admin-button) com efeitos hover e transições consistentes.
+                  Classes CSS globais para elementos de filtro
+                  (.admin-filter-element) e botões (.admin-button) com efeitos
+                  hover e transições consistentes.
                 </p>
               </div>
             </div>
@@ -226,5 +272,5 @@ export default function AdminExamplePage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

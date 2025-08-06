@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/nextjs';
+import React from 'react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 
 const meta: Meta = {
   title: 'Design System/Design Tokens',
@@ -6,15 +7,16 @@ const meta: Meta = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'Documentação dos tokens de design utilizados no projeto GB Locações.',
+        component:
+          'Documentação dos tokens de design utilizados no projeto GB Locações.',
       },
     },
   },
   tags: ['autodocs'],
-};
+}
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 // Cores
 export const Colors: Story = {
@@ -31,7 +33,9 @@ export const Colors: Story = {
           <div className="space-y-2">
             <div className="h-16 bg-primary-foreground rounded-lg border"></div>
             <p className="text-sm font-medium">Primary Foreground</p>
-            <p className="text-xs text-muted-foreground">bg-primary-foreground</p>
+            <p className="text-xs text-muted-foreground">
+              bg-primary-foreground
+            </p>
           </div>
           <div className="space-y-2">
             <div className="h-16 bg-secondary rounded-lg border"></div>
@@ -41,7 +45,9 @@ export const Colors: Story = {
           <div className="space-y-2">
             <div className="h-16 bg-secondary-foreground rounded-lg border"></div>
             <p className="text-sm font-medium">Secondary Foreground</p>
-            <p className="text-xs text-muted-foreground">bg-secondary-foreground</p>
+            <p className="text-xs text-muted-foreground">
+              bg-secondary-foreground
+            </p>
           </div>
           <div className="space-y-2">
             <div className="h-16 bg-muted rounded-lg border"></div>
@@ -61,7 +67,9 @@ export const Colors: Story = {
           <div className="space-y-2">
             <div className="h-16 bg-accent-foreground rounded-lg border"></div>
             <p className="text-sm font-medium">Accent Foreground</p>
-            <p className="text-xs text-muted-foreground">bg-accent-foreground</p>
+            <p className="text-xs text-muted-foreground">
+              bg-accent-foreground
+            </p>
           </div>
           <div className="space-y-2">
             <div className="h-16 bg-destructive rounded-lg border"></div>
@@ -71,7 +79,9 @@ export const Colors: Story = {
           <div className="space-y-2">
             <div className="h-16 bg-destructive-foreground rounded-lg border"></div>
             <p className="text-sm font-medium">Destructive Foreground</p>
-            <p className="text-xs text-muted-foreground">bg-destructive-foreground</p>
+            <p className="text-xs text-muted-foreground">
+              bg-destructive-foreground
+            </p>
           </div>
           <div className="space-y-2">
             <div className="h-16 bg-border rounded-lg border"></div>
@@ -90,32 +100,54 @@ export const Colors: Story = {
         <h2 className="text-2xl font-bold mb-4">Tipografia</h2>
         <div className="space-y-4">
           <div>
-            <h1 className="text-4xl font-bold">Heading 1 (text-4xl font-bold)</h1>
-            <p className="text-sm text-muted-foreground">Tamanho: 2.25rem (36px)</p>
+            <h1 className="text-4xl font-bold">
+              Heading 1 (text-4xl font-bold)
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              Tamanho: 2.25rem (36px)
+            </p>
           </div>
           <div>
-            <h2 className="text-3xl font-semibold">Heading 2 (text-3xl font-semibold)</h2>
-            <p className="text-sm text-muted-foreground">Tamanho: 1.875rem (30px)</p>
+            <h2 className="text-3xl font-semibold">
+              Heading 2 (text-3xl font-semibold)
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Tamanho: 1.875rem (30px)
+            </p>
           </div>
           <div>
-            <h3 className="text-2xl font-semibold">Heading 3 (text-2xl font-semibold)</h3>
-            <p className="text-sm text-muted-foreground">Tamanho: 1.5rem (24px)</p>
+            <h3 className="text-2xl font-semibold">
+              Heading 3 (text-2xl font-semibold)
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Tamanho: 1.5rem (24px)
+            </p>
           </div>
           <div>
-            <h4 className="text-xl font-semibold">Heading 4 (text-xl font-semibold)</h4>
-            <p className="text-sm text-muted-foreground">Tamanho: 1.25rem (20px)</p>
+            <h4 className="text-xl font-semibold">
+              Heading 4 (text-xl font-semibold)
+            </h4>
+            <p className="text-sm text-muted-foreground">
+              Tamanho: 1.25rem (20px)
+            </p>
           </div>
           <div>
             <p className="text-base">Texto base (text-base)</p>
-            <p className="text-sm text-muted-foreground">Tamanho: 1rem (16px)</p>
+            <p className="text-sm text-muted-foreground">
+              Tamanho: 1rem (16px)
+            </p>
           </div>
           <div>
             <p className="text-sm">Texto pequeno (text-sm)</p>
-            <p className="text-sm text-muted-foreground">Tamanho: 0.875rem (14px)</p>
+            <p className="text-sm text-muted-foreground">
+              Tamanho: 0.875rem (14px)
+            </p>
           </div>
           <div>
             <p className="text-xs">Texto muito pequeno (text-xs)</p>
-            <p className="text-sm text-muted-foreground">Tamanho: 0.75rem (12px)</p>
+            <p className="text-sm text-muted-foreground">
+              Tamanho: 0.75rem (12px)
+            </p>
           </div>
         </div>
       </div>
@@ -236,8 +268,9 @@ export const Colors: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Demonstração visual de todos os tokens de design utilizados no projeto.',
+        story:
+          'Demonstração visual de todos os tokens de design utilizados no projeto.',
       },
     },
   },
-};
+}

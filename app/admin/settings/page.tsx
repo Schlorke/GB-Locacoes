@@ -1,8 +1,8 @@
-'use client';
+'use client'
 
-import { getSettings, updateSettings } from '@/app/api/admin/settings/actions';
-import { SettingsBlock } from '@/components/admin/settings-block';
-import { SettingsNavigationBar } from '@/components/admin/settings-navigation-bar';
+import { getSettings, updateSettings } from '@/app/api/admin/settings/actions'
+import { SettingsBlock } from '@/components/admin/settings-block'
+import { SettingsNavigationBar } from '@/components/admin/settings-navigation-bar'
 import {
   CompanyInfoPreview,
   CustomSettingsPreview,
@@ -10,22 +10,30 @@ import {
   SeoPreview,
   SocialLinksPreview,
   SystemPreview,
-} from '@/components/admin/settings-previews';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { SettingsInput } from '@/schemas/settings.schema';
-import { motion } from 'framer-motion';
-import { Building2, Code, Images, Loader2, Search, Settings, Share2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+} from '@/components/admin/settings-previews'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '@/hooks/use-toast'
+import { SettingsInput } from '@/schemas/settings.schema'
+import { motion } from 'framer-motion'
+import {
+  Building2,
+  Code,
+  Images,
+  Loader2,
+  Search,
+  Settings,
+  Share2,
+} from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 export default function SettingsPage() {
-  const { toast } = useToast();
-  const [_isLoading, setIsLoading] = useState(false);
-  const [isLoadingData, setIsLoadingData] = useState(true);
-  const [activeSection, setActiveSection] = useState<string>('company');
+  const { toast } = useToast()
+  const [_isLoading, setIsLoading] = useState(false)
+  const [isLoadingData, setIsLoadingData] = useState(true)
+  const [activeSection, setActiveSection] = useState<string>('company')
 
   // Estados de loading por seção
   const [sectionLoading, setSectionLoading] = useState({
@@ -35,7 +43,7 @@ export default function SettingsPage() {
     seo: false,
     system: false,
     custom: false,
-  });
+  })
 
   // Estados de reset por seção
   const [sectionResetting, setSectionResetting] = useState({
@@ -45,7 +53,7 @@ export default function SettingsPage() {
     seo: false,
     system: false,
     custom: false,
-  });
+  })
 
   const [formData, setFormData] = useState<SettingsInput>({
     companyPhone: '',
@@ -56,7 +64,8 @@ export default function SettingsPage() {
     contactEmail: '',
     socialLinks: {},
     seoTitle: 'GB Locações - Equipamentos para Construção',
-    seoDescription: 'Locação de equipamentos para construção civil com qualidade e segurança',
+    seoDescription:
+      'Locação de equipamentos para construção civil com qualidade e segurança',
     themeColorPrimary: '#ea580c',
     maintenanceMode: false,
     analyticsTrackingId: '',
@@ -74,13 +83,13 @@ export default function SettingsPage() {
     securityConfig: {},
     customCss: '',
     customJs: '',
-  });
+  })
 
   // Carregar dados iniciais
   useEffect(() => {
     const loadSettings = async () => {
       try {
-        const result = await getSettings();
+        const result = await getSettings()
         if (result.success && result.data) {
           setFormData({
             companyPhone: result.data.companyPhone || '',
@@ -89,24 +98,26 @@ export default function SettingsPage() {
             companyAddress: result.data.companyAddress || '',
             heroCarousel:
               (result.data.heroCarousel as Array<{
-                imageUrl: string;
-                id?: string;
-                title?: string;
-                description?: string;
-                link?: string;
-                order?: number;
+                imageUrl: string
+                id?: string
+                title?: string
+                description?: string
+                link?: string
+                order?: number
               }>) || [],
             contactEmail: result.data.contactEmail || '',
             socialLinks:
               (result.data.socialLinks as {
-                facebook?: string;
-                instagram?: string;
-                linkedin?: string;
-                whatsapp?: string;
-                youtube?: string;
-                twitter?: string;
+                facebook?: string
+                instagram?: string
+                linkedin?: string
+                whatsapp?: string
+                youtube?: string
+                twitter?: string
               }) || {},
-            seoTitle: result.data.seoTitle || 'GB Locações - Equipamentos para Construção',
+            seoTitle:
+              result.data.seoTitle ||
+              'GB Locações - Equipamentos para Construção',
             seoDescription:
               result.data.seoDescription ||
               'Locação de equipamentos para construção civil com qualidade e segurança',
@@ -116,13 +127,13 @@ export default function SettingsPage() {
             footerText: result.data.footerText || '',
             businessHours:
               (result.data.businessHours as {
-                monday?: { closed: boolean; open?: string; close?: string };
-                tuesday?: { closed: boolean; open?: string; close?: string };
-                wednesday?: { closed: boolean; open?: string; close?: string };
-                thursday?: { closed: boolean; open?: string; close?: string };
-                friday?: { closed: boolean; open?: string; close?: string };
-                saturday?: { closed: boolean; open?: string; close?: string };
-                sunday?: { closed: boolean; open?: string; close?: string };
+                monday?: { closed: boolean; open?: string; close?: string }
+                tuesday?: { closed: boolean; open?: string; close?: string }
+                wednesday?: { closed: boolean; open?: string; close?: string }
+                thursday?: { closed: boolean; open?: string; close?: string }
+                friday?: { closed: boolean; open?: string; close?: string }
+                saturday?: { closed: boolean; open?: string; close?: string }
+                sunday?: { closed: boolean; open?: string; close?: string }
               }) || {},
             supportChat: result.data.supportChat !== false,
             whatsappNumber: result.data.whatsappNumber || '',
@@ -133,116 +144,117 @@ export default function SettingsPage() {
             maintenanceMessage: result.data.maintenanceMessage || '',
             smtpConfig:
               (result.data.smtpConfig as {
-                host?: string;
-                port?: number;
-                secure?: boolean;
-                username?: string;
-                password?: string;
-                fromEmail?: string;
-                fromName?: string;
+                host?: string
+                port?: number
+                secure?: boolean
+                username?: string
+                password?: string
+                fromEmail?: string
+                fromName?: string
               }) || {},
             uploadLimits:
               (result.data.uploadLimits as {
-                maxFileSize?: number;
-                allowedTypes?: string[];
-                maxFiles?: number;
+                maxFileSize?: number
+                allowedTypes?: string[]
+                maxFiles?: number
               }) || {},
             securityConfig:
               (result.data.securityConfig as {
-                enableRecaptcha?: boolean;
-                recaptchaSiteKey?: string;
-                recaptchaSecretKey?: string;
-                enable2FA?: boolean;
-                sessionTimeout?: number;
-                maxLoginAttempts?: number;
+                enableRecaptcha?: boolean
+                recaptchaSiteKey?: string
+                recaptchaSecretKey?: string
+                enable2FA?: boolean
+                sessionTimeout?: number
+                maxLoginAttempts?: number
               }) || {},
             customCss: result.data.customCss || '',
             customJs: result.data.customJs || '',
-          });
+          })
         }
       } catch (error) {
-        console.error('Erro ao carregar configurações:', error);
+        console.error('Erro ao carregar configurações:', error)
         toast({
           title: 'Erro',
           description: 'Não foi possível carregar as configurações.',
           variant: 'destructive',
-        });
+        })
       } finally {
-        setIsLoadingData(false);
+        setIsLoadingData(false)
       }
-    };
+    }
 
-    loadSettings();
-  }, [toast]);
+    loadSettings()
+  }, [toast])
 
   const _handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+    e.preventDefault()
+    setIsLoading(true)
 
     try {
-      const result = await updateSettings(formData);
+      const result = await updateSettings(formData)
 
       if (result.success) {
         toast({
           title: 'Sucesso!',
-          description: result.message || 'Configurações atualizadas com sucesso.',
-        });
+          description:
+            result.message || 'Configurações atualizadas com sucesso.',
+        })
       } else {
         toast({
           title: 'Erro',
           description: result.error || 'Erro ao atualizar configurações.',
           variant: 'destructive',
-        });
+        })
       }
     } catch (error) {
-      console.error('Erro ao salvar:', error);
+      console.error('Erro ao salvar:', error)
       toast({
         title: 'Erro',
         description: 'Erro interno do servidor.',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const updateField = (field: keyof SettingsInput, value: unknown) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
-    }));
-  };
+    }))
+  }
 
   // Funções específicas para salvar cada seção
   const saveSection = async (section: keyof typeof sectionLoading) => {
-    setSectionLoading((prev) => ({ ...prev, [section]: true }));
+    setSectionLoading((prev) => ({ ...prev, [section]: true }))
 
     try {
-      const result = await updateSettings(formData);
+      const result = await updateSettings(formData)
 
       if (result.success) {
         toast({
           title: 'Sucesso!',
           description: `Configurações de ${getSectionName(section)} atualizadas com sucesso.`,
-        });
+        })
       } else {
         toast({
           title: 'Erro',
           description: result.error || 'Erro ao atualizar configurações.',
           variant: 'destructive',
-        });
+        })
       }
     } catch (error) {
-      console.error('Erro ao salvar:', error);
+      console.error('Erro ao salvar:', error)
       toast({
         title: 'Erro',
         description: 'Erro interno do servidor.',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setSectionLoading((prev) => ({ ...prev, [section]: false }));
+      setSectionLoading((prev) => ({ ...prev, [section]: false }))
     }
-  };
+  }
 
   const getSectionName = (section: string) => {
     const names = {
@@ -252,35 +264,35 @@ export default function SettingsPage() {
       seo: 'SEO',
       system: 'sistema',
       custom: 'personalização',
-    };
-    return names[section as keyof typeof names] || section;
-  };
+    }
+    return names[section as keyof typeof names] || section
+  }
 
   // Funções de reset por seção
   const resetSection = async (section: keyof typeof sectionResetting) => {
-    setSectionResetting((prev) => ({ ...prev, [section]: true }));
+    setSectionResetting((prev) => ({ ...prev, [section]: true }))
 
     try {
       // Simula um delay para mostrar a animação
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      const defaults = getDefaultValues(section);
-      setFormData((prev) => ({ ...prev, ...defaults }));
+      const defaults = getDefaultValues(section)
+      setFormData((prev) => ({ ...prev, ...defaults }))
 
       toast({
         title: 'Configurações resetadas',
         description: `Configurações de ${getSectionName(section)} foram restauradas para os valores padrão.`,
-      });
+      })
     } catch (_error) {
       toast({
         title: 'Erro ao resetar',
         description: 'Ocorreu um erro ao restaurar as configurações.',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setSectionResetting((prev) => ({ ...prev, [section]: false }));
+      setSectionResetting((prev) => ({ ...prev, [section]: false }))
     }
-  };
+  }
 
   const getDefaultValues = (section: string): Partial<SettingsInput> => {
     switch (section) {
@@ -291,47 +303,48 @@ export default function SettingsPage() {
           companyAddress: '',
           aboutUsText: '',
           companyIconUrl: '',
-        };
+        }
       case 'hero':
         return {
           heroCarousel: [],
-        };
+        }
       case 'social':
         return {
           whatsappNumber: '',
           socialLinks: {},
-        };
+        }
       case 'seo':
         return {
           seoTitle: 'GB Locações - Equipamentos para Construção',
-          seoDescription: 'Locação de equipamentos para construção civil com qualidade e segurança',
+          seoDescription:
+            'Locação de equipamentos para construção civil com qualidade e segurança',
           favicon: '',
-        };
+        }
       case 'system':
         return {
           maintenanceMode: false,
           supportChat: true,
           defaultLanguage: 'pt-BR',
           baseCurrency: 'BRL',
-        };
+        }
       case 'custom':
         return {
           analyticsTrackingId: '',
           customCss: '',
           customJs: '',
-        };
+        }
       default:
-        return {};
+        return {}
     }
-  };
+  }
 
   // Funções específicas de save para cada seção
-  const saveCompanySettings = () => saveSection('company');
-  const saveHeroSettings = () => saveSection('hero');
-  const saveSocialSettings = () => saveSection('social');
-  const saveSeoSettings = () => saveSection('seo');
-  const saveSystemSettings = () => saveSection('system');
-  const saveCustomSettings = () => saveSection('custom');
+  const saveCompanySettings = () => saveSection('company')
+  const saveHeroSettings = () => saveSection('hero')
+  const saveSocialSettings = () => saveSection('social')
+  const saveSeoSettings = () => saveSection('seo')
+  const saveSystemSettings = () => saveSection('system')
+  const saveCustomSettings = () => saveSection('custom')
 
   if (isLoadingData) {
     return (
@@ -339,11 +352,13 @@ export default function SettingsPage() {
         <div className="flex items-center justify-center h-[calc(100vh-200px)]">
           <div className="text-center">
             <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-            <p className="text-lg text-muted-foreground">Carregando configurações...</p>
+            <p className="text-lg text-muted-foreground">
+              Carregando configurações...
+            </p>
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -365,13 +380,16 @@ export default function SettingsPage() {
                   Configurações do Sistema
                 </h1>
                 <p className="text-orange-50 font-medium">
-                  Gerencie as configurações gerais da plataforma com preview em tempo real
+                  Gerencie as configurações gerais da plataforma com preview em
+                  tempo real
                 </p>
               </div>
 
               <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
                 <Settings className="w-5 h-5 text-orange-50" />
-                <span className="font-semibold text-white">Configurações Globais</span>
+                <span className="font-semibold text-white">
+                  Configurações Globais
+                </span>
               </div>
             </div>
           </div>
@@ -383,7 +401,10 @@ export default function SettingsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.05 }}
         >
-          <SettingsNavigationBar onSectionSelect={setActiveSection} activeSection={activeSection} />
+          <SettingsNavigationBar
+            onSectionSelect={setActiveSection}
+            activeSection={activeSection}
+          />
         </motion.div>
 
         {/* Conteúdo das configurações */}
@@ -406,7 +427,9 @@ export default function SettingsPage() {
                       <Input
                         id="companyPhone"
                         value={formData.companyPhone || ''}
-                        onChange={(e) => updateField('companyPhone', e.target.value)}
+                        onChange={(e) =>
+                          updateField('companyPhone', e.target.value)
+                        }
                         placeholder="(11) 99999-9999"
                         className="mt-1"
                       />
@@ -418,7 +441,9 @@ export default function SettingsPage() {
                         id="contactEmail"
                         type="email"
                         value={formData.contactEmail || ''}
-                        onChange={(e) => updateField('contactEmail', e.target.value)}
+                        onChange={(e) =>
+                          updateField('contactEmail', e.target.value)
+                        }
                         placeholder="contato@gblocacoes.com.br"
                         className="mt-1"
                       />
@@ -429,7 +454,9 @@ export default function SettingsPage() {
                       <Textarea
                         id="companyAddress"
                         value={formData.companyAddress || ''}
-                        onChange={(e) => updateField('companyAddress', e.target.value)}
+                        onChange={(e) =>
+                          updateField('companyAddress', e.target.value)
+                        }
                         placeholder="Endereço completo da empresa"
                         className="mt-1"
                         rows={3}
@@ -441,7 +468,9 @@ export default function SettingsPage() {
                       <Textarea
                         id="aboutUsText"
                         value={formData.aboutUsText || ''}
-                        onChange={(e) => updateField('aboutUsText', e.target.value)}
+                        onChange={(e) =>
+                          updateField('aboutUsText', e.target.value)
+                        }
                         placeholder="Descrição da empresa"
                         className="mt-1"
                         rows={4}
@@ -453,7 +482,9 @@ export default function SettingsPage() {
                       <Input
                         id="companyIconUrl"
                         value={formData.companyIconUrl || ''}
-                        onChange={(e) => updateField('companyIconUrl', e.target.value)}
+                        onChange={(e) =>
+                          updateField('companyIconUrl', e.target.value)
+                        }
                         placeholder="https://exemplo.com/logo.png"
                         className="mt-1"
                       />
@@ -493,11 +524,13 @@ export default function SettingsPage() {
                 form={
                   <div className="space-y-4">
                     <p className="text-sm text-gray-600">
-                      Gerencie as imagens e conteúdo do carousel principal da página inicial.
+                      Gerencie as imagens e conteúdo do carousel principal da
+                      página inicial.
                     </p>
                     <div className="bg-gray-50 p-4 rounded-lg text-center">
                       <p className="text-sm text-gray-500">
-                        Componente de gerenciamento do carousel em desenvolvimento
+                        Componente de gerenciamento do carousel em
+                        desenvolvimento
                       </p>
                     </div>
                   </div>
@@ -529,7 +562,9 @@ export default function SettingsPage() {
                       <Input
                         id="whatsappNumber"
                         value={formData.whatsappNumber || ''}
-                        onChange={(e) => updateField('whatsappNumber', e.target.value)}
+                        onChange={(e) =>
+                          updateField('whatsappNumber', e.target.value)
+                        }
                         placeholder="5511999999999"
                         className="mt-1"
                       />
@@ -537,7 +572,8 @@ export default function SettingsPage() {
 
                     <div className="bg-gray-50 p-4 rounded-lg">
                       <p className="text-sm text-gray-500">
-                        Campos para Instagram, Facebook, LinkedIn em desenvolvimento
+                        Campos para Instagram, Facebook, LinkedIn em
+                        desenvolvimento
                       </p>
                     </div>
                   </div>
@@ -569,11 +605,15 @@ export default function SettingsPage() {
                       <Input
                         id="seoTitle"
                         value={formData.seoTitle || ''}
-                        onChange={(e) => updateField('seoTitle', e.target.value)}
+                        onChange={(e) =>
+                          updateField('seoTitle', e.target.value)
+                        }
                         placeholder="GB Locações - Equipamentos para Construção"
                         className="mt-1"
                       />
-                      <p className="text-xs text-gray-500 mt-1">Máximo 60 caracteres recomendado</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Máximo 60 caracteres recomendado
+                      </p>
                     </div>
 
                     <div>
@@ -581,7 +621,9 @@ export default function SettingsPage() {
                       <Textarea
                         id="seoDescription"
                         value={formData.seoDescription || ''}
-                        onChange={(e) => updateField('seoDescription', e.target.value)}
+                        onChange={(e) =>
+                          updateField('seoDescription', e.target.value)
+                        }
                         placeholder="Descrição que aparece nos resultados de busca"
                         className="mt-1"
                         rows={3}
@@ -636,22 +678,30 @@ export default function SettingsPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label>Modo Manutenção</Label>
-                        <p className="text-sm text-gray-500">Ativar para manutenção do sistema</p>
+                        <p className="text-sm text-gray-500">
+                          Ativar para manutenção do sistema
+                        </p>
                       </div>
                       <Switch
                         checked={formData.maintenanceMode}
-                        onCheckedChange={(checked) => updateField('maintenanceMode', checked)}
+                        onCheckedChange={(checked) =>
+                          updateField('maintenanceMode', checked)
+                        }
                       />
                     </div>
 
                     <div className="flex items-center justify-between">
                       <div>
                         <Label>Chat de Suporte</Label>
-                        <p className="text-sm text-gray-500">Exibir widget de chat no site</p>
+                        <p className="text-sm text-gray-500">
+                          Exibir widget de chat no site
+                        </p>
                       </div>
                       <Switch
                         checked={formData.supportChat}
-                        onCheckedChange={(checked) => updateField('supportChat', checked)}
+                        onCheckedChange={(checked) =>
+                          updateField('supportChat', checked)
+                        }
                       />
                     </div>
 
@@ -660,7 +710,9 @@ export default function SettingsPage() {
                       <Input
                         id="defaultLanguage"
                         value={formData.defaultLanguage || ''}
-                        onChange={(e) => updateField('defaultLanguage', e.target.value)}
+                        onChange={(e) =>
+                          updateField('defaultLanguage', e.target.value)
+                        }
                         placeholder="pt-BR"
                         className="mt-1"
                       />
@@ -671,7 +723,9 @@ export default function SettingsPage() {
                       <Input
                         id="baseCurrency"
                         value={formData.baseCurrency || ''}
-                        onChange={(e) => updateField('baseCurrency', e.target.value)}
+                        onChange={(e) =>
+                          updateField('baseCurrency', e.target.value)
+                        }
                         placeholder="BRL"
                         className="mt-1"
                       />
@@ -712,11 +766,15 @@ export default function SettingsPage() {
                 form={
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="analyticsTrackingId">Google Analytics ID</Label>
+                      <Label htmlFor="analyticsTrackingId">
+                        Google Analytics ID
+                      </Label>
                       <Input
                         id="analyticsTrackingId"
                         value={formData.analyticsTrackingId || ''}
-                        onChange={(e) => updateField('analyticsTrackingId', e.target.value)}
+                        onChange={(e) =>
+                          updateField('analyticsTrackingId', e.target.value)
+                        }
                         placeholder="GA_TRACKING_ID"
                         className="mt-1"
                       />
@@ -727,7 +785,9 @@ export default function SettingsPage() {
                       <Textarea
                         id="customCss"
                         value={formData.customCss || ''}
-                        onChange={(e) => updateField('customCss', e.target.value)}
+                        onChange={(e) =>
+                          updateField('customCss', e.target.value)
+                        }
                         placeholder="/* CSS customizado */"
                         className="mt-1 font-mono text-sm"
                         rows={5}
@@ -739,7 +799,9 @@ export default function SettingsPage() {
                       <Textarea
                         id="customJs"
                         value={formData.customJs || ''}
-                        onChange={(e) => updateField('customJs', e.target.value)}
+                        onChange={(e) =>
+                          updateField('customJs', e.target.value)
+                        }
                         placeholder="// JavaScript customizado"
                         className="mt-1 font-mono text-sm"
                         rows={5}
@@ -766,5 +828,5 @@ export default function SettingsPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

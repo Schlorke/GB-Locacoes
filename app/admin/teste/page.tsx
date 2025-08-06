@@ -1,30 +1,33 @@
-'use client';
+'use client'
 
-import { AdminCard } from '@/components/admin/admin-card';
-import { AdminFilterCard } from '@/components/admin/admin-filter-card';
-import { AdminPageHeader } from '@/components/admin/admin-page-header';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Filter, Package, Plus, Settings } from 'lucide-react';
-import { useState } from 'react';
+import { AdminCard } from '@/components/admin/admin-card'
+import { AdminFilterCard } from '@/components/admin/admin-filter-card'
+import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Filter, Package, Plus, Settings } from 'lucide-react'
+import { useState } from 'react'
 
 const mockData = [
   { id: '1', name: 'Item A', category: 'cat1', status: 'available' },
   { id: '2', name: 'Item B', category: 'cat2', status: 'unavailable' },
   { id: '3', name: 'Item C', category: 'cat1', status: 'available' },
-];
+]
 
 export default function TestePage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [statusFilter, setStatusFilter] = useState('all')
 
   const filteredData = mockData.filter((item) => {
-    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || item.category === selectedCategory;
-    const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
-    return matchesSearch && matchesCategory && matchesStatus;
-  });
+    const matchesSearch = item.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+    const matchesCategory =
+      selectedCategory === 'all' || item.category === selectedCategory
+    const matchesStatus = statusFilter === 'all' || item.status === statusFilter
+    return matchesSearch && matchesCategory && matchesStatus
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -48,11 +51,16 @@ export default function TestePage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2 text-green-600">
                 <span className="font-semibold">✓</span>
-                <span>Todos os dropdowns usam CustomSelect (funciona corretamente)</span>
+                <span>
+                  Todos os dropdowns usam CustomSelect (funciona corretamente)
+                </span>
               </div>
               <div className="flex items-center gap-2 text-green-600">
                 <span className="font-semibold">✓</span>
-                <span>Dropdowns aparecem ABAIXO do elemento pai (não no centro da tela)</span>
+                <span>
+                  Dropdowns aparecem ABAIXO do elemento pai (não no centro da
+                  tela)
+                </span>
               </div>
               <div className="flex items-center gap-2 text-green-600">
                 <span className="font-semibold">✓</span>
@@ -60,11 +68,15 @@ export default function TestePage() {
               </div>
               <div className="flex items-center gap-2 text-green-600">
                 <span className="font-semibold">✓</span>
-                <span>Animação anti-horária no botão reset funciona perfeitamente</span>
+                <span>
+                  Animação anti-horária no botão reset funciona perfeitamente
+                </span>
               </div>
               <div className="flex items-center gap-2 text-green-600">
                 <span className="font-semibold">✓</span>
-                <span>Ícone de filtro muda de cor quando filtros estão ativos</span>
+                <span>
+                  Ícone de filtro muda de cor quando filtros estão ativos
+                </span>
               </div>
             </div>
           </AdminCard>
@@ -118,16 +130,24 @@ export default function TestePage() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Teste dos Dropdowns:</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  Teste dos Dropdowns:
+                </h4>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Clique no dropdown da esquerda - deve abrir ABAIXO dele</li>
-                  <li>• Clique no dropdown da direita - deve abrir ABAIXO dele</li>
+                  <li>
+                    • Clique no dropdown da esquerda - deve abrir ABAIXO dele
+                  </li>
+                  <li>
+                    • Clique no dropdown da direita - deve abrir ABAIXO dele
+                  </li>
                   <li>• Não deve mais aparecer modal no centro da tela</li>
                   <li>• Largura deve respeitar o elemento pai</li>
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Teste do Reset:</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">
+                  Teste do Reset:
+                </h4>
                 <ul className="text-sm text-gray-600 space-y-1">
                   <li>• Selecione qualquer filtro para ativar</li>
                   <li>• O ícone do filtro deve ficar laranja</li>
@@ -140,11 +160,16 @@ export default function TestePage() {
         </div>
 
         {/* Resultados filtrados */}
-        <AdminCard title="Resultados" icon={<Package className="w-5 h-5 text-orange-600" />}>
+        <AdminCard
+          title="Resultados"
+          icon={<Package className="w-5 h-5 text-orange-600" />}
+        >
           {filteredData.length === 0 ? (
             <div className="text-center py-8">
               <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500">Nenhum item encontrado com os filtros ativos</p>
+              <p className="text-gray-500">
+                Nenhum item encontrado com os filtros ativos
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -152,11 +177,19 @@ export default function TestePage() {
                 <AdminCard key={item.id} variant="elevated" className="h-full">
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="font-semibold text-gray-900">{item.name}</h3>
-                    <Badge variant={item.status === 'available' ? 'default' : 'destructive'}>
-                      {item.status === 'available' ? 'Disponível' : 'Indisponível'}
+                    <Badge
+                      variant={
+                        item.status === 'available' ? 'default' : 'destructive'
+                      }
+                    >
+                      {item.status === 'available'
+                        ? 'Disponível'
+                        : 'Indisponível'}
                     </Badge>
                   </div>
-                  <p className="text-sm text-gray-600">Categoria: {item.category}</p>
+                  <p className="text-sm text-gray-600">
+                    Categoria: {item.category}
+                  </p>
                 </AdminCard>
               ))}
             </div>
@@ -172,7 +205,9 @@ export default function TestePage() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-semibold text-green-800 mb-2">Admin - Equipamentos</h4>
+                <h4 className="font-semibold text-green-800 mb-2">
+                  Admin - Equipamentos
+                </h4>
                 <p className="text-sm text-green-600">
                   ✓ CustomSelect implementado
                   <br />
@@ -181,14 +216,18 @@ export default function TestePage() {
                 </p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-semibold text-green-800 mb-2">Admin - Orçamentos</h4>
+                <h4 className="font-semibold text-green-800 mb-2">
+                  Admin - Orçamentos
+                </h4>
                 <p className="text-sm text-green-600">
                   ✓ CustomSelect implementado
                   <br />✓ Dropdown posicionamento correto
                 </p>
               </div>
               <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                <h4 className="font-semibold text-green-800 mb-2">Público - Equipamentos</h4>
+                <h4 className="font-semibold text-green-800 mb-2">
+                  Público - Equipamentos
+                </h4>
                 <p className="text-sm text-green-600">
                   ✓ CustomSelect implementado
                   <br />✓ Filtros funcionando
@@ -199,5 +238,5 @@ export default function TestePage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

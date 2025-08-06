@@ -1,9 +1,9 @@
-import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma'
+import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    await prisma.$connect();
+    await prisma.$connect()
 
     const equipments = await prisma.equipment.findMany({
       include: {
@@ -12,7 +12,7 @@ export async function GET() {
       orderBy: {
         createdAt: 'desc',
       },
-    });
+    })
 
     if (equipments.length === 0) {
       const mockEquipments = [
@@ -34,16 +34,16 @@ export async function GET() {
           },
           reviews: [],
         },
-      ];
-      return NextResponse.json(mockEquipments);
+      ]
+      return NextResponse.json(mockEquipments)
     }
 
     // Formatar os dados do banco garantindo que as imagens sejam incluídas
     const formattedEquipments = equipments.map((equipment) => {
       // Priorizar primeira imagem do array ou usar placeholder
-      let primaryImage = null;
+      let primaryImage = null
       if (equipment.images && equipment.images.length > 0) {
-        primaryImage = equipment.images[0];
+        primaryImage = equipment.images[0]
       }
 
       const formattedEquipment = {
@@ -68,14 +68,14 @@ export async function GET() {
           fontColor: equipment.category.fontColor,
         },
         reviews: [],
-      };
+      }
 
-      return formattedEquipment;
-    });
+      return formattedEquipment
+    })
 
-    return NextResponse.json(formattedEquipments);
+    return NextResponse.json(formattedEquipments)
   } catch (error) {
-    console.error('Erro ao buscar equipamentos:', error);
+    console.error('Erro ao buscar equipamentos:', error)
 
     const mockEquipments = [
       {
@@ -96,8 +96,8 @@ export async function GET() {
         },
         reviews: [],
       },
-    ];
+    ]
 
-    return NextResponse.json(mockEquipments);
+    return NextResponse.json(mockEquipments)
   }
 }

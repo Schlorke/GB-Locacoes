@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import { AdminFilterCard } from '@/components/admin/admin-filter-card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AdminFilterCard } from '@/components/admin/admin-filter-card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   Building,
   Container,
@@ -18,10 +18,10 @@ import {
   Truck,
   Wrench,
   Zap,
-} from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+} from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 // Icon mapping
 const iconMap = {
@@ -34,127 +34,143 @@ const iconMap = {
   Truck,
   Wrench,
   Zap,
-};
+}
 
 interface Review {
-  id: string;
-  rating: number;
-  comment?: string | null;
-  createdAt: string;
+  id: string
+  rating: number
+  comment?: string | null
+  createdAt: string
 }
 
 interface Equipment {
-  id: string;
-  name: string;
-  description: string;
-  pricePerDay: number;
-  images: string[];
+  id: string
+  name: string
+  description: string
+  pricePerDay: number
+  images: string[]
   category: {
-    id: string;
-    name: string;
-    color?: string;
-    bgColor?: string;
-    fontColor?: string;
-    icon?: string;
-    iconColor?: string;
-  };
-  isAvailable: boolean;
-  reviews?: Review[];
+    id: string
+    name: string
+    color?: string
+    bgColor?: string
+    fontColor?: string
+    icon?: string
+    iconColor?: string
+  }
+  isAvailable: boolean
+  reviews?: Review[]
 }
 
 interface Category {
-  id: string;
-  name: string;
-  bgColor?: string;
-  fontColor?: string;
-  icon?: string;
-  iconColor?: string;
+  id: string
+  name: string
+  bgColor?: string
+  fontColor?: string
+  icon?: string
+  iconColor?: string
 }
 
 export default function EquipmentsPage() {
-  const [equipments, setEquipments] = useState<Equipment[]>([]);
-  const [filteredEquipments, setFilteredEquipments] = useState<Equipment[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [equipments, setEquipments] = useState<Equipment[]>([])
+  const [filteredEquipments, setFilteredEquipments] = useState<Equipment[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [categoryFilter, setCategoryFilter] = useState('all')
 
   // Função para renderizar ícones dinamicamente
   const renderIcon = (iconName?: string, color?: string) => {
-    if (!iconName) return null;
+    if (!iconName) return null
 
     try {
-      const IconComponent = iconMap[iconName as keyof typeof iconMap];
+      const IconComponent = iconMap[iconName as keyof typeof iconMap]
       if (IconComponent && typeof IconComponent === 'function') {
-        return <IconComponent size={14} color={color || 'currentColor'} className="mr-1.5" />;
+        return (
+          <IconComponent
+            size={14}
+            color={color || 'currentColor'}
+            className="mr-1.5"
+          />
+        )
       }
     } catch (_error) {
       // Fallback se o ícone não existir
-      return <Package size={14} color={color || 'currentColor'} className="mr-1.5" />;
+      return (
+        <Package size={14} color={color || 'currentColor'} className="mr-1.5" />
+      )
     }
 
     // Fallback se o ícone não for encontrado
-    return <Package size={14} color={color || 'currentColor'} className="mr-1.5" />;
-  };
+    return (
+      <Package size={14} color={color || 'currentColor'} className="mr-1.5" />
+    )
+  }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   useEffect(() => {
     // Garantir que equipments é sempre um array
-    const safeEquipments = Array.isArray(equipments) ? equipments : [];
-    let filtered = safeEquipments;
+    const safeEquipments = Array.isArray(equipments) ? equipments : []
+    let filtered = safeEquipments
 
     if (searchTerm) {
       filtered = filtered.filter(
         (eq) =>
           eq.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          eq.description.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
+          eq.description.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     }
 
     if (categoryFilter !== 'all') {
-      filtered = filtered.filter((eq) => eq.category.id === categoryFilter);
+      filtered = filtered.filter((eq) => eq.category.id === categoryFilter)
     }
 
-    setFilteredEquipments(filtered);
-  }, [searchTerm, categoryFilter, equipments]);
+    setFilteredEquipments(filtered)
+  }, [searchTerm, categoryFilter, equipments])
 
   const fetchData = async () => {
     try {
-      setIsLoading(true);
-      setError(null);
+      setIsLoading(true)
+      setError(null)
 
       const [equipmentsRes, categoriesRes] = await Promise.all([
         fetch('/api/equipments'),
         fetch('/api/categories'),
-      ]);
+      ])
 
       if (!equipmentsRes.ok) {
-        throw new Error(`Erro ao carregar equipamentos: ${equipmentsRes.status}`);
+        throw new Error(
+          `Erro ao carregar equipamentos: ${equipmentsRes.status}`
+        )
       }
       if (!categoriesRes.ok) {
-        throw new Error(`Erro ao carregar categorias: ${categoriesRes.status}`);
+        throw new Error(`Erro ao carregar categorias: ${categoriesRes.status}`)
       }
 
-      const equipmentsData = await equipmentsRes.json();
-      const categoriesData = await categoriesRes.json();
+      const equipmentsData = await equipmentsRes.json()
+      const categoriesData = await categoriesRes.json()
 
-      const equipmentsList: Equipment[] = Array.isArray(equipmentsData) ? equipmentsData : [];
-      const categoriesList: Category[] = Array.isArray(categoriesData) ? categoriesData : [];
+      const equipmentsList: Equipment[] = Array.isArray(equipmentsData)
+        ? equipmentsData
+        : []
+      const categoriesList: Category[] = Array.isArray(categoriesData)
+        ? categoriesData
+        : []
 
-      setEquipments(equipmentsList);
-      setFilteredEquipments(equipmentsList);
-      setCategories(categoriesList);
+      setEquipments(equipmentsList)
+      setFilteredEquipments(equipmentsList)
+      setCategories(categoriesList)
     } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-      setError(error instanceof Error ? error.message : 'Erro desconhecido');
+      console.error('Erro ao carregar dados:', error)
+      setError(error instanceof Error ? error.message : 'Erro desconhecido')
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   if (isLoading) {
     return (
@@ -165,10 +181,12 @@ export default function EquipmentsPage() {
           className="text-center"
         >
           <Loader2 className="h-12 w-12 animate-spin text-orange-600 mx-auto mb-4" />
-          <p className="text-lg text-muted-foreground">Carregando equipamentos...</p>
+          <p className="text-lg text-muted-foreground">
+            Carregando equipamentos...
+          </p>
         </motion.div>
       </div>
-    );
+    )
   }
 
   if (error) {
@@ -186,19 +204,26 @@ export default function EquipmentsPage() {
             Erro ao carregar equipamentos
           </h3>
           <p className="text-red-600 mb-4">{error}</p>
-          <Button onClick={fetchData} className="hover:scale-105 transition-transform duration-200">
+          <Button
+            onClick={fetchData}
+            className="hover:scale-105 transition-transform duration-200"
+          >
             Tentar Novamente
           </Button>
         </motion.div>
       </div>
-    );
+    )
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header com gradiente */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
           <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
             {/* Clean depth layers without decorative elements */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
@@ -215,8 +240,10 @@ export default function EquipmentsPage() {
               <div className="flex items-center justify-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit mx-auto">
                 <Search className="w-5 h-5 text-orange-50" />
                 <span className="font-semibold text-white">
-                  {Array.isArray(filteredEquipments) ? filteredEquipments.length : 0} equipamentos
-                  encontrados
+                  {Array.isArray(filteredEquipments)
+                    ? filteredEquipments.length
+                    : 0}{' '}
+                  equipamentos encontrados
                 </span>
               </div>
             </div>
@@ -264,10 +291,14 @@ export default function EquipmentsPage() {
                 {filteredEquipments.map((equipment, index) => {
                   const averageRating =
                     equipment.reviews && equipment.reviews.length > 0
-                      ? equipment.reviews.reduce((acc, review) => acc + review.rating, 0) /
-                        equipment.reviews.length
-                      : 0;
-                  const reviewCount = equipment.reviews ? equipment.reviews.length : 0;
+                      ? equipment.reviews.reduce(
+                          (acc, review) => acc + review.rating,
+                          0
+                        ) / equipment.reviews.length
+                      : 0
+                  const reviewCount = equipment.reviews
+                    ? equipment.reviews.length
+                    : 0
 
                   return (
                     <motion.div
@@ -285,7 +316,10 @@ export default function EquipmentsPage() {
 
                         <div className="relative h-48 bg-gray-200 z-0">
                           <Image
-                            src={equipment.images?.[0] || '/placeholder.svg?height=200&width=300'}
+                            src={
+                              equipment.images?.[0] ||
+                              '/placeholder.svg?height=200&width=300'
+                            }
                             alt={equipment.name}
                             fill
                             className="object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
@@ -320,11 +354,17 @@ export default function EquipmentsPage() {
                                   </span>
                                 </div>
                                 <span className="text-sm text-gray-500">
-                                  ({reviewCount} {reviewCount === 1 ? 'avaliação' : 'avaliações'})
+                                  ({reviewCount}{' '}
+                                  {reviewCount === 1
+                                    ? 'avaliação'
+                                    : 'avaliações'}
+                                  )
                                 </span>
                               </>
                             ) : (
-                              <span className="text-sm text-gray-500">Nenhuma avaliação</span>
+                              <span className="text-sm text-gray-500">
+                                Nenhuma avaliação
+                              </span>
                             )}
                           </div>
 
@@ -332,20 +372,25 @@ export default function EquipmentsPage() {
                             <div className="flex items-center justify-between">
                               <div className="text-2xl font-bold text-orange-600">
                                 R$ {equipment.pricePerDay?.toFixed(2) || '0.00'}
-                                <span className="text-sm font-normal text-gray-500">/dia</span>
+                                <span className="text-sm font-normal text-gray-500">
+                                  /dia
+                                </span>
                               </div>
                               <Badge
                                 variant="secondary"
                                 className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors backdrop-blur-sm"
                                 style={{
-                                  backgroundColor: equipment.category?.bgColor || '#f3f4f6',
-                                  color: equipment.category?.fontColor || '#374151',
+                                  backgroundColor:
+                                    equipment.category?.bgColor || '#f3f4f6',
+                                  color:
+                                    equipment.category?.fontColor || '#374151',
                                   borderColor: 'transparent',
                                 }}
                               >
                                 {renderIcon(
                                   equipment.category?.icon,
-                                  equipment.category?.iconColor || equipment.category?.fontColor,
+                                  equipment.category?.iconColor ||
+                                    equipment.category?.fontColor
                                 )}
                                 {equipment.category?.name || 'Sem categoria'}
                               </Badge>
@@ -376,7 +421,9 @@ export default function EquipmentsPage() {
                               className="w-full hover:scale-105 transition-transform duration-200"
                             >
                               {equipment.isAvailable ? (
-                                <Link href={`/orcamento?equipmentId=${equipment.id}`}>
+                                <Link
+                                  href={`/orcamento?equipmentId=${equipment.id}`}
+                                >
                                   Solicitar Orçamento
                                 </Link>
                               ) : (
@@ -387,7 +434,7 @@ export default function EquipmentsPage() {
                         </CardFooter>
                       </Card>
                     </motion.div>
-                  );
+                  )
                 })}
               </AnimatePresence>
             </div>
@@ -412,5 +459,5 @@ export default function EquipmentsPage() {
         </motion.div>
       </div>
     </div>
-  );
+  )
 }

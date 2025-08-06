@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { toast } from '@/hooks/use-toast';
+import { toast } from '@/hooks/use-toast'
 import {
   closestCenter,
   DndContext,
@@ -10,44 +10,50 @@ import {
   useSensors,
   type DragEndEvent,
   type DragStartEvent,
-} from '@dnd-kit/core';
+} from '@dnd-kit/core'
 import {
   arrayMove,
   rectSortingStrategy,
   SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, GripVertical, Link, Upload } from 'lucide-react';
-import Image from 'next/image';
-import type * as React from 'react';
-import { useState } from 'react';
-import { Button } from './button';
-import { CloseButton } from './close-button';
-import { Input } from './input';
-import { Label } from './label';
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import { motion } from 'framer-motion'
+import {
+  ChevronLeft,
+  ChevronRight,
+  GripVertical,
+  Link,
+  Upload,
+} from 'lucide-react'
+import Image from 'next/image'
+import type * as React from 'react'
+import { useState } from 'react'
+import { Button } from './button'
+import { CloseButton } from './close-button'
+import { Input } from './input'
+import { Label } from './label'
 
 interface ImageUploadProps {
-  images: string[];
-  onImagesChange: (_images: string[]) => void;
-  maxImages?: number;
-  currentImageIndex?: number;
-  onImageIndexChange?: (index: number) => void;
-  onImageZoom?: () => void;
-  nextImage?: () => void;
-  prevImage?: () => void;
-  goToImage?: (index: number) => void;
+  images: string[]
+  onImagesChange: (_images: string[]) => void
+  maxImages?: number
+  currentImageIndex?: number
+  onImageIndexChange?: (index: number) => void
+  onImageZoom?: () => void
+  nextImage?: () => void
+  prevImage?: () => void
+  goToImage?: (index: number) => void
 }
 
 interface SortableImageProps {
-  id: string;
-  url: string;
-  index: number;
-  onRemove: () => void;
-  isPrincipal: boolean;
-  isDragActive: boolean;
+  id: string
+  url: string
+  index: number
+  onRemove: () => void
+  isPrincipal: boolean
+  isDragActive: boolean
 }
 
 function DropIndicator() {
@@ -57,7 +63,7 @@ function DropIndicator() {
         Solte aqui para reordenar
       </div>
     </div>
-  );
+  )
 }
 
 function SortableImage({
@@ -68,10 +74,17 @@ function SortableImage({
   isPrincipal,
   isDragActive: _isDragActive,
 }: SortableImageProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging, isOver } =
-    useSortable({
-      id,
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+    isOver,
+  } = useSortable({
+    id,
+  })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -79,7 +92,7 @@ function SortableImage({
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 1000 : 'auto',
     scale: isDragging ? '1.05' : '1',
-  };
+  }
 
   return (
     <div ref={setNodeRef} style={style} className="relative group">
@@ -103,8 +116,8 @@ function SortableImage({
             alt={`Preview ${index + 1}`}
             className="w-full h-full object-cover"
             onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = '/placeholder.svg?height=120&width=200';
+              const target = e.target as HTMLImageElement
+              target.src = '/placeholder.svg?height=120&width=200'
             }}
           />
         </div>
@@ -132,7 +145,7 @@ function SortableImage({
         size="sm"
       />
     </div>
-  );
+  )
 }
 
 export function ImageUpload({
@@ -146,119 +159,126 @@ export function ImageUpload({
   prevImage,
   goToImage,
 }: ImageUploadProps) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [urlInput, setUrlInput] = useState('');
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false)
+  const [urlInput, setUrlInput] = useState('')
+  const [activeId, setActiveId] = useState<string | null>(null)
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
+    })
+  )
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id as string);
-  };
+    setActiveId(event.active.id as string)
+  }
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    setActiveId(null);
+    const { active, over } = event
+    setActiveId(null)
 
     if (active.id !== over?.id) {
-      const oldIndex = images.findIndex((_url, index) => `image-${index}` === active.id);
-      const newIndex = images.findIndex((_url, index) => `image-${index}` === over?.id);
+      const oldIndex = images.findIndex(
+        (_url, index) => `image-${index}` === active.id
+      )
+      const newIndex = images.findIndex(
+        (_url, index) => `image-${index}` === over?.id
+      )
 
       if (oldIndex !== -1 && newIndex !== -1) {
-        onImagesChange(arrayMove(images, oldIndex, newIndex));
+        onImagesChange(arrayMove(images, oldIndex, newIndex))
       }
     }
-  };
+  }
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files
+    if (!files || files.length === 0) return
 
     if (images.length + files.length > maxImages) {
       toast({
         title: 'Limite excedido',
         description: `Máximo de ${maxImages} imagens permitidas`,
         variant: 'destructive',
-      });
-      return;
+      })
+      return
     }
 
-    setIsUploading(true);
-    const uploadedUrls: string[] = [];
+    setIsUploading(true)
+    const uploadedUrls: string[] = []
 
     try {
       for (const file of Array.from(files)) {
-        const formData = new FormData();
-        formData.append('file', file);
+        const formData = new FormData()
+        formData.append('file', file)
 
         const response = await fetch('/api/upload', {
           method: 'POST',
           body: formData,
-        });
+        })
 
         if (response.ok) {
-          const data = await response.json();
-          uploadedUrls.push(data.url);
+          const data = await response.json()
+          uploadedUrls.push(data.url)
         } else {
-          const error = await response.json();
-          throw new Error(error.error || 'Erro no upload');
+          const error = await response.json()
+          throw new Error(error.error || 'Erro no upload')
         }
       }
 
-      onImagesChange([...images, ...uploadedUrls]);
+      onImagesChange([...images, ...uploadedUrls])
       toast({
         title: 'Upload concluído',
         description: `${uploadedUrls.length} imagem(ns) enviada(s) com sucesso`,
-      });
+      })
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error('Upload error:', error)
       toast({
         title: 'Erro no upload',
-        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        description:
+          error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setIsUploading(false);
+      setIsUploading(false)
       // Reset input
-      event.target.value = '';
+      event.target.value = ''
     }
-  };
+  }
 
   const handleUrlAdd = () => {
-    if (!urlInput.trim()) return;
+    if (!urlInput.trim()) return
 
     if (images.length >= maxImages) {
       toast({
         title: 'Limite excedido',
         description: `Máximo de ${maxImages} imagens permitidas`,
         variant: 'destructive',
-      });
-      return;
+      })
+      return
     }
 
     // Validação básica de URL
     try {
-      new URL(urlInput);
-      onImagesChange([...images, urlInput.trim()]);
-      setUrlInput('');
+      new URL(urlInput)
+      onImagesChange([...images, urlInput.trim()])
+      setUrlInput('')
     } catch {
       toast({
         title: 'URL inválida',
         description: 'Por favor, insira uma URL válida',
         variant: 'destructive',
-      });
+      })
     }
-  };
+  }
 
   const removeImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index);
-    onImagesChange(newImages);
-  };
+    const newImages = images.filter((_, i) => i !== index)
+    onImagesChange(newImages)
+  }
 
   return (
     <div
@@ -267,7 +287,8 @@ export function ImageUpload({
         backgroundColor: 'hsl(210, 40%, 98%)',
         borderColor: 'hsl(210, 20%, 90%)',
         borderWidth: '1.5px',
-        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+        boxShadow:
+          '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
       }}
     >
       {/* Carrossel de Imagens Atuais */}
@@ -276,7 +297,9 @@ export function ImageUpload({
           {/* Header com indicador */}
           {images.length > 1 && (
             <div className="flex items-center justify-between mb-4 w-full">
-              <h3 className="text-sm font-semibold text-slate-700">Preview do Equipamento</h3>
+              <h3 className="text-sm font-semibold text-slate-700">
+                Preview do Equipamento
+              </h3>
               <div className="text-xs text-slate-500 bg-white/70 px-2 py-1 rounded-full">
                 {currentImageIndex + 1} de {images.length}
               </div>
@@ -308,14 +331,14 @@ export function ImageUpload({
                   <button
                     type="button"
                     onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
+                      e.preventDefault()
+                      e.stopPropagation()
                       if (prevImage) {
-                        prevImage();
+                        prevImage()
                       } else if (currentImageIndex > 0) {
                         // Fallback interno caso a função não seja passada
-                        const newIndex = currentImageIndex - 1;
-                        if (_onImageIndexChange) _onImageIndexChange(newIndex);
+                        const newIndex = currentImageIndex - 1
+                        if (_onImageIndexChange) _onImageIndexChange(newIndex)
                       }
                     }}
                     title="Imagem anterior"
@@ -327,14 +350,14 @@ export function ImageUpload({
                   <button
                     type="button"
                     onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
+                      e.preventDefault()
+                      e.stopPropagation()
                       if (nextImage) {
-                        nextImage();
+                        nextImage()
                       } else if (currentImageIndex < images.length - 1) {
                         // Fallback interno caso a função não seja passada
-                        const newIndex = currentImageIndex + 1;
-                        if (_onImageIndexChange) _onImageIndexChange(newIndex);
+                        const newIndex = currentImageIndex + 1
+                        if (_onImageIndexChange) _onImageIndexChange(newIndex)
                       }
                     }}
                     title="Próxima imagem"
@@ -354,12 +377,12 @@ export function ImageUpload({
                       key={index}
                       type="button"
                       onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
+                        e.preventDefault()
+                        e.stopPropagation()
                         if (goToImage) {
-                          goToImage(index);
+                          goToImage(index)
                         } else {
-                          if (_onImageIndexChange) _onImageIndexChange(index);
+                          if (_onImageIndexChange) _onImageIndexChange(index)
                         }
                       }}
                       whileHover={{ scale: 1.2 }}
@@ -391,12 +414,12 @@ export function ImageUpload({
                   key={index}
                   type="button"
                   onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    e.preventDefault()
+                    e.stopPropagation()
                     if (goToImage) {
-                      goToImage(index);
+                      goToImage(index)
                     } else {
-                      if (_onImageIndexChange) _onImageIndexChange(index);
+                      if (_onImageIndexChange) _onImageIndexChange(index)
                     }
                   }}
                   whileHover={{ scale: 1.05 }}
@@ -420,7 +443,9 @@ export function ImageUpload({
               ))}
               {images.length > 6 && (
                 <div className="flex-shrink-0 w-16 h-12 rounded-lg bg-gray-100 border-2 border-gray-200 flex items-center justify-center">
-                  <span className="text-xs font-medium text-gray-500">+{images.length - 6}</span>
+                  <span className="text-xs font-medium text-gray-500">
+                    +{images.length - 6}
+                  </span>
                 </div>
               )}
             </motion.div>
@@ -482,7 +507,10 @@ export function ImageUpload({
             </span>
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground mt-3" style={{ lineHeight: '0.5rem' }}>
+        <p
+          className="text-xs text-muted-foreground mt-3"
+          style={{ lineHeight: '0.5rem' }}
+        >
           JPG, PNG ou WebP. Máximo 5MB por arquivo.
         </p>
       </div>
@@ -524,7 +552,8 @@ export function ImageUpload({
             Imagens ({images.length}/{maxImages})
           </Label>
           <p className="text-xs text-muted-foreground">
-            Arraste as imagens para reordenar. A primeira imagem será a principal.
+            Arraste as imagens para reordenar. A primeira imagem será a
+            principal.
           </p>
           <DndContext
             sensors={sensors}
@@ -554,5 +583,5 @@ export function ImageUpload({
         </div>
       )}
     </div>
-  );
+  )
 }

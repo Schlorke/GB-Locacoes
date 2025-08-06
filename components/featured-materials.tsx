@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Package } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { Package } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 // Icon mapping
 import {
@@ -19,7 +19,7 @@ import {
   Truck,
   Wrench,
   Zap,
-} from 'lucide-react';
+} from 'lucide-react'
 
 const iconMap = {
   Package: PackageIcon,
@@ -31,73 +31,87 @@ const iconMap = {
   Truck,
   Wrench,
   Zap,
-};
+}
 
 interface Equipment {
-  id: string;
-  name: string;
-  description: string;
-  pricePerDay: number;
-  images: string[];
+  id: string
+  name: string
+  description: string
+  pricePerDay: number
+  images: string[]
   category: {
-    id: string;
-    name: string;
-    bgColor?: string;
-    fontColor?: string;
-    icon?: string;
-    iconColor?: string;
-  };
-  isAvailable: boolean;
+    id: string
+    name: string
+    bgColor?: string
+    fontColor?: string
+    icon?: string
+    iconColor?: string
+  }
+  isAvailable: boolean
 }
 
 export default function FeaturedMaterials() {
-  const [equipments, setEquipments] = useState<Equipment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [equipments, setEquipments] = useState<Equipment[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   // Função para renderizar ícones dinamicamente
   const renderIcon = (iconName?: string, color?: string) => {
-    if (!iconName) return null;
+    if (!iconName) return null
 
     try {
-      const IconComponent = iconMap[iconName as keyof typeof iconMap];
+      const IconComponent = iconMap[iconName as keyof typeof iconMap]
       if (IconComponent && typeof IconComponent === 'function') {
-        return <IconComponent size={14} color={color || 'currentColor'} className="mr-1.5" />;
+        return (
+          <IconComponent
+            size={14}
+            color={color || 'currentColor'}
+            className="mr-1.5"
+          />
+        )
       }
     } catch (_error) {
       // Fallback se o ícone não existir
-      return <Package size={14} color={color || 'currentColor'} className="mr-1.5" />;
+      return (
+        <Package size={14} color={color || 'currentColor'} className="mr-1.5" />
+      )
     }
 
     // Fallback se o ícone não for encontrado
-    return <Package size={14} color={color || 'currentColor'} className="mr-1.5" />;
-  };
+    return (
+      <Package size={14} color={color || 'currentColor'} className="mr-1.5" />
+    )
+  }
 
   useEffect(() => {
-    fetchFeaturedEquipments();
-  }, []);
+    fetchFeaturedEquipments()
+  }, [])
 
   const fetchFeaturedEquipments = async () => {
     try {
-      const response = await fetch('/api/equipments');
+      const response = await fetch('/api/equipments')
       if (response.ok) {
-        const data = await response.json();
+        const data = await response.json()
         // Pegar apenas os primeiros 6 equipamentos para destaque
-        setEquipments(Array.isArray(data) ? data.slice(0, 6) : []);
+        setEquipments(Array.isArray(data) ? data.slice(0, 6) : [])
       }
     } catch (error) {
-      console.error('Erro ao carregar equipamentos em destaque:', error);
+      console.error('Erro ao carregar equipamentos em destaque:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   if (isLoading) {
     return (
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Equipamentos em Destaque</h2>
-            <p className="text-lg text-gray-600">Nossos equipamentos mais procurados</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Equipamentos em Destaque
+            </h2>
+            <p className="text-lg text-gray-600">
+              Nossos equipamentos mais procurados
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {Array.from({ length: 6 }).map((_, i) => (
@@ -113,15 +127,19 @@ export default function FeaturedMaterials() {
           </div>
         </div>
       </section>
-    );
+    )
   }
 
   return (
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Equipamentos em Destaque</h2>
-          <p className="text-lg text-gray-600">Nossos equipamentos mais procurados</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Equipamentos em Destaque
+          </h2>
+          <p className="text-lg text-gray-600">
+            Nossos equipamentos mais procurados
+          </p>
         </div>
 
         {equipments.length > 0 ? (
@@ -137,14 +155,20 @@ export default function FeaturedMaterials() {
 
                 <div className="relative h-48 bg-gray-200 z-10">
                   <Image
-                    src={equipment.images?.[0] || '/placeholder.svg?height=200&width=300'}
+                    src={
+                      equipment.images?.[0] ||
+                      '/placeholder.svg?height=200&width=300'
+                    }
                     alt={equipment.name}
                     fill
                     className="object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
                   />
                   {!equipment.isAvailable && (
                     <div className="absolute top-3 right-3">
-                      <Badge variant="destructive" className="bg-red-500/90 backdrop-blur-sm">
+                      <Badge
+                        variant="destructive"
+                        className="bg-red-500/90 backdrop-blur-sm"
+                      >
                         Indisponível
                       </Badge>
                     </div>
@@ -155,26 +179,32 @@ export default function FeaturedMaterials() {
                   <h3 className="font-semibold text-lg text-gray-900 mb-2 line-clamp-1">
                     {equipment.name}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">{equipment.description}</p>
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                    {equipment.description}
+                  </p>
 
                   <div className="mb-4">
                     <div className="flex items-center justify-between">
                       <div className="text-2xl font-bold text-orange-600">
                         R$ {equipment.pricePerDay?.toFixed(2) || '0.00'}
-                        <span className="text-sm font-normal text-gray-500">/dia</span>
+                        <span className="text-sm font-normal text-gray-500">
+                          /dia
+                        </span>
                       </div>
                       <Badge
                         variant="secondary"
                         className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors backdrop-blur-sm"
                         style={{
-                          backgroundColor: equipment.category?.bgColor || '#f3f4f6',
+                          backgroundColor:
+                            equipment.category?.bgColor || '#f3f4f6',
                           color: equipment.category?.fontColor || '#374151',
                           borderColor: 'transparent',
                         }}
                       >
                         {renderIcon(
                           equipment.category?.icon,
-                          equipment.category?.iconColor || equipment.category?.fontColor,
+                          equipment.category?.iconColor ||
+                            equipment.category?.fontColor
                         )}
                         {equipment.category?.name || 'Sem categoria'}
                       </Badge>
@@ -203,7 +233,9 @@ export default function FeaturedMaterials() {
                       className="flex-1"
                     >
                       {equipment.isAvailable ? (
-                        <Link href={`/orcamento?equipmentId=${equipment.id}`}>Solicitar</Link>
+                        <Link href={`/orcamento?equipmentId=${equipment.id}`}>
+                          Solicitar
+                        </Link>
                       ) : (
                         <span>Indisponível</span>
                       )}
@@ -218,7 +250,9 @@ export default function FeaturedMaterials() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-gray-600">Nenhum equipamento disponível no momento.</p>
+            <p className="text-gray-600">
+              Nenhum equipamento disponível no momento.
+            </p>
           </div>
         )}
 
@@ -229,5 +263,5 @@ export default function FeaturedMaterials() {
         </div>
       </div>
     </section>
-  );
+  )
 }

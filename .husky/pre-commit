@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Formatar arquivos Markdown automaticamente
+pnpm fix:md
+
+# Verificar se há mudanças não commitadas
+if [ -n "$(git diff --name-only)" ]; then
+  echo "📝 Arquivos Markdown formatados automaticamente. Adicionando mudanças..."
+  git add .
+fi

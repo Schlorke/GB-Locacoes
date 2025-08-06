@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Building, Menu } from 'lucide-react';
-import Link from 'next/link';
-import { useState } from 'react';
-import MobileSidebar from './mobile-sidebar';
+import { Button } from '@/components/ui/button'
+import { Building, Menu } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
+import MobileSidebar from './mobile-sidebar'
 
 export default function AdminMobileHeader() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
@@ -35,5 +35,5 @@ export default function AdminMobileHeader() {
       {/* Sidebar Mobile */}
       <MobileSidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
-  );
+  )
 }

@@ -27,7 +27,11 @@ $orange-secondary: #fed7aa; // Orange-200
 $orange-accent: #f97316; // Orange-500
 
 // Cores de Background
-$bg-primary: linear-gradient(to bottom right, #f8fafc, #dbeafe); // slate-50 to blue-50
+$bg-primary: linear-gradient(
+  to bottom right,
+  #f8fafc,
+  #dbeafe
+); // slate-50 to blue-50
 $bg-card: rgba(255, 255, 255, 0.95); // white with transparency
 $bg-overlay: rgba(0, 0, 0, 0.8); // modal overlays
 
@@ -101,14 +105,20 @@ $spacing-2xl: 3rem;     // 12 (48px)
 
 ```tsx
 <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-  <div className="max-w-7xl mx-auto space-y-6 p-6">{/* Conteúdo da página */}</div>
+  <div className="max-w-7xl mx-auto space-y-6 p-6">
+    {/* Conteúdo da página */}
+  </div>
 </div>
 ```
 
 ### 2. Header com Gradiente (Padrão Obrigatório)
 
 ```tsx
-<motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+<motion.div
+  initial={{ opacity: 0, y: -20 }}
+  animate={{ opacity: 1, y: 0 }}
+  className="mb-8"
+>
   <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
     {/* Camadas de profundidade */}
     <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
@@ -130,15 +140,21 @@ $spacing-2xl: 3rem;     // 12 (48px)
         </Button>
 
         <div>
-          <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">Título da Página</h1>
-          <p className="text-orange-50 font-medium">Subtítulo explicativo da funcionalidade</p>
+          <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
+            Título da Página
+          </h1>
+          <p className="text-orange-50 font-medium">
+            Subtítulo explicativo da funcionalidade
+          </p>
         </div>
       </div>
 
       {/* Badge Informativo */}
       <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
         <IconeAqui className="w-5 h-5 text-orange-50" />
-        <span className="font-semibold text-white">Informação contextual ou contador</span>
+        <span className="font-semibold text-white">
+          Informação contextual ou contador
+        </span>
       </div>
     </div>
   </div>
@@ -159,11 +175,15 @@ $spacing-2xl: 3rem;     // 12 (48px)
     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
     <CardHeader className="relative z-10">
-      <CardTitle className="text-xl font-semibold text-gray-900">Título do Card</CardTitle>
+      <CardTitle className="text-xl font-semibold text-gray-900">
+        Título do Card
+      </CardTitle>
       <p className="text-sm text-gray-600 mt-1">Descrição do card</p>
     </CardHeader>
 
-    <CardContent className="relative z-10 space-y-8">{/* Conteúdo do card */}</CardContent>
+    <CardContent className="relative z-10 space-y-8">
+      {/* Conteúdo do card */}
+    </CardContent>
   </Card>
 </motion.div>
 ```
@@ -178,17 +198,18 @@ $spacing-2xl: 3rem;     // 12 (48px)
 {
   /* Padrão para seções de formulário */
 }
-<div className="space-y-6">
+;<div className="space-y-6">
   <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
       <span className="text-xs font-medium text-blue-600">1</span>
     </div>
     <h3 className="text-lg font-medium text-gray-900">Nome da Seção</h3>
-    <span className="text-sm text-gray-500">(Opcional)</span> {/* Se aplicável */}
+    <span className="text-sm text-gray-500">(Opcional)</span>{" "}
+    {/* Se aplicável */}
   </div>
 
   <div className="space-y-4">{/* Campos do formulário */}</div>
-</div>;
+</div>
 ```
 
 ### 2. Campo de Formulário
@@ -238,7 +259,10 @@ $spacing-2xl: 3rem;     // 12 (48px)
   items.length > 0 && (
     <div className="space-y-3">
       {items.map((item, index) => (
-        <div key={index} className="flex items-center justify-between p-3 border rounded-md">
+        <div
+          key={index}
+          className="flex items-center justify-between p-3 border rounded-md"
+        >
           <div className="min-w-0 flex-1">
             <div className="font-medium text-sm">{item.title}</div>
             <div className="text-sm mt-1">{item.description}</div>
@@ -255,7 +279,7 @@ $spacing-2xl: 3rem;     // 12 (48px)
         </div>
       ))}
     </div>
-  );
+  )
 }
 ```
 
@@ -265,17 +289,22 @@ $spacing-2xl: 3rem;     // 12 (48px)
 {
   /* Área de botões principal */
 }
-<div className="flex justify-end pt-6 mt-8 border-t border-gray-100">
+;<div className="flex justify-end pt-6 mt-8 border-t border-gray-100">
   <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-    <Button variant="outline" type="button" asChild className="w-full sm:w-auto bg-transparent">
+    <Button
+      variant="outline"
+      type="button"
+      asChild
+      className="w-full sm:w-auto bg-transparent"
+    >
       <Link href="/admin/voltar">Cancelar</Link>
     </Button>
     <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
       <Save className="h-4 w-4 mr-2" />
-      {isLoading ? 'Salvando...' : 'Salvar'}
+      {isLoading ? "Salvando..." : "Salvar"}
     </Button>
   </div>
-</div>;
+</div>
 ```
 
 ### 6. Modal de Zoom/Visualização
@@ -299,7 +328,7 @@ $spacing-2xl: 3rem;     // 12 (48px)
         </button>
       </div>
     </div>
-  );
+  )
 }
 ```
 
@@ -362,36 +391,36 @@ transition={{ delay: index * 0.05 }}
 ```tsx
 // Sucesso
 toast({
-  title: 'Sucesso!',
-  description: 'Operação realizada com sucesso.',
-});
+  title: "Sucesso!",
+  description: "Operação realizada com sucesso."
+})
 
 // Erro
 toast({
-  title: 'Erro',
-  description: 'Mensagem de erro específica.',
-  variant: 'destructive',
-});
+  title: "Erro",
+  description: "Mensagem de erro específica.",
+  variant: "destructive"
+})
 
 // Aviso
 toast({
-  title: 'Atenção',
-  description: 'Mensagem de aviso.',
-  variant: 'default',
-});
+  title: "Atenção",
+  description: "Mensagem de aviso.",
+  variant: "default"
+})
 ```
 
 ### 2. Estados de Validação
 
 ```tsx
 // Validação de campo obrigatório
-if (!campo || campo.trim() === '') {
+if (!campo || campo.trim() === "") {
   toast({
-    title: 'Erro de Validação',
-    description: 'Preencha todos os campos obrigatórios (*).',
-    variant: 'destructive',
-  });
-  return;
+    title: "Erro de Validação",
+    description: "Preencha todos os campos obrigatórios (*).",
+    variant: "destructive"
+  })
+  return
 }
 ```
 
@@ -420,10 +449,10 @@ if (!campo || campo.trim() === '') {
 ```tsx
 export default function ListagemPage() {
   // Estados padrão
-  const [items, setItems] = useState([]);
-  const [filteredItems, setFilteredItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [items, setItems] = useState([])
+  const [filteredItems, setFilteredItems] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState("")
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -433,7 +462,7 @@ export default function ListagemPage() {
         {/* Grid/Lista de items */}
       </div>
     </div>
-  );
+  )
 }
 ```
 
@@ -442,8 +471,8 @@ export default function ListagemPage() {
 ```tsx
 export default function FormularioPage() {
   // Estados do formulário
-  const [formData, setFormData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -474,7 +503,7 @@ export default function FormularioPage() {
         </form>
       </div>
     </div>
-  );
+  )
 }
 ```
 
@@ -538,18 +567,18 @@ export default function FormularioPage() {
 ### 3. Imports Padrão
 
 ```tsx
-'use client';
+"use client"
 
-import { AdminFilterCard } from '@/components/admin/admin-filter-card';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Save, Package } from 'lucide-react';
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { AdminFilterCard } from "@/components/admin/admin-filter-card"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useToast } from "@/hooks/use-toast"
+import { motion } from "framer-motion"
+import { ArrowLeft, Save, Package } from "lucide-react"
+import Link from "next/link"
+import { useState, useEffect } from "react"
 ```
 
 ### 4. Padrões de Nomenclatura
@@ -591,11 +620,20 @@ import { useState, useEffect } from 'react';
 
 ```tsx
 const statusConfig = {
-  active: { color: 'bg-green-100 text-green-800 border-green-200', icon: CheckCircle },
-  inactive: { color: 'bg-gray-100 text-gray-800 border-gray-200', icon: XCircle },
-  pending: { color: 'bg-yellow-100 text-yellow-800 border-yellow-200', icon: Clock },
-  error: { color: 'bg-red-100 text-red-800 border-red-200', icon: AlertCircle },
-};
+  active: {
+    color: "bg-green-100 text-green-800 border-green-200",
+    icon: CheckCircle
+  },
+  inactive: {
+    color: "bg-gray-100 text-gray-800 border-gray-200",
+    icon: XCircle
+  },
+  pending: {
+    color: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    icon: Clock
+  },
+  error: { color: "bg-red-100 text-red-800 border-red-200", icon: AlertCircle }
+}
 ```
 
 ---

@@ -1,16 +1,16 @@
-import { type NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server'
 
-export const dynamic = 'force-dynamic';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+export const dynamic = 'force-dynamic'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
 
 export async function GET(_request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions)
 
     if (!session?.user || !['ADMIN', 'OPERATOR'].includes(session.user.role)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Buscar estatísticas gerais
@@ -35,7 +35,7 @@ export async function GET(_request: NextRequest) {
         where: { status: 'COMPLETED' },
         _sum: { total: true },
       }),
-    ]);
+    ])
 
     const stats = {
       totalEquipments,
@@ -48,11 +48,14 @@ export async function GET(_request: NextRequest) {
       completedQuotes,
       totalRevenue: totalRevenue._sum.total || 0,
       monthlyRevenue: 0, // Pode ser calculado se necessário
-    };
+    }
 
-    return NextResponse.json(stats);
+    return NextResponse.json(stats)
   } catch (error) {
-    console.error('Error fetching dashboard stats:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('Error fetching dashboard stats:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

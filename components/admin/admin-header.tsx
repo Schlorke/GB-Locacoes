@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Bell, Building, Menu, Search, UserCircle } from 'lucide-react';
-import { useSession } from 'next-auth/react';
-import AdminSidebar from './admin-sidebar';
+import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Bell, Building, Menu, Search, UserCircle } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import AdminSidebar from './admin-sidebar'
 
 export default function AdminHeader() {
-  const { data: session } = useSession();
+  const { data: session } = useSession()
 
   return (
     <header className="fixed top-0 left-0 z-50 w-full border-b border-slate-700 bg-slate-900">
@@ -74,5 +74,5 @@ export default function AdminHeader() {
         </div>
       </div>
     </header>
-  );
+  )
 }

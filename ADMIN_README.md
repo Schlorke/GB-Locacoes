@@ -2,7 +2,8 @@
 
 ## 📁 Arquivos do Design System
 
-1. **`ADMIN_DESIGN_SYSTEM.md`** - Documentação completa com fundamentos, cores, tipografia e padrões
+1. **`ADMIN_DESIGN_SYSTEM.md`** - Documentação completa com fundamentos, cores,
+   tipografia e padrões
 2. **`ADMIN_QUICK_GUIDE.md`** - Guia rápido com templates prontos para uso
 3. **`ADMIN_COMPONENTS.md`** - Componentes reutilizáveis já implementados
 4. **`ADMIN_README.md`** - Este arquivo com instruções de uso
@@ -30,7 +31,7 @@ touch app/admin/nova-secao/page.tsx
   icon={<SeuIcone className="w-6 h-6 text-orange-200" />}
   badge={{
     icon: <IconeContextual className="w-5 h-5 text-orange-50" />,
-    text: 'Informação relevante',
+    text: "Informação relevante"
   }}
 />
 ```
@@ -105,13 +106,14 @@ xl: 1280px  // Desktop
 
 ```tsx
 // Listagens
-className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
+className =
+  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
 
 // Formulários (2 colunas)
-className = 'grid grid-cols-1 xl:grid-cols-2 gap-8';
+className = "grid grid-cols-1 xl:grid-cols-2 gap-8"
 
 // Botões
-className = 'flex flex-col sm:flex-row gap-3 w-full sm:w-auto';
+className = "flex flex-col sm:flex-row gap-3 w-full sm:w-auto"
 ```
 
 ## 🔄 Estados Comuns
@@ -134,8 +136,8 @@ className = 'flex flex-col sm:flex-row gap-3 w-full sm:w-auto';
   title="Nenhum item encontrado"
   description="Clique no botão abaixo para adicionar o primeiro item"
   action={{
-    text: 'Novo Item',
-    href: '/admin/novo-item',
+    text: "Novo Item",
+    href: "/admin/novo-item"
   }}
 />
 ```
@@ -145,16 +147,16 @@ className = 'flex flex-col sm:flex-row gap-3 w-full sm:w-auto';
 ```tsx
 // Sucesso
 toast({
-  title: 'Sucesso!',
-  description: 'Item criado com sucesso.',
-});
+  title: "Sucesso!",
+  description: "Item criado com sucesso."
+})
 
 // Erro
 toast({
-  title: 'Erro',
-  description: 'Não foi possível salvar o item.',
-  variant: 'destructive',
-});
+  title: "Erro",
+  description: "Não foi possível salvar o item.",
+  variant: "destructive"
+})
 ```
 
 ## 🧩 Componentes Prontos
@@ -215,9 +217,9 @@ toast({
 
 ```tsx
 export default function MinhaListagem() {
-  const [items, setItems] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [loading, setLoading] = useState(true)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -228,7 +230,7 @@ export default function MinhaListagem() {
           icon={<Package className="w-6 h-6 text-orange-200" />}
           badge={{
             icon: <Hash className="w-5 h-5 text-orange-50" />,
-            text: `${items.length} items encontrados`,
+            text: `${items.length} items encontrados`
           }}
         />
 
@@ -252,7 +254,7 @@ export default function MinhaListagem() {
             icon={<Package className="w-12 h-12" />}
             title="Nenhum item encontrado"
             description="Adicione o primeiro item para começar"
-            action={{ text: 'Novo Item', href: '/admin/nova-secao/novo' }}
+            action={{ text: "Novo Item", href: "/admin/nova-secao/novo" }}
           />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -261,7 +263,7 @@ export default function MinhaListagem() {
         )}
       </div>
     </div>
-  );
+  )
 }
 ```
 
@@ -269,8 +271,8 @@ export default function MinhaListagem() {
 
 ```tsx
 export default function MeuFormulario() {
-  const [formData, setFormData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -290,12 +292,15 @@ export default function MeuFormulario() {
               </FormField>
             </FormSection>
 
-            <ActionButtons cancelHref="/admin/minha-secao" isLoading={isLoading} />
+            <ActionButtons
+              cancelHref="/admin/minha-secao"
+              isLoading={isLoading}
+            />
           </AdminCard>
         </form>
       </div>
     </div>
-  );
+  )
 }
 ```
 

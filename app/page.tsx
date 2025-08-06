@@ -1,7 +1,7 @@
-import Hero from '@/components/hero';
-import HomePageClient from '@/components/home-page-client';
-import WhyChooseUs from '@/components/why-choose-us';
-import ContactSection from '@/components/contact-section';
+import Hero from '@/components/hero'
+import HomePageClient from '@/components/home-page-client'
+import WhyChooseUs from '@/components/why-choose-us'
+import ContactSection from '@/components/contact-section'
 
 export const metadata = {
   title: 'GB Locações - Locação de Equipamentos para Construção Civil',
@@ -15,7 +15,7 @@ export const metadata = {
       'Há 10 anos oferecendo soluções em locação de equipamentos para construção civil com segurança, qualidade e manutenção constante.',
     type: 'website',
   },
-};
+}
 
 export default function HomePage() {
   return (
@@ -25,5 +25,5 @@ export default function HomePage() {
       <WhyChooseUs />
       <ContactSection />
     </main>
-  );
+  )
 }

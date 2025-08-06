@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
+import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Catálogo | GB Locações',
   description: 'Catálogo completo de equipamentos para construção civil',
-};
+}
 
 export default function CatalogoPage() {
   return (
@@ -28,9 +28,11 @@ export default function CatalogoPage() {
         </div>
         <div className="p-6 border rounded-lg">
           <h3 className="text-h3 font-semibold mb-2">Ferramentas</h3>
-          <p className="text-muted-foreground">Ferramentas elétricas e manuais para construção.</p>
+          <p className="text-muted-foreground">
+            Ferramentas elétricas e manuais para construção.
+          </p>
         </div>
       </div>
     </div>
-  );
+  )
 }

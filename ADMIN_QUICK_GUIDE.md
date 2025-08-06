@@ -3,22 +3,22 @@
 ## Template Base para Nova Página
 
 ```tsx
-'use client';
+"use client"
 
-import { AdminFilterCard } from '@/components/admin/admin-filter-card';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Save, Package } from 'lucide-react';
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { AdminFilterCard } from "@/components/admin/admin-filter-card"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useToast } from "@/hooks/use-toast"
+import { motion } from "framer-motion"
+import { ArrowLeft, Save, Package } from "lucide-react"
+import Link from "next/link"
+import { useState, useEffect } from "react"
 
 export default function NovaPagina() {
-  const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
+  const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -49,12 +49,16 @@ export default function NovaPagina() {
                   <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
                     Título da Página
                   </h1>
-                  <p className="text-orange-50 font-medium">Subtítulo explicativo</p>
+                  <p className="text-orange-50 font-medium">
+                    Subtítulo explicativo
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
                 <Package className="w-5 h-5 text-orange-50" />
-                <span className="font-semibold text-white">Informação contextual</span>
+                <span className="font-semibold text-white">
+                  Informação contextual
+                </span>
               </div>
             </div>
           </div>
@@ -71,15 +75,19 @@ export default function NovaPagina() {
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
             <CardHeader className="relative z-10">
-              <CardTitle className="text-xl font-semibold text-gray-900">Título do Card</CardTitle>
+              <CardTitle className="text-xl font-semibold text-gray-900">
+                Título do Card
+              </CardTitle>
             </CardHeader>
 
-            <CardContent className="relative z-10 space-y-8">{/* Seu conteúdo aqui */}</CardContent>
+            <CardContent className="relative z-10 space-y-8">
+              {/* Seu conteúdo aqui */}
+            </CardContent>
           </Card>
         </motion.div>
       </div>
     </div>
-  );
+  )
 }
 ```
 
@@ -121,12 +129,16 @@ export default function NovaPagina() {
 ```tsx
 <div className="flex justify-end pt-6 mt-8 border-t border-gray-100">
   <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-    <Button variant="outline" asChild className="w-full sm:w-auto bg-transparent">
+    <Button
+      variant="outline"
+      asChild
+      className="w-full sm:w-auto bg-transparent"
+    >
       <Link href="/admin/voltar">Cancelar</Link>
     </Button>
     <Button type="submit" disabled={loading} className="w-full sm:w-auto">
       <Save className="h-4 w-4 mr-2" />
-      {loading ? 'Salvando...' : 'Salvar'}
+      {loading ? "Salvando..." : "Salvar"}
     </Button>
   </div>
 </div>
@@ -141,15 +153,15 @@ export default function NovaPagina() {
   onSearchChange={setSearchTerm}
   filters={[
     {
-      label: 'Status',
+      label: "Status",
       value: statusFilter,
       onValueChange: setStatusFilter,
-      placeholder: 'Filtrar por status',
+      placeholder: "Filtrar por status",
       options: [
-        { value: 'all', label: 'Todos' },
-        { value: 'active', label: 'Ativos' },
-      ],
-    },
+        { value: "all", label: "Todos" },
+        { value: "active", label: "Ativos" }
+      ]
+    }
   ]}
   actionButtons={
     <Button asChild className="bg-slate-700 hover:bg-slate-600">
@@ -188,14 +200,18 @@ export default function NovaPagina() {
 ```tsx
 // Loading
 {
-  loading && <Loader2 className="h-12 w-12 animate-spin" />;
+  loading && <Loader2 className="h-12 w-12 animate-spin" />
 }
 
 // Toast Sucesso
-toast({ title: 'Sucesso!', description: 'Operação realizada.' });
+toast({ title: "Sucesso!", description: "Operação realizada." })
 
 // Toast Erro
-toast({ title: 'Erro', description: 'Erro ao realizar operação.', variant: 'destructive' });
+toast({
+  title: "Erro",
+  description: "Erro ao realizar operação.",
+  variant: "destructive"
+})
 
 // Lista Vazia
 {
@@ -204,14 +220,15 @@ toast({ title: 'Erro', description: 'Erro ao realizar operação.', variant: 'de
       <Icon className="w-12 h-12 mx-auto mb-3 text-gray-400" />
       <p className="text-lg font-medium">Nenhum item encontrado</p>
     </div>
-  );
+  )
 }
 ```
 
 ## Grid Responsivo Padrão
 
 ```tsx
-className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
+className =
+  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
 ```
 
 ## Animações Padrão

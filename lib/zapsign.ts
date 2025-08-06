@@ -1,8 +1,8 @@
 export interface ZapsignClient {
-  token: string;
+  token: string
 }
 
 export const createZapsignClient = (): ZapsignClient => {
-  const token = process.env.ZAPSIGN_TOKEN ?? '';
-  return { token };
-};
+  const token = process.env.ZAPSIGN_TOKEN ?? ''
+  return { token }
+}

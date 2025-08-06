@@ -1,8 +1,8 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Phone, Mail, MapPin, Clock } from 'lucide-react'
 
 export default function ContactSection() {
   return (
@@ -14,8 +14,8 @@ export default function ContactSection() {
             Entre em Contato
           </h2>
           <p className="section-subtitle text-xl text-gray-600 max-w-2xl mx-auto">
-            Estamos prontos para atender sua necessidade de equipamentos para construção civil. Fale
-            conosco!
+            Estamos prontos para atender sua necessidade de equipamentos para
+            construção civil. Fale conosco!
           </p>
         </div>
 
@@ -23,7 +23,9 @@ export default function ContactSection() {
           {/* Contact Form */}
           <Card className="contact-form hover:shadow-xl transition-all duration-500">
             <CardContent className="p-8">
-              <h3 className="text-2xl font-semibold mb-6">Solicite um Orçamento de Equipamentos</h3>
+              <h3 className="text-2xl font-semibold mb-6">
+                Solicite um Orçamento de Equipamentos
+              </h3>
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="group">
@@ -147,7 +149,9 @@ export default function ContactSection() {
                     </h4>
                     <p className="text-gray-600 mb-1">(51) 2313-6262</p>
                     <p className="text-gray-600">(51) 99820-5163</p>
-                    <p className="text-sm text-orange-600 mt-2">Atendimento especializado</p>
+                    <p className="text-sm text-orange-600 mt-2">
+                      Atendimento especializado
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -163,9 +167,13 @@ export default function ContactSection() {
                     <h4 className="font-semibold text-lg mb-2 group-hover:text-orange-600 transition-colors">
                       E-mail
                     </h4>
-                    <p className="text-gray-600 mb-1">contato@gblocacoes.com.br</p>
+                    <p className="text-gray-600 mb-1">
+                      contato@gblocacoes.com.br
+                    </p>
                     <p className="text-gray-600">comercial@gblocacoes.com.br</p>
-                    <p className="text-sm text-orange-600 mt-2">Resposta rápida garantida</p>
+                    <p className="text-sm text-orange-600 mt-2">
+                      Resposta rápida garantida
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -207,7 +215,9 @@ export default function ContactSection() {
                     <div className="text-gray-600 space-y-1">
                       <p>Segunda a Sexta: 8h às 18h</p>
                       <p>Sábado: 8h às 12h</p>
-                      <p className="text-sm text-orange-600 mt-2">CNPJ: 34.780.330/0001-69</p>
+                      <p className="text-sm text-orange-600 mt-2">
+                        CNPJ: 34.780.330/0001-69
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -217,5 +227,5 @@ export default function ContactSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }

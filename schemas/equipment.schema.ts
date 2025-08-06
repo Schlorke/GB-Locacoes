@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const equipmentSchema = z.object({
   id: z.string().optional(),
@@ -6,6 +6,6 @@ export const equipmentSchema = z.object({
   description: z.string().optional(),
   price: z.number().nonnegative(),
   categoryId: z.string(),
-});
+})
 
-export type Equipment = z.infer<typeof equipmentSchema>;
+export type Equipment = z.infer<typeof equipmentSchema>

@@ -1,14 +1,14 @@
-'use client';
+'use client'
 
-import { cn } from '@/lib/utils';
-import { Funnel } from 'lucide-react';
+import { cn } from '@/lib/utils'
+import { Funnel } from 'lucide-react'
 
 interface FilterIndicatorProps {
-  isFiltered: boolean;
-  className?: string;
-  size?: 'sm' | 'md' | 'lg';
-  activeColor?: string;
-  inactiveColor?: string;
+  isFiltered: boolean
+  className?: string
+  size?: 'sm' | 'md' | 'lg'
+  activeColor?: string
+  inactiveColor?: string
 }
 
 export function FilterIndicator({
@@ -22,7 +22,7 @@ export function FilterIndicator({
     sm: 'w-3 h-3',
     md: 'w-4 h-4',
     lg: 'w-5 h-5',
-  };
+  }
 
   return (
     <div className="flex items-center justify-center flex-shrink-0 h-10">
@@ -31,9 +31,9 @@ export function FilterIndicator({
           'transition-colors duration-300',
           sizeClasses[size],
           isFiltered ? activeColor : inactiveColor,
-          className,
+          className
         )}
       />
     </div>
-  );
+  )
 }

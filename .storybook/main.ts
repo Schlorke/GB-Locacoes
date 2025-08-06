@@ -1,29 +1,85 @@
-import type { StorybookConfig } from '@storybook/nextjs';
-import path from 'path';
+import type { StorybookConfig } from '@storybook/react-vite'
+import path from 'path'
 
 const config: StorybookConfig = {
   stories: [
+    '../stories/**/*.mdx',
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
-    '../components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions'],
+  addons: [
+    '@storybook/addon-docs',
+    '@storybook/addon-a11y',
+    '@storybook/addon-vitest',
+  ],
   framework: {
-    name: '@storybook/nextjs',
+    name: '@storybook/react-vite',
     options: {},
   },
-  staticDirs: ['../public'],
-  typescript: {
-    check: false,
-  },
-  webpackFinal: async (config) => {
+  viteFinal: async (config) => {
+    // Configurar aliases do TypeScript
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
         '@': path.resolve(__dirname, '../'),
-      };
+        '@/components': path.resolve(__dirname, '../components'),
+        '@/lib': path.resolve(__dirname, '../lib'),
+        '@/hooks': path.resolve(__dirname, '../hooks'),
+        '@/types': path.resolve(__dirname, '../types'),
+        '@/app': path.resolve(__dirname, '../app'),
+      }
     }
-    return config;
-  },
-};
 
-export default config;
+    // Configurar variáveis de ambiente para o Storybook
+    if (config.define) {
+      config.define = {
+        ...config.define,
+        'process.env': {},
+        'process.env.NODE_ENV': JSON.stringify('development'),
+        'process.env.NEXT_PUBLIC_VERCEL_URL': JSON.stringify(''),
+        'process.env.NEXT_PUBLIC_SITE_URL': JSON.stringify(
+          'http://localhost:3000'
+        ),
+      }
+    } else {
+      config.define = {
+        'process.env': {},
+        'process.env.NODE_ENV': JSON.stringify('development'),
+        'process.env.NEXT_PUBLIC_VERCEL_URL': JSON.stringify(''),
+        'process.env.NEXT_PUBLIC_SITE_URL': JSON.stringify(
+          'http://localhost:3000'
+        ),
+      }
+    }
+
+    // Configurar para lidar com módulos do Next.js
+    if (config.optimizeDeps) {
+      config.optimizeDeps = {
+        ...config.optimizeDeps,
+        include: [
+          ...(config.optimizeDeps.include || []),
+          'next/image',
+          'next/link',
+          'next/navigation',
+          'next/router',
+          'next/head',
+        ],
+      }
+    }
+
+    // Configurações para lidar com módulos do Next.js
+    if (config.ssr) {
+      config.ssr = {
+        ...config.ssr,
+        noExternal: ['next'],
+      }
+    } else {
+      config.ssr = {
+        noExternal: ['next'],
+      }
+    }
+
+    return config
+  },
+}
+
+export default config

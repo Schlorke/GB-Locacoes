@@ -1,17 +1,17 @@
-'use client';
+'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import type React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
+import React from 'react'
 
 interface AdminCardProps {
-  children: React.ReactNode;
-  title?: string;
-  subtitle?: string;
-  icon?: React.ReactNode;
-  className?: string;
-  contentClassName?: string;
-  variant?: 'default' | 'elevated' | 'glass';
+  children: React.ReactNode
+  title?: string
+  subtitle?: string
+  icon?: React.ReactNode
+  className?: string
+  contentClassName?: string
+  variant?: 'default' | 'elevated' | 'glass'
 }
 
 export function AdminCard({
@@ -30,7 +30,7 @@ export function AdminCard({
       'relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm hover:shadow-3xl transition-all duration-300 h-full hover:scale-[1.03]',
     glass:
       'relative overflow-hidden border border-white/20 bg-white/10 backdrop-blur-md shadow-xl hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02]',
-  };
+  }
 
   return (
     <Card className={cn(cardVariants[variant], className)}>
@@ -53,9 +53,13 @@ export function AdminCard({
             )}
             <div className="flex-1">
               {title && (
-                <CardTitle className="text-lg font-semibold text-gray-900">{title}</CardTitle>
+                <CardTitle className="text-lg font-semibold text-gray-900">
+                  {title}
+                </CardTitle>
               )}
-              {subtitle && <p className="text-sm text-gray-600 mt-1">{subtitle}</p>}
+              {subtitle && (
+                <p className="text-sm text-gray-600 mt-1">{subtitle}</p>
+              )}
             </div>
           </div>
         </CardHeader>
@@ -63,10 +67,14 @@ export function AdminCard({
 
       {/* Content */}
       <CardContent
-        className={cn('relative z-10', !title && !subtitle && !icon && 'p-6', contentClassName)}
+        className={cn(
+          'relative z-10',
+          !title && !subtitle && !icon && 'p-6',
+          contentClassName
+        )}
       >
         {children}
       </CardContent>
     </Card>
-  );
+  )
 }

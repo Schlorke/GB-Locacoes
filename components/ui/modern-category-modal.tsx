@@ -1,48 +1,60 @@
-'use client';
+'use client'
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { CloseButton } from '@/components/ui/close-button';
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { CloseButton } from '@/components/ui/close-button'
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'framer-motion';
-import * as LucideIcons from 'lucide-react';
-import { AlertTriangle, Edit, Palette, Save, Search, Tag, X } from 'lucide-react';
-import React, { useState } from 'react';
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
+import { AnimatePresence, motion } from 'framer-motion'
+import * as LucideIcons from 'lucide-react'
+import {
+  AlertTriangle,
+  Edit,
+  Palette,
+  Save,
+  Search,
+  Tag,
+  X,
+} from 'lucide-react'
+import React, { useState } from 'react'
 
 export interface CategoryData {
-  id?: string;
-  name: string;
-  description: string;
-  backgroundColor: string;
-  fontColor: string;
-  icon?: keyof typeof LucideIcons | null;
-  iconColor: string;
+  id?: string
+  name: string
+  description: string
+  backgroundColor: string
+  fontColor: string
+  icon?: keyof typeof LucideIcons | null
+  iconColor: string
 }
 
 interface ModernCategoryModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
   onSave: (
     _data: Omit<CategoryData, 'backgroundColor'> & {
-      bgColor: string;
-      icon: keyof typeof LucideIcons | null | undefined;
-    },
-  ) => Promise<void>;
-  initialData?: CategoryData;
-  title?: string;
-  saveButtonText?: string;
+      bgColor: string
+      icon: keyof typeof LucideIcons | null | undefined
+    }
+  ) => Promise<void>
+  initialData?: CategoryData
+  title?: string
+  saveButtonText?: string
 }
 
 const ICON_OPTIONS: (keyof typeof LucideIcons)[] = [
@@ -397,7 +409,7 @@ const ICON_OPTIONS: (keyof typeof LucideIcons)[] = [
   'Turtle',
   'Snail',
   'Cat',
-];
+]
 
 export function ModernCategoryModal({
   isOpen,
@@ -414,12 +426,12 @@ export function ModernCategoryModal({
       fontColor: '#ffffff',
       icon: undefined,
       iconColor: '#ffffff',
-    },
-  );
+    }
+  )
   // Preenche o formulário ao abrir para edição
   React.useEffect(() => {
     if (isOpen && initialData) {
-      setFormData(initialData);
+      setFormData(initialData)
     } else if (isOpen && !initialData) {
       setFormData({
         name: '',
@@ -428,62 +440,66 @@ export function ModernCategoryModal({
         fontColor: '#ffffff',
         icon: undefined,
         iconColor: '#ffffff',
-      });
+      })
     }
-  }, [isOpen, initialData]);
+  }, [isOpen, initialData])
 
   const [errors, setErrors] = useState<{
-    name?: string;
-    description?: string;
-    submit?: string;
-  }>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDesignOpen, setIsDesignOpen] = useState(false);
-  const [iconFilter, setIconFilter] = useState('');
+    name?: string
+    description?: string
+    submit?: string
+  }>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDesignOpen, setIsDesignOpen] = useState(false)
+  const [iconFilter, setIconFilter] = useState('')
 
   // Limpa erro de submit ao abrir modal ou ao mudar nome
   React.useEffect(() => {
-    setErrors((prev) => ({ ...prev, submit: undefined }));
-  }, [isOpen, formData.name, initialData]);
+    setErrors((prev) => ({ ...prev, submit: undefined }))
+  }, [isOpen, formData.name, initialData])
 
   async function handleSubmit() {
-    setIsSubmitting(true);
-    setErrors({});
+    setIsSubmitting(true)
+    setErrors({})
     if (!formData.name.trim()) {
-      setErrors({ name: 'O nome da categoria é obrigatório.' });
-      setIsSubmitting(false);
-      return;
+      setErrors({ name: 'O nome da categoria é obrigatório.' })
+      setIsSubmitting(false)
+      return
     }
     try {
       // Corrige o nome do campo para o backend
-      const { backgroundColor, icon, ...rest } = formData;
+      const { backgroundColor, icon, ...rest } = formData
       const payload = {
         ...rest,
         bgColor: backgroundColor,
         icon: icon === undefined ? null : icon,
-      };
-      await onSave(payload);
-      onClose();
+      }
+      await onSave(payload)
+      onClose()
     } catch (err: unknown) {
-      let message = 'Erro ao salvar categoria.';
+      let message = 'Erro ao salvar categoria.'
       if (
         err &&
         typeof err === 'object' &&
         'message' in err &&
         typeof (err as Record<string, unknown>).message === 'string'
       ) {
-        message = String((err as Record<string, unknown>).message);
+        message = String((err as Record<string, unknown>).message)
       }
-      setErrors({ submit: message });
+      setErrors({ submit: message })
     }
-    setIsSubmitting(false);
+    setIsSubmitting(false)
   }
 
   // Utilitário para renderizar ícones Lucide dinamicamente
-  function renderIcon(icon: keyof typeof LucideIcons, size = 20, color?: string) {
-    if (!icon) return null;
-    const LucideIcon = LucideIcons[icon] as React.ElementType;
-    return LucideIcon ? <LucideIcon size={size} color={color} /> : null;
+  function renderIcon(
+    icon: keyof typeof LucideIcons,
+    size = 20,
+    color?: string
+  ) {
+    if (!icon) return null
+    const LucideIcon = LucideIcons[icon] as React.ElementType
+    return LucideIcon ? <LucideIcon size={size} color={color} /> : null
   }
   return (
     <React.Fragment>
@@ -494,8 +510,10 @@ export function ModernCategoryModal({
           style={{
             paddingTop: 'env(safe-area-inset-top)',
             paddingBottom: 'env(safe-area-inset-bottom)',
-            height: 'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
-            maxHeight: 'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+            height:
+              'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+            maxHeight:
+              'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
           }}
         >
           <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
@@ -511,8 +529,14 @@ export function ModernCategoryModal({
               {/* Preview da Categoria */}
               <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-2 xs:rounded-md">
                 <div className="flex items-center justify-between mb-4 w-full">
-                  <h3 className="text-sm font-semibold text-slate-700">Preview da Categoria</h3>
-                  <Popover modal open={isDesignOpen} onOpenChange={setIsDesignOpen}>
+                  <h3 className="text-sm font-semibold text-slate-700">
+                    Preview da Categoria
+                  </h3>
+                  <Popover
+                    modal
+                    open={isDesignOpen}
+                    onOpenChange={setIsDesignOpen}
+                  >
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
@@ -551,7 +575,7 @@ export function ModernCategoryModal({
                               variant="ghost"
                               size="sm"
                               onClick={() => {
-                                setFormData({ ...formData, icon: undefined });
+                                setFormData({ ...formData, icon: undefined })
                               }}
                               className="text-slate-400 hover:text-red-500 h-7 px-2 rounded-lg transition-colors text-xs"
                               title="Remover ícone"
@@ -584,17 +608,22 @@ export function ModernCategoryModal({
                         {/* Icons Grid */}
                         <div className="space-y-3">
                           <div className="flex items-center justify-between">
-                            <h5 className="text-sm font-medium text-slate-700">Ícone</h5>
+                            <h5 className="text-sm font-medium text-slate-700">
+                              Ícone
+                            </h5>
                           </div>
                           <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
                             <div className="relative pb-0 category-icon-grid-container">
                               <div className="icon-grid-responsive icon-grid-scroll category-icon-grid">
                                 {ICON_OPTIONS.filter((iconName) =>
-                                  iconName.toLowerCase().includes(iconFilter.toLowerCase()),
+                                  iconName
+                                    .toLowerCase()
+                                    .includes(iconFilter.toLowerCase())
                                 )
                                   .slice(0, 48)
                                   .map((iconName) => {
-                                    const isSelected = formData.icon === iconName;
+                                    const isSelected =
+                                      formData.icon === iconName
                                     return (
                                       <button
                                         key={iconName}
@@ -609,20 +638,23 @@ export function ModernCategoryModal({
                                           'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden',
                                           isSelected
                                             ? 'border-blue-400 shadow-md'
-                                            : 'border-slate-200 hover:border-slate-300 hover:shadow-sm',
+                                            : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
                                         )}
                                         title={iconName}
                                         data-bg={formData.backgroundColor}
                                         data-icon-color={formData.iconColor}
-                                        style={{ backgroundColor: formData.backgroundColor }}
+                                        style={{
+                                          backgroundColor:
+                                            formData.backgroundColor,
+                                        }}
                                       >
                                         {renderIcon(
                                           iconName as keyof typeof LucideIcons,
                                           16,
-                                          formData.iconColor,
+                                          formData.iconColor
                                         )}
                                       </button>
-                                    );
+                                    )
                                   })}
                               </div>
                             </div>
@@ -630,7 +662,9 @@ export function ModernCategoryModal({
                         </div>
                         {/* Color Sections */}
                         <div className="space-y-3">
-                          <h5 className="text-sm font-medium text-slate-700">Cores</h5>
+                          <h5 className="text-sm font-medium text-slate-700">
+                            Cores
+                          </h5>
                           <div className="flex gap-4 justify-center">
                             {/* Icon Color */}
                             <div className="flex flex-col items-center gap-2">
@@ -638,7 +672,10 @@ export function ModernCategoryModal({
                                 type="color"
                                 value={formData.iconColor}
                                 onChange={(e) =>
-                                  setFormData({ ...formData, iconColor: e.target.value })
+                                  setFormData({
+                                    ...formData,
+                                    iconColor: e.target.value,
+                                  })
                                 }
                                 className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
                                 title="Selecionar cor do ícone"
@@ -653,7 +690,10 @@ export function ModernCategoryModal({
                                 type="color"
                                 value={formData.backgroundColor}
                                 onChange={(e) =>
-                                  setFormData({ ...formData, backgroundColor: e.target.value })
+                                  setFormData({
+                                    ...formData,
+                                    backgroundColor: e.target.value,
+                                  })
                                 }
                                 className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
                                 title="Selecionar cor de fundo"
@@ -668,7 +708,10 @@ export function ModernCategoryModal({
                                 type="color"
                                 value={formData.fontColor}
                                 onChange={(e) =>
-                                  setFormData({ ...formData, fontColor: e.target.value })
+                                  setFormData({
+                                    ...formData,
+                                    fontColor: e.target.value,
+                                  })
                                 }
                                 className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
                                 title="Selecionar cor da fonte"
@@ -698,7 +741,7 @@ export function ModernCategoryModal({
                       'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
                       'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
                       'hover:scale-[1.07]',
-                      'xs:text-[10px] xs:px-1 xs:py-1 xs:rounded-md',
+                      'xs:text-[10px] xs:px-1 xs:py-1 xs:rounded-md'
                     )}
                     style={{
                       backgroundColor: formData.backgroundColor,
@@ -725,17 +768,22 @@ export function ModernCategoryModal({
               </div>
               {/* Nome */}
               <div className="space-y-3 w-full max-w-full">
-                <Label htmlFor="name" className="text-sm font-semibold text-slate-700">
+                <Label
+                  htmlFor="name"
+                  className="text-sm font-semibold text-slate-700"
+                >
                   Nome da Categoria *
                 </Label>
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="Ex: Ferramentas de Construção"
                   className={cn(
                     'h-11 text-sm border-gray-200 focus:border-blue-500 rounded-lg xs:h-9 xs:text-xs w-full max-w-full',
-                    errors.name && 'border-red-500 focus:border-red-500',
+                    errors.name && 'border-red-500 focus:border-red-500'
                   )}
                 />
                 {errors.name && (
@@ -744,22 +792,29 @@ export function ModernCategoryModal({
                     {errors.name}
                   </div>
                 )}
-                <p className="text-xs text-slate-500">{formData.name.length}/50 caracteres</p>
+                <p className="text-xs text-slate-500">
+                  {formData.name.length}/50 caracteres
+                </p>
               </div>
               {/* Descrição */}
               <div className="space-y-3 w-full max-w-full">
-                <Label htmlFor="description" className="text-sm font-semibold text-slate-700">
+                <Label
+                  htmlFor="description"
+                  className="text-sm font-semibold text-slate-700"
+                >
                   Descrição (Opcional)
                 </Label>
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   placeholder="Descreva brevemente esta categoria..."
                   rows={3}
                   className={cn(
                     'text-sm border-gray-200 focus:border-blue-500 resize-none rounded-lg xs:text-xs xs:h-16 w-full max-w-full',
-                    errors.description && 'border-red-500 focus:border-red-500',
+                    errors.description && 'border-red-500 focus:border-red-500'
                   )}
                 />
                 {errors.description && (
@@ -784,7 +839,9 @@ export function ModernCategoryModal({
                     >
                       <div className="flex items-center gap-2 text-red-600">
                         <AlertTriangle className="w-4 h-4" />
-                        <span className="text-sm font-medium">{errors.submit}</span>
+                        <span className="text-sm font-medium">
+                          {errors.submit}
+                        </span>
                       </div>
                     </motion.div>
                   )}
@@ -832,5 +889,5 @@ export function ModernCategoryModal({
         </DialogContent>
       </Dialog>
     </React.Fragment>
-  );
+  )
 }

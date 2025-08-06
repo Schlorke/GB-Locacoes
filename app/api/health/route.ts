@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(_request: NextRequest) {
   try {
@@ -8,11 +8,14 @@ export async function GET(_request: NextRequest) {
       uptime: process.uptime(),
       environment: process.env.NODE_ENV || 'development',
       version: '1.0.0',
-    };
+    }
 
-    return NextResponse.json(healthCheck);
+    return NextResponse.json(healthCheck)
   } catch (error) {
-    console.error('Health check failed:', error);
-    return NextResponse.json({ status: 'error', message: 'Health check failed' }, { status: 500 });
+    console.error('Health check failed:', error)
+    return NextResponse.json(
+      { status: 'error', message: 'Health check failed' },
+      { status: 500 }
+    )
   }
 }

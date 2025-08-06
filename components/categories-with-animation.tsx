@@ -1,9 +1,18 @@
-'use client';
+'use client'
 
-import { Card, CardContent } from '@/components/ui/card';
-import { Building, Container, Hammer, HardHat, Shield, Truck, Wrench, Zap } from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useRef } from 'react';
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  Building,
+  Container,
+  Hammer,
+  HardHat,
+  Shield,
+  Truck,
+  Wrench,
+  Zap,
+} from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useRef } from 'react'
 
 const categories = [
   {
@@ -70,11 +79,11 @@ const categories = [
     description: 'Diversos equipamentos para obras',
     color: 'from-orange-500 to-orange-600',
   },
-];
+]
 
 export default function CategoriesWithAnimation() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const sectionRef = useRef<HTMLElement>(null)
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -85,34 +94,34 @@ export default function CategoriesWithAnimation() {
             cardsRef.current.forEach((card, index) => {
               if (card) {
                 setTimeout(() => {
-                  card.style.opacity = '1';
-                  card.style.transform = 'translateY(0)';
-                  card.style.transition = 'all 0.8s ease-out';
-                }, index * 200); // 200ms entre cada card
+                  card.style.opacity = '1'
+                  card.style.transform = 'translateY(0)'
+                  card.style.transition = 'all 0.8s ease-out'
+                }, index * 200) // 200ms entre cada card
               }
-            });
+            })
 
-            observer.unobserve(entry.target);
+            observer.unobserve(entry.target)
           }
-        });
+        })
       },
       {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px',
-      },
-    );
+      }
+    )
 
-    const currentSection = sectionRef.current;
+    const currentSection = sectionRef.current
     if (currentSection) {
-      observer.observe(currentSection);
+      observer.observe(currentSection)
     }
 
     return () => {
       if (currentSection) {
-        observer.unobserve(currentSection);
+        observer.unobserve(currentSection)
       }
-    };
-  }, []);
+    }
+  }, [])
 
   return (
     <section ref={sectionRef} className="py-16 bg-gray-50">
@@ -123,18 +132,19 @@ export default function CategoriesWithAnimation() {
             Categorias de Equipamentos
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Encontre rapidamente o equipamento especializado que você precisa para sua obra
+            Encontre rapidamente o equipamento especializado que você precisa
+            para sua obra
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {categories.map((category, index) => {
-            const IconComponent = category.icon;
+            const IconComponent = category.icon
             return (
               <Link key={category.name} href={category.href} className="group">
                 <Card
                   ref={(el) => {
-                    cardsRef.current[index] = el;
+                    cardsRef.current[index] = el
                   }}
                   className="h-full relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col"
                   style={{
@@ -179,10 +189,10 @@ export default function CategoriesWithAnimation() {
                   </CardContent>
                 </Card>
               </Link>
-            );
+            )
           })}
         </div>
       </div>
     </section>
-  );
+  )
 }

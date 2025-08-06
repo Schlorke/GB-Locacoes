@@ -1,26 +1,26 @@
-'use client';
+'use client'
 
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 export default function AdminPage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  const { data: session, status } = useSession()
+  const router = useRouter()
 
   useEffect(() => {
     // Adicionamos um pequeno timeout para garantir que a sessão seja carregada corretamente
     const redirectTimer = setTimeout(() => {
       if (status === 'authenticated' && session) {
-        router.push('/admin/dashboard');
+        router.push('/admin/dashboard')
       } else if (status === 'unauthenticated') {
-        router.push('/admin/login');
+        router.push('/admin/login')
       }
       // Não redirecionamos se status === "loading"
-    }, 300);
+    }, 300)
 
-    return () => clearTimeout(redirectTimer);
-  }, [session, status, router]);
+    return () => clearTimeout(redirectTimer)
+  }, [session, status, router])
 
   // Mostrar estado de carregamento enquanto redireciona
   return (
@@ -30,5 +30,5 @@ export default function AdminPage() {
         <p className="mt-4 text-slate-600 font-medium">Redirecionando...</p>
       </div>
     </div>
-  );
+  )
 }

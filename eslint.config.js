@@ -1,13 +1,13 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 
 // eslint.config.js
-import js from '@eslint/js';
-import configPrettier from 'eslint-config-prettier';
-import prettier from 'eslint-plugin-prettier';
-import react from 'eslint-plugin-react';
-import reactHooks from 'eslint-plugin-react-hooks';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+import js from '@eslint/js'
+import configPrettier from 'eslint-config-prettier'
+import prettier from 'eslint-plugin-prettier'
+import react from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
+import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default [
   // Ignore patterns - must be first
@@ -22,6 +22,8 @@ export default [
       '**/build/**',
       '**/next-env.d.ts',
       '**/scripts/**/*.mjs',
+      '**/scripts/**/*.cjs',
+      '**/scripts/**/*.js',
       '**/.vercel/**',
       '**/.turbo/**',
       '**/coverage/**',
@@ -102,4 +104,4 @@ export default [
     },
   }, // Prettier config (must be last)
   configPrettier,
-];
+]

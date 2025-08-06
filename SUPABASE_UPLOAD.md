@@ -1,12 +1,13 @@
 # Configuração do Upload de Imagens com Supabase
 
-Este projeto usa **Supabase Storage** para gerenciar uploads de imagens, substituindo a dependência da Vercel Blob.
+Este projeto usa **Supabase Storage** para gerenciar uploads de imagens,
+substituindo a dependência da Vercel Blob.
 
 ## 🚀 Setup Rápido
 
 ### 1. Configurar Variáveis de Ambiente
 
-Adicione as seguintes variáveis ao seu arquivo `.env.local`:
+**Adicione** as seguintes variáveis ao seu arquivo `.env.local`:
 
 ```env
 # Supabase Configuration
@@ -16,7 +17,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY="sua-chave-anonima-aqui"
 
 ### 2. Criar Bucket no Supabase (Automático)
 
-Execute uma das opções abaixo:
+**Execute** uma das opções abaixo:
 
 #### Opção A: Via API (Recomendado)
 
@@ -32,13 +33,14 @@ curl -X POST http://localhost:3000/api/supabase-setup \
 
 #### Opção B: Manual no Dashboard do Supabase
 
-1. Acesse seu projeto no [Supabase Dashboard](https://app.supabase.com)
-2. Vá para **Storage** → **Buckets**
-3. Clique em **Create bucket**
-4. Nome: `gb-locacoes-images`
-5. Marque como **Public bucket**
-6. Configure os tipos permitidos: `image/jpeg, image/png, image/webp, image/gif`
-7. Tamanho máximo: `5MB`
+1. **Acesse** seu projeto no [Supabase Dashboard](https://app.supabase.com)
+2. **Vá para** **Storage** → **Buckets**
+3. **Clique em** **Create bucket**
+4. **Nome**: `gb-locacoes-images`
+5. **Marque como** **Public bucket**
+6. **Configure** os tipos permitidos:
+   `image/jpeg, image/png, image/webp, image/gif`
+7. **Tamanho máximo**: `5MB`
 
 ### 3. Testar Upload
 
@@ -89,11 +91,13 @@ curl -X POST http://localhost:3000/api/supabase-setup \
 
 ### Erro: "Missing Supabase environment variables"
 
-Verifique se as variáveis `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` estão configuradas no `.env.local`.
+Verifique se as variáveis `NEXT_PUBLIC_SUPABASE_URL` e
+`NEXT_PUBLIC_SUPABASE_ANON_KEY` estão configuradas no `.env.local`.
 
 ### Problemas de Permissão
 
-Certifique-se de que o bucket está marcado como **público** no dashboard do Supabase.
+Certifique-se de que o bucket está marcado como **público** no dashboard do
+Supabase.
 
 ## 🚀 Deploy
 

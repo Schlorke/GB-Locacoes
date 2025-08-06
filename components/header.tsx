@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
-import { Button } from '@/components/ui/button';
-import { CloseButton } from '@/components/ui/close-button';
-import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button'
+import { CloseButton } from '@/components/ui/close-button'
+import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   const handleInternalNavigation = () => {
-    sessionStorage.setItem('internalNavigation', 'true');
-    setIsMenuOpen(false);
-  };
+    sessionStorage.setItem('internalNavigation', 'true')
+    setIsMenuOpen(false)
+  }
 
   const navigation = [
     { name: 'Início', href: '/' },
@@ -22,15 +22,15 @@ export default function Header() {
     { name: 'Orçamento', href: '/orcamento' },
     { name: 'Sobre', href: '/sobre' },
     { name: 'Contato', href: '/contato' },
-  ];
+  ]
 
   // Função para verificar se é a página ativa
   const isActivePage = (href: string) => {
     if (href === '/') {
-      return pathname === '/';
+      return pathname === '/'
     }
-    return pathname.startsWith(href);
-  };
+    return pathname.startsWith(href)
+  }
 
   return (
     <header className="fixed top-0 left-0 w-screen z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-slate-200/50">
@@ -52,7 +52,8 @@ export default function Header() {
                 <span className="text-slate-100">(51) 2313-6262</span>
               </span>
               <span className="hidden md:inline text-slate-200 font-light">
-                Atendimento especializado • Entrega em toda região de Porto Alegre
+                Atendimento especializado • Entrega em toda região de Porto
+                Alegre
               </span>
             </div>
             <div className="flex items-center gap-4">
@@ -100,13 +101,15 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             {navigation.map((item) => {
-              const isActive = isActivePage(item.href);
+              const isActive = isActivePage(item.href)
               return (
                 <Link
                   key={item.name}
                   href={item.href}
                   className={`relative font-medium transition-all duration-200 group py-2 ${
-                    isActive ? 'text-orange-600' : 'text-slate-700 hover:text-orange-600'
+                    isActive
+                      ? 'text-orange-600'
+                      : 'text-slate-700 hover:text-orange-600'
                   }`}
                   onClick={handleInternalNavigation}
                 >
@@ -119,7 +122,7 @@ export default function Header() {
                     }`}
                   ></span>
                 </Link>
-              );
+              )
             })}
           </nav>
 
@@ -178,7 +181,7 @@ export default function Header() {
           <div className="lg:hidden border-t border-slate-200/50 py-4 bg-white/95 backdrop-blur-sm">
             <nav className="space-y-1">
               {navigation.map((item) => {
-                const isActive = isActivePage(item.href);
+                const isActive = isActivePage(item.href)
                 return (
                   <Link
                     key={item.name}
@@ -192,7 +195,7 @@ export default function Header() {
                   >
                     {item.name}
                   </Link>
-                );
+                )
               })}
             </nav>
             <div className="mt-6 pt-4 border-t border-slate-200/50 px-2 space-y-2">
@@ -210,5 +213,5 @@ export default function Header() {
         )}
       </div>
     </header>
-  );
+  )
 }

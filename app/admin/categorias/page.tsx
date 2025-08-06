@@ -1,57 +1,74 @@
-'use client';
+'use client'
 
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { ModernCategoryModal, type CategoryData } from '@/components/ui/modern-category-modal';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'framer-motion';
-import * as LucideIcons from 'lucide-react';
-import { Edit, Eye, FileText, Hash, Package, Plus, Search, Tag, Trash2, X } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import {
+  ModernCategoryModal,
+  type CategoryData,
+} from '@/components/ui/modern-category-modal'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { useToast } from '@/hooks/use-toast'
+import { cn } from '@/lib/utils'
+import { AnimatePresence, motion } from 'framer-motion'
+import * as LucideIcons from 'lucide-react'
+import {
+  Edit,
+  Eye,
+  FileText,
+  Hash,
+  Package,
+  Plus,
+  Search,
+  Tag,
+  Trash2,
+  X,
+} from 'lucide-react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 interface Category {
-  id: string;
-  name: string;
-  description?: string;
-  icon?: keyof typeof LucideIcons;
-  iconColor?: string;
-  backgroundColor?: string; // Renomeado para compatibilidade com TagData
-  fontColor?: string;
-  createdAt: string;
+  id: string
+  name: string
+  description?: string
+  icon?: keyof typeof LucideIcons
+  iconColor?: string
+  backgroundColor?: string // Renomeado para compatibilidade com TagData
+  fontColor?: string
+  createdAt: string
   _count?: {
-    equipments: number;
-  };
+    equipments: number
+  }
   // Mantém compatibilidade com API existente
-  bgColor?: string;
+  bgColor?: string
 }
 
 export default function AdminCategoriesPage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([])
+  const [filteredCategories, setFilteredCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  )
+  const [searchTerm, setSearchTerm] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [activeCardId, setActiveCardId] = useState<string | null>(null)
 
   // Novo estado para o ModernCategoryModal
-  const [isModernModalOpen, setIsModernModalOpen] = useState(false);
-  const [editingCategoryData, setEditingCategoryData] = useState<CategoryData | null>(null);
+  const [isModernModalOpen, setIsModernModalOpen] = useState(false)
+  const [editingCategoryData, setEditingCategoryData] =
+    useState<CategoryData | null>(null)
 
-  const { toast } = useToast();
-  const isMobile = useIsMobile();
+  const { toast } = useToast()
+  const isMobile = useIsMobile()
 
   // Função para converter Category para CategoryData
   const categoryToCategoryData = (category: Category): CategoryData => ({
@@ -62,166 +79,183 @@ export default function AdminCategoriesPage() {
     fontColor: category.fontColor || '#0c4a6e',
     icon: category.icon ?? undefined,
     iconColor: category.iconColor || '#0ea5e9',
-  });
+  })
 
   // Função para converter CategoryData para Category
   // Removido: função não utilizada
 
   const fetchCategories = useCallback(async () => {
     try {
-      setLoading(true);
-      const response = await fetch('/api/admin/categories');
-      const data = await response.json();
+      setLoading(true)
+      const response = await fetch('/api/admin/categories')
+      const data = await response.json()
 
-      const categoriesArray = Array.isArray(data) ? data : data?.categories || [];
+      const categoriesArray = Array.isArray(data)
+        ? data
+        : data?.categories || []
 
-      setCategories(categoriesArray);
+      setCategories(categoriesArray)
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error('Error fetching categories:', error)
       toast({
         title: 'Erro',
         description: 'Erro ao carregar categorias. Tente novamente.',
         variant: 'destructive',
-      });
-      setCategories([]);
+      })
+      setCategories([])
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  }, [toast]);
+  }, [toast])
 
   const filterCategories = useCallback(() => {
     if (!Array.isArray(categories)) {
-      setFilteredCategories([]);
-      return;
+      setFilteredCategories([])
+      return
     }
 
     const filtered = categories.filter((category: Category) => {
       const matchesSearch =
         category.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        category.description?.toLowerCase().includes(searchTerm.toLowerCase());
+        category.description?.toLowerCase().includes(searchTerm.toLowerCase())
 
-      return matchesSearch;
-    });
+      return matchesSearch
+    })
 
-    setFilteredCategories(filtered);
-  }, [categories, searchTerm]);
-
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+    setFilteredCategories(filtered)
+  }, [categories, searchTerm])
 
   useEffect(() => {
-    filterCategories();
-  }, [categories, searchTerm, filterCategories]);
+    fetchCategories()
+  }, [fetchCategories])
+
+  useEffect(() => {
+    filterCategories()
+  }, [categories, searchTerm, filterCategories])
 
   // Fechar botões ao clicar fora em mobile
   useEffect(() => {
     const handleClickOutside = () => {
       if (isMobile && activeCardId) {
-        setActiveCardId(null);
+        setActiveCardId(null)
       }
-    };
+    }
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [isMobile, activeCardId]);
+    document.addEventListener('click', handleClickOutside)
+    return () => document.removeEventListener('click', handleClickOutside)
+  }, [isMobile, activeCardId])
 
   // Novas funções para o ModernCategoryModal
   const openNewCategoryModal = () => {
-    setEditingCategoryData(null);
-    setIsModernModalOpen(true);
-  };
+    setEditingCategoryData(null)
+    setIsModernModalOpen(true)
+  }
 
   const openEditCategoryModal = (category: Category) => {
-    setEditingCategoryData(categoryToCategoryData(category));
-    setIsModernModalOpen(true);
-  };
+    setEditingCategoryData(categoryToCategoryData(category))
+    setIsModernModalOpen(true)
+  }
 
   const handleCategorySave = async (
-    categoryData: Omit<CategoryData, 'backgroundColor'> & { bgColor: string },
+    categoryData: Omit<CategoryData, 'backgroundColor'> & { bgColor: string }
   ) => {
-    const isEditing = !!editingCategoryData?.id;
+    const isEditing = !!editingCategoryData?.id
     const url = isEditing
       ? `/api/admin/categories/${editingCategoryData.id}`
-      : '/api/admin/categories';
-    const method = isEditing ? 'PUT' : 'POST';
+      : '/api/admin/categories'
+    const method = isEditing ? 'PUT' : 'POST'
 
     // Corrige para garantir que icon: null seja enviado ao remover ícone
     const categoryPayload = {
       ...categoryData,
       icon:
-        categoryData.icon === undefined || categoryData.icon === null ? null : categoryData.icon,
-    };
+        categoryData.icon === undefined || categoryData.icon === null
+          ? null
+          : categoryData.icon,
+    }
 
     const response = await fetch(url, {
       method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(categoryPayload),
-    });
+    })
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData = await response.json()
       if (response.status === 409) {
-        throw new Error('Categoria já existente');
+        throw new Error('Categoria já existente')
       } else {
-        throw new Error(errorData.error || 'Erro ao salvar categoria');
+        throw new Error(errorData.error || 'Erro ao salvar categoria')
       }
     }
 
     // Recarrega as categorias
-    await fetchCategories();
+    await fetchCategories()
 
     toast({
       title: 'Sucesso',
-      description: isEditing ? 'Categoria atualizada com sucesso' : 'Categoria criada com sucesso',
-    });
-  };
+      description: isEditing
+        ? 'Categoria atualizada com sucesso'
+        : 'Categoria criada com sucesso',
+    })
+  }
 
   const deleteCategory = async (categoryId: string) => {
-    if (!confirm('Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.'))
-      return;
+    if (
+      !confirm(
+        'Tem certeza que deseja excluir esta categoria? Esta ação não pode ser desfeita.'
+      )
+    )
+      return
 
-    setIsSubmitting(true);
+    setIsSubmitting(true)
     try {
       const response = await fetch(`/api/admin/categories/${categoryId}`, {
         method: 'DELETE',
-      });
+      })
       if (response.ok) {
         toast({
           title: 'Sucesso',
           description: 'Categoria excluída com sucesso',
-        });
-        fetchCategories();
+        })
+        fetchCategories()
       } else {
-        const errorData = await response.json();
+        const errorData = await response.json()
         toast({
           title: 'Erro',
           description: errorData.error || 'Erro ao excluir categoria',
           variant: 'destructive',
-        });
+        })
       }
     } catch (error) {
-      console.error('Error deleting category:', error);
+      console.error('Error deleting category:', error)
       toast({
         title: 'Erro',
         description: 'Erro ao excluir categoria',
         variant: 'destructive',
-      });
+      })
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
-    if (!iconName || !LucideIcons[iconName]) return <Tag className="h-4 w-4 text-gray-400" />;
+    if (!iconName || !LucideIcons[iconName])
+      return <Tag className="h-4 w-4 text-gray-400" />
 
     const IconComponent = LucideIcons[iconName] as React.ComponentType<{
-      size?: number;
-      color?: string;
-      className?: string;
-    }>;
-    return <IconComponent size={16} color={color || '#3b82f6'} className="flex-shrink-0" />;
-  };
+      size?: number
+      color?: string
+      className?: string
+    }>
+    return (
+      <IconComponent
+        size={16}
+        color={color || '#3b82f6'}
+        className="flex-shrink-0"
+      />
+    )
+  }
 
   const getCategoryBadge = (category: Category) => {
     return (
@@ -231,20 +265,25 @@ export default function AdminCategoriesPage() {
           'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
           'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
           'hover:scale-[1.07]',
-          'xs:text-[10px] xs:px-1 xs:py-1 xs:rounded-md',
+          'xs:text-[10px] xs:px-1 xs:py-1 xs:rounded-md'
         )}
         style={{
-          backgroundColor: category.backgroundColor || category.bgColor || '#e0e7ff',
+          backgroundColor:
+            category.backgroundColor || category.bgColor || '#e0e7ff',
           color: category.fontColor || '#1e40af',
         }}
       >
         {category.icon ? (
-          <span className="flex-shrink-0">{renderIcon(category.icon, category.iconColor)}</span>
+          <span className="flex-shrink-0">
+            {renderIcon(category.icon, category.iconColor)}
+          </span>
         ) : null}
-        <span className="truncate font-semibold text-sm min-w-0">{category.name}</span>
+        <span className="truncate font-semibold text-sm min-w-0">
+          {category.name}
+        </span>
       </Badge>
-    );
-  };
+    )
+  }
 
   if (loading) {
     return (
@@ -255,7 +294,7 @@ export default function AdminCategoriesPage() {
           className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
         />
       </div>
-    );
+    )
   }
 
   return (
@@ -283,8 +322,10 @@ export default function AdminCategoriesPage() {
               <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
                 <Tag className="w-5 h-5 text-orange-50" />
                 <span className="font-semibold text-white">
-                  {Array.isArray(filteredCategories) ? filteredCategories.length : 0} categorias
-                  encontradas
+                  {Array.isArray(filteredCategories)
+                    ? filteredCategories.length
+                    : 0}{' '}
+                  categorias encontradas
                 </span>
               </div>
             </div>
@@ -332,7 +373,8 @@ export default function AdminCategoriesPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          {!Array.isArray(filteredCategories) || filteredCategories.length === 0 ? (
+          {!Array.isArray(filteredCategories) ||
+          filteredCategories.length === 0 ? (
             <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
               {/* Clean depth layers for empty state card */}
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
@@ -341,7 +383,9 @@ export default function AdminCategoriesPage() {
               <CardContent className="relative z-10 text-center py-12">
                 <div className="text-gray-400 mb-4">
                   <Tag className="w-12 h-12 mx-auto mb-3" />
-                  <p className="text-lg font-medium">Nenhuma categoria encontrada</p>
+                  <p className="text-lg font-medium">
+                    Nenhuma categoria encontrada
+                  </p>
                   <p className="text-sm">
                     {searchTerm
                       ? 'Tente ajustar os filtros de busca'
@@ -372,7 +416,9 @@ export default function AdminCategoriesPage() {
                     className="group"
                     onClick={() => {
                       if (isMobile) {
-                        setActiveCardId(activeCardId === category.id ? null : category.id);
+                        setActiveCardId(
+                          activeCardId === category.id ? null : category.id
+                        )
                       }
                     }}
                   >
@@ -423,8 +469,8 @@ export default function AdminCategoriesPage() {
                               variant="ghost"
                               size="sm"
                               onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedCategory(category);
+                                e.stopPropagation()
+                                setSelectedCategory(category)
                               }}
                               className="flex-shrink-0"
                             >
@@ -434,8 +480,8 @@ export default function AdminCategoriesPage() {
                               variant="ghost"
                               size="sm"
                               onClick={(e) => {
-                                e.stopPropagation();
-                                openEditCategoryModal(category);
+                                e.stopPropagation()
+                                openEditCategoryModal(category)
                               }}
                               className="flex-shrink-0"
                             >
@@ -445,10 +491,13 @@ export default function AdminCategoriesPage() {
                               variant="ghost"
                               size="sm"
                               onClick={(e) => {
-                                e.stopPropagation();
-                                deleteCategory(category.id);
+                                e.stopPropagation()
+                                deleteCategory(category.id)
                               }}
-                              disabled={(category._count?.equipments || 0) > 0 || isSubmitting}
+                              disabled={
+                                (category._count?.equipments || 0) > 0 ||
+                                isSubmitting
+                              }
                               className="hover:bg-red-100 hover:text-red-700 disabled:opacity-50 flex-shrink-0"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -465,15 +514,20 @@ export default function AdminCategoriesPage() {
         </motion.div>
 
         {/* Modal de Preview da Categoria */}
-        <Dialog open={!!selectedCategory} onOpenChange={() => setSelectedCategory(null)}>
+        <Dialog
+          open={!!selectedCategory}
+          onOpenChange={() => setSelectedCategory(null)}
+        >
           <DialogContent
             closeButtonClassName="hover:bg-white"
             className="w-full max-w-lg h-[100svh] max-h-[100svh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
             style={{
               paddingTop: 'env(safe-area-inset-top)',
               paddingBottom: 'env(safe-area-inset-bottom)',
-              height: 'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
-              maxHeight: 'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+              height:
+                'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+              maxHeight:
+                'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
             }}
           >
             <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
@@ -524,20 +578,30 @@ export default function AdminCategoriesPage() {
                             <div className="flex items-center gap-3">
                               <Tag className="w-4 h-4 text-gray-400" />
                               <div>
-                                <div className="text-xs text-gray-500">Nome</div>
-                                <div className="font-medium text-sm">{selectedCategory.name}</div>
+                                <div className="text-xs text-gray-500">
+                                  Nome
+                                </div>
+                                <div className="font-medium text-sm">
+                                  {selectedCategory.name}
+                                </div>
                               </div>
                             </div>
 
                             <div className="flex items-start gap-3">
                               <FileText className="w-4 h-4 text-gray-400 mt-1" />
                               <div className="flex-1 min-w-0">
-                                <div className="text-xs text-gray-500">Descrição</div>
+                                <div className="text-xs text-gray-500">
+                                  Descrição
+                                </div>
                                 <div
                                   className="font-medium text-sm truncate"
-                                  title={selectedCategory.description || 'Sem descrição'}
+                                  title={
+                                    selectedCategory.description ||
+                                    'Sem descrição'
+                                  }
                                 >
-                                  {selectedCategory.description || 'Sem descrição'}
+                                  {selectedCategory.description ||
+                                    'Sem descrição'}
                                 </div>
                               </div>
                             </div>
@@ -548,9 +612,12 @@ export default function AdminCategoriesPage() {
                             <div className="flex items-center gap-3">
                               <Package className="w-4 h-4 text-gray-400" />
                               <div>
-                                <div className="text-xs text-gray-500">Equipamentos</div>
+                                <div className="text-xs text-gray-500">
+                                  Equipamentos
+                                </div>
                                 <div className="font-medium text-sm">
-                                  {selectedCategory._count?.equipments || 0} equipamentos
+                                  {selectedCategory._count?.equipments || 0}{' '}
+                                  equipamentos
                                 </div>
                               </div>
                             </div>
@@ -558,7 +625,9 @@ export default function AdminCategoriesPage() {
                             <div className="flex items-center gap-3">
                               <Hash className="w-4 h-4 text-gray-400" />
                               <div>
-                                <div className="text-xs text-gray-500">ID da Categoria</div>
+                                <div className="text-xs text-gray-500">
+                                  ID da Categoria
+                                </div>
                                 <div className="font-medium font-mono text-xs text-slate-600">
                                   {selectedCategory.id}
                                 </div>
@@ -586,8 +655,8 @@ export default function AdminCategoriesPage() {
                 <Button
                   onClick={() => {
                     if (selectedCategory) {
-                      setSelectedCategory(null);
-                      openEditCategoryModal(selectedCategory);
+                      setSelectedCategory(null)
+                      openEditCategoryModal(selectedCategory)
                     }
                   }}
                   className="flex-1 h-10 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300"
@@ -607,9 +676,11 @@ export default function AdminCategoriesPage() {
           onSave={handleCategorySave}
           initialData={editingCategoryData || undefined}
           title={editingCategoryData ? 'Editar Categoria' : 'Nova Categoria'}
-          saveButtonText={editingCategoryData ? 'Atualizar Categoria' : 'Criar Categoria'}
+          saveButtonText={
+            editingCategoryData ? 'Atualizar Categoria' : 'Criar Categoria'
+          }
         />
       </div>
     </div>
-  );
+  )
 }

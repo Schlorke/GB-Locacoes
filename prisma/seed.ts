@@ -1,5 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 
 // Se UserRole não existir, defina manualmente:
 enum UserRole {
@@ -7,23 +7,23 @@ enum UserRole {
   CLIENT = 'CLIENT',
 }
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 async function main() {
-  console.error('Start seeding...');
+  console.error('Start seeding...')
 
-  const adminEmail = 'admin@gblocacoes.com.br';
-  const adminPassword = 'admin123'; // Use a strong password in production!
+  const adminEmail = 'admin@gblocacoes.com.br'
+  const adminPassword = 'admin123' // Use a strong password in production!
 
   // Check if admin user already exists
   const existingAdmin = await prisma.user.findUnique({
     where: { email: adminEmail },
-  });
+  })
 
   if (existingAdmin) {
-    console.error('Admin user already exists. Skipping...');
+    console.error('Admin user already exists. Skipping...')
   } else {
-    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    const hashedPassword = await bcrypt.hash(adminPassword, 10)
 
     await prisma.user.create({
       data: {
@@ -33,27 +33,28 @@ async function main() {
         role: UserRole.ADMIN,
         emailVerified: new Date(), // Pre-verify the admin email
       },
-    });
-    console.error(`✅ Admin user created with email: ${adminEmail}`);
-    console.error(`🤫 Password: ${adminPassword}`);
+    })
+    console.error(`✅ Admin user created with email: ${adminEmail}`)
+    console.error(`🤫 Password: ${adminPassword}`)
   }
 
   // Seed categories
-  await seedCategories();
+  await seedCategories()
 
   // Seed equipments
-  await seedEquipments();
+  await seedEquipments()
 
-  console.warn('Seeding finished.');
+  console.warn('Seeding finished.')
 }
 
 async function seedCategories() {
-  console.error('Seeding categories...');
+  console.error('Seeding categories...')
 
   const categories = [
     {
       name: 'Andaimes Suspensos',
-      description: 'Andaimes suspensos elétricos e manuais para trabalhos em altura',
+      description:
+        'Andaimes suspensos elétricos e manuais para trabalhos em altura',
       icon: 'Building',
       iconColor: '#1E40AF',
       bgColor: '#EFF6FF',
@@ -99,7 +100,7 @@ async function seedCategories() {
       bgColor: '#E0E7FF',
       fontColor: '#4338CA',
     },
-  ];
+  ]
 
   for (const category of categories) {
     const category_with_slug = {
@@ -108,27 +109,27 @@ async function seedCategories() {
         .toLowerCase()
         .replace(/\s+/g, '-')
         .replace(/[^\w-]+/g, ''),
-    };
+    }
 
     await prisma.category.upsert({
       where: { slug: category_with_slug.slug },
       create: category_with_slug,
       update: category_with_slug,
-    });
+    })
   }
 
-  console.warn('Categories seeded successfully!');
+  console.warn('Categories seeded successfully!')
 }
 
 async function seedEquipments() {
-  console.error('Seeding equipments...');
+  console.error('Seeding equipments...')
 
   // Buscar categorias existentes
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany()
 
   if (categories.length === 0) {
-    console.error('No categories found. Please run category seed first.');
-    return;
+    console.error('No categories found. Please run category seed first.')
+    return
   }
 
   const equipments = [
@@ -218,7 +219,8 @@ async function seedEquipments() {
     },
     {
       name: 'Rompedor Elétrico 15kg',
-      description: 'Rompedor elétrico mais leve para trabalhos de precisão e quebra de pisos.',
+      description:
+        'Rompedor elétrico mais leve para trabalhos de precisão e quebra de pisos.',
       pricePerDay: 65.0,
       images: [
         '/placeholder.svg?height=400&width=600&text=Rompedor+Eletrico',
@@ -227,21 +229,22 @@ async function seedEquipments() {
       available: false, // Alguns indisponíveis para teste
       categorySlug: 'rompedores',
     },
-  ];
+  ]
 
   for (const equipment of equipments) {
     const category = categories.find(
-      (cat: { slug: string; id: string; name: string }) => cat.slug === equipment.categorySlug,
-    );
+      (cat: { slug: string; id: string; name: string }) =>
+        cat.slug === equipment.categorySlug
+    )
 
     if (!category) {
-      console.error(`Category not found for slug: ${equipment.categorySlug}`);
-      continue;
+      console.error(`Category not found for slug: ${equipment.categorySlug}`)
+      continue
     }
 
     const existingEquipment = await prisma.equipment.findFirst({
       where: { name: equipment.name },
-    });
+    })
 
     if (!existingEquipment) {
       await prisma.equipment.create({
@@ -253,21 +256,21 @@ async function seedEquipments() {
           available: equipment.available,
           categoryId: category.id,
         },
-      });
-      console.error(`✅ Equipment created: ${equipment.name}`);
+      })
+      console.error(`✅ Equipment created: ${equipment.name}`)
     } else {
-      console.error(`⚠️ Equipment already exists: ${equipment.name}`);
+      console.error(`⚠️ Equipment already exists: ${equipment.name}`)
     }
   }
 
-  console.warn('Equipments seeded successfully!');
+  console.warn('Equipments seeded successfully!')
 }
 
 main()
   .catch((e) => {
-    console.error(e);
-    process.exit(1);
+    console.error(e)
+    process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect();
-  });
+    await prisma.$disconnect()
+  })

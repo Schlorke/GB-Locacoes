@@ -2,7 +2,9 @@
 
 ## Implementação Completa do Design System
 
-Baseado no **Design System Admin** criado anteriormente, foi implementado um sistema completo de configurações administrativas seguindo todos os padrões estabelecidos.
+Baseado no **Design System Admin** criado anteriormente, foi implementado um
+sistema completo de configurações administrativas seguindo todos os padrões
+estabelecidos.
 
 ---
 
@@ -130,7 +132,7 @@ flex-col sm:flex-row gap-3
 
 ```tsx
 {
-  isLoading ? 'Salvando...' : 'Salvar Configurações';
+  isLoading ? "Salvando..." : "Salvar Configurações"
 }
 ```
 
@@ -225,17 +227,17 @@ flex-col sm:flex-row gap-3
 ### **3. Usar Configurações no Frontend**
 
 ```tsx
-import { useSettings, useCompanyInfo } from '@/hooks/use-settings';
+import { useSettings, useCompanyInfo } from "@/hooks/use-settings"
 
-const { companyPhone, contactEmail } = useCompanyInfo();
+const { companyPhone, contactEmail } = useCompanyInfo()
 ```
 
 ### **4. Server-side**
 
 ```tsx
-import { getSettings } from '@/app/api/admin/settings/actions';
+import { getSettings } from "@/app/api/admin/settings/actions"
 
-const result = await getSettings();
+const result = await getSettings()
 ```
 
 ---
@@ -317,15 +319,15 @@ npx prisma db push
 
 ## 🎨 Design System Aplicado
 
-**Cores:** Orange gradient headers, depth layers, branded cards
-**Tipografia:** Hierarquia definida, font weights consistentes  
-**Espaçamento:** Sistema 4px base, space-y-6 padrão
-**Componentes:** Cards, inputs, buttons seguindo padrões
-**Animações:** Framer Motion com delays escalonados
-**Ícones:** Lucide React categorizados por cor
+**Cores:** Orange gradient headers, depth layers, branded cards **Tipografia:**
+Hierarquia definida, font weights consistentes  
+**Espaçamento:** Sistema 4px base, space-y-6 padrão **Componentes:** Cards,
+inputs, buttons seguindo padrões **Animações:** Framer Motion com delays
+escalonados **Ícones:** Lucide React categorizados por cor
 
 ---
 
 **🎉 Sistema completo pronto para produção!**
 
-_Implementação seguindo rigorosamente o Admin Design System estabelecido, com foco em consistência visual, performance e experiência do usuário._
+_Implementação seguindo rigorosamente o Admin Design System estabelecido, com
+foco em consistência visual, performance e experiência do usuário._

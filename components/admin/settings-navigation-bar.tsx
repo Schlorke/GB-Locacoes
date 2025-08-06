@@ -1,22 +1,21 @@
-'use client';
+'use client'
 
-import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
-import { Building, Globe, Images, Search, Settings, Share2 } from 'lucide-react';
-import type React from 'react';
-import { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
+import { Building, Globe, Images, Search, Settings, Share2 } from 'lucide-react'
+import React, { useState } from 'react'
 
 interface SettingsNavigationBarProps {
-  onSectionSelect: (section: string) => void;
-  activeSection?: string;
-  className?: string;
+  onSectionSelect: (section: string) => void
+  activeSection?: string
+  className?: string
 }
 
 interface SettingsSection {
-  id: string;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  description: string;
+  id: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  description: string
 }
 
 const settingsSections: SettingsSection[] = [
@@ -56,20 +55,20 @@ const settingsSections: SettingsSection[] = [
     icon: Globe,
     description: 'Configurações específicas do projeto',
   },
-];
+]
 
 export function SettingsNavigationBar({
   onSectionSelect,
   activeSection,
   className,
 }: SettingsNavigationBarProps) {
-  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
+  const [hoveredSection, setHoveredSection] = useState<string | null>(null)
 
   return (
     <Card
       className={cn(
         'relative overflow-visible border-0 shadow-xl bg-white backdrop-blur-sm transition-all duration-300',
-        className,
+        className
       )}
     >
       {/* Clean depth layers */}
@@ -84,17 +83,21 @@ export function SettingsNavigationBar({
               <Settings className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Configurações do Sistema</h2>
-              <p className="text-sm text-gray-600">Clique em uma configuração para editá-la</p>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Configurações do Sistema
+              </h2>
+              <p className="text-sm text-gray-600">
+                Clique em uma configuração para editá-la
+              </p>
             </div>
           </div>
 
           {/* Grid de botões de configuração */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
             {settingsSections.map((section) => {
-              const Icon = section.icon;
-              const isActive = activeSection === section.id;
-              const isHovered = hoveredSection === section.id;
+              const Icon = section.icon
+              const isActive = activeSection === section.id
+              const isHovered = hoveredSection === section.id
 
               return (
                 <button
@@ -110,7 +113,7 @@ export function SettingsNavigationBar({
                     // Shadow like inputs
                     'border-gray-200 hover:border-gray-300',
                     // Active state
-                    isActive && 'border-blue-500 bg-blue-50/50 shadow-md',
+                    isActive && 'border-blue-500 bg-blue-50/50 shadow-md'
                   )}
                   style={{
                     boxShadow: isActive
@@ -124,7 +127,11 @@ export function SettingsNavigationBar({
                   <Icon
                     className={cn(
                       'w-5 h-5 transition-all duration-300',
-                      isActive ? 'text-blue-600' : isHovered ? 'text-orange-500' : 'text-gray-600',
+                      isActive
+                        ? 'text-blue-600'
+                        : isHovered
+                          ? 'text-orange-500'
+                          : 'text-gray-600'
                     )}
                   />
 
@@ -132,17 +139,21 @@ export function SettingsNavigationBar({
                   <span
                     className={cn(
                       'text-xs font-medium text-center leading-tight transition-all duration-300',
-                      isActive ? 'text-blue-700' : isHovered ? 'text-orange-500' : 'text-gray-700',
+                      isActive
+                        ? 'text-blue-700'
+                        : isHovered
+                          ? 'text-orange-500'
+                          : 'text-gray-700'
                     )}
                   >
                     {section.label}
                   </span>
                 </button>
-              );
+              )
             })}
           </div>
         </div>
       </CardContent>
     </Card>
-  );
+  )
 }

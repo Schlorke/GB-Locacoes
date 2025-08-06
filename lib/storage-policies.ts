@@ -1,11 +1,11 @@
-import { supabaseAdmin } from './supabase-admin';
+import { supabaseAdmin } from './supabase-admin'
 
 /**
  * Configura as políticas de RLS para o bucket de imagens
  */
 export async function setupStoragePolicies() {
   try {
-    const bucketName = 'gb-locacoes-images';
+    const bucketName = 'gb-locacoes-images'
 
     // Políticas SQL para permitir operações no bucket
     const policies = [
@@ -29,30 +29,30 @@ export async function setupStoragePolicies() {
       CREATE POLICY "Allow public deletes" ON storage.objects 
       FOR DELETE USING (bucket_id = '${bucketName}');
       `,
-    ];
+    ]
 
-    const results = [];
+    const results = []
 
     for (const policy of policies) {
       try {
         const { error } = await supabaseAdmin.rpc('exec_sql', {
           sql_query: policy,
-        });
+        })
 
         if (error && !error.message.includes('already exists')) {
-          console.error('Erro ao criar política:', error);
-          results.push({ success: false, error: error.message, policy });
+          console.error('Erro ao criar política:', error)
+          results.push({ success: false, error: error.message, policy })
         } else {
-          results.push({ success: true, policy });
+          results.push({ success: true, policy })
         }
       } catch (err) {
-        results.push({ success: false, error: String(err), policy });
+        results.push({ success: false, error: String(err), policy })
       }
     }
 
-    return { success: true, results };
+    return { success: true, results }
   } catch (error) {
-    return { success: false, error: String(error) };
+    return { success: false, error: String(error) }
   }
 }
 
@@ -63,15 +63,15 @@ export async function disableRLSForStorage() {
   try {
     const { error } = await supabaseAdmin.rpc('exec_sql', {
       sql_query: 'ALTER TABLE storage.objects DISABLE ROW LEVEL SECURITY;',
-    });
+    })
 
     if (error) {
-      return { success: false, error: error.message };
+      return { success: false, error: error.message }
     }
 
-    return { success: true, message: 'RLS desabilitado para storage.objects' };
+    return { success: true, message: 'RLS desabilitado para storage.objects' }
   } catch (error) {
-    return { success: false, error: String(error) };
+    return { success: false, error: String(error) }
   }
 }
 
@@ -80,7 +80,7 @@ export async function disableRLSForStorage() {
  */
 export async function createSimpleStoragePolicy() {
   try {
-    const bucketName = 'gb-locacoes-images';
+    const bucketName = 'gb-locacoes-images'
 
     // SQL para criar política simples que permite tudo
     const sql = `
@@ -97,21 +97,22 @@ export async function createSimpleStoragePolicy() {
         -- Se houve algum erro, apenas continue
         NULL;
       END $$;
-    `;
+    `
 
     const { error } = await supabaseAdmin.rpc('exec_sql', {
       sql_query: sql,
-    });
+    })
 
     if (error) {
-      return { success: false, error: error.message };
+      return { success: false, error: error.message }
     }
 
     return {
       success: true,
-      message: 'Política simples criada para permitir todas as operações no bucket',
-    };
+      message:
+        'Política simples criada para permitir todas as operações no bucket',
+    }
   } catch (error) {
-    return { success: false, error: String(error) };
+    return { success: false, error: String(error) }
   }
 }
