@@ -67,7 +67,7 @@ Supabase (PostgreSQL & Storage)
 ## Pré-requisitos
 
 - Node.js 20+
-- PNPM 8+
+- PNPM 10+
 - Banco PostgreSQL (local via Docker ou Supabase)
 
 ## Instalação
@@ -97,17 +97,19 @@ pnpm dev
 
 ```env
 DATABASE_URL="postgresql://username:password@host:port/database?schema=public"
+DIRECT_URL="postgresql://username:password@host:port/database?schema=public"
 NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key-here"
+SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your-secret-here"
 RESEND_API_KEY="your-resend-api-key"
 STRIPE_SECRET_KEY="your-stripe-secret-key"
 MERCADO_PAGO_TOKEN="your-mercado-pago-token"
+ZAPSIGN_TOKEN="your-zapsign-token"
+MELHOR_ENVIO_TOKEN="your-melhor-envio-token"
+LOG_LEVEL="info"
 ```
-
-**Variáveis adicionais** utilizadas no código: `DIRECT_URL`,
-`SUPABASE_SERVICE_ROLE_KEY`, `ZAPSIGN_TOKEN`, `MELHOR_ENVIO_TOKEN`, `LOG_LEVEL`.
 
 ## Uso Rápido
 
@@ -223,7 +225,7 @@ com Chromatic para visual regression testing.
 **Execute**:
 
 ```bash
-pnpm vitest run
+pnpm test
 ```
 
 **O relatório** de cobertura estará em `coverage/` quando rodado com
@@ -242,8 +244,8 @@ Relate bugs e sugestões via
 ## Contribuindo
 
 Siga o padrão de commits `feat:`, `fix:`, `test:` etc. Rode `pnpm lint` e
-`pnpm vitest run` antes de enviar PR. Consulte [AGENTS.md](AGENTS.md) para
-detalhes de estilo e fluxos.
+`pnpm test` antes de enviar PR. Consulte [AGENTS.md](AGENTS.md) para detalhes de
+estilo e fluxos.
 
 ## Licença
 
