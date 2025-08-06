@@ -4,7 +4,7 @@ import { getSettings } from '@/app/api/admin/settings/actions'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 interface SettingsContextType {
-  settings: Record<string, unknown>
+  settings: Record<string, unknown> | null
   loading: boolean
   refresh: () => Promise<void>
 }
@@ -21,7 +21,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     try {
       setLoading(true)
       const result = await getSettings()
-      if (result.success) {
+      if (result.success && result.data) {
         setSettings(result.data)
       }
     } catch (error) {

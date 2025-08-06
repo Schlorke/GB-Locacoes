@@ -27,13 +27,7 @@ export const Default: StoryObj<typeof ImageUpload> = {
 
 export const Variant: StoryObj<typeof ImageUpload> = {
   args: {
-    images: [
-      {
-        id: '1',
-        url: '/placeholder.jpg',
-        name: 'image1.jpg',
-      },
-    ],
+    images: ['/placeholder.jpg'],
     onImagesChange: () => {},
     maxImages: 3,
   },

@@ -1,12 +1,12 @@
-import type { UserRole } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from './prisma'
 
-export enum Role {
-  ADMIN = 'ADMIN',
-  CLIENT = 'CLIENT',
+// Use the Role enum from Prisma instead of defining our own
+const Role = {
+  ADMIN: 'ADMIN' as const,
+  CLIENT: 'CLIENT' as const,
 }
 
 export const authOptions: NextAuthOptions = {
@@ -94,7 +94,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
-        session.user.role = token.role as UserRole
+        session.user.role = token.role as 'ADMIN' | 'CLIENT'
       }
       return session
     },

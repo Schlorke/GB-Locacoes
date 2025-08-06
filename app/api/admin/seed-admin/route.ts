@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { UserRole } from '@prisma/client'
+import { Role } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
 
@@ -80,7 +80,7 @@ export async function POST() {
           name: adminName,
           email: adminEmail,
           password: hashedPassword,
-          role: UserRole.ADMIN,
+          role: Role.ADMIN,
           emailVerified: new Date(),
         },
         select: {

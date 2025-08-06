@@ -21,7 +21,7 @@ export default meta
 export const Default: StoryObj<typeof HeroCarouselManager> = {
   args: {
     items: [],
-    onItemsChange: () => {},
+    onChange: () => {},
   },
 }
 
@@ -37,6 +37,6 @@ export const Variant: StoryObj<typeof HeroCarouselManager> = {
         order: 1,
       },
     ],
-    onItemsChange: () => {},
+    onChange: () => {},
   },
 }

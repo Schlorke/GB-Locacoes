@@ -1,6 +1,6 @@
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { Prisma, QuoteStatus } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { type NextRequest, NextResponse } from 'next/server'
 
@@ -46,7 +46,11 @@ export async function GET(request: NextRequest) {
     }
 
     if (status && status !== 'all') {
-      where.status = status.toUpperCase() as QuoteStatus
+      where.status = status.toUpperCase() as
+        | 'PENDING'
+        | 'APPROVED'
+        | 'REJECTED'
+        | 'COMPLETED'
     }
 
     const quotes = await prisma.quote.findMany({

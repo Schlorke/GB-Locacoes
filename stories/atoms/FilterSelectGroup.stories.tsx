@@ -21,7 +21,6 @@ export const Default: StoryObj<typeof FilterSelectGroup> = {
   args: {
     filters: [
       {
-        id: 'category',
         label: 'Categoria',
         options: [
           { value: 'all', label: 'Todas' },
@@ -29,9 +28,9 @@ export const Default: StoryObj<typeof FilterSelectGroup> = {
           { value: 'gardening', label: 'Jardinagem' },
         ],
         value: 'all',
+        onValueChange: () => {},
       },
     ],
-    onFilterChange: () => {},
   },
 }
 
@@ -39,7 +38,6 @@ export const Variant: StoryObj<typeof FilterSelectGroup> = {
   args: {
     filters: [
       {
-        id: 'category',
         label: 'Categoria',
         options: [
           { value: 'all', label: 'Todas' },
@@ -47,9 +45,9 @@ export const Variant: StoryObj<typeof FilterSelectGroup> = {
           { value: 'gardening', label: 'Jardinagem' },
         ],
         value: 'all',
+        onValueChange: () => {},
       },
       {
-        id: 'status',
         label: 'Status',
         options: [
           { value: 'all', label: 'Todos' },
@@ -57,8 +55,8 @@ export const Variant: StoryObj<typeof FilterSelectGroup> = {
           { value: 'rented', label: 'Alugado' },
         ],
         value: 'all',
+        onValueChange: () => {},
       },
     ],
-    onFilterChange: () => {},
   },
 }

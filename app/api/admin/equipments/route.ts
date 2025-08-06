@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    const equipmentsFormatted = equipments.map((equip) => ({
+    const equipmentsFormatted = equipments.map((equip: any) => ({
       ...equip,
       pricePerDay: Number(equip.pricePerDay), // Converter Decimal para number
       isAvailable: equip.available,
