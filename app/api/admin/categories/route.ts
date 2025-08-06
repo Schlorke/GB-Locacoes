@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
+
 import { type NextRequest, NextResponse } from 'next/server'
 import crypto from 'node:crypto'
 import { z } from 'zod'

@@ -39,7 +39,7 @@ export async function GET() {
     }
 
     // Formatar os dados do banco garantindo que as imagens sejam incluídas
-    const formattedEquipments = equipments.map((equipment) => {
+    const formattedEquipments = equipments.map((equipment: any) => {
       // Priorizar primeira imagem do array ou usar placeholder
       let primaryImage = null
       if (equipment.images && equipment.images.length > 0) {

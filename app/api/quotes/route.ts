@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
@@ -54,7 +53,7 @@ export async function POST(request: Request) {
         days: item.days || 1,
         pricePerDay: equipment.pricePerDay,
         priceAtTime: equipment.pricePerDay,
-        total: new Prisma.Decimal(itemTotal),
+        total: itemTotal,
       })
     }
 
@@ -66,7 +65,7 @@ export async function POST(request: Request) {
         phone: customerPhone,
         company: customerCompany,
         message,
-        total: new Prisma.Decimal(totalAmount),
+        total: totalAmount,
         status: 'PENDING', // Fixed: using correct enum value
         items: {
           create: quoteItems,

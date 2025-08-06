@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/middlewares/require-admin'
-import { Prisma } from '@prisma/client'
 import { type NextRequest, NextResponse } from 'next/server'
 
 // GET /api/admin/equipments - List all equipments with pagination and filtering
@@ -46,7 +45,7 @@ export async function GET(request: NextRequest) {
     }
 
     const skip = (page - 1) * limit
-    const where: Prisma.EquipmentWhereInput = {}
+    const where: any = {}
 
     if (search) {
       where.OR = [
@@ -120,14 +119,14 @@ export async function GET(request: NextRequest) {
       console.error('[API GET /admin/equipments] Stack trace:', error.stack)
     }
 
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof Error && 'code' in error) {
       console.error(
         '[API GET /admin/equipments] Erro do Prisma - Código:',
-        error.code
+        (error as any).code
       )
       console.error(
         '[API GET /admin/equipments] Erro do Prisma - Meta:',
-        error.meta
+        (error as any).meta
       )
     }
 
@@ -241,17 +240,17 @@ export async function POST(request: NextRequest) {
       error
     )
 
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof Error && 'code' in error) {
       console.error(
         '[API POST /admin/equipments] Erro do Prisma - Código:',
-        error.code
+        (error as any).code
       )
       return NextResponse.json(
         {
           error: 'Erro ao processar dados do equipamento.',
           details:
             process.env.NODE_ENV === 'development'
-              ? `Prisma Error ${error.code}: ${error.message}`
+              ? `Prisma Error ${(error as any).code}: ${error.message}`
               : undefined,
         },
         { status: 400 }
