@@ -1,0 +1,57 @@
+# Jekyll configuration for GitHub Pages
+# Exclude admin documentation files that contain JSX/JavaScript code
+# that conflicts with Jekyll's Liquid template engine
+
+exclude:
+  - ADMIN_*.md
+  - node_modules/
+  - .next/
+  - storybook-static/
+  - .git/
+  - .github/
+  - app/
+  - components/
+  - hooks/
+  - lib/
+  - middlewares/
+  - prisma/
+  - schemas/
+  - types/
+  - tests/
+  - stories/
+  - docs/
+  - scripts/
+  - public/
+  - package.json
+  - pnpm-lock.yaml
+  - tsconfig.json
+  - vitest.config.ts
+  - next.config.mjs
+  - tailwind.config.cjs
+  - postcss.config.cjs
+  - eslint.config.js
+  - Dockerfile
+  - docker-compose.yml
+  - vercel.json
+  - .gitignore
+  - .dockerignore
+  - .editorconfig
+  - .eslintrc.js
+  - .eslintrc.json
+  - .hintrc
+  - .prettierignore
+  - .prettierrc
+  - .markdownlint.json
+  - components.json
+  - middleware.ts
+  - pnpm-workspace.yaml
+  - next-env.d.ts
+  - vitest.shims.d.ts
+  - tsconfig.tsbuildinfo
+  - debug-storybook.log
+
+# Disable Jekyll processing for this repository
+# This is a Next.js project, not a Jekyll site
+plugins: []
+markdown: kramdown
+highlighter: rouge
