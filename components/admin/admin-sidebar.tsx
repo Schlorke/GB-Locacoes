@@ -91,7 +91,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         <ul className="space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon
-            const isActive = pathname.startsWith(item.href)
+            const isActive = pathname?.startsWith(item.href) || false
 
             return (
               <li key={item.href} className="list-none">

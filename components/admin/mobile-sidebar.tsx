@@ -117,7 +117,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
             <div className="space-y-2">
               {navItems.map((item) => {
                 const Icon = item.icon
-                const isActive = pathname.startsWith(item.href)
+                const isActive = pathname?.startsWith(item.href) || false
 
                 return (
                   <Link

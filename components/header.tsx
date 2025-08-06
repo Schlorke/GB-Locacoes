@@ -26,6 +26,7 @@ export default function Header() {
 
   // Função para verificar se é a página ativa
   const isActivePage = (href: string) => {
+    if (!pathname) return false
     if (href === '/') {
       return pathname === '/'
     }

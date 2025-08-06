@@ -1,5 +1,486 @@
 ---
 description:
-globs:
-alwaysApply: false
+  GB-Locacoes - Sistema de Locações de Equipamentos para Construção Civil
+globs: ['**/*.{ts,tsx,js,jsx,md,mdx,json,css,scss}']
+alwaysApply: true
+---
+
+# 🏗️ GB-LOCACOES - CURSOR RULES & DEVELOPMENT GUIDELINES
+
+## 🎯 **VISÃO GERAL DO PROJETO**
+
+**GB-Locacoes** é uma plataforma moderna de locação de equipamentos para
+construção civil, desenvolvida com Next.js 15, TypeScript, Prisma, PostgreSQL e
+um design system robusto. O projeto segue princípios de arquitetura limpa,
+componentização inteligente e experiência do usuário excepcional.
+
+## 🏛️ **ARQUITETURA & ESTRUTURA**
+
+### **Stack Principal**
+
+- **Framework**: Next.js 15.4.6 (App Router)
+- **Linguagem**: TypeScript 5.9.2
+- **UI**: React 19.1.1 + Tailwind CSS 3.4.17
+- **Database**: PostgreSQL + Prisma 6.13.0
+- **Auth**: NextAuth.js 4.24.11
+- **State**: Zustand 5.0.7 + React Hook Form 7.62.0
+- **Testing**: Vitest + Testing Library + Playwright
+
+### **Estrutura de Diretórios**
+
+```
+GB-Locacoes/
+├── app/                    # App Router (Next.js 13+)
+│   ├── admin/             # Área administrativa
+│   ├── api/               # API Routes
+│   └── (public)/          # Rotas públicas
+├── components/            # Componentes React
+│   ├── ui/               # Componentes base (Radix UI)
+│   └── (feature)/        # Componentes específicos
+├── lib/                  # Utilitários e configurações
+├── hooks/                # Custom hooks
+├── types/                # Definições TypeScript
+├── schemas/              # Schemas de validação (Zod)
+├── prisma/               # Schema e migrações
+├── stories/              # Storybook stories
+├── design-tokens/        # Sistema de design tokens
+└── tests/                # Testes
+```
+
+## 🎨 **DESIGN SYSTEM & IDENTIDADE VISUAL**
+
+### **Princípios de Design**
+
+1. **Consistência**: Todos os componentes devem seguir o design system
+   estabelecido
+2. **Acessibilidade**: WCAG 2.1 AA compliance obrigatório
+3. **Responsividade**: Mobile-first approach
+4. **Performance**: Otimização para Core Web Vitals
+5. **Usabilidade**: UX intuitiva e eficiente
+
+### **Sistema de Cores**
+
+- **Primária**: `#ea580c` (Orange-600)
+- **Secundária**: `#3B82F6` (Blue-500)
+- **Neutra**: Escala de cinzas do Tailwind
+- **Semântica**: Success (green), Warning (yellow), Error (red)
+
+### **Tipografia**
+
+- **Sans**: Inter (var(--font-inter))
+- **Heading**: Jost (var(--font-heading))
+- **Escalas**: h1, h2, h3, base, small (clamp responsivo)
+
+### **Componentes Base (Radix UI)**
+
+SEMPRE utilize os componentes do diretório `components/ui/` que são baseados em
+Radix UI:
+
+- `Button` - Botões com variantes: default, destructive, outline, secondary,
+  ghost, reset, link
+- `Card` - Containers de conteúdo
+- `Dialog` - Modais e overlays
+- `Form` - Formulários com React Hook Form + Zod
+- `Input` - Campos de entrada
+- `Select` - Seletores dropdown
+- `Toast` - Notificações (via Sonner)
+- `Carousel` - Carrosséis (via Embla)
+- `Table` - Tabelas de dados
+- `Tabs` - Navegação por abas
+- `Accordion` - Acordeões expansíveis
+
+### **Design Tokens**
+
+Utilize SEMPRE os tokens do design system:
+
+- Cores: `design-tokens/output/tokens-tailwind.json`
+- Espaçamentos: Sistema 4px (4, 8, 12, 16, 20, 24, 32, 48, 64)
+- Bordas: `--radius` (8px padrão)
+- Sombras: Sistema de elevação consistente
+
+## 🧩 **PADRÕES DE COMPONENTES**
+
+### **Estrutura de Componente**
+
+```typescript
+'use client'
+
+import { cn } from '@/lib/utils'
+import { cva, type VariantProps } from 'class-variance-authority'
+import * as React from 'react'
+
+const componentVariants = cva(
+  'base-classes',
+  {
+    variants: {
+      variant: {
+        default: 'default-classes',
+        // outras variantes
+      },
+      size: {
+        default: 'default-size',
+        // outros tamanhos
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+)
+
+export interface ComponentProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof componentVariants> {
+  // props específicas
+}
+
+const Component = React.forwardRef<HTMLDivElement, ComponentProps>(
+  ({ className, variant, size, ...props }, ref) => {
+    return (
+      <div
+        className={cn(componentVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Component.displayName = 'Component'
+
+export { Component, componentVariants }
+```
+
+### **Regras de Nomenclatura**
+
+- **Componentes**: PascalCase (`EquipmentCard.tsx`)
+- **Hooks**: camelCase com prefixo `use` (`useQuoteForm.ts`)
+- **Utilitários**: camelCase (`formatCurrency.ts`)
+- **Tipos**: PascalCase (`EquipmentType.ts`)
+- **Constantes**: UPPER_SNAKE_CASE (`API_ENDPOINTS`)
+
+## 🔧 **DESENVOLVIMENTO & BOAS PRÁTICAS**
+
+### **TypeScript**
+
+- **Strict Mode**: Sempre habilitado
+- **Interfaces vs Types**: Use interfaces para objetos, types para
+  unions/intersections
+- **Generics**: Utilize quando apropriado para reutilização
+- **Utility Types**: Aproveite `Pick`, `Omit`, `Partial`, `Required`
+
+### **React Patterns**
+
+- **Hooks**: Custom hooks para lógica reutilizável
+- **Context**: Para estado global (Settings, Auth)
+- **ForwardRef**: Para componentes que precisam de ref
+- **Memo**: Para otimização de performance quando necessário
+- **Error Boundaries**: Para tratamento de erros
+
+### **Formulários**
+
+SEMPRE use React Hook Form + Zod:
+
+```typescript
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+const formSchema = z.object({
+  name: z.string().min(1, 'Nome é obrigatório'),
+  email: z.string().email('Email inválido'),
+})
+
+type FormData = z.infer<typeof formSchema>
+
+const MyForm = () => {
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+  })
+
+  return (
+    <Form {...form}>
+      <FormField
+        control={form.control}
+        name="name"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Nome</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </Form>
+  )
+}
+```
+
+### **Validação**
+
+- **Zod**: Para validação de schemas
+- **React Hook Form**: Para gerenciamento de formulários
+- **Validação Server-side**: Sempre implemente validação no backend
+
+### **Estado Global**
+
+- **Zustand**: Para estado global simples
+- **Context**: Para configurações e autenticação
+- **Local State**: Para estado específico de componentes
+
+## 🎯 **FUNCIONALIDADES ESPECÍFICAS**
+
+### **Sistema de Autenticação**
+
+- **NextAuth.js**: Para autenticação
+- **Roles**: ADMIN, CLIENT
+- **Middleware**: Proteção de rotas
+- **JWT**: Tokens de sessão
+
+### **Upload de Arquivos**
+
+- **Vercel Blob**: Para armazenamento
+- **Supabase Storage**: Backup
+- **Validação**: Tamanho e tipo de arquivo
+- **Preview**: Para imagens
+
+### **Integrações Externas**
+
+- **Stripe**: Pagamentos
+- **Resend**: Emails
+- **Melhor Envio**: Frete
+- **ZapSign**: Assinaturas
+
+### **Performance**
+
+- **Next.js Image**: Otimização de imagens
+- **Lazy Loading**: Para componentes pesados
+- **Code Splitting**: Automático com Next.js
+- **Caching**: Estratégias apropriadas
+
+## 🧪 **TESTING & QUALIDADE**
+
+### **Testes**
+
+- **Unit**: Vitest + Testing Library
+- **Integration**: API routes
+- **E2E**: Playwright
+- **Storybook**: Para componentes
+
+### **Code Quality**
+
+- **ESLint**: Configuração estrita
+- **Prettier**: Formatação consistente
+- **TypeScript**: Strict mode
+- **Husky**: Git hooks
+
+## 📱 **RESPONSIVIDADE & MOBILE**
+
+### **Breakpoints**
+
+- **Mobile**: < 768px
+- **Tablet**: 768px - 1024px
+- **Desktop**: > 1024px
+
+### **Mobile-First**
+
+- Comece sempre com estilos mobile
+- Use `md:`, `lg:`, `xl:` para breakpoints maiores
+- Teste em dispositivos reais
+
+## 🚀 **DEPLOY & PRODUÇÃO**
+
+### **Ambientes**
+
+- **Development**: `pnpm dev`
+- **Staging**: Vercel Preview
+- **Production**: Vercel
+
+### **Variáveis de Ambiente**
+
+- **DATABASE_URL**: PostgreSQL
+- **NEXTAUTH_SECRET**: Autenticação
+- **STRIPE_SECRET_KEY**: Pagamentos
+- **RESEND_API_KEY**: Emails
+
+## 🎨 **DIRETRIZES DE UI/UX**
+
+### **Interações**
+
+- **Hover States**: Sempre implemente
+- **Focus States**: Para acessibilidade
+- **Loading States**: Para operações assíncronas
+- **Error States**: Tratamento de erros
+- **Success States**: Feedback positivo
+
+### **Animações**
+
+- **Framer Motion**: Para animações complexas
+- **CSS Transitions**: Para micro-interações
+- **Performance**: 60fps sempre
+- **Reduced Motion**: Respeite preferências do usuário
+
+### **Acessibilidade**
+
+- **ARIA Labels**: Sempre implemente
+- **Keyboard Navigation**: Navegação por teclado
+- **Screen Readers**: Compatibilidade
+- **Color Contrast**: Mínimo 4.5:1
+- **Focus Management**: Gerenciamento de foco
+
+## 🔍 **DEBUGGING & MONITORING**
+
+### **Logging**
+
+- **Pino**: Para logs estruturados
+- **Vercel Analytics**: Métricas de performance
+- **Error Tracking**: Captura de erros
+
+### **Development Tools**
+
+- **React DevTools**: Para debugging
+- **Prisma Studio**: Para database
+- **Storybook**: Para componentes
+
+## 📚 **DOCUMENTAÇÃO**
+
+### **Código**
+
+- **JSDoc**: Para funções complexas
+- **README**: Para cada diretório importante
+- **TypeScript**: Tipos bem definidos
+
+### **Componentes**
+
+- **Storybook**: Documentação visual
+- **Props Interface**: Bem documentada
+- **Examples**: Casos de uso
+
+## ⚠️ **ANTI-PADRÕES (NÃO FAÇA)**
+
+### **Design System**
+
+- ❌ Não crie componentes fora do design system
+- ❌ Não use cores hardcoded
+- ❌ Não ignore acessibilidade
+- ❌ Não quebre a responsividade
+
+### **Performance**
+
+- ❌ Não faça re-renders desnecessários
+- ❌ Não carregue dados desnecessários
+- ❌ Não ignore lazy loading
+- ❌ Não use imagens não otimizadas
+
+### **TypeScript**
+
+- ❌ Não use `any`
+- ❌ Não ignore erros de tipo
+- ❌ Não use `@ts-ignore` sem justificativa
+- ❌ Não crie tipos desnecessários
+
+### **React**
+
+- ❌ Não use `useEffect` sem dependências
+- ❌ Não ignore o ESLint
+- ❌ Não crie componentes muito grandes
+- ❌ Não ignore o React.memo quando apropriado
+
+## 🎯 **CHECKLIST DE DESENVOLVIMENTO**
+
+Antes de submeter qualquer código, verifique:
+
+### **Funcionalidade**
+
+- [ ] Funcionalidade implementada corretamente
+- [ ] Validação adequada
+- [ ] Tratamento de erros
+- [ ] Loading states
+- [ ] Success/error feedback
+
+### **Design**
+
+- [ ] Segue o design system
+- [ ] Responsivo em todos os breakpoints
+- [ ] Acessível (ARIA, keyboard, contrast)
+- [ ] Animações suaves
+- [ ] Estados visuais (hover, focus, active)
+
+### **Código**
+
+- [ ] TypeScript sem erros
+- [ ] ESLint sem warnings
+- [ ] Prettier aplicado
+- [ ] Testes passando
+- [ ] Performance adequada
+
+### **Documentação**
+
+- [ ] JSDoc para funções complexas
+- [ ] Props bem documentadas
+- [ ] README atualizado se necessário
+- [ ] Storybook stories se aplicável
+
+## 🚀 **COMANDOS ÚTEIS**
+
+```bash
+# Development
+pnpm dev                    # Iniciar desenvolvimento
+pnpm build                  # Build de produção
+pnpm start                  # Iniciar produção
+
+# Database
+pnpm db:generate           # Gerar cliente Prisma
+pnpm db:push               # Push do schema
+pnpm db:seed               # Seed do banco
+pnpm db:studio             # Abrir Prisma Studio
+
+# Testing
+pnpm test                  # Rodar testes
+pnpm test:watch            # Testes em watch
+pnpm test:coverage         # Cobertura de testes
+pnpm test:ui               # Interface de testes
+
+# Quality
+pnpm lint                  # Linting
+pnpm lint:fix              # Fix automático
+pnpm format                # Formatação
+pnpm format:check          # Verificar formatação
+pnpm type-check            # Verificar tipos
+
+# Storybook
+pnpm storybook             # Iniciar Storybook
+pnpm build-storybook       # Build do Storybook
+pnpm chromatic             # Publicar no Chromatic
+
+# Design System
+pnpm design-system:build-tokens    # Build dos tokens
+pnpm design-system:watch-tokens    # Watch dos tokens
+```
+
+## 🎯 **OBJETIVO FINAL**
+
+Crie código que seja:
+
+- **Manutenível**: Fácil de entender e modificar
+- **Escalável**: Preparado para crescimento
+- **Performático**: Otimizado para velocidade
+- **Acessível**: Inclusivo para todos os usuários
+- **Testável**: Coberto por testes adequados
+- **Documentado**: Bem explicado e exemplificado
+
+**Lembre-se**: Qualidade sobre velocidade. Um código bem escrito hoje economiza
+horas de debugging amanhã.
+
+---
+
+_Esta documentação deve ser atualizada conforme o projeto evolui. Mantenha-a
+sempre atualizada e siga rigorosamente estas diretrizes para garantir
+consistência e qualidade em todo o projeto._ description: globs: alwaysApply:
+false
+
+---
+
 ---

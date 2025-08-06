@@ -81,6 +81,20 @@ const config: StorybookConfig = {
       }
     }
 
+    // Garantir que o React seja carregado corretamente
+    if (config.esbuild) {
+      config.esbuild = {
+        ...config.esbuild,
+        jsx: 'automatic',
+        jsxImportSource: 'react',
+      }
+    } else {
+      config.esbuild = {
+        jsx: 'automatic',
+        jsxImportSource: 'react',
+      }
+    }
+
     return config
   },
 }

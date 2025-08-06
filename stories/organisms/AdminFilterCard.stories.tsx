@@ -1,6 +1,7 @@
 import { AdminFilterCard } from '@/components/admin/admin-filter-card'
 import { Button } from '@/components/ui/button'
 import type { Meta, StoryObj } from '@storybook/react'
+import { fn } from '@storybook/test'
 import { Plus } from 'lucide-react'
 
 const meta: Meta<typeof AdminFilterCard> = {
@@ -24,10 +25,9 @@ export const Default: StoryObj<typeof AdminFilterCard> = {
   args: {
     searchPlaceholder: 'Buscar equipamentos...',
     searchValue: '',
-    onSearchChange: (value: string) => console.log('Search:', value),
+    onSearchChange: fn(),
     filters: [
       {
-        id: 'category',
         label: 'Categoria',
         options: [
           { value: '', label: 'Todas' },
@@ -36,10 +36,9 @@ export const Default: StoryObj<typeof AdminFilterCard> = {
           { value: 'electronics', label: 'Eletrônicos' },
         ],
         value: '',
-        onChange: (value: string) => console.log('Category:', value),
+        onValueChange: fn(),
       },
       {
-        id: 'status',
         label: 'Status',
         options: [
           { value: '', label: 'Todos' },
@@ -48,7 +47,7 @@ export const Default: StoryObj<typeof AdminFilterCard> = {
           { value: 'maintenance', label: 'Manutenção' },
         ],
         value: '',
-        onChange: (value: string) => console.log('Status:', value),
+        onValueChange: fn(),
       },
     ],
     actionButtons: (
@@ -64,7 +63,7 @@ export const WithSearchOnly: StoryObj<typeof AdminFilterCard> = {
   args: {
     searchPlaceholder: 'Buscar...',
     searchValue: '',
-    onSearchChange: (value: string) => console.log('Search:', value),
+    onSearchChange: fn(),
     filters: [],
   },
 }
@@ -73,7 +72,6 @@ export const WithFiltersOnly: StoryObj<typeof AdminFilterCard> = {
   args: {
     filters: [
       {
-        id: 'category',
         label: 'Categoria',
         options: [
           { value: '', label: 'Todas' },
@@ -81,7 +79,7 @@ export const WithFiltersOnly: StoryObj<typeof AdminFilterCard> = {
           { value: 'machines', label: 'Máquinas' },
         ],
         value: '',
-        onChange: (value: string) => console.log('Category:', value),
+        onValueChange: fn(),
       },
     ],
   },
@@ -91,10 +89,9 @@ export const WithActionButtons: StoryObj<typeof AdminFilterCard> = {
   args: {
     searchPlaceholder: 'Buscar...',
     searchValue: '',
-    onSearchChange: (value: string) => console.log('Search:', value),
+    onSearchChange: fn(),
     filters: [
       {
-        id: 'status',
         label: 'Status',
         options: [
           { value: '', label: 'Todos' },
@@ -102,7 +99,7 @@ export const WithActionButtons: StoryObj<typeof AdminFilterCard> = {
           { value: 'inactive', label: 'Inativo' },
         ],
         value: '',
-        onChange: (value: string) => console.log('Status:', value),
+        onValueChange: fn(),
       },
     ],
     actionButtons: (
@@ -121,10 +118,9 @@ export const ComplexFilters: StoryObj<typeof AdminFilterCard> = {
   args: {
     searchPlaceholder: 'Buscar equipamentos...',
     searchValue: '',
-    onSearchChange: (value: string) => console.log('Search:', value),
+    onSearchChange: fn(),
     filters: [
       {
-        id: 'category',
         label: 'Categoria',
         options: [
           { value: '', label: 'Todas' },
@@ -134,10 +130,9 @@ export const ComplexFilters: StoryObj<typeof AdminFilterCard> = {
           { value: 'vehicles', label: 'Veículos' },
         ],
         value: '',
-        onChange: (value: string) => console.log('Category:', value),
+        onValueChange: fn(),
       },
       {
-        id: 'status',
         label: 'Status',
         options: [
           { value: '', label: 'Todos' },
@@ -147,10 +142,9 @@ export const ComplexFilters: StoryObj<typeof AdminFilterCard> = {
           { value: 'rented', label: 'Alugado' },
         ],
         value: '',
-        onChange: (value: string) => console.log('Status:', value),
+        onValueChange: fn(),
       },
       {
-        id: 'location',
         label: 'Localização',
         options: [
           { value: '', label: 'Todas' },
@@ -159,7 +153,7 @@ export const ComplexFilters: StoryObj<typeof AdminFilterCard> = {
           { value: 'office', label: 'Escritório' },
         ],
         value: '',
-        onChange: (value: string) => console.log('Location:', value),
+        onValueChange: fn(),
       },
     ],
     actionButtons: (

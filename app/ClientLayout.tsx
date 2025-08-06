@@ -27,7 +27,7 @@ export default function ClientLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  const isAdminRoute = pathname.startsWith('/admin')
+  const isAdminRoute = pathname?.startsWith('/admin') || false
 
   return (
     <html lang="pt-BR" className={`${inter.variable} ${jost.variable}`}>

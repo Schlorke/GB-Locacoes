@@ -1,5 +1,6 @@
 import AdminSidebar from '@/components/admin/admin-sidebar'
 import type { Meta, StoryObj } from '@storybook/react'
+import { fn } from '@storybook/test'
 
 const meta: Meta<typeof AdminSidebar> = {
   title: 'Admin/AdminSidebar',
@@ -18,11 +19,13 @@ const meta: Meta<typeof AdminSidebar> = {
 export default meta
 
 export const Default: StoryObj<typeof AdminSidebar> = {
-  args: {},
+  args: {
+    onCollapseChange: fn(),
+  },
 }
 
 export const Variant: StoryObj<typeof AdminSidebar> = {
   args: {
-    // Props específicas do componente
+    onCollapseChange: fn(),
   },
 }

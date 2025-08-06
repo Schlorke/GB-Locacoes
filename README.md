@@ -1,154 +1,271 @@
-# GB Locações
-
-![Logo](public/placeholder-logo.png)
+# 🏗️ GB-Locacoes - Plataforma de Locações de Equipamentos
 
 [![CI](https://img.shields.io/github/actions/workflow/status/GBLocacoes/GB-Locacoes/test.yml?label=CI)](https://github.com/GBLocacoes/GB-Locacoes/actions)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](#licença)
+[![Next.js](https://img.shields.io/badge/Next.js-15.4.6-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-6.13.0-2D3748)](https://www.prisma.io/)
+[![Storybook](https://img.shields.io/badge/Storybook-9.1.1-FF4785)](https://storybook.js.org/)
 
-Plataforma completa para locação de equipamentos de construção civil utilizando
-**Next.js 15**, **TypeScript** e **Prisma**.
+> **Plataforma moderna e completa para locação de equipamentos de construção
+> civil** 🚀
 
-## Visão Geral
+## 📋 Índice
 
-O projeto visa facilitar a gestão de catálogo, orçamentos e locações de
-equipamentos. Conta com painel administrativo, área do cliente e integrações
-para pagamentos, logística e assinaturas digitais.
+- [🎯 Visão Geral](#-visão-geral)
+- [🏗️ Arquitetura](#️-arquitetura)
+- [🚀 Quick Start](#-quick-start)
+- [⚙️ Configuração](#️-configuração)
+- [📁 Estrutura do Projeto](#-estrutura-do-projeto)
+- [🎨 Design System](#-design-system)
+- [🧪 Testes](#-testes)
+- [📚 Documentação](#-documentação)
+- [🤝 Contribuindo](#-contribuindo)
+- [📄 Licença](#-licença)
 
-## Demonstração
+## 🎯 Visão Geral
 
-Coloque capturas de tela ou GIFs em `docs/assets/` e referencie aqui.
+**GB-Locacoes** é uma plataforma completa e moderna para locação de equipamentos
+de construção civil, desenvolvida com as tecnologias mais avançadas de
+2024/2025.
 
-## Tabela de Conteúdo
+### ✨ Características Principais
 
-- [Arquitetura](#arquitetura)
-- [Pré-requisitos](#pré-requisitos)
-- [Instalação](#instalação)
-- [Configuração](#configuração)
-- [Uso Rápido](#uso-rápido)
-- [Estrutura de Diretórios](#estrutura-de-diretórios)
-- [Design System](#-design-system)
-- [🔧 Storybook](#-storybook)
-- [Scripts](#scripts)
-- [Testes](#testes)
-- [Roadmap](#roadmap)
-- [Contribuindo](#contribuindo)
-- [Licença](#licença)
-- [Autores](#autores)
+- 🎨 **Design System Completo** - Sistema de design tokens e componentes
+- 📱 **Responsivo** - Mobile-first com PWA capabilities
+- 🔐 **Autenticação Robusta** - NextAuth.js com roles e 2FA
+- 💳 **Pagamentos Integrados** - Stripe e Mercado Pago
+- 📄 **Contratos Digitais** - ZapSign para assinaturas
+- 📧 **Email Transacional** - Resend/SendGrid
+- 🚚 **Logística** - Melhor Envio integrado
+- 🧪 **Testes Completos** - Unit, Integration e E2E
+- 📊 **Analytics** - Vercel Analytics e métricas
+- 🎭 **Storybook** - Documentação viva de componentes
 
-## Arquitetura
+### 🎯 Funcionalidades
 
-<!-- prettier-ignore-start -->
-```text
-Browser
-   │
-   ▼
-Next.js App Router (Edge/SSR)
-   │  Server Actions
-   ▼
-Prisma ORM
-   │
-   ▼
-Supabase (PostgreSQL & Storage)
+- **Catálogo de Equipamentos** - Busca, filtros e detalhes
+- **Sistema de Orçamentos** - Cálculo automático e envio
+- **Painel Administrativo** - Gestão completa
+- **Área do Cliente** - Histórico e acompanhamento
+- **Upload de Arquivos** - Imagens e documentos
+- **Notificações** - Email e WhatsApp
+- **Relatórios** - Analytics e métricas
+
+## 🏗️ Arquitetura
+
+### 🏛️ Stack Tecnológico
+
+| Camada            | Tecnologia      | Versão  | Propósito                      |
+| ----------------- | --------------- | ------- | ------------------------------ |
+| **Frontend**      | Next.js         | 15.4.6  | Framework React com App Router |
+| **Linguagem**     | TypeScript      | 5.9.2   | Tipagem estática               |
+| **UI Framework**  | React           | 19.1.1  | Biblioteca de componentes      |
+| **Styling**       | Tailwind CSS    | 3.4.17  | Framework CSS utilitário       |
+| **Components**    | Radix UI        | Latest  | Componentes primitivos         |
+| **Database**      | PostgreSQL      | 15+     | Banco relacional               |
+| **ORM**           | Prisma          | 6.13.0  | Mapeamento objeto-relacional   |
+| **Auth**          | NextAuth.js     | 4.24.11 | Autenticação e autorização     |
+| **State**         | Zustand         | 5.0.7   | Gerenciamento de estado        |
+| **Forms**         | React Hook Form | 7.62.0  | Formulários e validação        |
+| **Validation**    | Zod             | 4.0.15  | Validação de schemas           |
+| **Testing**       | Vitest          | 3.2.4   | Framework de testes            |
+| **E2E**           | Playwright      | 1.54.2  | Testes end-to-end              |
+| **Design System** | Storybook       | 9.1.1   | Documentação de componentes    |
+
+### 🔌 Integrações Externas
+
+- **💳 Pagamentos**: Stripe, Mercado Pago
+- **📄 Contratos**: ZapSign
+- **📧 Email**: Resend, SendGrid
+- **🚚 Logística**: Melhor Envio
+- **☁️ Storage**: Supabase, Vercel Blob
+- **📊 Analytics**: Vercel Analytics
+- **🔍 SEO**: Next.js SEO otimizado
+
+### 🏗️ Arquitetura de Sistema
+
+```mermaid
+graph TB
+    A[Cliente] --> B[Next.js App Router]
+    B --> C[API Routes]
+    C --> D[Prisma ORM]
+    D --> E[PostgreSQL]
+
+    B --> F[NextAuth.js]
+    F --> G[JWT Tokens]
+
+    C --> H[Stripe API]
+    C --> I[ZapSign API]
+    C --> J[Resend API]
+    C --> K[Melhor Envio API]
+
+    B --> L[Vercel Blob]
+    B --> M[Supabase Storage]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style E fill:#bfb,stroke:#333,stroke-width:2px
 ```
-<!-- prettier-ignore-end -->
 
-**Principais tecnologias**:
+## 🚀 Quick Start
 
-- **Next.js 15** com App Router
-- **ShadCN UI** e **TailwindCSS**
-- **Prisma ORM** conectado ao **Supabase**
-- **NextAuth** com suporte a 2FA
-- **Stripe** / **Mercado Pago** para pagamentos
-- **ZapSign** para contratos digitais
-- **Resend/SendGrid** para e-mail
-- **Melhor Envio** para logística
-- **Vitest** para testes unitários
+### 📋 Pré-requisitos
 
-## Pré-requisitos
+- **Node.js** 20+ ([Download](https://nodejs.org/))
+- **PNPM** 10+ (`npm install -g pnpm`)
+- **PostgreSQL** 15+ (local ou Supabase)
+- **Git** ([Download](https://git-scm.com/))
 
-- Node.js 20+
-- PNPM 10+
-- Banco PostgreSQL (local via Docker ou Supabase)
-
-## Instalação
-
-**Clone** o repositório:
+### ⚡ Instalação Rápida
 
 ```bash
-git clone https://github.com/Schlorke/GB-Locacoes.git
+# 1. Clone o repositório
+git clone https://github.com/GBLocacoes/GB-Locacoes.git
 cd GB-Locacoes
-```
 
-```bash
+# 2. Instale as dependências
 pnpm install
+
+# 3. Configure as variáveis de ambiente
+cp .env.example .env.local
+
+# 4. Configure o banco de dados
 pnpm db:generate
 pnpm db:push
-```
+pnpm db:seed
 
-```bash
+# 5. Inicie o servidor de desenvolvimento
 pnpm dev
 ```
 
-**A aplicação** ficará disponível em `http://localhost:3000`.
+🎉 **Acesse** `http://localhost:3000` e comece a usar!
 
-## Configuração
+### 🐳 Docker (Opcional)
 
-**Copie** `.env.example` para `.env` e ajuste cada chave:
+```bash
+# Inicie com Docker Compose
+docker-compose up --build
+
+# Acesse em http://localhost:3000
+```
+
+## ⚙️ Configuração
+
+### 🔧 Variáveis de Ambiente
+
+Crie um arquivo `.env.local` baseado no `.env.example`:
 
 ```env
+# Database
 DATABASE_URL="postgresql://username:password@host:port/database?schema=public"
 DIRECT_URL="postgresql://username:password@host:port/database?schema=public"
+
+# Supabase (Storage e Auth)
 NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key-here"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
 SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
+
+# NextAuth
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your-secret-here"
-RESEND_API_KEY="your-resend-api-key"
-STRIPE_SECRET_KEY="your-stripe-secret-key"
+
+# Pagamentos
+STRIPE_SECRET_KEY="sk_test_..."
+STRIPE_PUBLISHABLE_KEY="pk_test_..."
 MERCADO_PAGO_TOKEN="your-mercado-pago-token"
+
+# Email
+RESEND_API_KEY="your-resend-api-key"
+SENDGRID_API_KEY="your-sendgrid-api-key"
+
+# Contratos
 ZAPSIGN_TOKEN="your-zapsign-token"
+
+# Logística
 MELHOR_ENVIO_TOKEN="your-melhor-envio-token"
+
+# Logs
 LOG_LEVEL="info"
 ```
 
-## Uso Rápido
+### 🗄️ Configuração do Banco
 
 ```bash
-pnpm dev
+# Gerar cliente Prisma
+pnpm db:generate
+
+# Aplicar migrations
+pnpm db:push
+
+# Popular dados iniciais
+pnpm db:seed
+
+# Abrir Prisma Studio
+pnpm db:studio
 ```
 
-**Acesse** `http://localhost:3000` e realize um orçamento pelo catálogo.
+## 📁 Estrutura do Projeto
 
-## Estrutura de Diretórios
-
-```text
-.
-├── app/                # rotas Next.js
-├── components/         # componentes reutilizáveis
-├── hooks/
-├── lib/                # integrações e utilitários
-├── middlewares/
-├── prisma/             # schema e seeds
-├── public/             # arquivos estáticos
-├── schemas/            # validações com Zod
-├── tests/              # testes Vitest
-└── types/
+```
+GB-Locacoes/
+├── 📁 app/                    # Next.js App Router
+│   ├── 📁 admin/             # Painel administrativo
+│   ├── 📁 api/               # API Routes
+│   ├── 📁 (public)/          # Rotas públicas
+│   └── 📄 layout.tsx         # Layout raiz
+├── 📁 components/            # Componentes React
+│   ├── 📁 ui/               # Componentes base (Radix UI)
+│   ├── 📁 admin/            # Componentes administrativos
+│   └── 📄 *.tsx             # Componentes específicos
+├── 📁 lib/                  # Utilitários e configurações
+│   ├── 📁 validators/       # Schemas de validação
+│   └── 📄 *.ts              # Configurações e integrações
+├── 📁 hooks/                # Custom hooks
+├── 📁 types/                # Definições TypeScript
+├── 📁 schemas/              # Schemas Zod
+├── 📁 prisma/               # Schema e migrações
+├── 📁 stories/              # Storybook stories
+├── 📁 design-tokens/        # Sistema de design tokens
+├── 📁 tests/                # Testes
+├── 📁 docs/                 # Documentação adicional
+└── 📁 public/               # Arquivos estáticos
 ```
 
-## 🎨 Design System 2025
+### 🗂️ Detalhamento dos Diretórios
 
-O projeto GB Locações possui um **Design System completo** implementado com as
-ferramentas mais modernas de 2025.
+#### `app/` - Next.js App Router
 
-### ✅ Ferramentas Implementadas
+- **`admin/`** - Painel administrativo completo
+- **`api/`** - API Routes para backend
+- **`(public)/`** - Rotas públicas do site
+- **`layout.tsx`** - Layout raiz da aplicação
 
-- **Storybook** - Documentação viva de componentes (70+ stories)
-- **Style Dictionary** - Gestão centralizada de design tokens
+#### `components/` - Componentes React
+
+- **`ui/`** - Componentes base baseados em Radix UI
+- **`admin/`** - Componentes específicos do admin
+- **`*.tsx`** - Componentes de features específicas
+
+#### `lib/` - Utilitários
+
+- **`validators/`** - Schemas de validação Zod
+- **`*.ts`** - Configurações de integrações externas
+
+## 🎨 Design System
+
+O projeto possui um **Design System completo** implementado com as melhores
+práticas de 2025.
+
+### 🎯 Características
+
+- **Design Tokens** - Sistema centralizado de tokens
+- **Storybook** - Documentação viva de componentes
 - **Chromatic** - Visual regression testing
-- **Stylelint** - Linting de estilos
-- **CI/CD** - Automação completa de qualidade
+- **Acessibilidade** - WCAG 2.1 AA compliance
+- **Responsividade** - Mobile-first approach
 
-### 🚀 Comandos Rápidos
+### 🚀 Comandos do Design System
 
 ```bash
 # Design Tokens
@@ -156,102 +273,237 @@ pnpm design-system:build-tokens    # Gerar tokens
 pnpm design-system:watch-tokens    # Watch mode
 
 # Storybook
-pnpm design-system:storybook       # Desenvolvimento
-pnpm design-system:build           # Build
-pnpm design-system:publish         # Publicar Chromatic
+pnpm storybook                     # Desenvolvimento
+pnpm build-storybook              # Build
+pnpm chromatic                    # Visual regression
 
 # Qualidade
-pnpm design-system:lint            # Lint completo
-pnpm design-system:lint:fix        # Auto-fix
+pnpm design-system:lint           # Lint completo
+pnpm design-system:lint:fix       # Auto-fix
 ```
 
-### 📚 Documentação Completa
+### 📚 Documentação do Design System
 
-Consulte [DESIGN_SYSTEM_2025.md](./DESIGN_SYSTEM_2025.md) para detalhes
-completos da implementação.
+- **[DESIGN_SYSTEM_2025.md](./DESIGN_SYSTEM_2025.md)** - Documentação completa
+- **[ADMIN_DESIGN_SYSTEM.md](./ADMIN_DESIGN_SYSTEM.md)** - Guia administrativo
+- **[docs/design-system.md](./docs/design-system.md)** - Detalhes técnicos
 
-## 🔧 Storybook
+## 🧪 Testes
 
-O projeto utiliza **Storybook** para documentação e desenvolvimento de
-componentes. Todos os componentes estão organizados seguindo a metodologia
-**Atomic Design**.
+### 🎯 Estratégia de Testes
 
-### Executando o Storybook
+- **Unit Tests** - Vitest + Testing Library
+- **Integration Tests** - API Routes
+- **E2E Tests** - Playwright
+- **Visual Tests** - Chromatic
+- **Accessibility Tests** - axe-core
+
+### 🚀 Comandos de Testes
 
 ```bash
-# Desenvolvimento
-pnpm storybook
+# Testes unitários
+pnpm test                        # Executar testes
+pnpm test:watch                  # Watch mode
+pnpm test:coverage              # Relatório de cobertura
+pnpm test:ui                    # Interface visual
 
-# Build de produção
-pnpm build-storybook
+# Testes E2E
+pnpm test:e2e                   # Executar Playwright
+pnpm test:e2e:ui                # Interface Playwright
 
-# Visual regression testing (Chromatic)
-pnpm chromatic
+# Storybook
+pnpm storybook                  # Desenvolvimento
+pnpm build-storybook           # Build
+pnpm chromatic                 # Visual regression
 ```
 
-### Estrutura das Stories
-
-- **Design System/Design Tokens** - Documentação dos tokens de design
-- **Atoms/** - Componentes básicos (Button, Input, Badge, etc.)
-- **Molecules/** - Componentes compostos (EquipmentCard, ContactForm, etc.)
-- **Organisms/** - Componentes complexos (Header, Footer, etc.)
-
-### Características
-
-- ✅ **CSF 3** - Component Story Format 3
-- ✅ **Autodocs** - Documentação automática
-- ✅ **Acessibilidade** - Testes com axe-core
-- ✅ **Interações** - Play functions para testes
-- ✅ **Responsivo** - Viewports para mobile/tablet/desktop
-- ✅ **Chromatic** - Visual regression testing
-
-### CI/CD
-
-O Storybook é automaticamente buildado no GitHub Actions e pode ser integrado
-com Chromatic para visual regression testing.
-
-## Scripts
-
-- `pnpm dev` – inicia o servidor de desenvolvimento
-- `pnpm build` – gera build de produção
-- `pnpm lint` – executa ESLint
-- `pnpm test` – roda os testes (Vitest)
-- `pnpm test:coverage` – gera relatório de cobertura
-- `pnpm db:push` – aplica schema no banco
-- `pnpm db:seed` – popula dados iniciais
-
-## Testes
-
-**Execute**:
+### 📊 Cobertura de Testes
 
 ```bash
-pnpm test
+# Gerar relatório de cobertura
+pnpm test:coverage
+
+# Abrir relatório no navegador
+open coverage/lcov-report/index.html
 ```
 
-**O relatório** de cobertura estará em `coverage/` quando rodado com
-`pnpm test:coverage`.
+## 📚 Documentação
 
-## Roadmap
+### 📖 Documentação Principal
 
-- [ ] Painel completo do cliente
-- [ ] Integração total com pagamentos
-- [ ] Upload otimizado em produção
-- [ ] Traduções (i18n) para EN/ES
+- **[README.md](./README.md)** - Este arquivo
+- **[AGENTS.md](./AGENTS.md)** - Guia para IA e colaboradores
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Como contribuir
+- **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)** - Código de conduta
 
-Relate bugs e sugestões via
-[Issues](https://github.com/GBLocacoes/GB-Locacoes/issues).
+### 🎨 Design System
 
-## Contribuindo
+- **[DESIGN_SYSTEM_2025.md](./DESIGN_SYSTEM_2025.md)** - Design System completo
+- **[ADMIN_DESIGN_SYSTEM.md](./ADMIN_DESIGN_SYSTEM.md)** - Guia administrativo
+- **[ADMIN_README.md](./ADMIN_README.md)** - Documentação do admin
+- **[ADMIN_QUICK_GUIDE.md](./ADMIN_QUICK_GUIDE.md)** - Guia rápido do admin
+- **[ADMIN_COMPONENTS.md](./ADMIN_COMPONENTS.md)** - Componentes do admin
 
-Siga o padrão de commits `feat:`, `fix:`, `test:` etc. Rode `pnpm lint` e
-`pnpm test` antes de enviar PR. Consulte [AGENTS.md](AGENTS.md) para detalhes de
-estilo e fluxos.
+### 🔧 Técnica
 
-## Licença
+- **[STORYBOOK_README.md](./STORYBOOK_README.md)** - Guia do Storybook
+- **[SUPABASE_UPLOAD.md](./SUPABASE_UPLOAD.md)** - Upload de arquivos
+- **[docs/](./docs/)** - Documentação adicional
 
-Este projeto utiliza a licença [MIT](LICENSE) © GB Locações.
+### 🧪 Testes e Qualidade
 
-## Autores
+- **[docs/accessibility-improvements.md](./docs/accessibility-improvements.md)** -
+  Melhorias de acessibilidade
+- **[docs/storybook-play-functions.md](./docs/storybook-play-functions.md)** -
+  Funções Play do Storybook
+- **[docs/storybook-troubleshooting.md](./docs/storybook-troubleshooting.md)** -
+  Troubleshooting do Storybook
 
-Equipe **GB Locações** – contato profissional via
-[website](https://gblocacoes.com.br).
+## 🚀 Scripts Disponíveis
+
+### 🛠️ Desenvolvimento
+
+```bash
+pnpm dev                    # Servidor de desenvolvimento
+pnpm build                  # Build de produção
+pnpm start                  # Servidor de produção
+pnpm lint                   # Linting
+pnpm lint:fix               # Auto-fix linting
+pnpm format                 # Formatação
+pnpm format:check           # Verificar formatação
+pnpm type-check             # Verificar tipos TypeScript
+```
+
+### 🗄️ Banco de Dados
+
+```bash
+pnpm db:generate           # Gerar cliente Prisma
+pnpm db:push               # Push do schema
+pnpm db:seed               # Seed do banco
+pnpm db:studio             # Abrir Prisma Studio
+```
+
+### 🧪 Testes
+
+```bash
+pnpm test                  # Testes unitários
+pnpm test:watch            # Watch mode
+pnpm test:coverage         # Cobertura
+pnpm test:ui               # Interface visual
+pnpm test:e2e              # Testes E2E
+```
+
+### 🎨 Design System
+
+```bash
+pnpm storybook             # Storybook dev
+pnpm build-storybook       # Build Storybook
+pnpm chromatic             # Visual regression
+pnpm design-system:build-tokens    # Build tokens
+pnpm design-system:watch-tokens    # Watch tokens
+```
+
+### 🔍 Qualidade
+
+```bash
+pnpm quality:check         # Verificar qualidade
+pnpm quality:fix           # Corrigir qualidade
+pnpm fix:md                # Formatar markdown
+```
+
+## 🤝 Contribuindo
+
+### 📋 Como Contribuir
+
+1. **Fork** o projeto
+2. **Clone** seu fork
+3. **Crie** uma branch: `git checkout -b feature/nova-funcionalidade`
+4. **Commit** suas mudanças:
+   `git commit -m 'feat: adiciona nova funcionalidade'`
+5. **Push** para a branch: `git push origin feature/nova-funcionalidade`
+6. **Abra** um Pull Request
+
+### 🎯 Padrões de Commit
+
+```bash
+feat: nova funcionalidade
+fix: correção de bug
+docs: documentação
+style: formatação
+refactor: refatoração
+test: testes
+chore: manutenção
+```
+
+### 🧪 Checklist de Pull Request
+
+- [ ] Código segue os padrões do projeto
+- [ ] Testes passando
+- [ ] Documentação atualizada
+- [ ] Design system respeitado
+- [ ] Acessibilidade verificada
+- [ ] Responsividade testada
+
+### 📖 Guias Detalhados
+
+- **[AGENTS.md](./AGENTS.md)** - Guia completo para colaboradores
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Processo de contribuição
+- **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)** - Código de conduta
+
+## 🚀 Deploy
+
+### ☁️ Vercel (Recomendado)
+
+```bash
+# 1. Conecte seu repositório ao Vercel
+# 2. Configure as variáveis de ambiente
+# 3. Deploy automático a cada push
+```
+
+### 🐳 Docker
+
+```bash
+# Build da imagem
+docker build -t gb-locacoes .
+
+# Executar container
+docker run -p 3000:3000 gb-locacoes
+```
+
+### 📊 Monitoramento
+
+- **Vercel Analytics** - Métricas de performance
+- **Vercel Speed Insights** - Core Web Vitals
+- **Pino** - Logs estruturados
+
+## 📄 Licença
+
+Este projeto está licenciado sob a **MIT License** - veja o arquivo
+[LICENSE](LICENSE) para detalhes.
+
+## 👥 Autores
+
+**Equipe GB Locações**
+
+- **Website**: [gblocacoes.com.br](https://gblocacoes.com.br)
+- **Email**: contato@gblocacoes.com.br
+- **GitHub**: [@GBLocacoes](https://github.com/GBLocacoes)
+
+## 🙏 Agradecimentos
+
+- **Next.js Team** - Framework incrível
+- **Vercel** - Plataforma de deploy
+- **Prisma** - ORM moderno
+- **Radix UI** - Componentes acessíveis
+- **Tailwind CSS** - Framework CSS
+- **Storybook** - Documentação de componentes
+
+---
+
+<div align="center">
+
+**⭐ Se este projeto te ajudou, considere dar uma estrela!**
+
+[![GitHub stars](https://img.shields.io/github/stars/GBLocacoes/GB-Locacoes?style=social)](https://github.com/GBLocacoes/GB-Locacoes/stargazers)
+
+</div>
