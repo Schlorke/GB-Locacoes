@@ -79,19 +79,21 @@ export default async function EquipmentDetailPage(props: Props) {
             {/* Galeria de imagens */}
             {equipment.images && equipment.images.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
-                {equipment.images.slice(1, 5).map((image, index) => (
-                  <div
-                    key={index}
-                    className="relative h-20 bg-gray-200 rounded overflow-hidden"
-                  >
-                    <Image
-                      src={image || '/placeholder.svg'}
-                      alt={`${equipment.name} ${index + 2}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
+                {equipment.images
+                  .slice(1, 5)
+                  .map((image: string, index: number) => (
+                    <div
+                      key={index}
+                      className="relative h-20 bg-gray-200 rounded overflow-hidden"
+                    >
+                      <Image
+                        src={image || '/placeholder.svg'}
+                        alt={`${equipment.name} ${index + 2}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
               </div>
             )}
           </div>

@@ -114,14 +114,14 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error creating category:', error)
 
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof Error && 'code' in error) {
       console.error(
         '[API POST /admin/categories] Prisma error:',
-        error.code,
+        (error as any).code,
         error.message
       )
 
-      if (error.code === 'P2002') {
+      if ((error as any).code === 'P2002') {
         return NextResponse.json(
           { error: 'Categoria já existente' },
           { status: 409 }

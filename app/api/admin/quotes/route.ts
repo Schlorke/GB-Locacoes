@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     }
 
     const skip = (page - 1) * limit
-    const where: Prisma.QuoteWhereInput = {}
+    const where: any = {}
 
     if (search) {
       where.OR = [
