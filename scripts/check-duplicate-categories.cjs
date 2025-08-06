@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 async function checkDuplicateCategories() {
   try {
     console.log('Verificando categorias duplicadas...');
-    
+
     const categories = await prisma.category.findMany({
       orderBy: {
         name: 'asc',
@@ -15,15 +15,15 @@ async function checkDuplicateCategories() {
     });
 
     console.log(`Total de categorias: ${categories.length}`);
-    
+
     // Verificar duplicatas por nome
     const nameCounts = {};
-    categories.forEach(cat => {
+    categories.forEach((cat) => {
       nameCounts[cat.name] = (nameCounts[cat.name] || 0) + 1;
     });
 
     const duplicates = Object.entries(nameCounts).filter(([name, count]) => count > 1);
-    
+
     if (duplicates.length > 0) {
       console.log('Categorias duplicadas encontradas:');
       duplicates.forEach(([name, count]) => {
@@ -35,12 +35,12 @@ async function checkDuplicateCategories() {
 
     // Verificar duplicatas por slug
     const slugCounts = {};
-    categories.forEach(cat => {
+    categories.forEach((cat) => {
       slugCounts[cat.slug] = (slugCounts[cat.slug] || 0) + 1;
     });
 
     const duplicateSlugs = Object.entries(slugCounts).filter(([slug, count]) => count > 1);
-    
+
     if (duplicateSlugs.length > 0) {
       console.log('Slugs duplicados encontrados:');
       duplicateSlugs.forEach(([slug, count]) => {
@@ -55,12 +55,11 @@ async function checkDuplicateCategories() {
     categories.forEach((cat, index) => {
       console.log(`${index + 1}. ID: ${cat.id}, Nome: "${cat.name}", Slug: "${cat.slug}"`);
     });
-
   } catch (error) {
     console.error('Erro ao verificar categorias:', error);
   } finally {
     await prisma.$disconnect();
   }
- }
+}
 
- checkDuplicateCategories();
+checkDuplicateCategories();
