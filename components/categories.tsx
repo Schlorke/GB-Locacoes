@@ -93,7 +93,7 @@ export default function Categories() {
         const res = await fetch('/api/categories')
         if (!res.ok) return
         const data: ApiCategory[] = await res.json()
-        const mapped: Category[] = data.map((cat) => ({
+        const mapped: Category[] = data.map((cat: ApiCategory) => ({
           icon:
             (cat.icon &&
               (

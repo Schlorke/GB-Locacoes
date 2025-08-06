@@ -1,6 +1,8 @@
-import type { Role } from '@prisma/client'
 import { getServerSession } from 'next-auth'
 import { authOptions } from './auth'
+
+// Define Role type manually to avoid import issues
+type Role = 'ADMIN' | 'CLIENT'
 
 export async function requireAdminAuth() {
   const session = await getServerSession(authOptions)

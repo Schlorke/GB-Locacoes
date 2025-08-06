@@ -1,7 +1,12 @@
 import { prisma } from '@/lib/prisma'
-import { Role } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
+
+// Define Role enum manually to avoid import issues
+const Role = {
+  ADMIN: 'ADMIN' as const,
+  CLIENT: 'CLIENT' as const,
+}
 
 export async function POST() {
   try {
