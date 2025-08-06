@@ -34,13 +34,18 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "chromatic",
+    "chromatic:ci": "chromatic --exit-zero-on-changes --only-changed",
+    "chromatic:accept": "chromatic --auto-accept-changes",
     "design-system:build-tokens": "node scripts/build-design-tokens.js",
     "design-system:watch-tokens": "style-dictionary build --watch",
     "design-system:storybook": "pnpm storybook",
     "design-system:build": "pnpm build-storybook",
-    "design-system:publish": "pnpm chromatic",
+    "design-system:publish": "pnpm chromatic:ci",
     "design-system:lint": "pnpm lint && stylelint \"**/*.{css,scss}\"",
-    "design-system:lint:fix": "pnpm lint:fix && stylelint \"**/*.{css,scss}\" --fix"
+    "design-system:lint:fix": "pnpm lint:fix && stylelint \"**/*.{css,scss}\" --fix",
+    "ci:test": "pnpm lint && pnpm test && pnpm type-check",
+    "ci:build": "pnpm build-storybook",
+    "ci:chromatic": "pnpm chromatic:ci"
   },
   "dependencies": {
     "@auth/core": "0.40.0",

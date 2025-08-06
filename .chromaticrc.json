@@ -1,0 +1,22 @@
+{
+  "projectToken": "chpt_ed7c61c0587a8b0",
+  "storybookBuildDir": "storybook-static",
+  "exitZeroOnChanges": true,
+  "autoAcceptChanges": false,
+  "onlyChanged": true,
+  "traceChanged": true,
+  "debug": false,
+  "dryRun": false,
+  "forceRebuild": false,
+  "interactive": false,
+  "fileHashing": true,
+  "untraced": [
+    "node_modules/**",
+    ".git/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    ".next/**",
+    "storybook-static/**"
+  ]
+}
