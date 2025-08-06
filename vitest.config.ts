@@ -38,10 +38,6 @@ export default defineConfig({
           setupFiles: ['.storybook/vitest.setup.ts'],
           environment: 'jsdom',
           globals: true,
-          define: {
-            'process.env.NODE_ENV': '"test"',
-            'process.env': '{}',
-          },
         },
       },
     ],
