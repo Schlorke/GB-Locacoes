@@ -4,3 +4,5 @@ dist
 .next
 coverage
 *.lock
+design-tokens/output/
+storybook-static/

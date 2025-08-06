@@ -133,18 +133,40 @@ pnpm dev
 └── types/
 ```
 
-## 🔱 Design System
+## 🎨 Design System 2025
 
-Consulte o [Design System](docs/design-system.md) para padrões de cores,
-tipografia e componentes reutilizáveis.
+O projeto GB Locações possui um **Design System completo** implementado com as
+ferramentas mais modernas de 2025.
 
-### ✅ Melhorias Recentes
+### ✅ Ferramentas Implementadas
 
-- **Acessibilidade**: Padrão de foco consistente em todos os componentes
-  interativos
-- **Consistência**: Variantes de botão alinhadas com a paleta de cores do design
-  system
-- **Storybook**: Compatibilidade corrigida com versões mais recentes
+- **Storybook** - Documentação viva de componentes (70+ stories)
+- **Style Dictionary** - Gestão centralizada de design tokens
+- **Chromatic** - Visual regression testing
+- **Stylelint** - Linting de estilos
+- **CI/CD** - Automação completa de qualidade
+
+### 🚀 Comandos Rápidos
+
+```bash
+# Design Tokens
+pnpm design-system:build-tokens    # Gerar tokens
+pnpm design-system:watch-tokens    # Watch mode
+
+# Storybook
+pnpm design-system:storybook       # Desenvolvimento
+pnpm design-system:build           # Build
+pnpm design-system:publish         # Publicar Chromatic
+
+# Qualidade
+pnpm design-system:lint            # Lint completo
+pnpm design-system:lint:fix        # Auto-fix
+```
+
+### 📚 Documentação Completa
+
+Consulte [DESIGN_SYSTEM_2025.md](./DESIGN_SYSTEM_2025.md) para detalhes
+completos da implementação.
 
 ## 🔧 Storybook
 

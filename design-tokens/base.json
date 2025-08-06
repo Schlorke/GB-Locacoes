@@ -1,0 +1,270 @@
+{
+  "color": {
+    "primary": {
+      "value": "#ea580c",
+      "type": "color",
+      "description": "Cor primária da marca - Orange 600"
+    },
+    "primary-light": {
+      "value": "#fed7aa",
+      "type": "color",
+      "description": "Cor primária clara - Orange 200"
+    },
+    "primary-dark": {
+      "value": "#f97316",
+      "type": "color",
+      "description": "Cor primária escura - Orange 500"
+    },
+    "secondary": {
+      "value": "#334155",
+      "type": "color",
+      "description": "Cor secundária - Slate 700"
+    },
+    "success": {
+      "value": "#10b981",
+      "type": "color",
+      "description": "Cor de sucesso - Emerald 500"
+    },
+    "warning": {
+      "value": "#f59e0b",
+      "type": "color",
+      "description": "Cor de aviso - Amber 500"
+    },
+    "error": {
+      "value": "#ef4444",
+      "type": "color",
+      "description": "Cor de erro - Red 500"
+    },
+    "info": {
+      "value": "#3b82f6",
+      "type": "color",
+      "description": "Cor de informação - Blue 500"
+    },
+    "background": {
+      "primary": {
+        "value": "#f8fafc",
+        "type": "color",
+        "description": "Background primário - Slate 50"
+      },
+      "secondary": {
+        "value": "#dbeafe",
+        "type": "color",
+        "description": "Background secundário - Blue 50"
+      },
+      "card": {
+        "value": "rgba(255, 255, 255, 0.95)",
+        "type": "color",
+        "description": "Background de cards com transparência"
+      }
+    },
+    "text": {
+      "primary": {
+        "value": "#111827",
+        "type": "color",
+        "description": "Texto primário - Gray 900"
+      },
+      "secondary": {
+        "value": "#6b7280",
+        "type": "color",
+        "description": "Texto secundário - Gray 500"
+      },
+      "muted": {
+        "value": "#9ca3af",
+        "type": "color",
+        "description": "Texto mudo - Gray 400"
+      },
+      "white": {
+        "value": "#ffffff",
+        "type": "color",
+        "description": "Texto branco"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": {
+        "value": "var(--font-inter), sans-serif",
+        "type": "fontFamily",
+        "description": "Fonte principal - Inter"
+      },
+      "heading": {
+        "value": "var(--font-jost), sans-serif",
+        "type": "fontFamily",
+        "description": "Fonte para títulos - Jost"
+      }
+    },
+    "fontSize": {
+      "h1": {
+        "value": "clamp(2.5rem, 5vw, 3.5rem)",
+        "type": "fontSize",
+        "description": "Título principal responsivo"
+      },
+      "h2": {
+        "value": "clamp(2rem, 4vw, 3rem)",
+        "type": "fontSize",
+        "description": "Subtítulo responsivo"
+      },
+      "h3": {
+        "value": "clamp(1.5rem, 3vw, 2.25rem)",
+        "type": "fontSize",
+        "description": "Título de seção responsivo"
+      },
+      "base": {
+        "value": "clamp(1rem, 2vw, 1.125rem)",
+        "type": "fontSize",
+        "description": "Texto base responsivo"
+      },
+      "small": {
+        "value": "clamp(0.875rem, 1.5vw, 1rem)",
+        "type": "fontSize",
+        "description": "Texto pequeno responsivo"
+      }
+    },
+    "lineHeight": {
+      "tight": {
+        "value": "1.2",
+        "type": "lineHeight",
+        "description": "Altura de linha apertada"
+      },
+      "normal": {
+        "value": "1.3",
+        "type": "lineHeight",
+        "description": "Altura de linha normal"
+      },
+      "relaxed": {
+        "value": "1.4",
+        "type": "lineHeight",
+        "description": "Altura de linha relaxada"
+      },
+      "loose": {
+        "value": "1.6",
+        "type": "lineHeight",
+        "description": "Altura de linha solta"
+      }
+    },
+    "letterSpacing": {
+      "tight": {
+        "value": "-0.015em",
+        "type": "letterSpacing",
+        "description": "Espaçamento de letras apertado"
+      },
+      "normal": {
+        "value": "0em",
+        "type": "letterSpacing",
+        "description": "Espaçamento de letras normal"
+      },
+      "wide": {
+        "value": "0.015em",
+        "type": "letterSpacing",
+        "description": "Espaçamento de letras largo"
+      }
+    }
+  },
+  "spacing": {
+    "xs": {
+      "value": "0.25rem",
+      "type": "spacing",
+      "description": "Espaçamento extra pequeno - 4px"
+    },
+    "sm": {
+      "value": "0.5rem",
+      "type": "spacing",
+      "description": "Espaçamento pequeno - 8px"
+    },
+    "md": {
+      "value": "1rem",
+      "type": "spacing",
+      "description": "Espaçamento médio - 16px"
+    },
+    "lg": {
+      "value": "1.5rem",
+      "type": "spacing",
+      "description": "Espaçamento grande - 24px"
+    },
+    "xl": {
+      "value": "2rem",
+      "type": "spacing",
+      "description": "Espaçamento extra grande - 32px"
+    },
+    "2xl": {
+      "value": "3rem",
+      "type": "spacing",
+      "description": "Espaçamento 2x grande - 48px"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "8px",
+      "type": "borderRadius",
+      "description": "Border radius pequeno"
+    },
+    "md": {
+      "value": "12px",
+      "type": "borderRadius",
+      "description": "Border radius médio"
+    },
+    "lg": {
+      "value": "16px",
+      "type": "borderRadius",
+      "description": "Border radius grande"
+    }
+  },
+  "shadow": {
+    "card": {
+      "value": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+      "type": "shadow",
+      "description": "Sombra para cards"
+    },
+    "modal": {
+      "value": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+      "type": "shadow",
+      "description": "Sombra para modais"
+    },
+    "button": {
+      "value": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      "type": "shadow",
+      "description": "Sombra para botões"
+    },
+    "overlay": {
+      "value": "4px 8px 18px 2px rgba(0,0,0,0.18)",
+      "type": "shadow",
+      "description": "Sombra para overlays"
+    }
+  },
+  "animation": {
+    "duration": {
+      "fast": {
+        "value": "0.2s",
+        "type": "duration",
+        "description": "Duração rápida"
+      },
+      "normal": {
+        "value": "0.3s",
+        "type": "duration",
+        "description": "Duração normal"
+      },
+      "slow": {
+        "value": "0.8s",
+        "type": "duration",
+        "description": "Duração lenta"
+      }
+    },
+    "easing": {
+      "ease-out": {
+        "value": "ease-out",
+        "type": "easing",
+        "description": "Easing de saída"
+      },
+      "ease-in": {
+        "value": "ease-in",
+        "type": "easing",
+        "description": "Easing de entrada"
+      },
+      "ease-in-out": {
+        "value": "ease-in-out",
+        "type": "easing",
+        "description": "Easing de entrada e saída"
+      }
+    }
+  }
+}
