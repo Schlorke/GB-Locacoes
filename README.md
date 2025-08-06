@@ -26,6 +26,7 @@ Coloque capturas de tela ou GIFs em `docs/assets/` e referencie aqui.
 - [Uso Rápido](#uso-rápido)
 - [Estrutura de Diretórios](#estrutura-de-diretórios)
 - [Design System](#-design-system)
+- [🔧 Storybook](#-storybook)
 - [Scripts](#scripts)
 - [Testes](#testes)
 - [Roadmap](#roadmap)
@@ -126,6 +127,49 @@ Acesse `http://localhost:3000` e realize um orçamento pelo catálogo.
 ## 🔱 Design System
 
 Consulte o [Design System](docs/design-system.md) para padrões de cores, tipografia e componentes reutilizáveis.
+
+### ✅ Melhorias Recentes
+
+- **Acessibilidade**: Padrão de foco consistente em todos os componentes interativos
+- **Consistência**: Variantes de botão alinhadas com a paleta de cores do design system
+- **Storybook**: Compatibilidade corrigida com versões mais recentes
+
+## 🔧 Storybook
+
+O projeto utiliza **Storybook** para documentação e desenvolvimento de componentes. Todos os componentes estão organizados seguindo a metodologia **Atomic Design**.
+
+### Executando o Storybook
+
+```bash
+# Desenvolvimento
+pnpm storybook
+
+# Build de produção
+pnpm build-storybook
+
+# Visual regression testing (Chromatic)
+pnpm chromatic
+```
+
+### Estrutura das Stories
+
+- **Design System/Design Tokens** - Documentação dos tokens de design
+- **Atoms/** - Componentes básicos (Button, Input, Badge, etc.)
+- **Molecules/** - Componentes compostos (EquipmentCard, ContactForm, etc.)
+- **Organisms/** - Componentes complexos (Header, Footer, etc.)
+
+### Características
+
+- ✅ **CSF 3** - Component Story Format 3
+- ✅ **Autodocs** - Documentação automática
+- ✅ **Acessibilidade** - Testes com axe-core
+- ✅ **Interações** - Play functions para testes
+- ✅ **Responsivo** - Viewports para mobile/tablet/desktop
+- ✅ **Chromatic** - Visual regression testing
+
+### CI/CD
+
+O Storybook é automaticamente buildado no GitHub Actions e pode ser integrado com Chromatic para visual regression testing.
 
 ## Scripts
 

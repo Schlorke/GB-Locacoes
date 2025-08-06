@@ -1,0 +1,7 @@
+<!-- Configuração global para garantir que React esteja sempre disponível -->
+<script>
+  // Garantir que React esteja disponível globalmente se necessário
+  if (typeof window !== 'undefined' && !window.React) {
+    console.warn('React não encontrado globalmente - verificar imports');
+  }
+</script>

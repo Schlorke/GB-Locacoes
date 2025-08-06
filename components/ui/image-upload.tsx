@@ -320,7 +320,7 @@ export function ImageUpload({
                     }}
                     title="Imagem anterior"
                     aria-label="Navegar para imagem anterior"
-                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10 focus:outline-none"
                   >
                     <ChevronLeft className="w-5 h-5 text-gray-700" />
                   </button>
@@ -339,7 +339,7 @@ export function ImageUpload({
                     }}
                     title="Próxima imagem"
                     aria-label="Navegar para próxima imagem"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10 focus:outline-none"
                   >
                     <ChevronRight className="w-5 h-5 text-gray-700" />
                   </button>
@@ -366,7 +366,7 @@ export function ImageUpload({
                       whileTap={{ scale: 0.9 }}
                       title={`Ir para imagem ${index + 1}`}
                       aria-label={`Navegar para imagem ${index + 1}`}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 ${
+                      className={`w-2 h-2 rounded-full transition-all duration-300 focus:outline-none ${
                         index === currentImageIndex
                           ? 'bg-white shadow-lg scale-125'
                           : 'bg-white/60 hover:bg-white/80'
@@ -403,7 +403,7 @@ export function ImageUpload({
                   whileTap={{ scale: 0.95 }}
                   title={`Visualizar imagem ${index + 1}`}
                   aria-label={`Selecionar imagem ${index + 1}`}
-                  className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 ${
+                  className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 focus:outline-none ${
                     index === currentImageIndex
                       ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
                       : 'border-gray-200 hover:border-gray-300'

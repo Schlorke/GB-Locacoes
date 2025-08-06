@@ -170,7 +170,7 @@ export default function Categories() {
             const IconComponent = category.icon;
             return (
               <Card
-                key={index}
+                key={category.title}
                 className="benefit-card category-card relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-500 hover:scale-105 group opacity-0 flex flex-col h-full"
               >
                 {/* Clean depth layers matching equipments page */}

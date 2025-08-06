@@ -1,3 +1,5 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+
 // eslint.config.js
 import js from '@eslint/js';
 import configPrettier from 'eslint-config-prettier';
@@ -30,16 +32,15 @@ export default [
       'postcss.config.cjs',
       'tailwind.config.cjs',
       'vitest.config.ts',
+      '**/*.stories.tsx',
+      '**/*.stories.ts',
+      '**/*.stories.js',
+      '**/*.stories.jsx',
+      '**/storybook-static/**',
     ],
-  },
-
-  // Base JavaScript config
-  js.configs.recommended,
-
-  // TypeScript configs
-  ...tseslint.configs.recommended,
-
-  // Main configuration
+  }, // Base JavaScript config
+  js.configs.recommended, // TypeScript configs
+  ...tseslint.configs.recommended, // Main configuration
   {
     files: ['**/*.{js,ts,jsx,tsx}'],
     languageOptions: {
@@ -99,8 +100,6 @@ export default [
       'no-undef': 'off', // TypeScript handles this
       'prefer-const': 'error',
     },
-  },
-
-  // Prettier config (must be last)
+  }, // Prettier config (must be last)
   configPrettier,
 ];

@@ -71,7 +71,7 @@ export default function WhyChooseUs() {
             const IconComponent = benefit.icon;
             return (
               <Card
-                key={index}
+                key={benefit.title}
                 className="benefit-card bg-gray-800/50 backdrop-blur-sm border-gray-700 hover:bg-gray-750 transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0"
               >
                 {/* Gradient overlay */}

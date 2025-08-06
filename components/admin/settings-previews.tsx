@@ -22,7 +22,7 @@ export const CompanyInfoPreview = memo(function CompanyInfoPreview({
   const { name, description, address, phone, email, businessHours } = data;
 
   const today = new Date().toLocaleDateString('pt-BR', { weekday: 'long' }).toLowerCase();
-  const todaySchedule = businessHours?.[today];
+  const _todaySchedule = businessHours?.[today];
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">

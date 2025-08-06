@@ -37,7 +37,7 @@ export function CustomSelect({
   children,
 }: Omit<CustomSelectProps, 'required'>) {
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
+  const [_dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
   const selectRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -110,7 +110,7 @@ export function CustomSelect({
           onClick={handleToggle}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 admin-filter-element"
+          className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 border-gray-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 admin-filter-element"
         >
           <span className={cn(value ? 'text-foreground' : 'text-muted-foreground')}>
             {selectedText}

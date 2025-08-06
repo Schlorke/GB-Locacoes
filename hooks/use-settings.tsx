@@ -4,7 +4,7 @@ import { getSettings } from '@/app/api/admin/settings/actions';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 interface SettingsContextType {
-  settings: any;
+  settings: Record<string, unknown>;
   loading: boolean;
   refresh: () => Promise<void>;
 }
@@ -12,7 +12,7 @@ interface SettingsContextType {
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const [settings, setSettings] = useState<any>(null);
+  const [settings, setSettings] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(true);
 
   const loadSettings = async () => {

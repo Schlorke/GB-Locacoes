@@ -186,7 +186,7 @@ export default function WhatsAppFAB() {
                 <div className="space-y-1 max-h-20 overflow-y-auto whatsapp-chat-scroll">
                   {quickMessages.map((quickMsg, index) => (
                     <button
-                      key={index}
+                      key={`quick-${index}-${quickMsg}`}
                       onClick={() => handleQuickMessage(quickMsg)}
                       className="block w-full text-left text-xs p-2 hover:bg-green-50 hover:text-green-700 rounded transition-colors border border-gray-200 hover:border-green-300"
                     >

@@ -23,7 +23,7 @@ import { useEffect, useState } from 'react';
 
 export default function SettingsPage() {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [_isLoading, setIsLoading] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [activeSection, setActiveSection] = useState<string>('company');
 
@@ -175,7 +175,7 @@ export default function SettingsPage() {
     loadSettings();
   }, [toast]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const _handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -271,7 +271,7 @@ export default function SettingsPage() {
         title: 'Configurações resetadas',
         description: `Configurações de ${getSectionName(section)} foram restauradas para os valores padrão.`,
       });
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: 'Erro ao resetar',
         description: 'Ocorreu um erro ao restaurar as configurações.',

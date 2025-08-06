@@ -37,3 +37,6 @@ GB-Locacoes/
 *.log
 *.sqlite
 *.dump
+
+*storybook.log
+storybook-static

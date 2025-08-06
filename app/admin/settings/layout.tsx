@@ -9,7 +9,7 @@ export default async function SettingsLayout({ children }: { children: React.Rea
     if (session.user.role !== 'ADMIN') {
       redirect('/admin');
     }
-  } catch (error) {
+  } catch (_error) {
     redirect('/admin/login');
   }
 

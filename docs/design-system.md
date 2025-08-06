@@ -42,7 +42,7 @@
 ### 1.2 Typography
 
 - **Fonts:** Inter as base sans, Jost for headings.
-- **Scale:** `h1` 2.5–3.5 rem, `h2` 2–3 rem, `h3` 1.5–2.25 rem, `base` 1–1.125 rem, `small` 0.875–1 rem.
+- **Scale:** `h1` 2.5–3.5 rem, `h2` 2–3 rem, `h3` 1.5–2.25 rem, `base` 1–1.125 rem, `small` 0.875–1 rem.
 - **Weights:** 700 for `h1`, 600 for `h2`/`h3`.
 
 ### 1.3 Spacing & Layout
@@ -62,19 +62,20 @@ Each component resides under `components/ui` and follows Tailwind utility classe
 
 #### Variants
 
-| Variant           | Class (summary)                              | Example                                          |
-| ----------------- | -------------------------------------------- | ------------------------------------------------ |
-| default (primary) | `bg-slate-700 text-white`                    | `<Button>Save</Button>`                          |
-| secondary         | `bg-secondary text-secondary-foreground`     | `<Button variant="secondary">Secondary</Button>` |
-| destructive       | `bg-destructive text-destructive-foreground` | `<Button variant="destructive">Delete</Button>`  |
-| outline           | `border border-input bg-background`          | `<Button variant="outline">Outline</Button>`     |
-| ghost             | `hover:bg-gray-200`                          | `<Button variant="ghost">Ghost</Button>`         |
-| link              | `text-primary underline-offset-4`            | `<Button variant="link">Link</Button>`           |
-| reset             | `border shadow-md group`                     | `<Button variant="reset">Reset</Button>`         |
+| Variant           | Class (summary)                                | Example                                          |
+| ----------------- | ---------------------------------------------- | ------------------------------------------------ |
+| default (primary) | `bg-slate-700 text-white`                      | `<Button>Save</Button>`                          |
+| secondary         | `bg-secondary text-secondary-foreground`       | `<Button variant="secondary">Secondary</Button>` |
+| destructive       | `bg-destructive text-destructive-foreground`   | `<Button variant="destructive">Delete</Button>`  |
+| outline           | `border border-input bg-background`            | `<Button variant="outline">Outline</Button>`     |
+| ghost             | `hover:bg-accent hover:text-accent-foreground` | `<Button variant="ghost">Ghost</Button>`         |
+| link              | `text-primary underline-offset-4`              | `<Button variant="link">Link</Button>`           |
+| reset             | `border shadow-md group`                       | `<Button variant="reset">Reset</Button>`         |
 
 **Sizes:** `default`, `sm`, `lg`, `icon`.
 
-**States:** default, `hover:scale-105`, disabled (`opacity-50`), focus (`focus:border-blue-500` via global style), active, loading (use `<Spinner>` inside and `aria-busy`).
+**States:** default, `hover:scale-105`, disabled (`opacity-50`), focus (`focus:border-blue-500` via global style),
+active, loading (use `<Spinner>` inside and `aria-busy`).
 
 ### 2.2 Input
 
@@ -206,7 +207,8 @@ import { FilterIndicator } from '@/components/ui/filter-indicator';
 <FilterIndicator isFiltered />;
 ```
 
-`FilterResetButton` animates icon on click; `FilterIndicator` changes color when filters are active.
+`FilterResetButton` animates icon on click; `FilterIndicator` changes color when
+filters are active.
 
 ## 3. Visual States
 
@@ -222,9 +224,22 @@ import { FilterIndicator } from '@/components/ui/filter-indicator';
 - Import components from `@/components/ui`.
 - Prefer Tailwind utility classes; avoid overriding existing design.
 - Name components and variants in English, lowercase.
-- For accessibility: provide `aria-label`, ensure contrast ≥4.5:1, use semantic HTML, manage focus order, and include `aria-live` for toasts.
+- For accessibility: provide `aria-label`, ensure contrast ≥4.5:1, use semantic HTML,
+  manage focus order, and include `aria-live` for toasts.
 
-## 5. Pendências → Sugestões de unificação
+## 5. Implementações Recentes
 
-- `Button` variant `ghost` uses grey hover text; verify consistency with brand palette.
-- `FilterResetButton` omits blue focus outline—consider adding a visible focus style for accessibility.
+### 5.1 Correções de Acessibilidade e Consistência
+
+- ✅ **Button variant `ghost`**: Corrigido para usar `hover:bg-accent hover:text-accent-foreground` em vez de
+  cores cinza inconsistentes
+- ✅ **FilterResetButton**: Adicionado `focus:ring-2 focus:ring-ring` para melhor
+  acessibilidade visual
+
+### 5.2 Padrões de Foco
+
+Todos os componentes interativos seguem o padrão de foco consistente:
+
+- `focus:outline-none` - Remove outline padrão do navegador
+- `focus:ring-2 focus:ring-ring` - Adiciona anel de foco visível
+- Usa a variável CSS `--ring` para consistência com o tema

@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { X } from 'lucide-react';
+import React from 'react';
 
 interface CloseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg';
@@ -43,6 +43,7 @@ export const CloseButton = React.forwardRef<HTMLButtonElement, CloseButtonProps>
       className={cn(
         'inline-flex items-center justify-center rounded-lg transition-all',
         'disabled:pointer-events-none disabled:opacity-50',
+        'focus:outline-none',
         sizeClasses[size],
         variantClasses[variant],
         className,
