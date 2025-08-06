@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
 import { ImageUpload } from '@/components/ui/image-upload'
+import type { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof ImageUpload> = {
   title: 'Atoms/ImageUpload',
@@ -18,11 +18,23 @@ const meta: Meta<typeof ImageUpload> = {
 export default meta
 
 export const Default: StoryObj<typeof ImageUpload> = {
-  args: {},
+  args: {
+    images: [],
+    onImagesChange: () => {},
+    maxImages: 5,
+  },
 }
 
 export const Variant: StoryObj<typeof ImageUpload> = {
   args: {
-    // Props específicas do componente
+    images: [
+      {
+        id: '1',
+        url: '/placeholder.jpg',
+        name: 'image1.jpg',
+      },
+    ],
+    onImagesChange: () => {},
+    maxImages: 3,
   },
 }

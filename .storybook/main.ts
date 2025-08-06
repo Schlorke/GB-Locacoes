@@ -62,6 +62,9 @@ const config: StorybookConfig = {
           'next/navigation',
           'next/router',
           'next/head',
+          'markdown-to-jsx',
+          'react',
+          'react-dom',
         ],
       }
     }

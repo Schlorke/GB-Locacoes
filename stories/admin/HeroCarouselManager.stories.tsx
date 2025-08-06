@@ -19,11 +19,24 @@ const meta: Meta<typeof HeroCarouselManager> = {
 export default meta
 
 export const Default: StoryObj<typeof HeroCarouselManager> = {
-  args: {},
+  args: {
+    items: [],
+    onItemsChange: () => {},
+  },
 }
 
 export const Variant: StoryObj<typeof HeroCarouselManager> = {
   args: {
-    // Props específicas do componente
+    items: [
+      {
+        id: '1',
+        title: 'Slide 1',
+        description: 'Descrição do slide 1',
+        imageUrl: '/placeholder.jpg',
+        link: '/equipamentos',
+        order: 1,
+      },
+    ],
+    onItemsChange: () => {},
   },
 }

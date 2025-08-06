@@ -25,6 +25,9 @@ export default defineConfig({
       'next/navigation',
       'next/router',
       'next/head',
+      'markdown-to-jsx',
+      'react',
+      'react-dom',
     ],
   },
   // Configurações para lidar com módulos do Next.js

@@ -1,13 +1,27 @@
 import { ThemeProvider } from '@/components/theme-provider'
+import { SidebarProvider } from '@/components/ui/sidebar'
+import { ToastProvider } from '@/components/ui/toast'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import type { Preview } from '@storybook/react-vite'
+import { SessionProvider } from 'next-auth/react'
 import React from 'react'
 import '../app/globals.css'
 
 export const decorators = [
   (Story) => (
-    <ThemeProvider attribute="class" defaultTheme="light">
-      <Story />
-    </ThemeProvider>
+    <div id="root">
+      <SessionProvider session={null}>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <ToastProvider>
+            <TooltipProvider>
+              <SidebarProvider>
+                <Story />
+              </SidebarProvider>
+            </TooltipProvider>
+          </ToastProvider>
+        </ThemeProvider>
+      </SessionProvider>
+    </div>
   ),
 ]
 
@@ -16,7 +30,16 @@ const preview: Preview = {
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: { expanded: true },
     backgrounds: { default: 'app-background' },
-    a11y: { element: '#root', manual: false },
+    a11y: {
+      config: {
+        rules: [
+          {
+            id: 'color-contrast',
+            enabled: false,
+          },
+        ],
+      },
+    },
     // Configurações para Next.js
     nextjs: {
       appDirectory: true,

@@ -1,3 +1,4 @@
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -13,8 +14,30 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: './tests/setup.ts',
-    include: ['tests/**/*.{test,spec}.{ts,tsx}'],
+    setupFiles: ['.storybook/vitest.setup.ts'],
+    projects: [
+      {
+        extends: true,
+        plugins: [
+          storybookTest({
+            configDir: path.join(dirname, '.storybook'),
+          }),
+        ],
+        test: {
+          name: 'storybook',
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: 'playwright',
+            instances: [
+              {
+                browser: 'chromium',
+              },
+            ],
+          },
+        },
+      },
+    ],
   },
   resolve: {
     alias: {
@@ -25,5 +48,8 @@ export default defineConfig({
       '@/types': path.resolve(dirname, './types'),
       '@/app': path.resolve(dirname, './app'),
     },
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'markdown-to-jsx'],
   },
 })

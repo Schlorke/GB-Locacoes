@@ -18,11 +18,14 @@ const meta: Meta<typeof ToggleGroup> = {
 export default meta
 
 export const Default: StoryObj<typeof ToggleGroup> = {
-  args: {},
+  args: {
+    type: 'single',
+  },
 }
 
 export const Variant: StoryObj<typeof ToggleGroup> = {
   args: {
+    type: 'multiple',
     // Props específicas do componente
   },
 }
