@@ -25,6 +25,12 @@ next-env.d.ts
 # 🔄 Prisma
 prisma/migrations/
 prisma/dev.db
+prisma/*.db
+prisma/*.db-journal
+node_modules/.prisma/client/libquery_engine-*
+node_modules/.prisma/client/query_engine-*
+node_modules/.prisma/client/libquery_engine.*
+node_modules/.prisma/client/query_engine.*
 
 # 🚫 Sub-repositório acidental
 GB-Locacoes/

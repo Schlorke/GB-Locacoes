@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "prisma generate && next build",
+    "prebuild": "prisma generate",
+    "build": "next build",
+    "postinstall": "prisma generate",
     "check:equipments": "node scripts/check-equipments.mjs",
     "codex:setup": "pnpm install && pnpm db:generate && pnpm db:push",
     "db:generate": "prisma generate",
@@ -43,9 +45,14 @@
     "design-system:publish": "pnpm chromatic:ci",
     "design-system:lint": "pnpm lint && stylelint \"**/*.{css,scss}\"",
     "design-system:lint:fix": "pnpm lint:fix && stylelint \"**/*.{css,scss}\" --fix",
-    "ci:test": "pnpm lint && pnpm test && pnpm type-check",
-    "ci:build": "pnpm build-storybook",
-    "ci:chromatic": "pnpm chromatic:ci"
+    "ci:test": "pnpm db:generate && pnpm lint && pnpm test && pnpm type-check",
+    "ci:build": "pnpm db:generate && pnpm build-storybook",
+    "ci:chromatic": "pnpm chromatic:ci",
+    "ci:full": "pnpm db:generate && pnpm lint && pnpm test && pnpm type-check && pnpm build",
+    "check:prisma": "node scripts/check-prisma.js",
+    "preci:test": "pnpm check:prisma",
+    "preci:build": "pnpm check:prisma",
+    "ci:prisma-only": "pnpm db:generate && pnpm check:prisma"
   },
   "dependencies": {
     "@auth/core": "0.40.0",

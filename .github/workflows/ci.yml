@@ -4,18 +4,16 @@ on:
   push:
     branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
-  # Job de testes e qualidade de código
   quality:
+    name: Tests & Quality
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,59 +21,79 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright
-        run: pnpm exec playwright install chromium
-
-      - name: Run CI tests
-        run: pnpm ci:test
-
-  # Job de build do Storybook
-  storybook:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
+          version: 10
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm db:generate
+
+      - name: Check Prisma setup
+        run: pnpm check:prisma
+
+      - name: Run linting
+        run: pnpm lint
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Type check
+        run: pnpm type-check
+
+      - name: Build application
+        run: pnpm build
 
       - name: Build Storybook
-        run: pnpm ci:build
+        run: pnpm build-storybook
+
+  storybook:
+    name: Storybook
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm db:generate
+
+      - name: Build Storybook
+        run: pnpm build-storybook
 
       - name: Upload Storybook build
         uses: actions/upload-artifact@v4
         with:
           name: storybook-static
           path: storybook-static
-          retention-days: 7
 
-  # Job do Chromatic (só roda em push para main/develop)
   chromatic:
+    name: Chromatic
     runs-on: ubuntu-latest
-    if:
-      github.event_name == 'push' && (github.ref == 'refs/heads/main' ||
-      github.ref == 'refs/heads/develop')
-    needs: [quality, storybook]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Required for Chromatic
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -83,19 +101,22 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Storybook
-        run: pnpm ci:build
+      - name: Generate Prisma client
+        run: pnpm db:generate
 
-      # Nota: CHROMATIC_PROJECT_TOKEN deve ser configurado nos secrets do repositório
+      - name: Build Storybook
+        run: pnpm build-storybook
+
       - name: Publish to Chromatic
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          storybookBuildDir: storybook-static
-          exitZeroOnChanges: true # Não falha em mudanças visuais
-          autoAcceptChanges: false # Não aceita automaticamente
-          onlyChanged: true # Só testa componentes alterados
-          traceChanged: true # Rastreia mudanças
+          workingDir: ./
