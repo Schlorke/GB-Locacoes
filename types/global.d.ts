@@ -3,6 +3,7 @@ declare namespace NodeJS {
     DATABASE_URL: string
     DIRECT_URL?: string
     NEXTAUTH_SECRET: string
+    NEXTAUTH_DEBUG?: string
     STRIPE_SECRET_KEY?: string
     RESEND_API_KEY?: string
     ZAPSIGN_TOKEN?: string

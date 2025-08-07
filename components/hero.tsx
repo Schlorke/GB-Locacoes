@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ArrowRight, MapPin, Phone, Play, Search } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default function Hero() {
@@ -77,11 +78,13 @@ export default function Hero() {
           </div>
           <div className="hero-image relative opacity-0 px-4">
             <div className="relative group bg-transparent">
-              <img
+              <Image
                 src="/placeholder.svg?height=500&width=600"
                 alt="Equipamentos de construção civil para locação - andaimes suspensos e cadeiras elétricas"
+                width={600}
+                height={500}
+                priority
                 className="rounded-2xl shadow-2xl w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
-                loading="eager"
               />
               {/* Floating Stats */}
               <div className="absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">

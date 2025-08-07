@@ -27,7 +27,7 @@ export default function ScrollRevealInit() {
         const navEntries = performance.getEntriesByType(
           'navigation'
         ) as PerformanceNavigationTiming[]
-        if (navEntries.length > 0) {
+        if (navEntries.length > 0 && navEntries[0]) {
           return navEntries[0].type
         }
 

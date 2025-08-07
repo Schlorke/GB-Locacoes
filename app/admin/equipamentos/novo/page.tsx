@@ -564,7 +564,7 @@ export default function NovoEquipamento() {
         >
           <div className="relative max-w-4xl max-h-[90vh] w-full h-full flex items-center justify-center">
             <Image
-              src={formData.images[currentImageIndex]}
+              src={formData.images[currentImageIndex] || ''}
               alt={`Equipamento - Imagem ${currentImageIndex + 1}`}
               fill
               className="object-contain"

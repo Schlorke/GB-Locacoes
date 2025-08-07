@@ -2,19 +2,19 @@
 
 import { toast } from '@/hooks/use-toast'
 import {
-  closestCenter,
   DndContext,
   KeyboardSensor,
   PointerSensor,
+  closestCenter,
   useSensor,
   useSensors,
   type DragEndEvent,
   type DragStartEvent,
 } from '@dnd-kit/core'
 import {
+  SortableContext,
   arrayMove,
   rectSortingStrategy,
-  SortableContext,
   sortableKeyboardCoordinates,
   useSortable,
 } from '@dnd-kit/sortable'
@@ -111,9 +111,11 @@ function SortableImage({
 
         {/* Image Container */}
         <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-          <img
+          <Image
             src={url || '/placeholder.svg'}
             alt={`Preview ${index + 1}`}
+            width={200}
+            height={120}
             className="w-full h-full object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement

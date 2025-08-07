@@ -43,7 +43,7 @@ export function MiniCarousel({
       style={{ height }}
     >
       <Image
-        src={images[currentIndex]}
+        src={images[currentIndex] || ''}
         alt={`Preview ${currentIndex + 1}`}
         fill
         className="object-cover"

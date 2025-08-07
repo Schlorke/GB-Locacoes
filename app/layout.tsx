@@ -81,8 +81,7 @@ export default function RootLayout({
   return (
     <ClientLayout>
       {children}
-      <SpeedInsights />{' '}
-      {/* ✅ Aqui dentro do ClientLayout, depois dos children */}
+      <SpeedInsights />
     </ClientLayout>
   )
 }

@@ -3,6 +3,17 @@ import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { prisma } from './prisma'
 
+// Helper function for debug logging
+const debugLog = (message: string, data?: unknown) => {
+  // Only log in development and when explicitly enabled
+  if (
+    process.env.NODE_ENV === 'development' &&
+    process.env.NEXTAUTH_DEBUG === 'true'
+  ) {
+    console.warn(`[AUTH DEBUG] ${message}`, data || '')
+  }
+}
+
 // Use the Role enum from Prisma instead of defining our own
 const Role = {
   ADMIN: 'ADMIN' as const,
@@ -18,34 +29,27 @@ export const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        console.warn('🔐 [AUTH] Iniciando autenticação')
+        debugLog('Iniciando autenticação')
 
         if (!credentials?.email || !credentials.password) {
-          console.warn('❌ [AUTH] Credenciais ausentes')
+          debugLog('Credenciais ausentes')
           return null
         }
 
         try {
-          console.warn('🔍 [AUTH] Buscando usuário:', credentials.email)
+          debugLog('Buscando usuário', { email: credentials.email })
 
           const user = await prisma.user.findUnique({
             where: { email: credentials.email },
           })
 
           if (!user) {
-            console.warn('❌ [AUTH] Usuário não encontrado')
+            debugLog('Usuário não encontrado')
             return null
           }
 
-          console.warn('👤 [AUTH] Usuário encontrado:', {
-            id: user.id,
-            email: user.email,
-            role: user.role,
-            hasPassword: !!user.password,
-          })
-
           if (!user.password) {
-            console.warn('❌ [AUTH] Usuário sem senha')
+            debugLog('Usuário sem senha')
             return null
           }
 
@@ -53,18 +57,22 @@ export const authOptions: NextAuthOptions = {
             credentials.password,
             user.password
           )
-          console.warn('🔑 [AUTH] Senha válida:', isValidPassword)
 
           if (!isValidPassword) {
+            debugLog('Senha inválida')
             return null
           }
 
           if (user.role === Role.CLIENT) {
-            console.warn('❌ [AUTH] Role não autorizada:', user.role)
+            debugLog('Role não autorizada', { role: user.role })
             return null
           }
 
-          console.warn('✅ [AUTH] Autenticação bem-sucedida')
+          debugLog('Autenticação bem-sucedida', {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+          })
 
           return {
             id: user.id,
@@ -103,7 +111,7 @@ export const authOptions: NextAuthOptions = {
     signIn: '/admin/login',
   },
   secret: process.env.NEXTAUTH_SECRET,
-  debug: true,
+  debug: false, // Disabled to prevent warnings
 }
 
 export default NextAuth(authOptions)

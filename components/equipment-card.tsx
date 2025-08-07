@@ -1,10 +1,11 @@
 'use client'
 
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Clock, Eye } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { formatCurrency } from '@/lib/utils'
+import { Clock, Eye } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 interface Equipment {
@@ -31,11 +32,12 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
       <div className="aspect-video overflow-hidden">
-        <img
+        <Image
           src={imageUrl || '/placeholder.svg'}
           alt={equipment.name}
+          width={300}
+          height={200}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          loading="lazy"
         />
       </div>
 

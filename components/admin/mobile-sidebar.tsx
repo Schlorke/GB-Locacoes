@@ -92,7 +92,8 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
                   alt="Logo"
                   width={32}
                   height={32}
-                  className="flex-shrink-0"
+                  priority
+                  className="w-8 h-8 flex-shrink-0"
                 />
                 <div className="text-left">
                   <h2 className="text-lg font-bold">GB Locações</h2>

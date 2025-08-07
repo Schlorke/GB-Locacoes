@@ -13,12 +13,17 @@ const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
 })
 
 const jost = Jost({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-jost',
+  preload: true,
+  fallback: ['Georgia', 'serif'],
+  adjustFontFallback: false,
 })
 
 export default function ClientLayout({
@@ -30,7 +35,11 @@ export default function ClientLayout({
   const isAdminRoute = pathname?.startsWith('/admin') || false
 
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${jost.variable}`}>
+    <html
+      lang="pt-BR"
+      className={`${inter.variable} ${jost.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />

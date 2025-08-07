@@ -49,8 +49,10 @@ export function HeroCarouselManager({
   const moveItem = (fromIndex: number, toIndex: number) => {
     const newItems = [...items]
     const [movedItem] = newItems.splice(fromIndex, 1)
-    newItems.splice(toIndex, 0, movedItem)
-    onChange(newItems)
+    if (movedItem) {
+      newItems.splice(toIndex, 0, movedItem)
+      onChange(newItems)
+    }
   }
 
   const handleDragStart = (index: number) => {
