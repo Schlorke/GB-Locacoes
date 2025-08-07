@@ -36,13 +36,16 @@ import { Input } from './input'
 import { Label } from './label'
 
 // Configuração para permitir imagens externas no Storybook
-const StorybookImage = ({ src, ...props }: any) => {
+const StorybookImage = ({
+  src,
+  ...props
+}: React.ComponentProps<typeof Image>) => {
   // Se estivermos no Storybook, usar img normal
   if (
     typeof window !== 'undefined' &&
     window.location.hostname.includes('chromatic')
   ) {
-    return <img src={src} {...props} />
+    return <img src={src as string} {...props} />
   }
   // Caso contrário, usar Next.js Image
   return <Image src={src} {...props} />
@@ -137,7 +140,7 @@ function SortableImage({
             onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
               const target = e.target as HTMLImageElement
               target.src =
-                'https://via.placeholder.com/200x120/cccccc/666666?text=Error'
+                'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjY2NjY2NjIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2NjY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkVycm88L3RleHQ+PC9zdmc+'
             }}
           />
         </div>

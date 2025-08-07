@@ -322,6 +322,7 @@ export default function EquipmentsPage() {
                             }
                             alt={equipment.name}
                             fill
+                            priority
                             className="object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
                           />
                           {!equipment.isAvailable && (

@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import React from 'react'
 
 import { Badge } from '@/components/ui/badge'
@@ -243,9 +244,12 @@ function QuotePage() {
                             <div className="flex flex-col sm:flex-row gap-4">
                               {/* Imagem */}
                               <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden mx-auto sm:mx-0">
-                                <img
+                                <Image
                                   src={imageUrl || '/placeholder.svg'}
                                   alt={equipment.name}
+                                  width={80}
+                                  height={80}
+                                  priority
                                   className="w-full h-full object-cover"
                                   onError={(e) => {
                                     const target = e.target as HTMLImageElement

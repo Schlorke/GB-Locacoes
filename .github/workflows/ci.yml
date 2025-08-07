@@ -45,6 +45,9 @@ jobs:
           DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
           NEXTAUTH_SECRET: dummy-secret-for-ci
           NEXTAUTH_URL: http://localhost:3000
+          NEXT_PUBLIC_SUPABASE_URL: https://dummy.supabase.co
+          SUPABASE_SERVICE_ROLE_KEY: dummy-service-role-key
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: dummy-anon-key
 
       - name: Build Storybook
         run: pnpm build-storybook
