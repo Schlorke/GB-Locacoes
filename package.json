@@ -52,7 +52,9 @@
     "check:prisma": "node scripts/check-prisma.js",
     "preci:test": "pnpm check:prisma",
     "preci:build": "pnpm check:prisma",
-    "ci:prisma-only": "pnpm db:generate && pnpm check:prisma"
+    "ci:prisma-only": "pnpm db:generate && pnpm check:prisma",
+    "fix:typescript": "node scripts/fix-typescript-errors.js",
+    "ci:typescript-fix": "pnpm fix:typescript && pnpm type-check"
   },
   "dependencies": {
     "@auth/core": "0.40.0",

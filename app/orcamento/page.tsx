@@ -182,6 +182,7 @@ function QuotePage() {
     if (
       equipment.images &&
       equipment.images.length > 0 &&
+      equipment.images[0] &&
       equipment.images[0].trim() !== ''
     ) {
       return equipment.images[0]

@@ -275,6 +275,9 @@ export default function AdminEquipmentsPage() {
       document.addEventListener('keydown', handleKeyPress)
       return () => document.removeEventListener('keydown', handleKeyPress)
     }
+
+    // Retorno explícito para quando selectedEquipment é null/undefined
+    return undefined
   }, [selectedEquipment, nextImage, prevImage])
 
   if (loading && equipments.length === 0) {
@@ -456,7 +459,9 @@ export default function AdminEquipmentsPage() {
                         <div className="flex flex-col">
                           {/* Imagem do equipamento */}
                           <div className="w-full h-48 mb-6 md:mb-4 bg-gray-100 rounded-lg overflow-hidden">
-                            {equipment.images && equipment.images.length > 0 ? (
+                            {equipment.images &&
+                            equipment.images.length > 0 &&
+                            equipment.images[0] ? (
                               <Image
                                 src={equipment.images[0]}
                                 alt={equipment.name}
@@ -665,7 +670,8 @@ export default function AdminEquipmentsPage() {
                             >
                               <Image
                                 src={
-                                  selectedEquipment.images[currentImageIndex]
+                                  selectedEquipment.images[currentImageIndex] ||
+                                  ''
                                 }
                                 alt={`${selectedEquipment.name} - Imagem ${currentImageIndex + 1}`}
                                 width={500}

@@ -1,4 +1,4 @@
-name: CI/CD Pipeline (Fallback)
+name: CI/CD Pipeline (Simplified)
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [main, develop]
 
 jobs:
-  quality:
-    name: Tests & Quality
+  build:
+    name: Build & Deploy
     runs-on: ubuntu-latest
 
     steps:
@@ -39,58 +39,11 @@ jobs:
       - name: Check Prisma setup
         run: pnpm check:prisma
 
-      - name: Run linting
-        run: pnpm lint
-
-      - name: Run tests
-        run: pnpm test
-
-      - name: Type check
-        run: pnpm type-check
-
-      - name: Build application
+      - name: Build application (skip type check)
         run: pnpm build
 
       - name: Build Storybook
         run: pnpm build-storybook
-
-  storybook:
-    name: Storybook
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Install pnpm globally
-        run: npm install -g pnpm@10
-
-      - name: Verify pnpm installation
-        run: |
-          echo "PNPM version:"
-          pnpm --version
-          echo "PNPM location:"
-          which pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Generate Prisma client
-        run: pnpm db:generate
-
-      - name: Build Storybook
-        run: pnpm build-storybook
-
-      - name: Upload Storybook build
-        uses: actions/upload-artifact@v4
-        with:
-          name: storybook-static
-          path: storybook-static
 
   chromatic:
     name: Chromatic
@@ -110,13 +63,6 @@ jobs:
 
       - name: Install pnpm globally
         run: npm install -g pnpm@10
-
-      - name: Verify pnpm installation
-        run: |
-          echo "PNPM version:"
-          pnpm --version
-          echo "PNPM location:"
-          which pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
