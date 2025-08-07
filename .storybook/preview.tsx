@@ -2,10 +2,23 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { SidebarProvider } from '@/components/ui/sidebar'
 import { ToastProvider } from '@/components/ui/toast'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import type { Preview } from '@storybook/react-vite'
+import type { Preview } from '@storybook/react'
 import { SessionProvider } from 'next-auth/react'
 import React from 'react'
 import '../app/globals.css'
+
+// Configuração para o Next.js Image
+import { ImageLoaderProps } from 'next/image'
+
+// Função de loader personalizada para o Storybook
+const imageLoader = ({ src, width, quality }: ImageLoaderProps) => {
+  // Se for uma URL externa, retorna como está
+  if (src.startsWith('http')) {
+    return src
+  }
+  // Para imagens locais, você pode implementar sua lógica aqui
+  return src
+}
 
 export const decorators = [
   (Story) => (
@@ -28,19 +41,13 @@ export const decorators = [
 const preview: Preview = {
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
-    controls: { expanded: true },
-    backgrounds: { default: 'app-background' },
-    a11y: {
-      config: {
-        rules: [
-          {
-            id: 'color-contrast',
-            enabled: false,
-          },
-        ],
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
       },
     },
-    // Configurações para Next.js
+    // Configuração para o Next.js Image
     nextjs: {
       appDirectory: true,
     },
@@ -49,6 +56,13 @@ const preview: Preview = {
       source: {
         state: 'open',
       },
+    },
+  },
+  // Configuração global para o Next.js Image
+  globalTypes: {
+    imageLoader: {
+      description: 'Image loader for Next.js Image component',
+      defaultValue: imageLoader,
     },
   },
   // Configurações globais para argTypes

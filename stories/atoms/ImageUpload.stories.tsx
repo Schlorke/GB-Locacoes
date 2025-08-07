@@ -27,7 +27,9 @@ export const Default: StoryObj<typeof ImageUpload> = {
 
 export const Variant: StoryObj<typeof ImageUpload> = {
   args: {
-    images: ['/placeholder.jpg'],
+    images: [
+      'https://via.placeholder.com/800x500/cccccc/666666?text=Equipamento',
+    ],
     onImagesChange: () => {},
     maxImages: 3,
   },

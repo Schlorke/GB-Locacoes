@@ -35,6 +35,19 @@ import { CloseButton } from './close-button'
 import { Input } from './input'
 import { Label } from './label'
 
+// Configuração para permitir imagens externas no Storybook
+const StorybookImage = ({ src, ...props }: any) => {
+  // Se estivermos no Storybook, usar img normal
+  if (
+    typeof window !== 'undefined' &&
+    window.location.hostname.includes('chromatic')
+  ) {
+    return <img src={src} {...props} />
+  }
+  // Caso contrário, usar Next.js Image
+  return <Image src={src} {...props} />
+}
+
 interface ImageUploadProps {
   images: string[]
   onImagesChange: (_images: string[]) => void
@@ -104,6 +117,7 @@ function SortableImage({
         <div
           {...attributes}
           {...listeners}
+          aria-label={`Arrastar imagem ${index + 1} para reordenar`}
           className={`absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing bg-black/20 backdrop-blur-sm rounded p-1 ${isDragging ? 'opacity-100' : ''}`}
         >
           <GripVertical className="h-4 w-4 text-white" />
@@ -111,15 +125,19 @@ function SortableImage({
 
         {/* Image Container */}
         <div className="aspect-video bg-muted rounded-lg overflow-hidden">
-          <Image
-            src={url || '/placeholder.svg'}
+          <StorybookImage
+            src={
+              url ||
+              'https://via.placeholder.com/200x120/cccccc/666666?text=Preview'
+            }
             alt={`Preview ${index + 1}`}
             width={200}
             height={120}
             className="w-full h-full object-cover"
-            onError={(e) => {
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
               const target = e.target as HTMLImageElement
-              target.src = '/placeholder.svg?height=120&width=200'
+              target.src =
+                'https://via.placeholder.com/200x120/cccccc/666666?text=Error'
             }}
           />
         </div>
@@ -318,8 +336,11 @@ export function ImageUpload({
                 transition={{ duration: 0.4, ease: 'easeOut' }}
                 className="absolute inset-0"
               >
-                <Image
-                  src={images[currentImageIndex] || '/placeholder.jpg'}
+                <StorybookImage
+                  src={
+                    images[currentImageIndex] ||
+                    'https://via.placeholder.com/800x500/cccccc/666666?text=Equipamento'
+                  }
                   alt={`Equipamento - Imagem ${currentImageIndex + 1}`}
                   fill
                   className="object-cover cursor-pointer transition-all duration-500"
@@ -434,7 +455,7 @@ export function ImageUpload({
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  <Image
+                  <StorybookImage
                     src={image}
                     alt={`Miniatura ${index + 1}`}
                     width={64}
