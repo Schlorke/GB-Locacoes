@@ -1,27 +1,33 @@
-name: CI/CD Pipeline (Simplified)
+name: CI/CD Pipeline (Simplified) - DISABLED
 
+# DISABLED: Use ci.yml instead
 on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
+  workflow_dispatch: # Manual trigger only - workflow is disabled
+  # push:
+  #   branches: [main, develop]
+  # pull_request:
+  #   branches: [main, develop]
 
 jobs:
   build:
     name: Build & Deploy
     runs-on: ubuntu-latest
+    if: false # Disabled
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Install pnpm globally
-        run: npm install -g pnpm@10
+          cache: 'pnpm'
 
       - name: Verify pnpm installation
         run: |
@@ -48,7 +54,7 @@ jobs:
   chromatic:
     name: Chromatic
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: false # Disabled
 
     steps:
       - name: Checkout code
@@ -56,13 +62,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Install pnpm globally
-        run: npm install -g pnpm@10
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

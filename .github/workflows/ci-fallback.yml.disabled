@@ -1,12 +1,11 @@
 name: CI/CD Pipeline (Fallback) - DISABLED
 
 # DISABLED: Use ci.yml instead
-on:
-  workflow_dispatch: # Manual trigger only - workflow is disabled
-  # push:
-  #   branches: [main, develop]
-  # pull_request:
-  #   branches: [main, develop]
+# on:
+#   push:
+#     branches: [main, develop]
+#   pull_request:
+#     branches: [main, develop]
 
 jobs:
   quality:
