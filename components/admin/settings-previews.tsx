@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Building2, Mail, MapPin, Phone } from 'lucide-react'
+import Image from 'next/image'
 import { memo } from 'react'
 import { MiniCarousel } from './mini-carousel'
 
@@ -250,7 +251,15 @@ export const SeoPreview = memo(function SeoPreview({ data }: SeoPreviewProps) {
       {/* Simulação do resultado do Google */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
         <div className="flex items-center gap-2 mb-3">
-          {favicon && <img src={favicon} alt="Favicon" className="w-4 h-4" />}
+          {favicon && (
+            <Image
+              src={favicon}
+              alt="Favicon"
+              width={16}
+              height={16}
+              className="w-4 h-4"
+            />
+          )}
           <span className="text-green-600 text-sm">gblocacoes.com.br</span>
         </div>
 

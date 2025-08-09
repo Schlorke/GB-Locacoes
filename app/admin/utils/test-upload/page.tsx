@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import Image from 'next/image'
 import { useState } from 'react'
 
 export default function TestUploadPage() {
@@ -109,9 +110,11 @@ export default function TestUploadPage() {
               {result.url && !result.error && (
                 <div className="mt-4">
                   <h4 className="font-semibold mb-2">Imagem uploadada:</h4>
-                  <img
+                  <Image
                     src={result.url}
                     alt="Upload test"
+                    width={400}
+                    height={300}
                     className="max-w-full h-auto rounded-lg border"
                   />
                 </div>

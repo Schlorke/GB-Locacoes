@@ -38,6 +38,7 @@ import { Label } from './label'
 // Configuração para permitir imagens externas no Storybook
 const StorybookImage = ({
   src,
+  alt = '',
   ...props
 }: React.ComponentProps<typeof Image>) => {
   // Se estivermos no Storybook, usar img normal
@@ -45,10 +46,11 @@ const StorybookImage = ({
     typeof window !== 'undefined' &&
     window.location.hostname.includes('chromatic')
   ) {
-    return <img src={src as string} {...props} />
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src as string} alt={alt} {...props} />
   }
   // Caso contrário, usar Next.js Image
-  return <Image src={src} {...props} />
+  return <Image src={src} alt={alt} {...props} />
 }
 
 interface ImageUploadProps {

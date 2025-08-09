@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 import { Badge } from '@/components/ui/badge'
@@ -222,12 +223,12 @@ function QuotePage() {
                     </p>
                     <p className="text-small text-gray-400 mt-2">
                       Você pode solicitar um orçamento geral ou{' '}
-                      <a
+                      <Link
                         href="/equipamentos"
                         className="text-orange-600 hover:text-orange-700 underline"
                       >
                         navegar pelos equipamentos
-                      </a>{' '}
+                      </Link>{' '}
                       para adicionar itens específicos
                     </p>
                   </div>

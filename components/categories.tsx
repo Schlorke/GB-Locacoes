@@ -171,7 +171,7 @@ export default function Categories() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {categories.map((category, index) => {
+          {categories.map((category, _index) => {
             const IconComponent = category.icon
             return (
               <Card

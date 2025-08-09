@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/middlewares/require-admin'
-import { type NextRequest, NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 
 // GET /api/admin/equipments - List all equipments with pagination and filtering
 export async function GET(request: NextRequest) {
@@ -45,7 +45,14 @@ export async function GET(request: NextRequest) {
     }
 
     const skip = (page - 1) * limit
-    const where: any = {}
+    const where: {
+      OR?: Array<{
+        name?: { contains: string; mode: 'insensitive' }
+        description?: { contains: string; mode: 'insensitive' }
+      }>
+      categoryId?: string
+      available?: boolean
+    } = {}
 
     if (search) {
       where.OR = [
@@ -87,7 +94,7 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    const equipmentsFormatted = equipments.map((equip: any) => ({
+    const equipmentsFormatted = equipments.map((equip) => ({
       ...equip,
       pricePerDay: Number(equip.pricePerDay), // Converter Decimal para number
       isAvailable: equip.available,
@@ -120,13 +127,14 @@ export async function GET(request: NextRequest) {
     }
 
     if (error instanceof Error && 'code' in error) {
+      const prismaError = error as Error & { code: string; meta?: unknown }
       console.error(
         '[API GET /admin/equipments] Erro do Prisma - Código:',
-        (error as any).code
+        prismaError.code
       )
       console.error(
         '[API GET /admin/equipments] Erro do Prisma - Meta:',
-        (error as any).meta
+        prismaError.meta
       )
     }
 
@@ -241,16 +249,17 @@ export async function POST(request: NextRequest) {
     )
 
     if (error instanceof Error && 'code' in error) {
+      const prismaError = error as Error & { code: string; meta?: unknown }
       console.error(
         '[API POST /admin/equipments] Erro do Prisma - Código:',
-        (error as any).code
+        prismaError.code
       )
       return NextResponse.json(
         {
           error: 'Erro ao processar dados do equipamento.',
           details:
             process.env.NODE_ENV === 'development'
-              ? `Prisma Error ${(error as any).code}: ${error.message}`
+              ? `Prisma Error ${prismaError.code}: ${error.message}`
               : undefined,
         },
         { status: 400 }

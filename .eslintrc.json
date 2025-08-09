@@ -1,7 +1,0 @@
-{
-  "extends": ["next", "next/core-web-vitals"],
-  "plugins": ["next"],
-  "rules": {
-    "no-console": ["warn", { "allow": ["log", "warn", "error"] }]
-  }
-}

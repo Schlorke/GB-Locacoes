@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { Shield, Truck, Clock, Users, Award, Headphones } from 'lucide-react'
+import { Award, Clock, Headphones, Shield, Truck, Users } from 'lucide-react'
 
 const benefits = [
   {
@@ -68,7 +68,7 @@ export default function WhyChooseUs() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {benefits.map((benefit, index) => {
+          {benefits.map((benefit, _index) => {
             const IconComponent = benefit.icon
             return (
               <Card

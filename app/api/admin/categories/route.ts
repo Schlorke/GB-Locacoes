@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma'
 
-import { type NextRequest, NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 import crypto from 'node:crypto'
 import { z } from 'zod'
 
@@ -115,13 +115,14 @@ export async function POST(request: NextRequest) {
     console.error('Error creating category:', error)
 
     if (error instanceof Error && 'code' in error) {
+      const prismaError = error as Error & { code: string; meta?: unknown }
       console.error(
         '[API POST /admin/categories] Prisma error:',
-        (error as any).code,
+        prismaError.code,
         error.message
       )
 
-      if ((error as any).code === 'P2002') {
+      if (prismaError.code === 'P2002') {
         return NextResponse.json(
           { error: 'Categoria já existente' },
           { status: 409 }

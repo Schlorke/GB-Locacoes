@@ -2,7 +2,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 import { getServerSession } from 'next-auth'
-import { type NextRequest, NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,7 +35,14 @@ export async function GET(request: NextRequest) {
     }
 
     const skip = (page - 1) * limit
-    const where: any = {}
+    const where: {
+      OR?: Array<{
+        name?: { contains: string; mode: 'insensitive' }
+        email?: { contains: string; mode: 'insensitive' }
+        phone?: { contains: string; mode: 'insensitive' }
+      }>
+      status?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED'
+    } = {}
 
     if (search) {
       where.OR = [
