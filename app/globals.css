@@ -184,6 +184,23 @@
       0 10px 15px -3px rgba(0, 0, 0, 0.1),
       0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   }
+
+  /* Modal category buttons - remove focus ring completely */
+  .category-modal-button:focus,
+  .category-modal-button:focus-visible,
+  .category-modal-button[aria-controls]:focus,
+  .category-modal-button[aria-controls]:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: inherit !important;
+  }
+
+  /* Icon selector buttons - black focus ring */
+  .icon-selector-button:focus,
+  .icon-selector-button:focus-visible {
+    outline: 1px solid black !important;
+    outline-offset: 1px !important;
+  }
 }
 
 /* =============================== */

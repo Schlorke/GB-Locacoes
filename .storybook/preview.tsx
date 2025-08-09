@@ -1,80 +1,113 @@
-import { ThemeProvider } from '@/components/theme-provider'
-import { SidebarProvider } from '@/components/ui/sidebar'
-import { ToastProvider } from '@/components/ui/toast'
-import { TooltipProvider } from '@/components/ui/tooltip'
+import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport'
 import type { Preview } from '@storybook/react'
-import { SessionProvider } from 'next-auth/react'
-import React from 'react'
 import '../app/globals.css'
 
-// Configuração para o Next.js Image
-import { ImageLoaderProps } from 'next/image'
+// Import fonts exactly as in the app
+import { Inter, Jost } from 'next/font/google'
+import React from 'react'
 
-// Função de loader personalizada para o Storybook
-const imageLoader = ({ src, width, quality }: ImageLoaderProps) => {
-  // Se for uma URL externa, retorna como está
-  if (src.startsWith('http')) {
-    return src
-  }
-  // Para imagens locais, você pode implementar sua lógica aqui
-  return src
-}
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+})
 
-export const decorators = [
-  (Story) => (
-    <div id="root">
-      <SessionProvider session={null}>
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <ToastProvider>
-            <TooltipProvider>
-              <SidebarProvider>
-                <Story />
-              </SidebarProvider>
-            </TooltipProvider>
-          </ToastProvider>
-        </ThemeProvider>
-      </SessionProvider>
-    </div>
-  ),
-]
+const jost = Jost({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jost',
+  preload: true,
+  fallback: ['Georgia', 'serif'],
+  adjustFontFallback: false,
+})
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
-        date: /Date$/i,
+        date: /Date$/,
       },
+      expanded: false,
     },
-    // Configuração para o Next.js Image
-    nextjs: {
-      appDirectory: true,
+    layout: 'fullscreen',
+    viewport: {
+      viewports: INITIAL_VIEWPORTS,
     },
-    // Configurações para lidar com imagens
+    backgrounds: {
+      default: 'light',
+      values: [
+        {
+          name: 'light',
+          value: '#ffffff',
+        },
+        {
+          name: 'gray-50',
+          value: '#f8fafc',
+        },
+        {
+          name: 'gray-900',
+          value: '#111827',
+        },
+      ],
+    },
     docs: {
-      source: {
-        state: 'open',
+      toc: true,
+    },
+    a11y: {
+      element: '#storybook-root',
+      config: {},
+      options: {},
+      manual: true,
+    },
+  },
+  globalTypes: {
+    reducedMotion: {
+      description: 'Reduce animations for accessibility',
+      defaultValue: false,
+      toolbar: {
+        title: 'Reduced Motion',
+        icon: 'eye',
+        items: [
+          { value: false, title: 'Enable animations' },
+          { value: true, title: 'Reduce motion' },
+        ],
+        showName: true,
+        dynamicTitle: true,
       },
     },
   },
-  // Configuração global para o Next.js Image
-  globalTypes: {
-    imageLoader: {
-      description: 'Image loader for Next.js Image component',
-      defaultValue: imageLoader,
+  decorators: [
+    (Story, context) => {
+      const reducedMotion = context.globals.reducedMotion
+
+      return React.createElement(
+        'div',
+        {
+          className: `${inter.variable} ${jost.variable} min-h-screen`,
+          style: {
+            fontFamily: 'var(--font-inter), sans-serif',
+          },
+        },
+        reducedMotion &&
+          React.createElement(
+            'style',
+            {},
+            `
+              *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+              }
+            `
+          ),
+        React.createElement(Story)
+      )
     },
-  },
-  // Configurações globais para argTypes
-  argTypes: {
-    // Desabilitar controles para props que podem causar problemas
-    src: { control: false },
-    alt: { control: false },
-    href: { control: false },
-    // Configurar controles para props comuns
-    className: { control: 'text' },
-    children: { control: 'text' },
-  },
+  ],
 }
 
 export default preview
