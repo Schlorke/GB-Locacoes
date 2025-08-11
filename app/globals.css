@@ -41,6 +41,10 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --z-dropdown: 9999;
+    --z-modal: 10000;
+    --z-popover: 10001;
+    --z-tooltip: 10002;
   }
   .dark {
     --background: 222.2 84% 4.9%;
@@ -239,12 +243,12 @@ textarea[class*='bg-background']:focus {
 /* 2.1. Correções Radix UI Select  */
 /* =============================== */
 [data-radix-popper-content-wrapper] {
-  z-index: 9999 !important;
+  z-index: var(--z-popover) !important;
 }
 
 [data-radix-select-content] {
   position: absolute !important;
-  z-index: 9999 !important;
+  z-index: var(--z-dropdown) !important;
 }
 
 /* Garantir que o Portal do Radix funcione corretamente */
@@ -252,7 +256,7 @@ textarea[class*='bg-background']:focus {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
-  z-index: 9999 !important;
+  z-index: var(--z-popover) !important;
   pointer-events: none !important;
 }
 
@@ -1049,6 +1053,12 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* =============================== */
 
 /* Estilos padrão para elementos de filtro e cards admin */
+.filter-container,
+.admin-filter-card {
+  position: relative;
+  z-index: 1;
+}
+
 .admin-filter-element {
   border-color: rgb(229 231 235) !important; /* border-gray-200 */
   transition: all 0.2s ease-in-out !important;
