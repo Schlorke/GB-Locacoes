@@ -167,7 +167,7 @@ export default function FeaturedMaterials() {
 
         {equipments.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {equipments.map((equipment: Equipment, index: number) => (
+            {equipments.map((equipment: Equipment, _index: number) => (
               <Card
                 key={equipment.id}
                 className={`material-card relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02] flex flex-col group opacity-0`}
