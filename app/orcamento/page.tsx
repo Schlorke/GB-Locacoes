@@ -13,7 +13,8 @@ import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/hooks/use-toast'
 import { formatCurrency } from '@/lib/utils'
-import { Minus, Package, Plus, ShoppingCart, Trash2 } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Minus, Package, Plus, ShoppingCart, Trash2, User } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useCallback, useEffect, useState } from 'react'
 
@@ -69,24 +70,30 @@ function QuotePage() {
           (eq: Equipment) => eq.id === equipmentId
         )
 
-        if (
-          equipment &&
-          !selectedEquipments.find((eq) => eq.id === equipmentId)
-        ) {
-          const price = Number(equipment.pricePerDay) || 0
-          const equipmentToAdd = {
-            ...equipment,
-            pricePerDay: price,
-            quantity: 1,
-            days: 1,
-          }
-          setSelectedEquipments((prev) => [...prev, equipmentToAdd])
+        if (equipment) {
+          setSelectedEquipments((prev) => {
+            const safePrev = Array.isArray(prev) ? prev : []
+            // Verificar se o equipamento já existe
+            const exists = safePrev.find((eq) => eq.id === equipmentId)
+            if (exists) {
+              return safePrev // Não adicionar duplicados
+            }
+
+            const price = Number(equipment.pricePerDay) || 0
+            const equipmentToAdd = {
+              ...equipment,
+              pricePerDay: price,
+              quantity: 1,
+              days: 1,
+            }
+            return [...safePrev, equipmentToAdd]
+          })
         }
       } catch {
         // Error handled silently for user experience
       }
     },
-    [selectedEquipments]
+    [] // Remover selectedEquipments da dependência para evitar loop
   )
 
   useEffect(() => {
@@ -193,28 +200,57 @@ function QuotePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="font-bold text-h1 text-gray-900 mb-4">
-            Solicitar Orçamento
-          </h1>
-          <p className="text-base text-gray-600">
-            Configure seu orçamento e receba nossa melhor proposta
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header com gradiente - seguindo padrão da página de equipamentos */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-8"
+        >
+          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+            {/* Clean depth layers without decorative elements */}
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            {/* Content */}
+            <div className="relative z-10 text-center">
+              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
+                Solicitar Orçamento
+              </h1>
+              <p className="text-orange-50 mb-4 font-medium">
+                Configure seu orçamento e receba nossa melhor proposta
+              </p>
+              <div className="flex items-center justify-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit mx-auto">
+                <ShoppingCart className="w-5 h-5 text-orange-50" />
+                <span className="font-semibold text-white">
+                  {selectedEquipments.length} equipamentos selecionados
+                </span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Equipamentos Selecionados - Coluna Principal */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-h3">
-                  <ShoppingCart className="h-5 w-5" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="lg:col-span-2 space-y-8"
+          >
+            <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+              {/* Clean depth layers for equipment card */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+              <CardHeader className="relative z-10">
+                <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
+                  <ShoppingCart className="h-7 w-7 text-orange-600" />
                   Equipamentos Selecionados ({selectedEquipments.length})
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative z-10">
                 {selectedEquipments.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
                     <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -234,152 +270,174 @@ function QuotePage() {
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {Array.isArray(selectedEquipments) &&
-                      selectedEquipments.map((equipment) => {
-                        const imageUrl = getEquipmentImage(equipment)
-                        return (
-                          <div
-                            key={equipment.id}
-                            className="border rounded-lg p-4"
-                          >
-                            <div className="flex flex-col sm:flex-row gap-4">
-                              {/* Imagem */}
-                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-md overflow-hidden mx-auto sm:mx-0">
-                                <Image
-                                  src={imageUrl || '/placeholder.svg'}
-                                  alt={equipment.name}
-                                  width={80}
-                                  height={80}
-                                  priority
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement
-                                    target.src = `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.name)}`
-                                  }}
-                                />
-                              </div>
-
-                              {/* Informações do Equipamento */}
-                              <div className="flex-1 min-w-0">
-                                <div className="text-center sm:text-left">
-                                  <h3 className="font-semibold text-lg truncate">
-                                    {equipment.name}
-                                  </h3>
-                                  <Badge
-                                    variant="secondary"
-                                    className="text-xs mb-2"
-                                  >
-                                    {equipment.category.name}
-                                  </Badge>
-                                  <p className="text-sm text-gray-600 mb-3">
-                                    {formatCurrency(
-                                      Number(equipment.pricePerDay) || 0
-                                    )}
-                                    /dia
-                                  </p>
+                    <AnimatePresence>
+                      {Array.isArray(selectedEquipments) &&
+                        selectedEquipments.map((equipment, index) => {
+                          const imageUrl = getEquipmentImage(equipment)
+                          return (
+                            <motion.div
+                              key={`equipment-${equipment.id}-${index}`}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -20 }}
+                              transition={{ delay: index * 0.05 }}
+                              className="relative overflow-hidden border-0 bg-white rounded-lg p-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.01]"
+                            >
+                              {/* Clean depth layers for equipment item card */}
+                              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/30 via-transparent to-gray-100/20"></div>
+                              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-gray-50/30"></div>
+                              <div className="relative z-10 flex flex-col sm:flex-row gap-4">
+                                {/* Imagem */}
+                                <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden mx-auto sm:mx-0 shadow-sm">
+                                  <Image
+                                    src={imageUrl || '/placeholder.svg'}
+                                    alt={equipment.name}
+                                    width={80}
+                                    height={80}
+                                    priority
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                      const target =
+                                        e.target as HTMLImageElement
+                                      target.src = `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.name)}`
+                                    }}
+                                  />
                                 </div>
 
-                                {/* Controles - Layout Responsivo */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                  <div className="flex items-center justify-center sm:justify-start gap-2">
-                                    <Label className="text-sm font-medium">
-                                      Quantidade:
-                                    </Label>
-                                    <div className="flex items-center gap-1">
-                                      <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() =>
-                                          updateQuantity(
-                                            equipment.id,
-                                            equipment.quantity - 1
-                                          )
-                                        }
-                                        disabled={equipment.quantity <= 1}
-                                        className="h-8 w-8 p-0"
-                                      >
-                                        <Minus className="h-3 w-3" />
-                                      </Button>
+                                {/* Informações do Equipamento */}
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-center sm:text-left">
+                                    <h3 className="font-semibold text-lg truncate">
+                                      {equipment.name}
+                                    </h3>
+                                    <Badge
+                                      variant="secondary"
+                                      className="text-xs mb-2 rounded-full"
+                                    >
+                                      {equipment.category.name}
+                                    </Badge>
+                                    <p className="text-sm text-gray-600 mb-3">
+                                      {formatCurrency(
+                                        Number(equipment.pricePerDay) || 0
+                                      )}
+                                      /dia
+                                    </p>
+                                  </div>
+
+                                  {/* Controles - Layout Responsivo */}
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div className="flex items-center justify-center sm:justify-start gap-2">
+                                      <Label className="text-sm font-medium">
+                                        Quantidade:
+                                      </Label>
+                                      <div className="flex items-center gap-1">
+                                        <Button
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() =>
+                                            updateQuantity(
+                                              equipment.id,
+                                              equipment.quantity - 1
+                                            )
+                                          }
+                                          disabled={equipment.quantity <= 1}
+                                          className="h-8 w-8 p-0"
+                                        >
+                                          <Minus className="h-3 w-3" />
+                                        </Button>
+                                        <Input
+                                          type="number"
+                                          value={equipment.quantity}
+                                          onChange={(e) =>
+                                            updateQuantity(
+                                              equipment.id,
+                                              Number.parseInt(e.target.value) ||
+                                                1
+                                            )
+                                          }
+                                          className="w-16 text-center h-8"
+                                          min="1"
+                                        />
+                                        <Button
+                                          variant="outline"
+                                          size="sm"
+                                          onClick={() =>
+                                            updateQuantity(
+                                              equipment.id,
+                                              equipment.quantity + 1
+                                            )
+                                          }
+                                          className="h-8 w-8 p-0"
+                                        >
+                                          <Plus className="h-3 w-3" />
+                                        </Button>
+                                      </div>
+                                    </div>
+
+                                    <div className="flex items-center justify-center sm:justify-start gap-2">
+                                      <Label className="text-sm font-medium">
+                                        Dias:
+                                      </Label>
                                       <Input
                                         type="number"
-                                        value={equipment.quantity}
+                                        value={equipment.days}
                                         onChange={(e) =>
-                                          updateQuantity(
+                                          updateDays(
                                             equipment.id,
                                             Number.parseInt(e.target.value) || 1
                                           )
                                         }
-                                        className="w-16 text-center h-8"
+                                        className="w-20 h-8"
                                         min="1"
                                       />
-                                      <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() =>
-                                          updateQuantity(
-                                            equipment.id,
-                                            equipment.quantity + 1
-                                          )
-                                        }
-                                        className="h-8 w-8 p-0"
-                                      >
-                                        <Plus className="h-3 w-3" />
-                                      </Button>
                                     </div>
                                   </div>
+                                </div>
 
-                                  <div className="flex items-center justify-center sm:justify-start gap-2">
-                                    <Label className="text-sm font-medium">
-                                      Dias:
-                                    </Label>
-                                    <Input
-                                      type="number"
-                                      value={equipment.days}
-                                      onChange={(e) =>
-                                        updateDays(
-                                          equipment.id,
-                                          Number.parseInt(e.target.value) || 1
-                                        )
-                                      }
-                                      className="w-20 h-8"
-                                      min="1"
-                                    />
-                                  </div>
+                                {/* Preço e Ações */}
+                                <div className="text-center sm:text-right flex-shrink-0">
+                                  <p className="text-base font-semibold text-primary mb-2">
+                                    {formatCurrency(
+                                      calculateSubtotal(equipment)
+                                    )}
+                                  </p>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() =>
+                                      removeEquipment(equipment.id)
+                                    }
+                                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
                                 </div>
                               </div>
-
-                              {/* Preço e Ações */}
-                              <div className="text-center sm:text-right flex-shrink-0">
-                                <p className="text-base font-semibold text-primary mb-2">
-                                  {formatCurrency(calculateSubtotal(equipment))}
-                                </p>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => removeEquipment(equipment.id)}
-                                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      })}
+                            </motion.div>
+                          )
+                        })}
+                    </AnimatePresence>
                   </div>
                 )}
               </CardContent>
             </Card>
 
             {/* Formulário de Contato - SEMPRE VISÍVEL */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-h3">Dados para Contato</CardTitle>
-                <p className="text-small text-gray-600">
+            <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+              {/* Clean depth layers for contact card */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+              <CardHeader className="relative z-10">
+                <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
+                  <User className="h-7 w-7 text-orange-600" />
+                  Dados para Contato
+                </CardTitle>
+                <p className="text-sm text-gray-600">
                   Preencha seus dados para receber o orçamento personalizado
                 </p>
               </CardHeader>
-              <CardContent>
+              <CardContent className="relative z-10">
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -452,7 +510,7 @@ function QuotePage() {
 
                   <Button
                     type="submit"
-                    className="w-full"
+                    className="w-full hover:scale-105 transition-transform duration-200"
                     size="lg"
                     disabled={isSubmitting}
                   >
@@ -461,21 +519,33 @@ function QuotePage() {
                 </form>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
 
           {/* Resumo do Pedido - Sidebar */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-24">
-              <CardHeader>
-                <CardTitle className="text-h3">Resumo do Pedido</CardTitle>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-1"
+          >
+            <Card className="sticky top-24 overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
+              {/* Clean depth layers for summary card */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+              <CardHeader className="relative z-10">
+                <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
+                  <Package className="h-7 w-7 text-orange-600" />
+                  Resumo do Pedido
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="relative z-10 space-y-4">
                 {Array.isArray(selectedEquipments) &&
                 selectedEquipments.length > 0 ? (
                   <>
-                    {selectedEquipments.map((equipment) => (
+                    {selectedEquipments.map((equipment, index) => (
                       <div
-                        key={equipment.id}
+                        key={`summary-${equipment.id}-${index}`}
                         className="flex justify-between text-sm"
                       >
                         <span className="truncate pr-2">
@@ -513,7 +583,7 @@ function QuotePage() {
                 )}
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
