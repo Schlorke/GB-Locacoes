@@ -146,7 +146,7 @@ export function CustomSelect({
         {isOpen && (
           <div
             id="dropdown-content"
-            className="absolute z-[9999] mt-1 w-full rounded-md border bg-white shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 overflow-hidden"
+            className="absolute z-[var(--z-dropdown)] mt-1 w-full rounded-md border bg-white shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 overflow-hidden"
             style={{
               maxHeight: '300px',
             }}

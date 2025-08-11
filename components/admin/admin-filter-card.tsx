@@ -60,7 +60,7 @@ export function AdminFilterCard({
   return (
     <Card
       className={cn(
-        'relative overflow-visible border-0 shadow-xl bg-white backdrop-blur-sm transition-all duration-300',
+        'admin-filter-card relative overflow-visible border-0 shadow-xl bg-white backdrop-blur-sm transition-all duration-300',
         className
       )}
     >
