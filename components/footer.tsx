@@ -1,13 +1,13 @@
-import Link from 'next/link'
 import {
-  Phone,
-  Mail,
-  MapPin,
   Clock,
   Facebook,
   Instagram,
   Linkedin,
+  Mail,
+  MapPin,
+  Phone,
 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Footer() {
   return (
@@ -17,11 +17,11 @@ export default function Footer() {
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-orange-600 text-white p-2 rounded-lg font-bold text-h3">
+              <div className="bg-orange-600 text-white p-2 rounded-lg font-bold text-lg">
                 GB
               </div>
               <div>
-                <div className="font-bold text-h3">GB Locações</div>
+                <div className="font-bold text-lg">GB Locações</div>
                 <div className="text-small text-gray-400">
                   Equipamentos para Construção
                 </div>
@@ -59,7 +59,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="font-semibold text-h3 mb-4">Links Rápidos</h3>
+            <h3 className="font-semibold text-lg mb-4">Links Rápidos</h3>
             <ul className="space-y-2">
               <li>
                 <Link
