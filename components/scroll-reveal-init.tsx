@@ -1,7 +1,27 @@
+/**
+ * 🎬 SISTEMA DE SCROLL REVEAL - GB LOCAÇÕES
+ *
+ * Sistema inteligente de animações que detecta o tipo de navegação:
+ * - Primeira visita: Executa animações suaves
+ * - Navegação interna: Mostra elementos imediatamente
+ *
+ * Compatível com:
+ * ✅ Elementos estáticos (Categories, Hero)
+ * ✅ Elementos dinâmicos (FeaturedMaterials com ssr: false)
+ * ✅ Componentes com carregamento assíncrono
+ * ✅ Navegação entre páginas
+ * ✅ Dispositivos móveis
+ *
+ * @author GB Locações Development Team
+ * @version 2.0
+ * @see docs/scroll-reveal-system.md
+ */
+
 'use client'
 
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+
 export default function ScrollRevealInit() {
   const [isHydrated, setIsHydrated] = useState(false)
   const pathname = usePathname()
@@ -34,7 +54,13 @@ export default function ScrollRevealInit() {
         return 'navigate' // fallback
       }
 
-      // Verificar se é navegação interna (clique em link do próprio site)
+      /**
+       * 🧠 DETECÇÃO DE TIPO DE NAVEGAÇÃO
+       *
+       * Determina se deve executar animações baseado no tipo de acesso:
+       * - Primeira visita: URL digitada, refresh, nova aba
+       * - Navegação interna: Clique em links internos, histórico
+       */
       const isInternalNavigation = () => {
         const navigationType = getNavigationType()
         const wasInternalClick =
@@ -64,6 +90,12 @@ export default function ScrollRevealInit() {
       const shouldExecuteAnimations = !isInternalNavigation()
       const isOnMobile = isMobile()
 
+      /**
+       * 🎯 SELETORES DE ELEMENTOS ANIMADOS
+       *
+       * Todos os elementos que participam do sistema de scroll reveal.
+       * Para adicionar novos elementos, inclua suas classes aqui.
+       */
       const selectors =
         '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
         '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
@@ -76,6 +108,14 @@ export default function ScrollRevealInit() {
           element.classList.contains('category-card-animate')
         ) {
           element.classList.remove('animate-in')
+        } else if (
+          element.classList.contains('section-title') ||
+          element.classList.contains('section-subtitle')
+        ) {
+          // Inicializar títulos e subtítulos de seção para animação
+          element.style.opacity = '0'
+          element.style.transform = 'translateY(60px)'
+          element.style.transition = 'none'
         } else {
           element.style.opacity = '0'
           element.style.transform = 'translateY(60px)'
@@ -251,9 +291,19 @@ export default function ScrollRevealInit() {
       // Lógica principal
       let observer: IntersectionObserver | null = null
       let mutation: MutationObserver | null = null
+      let internalMutation: MutationObserver | null = null
+      let periodicCheck: NodeJS.Timeout | null = null
 
       if (shouldExecuteAnimations) {
-        // EXECUTAR ANIMAÇÕES: Refresh, URL digitada, nova aba, etc.
+        /**
+         * 🎬 MODO PRIMEIRA VISITA
+         *
+         * Executa animações completas para impressionar o usuário.
+         * Configuração:
+         * - Elementos inicializados como invisíveis
+         * - IntersectionObserver detecta viewport
+         * - MutationObserver detecta novos elementos
+         */
         // Aguardar a hidratação antes de manipular o DOM
 
         setTimeout(() => {
@@ -293,14 +343,119 @@ export default function ScrollRevealInit() {
           })
         }, 100) // Delay maior para garantir DOM completo
       } else {
-        // NAVEGAÇÃO INTERNA: Mostrar tudo imediatamente
+        /**
+         * ⚡ MODO NAVEGAÇÃO INTERNA
+         *
+         * Mostra elementos imediatamente para fluidez.
+         * Sistemas de backup:
+         * - Delay maior para elementos dinâmicos (200ms)
+         * - MutationObserver para novos elementos
+         * - Verificação periódica para elementos perdidos
+         */
+        // Delay maior para aguardar elementos carregados dinamicamente
         setTimeout(() => {
           showAllElementsImmediately()
-        }, 50)
+        }, 200)
+
+        // Observer adicional para detectar novos elementos na navegação interna
+        internalMutation = new MutationObserver((records) => {
+          records.forEach((record) => {
+            record.addedNodes.forEach((node) => {
+              if (node.nodeType === 1) {
+                const el = node as HTMLElement
+                if (el.matches(selectors)) {
+                  // Mostrar elemento imediatamente
+                  el.style.opacity = '1'
+                  el.style.transform = 'translateY(0)'
+                  el.style.animation = 'none'
+                  el.style.transition = 'none'
+                }
+                el.querySelectorAll(selectors).forEach((child) => {
+                  const htmlChild = child as HTMLElement
+                  htmlChild.style.opacity = '1'
+                  htmlChild.style.transform = 'translateY(0)'
+                  htmlChild.style.animation = 'none'
+                  htmlChild.style.transition = 'none'
+                })
+              }
+            })
+          })
+        })
+        internalMutation.observe(document.body, {
+          childList: true,
+          subtree: true,
+        })
+
+        // Verificação periódica para elementos carregados dinamicamente
+        periodicCheck = setInterval(() => {
+          const hiddenElements = document.querySelectorAll(
+            `${selectors}[style*="opacity: 0"]`
+          )
+          hiddenElements.forEach((element) => {
+            const htmlElement = element as HTMLElement
+            htmlElement.style.opacity = '1'
+            htmlElement.style.transform = 'translateY(0)'
+            htmlElement.style.animation = 'none'
+            htmlElement.style.transition = 'none'
+          })
+        }, 500)
       }
+
+      /**
+       * 🔄 SISTEMA DE ELEMENTOS DINÂMICOS
+       *
+       * Processa elementos carregados assincronamente (ex: FeaturedMaterials).
+       * Funciona com componentes que usam ssr: false + API calls.
+       *
+       * Fluxo:
+       * 1. Componente carrega e dispara evento 'featuredMaterialsLoaded'
+       * 2. Sistema detecta evento e processa elementos
+       * 3. Aplica comportamento baseado no tipo de navegação
+       */
+      const handleFeaturedMaterialsLoaded = () => {
+        const featuredElements = document.querySelectorAll(
+          '.section-title, .section-subtitle, .material-card'
+        )
+
+        if (shouldExecuteAnimations) {
+          // Primeira visita: configurar para animação
+          featuredElements.forEach((element) => {
+            const htmlElement = element as HTMLElement
+            if (
+              htmlElement.classList.contains('section-title') ||
+              htmlElement.classList.contains('section-subtitle')
+            ) {
+              htmlElement.style.opacity = '0'
+              htmlElement.style.transform = 'translateY(60px)'
+              htmlElement.style.transition = 'none'
+              observer?.observe(htmlElement)
+            }
+          })
+        } else {
+          // Navegação interna: mostrar imediatamente
+          featuredElements.forEach((element) => {
+            const htmlElement = element as HTMLElement
+            htmlElement.style.opacity = '1'
+            htmlElement.style.transform = 'translateY(0)'
+            htmlElement.style.animation = 'none'
+            htmlElement.style.transition = 'none'
+          })
+        }
+      }
+
+      window.addEventListener(
+        'featuredMaterialsLoaded',
+        handleFeaturedMaterialsLoaded
+      )
 
       // Cleanup function
       return () => {
+        window.removeEventListener(
+          'featuredMaterialsLoaded',
+          handleFeaturedMaterialsLoaded
+        )
+
+        // Cleanup para primeira visita
         if (shouldExecuteAnimations) {
           observer?.disconnect()
           mutation?.disconnect()
@@ -311,6 +466,13 @@ export default function ScrollRevealInit() {
             htmlElement.style.animation = 'none'
             htmlElement.classList.remove('animate-in')
           })
+        }
+        // Cleanup para navegação interna
+        else {
+          internalMutation?.disconnect()
+          if (periodicCheck) {
+            clearInterval(periodicCheck)
+          }
         }
       }
     }

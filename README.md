@@ -288,6 +288,39 @@ pnpm design-system:lint:fix       # Auto-fix
 - **[ADMIN_DESIGN_SYSTEM.md](./ADMIN_DESIGN_SYSTEM.md)** - Guia administrativo
 - **[docs/design-system.md](./docs/design-system.md)** - Detalhes técnicos
 
+## 🎬 Sistema de Scroll Reveal
+
+O projeto implementa um **sistema inteligente de animações** que detecta o tipo
+de navegação do usuário:
+
+### 🎯 Comportamentos
+
+- **🎨 Primeira visita**: Animações suaves para impressionar
+- **⚡ Navegação interna**: Elementos aparecem instantaneamente para fluidez
+
+### 📁 Documentação
+
+- **[📖 Guia Rápido](README-SCROLL-REVEAL.md)** - Como usar e adicionar
+  elementos
+- **[🔧 Documentação Técnica](docs/scroll-reveal-system.md)** - Arquitetura e
+  troubleshooting
+
+### 🚀 Exemplo de Uso
+
+```tsx
+// Elementos estáticos
+<h2 className="section-title">Meu Título</h2>
+<p className="section-subtitle">Minha descrição</p>
+
+// Elementos dinâmicos
+useEffect(() => {
+  fetchData().finally(() => {
+    const event = new CustomEvent('meuComponenteLoaded')
+    window.dispatchEvent(event)
+  })
+}, [])
+```
+
 ## 🧪 Testes
 
 ### 🎯 Estratégia de Testes

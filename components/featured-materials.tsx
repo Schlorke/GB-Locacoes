@@ -76,7 +76,7 @@ export default function FeaturedMaterials() {
       )
     }
 
-    // Fallback se o ícone não for encontrado
+    // Fallback final
     return (
       <Package size={14} color={color || 'currentColor'} className="mr-1.5" />
     )
@@ -98,6 +98,23 @@ export default function FeaturedMaterials() {
       console.error('Erro ao carregar equipamentos em destaque:', error)
     } finally {
       setIsLoading(false)
+
+      /**
+       * 🔄 INTEGRAÇÃO COM SISTEMA DE SCROLL REVEAL
+       *
+       * Notifica o sistema global que os elementos foram carregados.
+       * Necessário porque este componente usa:
+       * - ssr: false (não renderizado no servidor)
+       * - Carregamento assíncrono de dados via API
+       *
+       * O sistema global processa os elementos baseado no tipo de navegação:
+       * - Primeira visita: Configura para animação
+       * - Navegação interna: Mostra imediatamente
+       */
+      setTimeout(() => {
+        const event = new CustomEvent('featuredMaterialsLoaded')
+        window.dispatchEvent(event)
+      }, 100)
     }
   }
 
@@ -134,20 +151,29 @@ export default function FeaturedMaterials() {
     <section className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <h2
+            className="section-title text-3xl md:text-4xl font-bold text-gray-900 mb-4 opacity-0"
+            style={{ opacity: 0, transform: 'translateY(60px)' }}
+          >
             Equipamentos em Destaque
           </h2>
-          <p className="text-lg text-gray-600">
+          <p
+            className="section-subtitle text-xl text-gray-600 max-w-2xl mx-auto opacity-0"
+            style={{ opacity: 0, transform: 'translateY(60px)' }}
+          >
             Nossos equipamentos mais procurados
           </p>
         </div>
 
         {equipments.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {equipments.map((equipment: Equipment) => (
+            {equipments.map((equipment: Equipment, index: number) => (
               <Card
                 key={equipment.id}
-                className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02] flex flex-col group"
+                className={`material-card relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02] flex flex-col group opacity-0`}
+                style={{
+                  transform: 'translateY(60px)',
+                }}
               >
                 {/* Clean depth layers for equipment card */}
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
