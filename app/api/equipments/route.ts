@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -39,39 +40,45 @@ export async function GET() {
     }
 
     // Formatar os dados do banco garantindo que as imagens sejam incluídas
-    const formattedEquipments = equipments.map((equipment) => {
-      // Priorizar primeira imagem do array ou usar placeholder
-      let primaryImage = null
-      if (equipment.images && equipment.images.length > 0) {
-        primaryImage = equipment.images[0]
-      }
+    const formattedEquipments = equipments.map(
+      (
+        equipment: Prisma.EquipmentGetPayload<{
+          include: { category: true }
+        }>
+      ) => {
+        // Priorizar primeira imagem do array ou usar placeholder
+        let primaryImage = null
+        if (equipment.images && equipment.images.length > 0) {
+          primaryImage = equipment.images[0]
+        }
 
-      const formattedEquipment = {
-        id: equipment.id,
-        name: equipment.name,
-        description: equipment.description,
-        pricePerDay: Number(equipment.pricePerDay), // Converter Decimal para number
-        imageUrl: primaryImage, // Campo principal para imagem
-        images:
-          equipment.images && equipment.images.length > 0
-            ? equipment.images
-            : primaryImage
-              ? [primaryImage]
-              : [],
-        isAvailable: equipment.available ?? true,
-        category: {
-          id: equipment.category.id,
-          name: equipment.category.name,
-          icon: equipment.category.icon,
-          iconColor: equipment.category.iconColor,
-          bgColor: equipment.category.bgColor,
-          fontColor: equipment.category.fontColor,
-        },
-        reviews: [],
-      }
+        const formattedEquipment = {
+          id: equipment.id,
+          name: equipment.name,
+          description: equipment.description,
+          pricePerDay: Number(equipment.pricePerDay), // Converter Decimal para number
+          imageUrl: primaryImage, // Campo principal para imagem
+          images:
+            equipment.images && equipment.images.length > 0
+              ? equipment.images
+              : primaryImage
+                ? [primaryImage]
+                : [],
+          isAvailable: equipment.available ?? true,
+          category: {
+            id: equipment.category.id,
+            name: equipment.category.name,
+            icon: equipment.category.icon,
+            iconColor: equipment.category.iconColor,
+            bgColor: equipment.category.bgColor,
+            fontColor: equipment.category.fontColor,
+          },
+          reviews: [],
+        }
 
-      return formattedEquipment
-    })
+        return formattedEquipment
+      }
+    )
 
     return NextResponse.json(formattedEquipments)
   } catch (error) {

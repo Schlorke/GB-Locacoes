@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/middlewares/require-admin'
+import type { Prisma } from '@prisma/client'
 import { NextResponse, type NextRequest } from 'next/server'
 
 // GET /api/admin/equipments - List all equipments with pagination and filtering
@@ -94,11 +95,17 @@ export async function GET(request: NextRequest) {
       },
     })
 
-    const equipmentsFormatted = equipments.map((equip) => ({
-      ...equip,
-      pricePerDay: Number(equip.pricePerDay), // Converter Decimal para number
-      isAvailable: equip.available,
-    }))
+    const equipmentsFormatted = equipments.map(
+      (
+        equip: Prisma.EquipmentGetPayload<{
+          include: { category: true }
+        }>
+      ) => ({
+        ...equip,
+        pricePerDay: Number(equip.pricePerDay), // Converter Decimal para number
+        isAvailable: equip.available,
+      })
+    )
 
     const totalItems = await prisma.equipment.count({ where })
     const totalPages = Math.ceil(totalItems / limit)
