@@ -1,11 +1,6 @@
 {
   "projectToken": "chpt_ed7c61c0587a8b0",
-  "buildScriptName": "build-storybook",
-  "storybookBuildDir": "storybook-static",
   "exitZeroOnChanges": true,
-  "onlyChanged": true,
   "autoAcceptChanges": false,
-  "skip": false,
-  "externals": ["public/**"],
-  "ignoreLastBuildOnBranch": "main"
+  "interactive": true
 }

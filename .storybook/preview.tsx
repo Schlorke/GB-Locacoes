@@ -1,24 +1,44 @@
 import type { Preview } from '@storybook/react'
+import React from 'react'
 import '../app/globals.css'
 
 // Mock NextAuth useSession for all stories
 const NextAuthDecorator = (Story: any) => {
   // Mock the useSession hook globally
-  const originalUseSession = require('next-auth/react').useSession
+  const originalUseSession = (globalThis as any).__nextAuth?.useSession
 
   // Override useSession to return mock data
-  require('next-auth/react').useSession = () => ({
-    data: {
-      user: {
-        id: 'mock-user-id',
-        name: 'Admin User',
-        email: 'admin@example.com',
-        role: 'ADMIN',
+  ;(globalThis as any).__nextAuth = {
+    useSession: () => ({
+      data: {
+        user: {
+          id: 'mock-user-id',
+          name: 'Admin User',
+          email: 'admin@example.com',
+          role: 'ADMIN',
+        },
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       },
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-    },
-    status: 'authenticated',
-  })
+      status: 'authenticated',
+    }),
+  }
+
+  return <Story />
+}
+
+// Mock SidebarProvider for components that need sidebar context
+const SidebarProviderDecorator = (Story: any) => {
+  // Mock the useSidebar hook
+  const mockUseSidebar = {
+    isOpen: false,
+    setIsOpen: () => {},
+    toggle: () => {},
+  }
+
+  // Override useSidebar to return mock data
+  if (typeof window !== 'undefined') {
+    ;(window as any).mockUseSidebar = mockUseSidebar
+  }
 
   return <Story />
 }
@@ -104,6 +124,7 @@ const preview: Preview = {
   },
   decorators: [
     NextAuthDecorator,
+    SidebarProviderDecorator,
     (Story) => (
       <div className="min-h-screen bg-white">
         <Story />
