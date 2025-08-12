@@ -120,8 +120,10 @@ export default function ScrollRevealInit() {
         } else if (element.hasAttribute('data-scroll-reveal')) {
           // Inicializar elementos com data-scroll-reveal
           element.style.opacity = '0'
-          element.style.transform = 'translateY(40px)'
+          element.style.transform = 'translate3d(0, 40px, 0)'
           element.style.transition = 'none'
+          element.style.willChange = 'opacity, transform'
+          element.style.backfaceVisibility = 'hidden'
         } else {
           element.style.opacity = '0'
           element.style.transform = 'translateY(60px)'
@@ -149,9 +151,10 @@ export default function ScrollRevealInit() {
           } else if (htmlElement.hasAttribute('data-scroll-reveal')) {
             // Elementos com data-scroll-reveal - mostrar imediatamente
             htmlElement.style.opacity = '1'
-            htmlElement.style.transform = 'translateY(0)'
+            htmlElement.style.transform = 'translate3d(0, 0, 0)'
             htmlElement.style.animation = 'none'
             htmlElement.style.transition = 'none'
+            htmlElement.style.willChange = 'auto'
           } else {
             // Legacy inline style approach
             htmlElement.style.opacity = '1'
@@ -183,8 +186,8 @@ export default function ScrollRevealInit() {
       // Função para configurar o observer (para animações)
       const setupObserver = () => {
         const observerOptions = {
-          threshold: 0.15,
-          rootMargin: '0px 0px -100px 0px',
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px',
         }
 
         const observer = new IntersectionObserver((entries) => {
@@ -199,6 +202,10 @@ export default function ScrollRevealInit() {
                 element.classList.contains('category-card-animate')
               ) {
                 element.classList.add('animate-in')
+                // Remover will-change após animação para performance
+                setTimeout(() => {
+                  element.style.willChange = 'auto'
+                }, 800)
               }
 
               // Legacy support for existing classes with inline style animations
@@ -226,6 +233,10 @@ export default function ScrollRevealInit() {
               else if (element.hasAttribute('data-scroll-reveal')) {
                 element.style.animation =
                   'fadeInUpSmooth 0.6s ease-out 0.1s forwards'
+                // Limpar will-change após animação para performance
+                setTimeout(() => {
+                  element.style.willChange = 'auto'
+                }, 700)
               }
 
               // Títulos de seção - legacy

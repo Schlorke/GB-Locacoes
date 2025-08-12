@@ -378,33 +378,33 @@ section {
 @keyframes slideInLeft {
   0% {
     opacity: 0;
-    transform: translateX(-100px);
+    transform: translate3d(-100px, 0, 0);
   }
   100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes slideInRight {
   0% {
     opacity: 0;
-    transform: translateX(80px);
+    transform: translate3d(80px, 0, 0);
   }
   100% {
     opacity: 1;
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes slideInUp {
   0% {
     opacity: 0;
-    transform: translateY(60px);
+    transform: translate3d(0, 60px, 0);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -412,11 +412,11 @@ section {
 @keyframes fadeInUpSmooth {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translate3d(0, 20px, 0);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -496,43 +496,49 @@ section {
 /* CSS-only animation classes to prevent hydration mismatches */
 .animate-on-scroll {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translate3d(0, 30px, 0);
   transition:
     opacity 0.8s ease-out,
     transform 0.8s ease-out;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .animate-on-scroll.animate-in {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 .animate-on-scroll-delayed {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translate3d(0, 30px, 0);
   transition:
     opacity 0.6s ease-out,
     transform 0.6s ease-out;
   transition-delay: 0.2s;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .animate-on-scroll-delayed.animate-in {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 /* Category cards animation */
 .category-card-animate {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translate3d(0, 30px, 0);
   transition:
     opacity 0.8s ease-out,
     transform 0.8s ease-out;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
 }
 
 .category-card-animate.animate-in {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 /* Staggered animation delays for category cards */
