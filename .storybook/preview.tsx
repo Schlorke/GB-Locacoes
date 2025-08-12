@@ -1,29 +1,31 @@
 import type { Preview } from '@storybook/react'
 import '../app/globals.css'
 
-// Import fonts exactly as in the app
-import { Inter, Jost } from 'next/font/google'
-import React from 'react'
+// Mock NextAuth useSession for all stories
+const NextAuthDecorator = (Story: any) => {
+  // Mock the useSession hook globally
+  const originalUseSession = require('next-auth/react').useSession
 
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-  preload: true,
-  fallback: ['system-ui', 'arial'],
-})
+  // Override useSession to return mock data
+  require('next-auth/react').useSession = () => ({
+    data: {
+      user: {
+        id: 'mock-user-id',
+        name: 'Admin User',
+        email: 'admin@example.com',
+        role: 'ADMIN',
+      },
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    },
+    status: 'authenticated',
+  })
 
-const jost = Jost({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-jost',
-  preload: true,
-  fallback: ['Georgia', 'serif'],
-  adjustFontFallback: false,
-})
+  return <Story />
+}
 
 const preview: Preview = {
   parameters: {
+    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -72,69 +74,41 @@ const preview: Preview = {
           value: '#ffffff',
         },
         {
-          name: 'gray-50',
-          value: '#f8fafc',
+          name: 'dark',
+          value: '#1a1a1a',
         },
         {
-          name: 'gray-900',
-          value: '#111827',
+          name: 'gray',
+          value: '#f5f5f5',
         },
       ],
     },
     docs: {
       toc: true,
     },
-    a11y: {
-      element: '#storybook-root',
-      config: {},
-      options: {},
-      manual: true,
-    },
-  },
-  globalTypes: {
-    reducedMotion: {
-      description: 'Reduce animations for accessibility',
-      defaultValue: false,
-      toolbar: {
-        title: 'Reduced Motion',
-        icon: 'eye',
-        items: [
-          { value: false, title: 'Enable animations' },
-          { value: true, title: 'Reduce motion' },
+    options: {
+      storySort: {
+        order: [
+          'Welcome',
+          'Design System',
+          'Foundations',
+          'Atoms',
+          'Molecules',
+          'Organisms',
+          'Templates',
+          'Pages',
+          'Admin',
         ],
-        showName: true,
-        dynamicTitle: true,
       },
     },
   },
   decorators: [
-    (Story, context) => {
-      const reducedMotion = context.globals.reducedMotion
-
-      return React.createElement(
-        'div',
-        {
-          className: `${inter.variable} ${jost.variable} min-h-screen`,
-          style: {
-            fontFamily: 'var(--font-inter), sans-serif',
-          },
-        },
-        reducedMotion &&
-          React.createElement(
-            'style',
-            {},
-            `
-              *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-              }
-            `
-          ),
-        React.createElement(Story)
-      )
-    },
+    NextAuthDecorator,
+    (Story) => (
+      <div className="min-h-screen bg-white">
+        <Story />
+      </div>
+    ),
   ],
 }
 
