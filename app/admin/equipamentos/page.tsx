@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { SmartPagination } from '@/components/ui/smart-pagination'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useToast } from '@/hooks/use-toast'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -80,6 +81,12 @@ export default function AdminEquipmentsPage() {
   )
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isImageZoomed, setIsImageZoomed] = useState(false)
+
+  // Estados de paginação
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage] = useState(9) // 3 linhas × 3 colunas
+  const [pageKey, setPageKey] = useState(0) // Key para forçar re-render com animação
+
   const { toast } = useToast()
   const isMobile = useIsMobile()
 
@@ -104,7 +111,7 @@ export default function AdminEquipmentsPage() {
   const fetchEquipments = useCallback(async () => {
     setLoading(true)
     try {
-      const response = await fetch('/api/admin/equipments')
+      const response = await fetch('/api/admin/equipments?limit=1000')
       if (response.ok) {
         const data = await response.json()
         const equipmentsData = Array.isArray(data) ? data : data.equipments
@@ -159,7 +166,24 @@ export default function AdminEquipmentsPage() {
     })
 
     setFilteredEquipments(filtered)
+    // Reset para primeira página quando filtros mudam
+    setCurrentPage(1)
   }, [equipments, searchTerm, selectedCategory, availabilityFilter])
+
+  // Cálculo da paginação
+  const totalPages = Math.ceil(filteredEquipments.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentEquipments = filteredEquipments.slice(startIndex, endIndex)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    setPageKey((prev) => prev + 1) // Incrementa para forçar re-render com animação
+    // Delay no scroll para permitir que a animação de saída termine
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 100)
+  }
 
   useEffect(() => {
     fetchEquipments()
@@ -377,6 +401,22 @@ export default function AdminEquipmentsPage() {
           />
         </motion.div>
 
+        {/* Componente de Paginação */}
+        {!loading && filteredEquipments.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-6"
+          >
+            <SmartPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </motion.div>
+        )}
+
         {/* Grid de Equipamentos */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -433,14 +473,18 @@ export default function AdminEquipmentsPage() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 md:gap-6 xl:gap-6">
-              <AnimatePresence>
-                {filteredEquipments.map((equipment, index) => (
+              <AnimatePresence mode="wait">
+                {currentEquipments.map((equipment, index) => (
                   <motion.div
-                    key={equipment.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: index * 0.1 }}
+                    key={`${equipment.id}-${pageKey}`}
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                    transition={{
+                      delay: index * 0.08,
+                      duration: 0.3,
+                      ease: 'easeOut',
+                    }}
                     className="group"
                     onClick={() => {
                       if (isMobile) {

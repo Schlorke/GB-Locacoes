@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
-import { type NextRequest, NextResponse } from 'next/server'
+import { requireAdmin } from '@/middlewares/require-admin'
+import { NextResponse, type NextRequest } from 'next/server'
 
 function slugify(text: string) {
   return text
@@ -18,6 +19,14 @@ export async function PUT(
 ) {
   const params = await props.params
   try {
+    // Verificar autenticação de admin
+    const adminResult = await requireAdmin(request)
+    if (!adminResult.success) {
+      return NextResponse.json(
+        { error: adminResult.error },
+        { status: adminResult.status }
+      )
+    }
     const { id } = params
     const body = await request.json()
     const { name, description, icon, iconColor, bgColor, fontColor } = body
@@ -58,11 +67,19 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   props: { params: Promise<{ id: string }> }
 ) {
   const params = await props.params
   try {
+    // Verificar autenticação de admin
+    const adminResult = await requireAdmin(request)
+    if (!adminResult.success) {
+      return NextResponse.json(
+        { error: adminResult.error },
+        { status: adminResult.status }
+      )
+    }
     const { id } = params
     await prisma.category.delete({ where: { id } })
     return NextResponse.json({ message: 'Categoria excluída' })

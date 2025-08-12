@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-
+import { requireAdmin } from '@/middlewares/require-admin'
 import { NextResponse, type NextRequest } from 'next/server'
 import crypto from 'node:crypto'
 import { z } from 'zod'
@@ -27,8 +27,16 @@ const CategorySchema = z
   .strict()
 
 // GET /api/admin/categories - List all categories
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    // Verificar autenticação de admin
+    const adminResult = await requireAdmin(request)
+    if (!adminResult.success) {
+      return NextResponse.json(
+        { error: adminResult.error },
+        { status: adminResult.status }
+      )
+    }
     const categories = await prisma.category.findMany({
       include: {
         _count: {
@@ -55,6 +63,14 @@ export async function GET() {
 // POST /api/admin/categories - Create new category
 export async function POST(request: NextRequest) {
   try {
+    // Verificar autenticação de admin
+    const adminResult = await requireAdmin(request)
+    if (!adminResult.success) {
+      return NextResponse.json(
+        { error: adminResult.error },
+        { status: adminResult.status }
+      )
+    }
     if (!process.env.DATABASE_URL) {
       console.error('[API POST /admin/categories] DATABASE_URL não definido')
       return NextResponse.json(

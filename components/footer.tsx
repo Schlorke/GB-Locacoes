@@ -16,13 +16,13 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="bg-orange-600 text-white p-2 rounded-lg font-bold text-lg">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg">
                 GB
               </div>
               <div>
-                <div className="font-bold text-lg">GB Locações</div>
-                <div className="text-small text-gray-400">
+                <div className="font-bold text-xl text-white">GB Locações</div>
+                <div className="text-sm text-gray-400">
                   Equipamentos para Construção
                 </div>
               </div>

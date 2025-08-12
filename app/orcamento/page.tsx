@@ -508,14 +508,16 @@ function QuotePage() {
                     />
                   </div>
 
-                  <Button
-                    type="submit"
-                    className="w-full hover:scale-105 transition-transform duration-200"
-                    size="lg"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Enviando...' : 'Solicitar Orçamento'}
-                  </Button>
+                  <div className="pt-2">
+                    <Button
+                      type="submit"
+                      className="block w-fit mx-auto hover:scale-105 transition-transform duration-200"
+                      size="lg"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Enviando...' : 'Solicitar Orçamento'}
+                    </Button>
+                  </div>
                 </form>
               </CardContent>
             </Card>
