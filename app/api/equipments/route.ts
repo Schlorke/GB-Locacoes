@@ -1,6 +1,31 @@
 import prisma from '@/lib/prisma'
-import type { Prisma } from '@prisma/client'
+import type { Decimal } from '@prisma/client/runtime/library'
 import { NextResponse } from 'next/server'
+
+// Tipo para equipamento com categoria incluída
+type EquipmentWithCategory = {
+  id: string
+  name: string
+  description: string | null
+  pricePerDay: Decimal
+  images: string[]
+  available: boolean
+  categoryId: string
+  createdAt: Date
+  updatedAt: Date
+  category: {
+    id: string
+    name: string
+    description: string | null
+    icon: string | null
+    iconColor: string
+    bgColor: string
+    fontColor: string
+    slug: string
+    createdAt: Date
+    updatedAt: Date
+  }
+}
 
 export async function GET() {
   try {
@@ -41,11 +66,7 @@ export async function GET() {
 
     // Formatar os dados do banco garantindo que as imagens sejam incluídas
     const formattedEquipments = equipments.map(
-      (
-        equipment: Prisma.EquipmentGetPayload<{
-          include: { category: true }
-        }>
-      ) => {
+      (equipment: EquipmentWithCategory) => {
         // Priorizar primeira imagem do array ou usar placeholder
         let primaryImage = null
         if (equipment.images && equipment.images.length > 0) {

@@ -1,7 +1,36 @@
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/middlewares/require-admin'
-import type { Prisma } from '@prisma/client'
+import type { Decimal } from '@prisma/client/runtime/library'
 import { NextResponse, type NextRequest } from 'next/server'
+
+// Tipo para equipamento com categoria incluída
+type EquipmentWithCategory = {
+  id: string
+  name: string
+  description: string | null
+  pricePerDay: Decimal // Prisma Decimal
+  images: string[]
+  available: boolean
+  categoryId: string
+  createdAt: Date
+  updatedAt: Date
+  category: {
+    id: string
+    name: string
+    description: string | null
+    icon: string | null
+    iconColor: string
+    bgColor: string
+    fontColor: string
+    slug: string
+    createdAt: Date
+    updatedAt: Date
+  }
+  _count: {
+    quoteItems: number
+    rental_items: number
+  }
+}
 
 // GET /api/admin/equipments - List all equipments with pagination and filtering
 export async function GET(request: NextRequest) {
@@ -96,11 +125,7 @@ export async function GET(request: NextRequest) {
     })
 
     const equipmentsFormatted = equipments.map(
-      (
-        equip: Prisma.EquipmentGetPayload<{
-          include: { category: true }
-        }>
-      ) => ({
+      (equip: EquipmentWithCategory) => ({
         ...equip,
         pricePerDay: Number(equip.pricePerDay), // Converter Decimal para number
         isAvailable: equip.available,
