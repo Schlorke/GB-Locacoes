@@ -206,7 +206,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/react": "19.1.9",
+      "@types/react": "19.1.10",
       "@auth/core": "0.40.0",
       "nodemailer": "7.0.5",
       "tailwindcss": "3.4.17",

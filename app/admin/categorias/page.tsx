@@ -346,7 +346,7 @@ export default function AdminCategoriesPage() {
 
             <CardContent className="relative z-10 p-6">
               <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-                <div className="relative flex-1 max-w-md">
+                <div className="relative flex-1 w-full">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
                     placeholder="Buscar categorias..."
