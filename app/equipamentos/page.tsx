@@ -4,6 +4,7 @@ import { AdminFilterCard } from '@/components/admin/admin-filter-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
+import { SmartPagination } from '@/components/ui/smart-pagination'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Building,
@@ -81,9 +82,15 @@ export default function EquipmentsPage() {
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [filterKey, setFilterKey] = useState(0) // Key para forçar re-render com animação
 
+  // Estados de paginação
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage] = useState(9) // 3 linhas × 3 colunas
+  const [pageKey, setPageKey] = useState(0) // Key para forçar re-render com animação na paginação
+
   // Handler para mudança de categoria com animação
   const handleCategoryChange = (category: string) => {
     setCategoryFilter(category)
+    setCurrentPage(1) // Reset para primeira página quando filtros mudam
     setFilterKey((prev) => prev + 1) // Incrementa para forçar re-render com animação
   }
 
@@ -177,6 +184,21 @@ export default function EquipmentsPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  // Cálculo da paginação
+  const totalPages = Math.ceil(filteredEquipments.length / itemsPerPage)
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = startIndex + itemsPerPage
+  const currentEquipments = filteredEquipments.slice(startIndex, endIndex)
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    setPageKey((prev) => prev + 1) // Incrementa para forçar re-render com animação
+    // Delay no scroll para permitir que a animação de saída termine
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 100)
   }
 
   if (isLoading) {
@@ -297,7 +319,7 @@ export default function EquipmentsPage() {
           {filteredEquipments.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <AnimatePresence mode="wait">
-                {filteredEquipments.map((equipment, index) => {
+                {currentEquipments.map((equipment, index) => {
                   const averageRating =
                     equipment.reviews && equipment.reviews.length > 0
                       ? equipment.reviews.reduce(
@@ -311,7 +333,7 @@ export default function EquipmentsPage() {
 
                   return (
                     <motion.div
-                      key={`${equipment.id}-${filterKey}`}
+                      key={`${equipment.id}-${filterKey}-${pageKey}`}
                       initial={{ opacity: 0, y: 20, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -469,6 +491,22 @@ export default function EquipmentsPage() {
                 </p>
               </CardContent>
             </Card>
+          )}
+
+          {/* Paginação */}
+          {!isLoading && filteredEquipments.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="mt-8"
+            >
+              <SmartPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </motion.div>
           )}
         </motion.div>
       </div>
