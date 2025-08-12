@@ -87,7 +87,9 @@ export default function ScrollRevealInit() {
         )
       }
 
-      const shouldExecuteAnimations = !isInternalNavigation()
+      // Página "Sobre" sempre executa animações, independente da navegação
+      const isAboutPage = pathname === '/sobre'
+      const shouldExecuteAnimations = isAboutPage || !isInternalNavigation()
       const isOnMobile = isMobile()
 
       /**

@@ -530,7 +530,7 @@ function QuotePage() {
             transition={{ delay: 0.2 }}
             className="lg:col-span-1"
           >
-            <Card className="sticky top-24 overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
+            <Card className="sticky top-24 overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
               {/* Clean depth layers for summary card */}
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
