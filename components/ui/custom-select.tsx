@@ -151,7 +151,10 @@ export function CustomSelect({
               maxHeight: '300px',
             }}
           >
-            <div className="max-h-full overflow-y-auto overscroll-contain p-1 filter-dropdown-scroll">
+            <div
+              className="max-h-full overflow-y-auto overscroll-contain p-1 filter-dropdown-scroll scrollbar-thin"
+              style={{ maxHeight: '280px', overflowY: 'auto' }}
+            >
               {children}
             </div>
           </div>
@@ -179,7 +182,7 @@ export function CustomSelectItem({ value, children }: CustomSelectItemProps) {
       type="button"
       onClick={handleClick}
       className={cn(
-        'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm transition-colors duration-200 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm text-left transition-colors duration-200 data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         isSelected
           ? 'bg-accent text-accent-foreground'
           : 'hover:bg-orange-50 hover:text-orange-600 focus:bg-orange-50 focus:text-orange-600'

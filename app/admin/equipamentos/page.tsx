@@ -370,10 +370,12 @@ export default function AdminEquipmentsPage() {
                 placeholder: 'Categoria',
                 options: [
                   { value: 'all', label: 'Todas as categorias' },
-                  ...categories.map((category) => ({
-                    value: category.id,
-                    label: category.name,
-                  })),
+                  ...categories
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((category) => ({
+                      value: category.id,
+                      label: category.name,
+                    })),
                 ],
               },
               {

@@ -79,6 +79,13 @@ export default function EquipmentsPage() {
   const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('all')
+  const [filterKey, setFilterKey] = useState(0) // Key para forçar re-render com animação
+
+  // Handler para mudança de categoria com animação
+  const handleCategoryChange = (category: string) => {
+    setCategoryFilter(category)
+    setFilterKey((prev) => prev + 1) // Incrementa para forçar re-render com animação
+  }
 
   // Função para renderizar ícones dinamicamente
   const renderIcon = (iconName?: string, color?: string) => {
@@ -265,14 +272,16 @@ export default function EquipmentsPage() {
               {
                 label: 'Categoria',
                 value: categoryFilter,
-                onValueChange: setCategoryFilter,
+                onValueChange: handleCategoryChange,
                 placeholder: 'Categoria',
                 options: [
                   { value: 'all', label: 'Todas as categorias' },
-                  ...categories.map((category) => ({
-                    value: category.id,
-                    label: category.name,
-                  })),
+                  ...categories
+                    .sort((a, b) => a.name.localeCompare(b.name))
+                    .map((category) => ({
+                      value: category.id,
+                      label: category.name,
+                    })),
                 ],
               },
             ]}
@@ -287,7 +296,7 @@ export default function EquipmentsPage() {
         >
           {filteredEquipments.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              <AnimatePresence>
+              <AnimatePresence mode="wait">
                 {filteredEquipments.map((equipment, index) => {
                   const averageRating =
                     equipment.reviews && equipment.reviews.length > 0
@@ -302,11 +311,15 @@ export default function EquipmentsPage() {
 
                   return (
                     <motion.div
-                      key={equipment.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ delay: index * 0.05 }}
+                      key={`${equipment.id}-${filterKey}`}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                      transition={{
+                        delay: index * 0.08,
+                        duration: 0.3,
+                        ease: 'easeOut',
+                      }}
                       className="group"
                     >
                       <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02] flex flex-col">

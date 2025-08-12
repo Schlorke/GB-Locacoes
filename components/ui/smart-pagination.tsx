@@ -35,7 +35,7 @@ export function SmartPagination({
     const half = Math.floor(showPageNumbers / 2)
 
     let start = Math.max(1, currentPage - half)
-    let end = Math.min(totalPages, start + showPageNumbers - 1)
+    const end = Math.min(totalPages, start + showPageNumbers - 1)
 
     // Ajustar o início se o fim ficou menor que o desejado
     if (end - start + 1 < showPageNumbers) {

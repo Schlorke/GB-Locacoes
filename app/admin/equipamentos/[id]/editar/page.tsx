@@ -370,14 +370,16 @@ export default function EditarEquipamento() {
                             }
                             placeholder="Selecione uma categoria"
                           >
-                            {categories.map((category) => (
-                              <CustomSelectItem
-                                key={category.id}
-                                value={category.id}
-                              >
-                                {category.name}
-                              </CustomSelectItem>
-                            ))}
+                            {categories
+                              .sort((a, b) => a.name.localeCompare(b.name))
+                              .map((category) => (
+                                <CustomSelectItem
+                                  key={category.id}
+                                  value={category.id}
+                                >
+                                  {category.name}
+                                </CustomSelectItem>
+                              ))}
                           </CustomSelect>
                         </div>
 
