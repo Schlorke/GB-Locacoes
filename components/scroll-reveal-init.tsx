@@ -99,7 +99,8 @@ export default function ScrollRevealInit() {
       const selectors =
         '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
         '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
-        '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate'
+        '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate, ' +
+        '[data-scroll-reveal]'
 
       const initializeElement = (element: HTMLElement) => {
         if (
@@ -115,6 +116,11 @@ export default function ScrollRevealInit() {
           // Inicializar títulos e subtítulos de seção para animação
           element.style.opacity = '0'
           element.style.transform = 'translateY(60px)'
+          element.style.transition = 'none'
+        } else if (element.hasAttribute('data-scroll-reveal')) {
+          // Inicializar elementos com data-scroll-reveal
+          element.style.opacity = '0'
+          element.style.transform = 'translateY(40px)'
           element.style.transition = 'none'
         } else {
           element.style.opacity = '0'
@@ -140,6 +146,12 @@ export default function ScrollRevealInit() {
             htmlElement.classList.contains('category-card-animate')
           ) {
             htmlElement.classList.add('animate-in')
+          } else if (htmlElement.hasAttribute('data-scroll-reveal')) {
+            // Elementos com data-scroll-reveal - mostrar imediatamente
+            htmlElement.style.opacity = '1'
+            htmlElement.style.transform = 'translateY(0)'
+            htmlElement.style.animation = 'none'
+            htmlElement.style.transition = 'none'
           } else {
             // Legacy inline style approach
             htmlElement.style.opacity = '1'
@@ -208,6 +220,12 @@ export default function ScrollRevealInit() {
               } else if (element.classList.contains('hero-image')) {
                 element.style.animation =
                   'slideInRight 1.2s ease-out 0.3s forwards'
+              }
+
+              // Elementos com data-scroll-reveal
+              else if (element.hasAttribute('data-scroll-reveal')) {
+                element.style.animation =
+                  'fadeInUpSmooth 0.6s ease-out 0.1s forwards'
               }
 
               // Títulos de seção - legacy

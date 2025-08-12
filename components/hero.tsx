@@ -50,7 +50,6 @@ export default function Hero() {
               <Link
                 href="/equipamentos"
                 className="inline-flex items-center justify-center hover:bg-yellow-600 gap-2 px-6 h-12 bg-yellow-500 hover:text-white text-gray-900 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group text-sm"
-                data-scroll-reveal
               >
                 Ver Catálogo de Equipamentos
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -59,7 +58,6 @@ export default function Hero() {
               <Link
                 href="/orcamento"
                 className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-white text-sm"
-                data-scroll-reveal
               >
                 <Play className="h-4 w-4 group-hover:scale-110 transition-transform" />
                 Solicitar Orçamento
