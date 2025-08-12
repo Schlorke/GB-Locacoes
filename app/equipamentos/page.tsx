@@ -349,16 +349,17 @@ export default function EquipmentsPage() {
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-                        <div className="relative h-48 bg-gray-200 z-0">
+                        <div className="relative h-48 bg-gray-100 z-0 flex items-center justify-center">
                           <Image
                             src={
                               equipment.images?.[0] ||
                               '/placeholder.svg?height=200&width=300'
                             }
                             alt={equipment.name}
-                            fill
+                            width={300}
+                            height={200}
                             priority
-                            className="object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-105"
+                            className="max-w-full max-h-full object-contain rounded-t-lg transition-transform duration-300 group-hover:scale-105"
                           />
                           {!equipment.isAvailable && (
                             <div className="absolute top-3 right-3">

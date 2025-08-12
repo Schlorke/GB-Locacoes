@@ -58,15 +58,16 @@ export default async function EquipmentDetailPage(props: Props) {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Imagens */}
           <div>
-            <div className="relative h-96 bg-gray-200 rounded-lg overflow-hidden mb-4">
+            <div className="relative h-96 bg-gray-100 rounded-lg overflow-hidden mb-4 flex items-center justify-center">
               <Image
                 src={
                   equipment.images?.[0] ||
                   '/placeholder.svg?height=400&width=600'
                 }
                 alt={equipment.name}
-                fill
-                className="object-cover"
+                width={600}
+                height={400}
+                className="max-w-full max-h-full object-contain"
                 priority
               />
               {!equipment.available && (
@@ -84,13 +85,14 @@ export default async function EquipmentDetailPage(props: Props) {
                   .map((image: string, index: number) => (
                     <div
                       key={index}
-                      className="relative h-20 bg-gray-200 rounded overflow-hidden"
+                      className="relative h-20 bg-gray-100 rounded overflow-hidden flex items-center justify-center"
                     >
                       <Image
                         src={image || '/placeholder.svg'}
                         alt={`${equipment.name} ${index + 2}`}
-                        fill
-                        className="object-cover"
+                        width={80}
+                        height={80}
+                        className="max-w-full max-h-full object-contain"
                       />
                     </div>
                   ))}

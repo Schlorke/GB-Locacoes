@@ -113,7 +113,7 @@ export default function ContatoPage() {
 
               {/* Stats badges */}
               <div className="flex flex-wrap items-center justify-center gap-3">
-                {stats.map((stat, index) => (
+                {stats.map((stat, _index) => (
                   <div
                     key={stat.label}
                     className="bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/20"
@@ -129,16 +129,42 @@ export default function ContatoPage() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Informações de Contato - Coluna Principal */}
+        {/* Primeira linha - Formulário e Informações de Contato com mesma altura */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6 items-stretch">
+          {/* Formulário de Contato - Coluna Principal Esquerda */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-2"
+          >
+            <Card className="overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+              <CardHeader className="relative z-10 pb-4">
+                <CardTitle className="flex items-center gap-2 text-xl font-bold text-gray-900">
+                  <MessageCircle className="h-5 w-5 text-orange-600" />
+                  Solicite um Orçamento
+                </CardTitle>
+                <p className="text-sm text-gray-600 mt-1">
+                  Preencha o formulário e receba nossa melhor proposta
+                </p>
+              </CardHeader>
+              <CardContent className="relative z-10">
+                <ContactForm />
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Informações de Contato - Sidebar Direita */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="lg:col-span-2 space-y-6"
+            className="lg:col-span-1"
           >
-            {/* Cards de Contato */}
-            <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+            <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
@@ -152,8 +178,8 @@ export default function ContatoPage() {
                 </p>
               </CardHeader>
               <CardContent className="relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {contactInfo.map((info, index) => (
+                <div className="grid grid-cols-1 gap-4">
+                  {contactInfo.map((info, _index) => (
                     <motion.div
                       key={info.title}
                       initial={{ opacity: 0, y: 20 }}
@@ -189,8 +215,17 @@ export default function ContatoPage() {
                 </div>
               </CardContent>
             </Card>
+          </motion.div>
+        </div>
 
-            {/* Nossos Serviços */}
+        {/* Segunda linha - Outros blocos empilhados */}
+        <div className="space-y-6">
+          {/* Nossos Diferenciais */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
             <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
@@ -206,12 +241,12 @@ export default function ContatoPage() {
               </CardHeader>
               <CardContent className="relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {services.map((service, index) => (
+                  {services.map((service, _index) => (
                     <motion.div
                       key={service.title}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 + index * 0.1 }}
+                      transition={{ delay: 0.4 + _index * 0.1 }}
                       className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-25 rounded-lg hover:from-orange-100 hover:to-orange-50 transition-all duration-300 hover:scale-[1.02] group"
                     >
                       <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-3 rounded-full w-12 h-12 mx-auto mb-3 shadow-lg group-hover:scale-105 transition-transform duration-300">
@@ -228,8 +263,14 @@ export default function ContatoPage() {
                 </div>
               </CardContent>
             </Card>
+          </motion.div>
 
-            {/* Área de Atendimento */}
+          {/* Área de Atendimento */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
             <Card className="relative overflow-hidden border-0 shadow-xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white hover:shadow-2xl transition-all duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
@@ -265,32 +306,6 @@ export default function ContatoPage() {
                     Suporte 24h
                   </Badge>
                 </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Formulário de Contato - Sidebar */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-1"
-          >
-            <Card className="sticky top-24 overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
-
-              <CardHeader className="relative z-10 pb-4">
-                <CardTitle className="flex items-center gap-2 text-xl font-bold text-gray-900">
-                  <MessageCircle className="h-5 w-5 text-orange-600" />
-                  Solicite um Orçamento
-                </CardTitle>
-                <p className="text-sm text-gray-600 mt-1">
-                  Preencha o formulário e receba nossa melhor proposta
-                </p>
-              </CardHeader>
-              <CardContent className="relative z-10">
-                <ContactForm />
               </CardContent>
             </Card>
           </motion.div>

@@ -76,7 +76,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="name">Nome Completo *</Label>
@@ -88,6 +88,7 @@ export default function ContactForm() {
             }
             placeholder="Seu nome completo"
             required
+            className="mt-1"
           />
         </div>
         <div>
@@ -101,6 +102,7 @@ export default function ContactForm() {
             }
             placeholder="(51) 99999-9999"
             required
+            className="mt-1"
           />
         </div>
       </div>
@@ -116,6 +118,7 @@ export default function ContactForm() {
           }
           placeholder="seu@email.com"
           required
+          className="mt-1"
         />
       </div>
 
@@ -128,6 +131,7 @@ export default function ContactForm() {
             setFormData((prev) => ({ ...prev, equipment: e.target.value }))
           }
           placeholder="Ex: Betoneira, Andaime, etc."
+          className="mt-1"
         />
       </div>
 
@@ -140,25 +144,29 @@ export default function ContactForm() {
             setFormData((prev) => ({ ...prev, message: e.target.value }))
           }
           placeholder="Descreva seu projeto e necessidades..."
-          rows={4}
+          rows={6}
           required
+          className="mt-1"
         />
       </div>
 
-      <Button
-        type="submit"
-        className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white font-semibold py-3 px-6 rounded-lg hover:from-orange-600 hover:to-yellow-600 transition-all duration-300 transform hover:scale-105"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Enviando...
-          </>
-        ) : (
-          'Enviar Solicitação'
-        )}
-      </Button>
+      <div className="pt-2">
+        <Button
+          type="submit"
+          className="block w-fit mx-auto hover:scale-105 transition-transform duration-200"
+          size="lg"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Enviando...
+            </>
+          ) : (
+            'Enviar Solicitação'
+          )}
+        </Button>
+      </div>
     </form>
   )
 }

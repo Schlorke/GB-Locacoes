@@ -6,7 +6,6 @@ import {
   Building,
   Calendar,
   Clock,
-  Heart,
   MapPin,
   Phone,
   Shield,
@@ -140,7 +139,7 @@ export default function SobrePage() {
         {/* Stats Section */}
         <div className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat, index) => {
+            {stats.map((stat, _index) => {
               const IconComponent = stat.icon
               return (
                 <Card
@@ -243,7 +242,7 @@ export default function SobrePage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((value, index) => {
+            {values.map((value, _index) => {
               const IconComponent = value.icon
               return (
                 <Card
@@ -291,7 +290,7 @@ export default function SobrePage() {
             <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-orange-500 to-orange-300 hidden md:block"></div>
 
             <div className="space-y-8">
-              {timeline.map((item, index) => (
+              {timeline.map((item, _index) => (
                 <div
                   key={item.year}
                   className="material-card relative flex items-start opacity-0"
@@ -328,7 +327,7 @@ export default function SobrePage() {
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
             <CardContent className="relative z-10 p-12 text-center text-white">
-              <Heart className="w-16 h-16 mx-auto mb-6 text-orange-100" />
+              <Building className="w-16 h-16 mx-auto mb-6 text-orange-100" />
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
                 Pronto para começar seu projeto?
               </h3>

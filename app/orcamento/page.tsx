@@ -288,14 +288,14 @@ function QuotePage() {
                               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-gray-50/30"></div>
                               <div className="relative z-10 flex flex-col sm:flex-row gap-4">
                                 {/* Imagem */}
-                                <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden mx-auto sm:mx-0 shadow-sm">
+                                <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden mx-auto sm:mx-0 shadow-sm flex items-center justify-center">
                                   <Image
                                     src={imageUrl || '/placeholder.svg'}
                                     alt={equipment.name}
                                     width={80}
                                     height={80}
                                     priority
-                                    className="w-full h-full object-cover"
+                                    className="max-w-full max-h-full object-contain"
                                     onError={(e) => {
                                       const target =
                                         e.target as HTMLImageElement

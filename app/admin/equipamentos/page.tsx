@@ -504,7 +504,7 @@ export default function AdminEquipmentsPage() {
                       <CardHeader className="relative z-10 pb-3">
                         <div className="flex flex-col">
                           {/* Imagem do equipamento */}
-                          <div className="w-full h-48 mb-6 md:mb-4 bg-gray-100 rounded-lg overflow-hidden">
+                          <div className="w-full h-48 mb-6 md:mb-4 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
                             {equipment.images &&
                             equipment.images.length > 0 &&
                             equipment.images[0] ? (
@@ -513,7 +513,7 @@ export default function AdminEquipmentsPage() {
                                 alt={equipment.name}
                                 width={300}
                                 height={200}
-                                className="w-full h-full object-cover"
+                                className="max-w-full max-h-full object-contain"
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center">
@@ -722,7 +722,7 @@ export default function AdminEquipmentsPage() {
                                 alt={`${selectedEquipment.name} - Imagem ${currentImageIndex + 1}`}
                                 width={500}
                                 height={300}
-                                className={`w-full h-full object-cover transition-all duration-500 ${
+                                className={`max-w-full max-h-full object-contain transition-all duration-500 ${
                                   isImageZoomed
                                     ? 'object-contain bg-black/90'
                                     : ''
@@ -806,7 +806,7 @@ export default function AdminEquipmentsPage() {
                                     alt={`Thumbnail ${index + 1}`}
                                     width={64}
                                     height={48}
-                                    className="w-full h-full object-cover"
+                                    className="max-w-full max-h-full object-contain"
                                   />
                                 </motion.button>
                               ))}
