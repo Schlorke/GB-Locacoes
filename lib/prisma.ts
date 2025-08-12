@@ -13,19 +13,26 @@ const prismaClientSingleton = () => {
   })
 }
 
-// Ensure Prisma Client is properly initialized
-let prisma: PrismaClient
+// Lazy initialization to avoid build-time issues
+let _prisma: PrismaClient | undefined
 
-if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient({
-    log: ['error'],
-  })
-} else {
-  if (!globalThis.__prisma) {
-    globalThis.__prisma = prismaClientSingleton()
+const getPrismaClient = () => {
+  if (_prisma) return _prisma
+
+  if (process.env.NODE_ENV === 'production') {
+    _prisma = new PrismaClient({
+      log: ['error'],
+    })
+  } else {
+    if (!globalThis.__prisma) {
+      globalThis.__prisma = prismaClientSingleton()
+    }
+    _prisma = globalThis.__prisma
   }
-  prisma = globalThis.__prisma
+
+  return _prisma
 }
 
-export { prisma }
-export default prisma
+// Export the client instance
+export const prisma = getPrismaClient()
+export default getPrismaClient
