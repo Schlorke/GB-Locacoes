@@ -1,8 +1,14 @@
 {
-  "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install --frozen-lockfile=false",
-  "images": {
-    "formats": ["image/avif", "image/webp"],
-    "sizes": [16, 32, 48, 64, 96, 128, 256, 384, 512, 1024, 2048]
+  "buildCommand": "pnpm db:generate && pnpm build",
+  "devCommand": "pnpm dev",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "framework": "nextjs",
+  "functions": {
+    "app/api/**/*.ts": {
+      "runtime": "nodejs20.x"
+    }
+  },
+  "env": {
+    "SKIP_ENV_VALIDATION": "1"
   }
 }
