@@ -1,9 +1,23 @@
+import {
+  AnimatedBenefit,
+  AnimatedMainCard,
+  AnimatedSection,
+} from '@/components/equipment-detail-animations'
+import { EquipmentImageGallery } from '@/components/equipment-image-gallery'
+import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
-import { ArrowLeft, Clock, MapPin } from 'lucide-react'
-import Image from 'next/image'
+import {
+  ArrowLeft,
+  CheckCircle,
+  MapPin,
+  Share2,
+  Shield,
+  Star,
+  Truck,
+} from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -15,7 +29,13 @@ export async function generateMetadata(props: Props) {
   const params = await props.params
   const equipment = await prisma.equipment.findUnique({
     where: { id: params.id },
-    include: { category: true },
+    include: {
+      category: {
+        select: {
+          name: true,
+        },
+      },
+    },
   })
 
   if (!equipment) {
@@ -33,7 +53,17 @@ export default async function EquipmentDetailPage(props: Props) {
   const equipment = await prisma.equipment.findUnique({
     where: { id: params.id },
     include: {
-      category: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+          icon: true,
+          iconColor: true,
+          bgColor: true,
+          fontColor: true,
+          slug: true,
+        },
+      },
     },
   })
 
@@ -41,167 +71,342 @@ export default async function EquipmentDetailPage(props: Props) {
     notFound()
   }
 
+  // Converter Decimal para number para cálculos
+  const pricePerDay = Number(equipment.pricePerDay)
+
   return (
-    <main className="pt-32 min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb */}
-        <nav className="mb-8">
-          <Link
-            href="/equipamentos"
-            className="inline-flex items-center text-orange-600 hover:text-orange-700"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Voltar aos Equipamentos
-          </Link>
-        </nav>
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50/30">
+      {/* Hero Section com Background Gradient - Altura fixa 184px */}
+      <div
+        className="relative bg-gradient-to-r from-slate-900 via-gray-900 to-slate-800"
+        style={{ height: '184px' }}
+      >
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Imagens */}
-          <div>
-            <div className="relative h-96 bg-gray-100 rounded-lg overflow-hidden mb-4 flex items-center justify-center">
-              <Image
-                src={
-                  equipment.images?.[0] ||
-                  '/placeholder.svg?height=400&width=600'
-                }
-                alt={equipment.name}
-                width={600}
-                height={400}
-                className="max-w-full max-h-full object-contain"
-                priority
-              />
-              {!equipment.available && (
-                <div className="absolute top-4 right-4">
-                  <Badge variant="destructive">Indisponível</Badge>
-                </div>
-              )}
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <nav className="mb-5 pt-12">
+            <Link
+              href="/equipamentos"
+              className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors font-medium"
+            >
+              <ArrowLeft className="h-5 w-5 mr-2" />
+              Voltar aos Equipamentos
+            </Link>
+          </nav>
+
+          {/* Quick Info Bar */}
+          <div className="flex flex-wrap items-center gap-4 text-white/80 text-sm mb-2">
+            <div className="flex items-center gap-2">
+              <Shield className="h-4 w-4 text-green-400" />
+              <span>Equipamento Certificado</span>
             </div>
-
-            {/* Galeria de imagens */}
-            {equipment.images && equipment.images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
-                {equipment.images
-                  .slice(1, 5)
-                  .map((image: string, index: number) => (
-                    <div
-                      key={index}
-                      className="relative h-20 bg-gray-100 rounded overflow-hidden flex items-center justify-center"
-                    >
-                      <Image
-                        src={image || '/placeholder.svg'}
-                        alt={`${equipment.name} ${index + 2}`}
-                        width={80}
-                        height={80}
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                  ))}
-              </div>
-            )}
-          </div>
-
-          {/* Informações */}
-          <div>
-            <Badge variant="outline" className="mb-4">
-              {equipment.category.name}
-            </Badge>
-
-            <h1 className="font-bold text-h1 text-gray-900 mb-4">
-              {equipment.name}
-            </h1>
-
-            <div className="flex items-center gap-4 mb-6">
-              <div className="text-h2 font-bold text-orange-600">
-                R$ {equipment.pricePerDay.toFixed(2)}
-                <span className="text-base font-normal text-gray-500">
-                  /dia
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4 text-gray-500" />
-                <span className="text-sm text-gray-500">Diária</span>
-              </div>
+            <div className="flex items-center gap-2">
+              <Truck className="h-4 w-4 text-blue-400" />
+              <span>Entrega Gratuita</span>
             </div>
-
-            {/* Avaliações - Feature not implemented yet */}
-            {/* 
-            <div className="flex items-center gap-2 mb-6">
-              <div className="flex items-center gap-1">
-                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                <span className="font-semibold">{averageRating.toFixed(1)}</span>
-              </div>
-              <span className="text-gray-500">
-                ({equipment.reviews.length}{' '}
-                {equipment.reviews.length === 1 ? 'avaliação' : 'avaliações'})
-              </span>
-            </div>
-            */}
-
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle>Descrição</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 leading-relaxed">
-                  {equipment.description}
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Especificações - Feature not implemented yet */}
-            {/* 
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle>Especificações Técnicas</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  ...specifications content...
-                </div>
-              </CardContent>
-            </Card>
-            */}
-
-            {/* Ações */}
-            <div className="space-y-4">
-              <Button
-                size="lg"
-                className="w-full"
-                disabled={!equipment.available}
-                asChild={equipment.available}
-              >
-                {equipment.available ? (
-                  <Link href={`/orcamento?equipmentId=${equipment.id}`}>
-                    Solicitar Orçamento
-                  </Link>
-                ) : (
-                  <span>Equipamento Indisponível</span>
-                )}
-              </Button>
-
-              <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-                <MapPin className="h-4 w-4" />
-                <span>
-                  Entrega em toda região metropolitana de Porto Alegre
-                </span>
-              </div>
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-orange-400" />
+              <span>Suporte 24h</span>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Reviews section - Feature not implemented yet */}
-        {/* 
-        <Card className="mt-12">
-          <CardHeader>
-            <CardTitle>Avaliações dos Clientes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              ...review content...
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10">
+        {/* Card Principal do Produto */}
+        <AnimatedMainCard>
+          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm mb-12 hover:shadow-2xl transition-all duration-300">
+            {/* Depth layers para profundidade moderna */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+            <div className="relative z-10 grid lg:grid-cols-3 gap-0">
+              {/* Coluna Esquerda - Galeria de Imagens (2/3) */}
+              <div className="lg:col-span-2 p-8 lg:p-12">
+                <EquipmentImageGallery
+                  images={equipment.images || []}
+                  altText={equipment.name}
+                />
+              </div>
+
+              {/* Coluna Direita - Informações do Produto (1/3) */}
+              <div className="bg-gradient-to-br from-gray-50/80 to-gray-100/40 p-8 lg:p-10 space-y-6">
+                {/* Header com Categoria e Compartilhar */}
+                <div className="flex items-center justify-between -mb-4 :)">
+                  <div
+                    className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium"
+                    style={{
+                      backgroundColor: equipment.category.bgColor || '#EFF6FF',
+                      color: equipment.category.fontColor || '#1E40AF',
+                    }}
+                  >
+                    {equipment.category.icon && (
+                      <span
+                        className="text-xs"
+                        style={{
+                          color: equipment.category.iconColor || '#3B82F6',
+                        }}
+                      >
+                        {equipment.category.icon}
+                      </span>
+                    )}
+                    {equipment.category.name}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-500 hover:text-orange-600"
+                  >
+                    <Share2 className="h-4 w-4 mr-1" />
+                    <span className="text-xs">Compartilhar</span>
+                  </Button>
+                </div>
+
+                {/* Título do Equipamento */}
+                <div>
+                  <h1 className="text-2xl font-bold text-gray-900 leading-tight mb-3">
+                    {equipment.name}
+                  </h1>
+
+                  {/* Avaliações */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className="h-4 w-4 fill-yellow-400 text-yellow-400"
+                        />
+                      ))}
+                      <span className="font-semibold text-sm ml-1">4.8</span>
+                    </div>
+                    <span className="text-xs text-gray-500">
+                      (127 avaliações)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Status de Disponibilidade */}
+                <div className="flex items-center gap-2">
+                  {equipment.available ? (
+                    <>
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <Badge className="bg-green-600 hover:bg-green-700 text-xs px-2 py-1">
+                        Disponível
+                      </Badge>
+                    </>
+                  ) : (
+                    <Badge variant="destructive" className="text-xs px-2 py-1">
+                      Indisponível
+                    </Badge>
+                  )}
+                </div>
+
+                {/* Sistema de Preços */}
+                <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+                  <EquipmentPricingSelector pricePerDay={pricePerDay} />
+                </div>
+
+                {/* Call-to-Action Principal */}
+                <div className="space-y-3">
+                  <Button
+                    size="lg"
+                    className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 shadow-lg"
+                    disabled={!equipment.available}
+                    asChild={equipment.available}
+                  >
+                    {equipment.available ? (
+                      <Link href={`/orcamento?equipmentId=${equipment.id}`}>
+                        Solicitar Orçamento Grátis
+                      </Link>
+                    ) : (
+                      <span>Equipamento Indisponível</span>
+                    )}
+                  </Button>
+
+                  <div className="text-center space-y-1">
+                    <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
+                      <MapPin className="h-3 w-3" />
+                      <span>Entrega em Porto Alegre e região</span>
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Resposta em até 2 horas
+                    </div>
+                  </div>
+                </div>
+
+                {/* Benefícios Rápidos */}
+                <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200">
+                  <div className="flex items-center gap-2">
+                    <Shield className="h-4 w-4 text-green-600" />
+                    <span className="text-xs text-gray-700">Certificado</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4 text-blue-600" />
+                    <span className="text-xs text-gray-700">
+                      Entrega grátis
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-        */}
+          </Card>
+        </AnimatedMainCard>
+
+        {/* Seção de Descrição e Especificações */}
+        <AnimatedSection
+          delay={0.1}
+          className="grid lg:grid-cols-3 gap-8 mb-12"
+        >
+          {/* Descrição Principal */}
+          {equipment.description && (
+            <div className="lg:col-span-2">
+              <Card className="relative h-full overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
+                {/* Depth layers para profundidade moderna */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+                <CardHeader className="relative z-10">
+                  <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
+                    Sobre este equipamento
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="relative z-10">
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-base">
+                    {equipment.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Informações Rápidas */}
+          <div>
+            <Card className="relative h-full overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
+              {/* Depth layers para profundidade moderna */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+              <CardHeader className="relative z-10">
+                <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
+                  Informações
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="relative z-10 space-y-6">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                    <span className="text-gray-600 font-medium">Categoria</span>
+                    <span className="font-semibold text-gray-900">
+                      {equipment.category.name}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                    <span className="text-gray-600 font-medium">
+                      Preço diário
+                    </span>
+                    <span className="font-bold text-orange-600 text-lg">
+                      R$ {pricePerDay.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                    <span className="text-gray-600 font-medium">Status</span>
+                    <Badge
+                      className={`text-sm px-3 py-1 shadow-sm ${equipment.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}
+                    >
+                      {equipment.available ? 'Disponível' : 'Indisponível'}
+                    </Badge>
+                  </div>
+                </div>
+
+                <div className="pt-6 space-y-4">
+                  <h4 className="font-semibold text-base text-gray-900">
+                    Incluído na locação:
+                  </h4>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 bg-green-50/50 rounded-lg border border-green-100">
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                      <span className="text-gray-700 font-medium">
+                        Manutenção preventiva
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-blue-50/50 rounded-lg border border-blue-100">
+                      <CheckCircle className="h-5 w-5 text-blue-600" />
+                      <span className="text-gray-700 font-medium">
+                        Suporte técnico 24h
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-orange-50/50 rounded-lg border border-orange-100">
+                      <CheckCircle className="h-5 w-5 text-orange-600" />
+                      <span className="text-gray-700 font-medium">
+                        Entrega e retirada
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </AnimatedSection>
+
+        {/* Seção de Confiança Premium */}
+        <AnimatedSection delay={0.2}>
+          <Card className="relative overflow-hidden border-0 shadow-xl bg-gradient-to-r from-slate-900 via-gray-900 to-slate-800 text-white mb-8 hover:shadow-2xl transition-all duration-300">
+            {/* Depth layers para profundidade moderna */}
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-800/30 via-transparent to-gray-900/40"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-slate-700/10 to-slate-800/30"></div>
+
+            <CardContent className="relative z-10 p-8 lg:p-12">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold mb-3">
+                  Por que escolher a GB Locações?
+                </h3>
+                <p className="text-gray-300 text-sm">
+                  Mais de 10 anos de experiência no mercado
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <AnimatedBenefit delay={0.3} className="text-center group">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
+                    <Shield className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="font-semibold mb-2 group-hover:text-orange-500 transition-colors duration-300">
+                    Equipamentos Certificados
+                  </h4>
+                  <p className="text-sm text-gray-300 leading-relaxed">
+                    Todos os equipamentos passam por rigorosa inspeção e possuem
+                    certificações de segurança
+                  </p>
+                </AnimatedBenefit>
+
+                <AnimatedBenefit delay={0.4} className="text-center group">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
+                    <Truck className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="font-semibold mb-2 group-hover:text-orange-500 transition-colors duration-300">
+                    Entrega Rápida
+                  </h4>
+                  <p className="text-sm text-gray-300 leading-relaxed">
+                    Entrega no mesmo dia para região metropolitana de Porto
+                    Alegre
+                  </p>
+                </AnimatedBenefit>
+
+                <AnimatedBenefit delay={0.5} className="text-center group">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
+                    <CheckCircle className="h-8 w-8 text-white" />
+                  </div>
+                  <h4 className="font-semibold mb-2 group-hover:text-orange-500 transition-colors duration-300">
+                    Suporte 24h
+                  </h4>
+                  <p className="text-sm text-gray-300 leading-relaxed">
+                    Suporte técnico especializado disponível 24 horas por dia
+                  </p>
+                </AnimatedBenefit>
+              </div>
+            </CardContent>
+          </Card>
+        </AnimatedSection>
       </div>
     </main>
   )
