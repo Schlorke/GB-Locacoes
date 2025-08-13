@@ -7,12 +7,20 @@ const config: StorybookConfig = {
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
     '../components/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
-  addons: ['@storybook/addon-links', '@storybook/addon-a11y'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    '@storybook/addon-a11y',
+  ],
+  staticDirs: ['../public'],
   framework: {
     name: '@storybook/nextjs',
     options: {
       nextConfigPath: path.resolve(__dirname, '../next.config.mjs'),
     },
+  },
+  nextjs: {
+    appDirectory: true,
   },
   typescript: {
     check: false,

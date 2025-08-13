@@ -1,7 +1,7 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
-  extends: ['next/core-web-vitals', 'next/typescript'],
+  extends: ['next/core-web-vitals', 'next/typescript', 'plugin:storybook/recommended'],
   rules: {
     '@typescript-eslint/no-unused-vars': [
       'warn',
@@ -12,6 +12,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-explicit-any': 'warn',
+    'storybook/no-renderer-packages': 'off',
   },
   ignorePatterns: [
     'node_modules/',
