@@ -1,6 +1,12 @@
-import { prisma } from '@/lib/prisma'
 import type { Decimal } from '@prisma/client/runtime/library'
 import { NextResponse } from 'next/server'
+
+// FIX: Dynamic imports to avoid Prisma initialization at build time
+// This prevents the "@prisma/client did not initialize yet" error during
+// Vercel's "Collecting page data" phase with Next.js 15 + Prisma 6
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
 
 // Tipo para equipamento com categoria incluída
 type EquipmentWithCategory = {
@@ -29,6 +35,9 @@ type EquipmentWithCategory = {
 
 export async function GET() {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { prisma } = await import('@/lib/prisma')
+
     await prisma.$connect()
 
     const equipments = await prisma.equipment.findMany({

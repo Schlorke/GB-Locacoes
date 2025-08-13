@@ -1,7 +1,9 @@
 import bcrypt from 'bcryptjs'
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { prisma } from './prisma'
+
+// FIX: Remove static import to avoid Prisma initialization during build
+// import { prisma } from './prisma' - REMOVED
 
 // Helper function for debug logging
 const debugLog = (message: string, data?: unknown) => {
@@ -37,6 +39,9 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
+          // Dynamic import - only load at runtime, never during build
+          const { prisma } = await import('./prisma')
+          
           debugLog('Buscando usuário', { email: credentials.email })
 
           const user = await prisma.user.findUnique({

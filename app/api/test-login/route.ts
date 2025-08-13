@@ -1,9 +1,18 @@
-import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
 
+// FIX: Dynamic imports to avoid Prisma initialization at build time
+// This prevents the "@prisma/client did not initialize yet" error during 
+// Vercel's "Collecting page data" phase with Next.js 15 + Prisma 6
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
+
 export async function POST(request: Request) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { prisma } = await import('@/lib/prisma')
+    
     const { email, password } = await request.json()
 
     const user = await prisma.user.findUnique({
