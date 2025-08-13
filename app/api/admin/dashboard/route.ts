@@ -1,12 +1,19 @@
 import { type NextRequest, NextResponse } from 'next/server'
 
+// FIX: Dynamic imports to avoid Prisma initialization at build time
+// This prevents the "@prisma/client did not initialize yet" error during 
+// Vercel's "Collecting page data" phase with Next.js 15 + Prisma 6
 export const dynamic = 'force-dynamic'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+export const runtime = 'nodejs'
+export const revalidate = 0
 
 export async function GET(_request: NextRequest) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { getServerSession } = await import('next-auth')
+    const { authOptions } = await import('@/lib/auth')
+    const { prisma } = await import('@/lib/prisma')
+
     const session = await getServerSession(authOptions)
 
     if (!session?.user || !['ADMIN', 'OPERATOR'].includes(session.user.role)) {

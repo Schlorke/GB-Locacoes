@@ -1,13 +1,13 @@
 'use server'
 
-import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
 import { SettingsInput, SettingsSchema } from '@/schemas/settings.schema'
-import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
 
 export async function getSettings() {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { prisma } = await import('@/lib/prisma')
+
     // Busca a primeira configuração ou cria uma padrão
     let settings = await prisma.setting.findFirst()
 
@@ -64,6 +64,11 @@ export async function getSettings() {
 
 export async function updateSettings(data: SettingsInput) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { authOptions } = await import('@/lib/auth')
+    const { prisma } = await import('@/lib/prisma')
+    const { getServerSession } = await import('next-auth')
+
     // Verificar autenticação
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== 'ADMIN') {
@@ -173,6 +178,11 @@ export async function updateSettings(data: SettingsInput) {
 
 export async function toggleMaintenanceMode(enabled: boolean) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { authOptions } = await import('@/lib/auth')
+    const { prisma } = await import('@/lib/prisma')
+    const { getServerSession } = await import('next-auth')
+
     // Verificar autenticação
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== 'ADMIN') {

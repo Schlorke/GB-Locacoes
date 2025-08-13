@@ -1,6 +1,12 @@
-import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
+
+// FIX: Dynamic imports to avoid Prisma initialization at build time
+// This prevents the "@prisma/client did not initialize yet" error during 
+// Vercel's "Collecting page data" phase with Next.js 15 + Prisma 6
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
 
 // Define Role enum manually to avoid import issues
 const Role = {
@@ -10,6 +16,9 @@ const Role = {
 
 export async function POST() {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { prisma } = await import('@/lib/prisma')
+
     const adminEmail = 'admin@gblocacoes.com.br'
     const adminPassword = 'admin123'
     const adminName = 'Admin'
@@ -170,6 +179,7 @@ export async function POST() {
     )
   } finally {
     try {
+      const { prisma } = await import('@/lib/prisma')
       await prisma.$disconnect()
     } catch (disconnectError) {
       console.error(
@@ -183,6 +193,9 @@ export async function POST() {
 // GET method remains the same
 export async function GET() {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { prisma } = await import('@/lib/prisma')
+
     const adminEmail = 'admin@gblocacoes.com.br'
 
     await prisma.$connect()
@@ -241,6 +254,7 @@ export async function GET() {
       { status: 500 }
     )
   } finally {
+    const { prisma } = await import('@/lib/prisma')
     await prisma.$disconnect()
   }
 }

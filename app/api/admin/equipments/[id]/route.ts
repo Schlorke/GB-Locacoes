@@ -1,12 +1,21 @@
-import { prisma } from '@/lib/prisma'
-import { requireAdmin } from '@/middlewares/require-admin'
 import { NextRequest, NextResponse } from 'next/server'
+
+// FIX: Dynamic imports to avoid Prisma initialization at build time
+// This prevents the "@prisma/client did not initialize yet" error during
+// Vercel's "Collecting page data" phase with Next.js 15 + Prisma 6
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+    const { prisma } = await import('@/lib/prisma')
+
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
       return NextResponse.json(
@@ -62,6 +71,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+    const { prisma } = await import('@/lib/prisma')
+
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
       return NextResponse.json(
@@ -145,6 +158,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+    const { prisma } = await import('@/lib/prisma')
+
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
       return NextResponse.json(

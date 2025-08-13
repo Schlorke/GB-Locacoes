@@ -1,7 +1,12 @@
-import { prisma } from '@/lib/prisma'
-import { requireAdmin } from '@/middlewares/require-admin'
 import type { Decimal } from '@prisma/client/runtime/library'
 import { NextResponse, type NextRequest } from 'next/server'
+
+// FIX: Dynamic imports to avoid Prisma initialization at build time
+// This prevents the "@prisma/client did not initialize yet" error during 
+// Vercel's "Collecting page data" phase with Next.js 15 + Prisma 6
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
 
 // Tipo para equipamento com categoria incluída
 type EquipmentWithCategory = {
@@ -35,6 +40,10 @@ type EquipmentWithCategory = {
 // GET /api/admin/equipments - List all equipments with pagination and filtering
 export async function GET(request: NextRequest) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+    const { prisma } = await import('@/lib/prisma')
+    
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
@@ -188,6 +197,10 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/equipments - Create new equipment
 export async function POST(request: NextRequest) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+    const { prisma } = await import('@/lib/prisma')
+    
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
