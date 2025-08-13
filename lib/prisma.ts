@@ -18,8 +18,29 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-export const prisma =
-  globalForPrisma.prisma ??
-  prismaClientSingleton()
+let _prisma: PrismaClient | undefined
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+function getPrismaClient(): PrismaClient {
+  if (_prisma) return _prisma
+  
+  if (globalForPrisma.prisma) {
+    _prisma = globalForPrisma.prisma
+    return _prisma
+  }
+  
+  _prisma = prismaClientSingleton()
+  
+  if (process.env.NODE_ENV !== 'production') {
+    globalForPrisma.prisma = _prisma
+  }
+  
+  return _prisma
+}
+
+// Use getter para lazy initialization
+export const prisma = new Proxy({} as PrismaClient, {
+  get(target, prop) {
+    const client = getPrismaClient()
+    return (client as Record<string, unknown>)[prop]
+  }
+})
