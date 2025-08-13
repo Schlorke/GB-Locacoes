@@ -8,7 +8,8 @@ import { EquipmentPricingSelector } from '@/components/equipment-pricing-selecto
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { prisma } from '@/lib/prisma'
+// FIX: Remove static import to avoid Prisma initialization during build
+// import { prisma } from '@/lib/prisma' - REMOVED
 import {
   ArrowLeft,
   CheckCircle,
@@ -27,29 +28,42 @@ interface Props {
 
 export async function generateMetadata(props: Props) {
   const params = await props.params
-  const equipment = await prisma.equipment.findUnique({
-    where: { id: params.id },
-    include: {
-      category: {
-        select: {
-          name: true,
+
+  try {
+    // Dynamic import - only load at runtime, never during build
+    const { prisma } = await import('@/lib/prisma')
+
+    const equipment = await prisma.equipment.findUnique({
+      where: { id: params.id },
+      include: {
+        category: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-  })
+    })
 
-  if (!equipment) {
+    if (!equipment) {
+      return { title: 'Equipamento não encontrado' }
+    }
+
+    return {
+      title: `${equipment.name} | GB Locações`,
+      description: equipment.description,
+    }
+  } catch (error) {
+    console.error('Error in generateMetadata:', error)
     return { title: 'Equipamento não encontrado' }
-  }
-
-  return {
-    title: `${equipment.name} | GB Locações`,
-    description: equipment.description,
   }
 }
 
 export default async function EquipmentDetailPage(props: Props) {
   const params = await props.params
+
+  // Dynamic import - only load at runtime, never during build
+  const { prisma } = await import('@/lib/prisma')
+
   const equipment = await prisma.equipment.findUnique({
     where: { id: params.id },
     include: {
