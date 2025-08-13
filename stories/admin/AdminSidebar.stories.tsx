@@ -1,6 +1,8 @@
 import AdminSidebar from '@/components/admin/admin-sidebar'
 import type { Meta, StoryObj } from '@storybook/react'
-import { fn } from '@storybook/test'
+
+// Mock function para actions
+const mockFn = () => {}
 
 const meta: Meta<typeof AdminSidebar> = {
   title: 'Admin/AdminSidebar',
@@ -20,12 +22,12 @@ export default meta
 
 export const Default: StoryObj<typeof AdminSidebar> = {
   args: {
-    onCollapseChange: fn(),
+    onCollapseChange: mockFn,
   },
 }
 
 export const Variant: StoryObj<typeof AdminSidebar> = {
   args: {
-    onCollapseChange: fn(),
+    onCollapseChange: mockFn,
   },
 }

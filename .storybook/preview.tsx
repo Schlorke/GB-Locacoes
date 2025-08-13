@@ -1,59 +1,37 @@
 import type { Preview } from '@storybook/react'
-import React from 'react'
 import '../app/globals.css'
+import { MockProvidersWrapper } from '../lib/storybook/mock-providers'
 
-// Mock NextAuth useSession for all stories
-const NextAuthDecorator = (Story: any) => {
-  // Mock the useSession hook globally
-  const originalUseSession = (globalThis as any).__nextAuth?.useSession
-
-  // Override useSession to return mock data
-  ;(globalThis as any).__nextAuth = {
-    useSession: () => ({
-      data: {
-        user: {
-          id: 'mock-user-id',
-          name: 'Admin User',
-          email: 'admin@example.com',
-          role: 'ADMIN',
-        },
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      },
-      status: 'authenticated',
-    }),
-  }
-
-  return <Story />
-}
-
-// Mock SidebarProvider for components that need sidebar context
-const SidebarProviderDecorator = (Story: any) => {
-  // Mock the useSidebar hook
-  const mockUseSidebar = {
-    isOpen: false,
-    setIsOpen: () => {},
-    toggle: () => {},
-  }
-
-  // Override useSidebar to return mock data
+// Global Storybook decorator that provides all necessary context
+const GlobalDecorator = (Story: any) => {
+  // Set global flag to identify Storybook environment
   if (typeof window !== 'undefined') {
-    ;(window as any).mockUseSidebar = mockUseSidebar
+    ;(window as any).__STORYBOOK__ = true
   }
 
-  return <Story />
+  return (
+    <MockProvidersWrapper>
+      <div className="font-sans antialiased">
+        <Story />
+      </div>
+    </MockProvidersWrapper>
+  )
 }
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
+    actions: {
+      argTypesRegex: '^on[A-Z].*',
+      disable: false,
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
-        date: /Date$/,
+        date: /Date$/i,
       },
-      expanded: false,
+      sort: 'alpha',
     },
-    layout: 'fullscreen',
+    layout: 'centered',
     viewport: {
       viewports: {
         mobile: {
@@ -73,18 +51,19 @@ const preview: Preview = {
         desktop: {
           name: 'Desktop',
           styles: {
-            width: '1024px',
-            height: '768px',
+            width: '1200px',
+            height: '800px',
           },
         },
         wide: {
-          name: 'Wide',
+          name: 'Wide Screen',
           styles: {
             width: '1440px',
             height: '900px',
           },
         },
       },
+      defaultViewport: 'desktop',
     },
     backgrounds: {
       default: 'light',
@@ -95,22 +74,33 @@ const preview: Preview = {
         },
         {
           name: 'dark',
-          value: '#1a1a1a',
+          value: '#0f172a',
         },
         {
           name: 'gray',
-          value: '#f5f5f5',
+          value: '#f8fafc',
+        },
+        {
+          name: 'orange',
+          value: '#fed7aa',
         },
       ],
     },
     docs: {
-      toc: true,
+      toc: {
+        contentsSelector: '.sbdocs-content',
+        headingSelector: 'h1, h2, h3',
+        ignoreSelector: '#storybook-docs',
+        title: 'Table of Contents',
+        disable: false,
+      },
     },
     options: {
       storySort: {
         order: [
           'Welcome',
           'Design System',
+          ['Overview', 'Colors', 'Typography', 'Icons'],
           'Foundations',
           'Atoms',
           'Molecules',
@@ -122,15 +112,8 @@ const preview: Preview = {
       },
     },
   },
-  decorators: [
-    NextAuthDecorator,
-    SidebarProviderDecorator,
-    (Story) => (
-      <div className="min-h-screen bg-white">
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [GlobalDecorator],
+  tags: ['autodocs'],
 }
 
 export default preview

@@ -1,8 +1,10 @@
 import { AdminFilterCard } from '@/components/admin/admin-filter-card'
 import { Button } from '@/components/ui/button'
 import type { Meta, StoryObj } from '@storybook/react'
-import { fn } from '@storybook/test'
 import { Plus } from 'lucide-react'
+
+// Mock functions para actions
+const mockFn = () => {}
 
 const meta: Meta<typeof AdminFilterCard> = {
   title: 'Organisms/AdminFilterCard',
@@ -25,7 +27,7 @@ export const Default: StoryObj<typeof AdminFilterCard> = {
   args: {
     searchPlaceholder: 'Buscar equipamentos...',
     searchValue: '',
-    onSearchChange: fn(),
+    onSearchChange: mockFn,
     filters: [
       {
         label: 'Categoria',
@@ -36,7 +38,7 @@ export const Default: StoryObj<typeof AdminFilterCard> = {
           { value: 'electronics', label: 'Eletrônicos' },
         ],
         value: '',
-        onValueChange: fn(),
+        onValueChange: mockFn,
       },
       {
         label: 'Status',
@@ -47,7 +49,7 @@ export const Default: StoryObj<typeof AdminFilterCard> = {
           { value: 'maintenance', label: 'Manutenção' },
         ],
         value: '',
-        onValueChange: fn(),
+        onValueChange: mockFn,
       },
     ],
     actionButtons: (
@@ -63,7 +65,7 @@ export const WithSearchOnly: StoryObj<typeof AdminFilterCard> = {
   args: {
     searchPlaceholder: 'Buscar...',
     searchValue: '',
-    onSearchChange: fn(),
+    onSearchChange: mockFn,
     filters: [],
   },
 }
@@ -79,7 +81,7 @@ export const WithFiltersOnly: StoryObj<typeof AdminFilterCard> = {
           { value: 'machines', label: 'Máquinas' },
         ],
         value: '',
-        onValueChange: fn(),
+        onValueChange: mockFn,
       },
     ],
   },
@@ -89,7 +91,7 @@ export const WithActionButtons: StoryObj<typeof AdminFilterCard> = {
   args: {
     searchPlaceholder: 'Buscar...',
     searchValue: '',
-    onSearchChange: fn(),
+    onSearchChange: mockFn,
     filters: [
       {
         label: 'Status',
@@ -99,7 +101,7 @@ export const WithActionButtons: StoryObj<typeof AdminFilterCard> = {
           { value: 'inactive', label: 'Inativo' },
         ],
         value: '',
-        onValueChange: fn(),
+        onValueChange: mockFn,
       },
     ],
     actionButtons: (
@@ -118,7 +120,7 @@ export const ComplexFilters: StoryObj<typeof AdminFilterCard> = {
   args: {
     searchPlaceholder: 'Buscar equipamentos...',
     searchValue: '',
-    onSearchChange: fn(),
+    onSearchChange: mockFn,
     filters: [
       {
         label: 'Categoria',
@@ -130,7 +132,7 @@ export const ComplexFilters: StoryObj<typeof AdminFilterCard> = {
           { value: 'vehicles', label: 'Veículos' },
         ],
         value: '',
-        onValueChange: fn(),
+        onValueChange: mockFn,
       },
       {
         label: 'Status',
@@ -142,7 +144,7 @@ export const ComplexFilters: StoryObj<typeof AdminFilterCard> = {
           { value: 'rented', label: 'Alugado' },
         ],
         value: '',
-        onValueChange: fn(),
+        onValueChange: mockFn,
       },
       {
         label: 'Localização',
@@ -153,7 +155,7 @@ export const ComplexFilters: StoryObj<typeof AdminFilterCard> = {
           { value: 'office', label: 'Escritório' },
         ],
         value: '',
-        onValueChange: fn(),
+        onValueChange: mockFn,
       },
     ],
     actionButtons: (

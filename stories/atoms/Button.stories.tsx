@@ -1,8 +1,9 @@
-import { Button } from '@/components/ui/button'
 import type { Meta, StoryObj } from '@storybook/react'
+import { Edit, Phone, Plus, ShoppingCart, Trash2 } from 'lucide-react'
+import { Button } from '../../components/ui/button'
 
 const meta: Meta<typeof Button> = {
-  title: 'Atoms/Button',
+  title: 'Design System/Atoms/Button',
   component: Button,
   argTypes: {
     variant: {
@@ -13,23 +14,46 @@ const meta: Meta<typeof Button> = {
         'outline',
         'destructive',
         'ghost',
-        'reset',
         'link',
       ],
+      description:
+        'Variante visual do botão conforme design system GB Locações',
     },
     size: {
       control: 'select',
       options: ['default', 'sm', 'lg', 'icon'],
+      description: 'Tamanho do botão',
     },
-    disabled: { control: 'boolean' },
-    asChild: { control: 'boolean' },
+    disabled: {
+      control: 'boolean',
+      description: 'Estado desabilitado do botão',
+    },
+    asChild: {
+      control: 'boolean',
+      description: 'Renderizar como elemento filho',
+    },
   },
   parameters: {
     layout: 'centered',
     docs: {
       description: {
-        component:
-          'Componente de botão reutilizável com múltiplas variantes e tamanhos. Baseado no ShadCN UI com customizações específicas do projeto.',
+        component: `
+## Button - Componente Base GB Locações
+
+Componente de botão reutilizável seguindo o design system da GB Locações. Construído com ShadCN UI e customizado com a identidade visual da marca.
+
+### Princípios de Design
+- **Cor primária**: Laranja (#f97316) para ações principais
+- **Hierarquia clara**: Variantes distintas para diferentes níveis de importância  
+- **Acessibilidade**: Contraste adequado e estados de foco visíveis
+- **Consistência**: Uso padronizado em todo o sistema
+
+### Casos de Uso
+- **Ações primárias**: Solicitar orçamento, finalizar pedido
+- **Ações secundárias**: Ver detalhes, cancelar
+- **Ações administrativas**: CRUD no painel admin
+- **Navegação**: Links e botões de direcionamento
+        `,
       },
     },
   },
@@ -38,90 +62,235 @@ const meta: Meta<typeof Button> = {
 
 export default meta
 
-export const Primary: StoryObj<typeof Button> = {
+// ============================================================================
+// STORIES CONTEXTUAIS - GB LOCAÇÕES
+// ============================================================================
+
+/** Botão principal para solicitar orçamentos - CTA primário do site */
+export const SolicitarOrcamento: StoryObj<typeof Button> = {
   args: {
     variant: 'default',
-    children: 'Alugar',
+    size: 'default',
+    children: 'Solicitar Orçamento',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '**Call-to-Action principal** do site GB Locações. Usado em cards de equipamentos e páginas de produto para iniciar o processo de orçamento.',
+      },
+    },
   },
 }
 
-export const Secondary: StoryObj<typeof Button> = {
-  args: {
-    variant: 'secondary',
-    children: 'Secundário',
-  },
-}
-
-export const Outline: StoryObj<typeof Button> = {
+/** Botão secundário para visualizar detalhes de equipamentos */
+export const VerDetalhes: StoryObj<typeof Button> = {
   args: {
     variant: 'outline',
-    children: 'Contorno',
+    size: 'default',
+    children: 'Ver Detalhes',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Botão secundário usado em **cards de equipamentos** para navegação para página de detalhes.',
+      },
+    },
   },
 }
 
-export const Destructive: StoryObj<typeof Button> = {
-  args: {
-    variant: 'destructive',
-    children: 'Excluir',
-  },
-}
-
-export const Ghost: StoryObj<typeof Button> = {
+/** Botão de contato no cabeçalho */
+export const ContatoTelefone: StoryObj<typeof Button> = {
   args: {
     variant: 'ghost',
-    children: 'Fantasma',
+    size: 'default',
+    children: (
+      <>
+        <Phone className="w-4 h-4 mr-2" />
+        (51) 2313-6262
+      </>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Botão de **contato telefônico** exibido no cabeçalho do site com ícone e número.',
+      },
+    },
   },
 }
 
-export const Reset: StoryObj<typeof Button> = {
+/** Botão para adicionar ao carrinho/orçamento */
+export const AdicionarOrcamento: StoryObj<typeof Button> = {
   args: {
-    variant: 'reset',
-    children: 'Resetar',
+    variant: 'secondary',
+    size: 'default',
+    children: (
+      <>
+        <ShoppingCart className="w-4 h-4 mr-2" />
+        Adicionar ao Orçamento
+      </>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Botão para **adicionar equipamentos ao orçamento** com ícone de carrinho.',
+      },
+    },
   },
 }
 
-export const Link: StoryObj<typeof Button> = {
+// ============================================================================
+// STORIES ADMINISTRATIVAS
+// ============================================================================
+
+/** Botão para criar novos itens no admin */
+export const AdminNovo: StoryObj<typeof Button> = {
   args: {
-    variant: 'link',
-    children: 'Link',
+    variant: 'default',
+    size: 'default',
+    children: (
+      <>
+        <Plus className="w-4 h-4 mr-2" />
+        Novo Equipamento
+      </>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Botão para **criar novos equipamentos** no painel administrativo.',
+      },
+    },
   },
 }
 
-export const Disabled: StoryObj<typeof Button> = {
+/** Botão de edição no admin */
+export const AdminEditar: StoryObj<typeof Button> = {
+  args: {
+    variant: 'ghost',
+    size: 'icon',
+    children: <Edit className="w-4 h-4" />,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Botão de **ação rápida para edição** em tabelas e listagens administrativas.',
+      },
+    },
+  },
+}
+
+/** Botão de exclusão no admin */
+export const AdminExcluir: StoryObj<typeof Button> = {
+  args: {
+    variant: 'destructive',
+    size: 'icon',
+    children: <Trash2 className="w-4 h-4" />,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Botão **destrutivo para exclusão** de itens. Sempre confirmar ação antes da exclusão.',
+      },
+    },
+  },
+}
+
+// ============================================================================
+// STORIES DE ESTADO E VARIAÇÕES
+// ============================================================================
+
+/** Estado desabilitado */
+export const Desabilitado: StoryObj<typeof Button> = {
   args: {
     variant: 'default',
     disabled: true,
-    children: 'Desabilitado',
+    children: 'Indisponível',
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Estado **desabilitado** usado quando equipamento está indisponível ou ação não pode ser executada.',
+      },
+    },
   },
 }
 
-export const Small: StoryObj<typeof Button> = {
+/** Estado de carregamento */
+export const Carregando: StoryObj<typeof Button> = {
   args: {
     variant: 'default',
-    size: 'sm',
-    children: 'Pequeno',
+    disabled: true,
+    children: (
+      <>
+        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+        Processando...
+      </>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Estado de **carregamento** com spinner durante processamento de orçamentos ou submissão de formulários.',
+      },
+    },
   },
 }
 
-export const Large: StoryObj<typeof Button> = {
-  args: {
-    variant: 'default',
-    size: 'lg',
-    children: 'Grande',
+// ============================================================================
+// STORIES DEMONSTRATIVAS
+// ============================================================================
+
+/** Todas as variantes lado a lado */
+export const TodasVariantes: StoryObj<typeof Button> = {
+  render: () => (
+    <div className="flex flex-wrap gap-4 items-center">
+      <Button variant="default">Default</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="destructive">Destructive</Button>
+      <Button variant="link">Link</Button>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '**Comparação visual** de todas as variantes disponíveis do componente Button.',
+      },
+    },
   },
 }
 
-export const Icon: StoryObj<typeof Button> = {
-  args: {
-    variant: 'default',
-    size: 'icon',
-    children: '🔍',
-  },
-}
-
-export const LongText: StoryObj<typeof Button> = {
-  args: {
-    variant: 'outline',
-    children: 'Texto muito extenso para testar overflow',
+/** Todos os tamanhos lado a lado */
+export const TodosTamanhos: StoryObj<typeof Button> = {
+  render: () => (
+    <div className="flex flex-wrap gap-4 items-center">
+      <Button size="sm">Pequeno</Button>
+      <Button size="default">Padrão</Button>
+      <Button size="lg">Grande</Button>
+      <Button size="icon">
+        <Edit className="w-4 h-4" />
+      </Button>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '**Comparação de tamanhos** disponíveis, incluindo tamanho de ícone.',
+      },
+    },
   },
 }
