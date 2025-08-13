@@ -13,26 +13,26 @@ const prismaClientSingleton = () => {
   })
 }
 
-// Lazy initialization to avoid build-time issues
+// FIXED: Global singleton pattern to prevent multiple instances
+// This avoids "@prisma/client did not initialize yet" in serverless
 let _prisma: PrismaClient | undefined
 
-const getPrismaClient = () => {
+export function getPrismaClient(): PrismaClient {
   if (_prisma) return _prisma
 
-  if (process.env.NODE_ENV === 'production') {
-    _prisma = new PrismaClient({
-      log: ['error'],
-    })
-  } else {
+  // Use global instance in development to prevent hot reload issues
+  if (process.env.NODE_ENV === 'development') {
     if (!globalThis.__prisma) {
       globalThis.__prisma = prismaClientSingleton()
     }
     _prisma = globalThis.__prisma
+  } else {
+    // Production: create new instance per Lambda
+    _prisma = prismaClientSingleton()
   }
 
   return _prisma
 }
 
-// Export the client instance
+// Export for backward compatibility - but prefer dynamic imports
 export const prisma = getPrismaClient()
-export default getPrismaClient
