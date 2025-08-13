@@ -1,5 +1,20 @@
 # 🏗️ GB-Locacoes - Plataforma de Locações de Equipamentos
 
+## ⚠️ DOCUMENTAÇÃO CRÍTICA - LEIA PRIMEIRO
+
+**ANTES DE FAZER QUALQUER ALTERAÇÃO NO CÓDIGO**, leia obrigatoriamente:
+
+- 🔥 **[DISASTER_RECOVERY_REPORT.md](./DISASTER_RECOVERY_REPORT.md)** - Análise
+  completa do desastre que quase destruiu o projeto
+- 🛡️ **[NEVER_AGAIN_FUNCTIONAL_CODE.md](./NEVER_AGAIN_FUNCTIONAL_CODE.md)** -
+  Código funcional protegido e versões problemáticas
+- ⚡ **[EMERGENCY_RESTORE_GUIDE.md](./EMERGENCY_RESTORE_GUIDE.md)** - Guia
+  rápido de restauração
+
+**Commit funcional de referência:** `585eb94`
+
+---
+
 [![CI](https://img.shields.io/github/actions/workflow/status/GBLocacoes/GB-Locacoes/test.yml?label=CI)](https://github.com/GBLocacoes/GB-Locacoes/actions)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](#licença)
 [![Next.js](https://img.shields.io/badge/Next.js-15.4.6-black)](https://nextjs.org/)
