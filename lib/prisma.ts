@@ -1,11 +1,38 @@
 import { PrismaClient } from '@prisma/client'
 
 declare global {
-  var prisma: PrismaClient | undefined
+  var __prisma: PrismaClient | undefined
 }
 
-const prisma = globalThis.prisma ?? new PrismaClient()
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    log:
+      process.env.NODE_ENV === 'development'
+        ? ['query', 'error', 'warn']
+        : ['error'],
+  })
+}
 
-if (process.env.NODE_ENV !== 'production') globalThis.prisma = prisma
+// Lazy initialization to avoid build-time issues
+let _prisma: PrismaClient | undefined
 
-export { prisma }
+const getPrismaClient = () => {
+  if (_prisma) return _prisma
+
+  if (process.env.NODE_ENV === 'production') {
+    _prisma = new PrismaClient({
+      log: ['error'],
+    })
+  } else {
+    if (!globalThis.__prisma) {
+      globalThis.__prisma = prismaClientSingleton()
+    }
+    _prisma = globalThis.__prisma
+  }
+
+  return _prisma
+}
+
+// Export the client instance
+export const prisma = getPrismaClient()
+export default getPrismaClient
