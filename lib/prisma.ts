@@ -13,34 +13,26 @@ const prismaClientSingleton = () => {
   })
 }
 
-// Prevent multiple instances in development
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
-}
-
+// Lazy initialization to avoid build-time issues
 let _prisma: PrismaClient | undefined
 
-function getPrismaClient(): PrismaClient {
+const getPrismaClient = () => {
   if (_prisma) return _prisma
-  
-  if (globalForPrisma.prisma) {
-    _prisma = globalForPrisma.prisma
-    return _prisma
+
+  if (process.env.NODE_ENV === 'production') {
+    _prisma = new PrismaClient({
+      log: ['error'],
+    })
+  } else {
+    if (!globalThis.__prisma) {
+      globalThis.__prisma = prismaClientSingleton()
+    }
+    _prisma = globalThis.__prisma
   }
-  
-  _prisma = prismaClientSingleton()
-  
-  if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.prisma = _prisma
-  }
-  
+
   return _prisma
 }
 
-// Use getter para lazy initialization
-export const prisma = new Proxy({} as PrismaClient, {
-  get(target, prop) {
-    const client = getPrismaClient()
-    return (client as Record<string, unknown>)[prop]
-  }
-})
+// Export the client instance
+export const prisma = getPrismaClient()
+export default getPrismaClient

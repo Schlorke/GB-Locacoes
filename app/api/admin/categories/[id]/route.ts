@@ -1,3 +1,4 @@
+import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/middlewares/require-admin'
 import { NextResponse, type NextRequest } from 'next/server'
 
@@ -50,8 +51,6 @@ export async function PUT(
     if (bgColor !== undefined) data.bgColor = bgColor?.trim() || '#e0e0e0'
     if (fontColor !== undefined) data.fontColor = fontColor?.trim() || '#000000'
 
-    // Dynamic import do Prisma
-    const { prisma } = await import('@/lib/prisma')
     const category = await prisma.category.update({
       where: { id },
       data,
@@ -83,8 +82,6 @@ export async function DELETE(
     }
     const { id } = params
 
-    // Dynamic import do Prisma
-    const { prisma } = await import('@/lib/prisma')
     await prisma.category.delete({ where: { id } })
     return NextResponse.json({ message: 'Categoria excluída' })
   } catch (error) {
