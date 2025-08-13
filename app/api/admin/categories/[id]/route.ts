@@ -81,7 +81,6 @@ export async function DELETE(
       )
     }
     const { id } = params
-
     await prisma.category.delete({ where: { id } })
     return NextResponse.json({ message: 'Categoria excluída' })
   } catch (error) {
