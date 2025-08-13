@@ -1,8 +1,13 @@
-import { prisma } from '@/lib/prisma'
-import { requireAdmin } from '@/middlewares/require-admin'
 import { NextResponse, type NextRequest } from 'next/server'
 import crypto from 'node:crypto'
 import { z } from 'zod'
+
+// FIX: Dynamic imports to avoid Prisma initialization at build time
+// This prevents the "@prisma/client did not initialize yet" error during 
+// Vercel's "Collecting page data" phase with Next.js 15 + Prisma 6
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
 
 function slugify(text: string) {
   return text
@@ -29,6 +34,10 @@ const CategorySchema = z
 // GET /api/admin/categories - List all categories
 export async function GET(request: NextRequest) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+    const { prisma } = await import('@/lib/prisma')
+    
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
@@ -63,6 +72,10 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/categories - Create new category
 export async function POST(request: NextRequest) {
   try {
+    // Dynamic imports - only load at runtime, never during build
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+    const { prisma } = await import('@/lib/prisma')
+    
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
