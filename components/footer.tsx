@@ -21,7 +21,7 @@ export default function Footer() {
                 <span className="text-base font-bold text-white">GB</span>
               </div>
               <div>
-                <div className="font-display text-xl font-bold text-orange-400">
+                <div className="font-display text-xl font-bold text-orange-500">
                   GB Locações
                 </div>
                 <div className="text-sm text-gray-400">
@@ -36,19 +36,19 @@ export default function Footer() {
             </p>
             <div className="flex space-x-3">
               <button
-                className="flex items-center justify-center p-2 rounded-md bg-transparent border-none text-gray-300 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-orange-600/20 hover:text-orange-400"
+                className="flex items-center justify-center p-2 rounded-md bg-transparent border-none text-gray-300 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-orange-600/20 hover:text-orange-500"
                 aria-label="Facebook"
               >
                 <Facebook className="h-5 w-5" />
               </button>
               <button
-                className="flex items-center justify-center p-2 rounded-md bg-transparent border-none text-gray-300 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-orange-600/20 hover:text-orange-400"
+                className="flex items-center justify-center p-2 rounded-md bg-transparent border-none text-gray-300 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-orange-600/20 hover:text-orange-500"
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
               </button>
               <button
-                className="flex items-center justify-center p-2 rounded-md bg-transparent border-none text-gray-300 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-orange-600/20 hover:text-orange-400"
+                className="flex items-center justify-center p-2 rounded-md bg-transparent border-none text-gray-300 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-orange-600/20 hover:text-orange-500"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="h-5 w-5" />
@@ -58,14 +58,14 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="flex flex-col space-y-2">
-            <h3 className="font-display text-lg font-bold text-orange-400 mb-2">
+            <h3 className="font-display text-lg font-bold text-orange-500 mb-2">
               Links Rápidos
             </h3>
             <ul className="flex flex-col space-y-2">
               <li>
                 <Link
                   href="/catalogo"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Catálogo de Equipamentos
                 </Link>
@@ -73,7 +73,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/categorias"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Categorias
                 </Link>
@@ -81,7 +81,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/orcamento"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Solicitar Orçamento
                 </Link>
@@ -89,7 +89,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/sobre"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Sobre Nós
                 </Link>
@@ -97,7 +97,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/contato"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Contato
                 </Link>
@@ -105,7 +105,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/login"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Área do Cliente
                 </Link>
@@ -115,14 +115,14 @@ export default function Footer() {
 
           {/* Categories */}
           <div className="flex flex-col space-y-2">
-            <h3 className="font-display text-lg font-bold text-orange-400 mb-2">
+            <h3 className="font-display text-lg font-bold text-orange-500 mb-2">
               Equipamentos
             </h3>
             <ul className="flex flex-col space-y-2">
               <li>
                 <Link
                   href="/catalogo/andaimes-suspensos"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Andaimes Suspensos
                 </Link>
@@ -130,7 +130,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/cadeiras-eletricas"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Cadeiras Elétricas
                 </Link>
@@ -138,7 +138,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/andaimes-tubulares"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Andaimes Tubulares
                 </Link>
@@ -146,7 +146,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/betoneiras"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Betoneiras
                 </Link>
@@ -154,7 +154,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/rompedores"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Rompedores
                 </Link>
@@ -162,7 +162,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/catalogo/compressores"
-                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-400"
+                  className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Compressores
                 </Link>
@@ -172,23 +172,23 @@ export default function Footer() {
 
           {/* Contact Info */}
           <div className="flex flex-col space-y-2">
-            <h3 className="font-display text-lg font-bold text-orange-400 mb-2">
+            <h3 className="font-display text-lg font-bold text-orange-500 mb-2">
               Contato
             </h3>
             <div className="flex flex-col space-y-2">
               <div className="flex items-start space-x-3">
-                <Phone className="h-5 w-5 text-orange-400 mt-1" />
+                <Phone className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
                   <Link
                     href="tel:+5151231362626"
-                    className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-400"
+                    className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
                     (51) 2313-6262
                   </Link>
                   <br />
                   <Link
                     href="tel:+555199820516"
-                    className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-400"
+                    className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
                     (51) 99820-5163
                   </Link>
@@ -199,11 +199,11 @@ export default function Footer() {
               </div>
 
               <div className="flex items-start space-x-3">
-                <Mail className="h-5 w-5 text-orange-400 mt-1" />
+                <Mail className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
                   <Link
                     href="mailto:contato@gblocacoes.com.br"
-                    className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-400"
+                    className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
                     contato@gblocacoes.com.br
                   </Link>
@@ -214,7 +214,7 @@ export default function Footer() {
               </div>
 
               <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-orange-400 mt-1" />
+                <MapPin className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
                   <p className="text-sm text-gray-300">
                     Travessa Doutor Heinzelmann, 365
@@ -228,7 +228,7 @@ export default function Footer() {
               </div>
 
               <div className="flex items-start space-x-3">
-                <Clock className="h-5 w-5 text-orange-400 mt-1" />
+                <Clock className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
                   <p className="text-sm text-gray-300">Seg-Sex: 8h às 18h</p>
                   <p className="text-sm text-gray-300">Sáb: 8h às 12h</p>
@@ -249,19 +249,19 @@ export default function Footer() {
           <div className="mt-4 flex space-x-8 md:mt-0">
             <Link
               href="/privacidade"
-              className="text-sm text-gray-400 transition-all duration-300 ease-in-out hover:text-orange-400"
+              className="text-sm text-gray-400 transition-all duration-300 ease-in-out hover:text-orange-500"
             >
               Privacidade
             </Link>
             <Link
               href="/termos"
-              className="text-sm text-gray-400 transition-all duration-300 ease-in-out hover:text-orange-400"
+              className="text-sm text-gray-400 transition-all duration-300 ease-in-out hover:text-orange-500"
             >
               Termos
             </Link>
             <Link
               href="/cookies"
-              className="text-sm text-gray-400 transition-all duration-300 ease-in-out hover:text-orange-400"
+              className="text-sm text-gray-400 transition-all duration-300 ease-in-out hover:text-orange-500"
             >
               Cookies
             </Link>
