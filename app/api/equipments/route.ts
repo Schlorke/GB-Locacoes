@@ -1,9 +1,8 @@
 import type { Decimal } from '@prisma/client/runtime/library'
 import { NextResponse } from 'next/server'
+import { getPrismaClient } from '@/lib/prisma'
 
-// FIX: Dynamic imports to avoid Prisma initialization at build time
-// This prevents the "@prisma/client did not initialize yet" error during
-// Vercel's "Collecting page data" phase with Next.js 15 + Prisma 6
+// Ensure this route always runs on Node.js with no caching
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 export const revalidate = 0
@@ -35,10 +34,7 @@ type EquipmentWithCategory = {
 
 export async function GET() {
   try {
-    // Dynamic imports - only load at runtime, never during build
-    const { prisma } = await import('@/lib/prisma')
-
-    await prisma.$connect()
+    const prisma = getPrismaClient()
 
     const equipments = await prisma.equipment.findMany({
       include: {
@@ -48,30 +44,6 @@ export async function GET() {
         createdAt: 'desc',
       },
     })
-
-    if (equipments.length === 0) {
-      const mockEquipments = [
-        {
-          id: 'mock-1',
-          name: 'Betoneira',
-          description: 'Betoneira para construção civil',
-          pricePerDay: 60,
-          imageUrl: '/placeholder.svg?height=200&width=300&text=Betoneira',
-          images: ['/placeholder.svg?height=200&width=300&text=Betoneira'],
-          isAvailable: true,
-          category: {
-            id: 'mock-cat-1',
-            name: 'Equipamentos',
-            icon: 'Wrench',
-            iconColor: '#3B82F6',
-            bgColor: '#EFF6FF',
-            fontColor: '#1E40AF',
-          },
-          reviews: [],
-        },
-      ]
-      return NextResponse.json(mockEquipments)
-    }
 
     // Formatar os dados do banco garantindo que as imagens sejam incluídas
     const formattedEquipments = equipments.map(
@@ -113,28 +85,9 @@ export async function GET() {
     return NextResponse.json(formattedEquipments)
   } catch (error) {
     console.error('Erro ao buscar equipamentos:', error)
-
-    const mockEquipments = [
-      {
-        id: 'fallback-1',
-        name: 'Betoneira (Dados de Teste)',
-        description: 'Betoneira para construção civil - dados de teste',
-        pricePerDay: 60,
-        imageUrl: '/placeholder.svg?height=200&width=300&text=Betoneira',
-        images: ['/placeholder.svg?height=200&width=300&text=Betoneira'],
-        isAvailable: true,
-        category: {
-          id: 'fallback-cat-1',
-          name: 'Equipamentos',
-          icon: 'Wrench',
-          iconColor: '#3B82F6',
-          bgColor: '#EFF6FF',
-          fontColor: '#1E40AF',
-        },
-        reviews: [],
-      },
-    ]
-
-    return NextResponse.json(mockEquipments)
+    return NextResponse.json(
+      { error: 'Erro interno do servidor' },
+      { status: 500 }
+    )
   }
 }

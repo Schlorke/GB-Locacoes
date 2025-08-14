@@ -12,92 +12,70 @@ import {
   Zap,
 } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-const categories = [
-  {
-    name: 'Andaimes Suspensos',
-    icon: Building,
-    count: 25,
-    href: '/catalogo/andaimes-suspensos',
-    description: 'Andaimes suspensos elétricos e manuais',
-    color: 'from-blue-500 to-blue-600',
-  },
-  {
-    name: 'Cadeiras Elétricas',
-    icon: Zap,
-    count: 18,
-    href: '/catalogo/cadeiras-eletricas',
-    description: 'Cadeiras elétricas e manuais para altura',
-    color: 'from-yellow-500 to-yellow-600',
-  },
-  {
-    name: 'Andaimes Tubulares',
-    icon: Wrench,
-    count: 35,
-    href: '/catalogo/andaimes-tubulares',
-    description: 'Andaimes tubulares para diversas alturas',
-    color: 'from-red-500 to-red-600',
-  },
-  {
-    name: 'Betoneiras',
-    icon: Truck,
-    count: 22,
-    href: '/catalogo/betoneiras',
-    description: 'Betoneiras de diversos tamanhos',
-    color: 'from-green-500 to-green-600',
-  },
-  {
-    name: 'Rompedores',
-    icon: Hammer,
-    count: 28,
-    href: '/catalogo/rompedores',
-    description: 'Rompedores pneumáticos e elétricos',
-    color: 'from-purple-500 to-purple-600',
-  },
-  {
-    name: 'Compressores',
-    icon: Container,
-    count: 15,
-    href: '/catalogo/compressores',
-    description: 'Compressores de ar para obras',
-    color: 'from-indigo-500 to-indigo-600',
-  },
-  {
-    name: 'Equipamentos de Segurança',
-    icon: Shield,
-    count: 45,
-    href: '/catalogo/seguranca',
-    description: 'EPIs e equipamentos de proteção',
-    color: 'from-emerald-500 to-emerald-600',
-  },
-  {
-    name: 'Outros Equipamentos',
-    icon: HardHat,
-    count: 32,
-    href: '/catalogo/outros',
-    description: 'Diversos equipamentos para obras',
-    color: 'from-orange-500 to-orange-600',
-  },
-]
+const iconMap = {
+  Building,
+  Container,
+  Hammer,
+  HardHat,
+  Shield,
+  Truck,
+  Wrench,
+  Zap,
+}
+
+interface Category {
+  id: string
+  name: string
+  description: string | null
+  slug: string
+  icon: string | null
+  iconColor: string
+  bgColor: string
+  fontColor: string
+  _count: {
+    equipments: number
+  }
+}
 
 export default function CategoriesWithAnimation() {
+  const [categories, setCategories] = useState<Category[]>([])
   const sectionRef = useRef<HTMLElement>(null)
   const cardsRef = useRef<(HTMLDivElement | null)[]>([])
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const baseUrl =
+          typeof window !== 'undefined' && (window as any).__STORYBOOK__
+            ? 'http://localhost:3000'
+            : ''
+        const res = await fetch(`${baseUrl}/api/categories`)
+        if (res.ok) {
+          const data = await res.json()
+          setCategories(Array.isArray(data) ? data : [])
+        }
+      } catch (error) {
+        console.error('Erro ao carregar categorias:', error)
+      }
+    }
+
+    fetchCategories()
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Animar os cards um por vez com delay
             cardsRef.current.forEach((card, index) => {
               if (card) {
                 setTimeout(() => {
                   card.style.opacity = '1'
                   card.style.transform = 'translateY(0)'
                   card.style.transition = 'all 0.8s ease-out'
-                }, index * 200) // 200ms entre cada card
+                }, index * 200)
               }
             })
 
@@ -139,9 +117,16 @@ export default function CategoriesWithAnimation() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
           {categories.map((category, index) => {
-            const IconComponent = category.icon
+            const IconComponent =
+              (category.icon &&
+                iconMap[category.icon as keyof typeof iconMap]) ||
+              Wrench
             return (
-              <Link key={category.name} href={category.href} className="group">
+              <Link
+                key={category.id}
+                href={`/catalogo/${category.slug}`}
+                className="group"
+              >
                 <Card
                   ref={(el) => {
                     cardsRef.current[index] = el
@@ -157,7 +142,10 @@ export default function CategoriesWithAnimation() {
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
                   {/* Gradient overlay on hover */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                    className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500"
+                    style={{
+                      background: `linear-gradient(to bottom right, ${category.iconColor}, ${category.fontColor})`,
+                    }}
                   ></div>
 
                   <CardContent className="p-6 text-center relative z-10 flex flex-col flex-1">
@@ -180,7 +168,7 @@ export default function CategoriesWithAnimation() {
 
                     <div className="text-sm font-medium text-orange-600 group-hover:text-orange-700 transition-colors duration-300 mt-auto">
                       <span className="inline-block group-hover:scale-110 transition-transform duration-300">
-                        {category.count} equipamentos disponíveis
+                        {category._count?.equipments ?? 0} equipamentos disponíveis
                       </span>
                     </div>
 
