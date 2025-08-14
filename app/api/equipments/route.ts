@@ -49,30 +49,6 @@ export async function GET() {
       },
     })
 
-    if (equipments.length === 0) {
-      const mockEquipments = [
-        {
-          id: 'mock-1',
-          name: 'Betoneira',
-          description: 'Betoneira para construção civil',
-          pricePerDay: 60,
-          imageUrl: '/placeholder.svg?height=200&width=300&text=Betoneira',
-          images: ['/placeholder.svg?height=200&width=300&text=Betoneira'],
-          isAvailable: true,
-          category: {
-            id: 'mock-cat-1',
-            name: 'Equipamentos',
-            icon: 'Wrench',
-            iconColor: '#3B82F6',
-            bgColor: '#EFF6FF',
-            fontColor: '#1E40AF',
-          },
-          reviews: [],
-        },
-      ]
-      return NextResponse.json(mockEquipments)
-    }
-
     // Formatar os dados do banco garantindo que as imagens sejam incluídas
     const formattedEquipments = equipments.map(
       (equipment: EquipmentWithCategory) => {
@@ -113,28 +89,9 @@ export async function GET() {
     return NextResponse.json(formattedEquipments)
   } catch (error) {
     console.error('Erro ao buscar equipamentos:', error)
-
-    const mockEquipments = [
-      {
-        id: 'fallback-1',
-        name: 'Betoneira (Dados de Teste)',
-        description: 'Betoneira para construção civil - dados de teste',
-        pricePerDay: 60,
-        imageUrl: '/placeholder.svg?height=200&width=300&text=Betoneira',
-        images: ['/placeholder.svg?height=200&width=300&text=Betoneira'],
-        isAvailable: true,
-        category: {
-          id: 'fallback-cat-1',
-          name: 'Equipamentos',
-          icon: 'Wrench',
-          iconColor: '#3B82F6',
-          bgColor: '#EFF6FF',
-          fontColor: '#1E40AF',
-        },
-        reviews: [],
-      },
-    ]
-
-    return NextResponse.json(mockEquipments)
+    return NextResponse.json(
+      { error: 'Erro interno do servidor' },
+      { status: 500 }
+    )
   }
 }

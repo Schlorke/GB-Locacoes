@@ -12,6 +12,8 @@ export async function GET() {
     // Dynamic imports - only load at runtime, never during build
     const { prisma } = await import('@/lib/prisma')
 
+    await prisma.$connect()
+
     const categories = await prisma.category.findMany({
       include: {
         _count: {
