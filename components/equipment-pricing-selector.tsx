@@ -98,10 +98,10 @@ export function EquipmentPricingSelector({
               variant={selectedPeriod.id === option.id ? 'default' : 'outline'}
               size="sm"
               className={cn(
-                'relative justify-center text-sm py-3 h-auto border transition-all duration-200 shadow-sm hover:shadow-md',
+                'relative justify-center text-sm py-3 h-auto border transition-all duration-200 shadow-sm',
                 selectedPeriod.id === option.id
                   ? 'bg-orange-600 hover:bg-orange-700 text-white border-orange-600 shadow-lg'
-                  : 'bg-white hover:bg-orange-50 hover:border-orange-300 text-gray-700'
+                  : 'bg-white border-gray-200 text-gray-700 hover:text-orange-500 hover:!bg-white hover:!border-gray-200'
               )}
               onClick={() => handlePeriodChange(option)}
             >

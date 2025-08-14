@@ -5,17 +5,19 @@ import {
 } from '@/components/equipment-detail-animations'
 import { EquipmentImageGallery } from '@/components/equipment-image-gallery'
 import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
+import { ShareButton } from '@/components/share-button'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { prisma } from '@/lib/prisma'
+import * as LucideIcons from 'lucide-react'
 import {
   ArrowLeft,
   CheckCircle,
   MapPin,
-  Share2,
   Shield,
   Star,
+  Tag,
   Truck,
 } from 'lucide-react'
 import Link from 'next/link'
@@ -23,6 +25,25 @@ import { notFound } from 'next/navigation'
 
 interface Props {
   params: Promise<{ id: string }>
+}
+
+// Função para renderizar ícones Lucide a partir do nome
+const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
+  if (!iconName || !LucideIcons[iconName])
+    return <Tag className="h-3 w-3 text-gray-400" />
+
+  const IconComponent = LucideIcons[iconName] as React.ComponentType<{
+    size?: number
+    color?: string
+    className?: string
+  }>
+  return (
+    <IconComponent
+      size={12}
+      color={color || '#3b82f6'}
+      className="flex-shrink-0"
+    />
+  )
 }
 
 export async function generateMetadata(props: Props) {
@@ -143,25 +164,19 @@ export default async function EquipmentDetailPage(props: Props) {
                     }}
                   >
                     {equipment.category.icon && (
-                      <span
-                        className="text-xs"
-                        style={{
-                          color: equipment.category.iconColor || '#3B82F6',
-                        }}
-                      >
-                        {equipment.category.icon}
+                      <span className="flex-shrink-0">
+                        {renderIcon(
+                          equipment.category.icon as keyof typeof LucideIcons,
+                          equipment.category.iconColor || '#3B82F6'
+                        )}
                       </span>
                     )}
                     {equipment.category.name}
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-gray-500 hover:text-orange-600"
-                  >
-                    <Share2 className="h-4 w-4 mr-1" />
-                    <span className="text-xs">Compartilhar</span>
-                  </Button>
+                  <ShareButton
+                    title={`${equipment.name} - GB Locações`}
+                    text={`Confira este equipamento para locação: ${equipment.name}`}
+                  />
                 </div>
 
                 {/* Título do Equipamento */}
