@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 // FIX: Dynamic imports to avoid Prisma initialization at build time
-// This prevents the "@prisma/client did not initialize yet" error during 
+// This prevents the "@prisma/client did not initialize yet" error during
 // Vercel's "Collecting page data" phase with Next.js 15 + Prisma 6
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -11,7 +11,7 @@ export async function GET() {
   try {
     // Dynamic imports - only load at runtime, never during build
     const { prisma } = await import('@/lib/prisma')
-    
+
     const categories = await prisma.category.findMany({
       include: {
         _count: {

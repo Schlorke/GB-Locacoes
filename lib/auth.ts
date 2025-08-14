@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
         try {
           // Dynamic import - only load at runtime, never during build
           const { prisma } = await import('./prisma')
-          
+
           debugLog('Buscando usuário', { email: credentials.email })
 
           const user = await prisma.user.findUnique({
