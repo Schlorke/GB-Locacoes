@@ -20,6 +20,45 @@
 Obrigado por considerar contribuir para o projeto GB-Locacoes! Este documento
 fornece diretrizes para contribuições.
 
+## ⚠️ **ANTES DE COMEÇAR: Compatibilidade de Dependências**
+
+### 🚨 **CRÍTICO: Versões Bloqueadas**
+
+**NUNCA ATUALIZAR** estas dependências sem aprovação:
+
+```bash
+# ❌ Prisma 6.14.0+ quebra o build
+@prisma/client@6.13.0  # MANTER
+prisma@6.13.0          # MANTER
+
+# ❌ Tailwind 4.x quebra design system
+tailwindcss@3.4.17     # MANTER
+```
+
+### ✅ **Processo Obrigatório para Atualizações**
+
+```bash
+# 1. Consultar guia ANTES de atualizar
+cat DEPENDENCY_COMPATIBILITY_GUIDE.md
+
+# 2. Atualizar apenas dependências seguras
+pnpm update @radix-ui/react-*  # UI - OK
+pnpm update @testing-library/* # Testing - OK
+
+# 3. SEMPRE testar build
+pnpm run build  # <- CRÍTICO!
+
+# 4. Se quebrar, reverter IMEDIATAMENTE
+git checkout package.json pnpm-lock.yaml && pnpm install
+```
+
+### 📚 **Documentação Relacionada**
+
+- **[DEPENDENCY_COMPATIBILITY_GUIDE.md](./DEPENDENCY_COMPATIBILITY_GUIDE.md)** -
+  Guia completo
+- **[PRISMA_TROUBLESHOOTING.md](./PRISMA_TROUBLESHOOTING.md)** - Problemas do
+  Prisma
+
 ### 🎯 Como Contribuir
 
 - **Reportar Bugs** - Use GitHub Issues

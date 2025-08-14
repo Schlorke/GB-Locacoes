@@ -205,6 +205,63 @@ pnpm db:seed
 pnpm db:studio
 ```
 
+## ⚠️ Compatibilidade de Dependências
+
+### 🔧 Versões Testadas e Estáveis
+
+| Dependência      | Versão Estável | ⚠️ Problemas Conhecidos                   |
+| ---------------- | -------------- | ----------------------------------------- |
+| **Next.js**      | 15.4.6         | ✅ Funcionando perfeitamente              |
+| **Prisma**       | **6.13.0**     | ❌ **6.14.0** causa erro de inicialização |
+| **React**        | 19.1.1         | ✅ Funcionando perfeitamente              |
+| **TypeScript**   | 5.9.2          | ✅ Funcionando perfeitamente              |
+| **Tailwind CSS** | **3.4.17**     | ❌ **4.x** quebra o projeto               |
+
+### 🚨 Incompatibilidades Críticas
+
+#### **Prisma 6.14.0 + Next.js 15.4.6**
+
+```bash
+# ❌ ERRO: "@prisma/client did not initialize yet"
+# ✅ SOLUÇÃO: Manter Prisma em 6.13.0
+pnpm add @prisma/client@6.13.0 prisma@6.13.0
+```
+
+#### **Tailwind CSS 4.x**
+
+```bash
+# ❌ PROBLEMA: Quebra o sistema de design
+# ✅ SOLUÇÃO: Manter em 3.4.17
+# Não atualizar até migração completa
+```
+
+### 🔍 Processo de Atualização Segura
+
+```bash
+# 1. ✅ Sempre testar build após atualizações
+pnpm update [packages]
+pnpm run build  # <- CRÍTICO: Este passo detecta problemas
+
+# 2. ✅ Atualizar por categorias
+# UI Components (Radix UI) - Geralmente seguro
+pnpm update @radix-ui/react-*
+
+# Database/ORM - CUIDADO! Testar sempre
+pnpm update @prisma/client prisma
+pnpm run build  # <- Verificar se funciona
+
+# Framework/Core - MUITO CUIDADO!
+# Ler changelog antes de atualizar Next.js, React, etc.
+```
+
+### 📚 Documentação de Troubleshooting
+
+- **[PRISMA_TROUBLESHOOTING.md](./PRISMA_TROUBLESHOOTING.md)** - Problemas e
+  soluções do Prisma
+- **[TECHNICAL_DOCUMENTATION.md](./TECHNICAL_DOCUMENTATION.md)** - Detalhes
+  técnicos
+- **[DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md)** - Guia de desenvolvimento
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -442,6 +499,15 @@ pnpm design-system:watch-tokens    # Watch tokens
 pnpm quality:check         # Verificar qualidade
 pnpm quality:fix           # Corrigir qualidade
 pnpm fix:md                # Formatar markdown
+```
+
+### 🔧 Compatibilidade
+
+```bash
+pnpm check:compatibility   # Verificar compatibilidade
+pnpm check:outdated-safe   # Ver atualizações seguras
+pnpm update:safe           # Atualizar dependências seguras
+pnpm verify:after-update   # Verificar após atualizações
 ```
 
 ## 🤝 Contribuindo

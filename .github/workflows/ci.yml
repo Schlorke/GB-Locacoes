@@ -30,6 +30,33 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm db:generate
 
+      - name: Check dependency compatibility
+        run: |
+          echo "🔍 Checking critical dependency versions..."
+
+          # Check Prisma version
+          PRISMA_CLIENT_VERSION=$(pnpm list @prisma/client --depth=0 | grep @prisma/client | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+          PRISMA_VERSION=$(pnpm list prisma --depth=0 | grep " prisma@" | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+
+          echo "📊 Found versions:"
+          echo "  @prisma/client: $PRISMA_CLIENT_VERSION"
+          echo "  prisma: $PRISMA_VERSION"
+
+          # Ensure Prisma is exactly 6.13.0 (compatible version)
+          if [ "$PRISMA_CLIENT_VERSION" != "6.13.0" ]; then
+            echo "❌ ERROR: @prisma/client must be exactly 6.13.0 (found: $PRISMA_CLIENT_VERSION)"
+            echo "🔧 FIX: pnpm add @prisma/client@6.13.0"
+            exit 1
+          fi
+
+          if [ "$PRISMA_VERSION" != "6.13.0" ]; then
+            echo "❌ ERROR: prisma must be exactly 6.13.0 (found: $PRISMA_VERSION)"
+            echo "🔧 FIX: pnpm add prisma@6.13.0"
+            exit 1
+          fi
+
+          echo "✅ All critical dependencies are compatible!"
+
       - name: Type check
         run: pnpm type-check
 

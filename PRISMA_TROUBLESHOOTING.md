@@ -3,6 +3,56 @@
 Este documento contém soluções para problemas comuns do Prisma no projeto
 GB-Locacoes.
 
+## 🚨 CRÍTICO: Prisma 6.14.0 + Next.js 15.4.6 Incompatibilidade
+
+### **⚠️ PROBLEMA CONHECIDO**
+
+A versão **Prisma 6.14.0** é **INCOMPATÍVEL** com **Next.js 15.4.6**, causando
+erro durante o build:
+
+```bash
+Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.
+```
+
+### **✅ SOLUÇÃO OBRIGATÓRIA**
+
+**MANTER PRISMA EM 6.13.0:**
+
+```bash
+# ❌ NÃO ATUALIZAR para 6.14.0
+# ✅ MANTER na versão estável
+pnpm add @prisma/client@6.13.0 prisma@6.13.0
+
+# Regenerar cliente
+pnpm db:generate
+
+# Verificar se funciona
+pnpm run build
+```
+
+### **🔍 Como Detectar o Problema**
+
+```bash
+# Se você atualizou o Prisma e o build quebrou:
+pnpm run build
+# ❌ Erro: "@prisma/client did not initialize yet"
+
+# Verificar versão atual
+pnpm list @prisma/client
+# Se mostrar 6.14.0, REVERTER para 6.13.0
+```
+
+### **🛡️ Prevenção**
+
+```bash
+# SEMPRE testar build após atualizar Prisma
+pnpm update @prisma/client prisma
+pnpm run build  # <- CRÍTICO: Este passo detecta problemas
+
+# Se build falhar, reverter imediatamente
+pnpm add @prisma/client@6.13.0 prisma@6.13.0
+```
+
 ## 🚨 Erro: "Module '@prisma/client' has no exported member 'PrismaClient'"
 
 ### **Causa**
@@ -185,4 +235,8 @@ Se os problemas persistirem:
 
 ---
 
-**Última atualização**: $(date) **Versão do Prisma**: 6.13.0
+**⚠️ IMPORTANTE**: MANTER Prisma em **6.13.0** - NÃO atualizar para 6.14.0
+devido à incompatibilidade com Next.js 15.4.6
+
+**Última atualização**: Janeiro 2025 | **Versão do Prisma**: 6.13.0 (ESTÁVEL) |
+**Versão do Next.js**: 15.4.6

@@ -19,6 +19,36 @@
 
 ## 🏗️ Arquitetura do Sistema
 
+### ⚠️ Compatibilidade de Dependências
+
+#### **🚨 Versões Críticas - NÃO ATUALIZAR**
+
+| Dependência        | Versão Estável | Versão Problemática | Motivo                                   |
+| ------------------ | -------------- | ------------------- | ---------------------------------------- |
+| **@prisma/client** | **6.13.0**     | 6.14.0+             | Erro de inicialização com Next.js 15.4.6 |
+| **prisma**         | **6.13.0**     | 6.14.0+             | Erro de inicialização com Next.js 15.4.6 |
+| **tailwindcss**    | **3.4.17**     | 4.x                 | Quebra sistema de design tokens          |
+
+#### **📋 Verificação de Compatibilidade**
+
+```bash
+# ✅ Verificar versões atuais
+pnpm list @prisma/client prisma tailwindcss
+
+# ✅ Processo seguro de atualização
+pnpm outdated                    # Ver dependências disponíveis
+pnpm update @radix-ui/react-*    # Atualizar apenas UI components
+pnpm run build                   # SEMPRE testar build
+pnpm test                        # SEMPRE rodar testes
+```
+
+#### **🔗 Documentação Relacionada**
+
+- **[DEPENDENCY_COMPATIBILITY_GUIDE.md](./DEPENDENCY_COMPATIBILITY_GUIDE.md)** -
+  Guia completo de compatibilidade
+- **[PRISMA_TROUBLESHOOTING.md](./PRISMA_TROUBLESHOOTING.md)** - Problemas
+  específicos do Prisma
+
 ### 🏛️ Visão Geral da Arquitetura
 
 O GB-Locacoes segue uma arquitetura moderna baseada em **Next.js 15 App Router**

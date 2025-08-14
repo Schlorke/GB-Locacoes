@@ -65,6 +65,42 @@ pnpm db:seed
 pnpm dev
 ```
 
+### ⚠️ Compatibilidade de Dependências
+
+#### **🚨 VERSÕES CRÍTICAS**
+
+| Dependência        | Versão OBRIGATÓRIA | ⚠️ NÃO ATUALIZAR              |
+| ------------------ | ------------------ | ----------------------------- |
+| **@prisma/client** | **6.13.0**         | ❌ 6.14.0+ (quebra build)     |
+| **prisma**         | **6.13.0**         | ❌ 6.14.0+ (quebra build)     |
+| **tailwindcss**    | **3.4.17**         | ❌ 4.x (quebra design system) |
+
+#### **🔍 Processo de Atualização Segura**
+
+```bash
+# ✅ SEMPRE seguir esta ordem:
+# 1. Atualizar dependências por categoria
+pnpm update @radix-ui/react-*  # UI - geralmente seguro
+
+# 2. TESTAR build após cada grupo
+pnpm run build  # <- CRÍTICO!
+
+# 3. Se build quebrar, reverter imediatamente
+pnpm add @prisma/client@6.13.0 prisma@6.13.0
+
+# 4. Nunca atualizar Prisma ou Tailwind sem aprovação
+```
+
+#### **🛡️ Verificação de Compatibilidade**
+
+```bash
+# Antes de qualquer atualização:
+pnpm outdated                    # Ver o que pode ser atualizado
+pnpm update [specific-packages]  # Atualizar categorias específicas
+pnpm run build                   # SEMPRE testar build
+pnpm test                        # SEMPRE rodar testes
+```
+
 ### 🔧 Configuração do VS Code
 
 #### **Extensões Recomendadas**

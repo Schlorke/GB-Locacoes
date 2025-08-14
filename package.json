@@ -54,7 +54,11 @@
     "preci:build": "pnpm check:prisma",
     "ci:prisma-only": "pnpm db:generate && pnpm check:prisma",
     "fix:typescript": "node scripts/fix-typescript-errors.js",
-    "ci:typescript-fix": "pnpm fix:typescript && pnpm type-check"
+    "ci:typescript-fix": "pnpm fix:typescript && pnpm type-check",
+    "check:compatibility": "node scripts/check-compatibility.cjs",
+    "check:outdated-safe": "pnpm outdated | grep -E '@radix-ui|@testing-library|date-fns|lucide-react' || true",
+    "update:safe": "pnpm update @radix-ui/react-* @testing-library/* date-fns lucide-react clsx",
+    "verify:after-update": "pnpm check:compatibility && pnpm run build && pnpm test"
   },
   "dependencies": {
     "@auth/core": "0.40.0",

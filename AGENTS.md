@@ -35,6 +35,44 @@ pnpm lint
 pnpm test
 ```
 
+### ⚠️ **CRÍTICO: Compatibilidade de Dependências**
+
+#### **🚨 NUNCA ATUALIZAR estas dependências:**
+
+```bash
+# ❌ Prisma 6.14.0+ causa erro de inicialização
+@prisma/client@6.13.0  # MANTER nesta versão
+prisma@6.13.0          # MANTER nesta versão
+
+# ❌ Tailwind 4.x quebra o design system
+tailwindcss@3.4.17     # MANTER nesta versão
+```
+
+#### **✅ Processo OBRIGATÓRIO para atualizações:**
+
+```bash
+# 1. SEMPRE verificar compatibilidade primeiro
+pnpm outdated
+
+# 2. Atualizar APENAS dependências seguras
+pnpm update @radix-ui/react-*  # UI components - OK
+pnpm update @testing-library/* # Testing - OK
+
+# 3. SEMPRE testar build após qualquer atualização
+pnpm run build  # <- CRÍTICO! Detecta problemas
+
+# 4. Se build quebrar, reverter IMEDIATAMENTE
+git checkout package.json pnpm-lock.yaml
+pnpm install
+```
+
+#### **📚 Documentação:**
+
+- **[DEPENDENCY_COMPATIBILITY_GUIDE.md](./DEPENDENCY_COMPATIBILITY_GUIDE.md)** -
+  Guia completo
+- **[PRISMA_TROUBLESHOOTING.md](./PRISMA_TROUBLESHOOTING.md)** - Problemas do
+  Prisma
+
 ---
 
 ## 🗂️ Estrutura recomendada de pastas
