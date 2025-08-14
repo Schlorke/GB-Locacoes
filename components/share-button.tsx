@@ -14,7 +14,7 @@ export function ShareButton({ title, text, className }: ShareButtonProps) {
   const [isSharing, setIsSharing] = useState(false)
   const [feedbackText, setFeedbackText] = useState('Compartilhar')
 
-  const handleShare = async () => {
+  const handleShare = async (): Promise<void> => {
     if (isSharing) return
 
     setIsSharing(true)
