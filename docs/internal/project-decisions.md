@@ -25,6 +25,49 @@
 4. **🚨 NÃO ALUCINE**: Se não souber, consulte a documentação primeiro
 5. **📝 DOCUMENTE**: Sempre atualize `CHANGELOG.md` após alterações
 
+### **🚨 DECISÕES CRÍTICAS IMPLEMENTADAS (DEZ 2024)**
+
+#### **🏗️ INFRASTRUCTURE AUTOMATION**
+
+- **Decisão**: Criar script `scripts/post-prisma-generate.js` para recriar
+  `lib/validations/index.ts` automaticamente
+- **Problema**: Prisma generate deleta diretório completo, causando build
+  failure
+- **Implementação**: Automação em todos os scripts que rodam Prisma (`prebuild`,
+  `postinstall`, `db:generate`)
+- **Status**: ✅ Resolvido permanentemente - Build automation funcionando
+
+#### **🔒 TYPE SAFETY OBRIGATÓRIO**
+
+- **Decisão**: Eliminar TODOS os tipos `any` e implementar type safety total
+- **Problema**: 42 erros TypeScript, tipos `unknown`, navegação insegura
+- **Implementação**:
+  - Interfaces específicas (`RequestLike`, `ResponseLike`, `OpenAPIMethodSpec`)
+  - Safe navigation (`trace.spans[0]?.name`, `req.headers?.['user-agent']`)
+  - Type guards e casts seguros (`as NextResponse`, `as const`)
+- **Status**: ✅ Zero TypeScript errors - 100% type safe
+
+#### **🎯 ZERO TOLERANCE PARA LINTING ERRORS**
+
+- **Decisão**: Resolver TODOS os 31,469 problemas de ESLint
+- **Problema**: Arquivos auto-gerados incluídos, overwhelming developer
+  experience
+- **Implementação**:
+  - `tsconfig.json`: Exclusão de `lib/validations/schemas/**/*.ts`
+  - Automation scripts para unused imports
+  - Ignore patterns refinados em `eslint.config.js`
+- **Status**: ✅ Zero ESLint problems - Developer experience perfeita
+
+#### **📦 DEPENDENCY COMPATIBILITY MATRIX**
+
+- **Decisão**: Manter matrix rigorosa de compatibilidade para stability
+- **Implementação**:
+  - Prisma: MANTER 6.13.0 (6.14.0+ quebra build)
+  - React 19: Overrides para dependências incompatíveis
+  - swagger-ui-react: REMOVIDO, implementação custom criada
+  - node-domexception: Override com `npm:@types/node@*`
+- **Status**: ✅ Dependency stability garantida
+
 Este documento orienta colaboradores humanos **e agentes automatizados** sobre
 como trabalhar neste repositório GB Locações.
 

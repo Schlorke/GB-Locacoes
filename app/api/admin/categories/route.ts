@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
     let raw
     try {
       raw = await request.json()
-    } catch (_err) {
+    } catch {
       return NextResponse.json({ error: 'JSON inválido' }, { status: 400 })
     }
 

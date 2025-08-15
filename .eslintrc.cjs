@@ -13,18 +13,5 @@ module.exports = {
     ],
     '@typescript-eslint/no-explicit-any': 'warn',
   },
-  ignorePatterns: [
-    'node_modules/',
-    '.next/',
-    'out/',
-    'dist/',
-    'build/',
-    'storybook-static/',
-    '**/*.config.js',
-    '**/*.config.cjs',
-    '**/*.config.mjs',
-    'scripts/',
-    'eslint.config.js',
-    '!.storybook',
-  ],
+  // ignorePatterns removido - usando ignores no eslint.config.js
 }

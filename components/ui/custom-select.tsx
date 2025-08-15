@@ -37,7 +37,7 @@ export function CustomSelect({
   children,
 }: Omit<CustomSelectProps, 'required'>) {
   const [isOpen, setIsOpen] = useState(false)
-  const [_dropdownPosition, setDropdownPosition] = useState({
+  const [, setDropdownPosition] = useState({
     top: 0,
     left: 0,
     width: 0,

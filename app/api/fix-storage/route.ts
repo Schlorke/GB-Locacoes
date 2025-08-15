@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       try {
         await supabaseAdmin.storage.deleteBucket('gb-locacoes-images')
         // Bucket antigo removido
-      } catch (_error) {
+      } catch {
         // Bucket não existia ou não pôde ser removido
       }
 

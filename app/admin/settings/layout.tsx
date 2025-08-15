@@ -13,7 +13,7 @@ export default async function SettingsLayout({
     if (session.user.role !== 'ADMIN') {
       redirect('/admin')
     }
-  } catch (_error) {
+  } catch {
     redirect('/admin/login')
   }
 

@@ -28,7 +28,7 @@ export const CompanyInfoPreview = memo(function CompanyInfoPreview({
   const today = new Date()
     .toLocaleDateString('pt-BR', { weekday: 'long' })
     .toLowerCase()
-  const _todaySchedule = businessHours?.[today]
+  // const todaySchedule = businessHours?.[today]
 
   return (
     <motion.div

@@ -1,0 +1,100 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "GB-Locações API",
+    "version": "1.0.0",
+    "description": "API completa da plataforma GB-Locações para locação de equipamentos de construção civil.\n\n## Funcionalidades\n\n- 🏗️ **Equipamentos**: Catálogo completo de equipamentos para locação\n- 📋 **Categorias**: Organização por tipos de equipamento\n- 💰 **Orçamentos**: Sistema de solicitação e gestão de orçamentos\n- 🔐 **Autenticação**: Sistema de login com roles (ADMIN/CLIENT)\n- 📤 **Upload**: Sistema de upload de arquivos e imagens\n- 📧 **Contato**: Formulário de contato e comunicação\n\n## Autenticação\n\nA API utiliza JWT tokens via NextAuth.js. Para endpoints protegidos, inclua o token no header: `Authorization: Bearer <token>`\n\n### Roles Disponíveis:\n- **ADMIN**: Acesso completo a todas as funcionalidades\n- **CLIENT**: Acesso limitado a funcionalidades públicas"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local development server"
+    },
+    {
+      "url": "https://gblocacoes.vercel.app/api",
+      "description": "Production server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "defaultResponseSet": "common",
+  "responseSets": {
+    "common": ["400", "500"],
+    "auth": ["400", "401", "403", "500"],
+    "public": ["400", "500"]
+  },
+  "errorConfig": {
+    "template": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "{{ERROR_MESSAGE}}"
+        },
+        "code": {
+          "type": "string",
+          "example": "{{ERROR_CODE}}"
+        }
+      }
+    },
+    "codes": {
+      "400": {
+        "description": "Bad Request",
+        "variables": {
+          "ERROR_MESSAGE": "Invalid request parameters",
+          "ERROR_CODE": "BAD_REQUEST"
+        }
+      },
+      "401": {
+        "description": "Unauthorized",
+        "variables": {
+          "ERROR_MESSAGE": "Authentication required",
+          "ERROR_CODE": "UNAUTHORIZED"
+        }
+      },
+      "403": {
+        "description": "Forbidden",
+        "variables": {
+          "ERROR_MESSAGE": "Access denied",
+          "ERROR_CODE": "FORBIDDEN"
+        }
+      },
+      "404": {
+        "description": "Not Found",
+        "variables": {
+          "ERROR_MESSAGE": "Resource not found",
+          "ERROR_CODE": "NOT_FOUND"
+        }
+      },
+      "409": {
+        "description": "Conflict",
+        "variables": {
+          "ERROR_MESSAGE": "Resource already exists",
+          "ERROR_CODE": "CONFLICT"
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "variables": {
+          "ERROR_MESSAGE": "An unexpected error occurred",
+          "ERROR_CODE": "INTERNAL_ERROR"
+        }
+      }
+    }
+  },
+  "apiDir": "./app/api",
+  "schemaDir": "./app",
+  "schemaType": "zod",
+  "docsUrl": "api-docs",
+  "ui": "swagger",
+  "outputFile": "openapi.json",
+  "includeOpenApiRoutes": false,
+  "debug": false
+}

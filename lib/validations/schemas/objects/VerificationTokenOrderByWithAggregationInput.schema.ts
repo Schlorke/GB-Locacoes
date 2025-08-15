@@ -1,0 +1,42 @@
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
+import { SortOrderSchema } from '../enums/SortOrder.schema'
+import { VerificationTokenCountOrderByAggregateInputObjectSchema } from './VerificationTokenCountOrderByAggregateInput.schema'
+import { VerificationTokenMaxOrderByAggregateInputObjectSchema } from './VerificationTokenMaxOrderByAggregateInput.schema'
+import { VerificationTokenMinOrderByAggregateInputObjectSchema } from './VerificationTokenMinOrderByAggregateInput.schema'
+
+export const VerificationTokenOrderByWithAggregationInputObjectSchema: z.ZodType<
+  Prisma.VerificationTokenOrderByWithAggregationInput,
+  Prisma.VerificationTokenOrderByWithAggregationInput
+> = z
+  .object({
+    identifier: SortOrderSchema.optional(),
+    token: SortOrderSchema.optional(),
+    expires: SortOrderSchema.optional(),
+    _count: z
+      .lazy(() => VerificationTokenCountOrderByAggregateInputObjectSchema)
+      .optional(),
+    _max: z
+      .lazy(() => VerificationTokenMaxOrderByAggregateInputObjectSchema)
+      .optional(),
+    _min: z
+      .lazy(() => VerificationTokenMinOrderByAggregateInputObjectSchema)
+      .optional(),
+  })
+  .strict()
+export const VerificationTokenOrderByWithAggregationInputObjectZodSchema = z
+  .object({
+    identifier: SortOrderSchema.optional(),
+    token: SortOrderSchema.optional(),
+    expires: SortOrderSchema.optional(),
+    _count: z
+      .lazy(() => VerificationTokenCountOrderByAggregateInputObjectSchema)
+      .optional(),
+    _max: z
+      .lazy(() => VerificationTokenMaxOrderByAggregateInputObjectSchema)
+      .optional(),
+    _min: z
+      .lazy(() => VerificationTokenMinOrderByAggregateInputObjectSchema)
+      .optional(),
+  })
+  .strict()

@@ -139,7 +139,7 @@ export default function SobrePage() {
         {/* Stats Section */}
         <div className="mb-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat, _index) => {
+            {stats.map((stat) => {
               const IconComponent = stat.icon
               return (
                 <Card
@@ -242,7 +242,7 @@ export default function SobrePage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((value, _index) => {
+            {values.map((value) => {
               const IconComponent = value.icon
               return (
                 <Card
@@ -290,7 +290,7 @@ export default function SobrePage() {
             <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-orange-500 to-orange-300 hidden md:block"></div>
 
             <div className="space-y-8">
-              {timeline.map((item, _index) => (
+              {timeline.map((item) => (
                 <div
                   key={item.year}
                   className="material-card relative flex items-start opacity-0"

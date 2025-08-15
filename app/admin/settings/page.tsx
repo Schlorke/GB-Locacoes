@@ -31,7 +31,7 @@ import { useEffect, useState } from 'react'
 
 export default function SettingsPage() {
   const { toast } = useToast()
-  const [_isLoading, setIsLoading] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false)
   const [isLoadingData, setIsLoadingData] = useState(true)
   const [activeSection, setActiveSection] = useState<string>('company')
 
@@ -186,37 +186,37 @@ export default function SettingsPage() {
     loadSettings()
   }, [toast])
 
-  const _handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault()
+  //   // setIsLoading(true)
 
-    try {
-      const result = await updateSettings(formData)
+  //   try {
+  //     const result = await updateSettings(formData)
 
-      if (result.success) {
-        toast({
-          title: 'Sucesso!',
-          description:
-            result.message || 'Configurações atualizadas com sucesso.',
-        })
-      } else {
-        toast({
-          title: 'Erro',
-          description: result.error || 'Erro ao atualizar configurações.',
-          variant: 'destructive',
-        })
-      }
-    } catch (error) {
-      console.error('Erro ao salvar:', error)
-      toast({
-        title: 'Erro',
-        description: 'Erro interno do servidor.',
-        variant: 'destructive',
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  //     if (result.success) {
+  //       toast({
+  //         title: 'Sucesso!',
+  //         description:
+  //           result.message || 'Configurações atualizadas com sucesso.',
+  //       })
+  //     } else {
+  //       toast({
+  //         title: 'Erro',
+  //         description: result.error || 'Erro ao atualizar configurações.',
+  //         variant: 'destructive',
+  //       })
+  //     }
+  //   } catch (error) {
+  //     console.error('Erro ao salvar:', error)
+  //     toast({
+  //       title: 'Erro',
+  //       description: 'Erro interno do servidor.',
+  //       variant: 'destructive',
+  //     })
+  //   } finally {
+  //     // setIsLoading(false)
+  //   }
+  // }
 
   const updateField = (field: keyof SettingsInput, value: unknown) => {
     setFormData((prev) => ({
@@ -283,7 +283,7 @@ export default function SettingsPage() {
         title: 'Configurações resetadas',
         description: `Configurações de ${getSectionName(section)} foram restauradas para os valores padrão.`,
       })
-    } catch (_error) {
+    } catch {
       toast({
         title: 'Erro ao resetar',
         description: 'Ocorreu um erro ao restaurar as configurações.',

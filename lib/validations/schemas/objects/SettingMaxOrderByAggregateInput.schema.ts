@@ -1,0 +1,61 @@
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
+import { SortOrderSchema } from '../enums/SortOrder.schema'
+
+export const SettingMaxOrderByAggregateInputObjectSchema: z.ZodType<
+  Prisma.SettingMaxOrderByAggregateInput,
+  Prisma.SettingMaxOrderByAggregateInput
+> = z
+  .object({
+    id: SortOrderSchema.optional(),
+    companyPhone: SortOrderSchema.optional(),
+    companyIconUrl: SortOrderSchema.optional(),
+    aboutUsText: SortOrderSchema.optional(),
+    companyAddress: SortOrderSchema.optional(),
+    contactEmail: SortOrderSchema.optional(),
+    seoTitle: SortOrderSchema.optional(),
+    seoDescription: SortOrderSchema.optional(),
+    themeColorPrimary: SortOrderSchema.optional(),
+    maintenanceMode: SortOrderSchema.optional(),
+    analyticsTrackingId: SortOrderSchema.optional(),
+    footerText: SortOrderSchema.optional(),
+    supportChat: SortOrderSchema.optional(),
+    whatsappNumber: SortOrderSchema.optional(),
+    favicon: SortOrderSchema.optional(),
+    logoSecondary: SortOrderSchema.optional(),
+    defaultLanguage: SortOrderSchema.optional(),
+    baseCurrency: SortOrderSchema.optional(),
+    maintenanceMessage: SortOrderSchema.optional(),
+    customCss: SortOrderSchema.optional(),
+    customJs: SortOrderSchema.optional(),
+    createdAt: SortOrderSchema.optional(),
+    updatedAt: SortOrderSchema.optional(),
+  })
+  .strict()
+export const SettingMaxOrderByAggregateInputObjectZodSchema = z
+  .object({
+    id: SortOrderSchema.optional(),
+    companyPhone: SortOrderSchema.optional(),
+    companyIconUrl: SortOrderSchema.optional(),
+    aboutUsText: SortOrderSchema.optional(),
+    companyAddress: SortOrderSchema.optional(),
+    contactEmail: SortOrderSchema.optional(),
+    seoTitle: SortOrderSchema.optional(),
+    seoDescription: SortOrderSchema.optional(),
+    themeColorPrimary: SortOrderSchema.optional(),
+    maintenanceMode: SortOrderSchema.optional(),
+    analyticsTrackingId: SortOrderSchema.optional(),
+    footerText: SortOrderSchema.optional(),
+    supportChat: SortOrderSchema.optional(),
+    whatsappNumber: SortOrderSchema.optional(),
+    favicon: SortOrderSchema.optional(),
+    logoSecondary: SortOrderSchema.optional(),
+    defaultLanguage: SortOrderSchema.optional(),
+    baseCurrency: SortOrderSchema.optional(),
+    maintenanceMessage: SortOrderSchema.optional(),
+    customCss: SortOrderSchema.optional(),
+    customJs: SortOrderSchema.optional(),
+    createdAt: SortOrderSchema.optional(),
+    updatedAt: SortOrderSchema.optional(),
+  })
+  .strict()

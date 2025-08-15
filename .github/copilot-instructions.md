@@ -46,6 +46,42 @@
 4. **🚨 NÃO ALUCINE**: Se não souber, consulte docs/ primeiro
 5. **📝 DOCUMENTE SEMPRE**: Atualize `CHANGELOG.md` após alterações
 
+### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024) - NÃO REINTRODUZIR**
+
+> ⚠️ **ATENÇÃO**: Este projeto passou por correções massivas. NÃO reintroduza
+> problemas resolvidos!
+
+#### **🏗️ Build Infrastructure - ESTÁVEL**
+
+- **❌ NÃO DELETE**: `scripts/post-prisma-generate.js` - crítico para build
+- **❌ NÃO MODIFIQUE**: Scripts em `package.json` sem entender dependências
+- **✅ FUNCIONANDO**: Build automation para `lib/validations/index.ts`
+
+#### **🔒 TypeScript - 100% TYPE SAFE**
+
+- **❌ NÃO USE**: Tipos `any` - sempre crie interfaces específicas
+- **✅ USE**: Safe navigation (`?.`) em objetos potencialmente undefined
+- **✅ USE**: Type guards e casts seguros (`as NextResponse`, `as const`)
+
+#### **📦 Dependencies - MATRIX ESTÁVEL**
+
+- **❌ NÃO ATUALIZE**: Prisma para 6.14.0+ (quebra build)
+- **❌ NÃO USE**: swagger-ui-react (incompatível React 19)
+- **✅ CUSTOM IMPLEMENTATION**: `app/api-docs/page.tsx` para API docs
+
+#### **🎯 ESLint - ZERO PROBLEMS**
+
+- **❌ NÃO INCLUA**: Arquivos auto-gerados no linting
+- **✅ MANTENHA**: Exclusões em `tsconfig.json` para
+  `lib/validations/schemas/**`
+
+#### **📚 DOCUMENTAÇÃO CRÍTICA**
+
+- **📖 LEIA**: `docs/internal/critical-issues-resolved.md` antes de mudanças
+  grandes
+- **📝 CONSULTE**: `docs/getting-started/troubleshooting.md` para problemas
+  conhecidos
+
 Este repositório é um sistema completo de e-commerce de locação de equipamentos
 para construção civil, com foco em performance, UX e arquitetura escalável.
 

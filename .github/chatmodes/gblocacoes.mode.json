@@ -1,5 +1,21 @@
 {
   "mode": "strict",
   "explanationLevel": "detailed",
-  "debugSuggestions": true
+  "debugSuggestions": true,
+  "projectStatus": "100% STABLE",
+  "lastMajorFix": "2024-12-21",
+  "avoidRegression": true,
+  "documentationFirst": true,
+  "criticalFiles": [
+    "scripts/post-prisma-generate.js",
+    "package.json",
+    "tsconfig.json",
+    "lib/validations/index.ts"
+  ],
+  "stableMetrics": {
+    "typescriptErrors": 0,
+    "eslintProblems": 0,
+    "buildStatus": "SUCCESS",
+    "testsPassing": "30/30"
+  }
 }

@@ -33,16 +33,16 @@ interface Category {
   name: string
 }
 
-interface _Equipment {
-  id: string
-  name: string
-  description: string
-  pricePerDay: number
-  categoryId: string
-  images: string[]
-  isAvailable: boolean
-  specifications?: Record<string, string>
-}
+// interface _Equipment {
+//   id: string
+//   name: string
+//   description: string
+//   pricePerDay: number
+//   categoryId: string
+//   images: string[]
+//   isAvailable: boolean
+//   specifications?: Record<string, string>
+// }
 
 interface FormData {
   name: string

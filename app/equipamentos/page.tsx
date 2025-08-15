@@ -109,7 +109,7 @@ export default function EquipmentsPage() {
           />
         )
       }
-    } catch (_error) {
+    } catch {
       // Fallback se o ícone não existir
       return (
         <Package size={14} color={color || 'currentColor'} className="mr-1.5" />

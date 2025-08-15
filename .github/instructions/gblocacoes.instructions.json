@@ -1,5 +1,6 @@
 {
   "language": "typescript",
+  "project_status": "100% ESTÁVEL - Problemas críticos resolvidos (Dez 2024)",
   "instructions": [
     "Utilizar apenas recursos compatíveis com Next.js App Router",
     "Usar TailwindCSS com classes utilitárias e responsivas",
@@ -9,5 +10,26 @@
     "Sugerir apenas componentes ShadCN, sem UI externas",
     "Evitar dependências como Upstash ou bibliotecas legadas",
     "Preservar animações e identidade visual já implementadas"
-  ]
+  ],
+  "critical_restrictions": [
+    "NÃO DELETAR scripts/post-prisma-generate.js - crítico para build",
+    "NÃO USAR tipos 'any' - sempre interfaces específicas",
+    "NÃO ATUALIZAR Prisma para 6.14.0+ - quebra build",
+    "NÃO USAR swagger-ui-react - incompatível React 19",
+    "NÃO INCLUIR arquivos auto-gerados no linting",
+    "SEMPRE usar safe navigation (?.) em objetos undefined"
+  ],
+  "documentation_priority": [
+    "SEMPRE consultar docs/ antes de implementar",
+    "SEMPRE atualizar CHANGELOG.md após mudanças",
+    "CONSULTAR docs/internal/critical-issues-resolved.md para problemas conhecidos",
+    "VERIFICAR docs/references/dependencies.md para compatibilidade"
+  ],
+  "success_metrics": {
+    "typescript_errors": "0 (Zero!)",
+    "eslint_problems": "0 (Zero!)",
+    "build_status": "SUCCESS (6-8s)",
+    "test_status": "30/30 passing",
+    "dependency_status": "Stable"
+  }
 }

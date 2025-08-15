@@ -3,6 +3,23 @@ generator client {
   output   = "../node_modules/.prisma/client"
 }
 
+generator zod {
+  provider                         = "prisma-zod-generator"
+  output                          = "../lib/validations"
+  relationModel                   = true
+  modelCase                       = "camelCase"
+  modelSuffix                     = "Schema"
+  useDecimalJs                    = true
+  prismaJsonNullability           = true
+  writeBarrelFiles                = true
+  createInputTypes                = false
+  addInputTypeValidation          = false
+  validateWhereUniqueInput        = false
+  createOptionalDefaultValuesTypes = true
+  createRelationValuesTypes       = true
+  createPartialTypes              = true
+}
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")

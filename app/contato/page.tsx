@@ -113,7 +113,7 @@ export default function ContatoPage() {
 
               {/* Stats badges */}
               <div className="flex flex-wrap items-center justify-center gap-3">
-                {stats.map((stat, _index) => (
+                {stats.map((stat) => (
                   <div
                     key={stat.label}
                     className="bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 border border-white/20"
@@ -179,7 +179,7 @@ export default function ContatoPage() {
               </CardHeader>
               <CardContent className="relative z-10">
                 <div className="grid grid-cols-1 gap-4">
-                  {contactInfo.map((info, _index) => (
+                  {contactInfo.map((info) => (
                     <motion.div
                       key={info.title}
                       initial={{ opacity: 0, y: 20 }}
@@ -241,12 +241,12 @@ export default function ContatoPage() {
               </CardHeader>
               <CardContent className="relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {services.map((service, _index) => (
+                  {services.map((service, index) => (
                     <motion.div
                       key={service.title}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 + _index * 0.1 }}
+                      transition={{ delay: 0.4 + index * 0.1 }}
                       className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-25 rounded-lg hover:from-orange-100 hover:to-orange-50 transition-all duration-300 hover:scale-[1.02] group"
                     >
                       <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-3 rounded-full w-12 h-12 mx-auto mb-3 shadow-lg group-hover:scale-105 transition-transform duration-300">

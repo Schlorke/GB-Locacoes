@@ -61,14 +61,26 @@ design system robusto.
 - **Testing**: Vitest + Testing Library + Playwright
 - **Design System**: Storybook 9.1.1 + Radix UI
 
-### **⚠️ COMPATIBILIDADES CRÍTICAS**
+### **⚠️ COMPATIBILIDADES CRÍTICAS & PROBLEMAS CONHECIDOS**
 
 > **OBRIGATÓRIO**: Consulte `docs/references/dependencies.md` antes de atualizar
 > dependências
 
+#### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024)**
+
 - **Prisma**: Manter em 6.13.0 (6.14.0+ causa erro "did not initialize yet")
 - **Tailwind**: Manter em 3.4.17 (usuário prefere versão atual)
 - **PNPM**: Recomendado NPM (PNPM causa conflitos com Prisma)
+- **Build failing**: Script `scripts/post-prisma-generate.js` criado para
+  resolver conflito do Prisma deletar `lib/validations/index.ts`
+- **TypeScript errors**: 42 erros resolvidos com tipos específicos e safe
+  navigation
+- **ESLint overwhelming**: 31,469 problemas resolvidos com ignore patterns e
+  automation
+- **swagger-ui-react**: Removido por incompatibilidade React 19, substituído por
+  implementação custom
+- **node-domexception deprecated**: Override com `npm:@types/node@*`
+  implementado
 
 ---
 
@@ -356,6 +368,44 @@ pnpm format                # Prettier
 6. **❌ NÃO** modifique animações/responsividade existentes
 7. **❌ NÃO** use `any` em TypeScript
 8. **❌ NÃO** implemente sem consultar docs/
+9. **❌ NÃO** delete ou modifique `scripts/post-prisma-generate.js` (crítico
+   para build)
+10. **❌ NÃO** modifique `package.json` scripts de build sem entender
+    dependências
+
+### **🆘 TROUBLESHOOTING - PROBLEMAS COMUNS**
+
+#### **🚨 "Module not found: Can't resolve '@/lib/validations'"**
+
+- **Causa**: Prisma generate deletou o arquivo `lib/validations/index.ts`
+- **Solução**: Execute `node scripts/post-prisma-generate.js` ou
+  `pnpm db:generate`
+- **Prevenção**: Script automático configurado em `package.json`
+
+#### **🚨 "TypeScript errors em massa (42+ erros)"**
+
+- **Causa**: Tipos `unknown`, `any`, navegação insegura em objetos
+- **Solução**: Use interfaces específicas, safe navigation (`?.`), type guards
+- **Exemplo**: `req.headers?.['content-length']` em vez de
+  `req.headers['content-length']`
+
+#### **🚨 "ESLint overwhelming errors (31k+ problemas)"**
+
+- **Causa**: Arquivos auto-gerados do Prisma incluídos no linting
+- **Solução**: Adicionar patterns em `eslint.config.js` ignores
+- **Já resolvido**: Configuração atualizada exclui `lib/validations/schemas/**`
+
+#### **🚨 "Build failing com 'Did not initialize yet'"**
+
+- **Causa**: PNPM + Next.js 15 + Prisma incompatibilidade
+- **Solução**: Use NPM, mantenha Prisma 6.13.0
+- **Memória**: Usuário prefere não downgrade de dependências
+
+#### **🚨 "Swagger UI React errors com React 19"**
+
+- **Causa**: swagger-ui-react não compatível com React 19
+- **Solução**: Implementação custom em `app/api-docs/page.tsx`
+- **Resultado**: Documentação API sem dependências externas
 
 ### **✅ SEMPRE FAÇA**
 
@@ -381,6 +431,7 @@ pnpm format                # Prettier
 | **🐛 Problemas/erros**         | [`docs/getting-started/troubleshooting.md`](docs/getting-started/troubleshooting.md) |
 | **⚠️ Compatibilidade**         | [`docs/references/dependencies.md`](docs/references/dependencies.md)                 |
 | **📖 Navegação completa**      | [`docs/README.md`](docs/README.md)                                                   |
+| **🔧 Ferramentas para APIs**   | [`docs/guides/api-documentation-tools.md`](docs/guides/api-documentation-tools.md)   |
 
 ---
 

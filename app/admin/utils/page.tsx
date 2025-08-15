@@ -99,7 +99,7 @@ export default function AdminUtilsPage() {
       // Simulate cache clearing
       await new Promise((resolve) => setTimeout(resolve, 2000))
       toast.success('Cache limpo com sucesso!')
-    } catch (_error) {
+    } catch {
       toast.error('Erro ao limpar cache')
     } finally {
       setIsLoading(false)
@@ -112,7 +112,7 @@ export default function AdminUtilsPage() {
       // Simulate backup creation
       await new Promise((resolve) => setTimeout(resolve, 3000))
       toast.success('Backup criado com sucesso!')
-    } catch (_error) {
+    } catch {
       toast.error('Erro ao criar backup')
     } finally {
       setIsLoading(false)
@@ -127,7 +127,7 @@ export default function AdminUtilsPage() {
       toast.success(
         'Verificação do sistema concluída - Tudo funcionando corretamente!'
       )
-    } catch (_error) {
+    } catch {
       toast.error('Erro na verificação do sistema')
     } finally {
       setIsLoading(false)

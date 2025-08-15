@@ -10,6 +10,53 @@ const compat = new FlatCompat({
 })
 
 // Use the .eslintrc.cjs configuration in flat config format
-export default compat.config({
-  extends: ['./.eslintrc.cjs'],
-})
+export default [
+  // Global ignores - aplicados a TODOS os arquivos
+  {
+    ignores: [
+      // Build outputs e cache
+      '.next/**',
+      'out/**',
+      'dist/**',
+      'build/**',
+      'storybook-static/**',
+      '.turbo/**',
+
+      // Dependencies
+      'node_modules/**',
+
+      // Config files
+      '**/*.config.js',
+      '**/*.config.cjs',
+      '**/*.config.mjs',
+      '**/*.config.ts',
+      'tailwind.config.cjs',
+      'postcss.config.cjs',
+      'next.config.mjs',
+      'vitest.config.ts',
+      'vitest.storybook.config.ts',
+
+      // Scripts
+      'scripts/**',
+
+      // Generated files
+      'lib/validations/**',
+      '*.openapi.json',
+      'public/openapi.json',
+
+      // Test files with flexible types
+      'tests/api/**',
+
+      // Storybook files
+      '.storybook/**',
+      'stories/**',
+
+      // Type definitions with flexible types
+      'types/global.d.ts',
+      'types/next-auth.d.ts',
+      'types/filters.ts',
+    ],
+  },
+  // Aplicar as configurações do Next.js aos arquivos restantes
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+]

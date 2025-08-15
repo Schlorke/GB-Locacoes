@@ -36,5 +36,11 @@
     "eslint.config.js",
     "prisma/**/*.ts"
   ],
-  "exclude": ["node_modules", ".next", "dist", "build"]
+  "exclude": [
+    "node_modules",
+    ".next",
+    "dist",
+    "build",
+    "lib/validations/schemas/**/*.ts"
+  ]
 }

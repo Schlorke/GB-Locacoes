@@ -1,16 +1,7 @@
 import { successResponse, withErrorHandling } from '@/lib/api-response'
 import { checkRateLimit, strictRateLimit } from '@/lib/rate-limit'
+import { ContactSchema } from '@/lib/validations'
 import { type NextRequest } from 'next/server'
-import { z } from 'zod'
-
-// Schema de validação
-const contactSchema = z.object({
-  name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-  email: z.string().email('Email inválido'),
-  phone: z.string().min(10, 'Telefone deve ter pelo menos 10 dígitos'),
-  equipment: z.string().optional(),
-  message: z.string().min(10, 'Mensagem deve ter pelo menos 10 caracteres'),
-})
 
 export const POST = withErrorHandling(async (request: NextRequest) => {
   // Rate limiting para evitar spam de formulários
@@ -21,8 +12,8 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
 
   const body = await request.json()
 
-  // Validar dados
-  const _validatedData = contactSchema.parse(body)
+  // Validar dados usando schema Zod centralizado
+  ContactSchema.parse(body)
 
   // TODO: Implementar envio de email real
   // TODO: Salvar no banco de dados se necessário
