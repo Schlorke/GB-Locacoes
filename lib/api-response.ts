@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { ZodError } from 'zod'
+import { ZodError, type ZodIssue } from 'zod'
 
 /**
  * Padronizar respostas de API com status codes e mensagens apropriadas
@@ -31,7 +31,7 @@ export function errorResponse(
     error: getErrorTypeByStatus(status),
     message,
     ...(code && { code }),
-    ...(details && process.env.NODE_ENV === 'development' && { details }),
+    ...(details && process.env.NODE_ENV === 'development' ? { details } : {}),
   }
 
   return NextResponse.json(error, { status })
@@ -59,7 +59,7 @@ export function successResponse<T>(
  * Tratar erros de validação Zod
  */
 export function handleValidationError(error: ZodError): NextResponse<ApiError> {
-  const fieldErrors = error.errors.map((err) => ({
+  const fieldErrors = error.issues.map((err: ZodIssue) => ({
     field: err.path.join('.'),
     message: err.message,
   }))
@@ -136,11 +136,21 @@ function getErrorTypeByStatus(status: number): string {
  * Wrapper para rotas API que trata erros automaticamente
  */
 export function withErrorHandling<T extends unknown[]>(
-  handler: (...args: T) => Promise<NextResponse>
+  handler: (...args: T) => Promise<NextResponse | Response>
 ) {
   return async (...args: T): Promise<NextResponse> => {
     try {
-      return await handler(...args)
+      const result = await handler(...args)
+      // Convert Response to NextResponse if needed
+      if (result instanceof Response && !(result instanceof NextResponse)) {
+        const body = await result.text()
+        return new NextResponse(body, {
+          status: result.status,
+          statusText: result.statusText,
+          headers: result.headers,
+        })
+      }
+      return result as NextResponse
     } catch (error) {
       console.error('API Error:', error)
 

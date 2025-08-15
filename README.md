@@ -23,6 +23,27 @@
 - [🤝 Contribuindo](#-contribuindo)
 - [📄 Licença](#-licença)
 
+---
+
+## 📚 **DOCUMENTAÇÃO PROFISSIONAL**
+
+> 🎯 **Nova estrutura**: Documentação completamente reorganizada em dezembro
+> 2024
+
+### **📁 Navegação Rápida na Documentação**
+
+| Para...                       | Acesse                                                                               |
+| ----------------------------- | ------------------------------------------------------------------------------------ |
+| **🚀 Começar rapidamente**    | [`docs/getting-started/installation.md`](docs/getting-started/installation.md)       |
+| **🏗️ Entender a arquitetura** | [`docs/architecture/overview.md`](docs/architecture/overview.md)                     |
+| **🎨 Usar o design system**   | [`docs/features/design-system.md`](docs/features/design-system.md)                   |
+| **⚙️ Sistema administrativo** | [`docs/features/admin-system.md`](docs/features/admin-system.md)                     |
+| **🔧 Resolver problemas**     | [`docs/getting-started/troubleshooting.md`](docs/getting-started/troubleshooting.md) |
+| **📖 Índice completo**        | [`docs/README.md`](docs/README.md)                                                   |
+
+**📌 Regra de Ouro**: SEMPRE consulte `docs/` antes de implementar
+funcionalidades!
+
 ## 🎯 Visão Geral
 
 **GB-Locacoes** é uma plataforma completa e moderna para locação de equipamentos
@@ -419,35 +440,55 @@ open coverage/lcov-report/index.html
 
 ## 📚 Documentação
 
-### 📖 Documentação Principal
+> 🎯 **Documentação completamente reorganizada em dezembro 2024**
 
-- **[README.md](./README.md)** - Este arquivo
-- **[AGENTS.md](./AGENTS.md)** - Guia para IA e colaboradores
+### **📁 Estrutura Completa da Documentação**
+
+```
+📁 docs/                           # DOCUMENTAÇÃO PRINCIPAL
+├── 📄 README.md                   # Índice e navegação
+├── 📁 getting-started/            # Para começar
+│   ├── 📄 installation.md         # Setup inicial
+│   ├── 📄 development.md          # Guia de desenvolvimento
+│   ├── 📄 deployment.md           # Deploy e produção
+│   └── 📄 troubleshooting.md      # Solução de problemas
+├── 📁 architecture/               # Arquitetura técnica
+│   ├── 📄 overview.md             # Visão geral da arquitetura
+│   ├── 📄 api.md                  # Documentação das APIs
+│   └── 📄 security.md             # Aspectos de segurança
+├── 📁 features/                   # Funcionalidades
+│   ├── 📄 admin-system.md         # Sistema administrativo
+│   └── 📄 design-system.md        # Design System completo
+├── 📁 guides/                     # Guias específicos
+│   ├── 📄 storybook.md            # Documentação Storybook
+│   ├── 📄 accessibility.md        # Melhorias de acessibilidade
+│   └── 📄 scroll-reveal.md        # Sistema scroll reveal
+├── 📁 references/                 # Referências técnicas
+│   └── 📄 dependencies.md         # Compatibilidade dependências
+└── 📁 internal/                   # Documentação interna
+    ├── 📄 cursor-setup.md         # Setup Cursor IDE
+    ├── 📄 project-decisions.md    # Decisões arquiteturais
+    └── 📄 tools.md                # Ferramentas internas
+```
+
+### **🚀 Quick Links**
+
+| **Para desenvolvedores**                                                        | **Para designers**                                            | **Para administradores**                                              |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [`getting-started/development.md`](docs/getting-started/development.md)         | [`features/design-system.md`](docs/features/design-system.md) | [`features/admin-system.md`](docs/features/admin-system.md)           |
+| [`architecture/overview.md`](docs/architecture/overview.md)                     | [`guides/storybook.md`](docs/guides/storybook.md)             | [`getting-started/deployment.md`](docs/getting-started/deployment.md) |
+| [`getting-started/troubleshooting.md`](docs/getting-started/troubleshooting.md) | [`guides/accessibility.md`](docs/guides/accessibility.md)     | [`architecture/security.md`](docs/architecture/security.md)           |
+
+### **📄 Arquivos na Raiz (Padrões do GitHub)**
+
+- **[README.md](./README.md)** - Este arquivo (visão geral)
+- **[AGENTS.md](./AGENTS.md)** - 🤖 **INSTRUÇÕES PARA IAs** (fonte de verdade)
+- **[CHANGELOG.md](./CHANGELOG.md)** - Histórico de mudanças
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Como contribuir
 - **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)** - Código de conduta
 
-### 🎨 Design System
-
-- **[DESIGN_SYSTEM_2025.md](./DESIGN_SYSTEM_2025.md)** - Design System completo
-- **[ADMIN_DESIGN_SYSTEM.md](./ADMIN_DESIGN_SYSTEM.md)** - Guia administrativo
-- **[ADMIN_README.md](./ADMIN_README.md)** - Documentação do admin
-- **[ADMIN_QUICK_GUIDE.md](./ADMIN_QUICK_GUIDE.md)** - Guia rápido do admin
-- **[ADMIN_COMPONENTS.md](./ADMIN_COMPONENTS.md)** - Componentes do admin
-
-### 🔧 Técnica
-
-- **[STORYBOOK_README.md](./STORYBOOK_README.md)** - Guia do Storybook
-- **[SUPABASE_UPLOAD.md](./SUPABASE_UPLOAD.md)** - Upload de arquivos
-- **[docs/](./docs/)** - Documentação adicional
-
-### 🧪 Testes e Qualidade
-
-- **[docs/accessibility-improvements.md](./docs/accessibility-improvements.md)** -
-  Melhorias de acessibilidade
-- **[docs/storybook-play-functions.md](./docs/storybook-play-functions.md)** -
-  Funções Play do Storybook
-- **[docs/storybook-troubleshooting.md](./docs/storybook-troubleshooting.md)** -
-  Troubleshooting do Storybook
+> **🤖 Para IAs/Assistentes**: Leia **[AGENTS.md](./AGENTS.md)** PRIMEIRO antes
+> de qualquer implementação!
 
 ## 🚀 Scripts Disponíveis
 
@@ -539,6 +580,7 @@ chore: manutenção
 - [ ] Código segue os padrões do projeto
 - [ ] Testes passando
 - [ ] Documentação atualizada
+- [ ] **📝 CHANGELOG.md atualizado** (OBRIGATÓRIO)
 - [ ] Design system respeitado
 - [ ] Acessibilidade verificada
 - [ ] Responsividade testada

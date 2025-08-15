@@ -1,11 +1,6 @@
-import { type NextRequest } from 'next/server'
+import { successResponse, withErrorHandling } from '@/lib/api-response'
 import { checkRateLimit, strictRateLimit } from '@/lib/rate-limit'
-import {
-  successResponse,
-  handleValidationError,
-  errorResponse,
-  withErrorHandling,
-} from '@/lib/api-response'
+import { type NextRequest } from 'next/server'
 import { z } from 'zod'
 
 // Schema de validação
@@ -27,7 +22,7 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   const body = await request.json()
 
   // Validar dados
-  const validatedData = contactSchema.parse(body)
+  const _validatedData = contactSchema.parse(body)
 
   // TODO: Implementar envio de email real
   // TODO: Salvar no banco de dados se necessário

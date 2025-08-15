@@ -1,8 +1,53 @@
 # GB Locações – Instruções para GitHub Copilot
 
+## 📚 **DOCUMENTAÇÃO COMO FONTE DE VERDADE**
+
+> ⚠️ **CRÍTICO**: SEMPRE consulte a documentação em `docs/` antes de implementar
+> qualquer funcionalidade
+
+### **📁 Estrutura da Documentação Oficial**
+
+```
+📁 docs/                          # CONSULTAR SEMPRE PRIMEIRO
+├── 📁 getting-started/           # Setup, desenvolvimento, deploy
+│   ├── 📄 installation.md       # Setup inicial + compatibilidade
+│   ├── 📄 development.md        # Padrões de desenvolvimento
+│   ├── 📄 deployment.md         # Deploy e produção
+│   └── 📄 troubleshooting.md    # Soluções de problemas
+├── 📁 architecture/              # Arquitetura técnica
+│   ├── 📄 overview.md           # Stack + arquitetura completa
+│   ├── 📄 api.md                # Documentação das APIs
+│   └── 📄 security.md           # Aspectos de segurança
+├── 📁 features/                  # Funcionalidades específicas
+│   ├── 📄 admin-system.md       # Sistema admin COMPLETO
+│   └── 📄 design-system.md      # Identidade visual + componentes
+├── 📁 guides/                    # Guias específicos
+│   ├── 📄 storybook.md          # Documentação Storybook
+│   ├── 📄 accessibility.md      # Melhorias de acessibilidade
+│   └── 📄 scroll-reveal.md      # Sistema scroll reveal
+├── 📁 references/                # Referências técnicas
+│   └── 📄 dependencies.md       # Compatibilidade dependências
+└── 📁 internal/                  # Documentação interna
+    ├── 📄 cursor-setup.md       # Setup específico Cursor
+    ├── 📄 project-decisions.md  # Decisões arquiteturais
+    └── 📄 tools.md              # Ferramentas internas
+```
+
+### **🧠 Anti-Alucinação Protocol**
+
+1. **📖 LEIA PRIMEIRO**: Antes de qualquer implementação:
+   - `docs/architecture/overview.md` - Entender a arquitetura
+   - `docs/features/design-system.md` - Componentes e estilos
+   - `docs/features/admin-system.md` - Funcionalidades admin
+   - `docs/getting-started/development.md` - Padrões de código
+
+2. **🎨 DESIGN SYSTEM**: Use APENAS componentes documentados
+3. **⚠️ COMPATIBILIDADE**: Verifique `docs/references/dependencies.md`
+4. **🚨 NÃO ALUCINE**: Se não souber, consulte docs/ primeiro
+5. **📝 DOCUMENTE SEMPRE**: Atualize `CHANGELOG.md` após alterações
+
 Este repositório é um sistema completo de e-commerce de locação de equipamentos
-para construção civil, com foco em performance, UX e arquitetura escalável. A IA
-Copilot deve atuar como um engenheiro full-stack de elite.
+para construção civil, com foco em performance, UX e arquitetura escalável.
 
 ---
 
@@ -45,6 +90,7 @@ Copilot deve atuar como um engenheiro full-stack de elite.
 - Evitar lógica duplicada em múltiplas rotas.
 - Usar `zod` para validação de dados e formular entradas confiáveis.
 - Utilizar middlewares para controle de permissão (admin/cliente).
+- **📝 OBRIGATÓRIO**: Atualizar `CHANGELOG.md` após toda implementação.
 
 ---
 

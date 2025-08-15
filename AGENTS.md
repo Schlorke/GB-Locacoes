@@ -1,194 +1,407 @@
-# AGENTS.md
+# 🤖 AGENTS.md - Instruções Principais para Agentes de IA
 
-Este documento orienta colaboradores humanos **e agentes automatizados** sobre
-como trabalhar neste repositório GB Locações.
+> **ARQUIVO CRÍTICO**: Este é o primeiro arquivo que toda IA deve ler ao
+> interagir com o projeto GB-Locações
 
----
+## 📚 **DOCUMENTAÇÃO COMO FONTE DE VERDADE ABSOLUTA**
 
-## 🧱 Estrutura e estilo do código
+### ⚠️ **PROTOCOLO ANTI-ALUCINAÇÃO OBRIGATÓRIO**
 
-- Projeto em **Next.js 15** (App Router) e **TypeScript**.
-- Nomes de arquivos e pastas sempre em inglês e minúsculo.
-- Rode **eslint** e **prettier** antes de enviar pull requests.
-- Siga os utilitários **TailwindCSS** e o design system **ShadCN UI** já
-  presentes.
-- ❌ **NÃO** alterar design, animações ou responsividade já implementados.
-- ✅ Padrão de foco: `focus:border-blue-500` **e/ou**
-  `focus:outline-blue-500 focus:outline-2` para todos os elementos interativos.
+1. **🚨 NUNCA ALUCINE**: Se não souber algo, consulte `docs/` PRIMEIRO
+2. **📖 LEIA ANTES DE AGIR**: Consulte a documentação antes de implementar
+3. **🎯 SIGA OS PADRÕES**: Use apenas componentes e práticas documentadas
+4. **📝 DOCUMENTE MUDANÇAS**: SEMPRE atualize o `CHANGELOG.md` após alterações
 
----
+### **📁 ESTRUTURA DA DOCUMENTAÇÃO (ATUALIZADA - DEZ 2024)**
 
-## ⚙️ Configurações e scripts
-
-- Variáveis de ambiente documentadas em **`.env.example`**.
-- Rodar localmente:
-
-```bash
-pnpm install
-pnpm dev
 ```
-
-- Lint e testes:
-
-```bash
-pnpm lint
-pnpm test
-```
-
-### ⚠️ **CRÍTICO: Compatibilidade de Dependências**
-
-#### **🚨 NUNCA ATUALIZAR estas dependências:**
-
-```bash
-# ❌ Prisma 6.14.0+ causa erro de inicialização
-@prisma/client@6.13.0  # MANTER nesta versão
-prisma@6.13.0          # MANTER nesta versão
-
-# ❌ Tailwind 4.x quebra o design system
-tailwindcss@3.4.17     # MANTER nesta versão
-```
-
-#### **✅ Processo OBRIGATÓRIO para atualizações:**
-
-```bash
-# 1. SEMPRE verificar compatibilidade primeiro
-pnpm outdated
-
-# 2. Atualizar APENAS dependências seguras
-pnpm update @radix-ui/react-*  # UI components - OK
-pnpm update @testing-library/* # Testing - OK
-
-# 3. SEMPRE testar build após qualquer atualização
-pnpm run build  # <- CRÍTICO! Detecta problemas
-
-# 4. Se build quebrar, reverter IMEDIATAMENTE
-git checkout package.json pnpm-lock.yaml
-pnpm install
-```
-
-#### **📚 Documentação:**
-
-- **[DEPENDENCY_COMPATIBILITY_GUIDE.md](./DEPENDENCY_COMPATIBILITY_GUIDE.md)** -
-  Guia completo
-- **[PRISMA_TROUBLESHOOTING.md](./PRISMA_TROUBLESHOOTING.md)** - Problemas do
-  Prisma
-
----
-
-## 🗂️ Estrutura recomendada de pastas
-
-- `app/` – rotas da aplicação (Next.js App Router)
-- `components/` – componentes visuais reutilizáveis
-- `lib/` – funções auxiliares e integrações externas
-- `types/` – tipos globais TypeScript
-- `schemas/` – validações com Zod
-- `middlewares/` – autenticação, logs, proteção
-- `prisma/` – schema do banco de dados e seeds
-- `public/` – arquivos estáticos
-
----
-
-## 🔐 Variáveis de ambiente críticas
-
-- `DATABASE_URL`
-- `NEXTAUTH_SECRET`
-- `ZAPSIGN_API_KEY`
-- `SENDGRID_API_KEY`
-- `STRIPE_SECRET_KEY`
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-
----
-
-## 🚀 Comandos úteis
-
-| Comando                     | Descrição                                    |
-| --------------------------- | -------------------------------------------- |
-| `pnpm dev`                  | Rodar o projeto localmente                   |
-| `pnpm lint`                 | Verificar estilo e formatação                |
-| `pnpm test`                 | Executar testes unitários (Vitest)           |
-| `docker-compose up --build` | Subir ambiente local com Docker + PostgreSQL |
-| `prisma migrate dev`        | Aplicar migrations localmente                |
-| `prisma studio`             | UI visual do banco de dados                  |
-
----
-
-## 🔄 Política de branches e commits
-
-- Use branches descritivas, ex.: `feature/add-login`, `fix/navbar-bug`.
-- Commits curtos, claros e no imperativo.  
-  Ex.: `feat: implement budget button`.
-
----
-
-## 📥 Revisão e Pull Requests
-
-- PRs devem conter **objetivo**, **passos de teste** e checklist:
-
-```md
-## Objetivo
-
-[Descreva brevemente o que foi feito.]
-
-## Como testar
-
-[Explique os passos para validar as alterações.]
-
-## Checklist
-
-- [ ] Código limpo
-- [ ] Testes passando
-- [ ] Sem alteração de design
-- [ ] Foco azul (`focus:border-blue-500` ou `focus:outline-blue-500`)
+📁 docs/                          # CONSULTAR SEMPRE PRIMEIRO
+├── 📄 README.md                  # Índice geral da documentação
+├── 📁 getting-started/           # Setup, desenvolvimento, deploy
+│   ├── 📄 installation.md       # Setup inicial + compatibilidade CRÍTICA
+│   ├── 📄 development.md        # Padrões de desenvolvimento OBRIGATÓRIOS
+│   ├── 📄 deployment.md         # Deploy e produção
+│   └── 📄 troubleshooting.md    # Soluções de problemas + compatibilidade
+├── 📁 architecture/              # Arquitetura técnica
+│   ├── 📄 overview.md           # Stack + arquitetura COMPLETA
+│   ├── 📄 api.md                # Documentação das APIs
+│   └── 📄 security.md           # Aspectos de segurança
+├── 📁 features/                  # Funcionalidades específicas
+│   ├── 📄 admin-system.md       # Sistema admin COMPLETO
+│   └── 📄 design-system.md      # Identidade visual + componentes
+├── 📁 guides/                    # Guias específicos
+│   ├── 📄 storybook.md          # Documentação Storybook
+│   ├── 📄 accessibility.md      # Melhorias de acessibilidade
+│   └── 📄 scroll-reveal.md      # Sistema scroll reveal
+├── 📁 references/                # Referências técnicas
+│   └── 📄 dependencies.md       # Compatibilidade dependências CRÍTICA
+└── 📁 internal/                  # Documentação interna
+    ├── 📄 cursor-setup.md       # Setup específico Cursor
+    ├── 📄 project-decisions.md  # Decisões arquiteturais
+    └── 📄 tools.md              # Ferramentas internas
 ```
 
 ---
 
-## 🤖 Agentes e responsabilidades automatizadas
+## 🎯 **CONTEXTO DO PROJETO GB-LOCAÇÕES**
 
-| Agente           | Responsabilidade                              |
-| ---------------- | --------------------------------------------- |
-| `quote-agent`    | Gera orçamentos a partir do catálogo          |
-| `contract-agent` | Dispara assinatura digital (ZapSign)          |
-| `email-agent`    | Envia e‑mails transacionais (Resend/SendGrid) |
-| `logger-agent`   | Registra ações sensíveis (Pino)               |
-| `cleanup-agent`  | Remove dependências obsoletas                 |
+**GB-Locações** é uma plataforma moderna de locação de equipamentos para
+construção civil, desenvolvida com Next.js 15, TypeScript, Prisma, PostgreSQL e
+design system robusto.
+
+### **🏛️ Stack Tecnológico Principal**
+
+- **Framework**: Next.js 15.4.6 (App Router)
+- **Linguagem**: TypeScript 5.9.2
+- **UI**: React 19.1.1 + Tailwind CSS 3.4.17
+- **Database**: PostgreSQL + Prisma 6.13.0 ⚠️ **NÃO ATUALIZAR** - Ver
+  `docs/references/dependencies.md`
+- **Auth**: NextAuth.js 4.24.11
+- **State**: Zustand 5.0.7 + React Hook Form 7.62.0
+- **Testing**: Vitest + Testing Library + Playwright
+- **Design System**: Storybook 9.1.1 + Radix UI
+
+### **⚠️ COMPATIBILIDADES CRÍTICAS**
+
+> **OBRIGATÓRIO**: Consulte `docs/references/dependencies.md` antes de atualizar
+> dependências
+
+- **Prisma**: Manter em 6.13.0 (6.14.0+ causa erro "did not initialize yet")
+- **Tailwind**: Manter em 3.4.17 (usuário prefere versão atual)
+- **PNPM**: Recomendado NPM (PNPM causa conflitos com Prisma)
 
 ---
 
-## 🔒 Regras obrigatórias para **agentes de IA**
+## 🧠 **FLUXO DE TRABALHO OBRIGATÓRIO**
 
-1. **Foco acessível em azul:**
-   - Implementar `focus:border-blue-500` **e/ou**
-     `focus:outline-blue-500 focus:outline-2`.
-   - `focus:ring` deve permanecer **desativado** (`focus:ring-0`), salvo
-     exceções aprovadas.
-2. **Proibição de alteração visual existente:**
-   - Não modificar estilos, animações, delays ou identidade já aplicada.
-3. **Não sobrescrever componentes reutilizáveis existentes.**
-4. **Não adicionar dependências** sem justificativa técnica.
-5. Priorizar **modularidade, segurança** e **legibilidade**.
-6. Usar **Zod** em todas as validações de entrada/saída.
-7. Utilizar **middlewares** para controle de acesso (admin/cliente).
+### **📖 Antes de Implementar QUALQUER Funcionalidade:**
 
-### Snippet global recomendado (Tailwind Layer Base)
+```
+1. 📚 LER docs/architecture/overview.md (arquitetura)
+   ↓
+2. 📚 LER docs/features/design-system.md (componentes)
+   ↓
+3. 📚 LER docs/getting-started/development.md (padrões)
+   ↓
+4. 🔍 VERIFICAR docs/references/dependencies.md (compatibilidade)
+   ↓
+5. 🎨 USAR apenas componentes documentados
+   ↓
+6. 🏗️ IMPLEMENTAR seguindo padrões estabelecidos
+   ↓
+7. 📝 ATUALIZAR CHANGELOG.md com as mudanças
+   ↓
+8. ✅ TESTAR com referência na documentação
+```
+
+### **🎨 Design System - REGRAS OBRIGATÓRIAS**
+
+1. **Use APENAS** componentes de `components/ui/` (baseados em Radix UI)
+2. **Consulte** `stories/` para ver componentes visuais no Storybook
+3. **Cores**: Orange-600 (#ea580c) como cor primária da marca
+4. **Tipografia**: Inter (sans) + Jost (headings)
+5. **Não invente** novos componentes sem consultar design system
+
+### **📱 Responsive Design**
+
+- **Mobile-first**: Sempre comece com estilos mobile
+- **Breakpoints**: sm: 640px, md: 768px, lg: 1024px, xl: 1280px
+- **Teste**: Em dispositivos reais sempre
+
+---
+
+## 🏗️ **PADRÕES DE ARQUITETURA**
+
+### **📁 Estrutura de Diretórios**
+
+```
+GB-Locacoes/
+├── app/                    # App Router (Next.js 15)
+│   ├── admin/             # Área administrativa
+│   ├── api/               # API Routes
+│   └── (public)/          # Rotas públicas
+├── components/            # Componentes React
+│   ├── ui/               # Componentes base (Radix UI) ← USAR SEMPRE
+│   └── (feature)/        # Componentes específicos
+├── lib/                  # Utilitários e configurações
+├── hooks/                # Custom hooks
+├── types/                # Definições TypeScript
+├── schemas/              # Schemas de validação (Zod)
+├── prisma/               # Schema e migrações
+├── stories/              # Storybook stories ← CONSULTAR SEMPRE
+├── design-tokens/        # Sistema de design tokens
+└── tests/                # Testes
+```
+
+### **⚙️ Padrões de Desenvolvimento**
+
+#### **TypeScript (Obrigatório)**
+
+- **Strict Mode**: Sempre habilitado
+- **Não use**: `any` (preferir tipos específicos)
+- **Interfaces**: Para objetos, `types` para unions
+- **Validação**: Sempre use Zod para schemas
+
+#### **React Patterns**
+
+- **Hooks**: Custom hooks para lógica reutilizável
+- **ForwardRef**: Para componentes que precisam de ref
+- **Formulários**: SEMPRE React Hook Form + Zod
+
+#### **Nomenclatura**
+
+- **Componentes**: PascalCase (`EquipmentCard.tsx`)
+- **Hooks**: camelCase com `use` (`useQuoteForm.ts`)
+- **Utilitários**: camelCase (`formatCurrency.ts`)
+- **Constantes**: UPPER_SNAKE_CASE (`API_ENDPOINTS`)
+
+---
+
+## 🎨 **SISTEMA DE DESIGN - GUIA RÁPIDO**
+
+### **🎨 Paleta de Cores**
 
 ```css
-@layer base {
-  input:not([type="checkbox"]):not([type="radio"]),
-  select,
-  textarea {
-    @apply border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0;
-  }
+/* Cores Primárias */
+--orange-600: #ea580c; /* Cor principal da marca */
+--orange-500: #f97316; /* Hover states */
+--orange-700: #c2410c; /* Active states */
+
+/* Cores Neutras */
+--slate-50: #f8fafc; /* Background claro */
+--slate-800: #1e293b; /* Texto principal */
+--slate-600: #475569; /* Texto secundário */
+```
+
+### **📝 Componentes Base (USAR SEMPRE)**
+
+```tsx
+// Componentes principais em components/ui/
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select } from "@/components/ui/select"
+// ... outros componentes documentados
+```
+
+### **🎭 Animações (Framer Motion)**
+
+```tsx
+// Padrão de entrada
+<motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.3 }}
+>
+```
+
+---
+
+## 🔐 **SISTEMA ADMINISTRATIVO**
+
+### **🚀 Template Base para Páginas Admin**
+
+> Consulte `docs/features/admin-system.md` para template completo
+
+```tsx
+"use client"
+
+import { AdminPageHeader } from "@/components/admin/admin-page-header"
+import { AdminCard } from "@/components/admin/admin-card"
+import { motion } from "framer-motion"
+
+export default function NovaPaginaAdmin() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="max-w-7xl mx-auto space-y-6 p-6">
+        <AdminPageHeader
+          title="Título da Página"
+          subtitle="Subtítulo explicativo"
+          icon={<Package className="w-8 h-8" />}
+        />
+
+        <AdminCard title="Conteúdo">{/* Seu conteúdo aqui */}</AdminCard>
+      </div>
+    </div>
+  )
 }
 ```
 
+### **🎨 Header Obrigatório Admin**
+
+```tsx
+// SEMPRE use este padrão para páginas admin
+<div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+  {/* Gradientes de fundo */}
+  <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
+  <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
+
+  <div className="relative z-10">{/* Conteúdo do header */}</div>
+</div>
+```
+
 ---
 
-## ✅ Em caso de dúvida
+## 🧪 **TESTES - ESTRATÉGIA OBRIGATÓRIA**
 
-A IA (ou contributor) deve:
+### **🎯 Tipos de Teste**
 
-- Priorizar segurança, clareza e organização.
-- Criar novos arquivos ou componentes **sem alterar** estilos existentes.
-- Solicitar **aprovação** antes de qualquer mudança sensível.
+- **Unit Tests**: Vitest + Testing Library
+- **Integration Tests**: API Routes
+- **E2E Tests**: Playwright
+- **Visual Tests**: Storybook + Chromatic
+- **Accessibility Tests**: axe-core
+
+### **🚀 Comandos Principais**
+
+```bash
+# Desenvolvimento
+pnpm dev                    # Servidor desenvolvimento
+pnpm build                  # Build produção
+pnpm type-check             # Verificar tipos
+
+# Database
+pnpm db:generate           # Gerar cliente Prisma
+pnpm db:push               # Push schema
+pnpm db:studio             # Prisma Studio
+
+# Testes
+pnpm test                  # Testes unitários
+pnpm test:e2e              # Testes E2E
+pnpm storybook             # Storybook
+
+# Quality
+pnpm lint                  # ESLint
+pnpm lint:fix              # Auto-fix
+pnpm format                # Prettier
+```
+
+---
+
+## 📝 **PROTOCOLO DE CHANGELOG OBRIGATÓRIO**
+
+### **🚨 REGRA CRÍTICA**: Toda alteração DEVE ser documentada no `CHANGELOG.md`
+
+#### **Formato Obrigatório:**
+
+```markdown
+## [Data] - Tipo de Mudança
+
+### Added ✨
+
+- Nova funcionalidade implementada
+- Novo componente criado
+
+### Changed 🔄
+
+- Funcionalidade existente modificada
+- Atualização de dependência
+
+### Fixed 🐛
+
+- Bug corrigido
+- Problema de compatibilidade resolvido
+
+### Removed ❌
+
+- Funcionalidade removida
+- Código legado eliminado
+
+### Security 🔐
+
+- Vulnerabilidade corrigida
+- Melhoria de segurança
+```
+
+#### **Exemplos Práticos:**
+
+```markdown
+## [2024-12-20] - Atualização Sistema Admin
+
+### Added ✨
+
+- Componente AdminPageHeader para padronização
+- Template base para páginas administrativas
+- Documentação completa em docs/features/admin-system.md
+
+### Changed 🔄
+
+- Reorganizada estrutura de documentação em docs/
+- Atualizado README.md com nova navegação
+- Melhorado protocolo anti-alucinação para IAs
+
+### Fixed 🐛
+
+- Corrigido problema de compatibilidade Prisma 6.14.0
+- Removidas duplicatas na documentação
+
+### Security 🔐
+
+- Implementado middleware de autenticação admin
+- Validação aprimorada com Zod schemas
+```
+
+---
+
+## 🚨 **ALERTAS CRÍTICOS PARA IAs**
+
+### **❌ NÃO FAÇA (Anti-Padrões)**
+
+1. **❌ NÃO** atualize Prisma para 6.14.0+ (quebra build)
+2. **❌ NÃO** mude Tailwind CSS (usuário prefere versão atual)
+3. **❌ NÃO** use PNPM (causa conflitos, preferir NPM)
+4. **❌ NÃO** crie componentes fora do design system
+5. **❌ NÃO** ignore o protocolo de CHANGELOG
+6. **❌ NÃO** modifique animações/responsividade existentes
+7. **❌ NÃO** use `any` em TypeScript
+8. **❌ NÃO** implemente sem consultar docs/
+
+### **✅ SEMPRE FAÇA**
+
+1. **✅ SEMPRE** consulte `docs/` antes de implementar
+2. **✅ SEMPRE** use componentes de `components/ui/`
+3. **✅ SEMPRE** valide com Zod
+4. **✅ SEMPRE** use TypeScript estrito
+5. **✅ SEMPRE** atualize CHANGELOG.md
+6. **✅ SEMPRE** teste responsividade
+7. **✅ SEMPRE** siga padrões de nomenclatura
+8. **✅ SEMPRE** implemente loading/error states
+
+---
+
+## 🔗 **LINKS RÁPIDOS CRÍTICOS**
+
+| Situação                       | Consulte Primeiro                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------------ |
+| **🚀 Começar desenvolvimento** | [`docs/getting-started/installation.md`](docs/getting-started/installation.md)       |
+| **🏗️ Entender arquitetura**    | [`docs/architecture/overview.md`](docs/architecture/overview.md)                     |
+| **🎨 Usar design system**      | [`docs/features/design-system.md`](docs/features/design-system.md)                   |
+| **⚙️ Sistema admin**           | [`docs/features/admin-system.md`](docs/features/admin-system.md)                     |
+| **🐛 Problemas/erros**         | [`docs/getting-started/troubleshooting.md`](docs/getting-started/troubleshooting.md) |
+| **⚠️ Compatibilidade**         | [`docs/references/dependencies.md`](docs/references/dependencies.md)                 |
+| **📖 Navegação completa**      | [`docs/README.md`](docs/README.md)                                                   |
+
+---
+
+## 🎯 **OBJETIVO FINAL**
+
+Criar código que seja:
+
+- **📖 Documentado**: Baseado na documentação oficial
+- **🎨 Consistente**: Seguindo design system estabelecido
+- **🔒 Seguro**: Com validações e autenticação adequadas
+- **⚡ Performático**: Otimizado para velocidade
+- **♿ Acessível**: Inclusivo para todos usuários
+- **🧪 Testado**: Coberto por testes adequados
+- **📝 Rastreável**: Com mudanças documentadas no CHANGELOG
+
+---
+
+**🧠 LEMBRE-SE**: Este projeto tem padrões estabelecidos, documentação
+profissional e compatibilidades específicas. NUNCA alucine - sempre consulte a
+documentação primeiro!
+
+---
+
+_Última atualização: dezembro 2024 | Versão: 2.0_

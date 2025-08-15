@@ -6,6 +6,7 @@
   "scripts": {
     "prebuild": "prisma generate",
     "build": "next build",
+    "postbuild": "node scripts/patch-prisma.js",
     "postinstall": "prisma generate",
     "check:equipments": "node scripts/check-equipments.mjs",
     "codex:setup": "pnpm install && pnpm db:generate && pnpm db:push",
@@ -100,12 +101,12 @@
     "@radix-ui/react-toggle-group": "latest",
     "@radix-ui/react-tooltip": "latest",
     "@supabase/supabase-js": "^2.55.0",
-    "@sveltejs/kit": "2.30.1",
+    "@sveltejs/kit": "2.31.0",
     "@testing-library/dom": "^10.4.1",
     "@types/debug": "latest",
     "@types/eslint": "latest",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/nodemailer": "6.4.17",
+    "@types/nodemailer": "7.0.0",
     "@types/react-dom": "^19.1.7",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vercel/analytics": "^1.5.0",
@@ -172,7 +173,7 @@
     "@testing-library/jest-dom": "^6.7.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^24.2.1",
+    "@types/node": "^24.3.0",
     "@types/react": "19.1.10",
     "@vitejs/plugin-react": "^5.0.0",
     "@vitest/browser": "^3.2.4",
@@ -218,16 +219,14 @@
       "rimraf": "^6.0.1"
     },
     "onlyBuiltDependencies": [
-      "@bundled-es-modules/glob",
       "@prisma/client",
       "@prisma/engines",
-      "@swc/core",
       "@vercel/speed-insights",
-      "core-js-pure",
       "esbuild",
       "prisma",
+      "scrollreveal",
       "sharp",
-      "style-dictionary"
+      "unrs-resolver"
     ]
   }
 }

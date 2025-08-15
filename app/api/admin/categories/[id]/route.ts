@@ -1,6 +1,8 @@
-import { prisma } from '@/lib/prisma'
-import { requireAdmin } from '@/middlewares/require-admin'
 import { NextResponse, type NextRequest } from 'next/server'
+
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
 
 function slugify(text: string) {
   return text
@@ -19,6 +21,11 @@ export async function PUT(
 ) {
   const params = await props.params
   try {
+    const { prisma } = await import('@/lib/prisma')
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+
+    await prisma.$connect()
+
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
@@ -72,6 +79,11 @@ export async function DELETE(
 ) {
   const params = await props.params
   try {
+    const { prisma } = await import('@/lib/prisma')
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+
+    await prisma.$connect()
+
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {

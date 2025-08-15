@@ -1,8 +1,10 @@
-import { prisma } from '@/lib/prisma'
-import { requireAdmin } from '@/middlewares/require-admin'
 import { NextResponse, type NextRequest } from 'next/server'
 import crypto from 'node:crypto'
 import { z } from 'zod'
+
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
 
 function slugify(text: string) {
   return text
@@ -29,6 +31,11 @@ const CategorySchema = z
 // GET /api/admin/categories - List all categories
 export async function GET(request: NextRequest) {
   try {
+    const { prisma } = await import('@/lib/prisma')
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+
+    await prisma.$connect()
+
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
@@ -63,6 +70,11 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/categories - Create new category
 export async function POST(request: NextRequest) {
   try {
+    const { prisma } = await import('@/lib/prisma')
+    const { requireAdmin } = await import('@/middlewares/require-admin')
+
+    await prisma.$connect()
+
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {

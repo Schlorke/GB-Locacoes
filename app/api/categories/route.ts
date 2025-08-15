@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
 
 export async function GET() {
   try {
+    const { prisma } = await import('@/lib/prisma')
+    await prisma.$connect()
+
     const categories = await prisma.category.findMany({
       include: {
         _count: {

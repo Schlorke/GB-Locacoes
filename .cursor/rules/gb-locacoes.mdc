@@ -7,6 +7,82 @@ alwaysApply: true
 
 # 🏗️ GB-LOCACOES - CURSOR RULES & DEVELOPMENT GUIDELINES
 
+## 📚 **DOCUMENTAÇÃO COMO FONTE DE VERDADE**
+
+> ⚠️ **FUNDAMENTAL**: SEMPRE consulte a documentação em `docs/` antes de
+> implementar qualquer funcionalidade
+
+### **📁 Estrutura da Documentação Oficial**
+
+```
+📁 docs/                          # CONSULTAR SEMPRE PRIMEIRO
+├── 📁 getting-started/           # Setup, desenvolvimento, deploy
+│   ├── 📄 installation.md       # Setup inicial + compatibilidade
+│   ├── 📄 development.md        # Padrões de desenvolvimento
+│   ├── 📄 deployment.md         # Deploy e produção
+│   └── 📄 troubleshooting.md    # Soluções de problemas
+├── 📁 architecture/              # Arquitetura técnica
+│   ├── 📄 overview.md           # Stack + arquitetura completa
+│   ├── 📄 api.md                # Documentação das APIs
+│   └── 📄 security.md           # Aspectos de segurança
+├── 📁 features/                  # Funcionalidades específicas
+│   ├── 📄 admin-system.md       # Sistema admin COMPLETO
+│   └── 📄 design-system.md      # Identidade visual + componentes
+├── 📁 guides/                    # Guias específicos
+│   └── 📄 storybook.md          # Documentação Storybook
+├── 📁 references/                # Referências técnicas
+│   └── 📄 dependencies.md       # Compatibilidade dependências
+└── 📁 internal/                  # Documentação interna
+    ├── 📄 cursor-setup.md       # Setup específico Cursor
+    └── 📄 project-decisions.md  # Decisões arquiteturais
+```
+
+### **🧠 Anti-Alucinação Protocol**
+
+1. **📖 SEMPRE LER PRIMEIRO**: Antes de qualquer implementação, consulte:
+   - `docs/architecture/overview.md` - Para entender a arquitetura
+   - `docs/features/design-system.md` - Para componentes e estilos
+   - `docs/features/admin-system.md` - Para funcionalidades admin
+   - `docs/getting-started/development.md` - Para padrões de código
+
+2. **🎨 DESIGN SYSTEM**: Use APENAS componentes documentados em:
+   - `docs/features/design-system.md` - Sistema de design completo
+   - `docs/features/admin-system.md` - Componentes administrativos
+   - `stories/` - Documentação visual no Storybook
+
+3. **🏗️ ARQUITETURA**: Siga RIGOROSAMENTE os padrões em:
+   - `docs/architecture/overview.md` - Estrutura e tecnologias
+   - `docs/getting-started/development.md` - Padrões de desenvolvimento
+
+4. **⚠️ COMPATIBILIDADE**: Verifique SEMPRE em:
+   - `docs/references/dependencies.md` - Versões testadas e incompatibilidades
+
+### **🚨 REGRAS CRÍTICAS DE DOCUMENTAÇÃO**
+
+1. **NÃO ALUCINE**: Se não souber algo, consulte `docs/` primeiro
+2. **NÃO INVENTE**: Use apenas componentes e padrões documentados
+3. **NÃO QUEBRE**: Siga as versões específicas em
+   `docs/references/dependencies.md`
+4. **NÃO IGNORE**: Toda funcionalidade deve seguir os padrões em
+   `docs/getting-started/development.md`
+5. **📝 DOCUMENTE SEMPRE**: Atualize o `CHANGELOG.md` após qualquer alteração
+
+### **📖 Fluxo de Trabalho Obrigatório**
+
+```
+1. 📚 LER docs relevantes
+   ↓
+2. 🔍 VERIFICAR compatibilidade
+   ↓
+3. 🎨 USAR componentes do design system
+   ↓
+4. 🏗️ IMPLEMENTAR seguindo padrões
+   ↓
+5. 📝 ATUALIZAR CHANGELOG.md com mudanças
+   ↓
+6. ✅ TESTAR com referência na documentação
+```
+
 ## 🎯 **VISÃO GERAL DO PROJETO**
 
 **GB-Locacoes** é uma plataforma moderna de locação de equipamentos para
