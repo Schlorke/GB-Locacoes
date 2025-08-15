@@ -64,7 +64,7 @@ export default function Footer() {
             <ul className="flex flex-col space-y-2">
               <li>
                 <Link
-                  href="/catalogo"
+                  href="/#equipamentos-destaque"
                   className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Catálogo de Equipamentos
@@ -72,7 +72,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/categorias"
+                  href="/#categorias"
                   className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Categorias
@@ -121,7 +121,7 @@ export default function Footer() {
             <ul className="flex flex-col space-y-2">
               <li>
                 <Link
-                  href="/catalogo/andaimes-suspensos"
+                  href="/equipamentos"
                   className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Andaimes Suspensos
@@ -129,7 +129,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/catalogo/cadeiras-eletricas"
+                  href="/equipamentos"
                   className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Cadeiras Elétricas
@@ -137,7 +137,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/catalogo/andaimes-tubulares"
+                  href="/equipamentos"
                   className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Andaimes Tubulares
@@ -145,7 +145,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/catalogo/betoneiras"
+                  href="/equipamentos"
                   className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Betoneiras
@@ -153,7 +153,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/catalogo/rompedores"
+                  href="/equipamentos"
                   className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Rompedores
@@ -161,7 +161,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/catalogo/compressores"
+                  href="/equipamentos"
                   className="inline-block transform transition-all duration-300 ease-in-out text-gray-300 hover:translate-x-1 hover:text-orange-500"
                 >
                   Compressores

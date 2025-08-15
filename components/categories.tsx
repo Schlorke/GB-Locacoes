@@ -33,7 +33,7 @@ const fallbackCategories: Category[] = [
       'Andaimes suspensos elétricos e manuais para trabalhos em altura com segurança total.',
     color: 'from-blue-500 to-blue-600',
     count: 25,
-    href: '/catalogo/andaimes-suspensos',
+    href: '/equipamentos',
   },
   {
     icon: LucideIcons.Zap,
@@ -42,7 +42,7 @@ const fallbackCategories: Category[] = [
       'Cadeiras elétricas e manuais para altura com tecnologia avançada e manutenção constante.',
     color: 'from-yellow-500 to-yellow-600',
     count: 18,
-    href: '/catalogo/cadeiras-eletricas',
+    href: '/equipamentos',
   },
   {
     icon: LucideIcons.Wrench,
@@ -51,7 +51,7 @@ const fallbackCategories: Category[] = [
       'Andaimes tubulares para diversas alturas com certificação e estrutura robusta.',
     color: 'from-red-500 to-red-600',
     count: 35,
-    href: '/catalogo/andaimes-tubulares',
+    href: '/equipamentos',
   },
   {
     icon: LucideIcons.Truck,
@@ -60,7 +60,7 @@ const fallbackCategories: Category[] = [
       'Betoneiras de diversos tamanhos para preparo de concreto com eficiência máxima.',
     color: 'from-green-500 to-green-600',
     count: 22,
-    href: '/catalogo/betoneiras',
+    href: '/equipamentos',
   },
   {
     icon: LucideIcons.Hammer,
@@ -69,7 +69,7 @@ const fallbackCategories: Category[] = [
       'Rompedores pneumáticos e elétricos para demolição e quebra de concreto.',
     color: 'from-purple-500 to-purple-600',
     count: 28,
-    href: '/catalogo/rompedores',
+    href: '/equipamentos',
   },
   {
     icon: LucideIcons.Container,
@@ -78,7 +78,7 @@ const fallbackCategories: Category[] = [
       'Compressores de ar para obras com alta pressão e durabilidade comprovada.',
     color: 'from-indigo-500 to-indigo-600',
     count: 15,
-    href: '/catalogo/compressores',
+    href: '/equipamentos',
   },
 ]
 
@@ -152,7 +152,7 @@ export default function Categories() {
   }, [categories])
 
   return (
-    <section ref={sectionRef} className="py-16 bg-gray-50">
+    <section id="categorias" ref={sectionRef} className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2

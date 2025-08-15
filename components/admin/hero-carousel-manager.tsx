@@ -236,7 +236,7 @@ export function HeroCarouselManager({
                           onChange={(e) =>
                             updateItem(index, { link: e.target.value })
                           }
-                          placeholder="/catalogo ou https://exemplo.com"
+                          placeholder="/equipamentos ou https://exemplo.com"
                           className="mt-1"
                         />
                       </div>

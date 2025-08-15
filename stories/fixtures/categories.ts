@@ -24,7 +24,7 @@ export const categoriesFixture: CategoryFixture[] = [
     icon: Building,
     color: 'from-blue-500 to-blue-600',
     count: 25,
-    href: '/catalogo/andaimes-suspensos',
+    href: '/equipamentos',
     slug: 'andaimes-suspensos',
   },
   {
@@ -35,7 +35,7 @@ export const categoriesFixture: CategoryFixture[] = [
     icon: Zap,
     color: 'from-yellow-500 to-yellow-600',
     count: 18,
-    href: '/catalogo/cadeiras-eletricas',
+    href: '/equipamentos',
     slug: 'cadeiras-eletricas',
   },
   {
@@ -46,7 +46,7 @@ export const categoriesFixture: CategoryFixture[] = [
     icon: Wrench,
     color: 'from-red-500 to-red-600',
     count: 35,
-    href: '/catalogo/andaimes-tubulares',
+    href: '/equipamentos',
     slug: 'andaimes-tubulares',
   },
   {
@@ -57,7 +57,7 @@ export const categoriesFixture: CategoryFixture[] = [
     icon: Truck,
     color: 'from-green-500 to-green-600',
     count: 22,
-    href: '/catalogo/betoneiras',
+    href: '/equipamentos',
     slug: 'betoneiras',
   },
   {
@@ -68,7 +68,7 @@ export const categoriesFixture: CategoryFixture[] = [
     icon: Hammer,
     color: 'from-purple-500 to-purple-600',
     count: 28,
-    href: '/catalogo/rompedores',
+    href: '/equipamentos',
     slug: 'rompedores',
   },
   {
@@ -79,7 +79,7 @@ export const categoriesFixture: CategoryFixture[] = [
     icon: Container,
     color: 'from-indigo-500 to-indigo-600',
     count: 15,
-    href: '/catalogo/compressores',
+    href: '/equipamentos',
     slug: 'compressores',
   },
 ]
