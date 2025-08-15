@@ -1,17 +1,18 @@
-import { authOptions } from '@/lib/auth'
+import { requireAdminOrOperator } from '@/middlewares/require-admin'
 import { prisma } from '@/lib/prisma'
-
-import { getServerSession } from 'next-auth'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.user || !['ADMIN', 'OPERATOR'].includes(session.user.role)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Verificar autenticação de admin ou operator
+    const authResult = await requireAdminOrOperator(request)
+    if (!authResult.success) {
+      return NextResponse.json(
+        { error: authResult.error },
+        { status: authResult.status }
+      )
     }
 
     const { searchParams } = new URL(request.url)

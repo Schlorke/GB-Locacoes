@@ -43,6 +43,19 @@ GB-Locacoes/
 *.log
 *.sqlite
 *.dump
+eslint-output.txt
+build-output.txt
+test-output.txt
+
+# 🤖 Ferramentas de IA e editores
+.cursor/
+*.mdc
+.copilot/
+
+# 📊 Outputs de ferramentas de análise
+coverage/
+.nyc_output/
+lighthouse-report.html
 
 *storybook.log
 storybook-static

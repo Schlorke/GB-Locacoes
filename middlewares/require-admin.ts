@@ -15,3 +15,18 @@ export async function requireAdmin(_request: NextRequest) {
 
   return { success: true, user: session.user }
 }
+
+// Versão para rotas que permitem ADMIN e OPERATOR
+export async function requireAdminOrOperator(_request: NextRequest) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    return { error: 'Unauthorized', status: 401 }
+  }
+
+  if (!['ADMIN', 'OPERATOR'].includes(session.user.role)) {
+    return { error: 'Unauthorized', status: 401 }
+  }
+
+  return { success: true, user: session.user }
+}

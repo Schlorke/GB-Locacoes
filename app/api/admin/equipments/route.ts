@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/middlewares/require-admin'
+import { checkRateLimit, adminApiRateLimit } from '@/lib/rate-limit'
 import type { Decimal } from '@prisma/client/runtime/library'
 import { NextResponse, type NextRequest } from 'next/server'
 
@@ -35,6 +36,12 @@ type EquipmentWithCategory = {
 // GET /api/admin/equipments - List all equipments with pagination and filtering
 export async function GET(request: NextRequest) {
   try {
+    // Rate limiting
+    const rateLimitResult = checkRateLimit(request, adminApiRateLimit)
+    if (!rateLimitResult.allowed) {
+      return rateLimitResult.response!
+    }
+
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {
@@ -188,6 +195,12 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/equipments - Create new equipment
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting para operações de escrita (mais restritivo)
+    const rateLimitResult = checkRateLimit(request, adminApiRateLimit)
+    if (!rateLimitResult.allowed) {
+      return rateLimitResult.response!
+    }
+
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
     if (!adminResult.success) {

@@ -1,4 +1,11 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
+import { checkRateLimit, strictRateLimit } from '@/lib/rate-limit'
+import {
+  successResponse,
+  handleValidationError,
+  errorResponse,
+  withErrorHandling,
+} from '@/lib/api-response'
 import { z } from 'zod'
 
 // Schema de validação
@@ -10,44 +17,28 @@ const contactSchema = z.object({
   message: z.string().min(10, 'Mensagem deve ter pelo menos 10 caracteres'),
 })
 
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-
-    // Validar dados
-    const _validatedData = contactSchema.parse(body)
-
-    // TODO: Implementar envio de email real
-    // TODO: Salvar no banco de dados se necessário
-    // TODO: Integrar com WhatsApp Business API
-
-    // Simular delay de processamento
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    return NextResponse.json({
-      success: true,
-      message: 'Mensagem enviada com sucesso! Entraremos em contato em breve.',
-    })
-  } catch (error) {
-    console.error('Erro ao processar formulário de contato:', error)
-
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Dados inválidos',
-          errors: error.issues, // Zod 4: 'errors' renamed to 'issues'
-        },
-        { status: 400 }
-      )
-    }
-
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Erro interno do servidor',
-      },
-      { status: 500 }
-    )
+export const POST = withErrorHandling(async (request: NextRequest) => {
+  // Rate limiting para evitar spam de formulários
+  const rateLimitResult = checkRateLimit(request, strictRateLimit)
+  if (!rateLimitResult.allowed) {
+    return rateLimitResult.response!
   }
-}
+
+  const body = await request.json()
+
+  // Validar dados
+  const validatedData = contactSchema.parse(body)
+
+  // TODO: Implementar envio de email real
+  // TODO: Salvar no banco de dados se necessário
+  // TODO: Integrar com WhatsApp Business API
+
+  // Simular delay de processamento
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  return successResponse(
+    { messageId: `msg_${Date.now()}` },
+    200,
+    'Mensagem enviada com sucesso! Entraremos em contato em breve.'
+  )
+})

@@ -1,6 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import {
+  requireAdmin,
+  requireAdminOrOperator,
+} from '@/middlewares/require-admin'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
@@ -11,10 +13,13 @@ export async function GET(
 ) {
   const params = await props.params
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.user || !['ADMIN', 'OPERATOR'].includes(session.user.role)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Verificar autenticação de admin ou operator
+    const authResult = await requireAdminOrOperator(request)
+    if (!authResult.success) {
+      return NextResponse.json(
+        { error: authResult.error },
+        { status: authResult.status }
+      )
     }
 
     const quote = await prisma.quote.findUnique({
@@ -71,10 +76,13 @@ export async function PATCH(
 ) {
   const params = await props.params
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.user || !['ADMIN', 'OPERATOR'].includes(session.user.role)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // Verificar autenticação de admin ou operator
+    const authResult = await requireAdminOrOperator(request)
+    if (!authResult.success) {
+      return NextResponse.json(
+        { error: authResult.error },
+        { status: authResult.status }
+      )
     }
 
     const body = await request.json()
@@ -118,10 +126,13 @@ export async function DELETE(
 ) {
   const params = await props.params
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    // DELETE requer apenas ADMIN (não OPERATOR)
+    const authResult = await requireAdmin(request)
+    if (!authResult.success) {
+      return NextResponse.json(
+        { error: authResult.error },
+        { status: authResult.status }
+      )
     }
 
     await prisma.quote.delete({
