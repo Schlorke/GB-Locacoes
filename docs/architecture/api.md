@@ -74,7 +74,57 @@ graph TB
 - **JWT Authentication** - Autenticação segura
 - **Rate Limiting** - Proteção contra abuso
 - **Error Handling** - Tratamento de erros consistente
-- **Documentation** - OpenAPI/Swagger ready
+- **Documentation** - OpenAPI/Swagger custom implementation
+- **Swagger UI** - Custom interface at `/api-docs`
+- **OpenAPI Spec** - Generated from JSDoc + Zod schemas
+
+---
+
+## 📋 **Documentação da API (Swagger/OpenAPI)**
+
+### **🎯 Implementação Custom**
+
+Nosso projeto usa uma **implementação custom de Swagger/OpenAPI** em vez de
+bibliotecas externas como `swagger-ui-react`, devido a incompatibilidades com
+React 19.
+
+### **🔧 Como Funciona**
+
+1. **JSDoc Comments**: Documentação inline nas rotas da API
+2. **Zod Schemas**: Validação e geração automática de schemas
+3. **Custom Generator**: `lib/openapi-generator.ts` gera especificação OpenAPI
+4. **Custom UI**: Interface personalizada em `/api-docs`
+
+### **📁 Arquivos de Implementação**
+
+```typescript
+// lib/openapi-generator.ts
+export function generateOpenAPISpec() {
+  return {
+    openapi: "3.0.0",
+    info: { title: "GB-Locações API", version: "1.0.0" },
+    servers: [
+      { url: "http://localhost:3000/api", description: "Development" },
+      { url: "https://gblocacoes.vercel.app/api", description: "Production" }
+    ]
+    // ... schemas e paths
+  }
+}
+```
+
+### **🚀 Acesso à Documentação**
+
+- **URL Local**: `http://localhost:3000/api-docs`
+- **URL Produção**: `https://gblocacoes.vercel.app/api-docs`
+- **Especificação**: `/openapi.json` (OpenAPI 3.0)
+
+### **✅ Vantagens da Implementação Custom**
+
+- **🎨 Branding**: Interface personalizada com identidade visual GB-Locações
+- **🔧 Controle Total**: Sem dependências externas problemáticas
+- **📱 React 19**: Compatibilidade total com versão mais recente
+- **⚡ Performance**: Sem overhead de bibliotecas desnecessárias
+- **🎯 Integração**: Perfeitamente integrado com nosso design system
 
 ---
 

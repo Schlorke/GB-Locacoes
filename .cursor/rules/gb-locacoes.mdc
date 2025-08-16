@@ -27,6 +27,7 @@ alwaysApply: true
 │   └── 📄 security.md           # Aspectos de segurança
 ├── 📁 features/                  # Funcionalidades específicas
 │   ├── 📄 admin-system.md       # Sistema admin COMPLETO
+│   ├── 📄 analytics-dashboard.md # Dashboard Analytics NOVO (JAN 2025)
 │   └── 📄 design-system.md      # Identidade visual + componentes
 ├── 📁 guides/                    # Guias específicos
 │   └── 📄 storybook.md          # Documentação Storybook
@@ -372,6 +373,16 @@ const MyForm = () => {
 - **Resend**: Emails
 - **Melhor Envio**: Frete
 - **ZapSign**: Assinaturas
+
+### **📊 Analytics e Monitoramento (NOVO - JAN 2025)**
+
+- **Dashboard Analytics**: `/admin/analytics` - Métricas em tempo real
+- **Sistema de Telemetria**: `lib/telemetry.ts` - Rastreamento simplificado
+- **Métricas de API**: `lib/metrics.ts` - Coleta automática de performance
+- **Security Monitoring**: `lib/security-monitoring.ts` - Detecção de ameaças
+- **API Instrumentation**: `lib/api-instrumentation.ts` - Instrumentação
+  automática
+- **OpenAPI Documentation**: `/api-docs` - Documentação interativa da API
 
 ### **Performance**
 

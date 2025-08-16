@@ -44,6 +44,19 @@
 **📌 Regra de Ouro**: SEMPRE consulte `docs/` antes de implementar
 funcionalidades!
 
+### 🆕 **RECURSOS IMPLEMENTADOS (JAN 2025)**
+
+- **📊 Dashboard de Analytics**: `/admin/analytics` - Monitoramento completo da
+  API
+- **🔧 Sistema de Telemetria**: Rastreamento de performance em tempo real
+- **📋 Documentação OpenAPI**: `/api-docs` - Interface custom interativa da API
+  (não swagger-ui-react)
+- **🛡️ Monitoramento de Segurança**: Detecção automática de ameaças
+- **📈 Métricas Avançadas**: 19 endpoints instrumentados com analytics
+
+👉 **Guia Completo**:
+[`docs/features/analytics-dashboard.md`](docs/features/analytics-dashboard.md)
+
 ### 🚨 **CORREÇÕES CRÍTICAS (DEZ 2024)**
 
 > ✅ **Projeto 100% ESTÁVEL** - Todos os problemas críticos resolvidos
@@ -116,8 +129,10 @@ de construção civil, desenvolvida com as tecnologias mais avançadas de
 - **📧 Email**: Resend, SendGrid
 - **🚚 Logística**: Melhor Envio
 - **☁️ Storage**: Supabase, Vercel Blob
-- **📊 Analytics**: Vercel Analytics
+- **📊 Analytics**: Vercel Analytics, Custom Metrics
 - **🔍 SEO**: Next.js SEO otimizado
+- **📋 API Docs**: OpenAPI/Swagger custom implementation
+- **🎨 Visual Testing**: Chromatic para regression testing
 
 ### 🏗️ Arquitetura de Sistema
 
@@ -421,8 +436,9 @@ useEffect(() => {
 - **Unit Tests** - Vitest + Testing Library
 - **Integration Tests** - API Routes
 - **E2E Tests** - Playwright
-- **Visual Tests** - Chromatic
-- **Accessibility Tests** - axe-core
+- **Visual Tests** - Chromatic (Visual Regression Testing)
+- **Accessibility Tests** - axe-core + Storybook a11y
+- **API Contract Tests** - OpenAPI validation
 
 ### 🚀 Comandos de Testes
 
@@ -440,7 +456,12 @@ pnpm test:e2e:ui                # Interface Playwright
 # Storybook
 pnpm storybook                  # Desenvolvimento
 pnpm build-storybook           # Build
-pnpm chromatic                 # Visual regression
+
+# Chromatic (Visual Regression Testing)
+pnpm chromatic                  # Publicar no Chromatic
+pnpm chromatic:test            # Teste sem falhar em mudanças
+pnpm chromatic:accept          # Aceitar mudanças automaticamente
+pnpm ci:chromatic              # Integração CI/CD
 ```
 
 ### 📊 Cobertura de Testes
@@ -502,6 +523,14 @@ open coverage/lcov-report/index.html
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Como contribuir
 - **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)** - Código de conduta
 
+### **🛠️ Ferramentas de Desenvolvimento**
+
+- **📋 API Documentation**: OpenAPI/Swagger custom em `/api-docs`
+- **🎨 Visual Testing**: Chromatic para regression testing
+- **📚 Component Library**: Storybook com acessibilidade
+- **🔍 Code Quality**: ESLint, Prettier, TypeScript strict
+- **🧪 Testing**: Vitest, Playwright, Contract testing
+
 > **🤖 Para IAs/Assistentes**: Leia **[AGENTS.md](./AGENTS.md)** PRIMEIRO antes
 > de qualquer implementação!
 
@@ -544,9 +573,17 @@ pnpm test:e2e              # Testes E2E
 ```bash
 pnpm storybook             # Storybook dev
 pnpm build-storybook       # Build Storybook
-pnpm chromatic             # Visual regression
 pnpm design-system:build-tokens    # Build tokens
 pnpm design-system:watch-tokens    # Watch tokens
+```
+
+### 🔍 Visual Testing (Chromatic)
+
+```bash
+pnpm chromatic             # Publicar no Chromatic
+pnpm chromatic:test        # Teste sem falhar em mudanças
+pnpm chromatic:accept      # Aceitar mudanças automaticamente
+pnpm ci:chromatic          # Integração CI/CD
 ```
 
 ### 🔍 Qualidade
