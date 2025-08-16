@@ -261,6 +261,16 @@ pnpm build
 - **Integrações atualizadas**: API docs e visual testing incluídos
 - **Status**: ✅ README completo e atualizado
 
+#### **🚨 CORREÇÃO CRÍTICA DE SEGURANÇA - RLS SUPABASE**
+
+- **Problema identificado**: 12 erros de RLS desabilitado no Supabase
+- **Script de correção**: `supabase-rls-fix.sql` criado com políticas completas
+- **Guia de execução**: `SUPABASE-RLS-FIX-GUIDE.md` com instruções passo a passo
+- **Segurança implementada**: Row Level Security em todas as tabelas públicas
+- **Políticas criadas**: 25+ políticas de segurança baseadas em roles
+  (ADMIN/CLIENT)
+- **Status**: ✅ Script pronto para execução no Supabase
+
 ---
 
 ## [2024-12-21] - CRITICAL FIXES & INFRASTRUCTURE
