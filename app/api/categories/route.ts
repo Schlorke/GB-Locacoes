@@ -101,7 +101,29 @@ export const revalidate = 0
  */
 export async function GET() {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    const { prisma, checkDatabaseConnection } = await import('@/lib/prisma')
+
+    // Verificar conectividade antes de prosseguir
+    const connectionCheck = await checkDatabaseConnection()
+    if (!connectionCheck.connected) {
+      console.error('Database connection failed:', connectionCheck.error)
+
+      return NextResponse.json(
+        {
+          error: 'Serviço temporariamente indisponível',
+          message: 'Problema de conectividade com o banco de dados',
+          retry_after: 30, // Sugerir retry em 30 segundos
+        },
+        {
+          status: 503,
+          headers: {
+            'Retry-After': '30',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+          },
+        }
+      )
+    }
+
     await prisma.$connect()
 
     const categories = await prisma.category.findMany({
@@ -120,9 +142,44 @@ export async function GET() {
     return NextResponse.json(categories)
   } catch (error) {
     console.error('Erro ao buscar categorias:', error)
-    return NextResponse.json(
-      { error: 'Erro interno do servidor' },
-      { status: 500 }
-    )
+
+    // Determinar tipo de erro e resposta apropriada
+    let statusCode = 500
+    let errorMessage = 'Erro interno do servidor'
+    let retryAfter = null
+
+    if (error instanceof Error) {
+      if (error.message?.includes('PrismaClientInitializationError')) {
+        statusCode = 503
+        errorMessage = 'Serviço temporariamente indisponível'
+        retryAfter = 60
+      } else if (error.message?.includes("Can't reach database server")) {
+        statusCode = 503
+        errorMessage = 'Problema de conectividade com o banco de dados'
+        retryAfter = 30
+      } else if (error.message?.includes('timeout')) {
+        statusCode = 504
+        errorMessage = 'Timeout na operação'
+        retryAfter = 15
+      }
+    }
+
+    const responseBody = {
+      error: errorMessage,
+      timestamp: new Date().toISOString(),
+    }
+
+    const headers: Record<string, string> = {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+    }
+
+    if (retryAfter) {
+      headers['Retry-After'] = retryAfter.toString()
+    }
+
+    return NextResponse.json(responseBody, {
+      status: statusCode,
+      headers,
+    })
   }
 }

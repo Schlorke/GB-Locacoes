@@ -8,6 +8,114 @@ e este projeto adere ao
 
 ## [2025-01-15] - ANALYTICS DASHBOARD & MAJOR IMPROVEMENTS + DOCUMENTATION FIXES
 
+## [2025-01-15] - CRÍTICO: CORREÇÃO DE PROBLEMAS DE BANCO DE DADOS EM PRODUÇÃO
+
+### 🚨 **PROBLEMA CRÍTICO RESOLVIDO** - Conectividade com Banco Supabase
+
+#### **Erro Identificado:**
+
+- **PrismaClientInitializationError**: Falha de conectividade com
+  `aws-0-us-east-1.pooler.supabase.com:5432`
+- **Status 500**: APIs `/api/equipments` e `/api/categories` falhando em
+  produção
+- **Causa**: Problemas de configuração de conexão e timeout
+
+#### **🔧 SOLUÇÕES IMPLEMENTADAS**
+
+##### **1. Health Check Aprimorado (`/api/health`)**
+
+- **Teste de conectividade**: Verificação automática de banco antes de responder
+- **Diagnóstico completo**: Status de variáveis de ambiente e configurações
+- **Timeout configurável**: 5 segundos para evitar travamentos
+- **Headers apropriados**: Status codes corretos (200/503) baseados na saúde do
+  sistema
+
+##### **2. Configuração Robusta do Prisma (`lib/prisma.ts`)**
+
+- **Handlers de erro**: Logging estruturado para produção
+- **Timeout configurável**: 30 segundos para operações de produção
+- **Monitoramento de queries**: Alertas para queries lentas (>1s)
+- **Funções de diagnóstico**: `checkDatabaseConnection()` e
+  `reconnectDatabase()`
+
+##### **3. APIs com Fallback Inteligente**
+
+- **Verificação prévia**: Teste de conectividade antes de executar queries
+- **Status codes apropriados**: 503 para problemas de conectividade, 504 para
+  timeout
+- **Headers de retry**: `Retry-After` para orientar clientes sobre quando tentar
+  novamente
+- **Cache control**: Headers apropriados para evitar cache de respostas de erro
+
+##### **4. Script de Diagnóstico (`scripts/diagnose-database.js`)**
+
+- **Verificação completa**: Variáveis de ambiente, Prisma, build e configurações
+- **Recomendações automáticas**: Sugestões baseadas no estado atual do sistema
+- **Comandos de recuperação**: Instruções específicas para resolver problemas
+- **Uso**: `pnpm diagnose:database`
+
+#### **📊 MELHORIAS DE RESILIÊNCIA**
+
+##### **Tratamento de Erros Específicos**
+
+```typescript
+// Detecção automática de tipos de erro
+if (error.message?.includes("PrismaClientInitializationError")) {
+  statusCode = 503 // Service Unavailable
+  retryAfter = 60 // Retry em 1 minuto
+} else if (error.message?.includes("Can't reach database server")) {
+  statusCode = 503 // Service Unavailable
+  retryAfter = 30 // Retry em 30 segundos
+}
+```
+
+##### **Headers de Resposta Inteligentes**
+
+```typescript
+headers: {
+  'Retry-After': retryAfter.toString(),
+  'Cache-Control': 'no-cache, no-store, must-revalidate'
+}
+```
+
+#### **🔍 COMANDOS DE DIAGNÓSTICO**
+
+```bash
+# Diagnóstico completo do banco
+pnpm diagnose:database
+
+# Verificar conectividade
+curl https://your-domain.com/api/health
+
+# Regenerar cliente Prisma
+pnpm db:generate
+
+# Build completo
+pnpm build
+```
+
+#### **📋 CHECKLIST DE VERIFICAÇÃO PARA PRODUÇÃO**
+
+- [ ] **Variáveis de ambiente** configuradas na Vercel
+- [ ] **DATABASE_URL** e **DIRECT_URL** corretos
+- [ ] **Cliente Prisma** regenerado (`pnpm db:generate`)
+- [ ] **Build** funcionando (`pnpm build`)
+- [ ] **Health check** respondendo (`/api/health`)
+- [ ] **APIs principais** funcionando (`/api/equipments`, `/api/categories`)
+
+#### **🚀 IMPACTO TÉCNICO**
+
+- **Resiliência**: APIs agora detectam problemas de conectividade
+  automaticamente
+- **UX**: Usuários recebem mensagens claras sobre problemas temporários
+- **Monitoramento**: Health check fornece visibilidade completa do sistema
+- **Debugging**: Script de diagnóstico acelera resolução de problemas
+- **Compliance**: Status codes HTTP apropriados para cada tipo de erro
+
+---
+
+## [2025-01-15] - ANALYTICS DASHBOARD & MAJOR IMPROVEMENTS + DOCUMENTATION FIXES
+
 ### 🆕 **NOVA FUNCIONALIDADE PRINCIPAL** - Dashboard de Analytics
 
 #### **📊 Dashboard de Analytics Completo (`/admin/analytics`)**
