@@ -1,6 +1,10 @@
-import { z } from 'zod';
-import { AccountSelectObjectSchema } from './objects/AccountSelect.schema';
-import { AccountIncludeObjectSchema } from './objects/AccountInclude.schema';
+import { z } from 'zod'
+import { AccountSelectObjectSchema } from './objects/AccountSelect.schema'
+import { AccountIncludeObjectSchema } from './objects/AccountInclude.schema'
 import { AccountWhereUniqueInputObjectSchema } from './objects/AccountWhereUniqueInput.schema'
 
-export const AccountDeleteOneSchema = z.object({ select: AccountSelectObjectSchema.optional(), include: AccountIncludeObjectSchema.optional(), where: AccountWhereUniqueInputObjectSchema  })
+export const AccountDeleteOneSchema = z.object({
+  select: AccountSelectObjectSchema.optional(),
+  include: AccountIncludeObjectSchema.optional(),
+  where: AccountWhereUniqueInputObjectSchema,
+})

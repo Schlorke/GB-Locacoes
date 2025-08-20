@@ -90,7 +90,8 @@ export default function EditarEquipamento() {
             pricePerDay: equipment.pricePerDay || 0,
             categoryId: equipment.categoryId || '',
             images: equipment.images || [],
-            isAvailable: equipment.available ?? true,
+            isAvailable: equipment.isAvailable ?? true,
+            specifications: equipment.specifications || {},
           })
         }
       } catch (error) {
