@@ -1,0 +1,105 @@
+<svg viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+  <!-- Definitions -->
+  <defs>
+    <radialGradient id="sunsetGradient" cx="75%" cy="20%" r="60%">
+      <stop offset="0%" stop-color="#facc15" stop-opacity="0.8" />
+      <stop offset="30%" stop-color="#f97316" stop-opacity="0.6" />
+      <stop offset="70%" stop-color="#ea580c" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#dc2626" stop-opacity="0.2" />
+    </radialGradient>
+    
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#facc15" stop-opacity="0.3" />
+      <stop offset="50%" stop-color="#f97316" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#ea580c" stop-opacity="0.5" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Sky -->
+  <rect width="1920" height="1080" fill="url(#skyGradient)" />
+  
+  <!-- Sun -->
+  <circle cx="1440" cy="250" r="80" fill="#facc15" opacity="0.7" />
+  <circle cx="1440" cy="250" r="120" fill="url(#sunsetGradient)" opacity="0.5" />
+  
+  <!-- Background Buildings -->
+  <g opacity="0.6">
+    <rect x="100" y="400" width="80" height="300" fill="#dc2626" opacity="0.7" />
+    <rect x="200" y="350" width="60" height="350" fill="#ea580c" opacity="0.8" />
+    <rect x="280" y="200" width="100" height="500" fill="#dc2626" opacity="0.7" />
+    <rect x="400" y="380" width="70" height="320" fill="#f97316" opacity="0.6" />
+    <rect x="500" y="320" width="90" height="380" fill="#ea580c" opacity="0.8" />
+    <rect x="620" y="360" width="50" height="340" fill="#dc2626" opacity="0.5" />
+    <rect x="690" y="300" width="80" height="400" fill="#b91c1c" opacity="0.6" />
+    <rect x="790" y="250" width="60" height="450" fill="#ea580c" opacity="0.7" />
+  </g>
+  
+  <!-- Building Windows -->
+  <g opacity="0.4">
+    <rect x="115" y="430" width="8" height="12" fill="#facc15" opacity="0.8" />
+    <rect x="125" y="430" width="8" height="12" fill="#facc15" opacity="0.6" />
+    <rect x="215" y="380" width="6" height="10" fill="#facc15" opacity="0.9" />
+    <rect x="225" y="380" width="6" height="10" fill="#facc15" opacity="0.5" />
+    <rect x="300" y="240" width="10" height="15" fill="#facc15" opacity="0.7" />
+    <rect x="315" y="240" width="10" height="15" fill="#facc15" opacity="0.9" />
+  </g>
+  
+  <!-- Construction Crane 1 -->
+  <g opacity="0.8">
+    <rect x="1200" y="600" width="20" height="200" fill="#111827" />
+    <rect x="1206" y="300" width="8" height="300" fill="#111827" />
+    <rect x="1080" y="296" width="200" height="8" fill="#111827" />
+    <line x1="1180" y1="304" x2="1180" y2="400" stroke="#374151" stroke-width="2" opacity="0.6" />
+    <rect x="1175" y="400" width="10" height="8" fill="#6b7280" />
+  </g>
+  
+  <!-- Construction Crane 2 -->
+  <g opacity="0.6">
+    <rect x="800" y="650" width="15" height="150" fill="#111827" />
+    <rect x="805" y="500" width="6" height="150" fill="#111827" />
+    <rect x="720" y="497" width="120" height="6" fill="#111827" />
+  </g>
+  
+  <!-- Scaffolding -->
+  <g opacity="0.7" stroke="#374151" stroke-width="3" fill="none">
+    <rect x="1400" y="500" width="80" height="120" />
+    <line x1="1420" y1="500" x2="1420" y2="620" />
+    <line x1="1440" y1="500" x2="1440" y2="620" />
+    <line x1="1460" y1="500" x2="1460" y2="620" />
+    <line x1="1400" y1="540" x2="1480" y2="540" />
+    <line x1="1400" y1="580" x2="1480" y2="580" />
+  </g>
+  
+  <!-- Construction Beams -->
+  <g opacity="0.5">
+    <rect x="1500" y="680" width="120" height="8" fill="#374151" />
+    <rect x="1520" y="688" width="80" height="8" fill="#374151" />
+    <rect x="1540" y="696" width="40" height="8" fill="#374151" />
+  </g>
+  
+  <!-- Workers Silhouettes -->
+  <g opacity="0.4">
+    <ellipse cx="1450" cy="495" rx="8" ry="12" fill="#111827" />
+    <rect x="1446" y="485" width="8" height="20" fill="#111827" />
+    <ellipse cx="1350" cy="645" rx="6" ry="10" fill="#111827" />
+    <rect x="1347" y="638" width="6" height="15" fill="#111827" />
+  </g>
+  
+  <!-- Dust Particles -->
+  <g opacity="0.2">
+    <circle cx="1300" cy="650" r="3" fill="#d1d5db" />
+    <circle cx="1320" cy="660" r="2" fill="#d1d5db" />
+    <circle cx="1280" cy="640" r="2.5" fill="#d1d5db" />
+    <circle cx="1450" cy="620" r="2" fill="#d1d5db" />
+    <circle cx="1480" cy="610" r="1.5" fill="#d1d5db" />
+  </g>
+  
+  <!-- Floating Particles -->
+  <g opacity="0.3">
+    <circle cx="200" cy="150" r="2" fill="#facc15" />
+    <circle cx="400" cy="200" r="1.5" fill="#f97316" />
+    <circle cx="800" cy="180" r="1" fill="#facc15" />
+    <circle cx="1200" cy="220" r="2" fill="#f97316" />
+    <circle cx="1600" cy="160" r="1.5" fill="#facc15" />
+  </g>
+</svg>

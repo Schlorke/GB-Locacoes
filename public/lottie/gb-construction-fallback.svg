@@ -1,0 +1,31 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Skyline Background -->
+  <path d="M0 400L320 350L640 380L960 320L1280 360L1600 340L1920 360V1080H0V400Z" fill="#ea580c" fill-opacity="0.3"/>
+  
+  <!-- Buildings Mid -->
+  <rect x="240" y="420" width="60" height="120" fill="#ea580c" fill-opacity="0.4"/>
+  <rect x="320" y="390" width="80" height="150" fill="#ea580c" fill-opacity="0.4"/>
+  <rect x="420" y="440" width="50" height="100" fill="#ea580c" fill-opacity="0.4"/>
+  
+  <!-- More buildings -->
+  <rect x="680" y="400" width="70" height="140" fill="#ea580c" fill-opacity="0.35"/>
+  <rect x="770" y="380" width="60" height="160" fill="#ea580c" fill-opacity="0.35"/>
+  <rect x="850" y="420" width="55" height="120" fill="#ea580c" fill-opacity="0.35"/>
+  
+  <!-- Crane -->
+  <rect x="1196" y="200" width="8" height="200" fill="#fbbf24" fill-opacity="0.6"/>
+  <rect x="1140" y="197" width="120" height="6" fill="#fbbf24" fill-opacity="0.6"/>
+  
+  <!-- Scaffolding -->
+  <g stroke="#111111" stroke-width="4" fill="none" opacity="0.7">
+    <path d="M550 300L650 300M550 350L650 350M550 400L650 400"/>
+    <path d="M550 300L550 400M600 300L600 400M650 300L650 400"/>
+  </g>
+  
+  <!-- Dust particles -->
+  <circle cx="360" cy="440" r="3" fill="#fbbf24" fill-opacity="0.2"/>
+  <circle cx="760" cy="490" r="2" fill="#fbbf24" fill-opacity="0.2"/>
+  <circle cx="560" cy="380" r="2.5" fill="#fbbf24" fill-opacity="0.2"/>
+  <circle cx="1100" cy="420" r="2" fill="#fbbf24" fill-opacity="0.2"/>
+  <circle cx="480" cy="460" r="2.5" fill="#fbbf24" fill-opacity="0.2"/>
+</svg>

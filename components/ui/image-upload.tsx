@@ -72,6 +72,9 @@ interface SortableImageProps {
   onRemove: () => void
   isPrincipal: boolean
   isDragActive: boolean
+  goToImage?: (index: number) => void
+  onImageIndexChange?: (index: number) => void
+  currentImageIndex?: number
 }
 
 function DropIndicator() {
@@ -91,6 +94,9 @@ function SortableImage({
   onRemove,
   isPrincipal,
   isDragActive: _isDragActive,
+  goToImage,
+  onImageIndexChange,
+  currentImageIndex,
 }: SortableImageProps) {
   const {
     attributes,
@@ -116,7 +122,13 @@ function SortableImage({
     <div ref={setNodeRef} style={style} className="relative group">
       {/* Main Container */}
       <div
-        className={`bg-white border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow ${isDragging ? 'shadow-xl border-blue-500' : ''}`}
+        className={`bg-white border-2 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 ${
+          isDragging
+            ? 'shadow-xl border-blue-500'
+            : index === currentImageIndex
+              ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
+              : 'border-gray-200 hover:border-gray-300'
+        }`}
       >
         {/* Drag Handle */}
         <div
@@ -129,7 +141,19 @@ function SortableImage({
         </div>
 
         {/* Image Container */}
-        <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+        <div
+          className="aspect-video bg-muted rounded-lg overflow-hidden cursor-pointer"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            // Usar a mesma lógica das miniaturas pequenas
+            if (goToImage) {
+              goToImage(index)
+            } else if (onImageIndexChange) {
+              onImageIndexChange(index)
+            }
+          }}
+        >
           <StorybookImage
             src={
               url ||
@@ -261,12 +285,23 @@ export function ImageUpload({
       })
     } catch (error) {
       console.error('Upload error:', error)
-      toast({
-        title: 'Erro no upload',
-        description:
-          error instanceof Error ? error.message : 'Erro desconhecido',
-        variant: 'destructive',
-      })
+
+      // Verificar se é erro de configuração do Supabase
+      if (error instanceof Error && error.message.includes('Supabase')) {
+        toast({
+          title: 'Configuração necessária',
+          description:
+            'Configure as variáveis de ambiente do Supabase para fazer upload de imagens',
+          variant: 'destructive',
+        })
+      } else {
+        toast({
+          title: 'Erro no upload',
+          description:
+            error instanceof Error ? error.message : 'Erro desconhecido',
+          variant: 'destructive',
+        })
+      }
     } finally {
       setIsUploading(false)
       // Reset input
@@ -428,56 +463,47 @@ export function ImageUpload({
               )}
             </div>
           </div>
+        </div>
+      )}
 
-          {/* Miniaturas */}
-          {images.length > 1 && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
+      {/* Reordenação de Imagens com Drag & Drop */}
+      {images.length > 0 && (
+        <div className="space-y-3">
+          <Label className="block text-sm font-medium">
+            Imagens ({images.length}/{maxImages})
+          </Label>
+          <p className="text-xs text-muted-foreground">
+            Arraste as imagens para reordenar. A primeira imagem será a
+            principal.
+          </p>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={images.map((_, index) => `image-${index}`)}
+              strategy={rectSortingStrategy}
             >
-              {images.slice(0, 6).map((image: string, index: number) => (
-                <motion.button
-                  key={index}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    if (goToImage) {
-                      goToImage(index)
-                    } else {
-                      if (_onImageIndexChange) _onImageIndexChange(index)
-                    }
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  title={`Visualizar imagem ${index + 1}`}
-                  aria-label={`Selecionar imagem ${index + 1}`}
-                  className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 focus:outline-none ${
-                    index === currentImageIndex
-                      ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <StorybookImage
-                    src={image}
-                    alt={`Miniatura ${index + 1}`}
-                    width={64}
-                    height={48}
-                    className="w-full h-full object-cover"
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {images.map((url, index) => (
+                  <SortableImage
+                    key={`image-${index}`}
+                    id={`image-${index}`}
+                    url={url}
+                    index={index}
+                    onRemove={() => removeImage(index)}
+                    isPrincipal={index === 0}
+                    isDragActive={activeId !== null}
+                    goToImage={goToImage}
+                    onImageIndexChange={_onImageIndexChange}
+                    currentImageIndex={currentImageIndex}
                   />
-                </motion.button>
-              ))}
-              {images.length > 6 && (
-                <div className="flex-shrink-0 w-16 h-12 rounded-lg bg-gray-100 border-2 border-gray-200 flex items-center justify-center">
-                  <span className="text-xs font-medium text-gray-500">
-                    +{images.length - 6}
-                  </span>
-                </div>
-              )}
-            </motion.div>
-          )}
+                ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         </div>
       )}
 
@@ -572,44 +598,6 @@ export function ImageUpload({
           />
         </div>
       </div>
-
-      {/* Preview das imagens com drag and drop */}
-      {images.length > 0 && (
-        <div className="space-y-2">
-          <Label className="block text-sm font-medium">
-            Imagens ({images.length}/{maxImages})
-          </Label>
-          <p className="text-xs text-muted-foreground">
-            Arraste as imagens para reordenar. A primeira imagem será a
-            principal.
-          </p>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={images.map((_, index) => `image-${index}`)}
-              strategy={rectSortingStrategy}
-            >
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {images.map((url, index) => (
-                  <SortableImage
-                    key={`image-${index}`}
-                    id={`image-${index}`}
-                    url={url}
-                    index={index}
-                    onRemove={() => removeImage(index)}
-                    isPrincipal={index === 0}
-                    isDragActive={activeId !== null}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
-        </div>
-      )}
     </div>
   )
 }

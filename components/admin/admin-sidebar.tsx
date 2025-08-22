@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import {
-  BarChart3,
   ChevronsLeft,
   ChevronsRight,
   FileText,
@@ -29,7 +28,6 @@ const navItems = [
   { href: '/admin/equipamentos', icon: PackageSearch, label: 'Equipamentos' },
   { href: '/admin/categorias', icon: ListChecks, label: 'Categorias' },
   { href: '/admin/orcamentos', icon: FileText, label: 'Orçamentos' },
-  { href: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
   { href: '/admin/settings', icon: Settings, label: 'Configurações' },
 ]
 

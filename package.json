@@ -134,6 +134,7 @@
     "happy-dom": "latest",
     "input-otp": "latest",
     "jsonwebtoken": "^9.0.2",
+    "lottie-web": "^5.13.0",
     "lucide-react": "^0.539.0",
     "next": "15.4.6",
     "next-auth": "4.24.11",
