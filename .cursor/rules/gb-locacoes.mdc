@@ -1,7 +1,7 @@
 ---
 description:
   GB-Locacoes - Sistema de Locações de Equipamentos para Construção Civil
-globs: ['**/*.{ts,tsx,js,jsx,md,mdx,json,css,scss}']
+globs: ['**/*.{ts,tsx,js,jsx,md,mdx,json,css,scss,env,env.*}']
 alwaysApply: true
 ---
 

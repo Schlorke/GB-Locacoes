@@ -514,3 +514,75 @@ pnpm build
 - [🤝 Como Contribuir](./CONTRIBUTING.md)
 - [🐛 Reportar Bugs](https://github.com/GBLocacoes/GB-Locacoes/issues)
 - [✨ Solicitar Features](https://github.com/GBLocacoes/GB-Locacoes/issues)
+
+## [2025-01-XX] - Correção de Scroll - Página Sobre
+
+### Fixed 🐛
+
+- **Problema de scroll travando no topo**: Corrigido bug na página `/sobre` que
+  impedia o scroll normal e travava a página no topo
+- **Conflito de animações**: Removidos estilos inline problemáticos que causavam
+  travamento durante inicialização das animações
+- **Scroll em dispositivos móveis**: Corrigido problema de scroll não funcional
+  em dispositivos móveis na página sobre
+- **Lock de posição**: Resolvido problema que forçava a página a permanecer no
+  topo durante carregamento das animações
+
+### Changed 🔄
+
+- **Página sobre otimizada**: Removidos estilos inline `opacity: 0` e
+  `transform` que causavam problemas de scroll
+- **Sistema de animações**: Mantidas classes CSS para animações via scroll
+  reveal, mas sem interferir no scroll da página
+- **CSS global**: Adicionadas regras específicas para garantir scroll funcional
+  na página sobre
+
+### Technical Details 🔧
+
+- **Arquivo modificado**: `app/sobre/page.tsx` - Removidos estilos inline
+  problemáticos
+- **CSS adicionado**: `app/globals.css` - Regras específicas para correção de
+  scroll
+- **Classe CSS**: Adicionada classe `.sobre-page` com regras de scroll
+  otimizadas
+- **Compatibilidade**: Mantida funcionalidade de animações via sistema scroll
+  reveal existente
+
+---
+
+## [2024-12-20] - Correções e Melhorias
+
+### Added ✨
+
+- Componente AdminPageHeader para padronização
+- Template base para páginas administrativas
+- Documentação completa em docs/features/admin-system.md
+- **Estilização completa da página Dashboard Admin** com design system
+  consistente
+
+### Changed 🔄
+
+- Reorganizada estrutura de documentação em docs/
+- Atualizado README.md com nova navegação
+- Melhorado protocolo anti-alucinação para IAs
+- **Paginação movida para baixo dos equipamentos** na página admin de
+  equipamentos
+- **Dashboard Admin completamente redesenhado** seguindo padrão das outras
+  páginas admin
+- **Animações da página Dashboard padronizadas** para ficarem iguais às outras
+  páginas admin
+
+### Fixed 🐛
+
+- Corrigido problema de compatibilidade Prisma 6.14.0
+- Removidas duplicatas na documentação
+- **Scroll secundário removido** da página sobre
+- **Travamento de scroll corrigido** da página sobre
+- **Erros de linter corrigidos** na página Dashboard (props duplicadas)
+
+### Security 🔐
+
+- Implementado middleware de autenticação admin
+- Validação aprimorada com Zod schemas
+
+## [2024-12-XX] - Atualizações Anteriores

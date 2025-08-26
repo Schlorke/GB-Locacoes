@@ -95,7 +95,6 @@ construção civil.
 
 ```tsx
 import ParallaxLottie from "@/components/hero/ParallaxLottie"
-
 ;<ParallaxLottie
   src="/lottie/gb-construction.json"
   fallbackSrc="/lottie/gb-construction-fallback.svg"

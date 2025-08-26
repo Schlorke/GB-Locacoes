@@ -289,9 +289,9 @@ export function ImageUpload({
       // Verificar se é erro de configuração do Supabase
       if (error instanceof Error && error.message.includes('Supabase')) {
         toast({
-          title: 'Configuração necessária',
+          title: 'Configuração do Supabase necessária',
           description:
-            'Configure as variáveis de ambiente do Supabase para fazer upload de imagens',
+            'Substitua os valores placeholder no arquivo .env.local pelos valores reais do seu projeto Supabase',
           variant: 'destructive',
         })
       } else {

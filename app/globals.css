@@ -189,14 +189,47 @@
       0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   }
 
-  /* Modal category buttons - remove focus ring completely */
-  .category-modal-button:focus,
-  .category-modal-button:focus-visible,
-  .category-modal-button[aria-controls]:focus,
-  .category-modal-button[aria-controls]:focus-visible {
+  /* NUCLEAR OPTION: Force identical styles for category modal buttons */
+  .category-modal-button-forced {
+    /* Reset all inherited styles */
+    all: unset !important;
+    /* Force consistent base styles */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important; /* 8px gap */
+    white-space: nowrap !important;
+    border-radius: 0.5rem !important; /* rounded-lg */
+    font-size: 0.75rem !important; /* text-xs */
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    /* Exact dimensions and spacing */
+    height: 2rem !important; /* h-8 */
+    padding-left: 0.75rem !important; /* px-3 */
+    padding-right: 0.75rem !important; /* px-3 */
+    /* Consistent styling */
+    border: 1px solid rgb(203 213 225) !important; /* border-slate-300 */
+    background-color: transparent !important;
+    color: rgb(15 23 42) !important; /* text-slate-900 */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Focus states - remove all focus styles */
+  .category-modal-button-forced:focus,
+  .category-modal-button-forced:focus-visible,
+  .category-modal-button-forced[aria-controls]:focus,
+  .category-modal-button-forced[aria-controls]:focus-visible {
     outline: none !important;
-    box-shadow: none !important;
-    border-color: inherit !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Hover states - identical for both buttons */
+  .category-modal-button-forced:hover {
+    background-color: white !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    border-color: rgb(203 213 225) !important;
   }
 
   /* Icon selector buttons - black focus ring */
@@ -1115,4 +1148,134 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 .filter-active {
   border-color: rgb(251 146 60) !important; /* border-orange-300 */
   background-color: rgb(255 247 237) !important; /* bg-orange-50 */
+}
+
+/* =============================== */
+/* 16. CORREÇÃO DE SCROLL - PÁGINA SOBRE */
+/* =============================== */
+
+/* REMOVER SCROLL SECUNDÁRIO - Deixar apenas o scroll principal da página */
+.sobre-page {
+  /* NÃO criar scroll secundário */
+  overflow: visible !important;
+  position: relative !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
+/* Corrigir problemas de scroll em dispositivos móveis */
+@media (max-width: 768px) {
+  .sobre-page {
+    /* NÃO criar scroll secundário */
+    overflow: visible !important;
+    position: relative !important;
+    height: auto !important;
+  }
+}
+
+/* Garantir que elementos com position: fixed não interfiram no scroll */
+header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.8) !important;
+}
+
+/* Corrigir problemas de scroll em elementos com overflow hidden */
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+/* Garantir que o body tenha scroll funcional */
+body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  position: relative !important;
+  height: auto !important;
+}
+
+/* Corrigir problemas de scroll em elementos com min-h-screen */
+.min-h-screen {
+  min-height: 100vh !important;
+  /* NÃO forçar overflow - deixar o scroll principal funcionar */
+  position: relative !important;
+  height: auto !important;
+}
+
+/* CORREÇÃO CRÍTICA: NÃO criar scroll secundário na página sobre */
+.sobre-page * {
+  /* NÃO forçar overflow - deixar o scroll principal funcionar */
+  pointer-events: auto !important;
+}
+
+.sobre-page .min-h-screen {
+  /* NÃO criar scroll secundário */
+  overflow: visible !important;
+  position: relative !important;
+  height: auto !important;
+}
+
+/* NÃO forçar scroll secundário em elementos da página sobre */
+.sobre-page .material-card,
+.sobre-page .benefit-card,
+.sobre-page .cta-section {
+  /* NÃO forçar overflow - deixar o scroll principal funcionar */
+  pointer-events: auto !important;
+  position: relative !important;
+}
+
+/* CORREÇÃO FINAL: Garantir que não há scroll secundário em nenhum elemento */
+* {
+  /* NÃO criar scroll secundário desnecessário */
+  scrollbar-width: thin;
+  scrollbar-color: #64748b #334155;
+}
+
+/* Garantir que apenas o body tenha scroll */
+html, body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* NÃO permitir scroll em elementos internos */
+div, section, article {
+  overflow: visible !important;
+}
+
+/* CORREÇÃO CRÍTICA: Garantir que não há scroll secundário na página sobre */
+.min-h-screen {
+  overflow: visible !important;
+  position: relative !important;
+  height: auto !important;
+}
+
+/* NÃO permitir scroll em elementos específicos */
+.material-card,
+.benefit-card,
+.cta-section,
+.hero-title,
+.hero-image,
+.section-title,
+.section-subtitle {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* CORREÇÃO FINAL: Garantir que o scroll principal funcione perfeitamente */
+body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  scroll-behavior: smooth !important;
+}
+
+/* NÃO permitir scroll em elementos aninhados */
+div > div {
+  overflow: visible !important;
 }
