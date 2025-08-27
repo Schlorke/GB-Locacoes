@@ -14,7 +14,7 @@ export async function GET(
   const params = await props.params
   try {
     // Verificar autenticação de admin ou operator
-    const authResult = await requireAdminOrOperator(request)
+    const authResult = await requireAdminOrOperator()
     if (!authResult.success) {
       return NextResponse.json(
         { error: authResult.error },
@@ -77,7 +77,7 @@ export async function PATCH(
   const params = await props.params
   try {
     // Verificar autenticação de admin ou operator
-    const authResult = await requireAdminOrOperator(request)
+    const authResult = await requireAdminOrOperator()
     if (!authResult.success) {
       return NextResponse.json(
         { error: authResult.error },
@@ -127,7 +127,7 @@ export async function DELETE(
   const params = await props.params
   try {
     // DELETE requer apenas ADMIN (não OPERATOR)
-    const authResult = await requireAdmin(request)
+    const authResult = await requireAdmin()
     if (!authResult.success) {
       return NextResponse.json(
         { error: authResult.error },

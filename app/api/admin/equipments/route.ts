@@ -330,7 +330,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Verificar autenticação de admin
-    const adminResult = await requireAdmin(request)
+    const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(
         { error: adminResult.error },
@@ -494,7 +494,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verificar autenticação de admin
-    const adminResult = await requireAdmin(request)
+    const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(
         { error: adminResult.error },

@@ -138,6 +138,23 @@ Encontrou algo confuso ou desatualizado?
   [Inicie uma discussão](https://github.com/GBLocacoes/GB-Locacoes/discussions)
 - 📧 Email: dev@gblocacoes.com.br
 
+## 🔧 **Problemas Críticos Resolvidos**
+
+### **📋 Resolução Completa - Agosto 2025**
+
+- **Documento**:
+  [troubleshooting/complete-resolution-august-2025.md](./troubleshooting/complete-resolution-august-2025.md)
+- **Status**: ✅ **TODOS OS PROBLEMAS RESOLVIDOS**
+- **Data**: 27 de Agosto de 2025
+- **Resumo**: API 503, TypeScript, Imports, Validações - **Sistema 100%
+  Operacional**
+
+### **📋 Índice Completo de Troubleshooting**
+
+- **Central**: [troubleshooting/README.md](./troubleshooting/README.md)
+- **Ferramentas**: Scripts automatizados em `scripts/validate-*.js`
+- **Histórico**: Ver seção completa no [CHANGELOG.md](../CHANGELOG.md)
+
 ---
 
 _Esta documentação é mantida pela equipe GB-Locações e pela comunidade.

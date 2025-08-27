@@ -205,7 +205,7 @@ export async function GET(request: NextRequest) {
     await prisma.$connect()
 
     // Verificar autenticação de admin ou operator
-    const authResult = await requireAdminOrOperator(request)
+    const authResult = await requireAdminOrOperator()
     if (!authResult.success) {
       return NextResponse.json(
         { error: authResult.error },

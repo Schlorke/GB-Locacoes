@@ -149,7 +149,7 @@ describe('🔍 Zod Schema Validation', () => {
       expect(result.success).toBe(false)
 
       if (!result.success) {
-        const emailError = result.error.issues.find((issue) =>
+        const emailError = result.error.issues.find((issue: any) =>
           issue.path.includes('customerEmail')
         )
         expect(emailError).toBeDefined()
@@ -169,7 +169,7 @@ describe('🔍 Zod Schema Validation', () => {
       expect(result.success).toBe(false)
 
       if (!result.success) {
-        const itemsError = result.error.issues.find((issue) =>
+        const itemsError = result.error.issues.find((issue: any) =>
           issue.path.includes('items')
         )
         expect(itemsError).toBeDefined()

@@ -29,7 +29,7 @@ const CategorySchema = z
   .strict()
 
 // GET /api/admin/categories - List all categories
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const { prisma } = await import('@/lib/prisma')
     const { requireAdmin } = await import('@/middlewares/require-admin')
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     await prisma.$connect()
 
     // Verificar autenticação de admin
-    const adminResult = await requireAdmin(request)
+    const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(
         { error: adminResult.error },
@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     await prisma.$connect()
 
     // Verificar autenticação de admin
-    const adminResult = await requireAdmin(request)
+    const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(
         { error: adminResult.error },
