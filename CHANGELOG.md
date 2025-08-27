@@ -12,18 +12,27 @@ e este projeto adere ao
 
 - Atualizada dependência `@types/react` de 19.1.11 para 19.1.12
 - Atualizada dependência `svelte` de 5.38.5 para 5.38.6
+- **Atualizado Prisma de 6.13.0 para 6.15.0** - ✅ Compatibilidade confirmada
+  com Next.js 15.5.2
 
 ### Fixed 🐛
 
-- Corrigidos warnings do Turbopack/Webpack adicionando configuração
-  `experimental.turbo` no `next.config.mjs`
+- Corrigidos warnings do Turbopack/Webpack atualizando configuração para
+  `experimental.turbopack` no `next.config.mjs`
 - Removidas variáveis não utilizadas em `lib/prisma.ts` (ESLint warnings)
 - Build funcionando corretamente após atualizações
+- **Resolvidos problemas de compatibilidade do Prisma** - versão 6.15.0 funciona
+  perfeitamente
+- Corrigido carregamento de variáveis de ambiente no script
+  `post-prisma-generate.js` - `NODE_ENV` agora é carregado corretamente
+- **Resolvido problema de reinicializações constantes do servidor** -
+  configuração Webpack/Turbopack otimizada para evitar conflitos
 
 ### Security 🔐
 
-- Mantidas versões estáveis do Prisma (6.13.0) e Tailwind CSS (3.4.17) conforme
-  diretrizes de compatibilidade
+- Verificada compatibilidade do Prisma 6.15.0 com Next.js 15.5.2 - ✅ APROVADO
+- Mantida versão estável do Tailwind CSS (3.4.17) conforme diretrizes
+- Backup criado antes da atualização para segurança
 - Verificada compatibilidade com documentação em
   `docs/references/dependencies.md`
 

@@ -17,19 +17,24 @@ export async function ensurePrismaInitialized(): Promise<void> {
 
   initializationPromise = (async () => {
     try {
-      console.log('[Prisma Middleware] Ensuring Prisma Client is initialized...')
-      
+      console.log(
+        '[Prisma Middleware] Ensuring Prisma Client is initialized...'
+      )
+
       // Verificar se o Prisma Client está disponível
       const { getPrisma } = await import('@/lib/prisma')
       const prisma = await getPrisma()
-      
+
       // Testar conexão
       await prisma.$queryRaw`SELECT 1`
-      
+
       isInitialized = true
       console.log('[Prisma Middleware] Prisma Client initialized successfully')
     } catch (error) {
-      console.error('[Prisma Middleware] Failed to initialize Prisma Client:', error)
+      console.error(
+        '[Prisma Middleware] Failed to initialize Prisma Client:',
+        error
+      )
       initializationPromise = null
       throw error
     }
@@ -41,7 +46,9 @@ export async function ensurePrismaInitialized(): Promise<void> {
 /**
  * Higher-order function para envolver handlers de API com inicialização do Prisma
  */
-export function withPrisma<T extends (...args: unknown[]) => unknown>(handler: T): T {
+export function withPrisma<T extends (...args: unknown[]) => unknown>(
+  handler: T
+): T {
   return (async (...args: unknown[]) => {
     await ensurePrismaInitialized()
     return handler(...args)

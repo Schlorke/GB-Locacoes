@@ -1,8 +1,27 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+// Carregar variáveis de ambiente do arquivo .env
+try {
+  const envPath = path.join(process.cwd(), '.env')
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8')
+    envContent.split('\n').forEach((line) => {
+      const [key, ...values] = line.split('=')
+      if (key && values.length > 0) {
+        const value = values.join('=').trim()
+        if (value && !process.env[key]) {
+          process.env[key] = value.replace(/^["']|["']$/g, '') // Remove aspas
+        }
+      }
+    })
+  }
+} catch (error) {
+  console.log('[post-prisma] ⚠️ Não foi possível carregar .env:', error.message)
+}
+
 console.log('[post-prisma] 🚀 Iniciando geração de validações...')
-console.log('[post-prisma] NODE_ENV:', process.env.NODE_ENV)
+console.log('[post-prisma] NODE_ENV:', process.env.NODE_ENV || 'development')
 console.log('[post-prisma] Working directory:', process.cwd())
 
 const validationsIndexContent = `import { z } from 'zod'

@@ -10,7 +10,7 @@ export async function GET(
   try {
     // Garantir que o Prisma está inicializado
     await ensurePrismaInitialized()
-    
+
     const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(

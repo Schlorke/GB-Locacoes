@@ -90,10 +90,10 @@ pnpm update tailwindcss
 
 ### 🗄️ **Database & ORM**
 
-| Dependência        | Versão Estável | Status     | Notas                        |
-| ------------------ | -------------- | ---------- | ---------------------------- |
-| **@prisma/client** | **6.13.0**     | ✅ Estável | ⚠️ NÃO atualizar para 6.14.0 |
-| **prisma**         | **6.13.0**     | ✅ Estável | ⚠️ NÃO atualizar para 6.14.0 |
+| Dependência        | Versão Estável | Status     | Notas                              |
+| ------------------ | -------------- | ---------- | ---------------------------------- |
+| **@prisma/client** | **6.15.0**     | ✅ Estável | ✅ Compatível com Next.js 15.5.2   |
+| **prisma**         | **6.15.0**     | ✅ Estável | ✅ Problemas anteriores resolvidos |
 
 ### 🎨 **Styling & UI**
 

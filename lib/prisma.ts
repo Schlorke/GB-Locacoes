@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 
 declare global {
   var __prisma: PrismaClient | undefined
@@ -8,22 +8,24 @@ let prismaInstance: PrismaClient | undefined
 
 const createPrismaClient = async (): Promise<PrismaClient> => {
   console.log('[Prisma] Creating new client instance')
-  
+
   // Verificar se DATABASE_URL existe
   if (!process.env.DATABASE_URL) {
     console.error('[Prisma] DATABASE_URL not found in environment variables')
-    console.error('[Prisma] Available env vars:', Object.keys(process.env).filter(k => k.includes('DATABASE')))
+    console.error(
+      '[Prisma] Available env vars:',
+      Object.keys(process.env).filter((k) => k.includes('DATABASE'))
+    )
     throw new Error('DATABASE_URL environment variable is required')
   }
 
   console.log('[Prisma] DATABASE_URL found, creating client...')
 
   try {
-    // Import dinâmico para evitar problemas durante o build
-    const { PrismaClient } = await import('@prisma/client')
-    
+    // ABORDAGEM SIMPLES E DIRETA - volta ao básico
     const client = new PrismaClient({
-      log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+      log:
+        process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
       datasources: {
         db: {
           url: process.env.DATABASE_URL,
@@ -58,15 +60,15 @@ export const getPrisma = async (): Promise<PrismaClient> => {
   // Criar nova instância
   try {
     prismaInstance = await createPrismaClient()
-    
+
     if (process.env.NODE_ENV !== 'production') {
       globalForPrisma.prisma = prismaInstance
     }
-    
+
     return prismaInstance
   } catch (error) {
     console.error('[Prisma] Failed to initialize client:', error)
-    
+
     // Em ambientes de build, tentar uma vez mais
     if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
       console.log('[Prisma] Retrying initialization for production/Vercel...')
@@ -78,7 +80,7 @@ export const getPrisma = async (): Promise<PrismaClient> => {
         throw retryError
       }
     }
-    
+
     throw error
   }
 }
@@ -87,7 +89,7 @@ export const getPrisma = async (): Promise<PrismaClient> => {
 export const prisma = new Proxy({} as PrismaClient, {
   get() {
     throw new Error('Use getPrisma() instead of direct prisma access')
-  }
+  },
 })
 
 // Função para diagnóstico de problemas de deployment
