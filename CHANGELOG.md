@@ -6,6 +6,34 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-08-27] - VERCEL DEPLOY FIX + CONFIGURAÇÕES
+
+### 🚀 **CORREÇÕES PARA DEPLOY NA VERCEL**
+
+#### **Problemas Identificados e Soluções** ✅ **DIAGNOSTICADO**
+
+- **Problema**: Erro de build na Vercel - "Prisma Client did not initialize yet"
+- **Causa**: Variáveis de ambiente não configuradas na plataforma Vercel
+- **Solução**: Guia completo criado (`vercel-deploy-guide.md`)
+- **TypeScript**: Reabilitada verificação no build (`ignoreBuildErrors: false`)
+- **Build Local**: ✅ Testado e funcionando (34 páginas geradas)
+
+#### **Configurações Críticas para Vercel**
+
+- **DATABASE_URL**: Obrigatória para Prisma
+- **NEXTAUTH_SECRET**: Obrigatória para autenticação
+- **NEXTAUTH_URL**: DEVE ser atualizada para URL de produção
+- **Supabase URLs**: Todas as chaves públicas e privadas
+
+#### **Guia de Deploy**
+
+- **Arquivo**: `vercel-deploy-guide.md` - Instruções passo a passo
+- **Build Command**: `pnpm run build` (já configurado)
+- **Scripts**: Prebuild e postbuild configurados corretamente
+- **Engines**: Prisma engines copiados automaticamente
+
+---
+
 ## [2025-08-27] - PACKAGE UPDATES + MANUTENÇÃO
 
 ### 📦 **ATUALIZAÇÕES DE DEPENDÊNCIAS**

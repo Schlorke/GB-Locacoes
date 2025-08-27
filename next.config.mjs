@@ -4,7 +4,7 @@ const nextConfig = {
     ignoreDuringBuilds: false,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false, // Mudança: habilitar verificação de TypeScript no build
   },
   images: {
     unoptimized: true,
