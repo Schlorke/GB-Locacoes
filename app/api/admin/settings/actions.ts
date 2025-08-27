@@ -1,13 +1,14 @@
 'use server'
 
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { getPrisma } from '@/lib/prisma'
 import { SettingsInput, SettingsSchema } from '@/schemas/settings.schema'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
 
 export async function getSettings() {
   try {
+    const prisma = await getPrisma()
     // Busca a primeira configuração ou cria uma padrão
     let settings = await prisma.setting.findFirst()
 
@@ -64,6 +65,7 @@ export async function getSettings() {
 
 export async function updateSettings(data: SettingsInput) {
   try {
+    const prisma = await getPrisma()
     // Verificar autenticação
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== 'ADMIN') {
@@ -173,6 +175,7 @@ export async function updateSettings(data: SettingsInput) {
 
 export async function toggleMaintenanceMode(enabled: boolean) {
   try {
+    const prisma = await getPrisma()
     // Verificar autenticação
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== 'ADMIN') {

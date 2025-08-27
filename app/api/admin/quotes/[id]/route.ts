@@ -3,7 +3,7 @@ import {
   requireAdmin,
   requireAdminOrOperator,
 } from '@/middlewares/require-admin'
-import { prisma } from '@/lib/prisma'
+import { getPrisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,6 +13,7 @@ export async function GET(
 ) {
   const params = await props.params
   try {
+    const prisma = await getPrisma()
     // Verificar autenticação de admin ou operator
     const authResult = await requireAdminOrOperator()
     if (!authResult.success) {
@@ -76,6 +77,7 @@ export async function PATCH(
 ) {
   const params = await props.params
   try {
+    const prisma = await getPrisma()
     // Verificar autenticação de admin ou operator
     const authResult = await requireAdminOrOperator()
     if (!authResult.success) {
@@ -126,6 +128,7 @@ export async function DELETE(
 ) {
   const params = await props.params
   try {
+    const prisma = await getPrisma()
     // DELETE requer apenas ADMIN (não OPERATOR)
     const authResult = await requireAdmin()
     if (!authResult.success) {

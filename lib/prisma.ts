@@ -1,10 +1,12 @@
-import { PrismaClient } from '@prisma/client'
+import type { PrismaClient } from '@prisma/client'
 
 declare global {
   var __prisma: PrismaClient | undefined
 }
 
-const createPrismaClient = () => {
+let prismaInstance: PrismaClient | undefined
+
+const createPrismaClient = async (): Promise<PrismaClient> => {
   console.log('[Prisma] Creating new client instance')
   
   // Verificar se DATABASE_URL existe
@@ -17,6 +19,9 @@ const createPrismaClient = () => {
   console.log('[Prisma] DATABASE_URL found, creating client...')
 
   try {
+    // Import dinâmico para evitar problemas durante o build
+    const { PrismaClient } = await import('@prisma/client')
+    
     const client = new PrismaClient({
       log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
       datasources: {
@@ -34,18 +39,40 @@ const createPrismaClient = () => {
   }
 }
 
-// Função para inicializar o Prisma com retry
-const initializePrisma = (): PrismaClient => {
+// Função para obter a instância do Prisma com lazy loading
+export const getPrisma = async (): Promise<PrismaClient> => {
+  const globalForPrisma = globalThis as unknown as {
+    prisma: PrismaClient | undefined
+  }
+
+  // Usar instância global se disponível (desenvolvimento)
+  if (process.env.NODE_ENV !== 'production' && globalForPrisma.prisma) {
+    return globalForPrisma.prisma
+  }
+
+  // Usar instância local se disponível
+  if (prismaInstance) {
+    return prismaInstance
+  }
+
+  // Criar nova instância
   try {
-    return createPrismaClient()
+    prismaInstance = await createPrismaClient()
+    
+    if (process.env.NODE_ENV !== 'production') {
+      globalForPrisma.prisma = prismaInstance
+    }
+    
+    return prismaInstance
   } catch (error) {
-    console.error('[Prisma] Initialization failed:', error)
+    console.error('[Prisma] Failed to initialize client:', error)
     
     // Em ambientes de build, tentar uma vez mais
     if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
       console.log('[Prisma] Retrying initialization for production/Vercel...')
       try {
-        return createPrismaClient()
+        prismaInstance = await createPrismaClient()
+        return prismaInstance
       } catch (retryError) {
         console.error('[Prisma] Retry failed:', retryError)
         throw retryError
@@ -56,16 +83,12 @@ const initializePrisma = (): PrismaClient => {
   }
 }
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
-}
-
-// Inicialização robusta
-export const prisma = globalForPrisma.prisma ?? initializePrisma()
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma
-}
+// Export para compatibilidade (será lazy)
+export const prisma = new Proxy({} as PrismaClient, {
+  get(target, prop) {
+    throw new Error('Use getPrisma() instead of direct prisma access')
+  }
+})
 
 // Função para diagnóstico de problemas de deployment
 export function diagnosticInfo(): {

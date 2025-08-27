@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { getPrisma } from '@/lib/prisma'
 import { ensurePrismaInitialized } from '@/lib/prisma-middleware'
 import { requireAdmin } from '@/middlewares/require-admin'
 import { NextRequest, NextResponse } from 'next/server'
@@ -20,6 +20,7 @@ export async function GET(
     }
 
     const { id } = await params
+    const prisma = await getPrisma()
     const equipment = await prisma.equipment.findUnique({
       where: { id },
       include: {
@@ -109,6 +110,7 @@ export async function PUT(
 
     console.error('Dados para update:', updateData)
 
+    const prisma = await getPrisma()
     const equipment = await prisma.equipment.update({
       where: { id },
       data: updateData,
@@ -158,6 +160,7 @@ export async function DELETE(
     }
 
     const { id } = await params
+    const prisma = await getPrisma()
     await prisma.equipment.delete({
       where: { id },
     })

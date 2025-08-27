@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { getPrisma } from '@/lib/prisma'
 import { QuoteRequestSchema } from '@/lib/validations'
 import { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
@@ -167,6 +167,7 @@ export async function POST(request: Request) {
     let totalAmount = 0
     const quoteItems = []
 
+    const prisma = await getPrisma()
     for (const item of items) {
       const equipment = await prisma.equipment.findUnique({
         where: { id: item.equipmentId },

@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma'
+import { getPrisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
 
@@ -9,6 +9,7 @@ const Role = {
 }
 
 export async function POST() {
+  const prisma = await getPrisma()
   try {
     const adminEmail = 'admin@gblocacoes.com.br'
     const adminPassword = 'admin123'
@@ -182,6 +183,7 @@ export async function POST() {
 
 // GET method remains the same
 export async function GET() {
+  const prisma = await getPrisma()
   try {
     const adminEmail = 'admin@gblocacoes.com.br'
 
