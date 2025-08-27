@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm run vercel-build",
+  "buildCommand": "pnpm run build",
   "installCommand": "pnpm install --frozen-lockfile=false",
   "images": {
     "formats": ["image/avif", "image/webp"],
