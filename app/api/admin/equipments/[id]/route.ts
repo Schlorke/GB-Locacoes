@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { ensurePrismaInitialized } from '@/lib/prisma-middleware'
 import { requireAdmin } from '@/middlewares/require-admin'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -7,6 +8,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Garantir que o Prisma está inicializado
+    await ensurePrismaInitialized()
+    
     const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(

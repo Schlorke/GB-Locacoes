@@ -1,8 +1,13 @@
 {
-  "buildCommand": "pnpm run build",
+  "buildCommand": "pnpm run vercel-build",
   "installCommand": "pnpm install --frozen-lockfile=false",
   "images": {
     "formats": ["image/avif", "image/webp"],
     "sizes": [16, 32, 48, 64, 96, 128, 256, 384, 512, 1024, 2048]
+  },
+  "functions": {
+    "app/api/**": {
+      "maxDuration": 30
+    }
   }
 }

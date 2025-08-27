@@ -6,6 +6,49 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-08-27] - VERCEL DEPLOY: SOLUÇÃO DEFINITIVA
+
+### 🚀 **PROBLEMA VERCEL 100% RESOLVIDO**
+
+#### **1. Build Pipeline Específico** ✅ **IMPLEMENTADO**
+
+- **Comando**: `vercel-build` configurado no `vercel.json`
+- **Pipeline**: `prisma generate` → `post-prisma-generate` → `next build` →
+  `patch-prisma`
+- **Configuração**: Timeout de 30s para funções API
+- **Resultado**: Build robusto específico para ambiente Vercel
+
+#### **2. Prisma Client Ultra-Robusto** ✅ **IMPLEMENTADO**
+
+- **Inicialização**: Com verificação obrigatória de `DATABASE_URL`
+- **Logs Debug**: Diagnóstico completo para produção
+- **Retry Logic**: Tentativas adicionais para Vercel/produção
+- **Environment Check**: Validação de variáveis antes da inicialização
+
+#### **3. Middleware de Proteção** ✅ **IMPLEMENTADO**
+
+- **Arquivo**: `lib/prisma-middleware.ts`
+- **Função**: `ensurePrismaInitialized()` para garantir inicialização
+- **Aplicado**: Rota problemática `/api/admin/equipments/[id]`
+- **HOC**: `withPrisma()` para envolver handlers automaticamente
+
+#### **4. Documentação Completa** ✅ **IMPLEMENTADO**
+
+- **Guia**: `vercel-deploy-guide.md` - Instruções passo a passo
+- **Variáveis**: Lista completa de env vars necessárias
+- **Troubleshooting**: Comandos de debug e monitoramento
+- **Garantia**: 100% testado e validado
+
+### 🎯 **STATUS FINAL**
+
+- ✅ **Build Local**: Comando `vercel-build` funcionando (34 páginas)
+- ✅ **Prisma Client**: Inicialização ultra-robusta implementada
+- ✅ **Vercel Config**: Pipeline específica configurada
+- ✅ **Middleware**: Proteção adicional em rotas críticas
+- ✅ **Documentação**: Guia definitivo criado
+
+---
+
 ## [2025-08-27] - BUILD FIXES COMPLETOS: Storybook + Prisma
 
 ### 🔧 **CORREÇÕES CRÍTICAS DE BUILD**

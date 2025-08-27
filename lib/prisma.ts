@@ -4,47 +4,68 @@ declare global {
   var __prisma: PrismaClient | undefined
 }
 
-const prismaClientSingleton = () => {
+const createPrismaClient = () => {
   console.log('[Prisma] Creating new client instance')
   
   // Verificar se DATABASE_URL existe
   if (!process.env.DATABASE_URL) {
-    console.error('[Prisma] DATABASE_URL not found')
+    console.error('[Prisma] DATABASE_URL not found in environment variables')
+    console.error('[Prisma] Available env vars:', Object.keys(process.env).filter(k => k.includes('DATABASE')))
     throw new Error('DATABASE_URL environment variable is required')
   }
 
-  const client = new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-    datasources: {
-      db: {
-        url: process.env.DATABASE_URL,
-      },
-    },
-  })
+  console.log('[Prisma] DATABASE_URL found, creating client...')
 
-  console.log('[Prisma] Client initialized successfully')
-  return client
+  try {
+    const client = new PrismaClient({
+      log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL,
+        },
+      },
+    })
+
+    console.log('[Prisma] Client created successfully')
+    return client
+  } catch (error) {
+    console.error('[Prisma] Failed to create client:', error)
+    throw error
+  }
+}
+
+// Função para inicializar o Prisma com retry
+const initializePrisma = (): PrismaClient => {
+  try {
+    return createPrismaClient()
+  } catch (error) {
+    console.error('[Prisma] Initialization failed:', error)
+    
+    // Em ambientes de build, tentar uma vez mais
+    if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
+      console.log('[Prisma] Retrying initialization for production/Vercel...')
+      try {
+        return createPrismaClient()
+      } catch (retryError) {
+        console.error('[Prisma] Retry failed:', retryError)
+        throw retryError
+      }
+    }
+    
+    throw error
+  }
 }
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Inicialização com tratamento de erro
-let prismaInstance: PrismaClient
+// Inicialização robusta
+export const prisma = globalForPrisma.prisma ?? initializePrisma()
 
-try {
-  prismaInstance = globalForPrisma.prisma ?? prismaClientSingleton()
-  
-  if (process.env.NODE_ENV !== 'production') {
-    globalForPrisma.prisma = prismaInstance
-  }
-} catch (error) {
-  console.error('[Prisma] Failed to initialize client:', error)
-  throw error
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma
 }
-
-export const prisma = prismaInstance
 
 // Função para diagnóstico de problemas de deployment
 export function diagnosticInfo(): {
