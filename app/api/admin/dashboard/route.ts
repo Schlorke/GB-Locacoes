@@ -231,11 +231,12 @@ export const revalidate = 0
  */
 export async function GET() {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    const { getPrisma } = await import('@/lib/prisma')
     const { requireAdminOrOperator } = await import(
       '@/middlewares/require-admin'
     )
 
+    const prisma = await getPrisma()
     await prisma.$connect()
 
     // Verificar autenticação de admin ou operator

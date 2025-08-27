@@ -320,7 +320,7 @@ type EquipmentWithCategory = {
 // GET /api/admin/equipments - List all equipments with pagination and filtering
 export async function GET(request: NextRequest) {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    const { getPrisma } = await import('@/lib/prisma')
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
     // Rate limiting
@@ -398,6 +398,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Teste de conexão com o banco
+    const prisma = await getPrisma()
     await prisma.$connect()
 
     const equipments = await prisma.equipment.findMany({
@@ -482,9 +483,10 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/equipments - Create new equipment
 export async function POST(request: NextRequest) {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    const { getPrisma } = await import('@/lib/prisma')
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
+    const prisma = await getPrisma()
     await prisma.$connect()
 
     // Rate limiting para operações de escrita (mais restritivo)

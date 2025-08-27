@@ -101,7 +101,7 @@ export const revalidate = 0
  */
 export async function GET() {
   try {
-    const { prisma, checkDatabaseConnection } = await import('@/lib/prisma')
+    const { getPrisma, checkDatabaseConnection } = await import('@/lib/prisma')
 
     // Verificar conectividade antes de prosseguir
     const connectionCheck = await checkDatabaseConnection()
@@ -124,6 +124,7 @@ export async function GET() {
       )
     }
 
+    const prisma = await getPrisma()
     await prisma.$connect()
 
     const categories = await prisma.category.findMany({

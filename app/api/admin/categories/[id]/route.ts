@@ -21,9 +21,10 @@ export async function PUT(
 ) {
   const params = await props.params
   try {
-    const { prisma } = await import('@/lib/prisma')
+    const { getPrisma } = await import('@/lib/prisma')
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
+    const prisma = await getPrisma()
     await prisma.$connect()
 
     // Verificar autenticação de admin
@@ -79,9 +80,10 @@ export async function DELETE(
 ) {
   const params = await props.params
   try {
-    const { prisma } = await import('@/lib/prisma')
+    const { getPrisma } = await import('@/lib/prisma')
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
+    const prisma = await getPrisma()
     await prisma.$connect()
 
     // Verificar autenticação de admin

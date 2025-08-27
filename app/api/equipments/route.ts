@@ -184,7 +184,7 @@ export async function GET() {
   let traceId: string | undefined
 
   try {
-    const { prisma, checkDatabaseConnection } = await import('@/lib/prisma')
+    const { getPrisma, checkDatabaseConnection } = await import('@/lib/prisma')
     const { startTrace, addSpan, finishSpan, finishTrace } = await import(
       '@/lib/telemetry'
     )
@@ -222,6 +222,7 @@ export async function GET() {
       )
     }
 
+    const prisma = await getPrisma()
     await prisma.$connect()
 
     // Instrumentar query do banco

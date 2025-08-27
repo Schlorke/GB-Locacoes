@@ -31,9 +31,10 @@ const CategorySchema = z
 // GET /api/admin/categories - List all categories
 export async function GET() {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    const { getPrisma } = await import('@/lib/prisma')
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
+    const prisma = await getPrisma()
     await prisma.$connect()
 
     // Verificar autenticação de admin
@@ -70,9 +71,10 @@ export async function GET() {
 // POST /api/admin/categories - Create new category
 export async function POST(request: NextRequest) {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    const { getPrisma } = await import('@/lib/prisma')
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
+    const prisma = await getPrisma()
     await prisma.$connect()
 
     // Verificar autenticação de admin
