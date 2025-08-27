@@ -60,8 +60,32 @@ const createPrismaClient = (): PrismaClient => {
     const prismaConfig = createPrismaConfig()
     console.log('[Prisma] Config:', JSON.stringify(prismaConfig, null, 2))
     
-    const client = new PrismaClient(prismaConfig)
-    console.log('[Prisma] Client created successfully')
+    let client: PrismaClient
+    
+    try {
+      client = new PrismaClient(prismaConfig)
+      console.log('[Prisma] Client created successfully')
+    } catch (initError) {
+      console.error('[Prisma] Initial client creation failed:', initError)
+      
+      // Fallback: tentar sem configurações específicas da Vercel
+      if (process.env.VERCEL) {
+        console.log('[Prisma] Tentando fallback sem engineType...')
+        const fallbackConfig: Record<string, unknown> = {
+          datasources: {
+            db: {
+              url: process.env.DATABASE_URL,
+            },
+          },
+          log: ['error'],
+        }
+        client = new PrismaClient(fallbackConfig)
+        console.log('[Prisma] Client criado com fallback')
+      } else {
+        throw initError
+      }
+    }
+    
     return client
   } catch (error) {
     console.error('[Prisma] Failed to create client:', error)
