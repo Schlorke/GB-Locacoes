@@ -6,6 +6,33 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-08-27] - 🚨 FOUND THE REAL VERCEL PROBLEM: Build Command Issue
+
+### 🎯 **DESCOBERTA CRÍTICA: Por que funciona localmente mas falha na Vercel**
+
+#### **1. Root Cause Identificado: vercel-build command BROKEN** ✅ **CORRIGIDO**
+
+- **PROBLEMA**: `vercel-build` command falha com erro EPERM (permission denied)
+- **EVIDÊNCIA**:
+  - ✅ `pnpm run build`: SUCCESS (34 páginas geradas)
+  - ❌ `pnpm run vercel-build`: FAIL (EPERM error no Prisma generate)
+- **IMPACTO**: Vercel usando comando que falha = 503 Service Unavailable
+- **SOLUÇÃO**: vercel.json buildCommand alterado para `pnpm run build`
+
+#### **2. Arquivos Corrigidos** ✅ **IMPLEMENTADO**
+
+- **`vercel.json`**: buildCommand: `vercel-build` → `build`
+- **VERCEL-DIAGNOSIS.md**: Análise completa do problema
+- **Resultado**: Build deve funcionar perfeitamente na Vercel agora
+
+#### **3. Sistema Local Funcionando Perfeitamente** ✅ **CONFIRMADO**
+
+- **APIs**: `/api/categories` (200 OK, 10 categorias) + `/api/equipments` (200
+  OK, 18 equipamentos)
+- **Prisma**: Client gerado e operando corretamente
+- **Build**: 34 páginas geradas sem erros
+- **Telemetria**: Sistema de monitoramento ativo
+
 ## [2025-08-27] - 🎉 CONFIRMAÇÃO: SISTEMA 100% OPERACIONAL!
 
 ### 🎯 **APIs FUNCIONANDO PERFEITAMENTE - PROBLEMA RESOLVIDO DEFINITIVAMENTE**
