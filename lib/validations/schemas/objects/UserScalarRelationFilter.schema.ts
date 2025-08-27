@@ -1,14 +1,10 @@
-import { z } from 'zod'
-import type { Prisma } from '../../../../node_modules/.prisma/client'
+import { z } from 'zod';
+import type { Prisma } from '../../../../node_modules/.prisma/client';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema'
 
-const makeSchema = (): z.ZodObject<any> =>
-  z
-    .object({
-      is: z.lazy(() => UserWhereInputObjectSchema).optional(),
-      isNot: z.lazy(() => UserWhereInputObjectSchema).optional(),
-    })
-    .strict()
-export const UserScalarRelationFilterObjectSchema: z.ZodType<Prisma.UserScalarRelationFilter> =
-  makeSchema() as unknown as z.ZodType<Prisma.UserScalarRelationFilter>
-export const UserScalarRelationFilterObjectZodSchema = makeSchema()
+const makeSchema = (): z.ZodObject<any> => z.object({
+  is: z.lazy(() => UserWhereInputObjectSchema).optional(),
+  isNot: z.lazy(() => UserWhereInputObjectSchema).optional()
+}).strict();
+export const UserScalarRelationFilterObjectSchema: z.ZodType<Prisma.UserScalarRelationFilter> = makeSchema() as unknown as z.ZodType<Prisma.UserScalarRelationFilter>;
+export const UserScalarRelationFilterObjectZodSchema = makeSchema();

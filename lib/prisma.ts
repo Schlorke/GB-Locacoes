@@ -6,6 +6,47 @@ declare global {
 
 let prismaInstance: PrismaClient | undefined
 
+// Configuração específica para Vercel
+const createPrismaConfig = () => {
+  const isVercel = !!process.env.VERCEL
+  const isProduction = process.env.NODE_ENV === 'production'
+  
+  console.log('[Prisma] Environment:', { isVercel, isProduction })
+  
+  interface PrismaConfig {
+    datasources: {
+      db: {
+        url: string | undefined
+      }
+    }
+    engineType?: string
+    log?: string[]
+  }
+  
+  const config: PrismaConfig = {
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
+  }
+
+  // Configuração específica para Vercel
+  if (isVercel && isProduction) {
+    config.engineType = 'binary'
+    console.log('[Prisma] Using binary engine for Vercel production')
+  }
+
+  // Log apenas em desenvolvimento
+  if (!isProduction) {
+    config.log = ['error', 'warn']
+  } else {
+    config.log = ['error']
+  }
+
+  return config
+}
+
 const createPrismaClient = (): PrismaClient => {
   console.log('[Prisma] Creating new client instance')
 
@@ -22,14 +63,10 @@ const createPrismaClient = (): PrismaClient => {
   console.log('[Prisma] DATABASE_URL found, creating client...')
 
   try {
-    // Configuração simplificada para evitar problemas de tipo
-    const client = new PrismaClient({
-      datasources: {
-        db: {
-          url: process.env.DATABASE_URL,
-        },
-      },
-    })
+    const prismaConfig = createPrismaConfig()
+    console.log('[Prisma] Config:', JSON.stringify(prismaConfig, null, 2))
+    
+    const client = new PrismaClient(prismaConfig)
     console.log('[Prisma] Client created successfully')
     return client
   } catch (error) {
@@ -67,7 +104,7 @@ export const getPrisma = (): PrismaClient => {
   return prismaInstance
 }
 
-// Função para verificar conexão com banco de dados
+// Função para verificar conexão com banco de dados com timeout
 export async function checkDatabaseConnection(): Promise<{
   connected: boolean
   error?: string
@@ -75,7 +112,15 @@ export async function checkDatabaseConnection(): Promise<{
 }> {
   try {
     const client = getPrisma()
-    await client.$queryRaw`SELECT 1`
+    
+    // Implementar timeout manual para evitar hang
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Database connection timeout')), 10000)
+    })
+    
+    const queryPromise = client.$queryRaw`SELECT 1`
+    
+    await Promise.race([queryPromise, timeoutPromise])
     return { connected: true }
   } catch (error: unknown) {
     console.error('[Prisma] Database connection failed:', error)

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "vercel-build": "echo 'Starting Vercel build...' && prisma generate --no-engine && prisma generate && node scripts/post-prisma-generate.js && next build && node scripts/patch-prisma.js",
+    "vercel-build": "echo 'Starting Vercel build...' && echo 'VERCEL env:' $VERCEL && prisma generate && node scripts/post-prisma-generate.js && next build && node scripts/patch-prisma.js",
     "prebuild": "prisma generate && node scripts/post-prisma-generate.js",
     "build": "next build",
     "postbuild": "node scripts/patch-prisma.js",
