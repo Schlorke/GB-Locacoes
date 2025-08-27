@@ -1,0 +1,12 @@
+stories
+.storybook
+tests
+*.md
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+coverage
+docs
+.env.example
+chromatic.config.js

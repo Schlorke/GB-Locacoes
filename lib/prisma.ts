@@ -6,7 +6,7 @@ declare global {
 
 let prismaInstance: PrismaClient | undefined
 
-const createPrismaClient = async (): Promise<PrismaClient> => {
+const createPrismaClient = (): PrismaClient => {
   console.log('[Prisma] Creating new client instance')
 
   // Verificar se DATABASE_URL existe
@@ -22,7 +22,7 @@ const createPrismaClient = async (): Promise<PrismaClient> => {
   console.log('[Prisma] DATABASE_URL found, creating client...')
 
   try {
-    // ABORDAGEM SIMPLES E DIRETA - volta ao básico
+    // Configuração otimizada para Vercel
     const client = new PrismaClient({
       log:
         process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
@@ -31,6 +31,10 @@ const createPrismaClient = async (): Promise<PrismaClient> => {
           url: process.env.DATABASE_URL,
         },
       },
+      // Configuração específica para ambientes serverless
+      ...(process.env.VERCEL && {
+        engineType: 'binary',
+      }),
     })
 
     console.log('[Prisma] Client created successfully')
@@ -42,7 +46,7 @@ const createPrismaClient = async (): Promise<PrismaClient> => {
 }
 
 // Função para obter a instância do Prisma com lazy loading
-export const getPrisma = async (): Promise<PrismaClient> => {
+export const getPrisma = (): PrismaClient => {
   const globalForPrisma = globalThis as unknown as {
     prisma: PrismaClient | undefined
   }
@@ -59,7 +63,7 @@ export const getPrisma = async (): Promise<PrismaClient> => {
 
   // Criar nova instância
   try {
-    prismaInstance = await createPrismaClient()
+    prismaInstance = createPrismaClient()
 
     if (process.env.NODE_ENV !== 'production') {
       globalForPrisma.prisma = prismaInstance
@@ -73,7 +77,7 @@ export const getPrisma = async (): Promise<PrismaClient> => {
     if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
       console.log('[Prisma] Retrying initialization for production/Vercel...')
       try {
-        prismaInstance = await createPrismaClient()
+        prismaInstance = createPrismaClient()
         return prismaInstance
       } catch (retryError) {
         console.error('[Prisma] Retry failed:', retryError)

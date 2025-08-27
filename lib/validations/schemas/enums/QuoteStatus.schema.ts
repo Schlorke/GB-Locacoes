@@ -1,3 +1,8 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
-export const QuoteStatusSchema = z.enum(['PENDING', 'APPROVED', 'REJECTED', 'COMPLETED'])
+export const QuoteStatusSchema = z.enum([
+  'PENDING',
+  'APPROVED',
+  'REJECTED',
+  'COMPLETED',
+])

@@ -10,7 +10,10 @@ e este projeto adere ao
 
 ### Changed 🔄
 
-- Atualizada dependência `@types/react` de 19.1.11 para 19.1.12
+- **Atualizada dependência `@types/react` para 19.1.12** - ✅ Versão mais
+  recente instalada
+- **Atualizada dependência `@types/react-dom` para 19.1.8** - ✅ Versão mais
+  recente disponível
 - Atualizada dependência `svelte` de 5.38.5 para 5.38.6
 - **Atualizado Prisma de 6.13.0 para 6.15.0** - ✅ Compatibilidade confirmada
   com Next.js 15.5.2
