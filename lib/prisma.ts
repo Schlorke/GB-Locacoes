@@ -13,17 +13,8 @@ const createPrismaConfig = () => {
   
   console.log('[Prisma] Environment:', { isVercel, isProduction })
   
-  interface PrismaConfig {
-    datasources: {
-      db: {
-        url: string | undefined
-      }
-    }
-    engineType?: string
-    log?: string[]
-  }
-  
-  const config: PrismaConfig = {
+  // Configuração básica sempre presente
+  const baseConfig = {
     datasources: {
       db: {
         url: process.env.DATABASE_URL,
@@ -31,20 +22,23 @@ const createPrismaConfig = () => {
     },
   }
 
+  // Configurações condicionais
+  const conditionalConfig: Record<string, unknown> = {}
+
   // Configuração específica para Vercel
   if (isVercel && isProduction) {
-    config.engineType = 'binary'
+    conditionalConfig.engineType = 'binary'
     console.log('[Prisma] Using binary engine for Vercel production')
   }
 
   // Log apenas em desenvolvimento
   if (!isProduction) {
-    config.log = ['error', 'warn']
+    conditionalConfig.log = ['error', 'warn']
   } else {
-    config.log = ['error']
+    conditionalConfig.log = ['error']
   }
 
-  return config
+  return { ...baseConfig, ...conditionalConfig }
 }
 
 const createPrismaClient = (): PrismaClient => {
