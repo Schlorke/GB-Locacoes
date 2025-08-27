@@ -1,18 +1,14 @@
-import { z } from 'zod'
-import type { Prisma } from '../../../../node_modules/.prisma/client'
-import { SortOrderSchema } from '../enums/SortOrder.schema'
+import { z } from 'zod';
+import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema'
 
-const makeSchema = (): z.ZodObject<any> =>
-  z
-    .object({
-      id: SortOrderSchema.optional(),
-      sessionToken: SortOrderSchema.optional(),
-      userId: SortOrderSchema.optional(),
-      expires: SortOrderSchema.optional(),
-      user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
-    })
-    .strict()
-export const SessionOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.SessionOrderByWithRelationInput> =
-  makeSchema() as unknown as z.ZodType<Prisma.SessionOrderByWithRelationInput>
-export const SessionOrderByWithRelationInputObjectZodSchema = makeSchema()
+const makeSchema = (): z.ZodObject<any> => z.object({
+  id: SortOrderSchema.optional(),
+  sessionToken: SortOrderSchema.optional(),
+  userId: SortOrderSchema.optional(),
+  expires: SortOrderSchema.optional(),
+  user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional()
+}).strict();
+export const SessionOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.SessionOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.SessionOrderByWithRelationInput>;
+export const SessionOrderByWithRelationInputObjectZodSchema = makeSchema();

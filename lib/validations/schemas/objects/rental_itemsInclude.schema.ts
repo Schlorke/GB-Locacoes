@@ -1,19 +1,11 @@
-import { z } from 'zod'
-import type { Prisma } from '../../../../node_modules/.prisma/client'
-import { EquipmentArgsObjectSchema } from './EquipmentArgs.schema'
+import { z } from 'zod';
+import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { EquipmentArgsObjectSchema } from './EquipmentArgs.schema';
 import { rentalsArgsObjectSchema } from './rentalsArgs.schema'
 
-const makeSchema = (): z.ZodObject<any> =>
-  z
-    .object({
-      equipments: z
-        .union([z.boolean(), z.lazy(() => EquipmentArgsObjectSchema)])
-        .optional(),
-      rentals: z
-        .union([z.boolean(), z.lazy(() => rentalsArgsObjectSchema)])
-        .optional(),
-    })
-    .strict()
-export const rental_itemsIncludeObjectSchema: z.ZodType<Prisma.rental_itemsInclude> =
-  makeSchema() as unknown as z.ZodType<Prisma.rental_itemsInclude>
-export const rental_itemsIncludeObjectZodSchema = makeSchema()
+const makeSchema = (): z.ZodObject<any> => z.object({
+  equipments: z.union([z.boolean(), z.lazy(() => EquipmentArgsObjectSchema)]).optional(),
+  rentals: z.union([z.boolean(), z.lazy(() => rentalsArgsObjectSchema)]).optional()
+}).strict();
+export const rental_itemsIncludeObjectSchema: z.ZodType<Prisma.rental_itemsInclude> = makeSchema() as unknown as z.ZodType<Prisma.rental_itemsInclude>;
+export const rental_itemsIncludeObjectZodSchema = makeSchema();
