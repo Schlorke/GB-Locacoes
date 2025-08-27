@@ -22,7 +22,6 @@ import {
   XCircle,
   Plus,
   Eye,
-  Loader2,
   AlertTriangle,
   DollarSign,
   Calendar,
@@ -85,6 +84,128 @@ const statusConfig = {
   },
 }
 
+// Dados dos cards principais para aplicar stagger effect
+const mainStatsCards = [
+  {
+    title: 'Total de Equipamentos',
+    value: (stats: DashboardStats | null) => stats?.totalEquipments || 0,
+    subtitle: (stats: DashboardStats | null) =>
+      `${stats?.availableEquipments || 0} disponíveis`,
+    icon: Package,
+    gradient: 'from-blue-500 to-blue-600',
+    bgColors: 'from-blue-400/12 via-transparent to-black/15',
+    bgColors2: 'from-transparent via-blue-500/6 to-blue-700/8',
+    textColors: 'text-blue-100',
+    subtitleColors: 'text-blue-200',
+  },
+  {
+    title: 'Categorias',
+    value: (stats: DashboardStats | null) => stats?.totalCategories || 0,
+    subtitle: () => 'Organizadas',
+    icon: BarChart3,
+    gradient: 'from-green-500 to-green-600',
+    bgColors: 'from-green-400/12 via-transparent to-black/15',
+    bgColors2: 'from-transparent via-green-500/6 to-green-700/8',
+    textColors: 'text-green-100',
+    subtitleColors: 'text-green-200',
+  },
+  {
+    title: 'Orçamentos',
+    value: (stats: DashboardStats | null) => stats?.totalQuotes || 0,
+    subtitle: (stats: DashboardStats | null) =>
+      `${stats?.pendingQuotes || 0} pendentes`,
+    icon: FileText,
+    gradient: 'from-purple-500 to-purple-600',
+    bgColors: 'from-purple-400/12 via-transparent to-black/15',
+    bgColors2: 'from-transparent via-purple-500/6 to-purple-700/8',
+    textColors: 'text-purple-100',
+    subtitleColors: 'text-purple-200',
+  },
+  {
+    title: 'Receita Mensal',
+    value: (stats: DashboardStats | null) =>
+      `R$ ${((stats?.monthlyRevenue || 0) / 100).toFixed(0)}`,
+    subtitle: () => 'Este mês',
+    icon: DollarSign,
+    gradient: 'from-orange-500 to-orange-600',
+    bgColors: 'from-orange-400/12 via-transparent to-black/15',
+    bgColors2: 'from-transparent via-orange-500/6 to-orange-700/8',
+    textColors: 'text-orange-100',
+    subtitleColors: 'text-orange-200',
+  },
+]
+
+// Dados dos cards de status para aplicar stagger effect
+const statusStatsCards = [
+  {
+    title: 'Pendentes',
+    value: (stats: DashboardStats | null) => stats?.pendingQuotes || 0,
+    icon: Clock,
+    borderColor: 'bg-yellow-500',
+    iconBg: 'bg-yellow-100',
+    iconColor: 'text-yellow-600',
+    valueColor: 'text-yellow-600',
+  },
+  {
+    title: 'Aprovados',
+    value: (stats: DashboardStats | null) => stats?.approvedQuotes || 0,
+    icon: CheckCircle,
+    borderColor: 'bg-green-500',
+    iconBg: 'bg-green-100',
+    iconColor: 'text-green-600',
+    valueColor: 'text-green-600',
+  },
+  {
+    title: 'Rejeitados',
+    value: (stats: DashboardStats | null) => stats?.rejectedQuotes || 0,
+    icon: XCircle,
+    borderColor: 'bg-red-500',
+    iconBg: 'bg-red-100',
+    iconColor: 'text-red-600',
+    valueColor: 'text-red-600',
+  },
+  {
+    title: 'Concluídos',
+    value: (stats: DashboardStats | null) => stats?.completedQuotes || 0,
+    icon: CheckCircle,
+    borderColor: 'bg-blue-500',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
+    valueColor: 'text-blue-600',
+  },
+]
+
+// Dados dos botões de ação rápida para aplicar stagger effect
+const quickActionButtons = [
+  {
+    title: 'Adicionar Equipamento',
+    subtitle: 'Cadastrar novo equipamento no sistema',
+    href: '/admin/equipamentos/novo',
+    icon: Plus,
+    hoverColors: 'hover:bg-blue-50 hover:border-blue-300',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
+  },
+  {
+    title: 'Gerenciar Categorias',
+    subtitle: 'Organizar equipamentos por categoria',
+    href: '/admin/categorias',
+    icon: BarChart3,
+    hoverColors: 'hover:bg-green-50 hover:border-green-300',
+    iconBg: 'bg-green-100',
+    iconColor: 'text-green-600',
+  },
+  {
+    title: 'Ver Orçamentos',
+    subtitle: 'Gerenciar solicitações de orçamento',
+    href: '/admin/orcamentos',
+    icon: FileText,
+    hoverColors: 'hover:bg-purple-50 hover:border-purple-300',
+    iconBg: 'bg-purple-100',
+    iconColor: 'text-purple-600',
+  },
+]
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [recentQuotes, setRecentQuotes] = useState<RecentQuote[]>([])
@@ -96,7 +217,7 @@ export default function AdminDashboard() {
 
   const fetchDashboardData = async () => {
     setIsLoading(true)
-    setRecentQuotes([]) // Reset para garantir array vazio
+    setRecentQuotes([])
 
     try {
       const [statsResponse, quotesResponse] = await Promise.all([
@@ -111,8 +232,6 @@ export default function AdminDashboard() {
 
       if (quotesResponse.ok) {
         const quotesData = await quotesResponse.json()
-
-        // Garantir que sempre temos um array
         let quotes: RecentQuote[] = []
 
         if (Array.isArray(quotesData)) {
@@ -128,10 +247,8 @@ export default function AdminDashboard() {
           quotes = []
         }
 
-        // Garantir que o slice funcione corretamente
         const safeQuotes = Array.isArray(quotes) ? quotes : []
         const finalQuotes = safeQuotes.slice(0, 5)
-
         setRecentQuotes(finalQuotes)
       } else {
         console.warn('Failed to fetch quotes:', quotesResponse.status)
@@ -140,7 +257,6 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Erro ao carregar dados do dashboard:', error)
       toast.error('Erro ao carregar dados do dashboard')
-      // Garantir que sempre temos um estado válido
       setRecentQuotes([])
       setStats(null)
     } finally {
@@ -163,18 +279,15 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="p-3 sm:p-4 lg:p-6 xl:p-8 max-w-none xl:max-w-6xl mx-auto">
-        {/* Header Estilizado */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-6 lg:mb-8"
         >
           <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
-            {/* Clean depth layers */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
-
-            {/* Content */}
             <div className="relative z-10">
               <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
                 Dashboard Administrativo
@@ -192,7 +305,7 @@ export default function AdminDashboard() {
           </div>
         </motion.div>
 
-        {/* Stats Cards - Estilizados */}
+        {/* Stats Cards - Com stagger effect igual página equipamentos */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -200,279 +313,117 @@ export default function AdminDashboard() {
           className="mb-8"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Card Equipamentos */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                delay: 0.1,
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-400/12 via-transparent to-black/15"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-500/6 to-blue-700/8"></div>
-                <CardContent className="relative z-10 p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-blue-100 text-sm truncate mb-1">
-                        Total de Equipamentos
-                      </p>
-                      <p className="text-3xl font-bold mb-1">
-                        {stats?.totalEquipments || 0}
-                      </p>
-                      <p className="text-blue-200 text-sm">
-                        {stats?.availableEquipments || 0} disponíveis
-                      </p>
-                    </div>
-                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
-                      <Package className="h-8 w-8 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Card Categorias */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                delay: 0.18,
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-green-500 to-green-600 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-green-400/12 via-transparent to-black/15"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-green-500/6 to-green-700/8"></div>
-                <CardContent className="relative z-10 p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-green-100 text-sm truncate mb-1">
-                        Categorias
-                      </p>
-                      <p className="text-3xl font-bold mb-1">
-                        {stats?.totalCategories || 0}
-                      </p>
-                      <p className="text-green-200 text-sm">
-                        Organizadas
-                      </p>
-                    </div>
-                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
-                      <BarChart3 className="h-8 w-8 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Card Orçamentos */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                delay: 0.26,
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-400/12 via-transparent to-black/15"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-purple-500/6 to-purple-700/8"></div>
-                <CardContent className="relative z-10 p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-purple-100 text-sm truncate mb-1">
-                        Orçamentos
-                      </p>
-                      <p className="text-3xl font-bold mb-1">
-                        {stats?.totalQuotes || 0}
-                      </p>
-                      <p className="text-purple-200 text-sm">
-                        {stats?.pendingQuotes || 0} pendentes
-                      </p>
-                    </div>
-                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
-                      <FileText className="h-8 w-8 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Card Receita */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                delay: 0.34,
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
-                <CardContent className="relative z-10 p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-orange-100 text-sm truncate mb-1">
-                        Receita Mensal
-                      </p>
-                      <p className="text-3xl font-bold mb-1">
-                        R$ {((stats?.monthlyRevenue || 0) / 100).toFixed(0)}
-                      </p>
-                      <p className="text-orange-200 text-sm">
-                        Este mês
-                      </p>
-                    </div>
-                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
-                      <DollarSign className="h-8 w-8 text-white" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+            {mainStatsCards.map((card, index) => {
+              const IconComponent = card.icon
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    delay: 0.1 + index * 0.08,
+                    duration: 0.3,
+                    ease: 'easeOut',
+                  }}
+                  className="group"
+                >
+                  <Card
+                    className={`relative overflow-hidden border-0 bg-gradient-to-br ${card.gradient} text-white shadow-xl hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02]`}
+                  >
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${card.bgColors}`}
+                    ></div>
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-tr ${card.bgColors2}`}
+                    ></div>
+                    <CardContent className="relative z-10 p-6">
+                      <div className="flex items-center justify-between">
+                        <div className="min-w-0 flex-1">
+                          <p
+                            className={`${card.textColors} text-sm truncate mb-1`}
+                          >
+                            {card.title}
+                          </p>
+                          <p className="text-3xl font-bold mb-1">
+                            {typeof card.value(stats) === 'string'
+                              ? card.value(stats)
+                              : card.value(stats)}
+                          </p>
+                          <p className={`${card.subtitleColors} text-sm`}>
+                            {card.subtitle(stats)}
+                          </p>
+                        </div>
+                        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
+                          <IconComponent className="h-8 w-8 text-white" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })}
           </div>
         </motion.div>
 
-        {/* Status dos Orçamentos - Estilizados */}
+        {/* Status Cards - Com stagger effect igual página equipamentos */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.42 }}
+          transition={{ delay: 0.2 }}
           className="mb-8"
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Pendentes */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                delay: 0.42,
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white backdrop-blur-sm">
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-yellow-500"></div>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm text-gray-600 mb-2">Pendentes</p>
-                      <p className="text-2xl font-bold text-yellow-600">
-                        {stats?.pendingQuotes || 0}
-                      </p>
-                    </div>
-                    <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Clock className="h-6 w-6 text-yellow-600" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Aprovados */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                delay: 0.5,
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white backdrop-blur-sm">
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm text-gray-600 mb-2">Aprovados</p>
-                      <p className="text-2xl font-bold text-green-600">
-                        {stats?.approvedQuotes || 0}
-                      </p>
-                    </div>
-                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="h-6 w-6 text-green-600" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Rejeitados */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                delay: 0.58,
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white backdrop-blur-sm">
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-red-500"></div>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm text-gray-600 mb-2">Rejeitados</p>
-                      <p className="text-2xl font-bold text-red-600">
-                        {stats?.rejectedQuotes || 0}
-                      </p>
-                    </div>
-                    <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <XCircle className="h-6 w-6 text-red-600" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Concluídos */}
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{
-                delay: 0.66,
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white backdrop-blur-sm">
-                <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm text-gray-600 mb-2">Concluídos</p>
-                      <p className="text-2xl font-bold text-blue-600">
-                        {stats?.completedQuotes || 0}
-                      </p>
-                    </div>
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <CheckCircle className="h-6 w-6 text-blue-600" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
+            {statusStatsCards.map((card, index) => {
+              const IconComponent = card.icon
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    delay: 0.2 + index * 0.08,
+                    duration: 0.3,
+                    ease: 'easeOut',
+                  }}
+                  className="group"
+                >
+                  <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02]">
+                    <div
+                      className={`absolute left-0 top-0 bottom-0 w-1 ${card.borderColor}`}
+                    ></div>
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm text-gray-600 mb-2">
+                            {card.title}
+                          </p>
+                          <p
+                            className={`text-2xl font-bold ${card.valueColor}`}
+                          >
+                            {card.value(stats)}
+                          </p>
+                        </div>
+                        <div
+                          className={`w-12 h-12 ${card.iconBg} rounded-full flex items-center justify-center flex-shrink-0`}
+                        >
+                          <IconComponent
+                            className={`h-6 w-6 ${card.iconColor}`}
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              )
+            })}
           </div>
         </motion.div>
 
-        {/* Ações Rápidas - Estilizadas */}
+        {/* Ações Rápidas - Com stagger effect igual página equipamentos */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.74 }}
+          transition={{ delay: 0.25 }}
           className="mb-8"
         >
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
@@ -487,120 +438,59 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent className="relative z-10">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Adicionar Equipamento */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    delay: 0.74,
-                    duration: 0.3,
-                    ease: 'easeOut',
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="h-auto p-6 w-full bg-transparent hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 shadow-sm hover:shadow-md border-2"
-                  >
-                    <Link
-                      href="/admin/equipamentos/novo"
-                      className="flex flex-col items-center gap-3"
+                {quickActionButtons.map((button, index) => {
+                  const IconComponent = button.icon
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{
+                        delay: 0.25 + index * 0.08,
+                        duration: 0.3,
+                        ease: 'easeOut',
+                      }}
+                      className="group"
                     >
-                      <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                        <Plus className="h-8 w-8 text-blue-600" />
-                      </div>
-                      <div className="text-center">
-                        <span className="font-semibold text-lg text-gray-900 block mb-1">
-                          Adicionar Equipamento
-                        </span>
-                        <span className="text-sm text-gray-600">
-                          Cadastrar novo equipamento no sistema
-                        </span>
-                      </div>
-                    </Link>
-                  </Button>
-                </motion.div>
-
-                {/* Gerenciar Categorias */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    delay: 0.82,
-                    duration: 0.3,
-                    ease: 'easeOut',
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="h-auto p-6 w-full bg-transparent hover:bg-green-50 hover:border-green-300 transition-all duration-300 shadow-sm hover:shadow-md border-2"
-                  >
-                    <Link
-                      href="/admin/categorias"
-                      className="flex flex-col items-center gap-3"
-                    >
-                      <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                        <BarChart3 className="h-8 w-8 text-green-600" />
-                      </div>
-                      <div className="text-center">
-                        <span className="font-semibold text-lg text-gray-900 block mb-1">
-                          Gerenciar Categorias
-                        </span>
-                        <span className="text-sm text-gray-600">
-                          Organizar equipamentos por categoria
-                        </span>
-                      </div>
-                    </Link>
-                  </Button>
-                </motion.div>
-
-                {/* Ver Orçamentos */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    delay: 0.9,
-                    duration: 0.3,
-                    ease: 'easeOut',
-                  }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="h-auto p-6 w-full bg-transparent hover:bg-purple-50 hover:border-purple-300 transition-all duration-300 shadow-sm hover:shadow-md border-2"
-                  >
-                    <Link
-                      href="/admin/orcamentos"
-                      className="flex flex-col items-center gap-3"
-                    >
-                      <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                        <FileText className="h-8 w-8 text-purple-600" />
-                      </div>
-                      <div className="text-center">
-                        <span className="font-semibold text-lg text-gray-900 block mb-1">
-                          Ver Orçamentos
-                        </span>
-                        <span className="text-sm text-gray-600">
-                          Gerenciar solicitações de orçamento
-                        </span>
-                      </div>
-                    </Link>
-                  </Button>
-                </motion.div>
+                      <Button
+                        asChild
+                        variant="outline"
+                        className={`h-auto p-6 w-full bg-transparent ${button.hoverColors} transition-all duration-300 shadow-sm hover:shadow-md border-2 hover:scale-[1.02]`}
+                      >
+                        <Link
+                          href={button.href}
+                          className="flex flex-col items-center gap-3"
+                        >
+                          <div
+                            className={`w-16 h-16 ${button.iconBg} rounded-full flex items-center justify-center`}
+                          >
+                            <IconComponent
+                              className={`h-8 w-8 ${button.iconColor}`}
+                            />
+                          </div>
+                          <div className="text-center">
+                            <span className="font-semibold text-lg text-gray-900 block mb-1">
+                              {button.title}
+                            </span>
+                            <span className="text-sm text-gray-600">
+                              {button.subtitle}
+                            </span>
+                          </div>
+                        </Link>
+                      </Button>
+                    </motion.div>
+                  )
+                })}
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
-        {/* Orçamentos Recentes - Estilizados */}
+        {/* Orçamentos Recentes - Com stagger effect igual página equipamentos */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.98 }}
+          transition={{ delay: 0.35 }}
           className="mb-8"
         >
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
@@ -632,7 +522,7 @@ export default function AdminDashboard() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{
-                    delay: 0.98,
+                    delay: 0.35,
                     duration: 0.3,
                     ease: 'easeOut',
                   }}
@@ -653,7 +543,9 @@ export default function AdminDashboard() {
                   <Table>
                     <TableHeader>
                       <TableRow className="border-gray-200">
-                        <TableHead className="min-w-[200px] font-semibold text-gray-700">Cliente</TableHead>
+                        <TableHead className="min-w-[200px] font-semibold text-gray-700">
+                          Cliente
+                        </TableHead>
                         <TableHead className="hidden sm:table-cell min-w-[150px] font-semibold text-gray-700">
                           Empresa
                         </TableHead>
@@ -663,7 +555,9 @@ export default function AdminDashboard() {
                         <TableHead className="hidden lg:table-cell w-[120px] font-semibold text-gray-700">
                           Valor
                         </TableHead>
-                        <TableHead className="w-[100px] font-semibold text-gray-700">Status</TableHead>
+                        <TableHead className="w-[100px] font-semibold text-gray-700">
+                          Status
+                        </TableHead>
                         <TableHead className="hidden sm:table-cell w-[100px] font-semibold text-gray-700">
                           Data
                         </TableHead>
@@ -673,8 +567,9 @@ export default function AdminDashboard() {
                       {Array.isArray(recentQuotes) &&
                         recentQuotes.map((quote, index) => {
                           const StatusIcon =
-                            statusConfig[quote.status as keyof typeof statusConfig]
-                              ?.icon || AlertTriangle
+                            statusConfig[
+                              quote.status as keyof typeof statusConfig
+                            ]?.icon || AlertTriangle
 
                           return (
                             <motion.tr
@@ -682,7 +577,7 @@ export default function AdminDashboard() {
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{
-                                delay: 0.98 + (index * 0.08),
+                                delay: 0.35 + index * 0.08,
                                 duration: 0.3,
                                 ease: 'easeOut',
                               }}

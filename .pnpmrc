@@ -1,0 +1,6 @@
+# Configurações específicas do pnpm
+shamefully-hoist=true
+auto-install-peers=true
+strict-peer-dependencies=false
+resolution-mode=highest
+prefer-frozen-lockfile=false

@@ -1,10 +1,12 @@
-import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
 
-
-export const QuoteItemWhereUniqueInputObjectSchema: z.ZodType<Prisma.QuoteItemWhereUniqueInput, Prisma.QuoteItemWhereUniqueInput> = z.object({
-  id: z.string()
-}).strict();
-export const QuoteItemWhereUniqueInputObjectZodSchema = z.object({
-  id: z.string()
-}).strict();
+const makeSchema = (): z.ZodObject<any> =>
+  z
+    .object({
+      id: z.string(),
+    })
+    .strict()
+export const QuoteItemWhereUniqueInputObjectSchema: z.ZodType<Prisma.QuoteItemWhereUniqueInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.QuoteItemWhereUniqueInput>
+export const QuoteItemWhereUniqueInputObjectZodSchema = makeSchema()

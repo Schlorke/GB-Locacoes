@@ -437,19 +437,19 @@ export default function ScrollRevealInit() {
         // CORREÇÃO CRÍTICA: NÃO travar scroll no topo
         document.body.style.overflow = 'auto'
         document.documentElement.style.overflow = 'auto'
-        
+
         // Garantir que não há travamento de scroll
         document.body.style.position = 'relative'
         document.documentElement.style.position = 'relative'
-        
+
         // CORREÇÃO CRÍTICA: Permitir scroll imediatamente, mesmo durante animações
         document.body.style.pointerEvents = 'auto'
         document.documentElement.style.pointerEvents = 'auto'
-        
+
         // Garantir que o scroll funcione mesmo com elementos animando
         document.body.style.touchAction = 'pan-y'
         document.documentElement.style.touchAction = 'pan-y'
-        
+
         // CORREÇÃO FINAL: Garantir que o scroll funcione imediatamente SEM travamento
         setTimeout(() => {
           // Forçar scroll funcional após um pequeno delay
@@ -457,17 +457,17 @@ export default function ScrollRevealInit() {
           document.documentElement.style.overflow = 'auto'
           document.body.style.pointerEvents = 'auto'
           document.documentElement.style.pointerEvents = 'auto'
-          
+
           // CORREÇÃO CRÍTICA: Garantir que não há travamento no topo
           window.scrollTo(0, 0)
           document.body.scrollTop = 0
           document.documentElement.scrollTop = 0
-          
+
           // CORREÇÃO FINAL: Garantir que o scroll funcione perfeitamente
           document.body.style.overflow = 'auto'
           document.documentElement.style.overflow = 'auto'
         }, 50)
-        
+
         // CORREÇÃO ADICIONAL: Garantir scroll funcional em intervalos
         setInterval(() => {
           if (document.body.style.overflow !== 'auto') {
@@ -475,7 +475,7 @@ export default function ScrollRevealInit() {
             document.documentElement.style.overflow = 'auto'
           }
         }, 100)
-        
+
         // CORREÇÃO FINAL: Garantir que não há travamento de scroll
         window.addEventListener('scroll', () => {
           // Garantir que o scroll funcione perfeitamente

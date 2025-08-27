@@ -1,16 +1,16 @@
-import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
 import { SortOrderSchema } from '../enums/SortOrder.schema'
 
-export const SessionMaxOrderByAggregateInputObjectSchema: z.ZodType<Prisma.SessionMaxOrderByAggregateInput, Prisma.SessionMaxOrderByAggregateInput> = z.object({
-  id: SortOrderSchema.optional(),
-  sessionToken: SortOrderSchema.optional(),
-  userId: SortOrderSchema.optional(),
-  expires: SortOrderSchema.optional()
-}).strict();
-export const SessionMaxOrderByAggregateInputObjectZodSchema = z.object({
-  id: SortOrderSchema.optional(),
-  sessionToken: SortOrderSchema.optional(),
-  userId: SortOrderSchema.optional(),
-  expires: SortOrderSchema.optional()
-}).strict();
+const makeSchema = (): z.ZodObject<any> =>
+  z
+    .object({
+      id: SortOrderSchema.optional(),
+      sessionToken: SortOrderSchema.optional(),
+      userId: SortOrderSchema.optional(),
+      expires: SortOrderSchema.optional(),
+    })
+    .strict()
+export const SessionMaxOrderByAggregateInputObjectSchema: z.ZodType<Prisma.SessionMaxOrderByAggregateInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.SessionMaxOrderByAggregateInput>
+export const SessionMaxOrderByAggregateInputObjectZodSchema = makeSchema()

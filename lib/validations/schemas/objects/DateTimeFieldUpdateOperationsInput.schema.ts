@@ -1,10 +1,12 @@
-import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
 
-
-export const DateTimeFieldUpdateOperationsInputObjectSchema: z.ZodType<Prisma.DateTimeFieldUpdateOperationsInput, Prisma.DateTimeFieldUpdateOperationsInput> = z.object({
-  set: z.date().optional()
-}).strict();
-export const DateTimeFieldUpdateOperationsInputObjectZodSchema = z.object({
-  set: z.date().optional()
-}).strict();
+const makeSchema = (): z.ZodObject<any> =>
+  z
+    .object({
+      set: z.date().optional(),
+    })
+    .strict()
+export const DateTimeFieldUpdateOperationsInputObjectSchema: z.ZodType<Prisma.DateTimeFieldUpdateOperationsInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.DateTimeFieldUpdateOperationsInput>
+export const DateTimeFieldUpdateOperationsInputObjectZodSchema = makeSchema()

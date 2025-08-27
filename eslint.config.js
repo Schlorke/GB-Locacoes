@@ -43,6 +43,7 @@ export default [
       'lib/validations/**',
       '*.openapi.json',
       'public/openapi.json',
+      'next-env.d.ts',
 
       // Test files with flexible types
       'tests/api/**',

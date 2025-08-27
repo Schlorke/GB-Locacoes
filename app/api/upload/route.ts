@@ -5,14 +5,14 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function POST(request: NextRequest) {
   try {
     console.log('🚀 Iniciando upload...')
-    
+
     // Debug: Verificar variáveis de ambiente
     console.log('🔧 Variáveis de ambiente:', {
       supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
       hasServiceKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
-      serviceKeyLength: process.env.SUPABASE_SERVICE_ROLE_KEY?.length || 0
+      serviceKeyLength: process.env.SUPABASE_SERVICE_ROLE_KEY?.length || 0,
     })
-    
+
     const formData = await request.formData()
     const file = formData.get('file') as File
 
@@ -76,9 +76,6 @@ export async function POST(request: NextRequest) {
       console.error('❌ Erro no upload do Supabase:', error)
       console.error('📋 Detalhes do erro:', {
         message: error.message,
-        details: error.details,
-        hint: error.hint,
-        code: error.code,
       })
 
       // Se o bucket não existir, retorna erro específico

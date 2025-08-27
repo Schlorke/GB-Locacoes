@@ -1,14 +1,20 @@
-import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
-import { AccountWhereUniqueInputObjectSchema } from './AccountWhereUniqueInput.schema';
-import { AccountCreateWithoutUserInputObjectSchema } from './AccountCreateWithoutUserInput.schema';
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
+import { AccountWhereUniqueInputObjectSchema } from './AccountWhereUniqueInput.schema'
+import { AccountCreateWithoutUserInputObjectSchema } from './AccountCreateWithoutUserInput.schema'
 import { AccountUncheckedCreateWithoutUserInputObjectSchema } from './AccountUncheckedCreateWithoutUserInput.schema'
 
-export const AccountCreateOrConnectWithoutUserInputObjectSchema: z.ZodType<Prisma.AccountCreateOrConnectWithoutUserInput, Prisma.AccountCreateOrConnectWithoutUserInput> = z.object({
-  where: z.lazy(() => AccountWhereUniqueInputObjectSchema),
-  create: z.union([z.lazy(() => AccountCreateWithoutUserInputObjectSchema), z.lazy(() => AccountUncheckedCreateWithoutUserInputObjectSchema)])
-}).strict();
-export const AccountCreateOrConnectWithoutUserInputObjectZodSchema = z.object({
-  where: z.lazy(() => AccountWhereUniqueInputObjectSchema),
-  create: z.union([z.lazy(() => AccountCreateWithoutUserInputObjectSchema), z.lazy(() => AccountUncheckedCreateWithoutUserInputObjectSchema)])
-}).strict();
+const makeSchema = (): z.ZodObject<any> =>
+  z
+    .object({
+      where: z.lazy(() => AccountWhereUniqueInputObjectSchema),
+      create: z.union([
+        z.lazy(() => AccountCreateWithoutUserInputObjectSchema),
+        z.lazy(() => AccountUncheckedCreateWithoutUserInputObjectSchema),
+      ]),
+    })
+    .strict()
+export const AccountCreateOrConnectWithoutUserInputObjectSchema: z.ZodType<Prisma.AccountCreateOrConnectWithoutUserInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.AccountCreateOrConnectWithoutUserInput>
+export const AccountCreateOrConnectWithoutUserInputObjectZodSchema =
+  makeSchema()

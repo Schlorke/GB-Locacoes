@@ -1,14 +1,14 @@
-import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
 
-
-export const VerificationTokenMinAggregateInputObjectSchema: z.ZodType<Prisma.VerificationTokenMinAggregateInputType, Prisma.VerificationTokenMinAggregateInputType> = z.object({
-  identifier: z.literal(true).optional(),
-  token: z.literal(true).optional(),
-  expires: z.literal(true).optional()
-}).strict();
-export const VerificationTokenMinAggregateInputObjectZodSchema = z.object({
-  identifier: z.literal(true).optional(),
-  token: z.literal(true).optional(),
-  expires: z.literal(true).optional()
-}).strict();
+const makeSchema = (): z.ZodObject<any> =>
+  z
+    .object({
+      identifier: z.literal(true).optional(),
+      token: z.literal(true).optional(),
+      expires: z.literal(true).optional(),
+    })
+    .strict()
+export const VerificationTokenMinAggregateInputObjectSchema: z.ZodType<Prisma.VerificationTokenMinAggregateInputType> =
+  makeSchema() as unknown as z.ZodType<Prisma.VerificationTokenMinAggregateInputType>
+export const VerificationTokenMinAggregateInputObjectZodSchema = makeSchema()

@@ -1,14 +1,14 @@
-import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
 
-
-export const SessionCreateManyUserInputObjectSchema: z.ZodType<Prisma.SessionCreateManyUserInput, Prisma.SessionCreateManyUserInput> = z.object({
-  id: z.string().optional(),
-  sessionToken: z.string(),
-  expires: z.date()
-}).strict();
-export const SessionCreateManyUserInputObjectZodSchema = z.object({
-  id: z.string().optional(),
-  sessionToken: z.string(),
-  expires: z.date()
-}).strict();
+const makeSchema = (): z.ZodObject<any> =>
+  z
+    .object({
+      id: z.string().optional(),
+      sessionToken: z.string(),
+      expires: z.date(),
+    })
+    .strict()
+export const SessionCreateManyUserInputObjectSchema: z.ZodType<Prisma.SessionCreateManyUserInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.SessionCreateManyUserInput>
+export const SessionCreateManyUserInputObjectZodSchema = makeSchema()

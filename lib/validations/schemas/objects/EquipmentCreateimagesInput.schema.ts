@@ -1,10 +1,12 @@
-import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
 
-
-export const EquipmentCreateimagesInputObjectSchema: z.ZodType<Prisma.EquipmentCreateimagesInput, Prisma.EquipmentCreateimagesInput> = z.object({
-  set: z.string().array()
-}).strict();
-export const EquipmentCreateimagesInputObjectZodSchema = z.object({
-  set: z.string().array()
-}).strict();
+const makeSchema = (): z.ZodObject<any> =>
+  z
+    .object({
+      set: z.string().array(),
+    })
+    .strict()
+export const EquipmentCreateimagesInputObjectSchema: z.ZodType<Prisma.EquipmentCreateimagesInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.EquipmentCreateimagesInput>
+export const EquipmentCreateimagesInputObjectZodSchema = makeSchema()

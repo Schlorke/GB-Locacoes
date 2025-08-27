@@ -1,26 +1,21 @@
-import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
 import { SortOrderSchema } from '../enums/SortOrder.schema'
 
-export const QuoteItemMinOrderByAggregateInputObjectSchema: z.ZodType<Prisma.QuoteItemMinOrderByAggregateInput, Prisma.QuoteItemMinOrderByAggregateInput> = z.object({
-  id: SortOrderSchema.optional(),
-  quoteId: SortOrderSchema.optional(),
-  equipmentId: SortOrderSchema.optional(),
-  quantity: SortOrderSchema.optional(),
-  days: SortOrderSchema.optional(),
-  pricePerDay: SortOrderSchema.optional(),
-  total: SortOrderSchema.optional(),
-  createdAt: SortOrderSchema.optional(),
-  updatedAt: SortOrderSchema.optional()
-}).strict();
-export const QuoteItemMinOrderByAggregateInputObjectZodSchema = z.object({
-  id: SortOrderSchema.optional(),
-  quoteId: SortOrderSchema.optional(),
-  equipmentId: SortOrderSchema.optional(),
-  quantity: SortOrderSchema.optional(),
-  days: SortOrderSchema.optional(),
-  pricePerDay: SortOrderSchema.optional(),
-  total: SortOrderSchema.optional(),
-  createdAt: SortOrderSchema.optional(),
-  updatedAt: SortOrderSchema.optional()
-}).strict();
+const makeSchema = (): z.ZodObject<any> =>
+  z
+    .object({
+      id: SortOrderSchema.optional(),
+      quoteId: SortOrderSchema.optional(),
+      equipmentId: SortOrderSchema.optional(),
+      quantity: SortOrderSchema.optional(),
+      days: SortOrderSchema.optional(),
+      pricePerDay: SortOrderSchema.optional(),
+      total: SortOrderSchema.optional(),
+      createdAt: SortOrderSchema.optional(),
+      updatedAt: SortOrderSchema.optional(),
+    })
+    .strict()
+export const QuoteItemMinOrderByAggregateInputObjectSchema: z.ZodType<Prisma.QuoteItemMinOrderByAggregateInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.QuoteItemMinOrderByAggregateInput>
+export const QuoteItemMinOrderByAggregateInputObjectZodSchema = makeSchema()
