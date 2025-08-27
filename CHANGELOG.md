@@ -30,9 +30,18 @@ e este projeto adere ao
 - ✅ `app/api/admin/seed-admin/route.ts` - Seed de usuário admin
 - ✅ `app/api/admin/quotes/[id]/route.ts` - CRUD de orçamentos admin
 
-**Rotas Já com Import Dinâmico (Mantidas):**
+**Rotas Corrigidas de Import Dinâmico para getPrisma():**
 
-- ✅ `app/api/equipments/route.ts` - Import dinâmico existente
+- ✅ `app/api/categories/route.ts` - Conversão para getPrisma()
+- ✅ `app/api/equipments/route.ts` - Conversão para getPrisma()
+- ✅ `app/api/admin/categories/route.ts` - Conversão para getPrisma()
+- ✅ `app/api/admin/categories/[id]/route.ts` - Conversão para getPrisma()
+- ✅ `app/api/admin/equipments/route.ts` - Conversão para getPrisma()
+- ✅ `app/api/admin/quotes/route.ts` - Conversão para getPrisma()
+- ✅ `app/api/admin/dashboard/route.ts` - Conversão para getPrisma()
+
+**Total: 13 rotas migradas para padrão consistente getPrisma()**
+
 - ✅ `app/api/categories/route.ts` - Import dinâmico existente
 - ✅ `app/api/admin/equipments/route.ts` - Import dinâmico existente
 - ✅ `app/api/admin/quotes/route.ts` - Import dinâmico existente

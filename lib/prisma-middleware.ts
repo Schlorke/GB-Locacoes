@@ -20,7 +20,8 @@ export async function ensurePrismaInitialized(): Promise<void> {
       console.log('[Prisma Middleware] Ensuring Prisma Client is initialized...')
       
       // Verificar se o Prisma Client está disponível
-      const { prisma } = await import('@/lib/prisma')
+      const { getPrisma } = await import('@/lib/prisma')
+      const prisma = await getPrisma()
       
       // Testar conexão
       await prisma.$queryRaw`SELECT 1`

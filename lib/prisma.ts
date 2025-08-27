@@ -119,6 +119,7 @@ export async function checkDatabaseConnection(): Promise<{
   }
 }> {
   try {
+    const prisma = await getPrisma()
     await prisma.$connect()
     await prisma.$queryRaw`SELECT 1`
     await prisma.$disconnect()
@@ -143,6 +144,7 @@ export async function checkDatabaseConnection(): Promise<{
 // Função para forçar reconexão
 export async function reconnectDatabase(): Promise<void> {
   try {
+    const prisma = await getPrisma()
     await prisma.$disconnect()
     await prisma.$connect()
     console.log('Database reconnection successful')
