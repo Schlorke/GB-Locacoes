@@ -1,16 +1,13 @@
-import { z } from 'zod'
-import type { Prisma } from '../../../../node_modules/.prisma/client'
+import { z } from 'zod';
+import type { Prisma } from '../../../../node_modules/.prisma/client';
 
-const makeSchema = (): z.ZodObject<any> =>
-  z
-    .object({
-      id: z.literal(true).optional(),
-      sessionToken: z.literal(true).optional(),
-      userId: z.literal(true).optional(),
-      expires: z.literal(true).optional(),
-      _all: z.literal(true).optional(),
-    })
-    .strict()
-export const SessionCountAggregateInputObjectSchema: z.ZodType<Prisma.SessionCountAggregateInputType> =
-  makeSchema() as unknown as z.ZodType<Prisma.SessionCountAggregateInputType>
-export const SessionCountAggregateInputObjectZodSchema = makeSchema()
+
+const makeSchema = (): z.ZodObject<any> => z.object({
+  id: z.literal(true).optional(),
+  sessionToken: z.literal(true).optional(),
+  userId: z.literal(true).optional(),
+  expires: z.literal(true).optional(),
+  _all: z.literal(true).optional()
+}).strict();
+export const SessionCountAggregateInputObjectSchema: z.ZodType<Prisma.SessionCountAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.SessionCountAggregateInputType>;
+export const SessionCountAggregateInputObjectZodSchema = makeSchema();

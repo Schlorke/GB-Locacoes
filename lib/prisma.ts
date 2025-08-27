@@ -5,53 +5,51 @@ declare global {
 }
 
 const prismaClientSingleton = () => {
-  return new PrismaClient({
-    log:
-      process.env.NODE_ENV === 'development'
-        ? ['query', 'error', 'warn']
-        : ['error'],
-    // Configurações robustas para produção
+  const client = new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
     datasources: {
       db: {
         url: process.env.DATABASE_URL,
       },
     },
   })
+
+  // Log apenas informações essenciais
+  if (process.env.NODE_ENV === 'production') {
+    console.log('[Prisma] Client initialized in production mode')
+  }
+
+  return client
 }
 
-// Use globalThis directly to avoid initialization issues during build
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Create a lazy initialization function
-let _prisma: PrismaClient | null = null
+// Inicialização simples e robusta
+export const prisma = globalForPrisma.prisma ?? prismaClientSingleton()
 
-export const prisma = new Proxy({} as PrismaClient, {
-  get(target, prop) {
-    if (!_prisma) {
-      try {
-        _prisma = globalForPrisma.prisma ?? prismaClientSingleton()
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma
+}
 
-        // Configurar handlers de erro para produção
-        if (process.env.NODE_ENV === 'production') {
-          // Logging básico para produção sem handlers de evento complexos
-          console.log('Prisma client initialized in production mode')
-        }
-
-        if (process.env.NODE_ENV !== 'production') {
-          globalForPrisma.prisma = _prisma
-        }
-      } catch (error) {
-        console.error('Failed to initialize Prisma client:', error)
-        throw new Error(
-          `Prisma initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-        )
-      }
-    }
-    return _prisma[prop as keyof PrismaClient]
-  },
-})
+// Função para diagnóstico de problemas de deployment
+export function diagnosticInfo(): {
+  environment: string
+  databaseUrl: boolean
+  prismaVersion: string
+  nodeVersion: string
+  platform: string
+} {
+  return {
+    environment: process.env.NODE_ENV || 'unknown',
+    databaseUrl: !!process.env.DATABASE_URL,
+    prismaVersion:
+      process.env.npm_package_dependencies__prisma_client || 'unknown',
+    nodeVersion: process.version,
+    platform: process.platform,
+  }
+}
 
 // Função para verificar conectividade
 export async function checkDatabaseConnection(): Promise<{
@@ -64,10 +62,9 @@ export async function checkDatabaseConnection(): Promise<{
   }
 }> {
   try {
-    const client = prisma
-    await client.$connect()
-    await client.$queryRaw`SELECT 1`
-    await client.$disconnect()
+    await prisma.$connect()
+    await prisma.$queryRaw`SELECT 1`
+    await prisma.$disconnect()
 
     return { connected: true }
   } catch (error) {
@@ -89,12 +86,7 @@ export async function checkDatabaseConnection(): Promise<{
 // Função para forçar reconexão
 export async function reconnectDatabase(): Promise<void> {
   try {
-    if (_prisma) {
-      await _prisma.$disconnect()
-      _prisma = null
-    }
-
-    // Forçar nova inicialização
+    await prisma.$disconnect()
     await prisma.$connect()
     console.log('Database reconnection successful')
   } catch (error) {

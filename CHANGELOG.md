@@ -6,6 +6,81 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-01-27] - CRÍTICO: CORREÇÃO DE DEPLOY NA VERCEL + PRISMA CLIENT
+
+### 🚨 **PROBLEMA CRÍTICO RESOLVIDO** - APIs não carregadas no deploy da Vercel
+
+#### **Erro Identificado:**
+
+- **Prisma initialization failed**: Client Prisma complexo causando falhas no
+  deploy
+- **API Routes 500**: Todas as APIs retornando erro na Vercel
+- **Import Resolution**: Problemas com importações dinâmicas do Prisma
+
+#### **Soluções Implementadas:**
+
+##### **1. 🔧 Simplificação do Client Prisma (`lib/prisma.ts`)**
+
+- **REMOVIDO**: Proxy complexo e lazy initialization problemática
+- **ADICIONADO**: Inicialização direta e robusta
+- **MELHORADO**: Logs específicos para produção
+- **CRIADO**: Função `diagnosticInfo()` para debugging
+
+##### **2. 📊 Sistema de Diagnóstico Avançado**
+
+- **ROTA**: `/api/health` com diagnósticos completos
+- **LOGS**: Informações detalhadas de ambiente e conectividade
+- **DEBUGGING**: Verificação automática de variáveis de ambiente
+
+##### **3. ⚙️ Otimizações Next.js para Vercel**
+
+- **WEBPACK**: Configuração específica para Prisma
+- **EXPERIMENTAL**: `serverComponentsExternalPackages` para Prisma
+- **BUILD**: Scripts otimizados para geração automática
+
+##### **4. 📚 Documentação de Deploy**
+
+- **CRIADO**: `docs/troubleshooting/vercel-deployment-fix.md`
+- **CHECKLIST**: Processo completo de deploy
+- **DEBUGGING**: Guia de resolução de problemas
+
+#### **Validação de Qualidade:**
+
+- ✅ **Testes Locais**: 30/30 testes passando
+- ✅ **Health Check**: `/api/health` funcionando localmente
+- ✅ **Build**: Processo de build sem erros
+- ✅ **Validações**: Esquemas Zod gerados automaticamente
+
+#### **Variáveis de Ambiente Verificadas:**
+
+- ✅ `DATABASE_URL`: Configuração correta do Supabase
+- ✅ `NEXTAUTH_SECRET`: Autenticação segura
+- ✅ `SUPABASE_*`: Chaves de acesso validadas
+
+### 🔧 **Mudanças Técnicas**
+
+#### **Modificados:**
+
+- `lib/prisma.ts`: Simplificação completa do client
+- `app/api/health/route.ts`: Diagnósticos avançados
+- `next.config.mjs`: Otimizações para Prisma
+- `package.json`: Scripts de build otimizados
+
+#### **Adicionados:**
+
+- `docs/troubleshooting/vercel-deployment-fix.md`: Guia completo
+- Função `diagnosticInfo()`: Informações de ambiente
+- Logs detalhados para debugging
+
+#### **Testado:**
+
+- Conectividade local com banco Supabase
+- Geração automática de esquemas Zod
+- Processo completo de build
+- Rota de health check
+
+---
+
 ## [2025-01-15] - ANALYTICS DASHBOARD & MAJOR IMPROVEMENTS + DOCUMENTATION FIXES
 
 ## [2025-01-15] - CRÍTICO: CORREÇÃO DE PROBLEMAS DE BANCO DE DADOS EM PRODUÇÃO

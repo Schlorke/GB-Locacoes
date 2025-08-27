@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server'
+import { diagnosticInfo, checkDatabaseConnection } from '@/lib/prisma'
+
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export async function GET() {
+  console.log('[Health Check] Starting comprehensive diagnostics...')
+
   try {
     const healthCheck = {
       status: 'ok' as 'ok' | 'error',
@@ -29,29 +35,37 @@ export async function GET() {
           ? 'configured'
           : 'missing',
       },
+      // Novos diagnósticos
+      prisma_diagnostics: {} as Record<string, unknown>,
     }
+
+    console.log('[Health Check] Getting Prisma diagnostics...')
+    healthCheck.prisma_diagnostics = diagnosticInfo()
 
     // Testar conexão com banco se DATABASE_URL estiver configurado
     if (process.env.DATABASE_URL) {
+      console.log('[Health Check] Testing database connection...')
       try {
-        const { prisma } = await import('@/lib/prisma')
+        const dbStatus = await checkDatabaseConnection()
 
-        // Testar conexão com timeout
-        const connectionPromise = prisma.$connect()
-        const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Connection timeout')), 5000)
-        )
-
-        await Promise.race([connectionPromise, timeoutPromise])
-
-        // Testar query simples
-        await prisma.$queryRaw`SELECT 1`
-
-        healthCheck.database.status = 'connected'
+        if (dbStatus.connected) {
+          healthCheck.database.status = 'connected'
+          console.log('[Health Check] ✅ Database connection successful')
+        } else {
+          healthCheck.database.status = 'error'
+          healthCheck.database.error = {
+            message: dbStatus.error || 'Unknown database error',
+            code: dbStatus.details?.code || 'UNKNOWN',
+            type: dbStatus.details?.type || 'Unknown',
+          }
+          console.log(
+            '[Health Check] ❌ Database connection failed:',
+            dbStatus.error
+          )
+        }
         healthCheck.database.connection = 'success'
 
-        // Fechar conexão
-        await prisma.$disconnect()
+        // Não precisa desconectar aqui, o checkDatabaseConnection já faz isso
       } catch (dbError) {
         healthCheck.database.status = 'error'
         healthCheck.database.error = {

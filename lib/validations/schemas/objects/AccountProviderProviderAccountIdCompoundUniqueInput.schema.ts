@@ -1,14 +1,10 @@
-import { z } from 'zod'
-import type { Prisma } from '../../../../node_modules/.prisma/client'
+import { z } from 'zod';
+import type { Prisma } from '../../../../node_modules/.prisma/client';
 
-const makeSchema = (): z.ZodObject<any> =>
-  z
-    .object({
-      provider: z.string(),
-      providerAccountId: z.string(),
-    })
-    .strict()
-export const AccountProviderProviderAccountIdCompoundUniqueInputObjectSchema: z.ZodType<Prisma.AccountProviderProviderAccountIdCompoundUniqueInput> =
-  makeSchema() as unknown as z.ZodType<Prisma.AccountProviderProviderAccountIdCompoundUniqueInput>
-export const AccountProviderProviderAccountIdCompoundUniqueInputObjectZodSchema =
-  makeSchema()
+
+const makeSchema = (): z.ZodObject<any> => z.object({
+  provider: z.string(),
+  providerAccountId: z.string()
+}).strict();
+export const AccountProviderProviderAccountIdCompoundUniqueInputObjectSchema: z.ZodType<Prisma.AccountProviderProviderAccountIdCompoundUniqueInput> = makeSchema() as unknown as z.ZodType<Prisma.AccountProviderProviderAccountIdCompoundUniqueInput>;
+export const AccountProviderProviderAccountIdCompoundUniqueInputObjectZodSchema = makeSchema();

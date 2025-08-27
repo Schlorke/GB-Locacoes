@@ -1,12 +1,9 @@
-import { z } from 'zod'
-import type { Prisma } from '../../../../node_modules/.prisma/client'
+import { z } from 'zod';
+import type { Prisma } from '../../../../node_modules/.prisma/client';
 import { QuoteCountOutputTypeSelectObjectSchema } from './QuoteCountOutputTypeSelect.schema'
 
-const makeSchema = (): z.ZodObject<any> =>
-  z
-    .object({
-      select: z.lazy(() => QuoteCountOutputTypeSelectObjectSchema).optional(),
-    })
-    .strict()
-export const QuoteCountOutputTypeArgsObjectSchema = makeSchema()
-export const QuoteCountOutputTypeArgsObjectZodSchema = makeSchema()
+const makeSchema = (): z.ZodObject<any> => z.object({
+  select: z.lazy(() => QuoteCountOutputTypeSelectObjectSchema).optional()
+}).strict();
+export const QuoteCountOutputTypeArgsObjectSchema = makeSchema();
+export const QuoteCountOutputTypeArgsObjectZodSchema = makeSchema();
