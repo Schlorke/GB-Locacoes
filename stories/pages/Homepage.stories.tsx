@@ -3,7 +3,7 @@ import ContactSection from '@/components/contact-section'
 import FeaturedMaterials from '@/components/featured-materials'
 import Hero from '@/components/hero'
 import WhyChooseUs from '@/components/why-choose-us'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { categoriesFixture } from '../fixtures/categories'
 import { featuredEquipmentsFixture } from '../fixtures/equipments'
 

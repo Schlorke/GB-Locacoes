@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ThemeProvider } from '@/components/theme-provider'
 
 const meta: Meta<typeof ThemeProvider> = {

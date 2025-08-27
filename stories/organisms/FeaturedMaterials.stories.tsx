@@ -1,5 +1,5 @@
 import FeaturedMaterials from '@/components/featured-materials'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta: Meta<typeof FeaturedMaterials> = {
   title: 'Organisms/FeaturedMaterials',

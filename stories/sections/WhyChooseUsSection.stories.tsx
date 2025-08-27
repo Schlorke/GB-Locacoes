@@ -1,5 +1,5 @@
 import WhyChooseUs from '@/components/why-choose-us'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta: Meta<typeof WhyChooseUs> = {
   title: 'Seções/Home/WhyChooseUs — Por que Escolher a GB Locações',

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Command } from '@/components/ui/command'
 
 const meta: Meta<typeof Command> = {

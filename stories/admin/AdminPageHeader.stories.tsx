@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { AdminPageHeader } from '@/components/admin/admin-page-header'
 
 const meta: Meta<typeof AdminPageHeader> = {

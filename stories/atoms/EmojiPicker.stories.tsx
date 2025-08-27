@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { EmojiPicker } from '@/components/ui/emoji-picker'
 
 const meta: Meta<typeof EmojiPicker> = {

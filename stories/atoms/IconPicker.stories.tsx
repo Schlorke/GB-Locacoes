@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { IconPicker } from '@/components/ui/icon-picker'
 
 const meta: Meta<typeof IconPicker> = {

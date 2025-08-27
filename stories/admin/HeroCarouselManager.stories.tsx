@@ -1,5 +1,5 @@
 import { HeroCarouselManager } from '@/components/admin/hero-carousel-manager'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta: Meta<typeof HeroCarouselManager> = {
   title: 'Admin/HeroCarouselManager',

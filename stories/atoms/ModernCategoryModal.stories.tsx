@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ModernCategoryModal } from '@/components/ui/modern-category-modal'
 
 const meta: Meta<typeof ModernCategoryModal> = {

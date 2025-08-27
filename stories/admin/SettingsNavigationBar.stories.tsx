@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { SettingsNavigationBar } from '@/components/admin/settings-navigation-bar'
 
 const meta: Meta<typeof SettingsNavigationBar> = {

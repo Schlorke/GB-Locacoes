@@ -1,5 +1,5 @@
 import AdminSidebar from '@/components/admin/admin-sidebar'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { fn } from '@storybook/test'
 
 const meta: Meta<typeof AdminSidebar> = {

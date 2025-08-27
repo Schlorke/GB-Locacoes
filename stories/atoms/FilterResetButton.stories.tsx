@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { FilterResetButton } from '@/components/ui/filter-reset-button'
 
 const meta: Meta<typeof FilterResetButton> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { MiniCarousel } from '@/components/admin/mini-carousel'
 
 const meta: Meta<typeof MiniCarousel> = {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Mdx } from '@/components/mdx'
 
 const meta: Meta<typeof Mdx> = {

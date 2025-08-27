@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { AdminCard } from '@/components/admin/admin-card'
 
 const meta: Meta<typeof AdminCard> = {

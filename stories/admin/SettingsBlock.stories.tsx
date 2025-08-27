@@ -1,5 +1,5 @@
 import { SettingsBlock } from '@/components/admin/settings-block'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Settings } from 'lucide-react'
 
 const meta: Meta<typeof SettingsBlock> = {

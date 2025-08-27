@@ -1,5 +1,5 @@
 import FeaturedMaterials from '@/components/featured-materials'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { featuredEquipmentsFixture } from '../fixtures/equipments'
 
 // Mock global fetch for Storybook

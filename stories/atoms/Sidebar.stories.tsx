@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Sidebar } from '@/components/ui/sidebar'
 
 const meta: Meta<typeof Sidebar> = {

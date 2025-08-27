@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 import { CurrencyInput } from '@/components/ui/currency-input'
 
 const meta: Meta<typeof CurrencyInput> = {

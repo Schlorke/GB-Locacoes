@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta: Meta<typeof Input> = {
   title: 'Atoms/Input',
