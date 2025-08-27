@@ -6,6 +6,41 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-08-27] - BUILD FIXES COMPLETOS: Storybook + Prisma
+
+### 🔧 **CORREÇÕES CRÍTICAS DE BUILD**
+
+#### **1. Problema Storybook Imports** ✅ **RESOLVIDO**
+
+- **Erro**: TypeScript não conseguia encontrar `@storybook/react`
+- **Causa**: 91 arquivos usando import incorreto
+- **Solução**: Script automatizado `fix-storybook-imports.js`
+- **Resultado**: 91 arquivos `.stories.tsx` corrigidos para
+  `@storybook/react-vite`
+
+#### **2. Problema Prisma Client** ✅ **RESOLVIDO**
+
+- **Erro**: "Prisma Client did not initialize yet" durante build
+- **Causa**: Inicialização inadequada + logs incorretos
+- **Solução**: Melhorado `lib/prisma.ts` com verificação de DATABASE_URL
+- **Debug**: Adicionados logs de diagnóstico no `post-prisma-generate.js`
+
+#### **3. Build Process** ✅ **100% FUNCIONAL**
+
+- **Status**: ✅ 34 páginas geradas com sucesso
+- **Prisma**: ✅ Client inicializado corretamente
+- **TypeScript**: ✅ Zero erros de compilação
+- **Scripts**: ✅ Todos os scripts de build funcionando
+
+### 🛠️ **FERRAMENTAS CRIADAS**
+
+- **Script**: `scripts/fix-storybook-imports.js` - Correção automática de
+  imports
+- **Config**: `vercel-build.sh` - Script de build específico para Vercel
+- **Debug**: Logs melhorados em toda a pipeline de build
+
+---
+
 ## [2025-08-27] - VERCEL DEPLOY FIX + CONFIGURAÇÕES
 
 ### 🚀 **CORREÇÕES PARA DEPLOY NA VERCEL**

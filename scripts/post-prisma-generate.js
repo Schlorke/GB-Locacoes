@@ -1,6 +1,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+console.log('[post-prisma] 🚀 Iniciando geração de validações...')
+console.log('[post-prisma] NODE_ENV:', process.env.NODE_ENV)
+console.log('[post-prisma] Working directory:', process.cwd())
+
 const validationsIndexContent = `import { z } from 'zod'
 
 // Esquemas públicos para a API

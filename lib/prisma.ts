@@ -5,6 +5,14 @@ declare global {
 }
 
 const prismaClientSingleton = () => {
+  console.log('[Prisma] Creating new client instance')
+  
+  // Verificar se DATABASE_URL existe
+  if (!process.env.DATABASE_URL) {
+    console.error('[Prisma] DATABASE_URL not found')
+    throw new Error('DATABASE_URL environment variable is required')
+  }
+
   const client = new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
     datasources: {
@@ -14,11 +22,7 @@ const prismaClientSingleton = () => {
     },
   })
 
-  // Log apenas informações essenciais
-  if (process.env.NODE_ENV === 'production') {
-    console.log('[Prisma] Client initialized in production mode')
-  }
-
+  console.log('[Prisma] Client initialized successfully')
   return client
 }
 
@@ -26,12 +30,21 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Inicialização simples e robusta
-export const prisma = globalForPrisma.prisma ?? prismaClientSingleton()
+// Inicialização com tratamento de erro
+let prismaInstance: PrismaClient
 
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma
+try {
+  prismaInstance = globalForPrisma.prisma ?? prismaClientSingleton()
+  
+  if (process.env.NODE_ENV !== 'production') {
+    globalForPrisma.prisma = prismaInstance
+  }
+} catch (error) {
+  console.error('[Prisma] Failed to initialize client:', error)
+  throw error
 }
+
+export const prisma = prismaInstance
 
 // Função para diagnóstico de problemas de deployment
 export function diagnosticInfo(): {
