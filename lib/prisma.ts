@@ -85,7 +85,7 @@ export const getPrisma = async (): Promise<PrismaClient> => {
 
 // Export para compatibilidade (será lazy)
 export const prisma = new Proxy({} as PrismaClient, {
-  get(target, prop) {
+  get() {
     throw new Error('Use getPrisma() instead of direct prisma access')
   }
 })

@@ -28,6 +28,12 @@ const nextConfig = {
   },
   // Otimizações específicas para Vercel + Prisma
   serverExternalPackages: ['@prisma/client', 'prisma'],
+  
+  // Configuração experimental
+  experimental: {
+    // Outras configurações experimentais podem ser adicionadas aqui
+  },
+  
   // Garantir que o Prisma seja incluído no bundle
   webpack: (config, { isServer }) => {
     if (isServer) {

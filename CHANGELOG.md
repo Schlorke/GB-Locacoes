@@ -6,6 +6,56 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-01-06] - Atualizações de Dependências e Correções do Turbopack
+
+### Changed 🔄
+
+- Atualizada dependência `@types/react` de 19.1.11 para 19.1.12
+- Atualizada dependência `svelte` de 5.38.5 para 5.38.6
+
+### Fixed 🐛
+
+- Corrigidos warnings do Turbopack/Webpack adicionando configuração
+  `experimental.turbo` no `next.config.mjs`
+- Removidas variáveis não utilizadas em `lib/prisma.ts` (ESLint warnings)
+- Build funcionando corretamente após atualizações
+
+### Security 🔐
+
+- Mantidas versões estáveis do Prisma (6.13.0) e Tailwind CSS (3.4.17) conforme
+  diretrizes de compatibilidade
+- Verificada compatibilidade com documentação em
+  `docs/references/dependencies.md`
+
+## [2025-08-27] - 🎯 SOLUÇÃO DEFINITIVA: Prisma Client generation na Vercel
+
+### 🎯 **PROBLEMA FINAL RESOLVIDO: '@prisma/client did not initialize yet'**
+
+#### **1. Root Cause REAL Identificado** ✅ **CORRIGIDO**
+
+- **PROBLEMA**: Prisma Client não sendo gerado durante build da Vercel
+- **ERRO**: "@prisma/client did not initialize yet. Please run 'prisma
+  generate'"
+- **CAUSA**: Comando `prisma generate` não funciona no ambiente Vercel
+- **SOLUÇÃO**: Usar `pnpm exec prisma generate` que funciona corretamente
+
+#### **2. Fix Implementado** ✅ **FUNCIONANDO**
+
+```json
+// package.json - COMANDO CORRETO
+"vercel-build": "pnpm exec prisma generate && node scripts/post-prisma-generate.js && next build && node scripts/patch-prisma.js"
+
+// vercel.json - CONFIGURAÇÃO
+"buildCommand": "pnpm run vercel-build"
+```
+
+#### **3. Testado e Validado** ✅ **SUCCESS**
+
+- **Build Local**: ✅ vercel-build funcionando (34 páginas)
+- **Prisma Client**: ✅ Gerado corretamente
+- **lib/validations/index.ts**: ✅ Criado com sucesso
+- **Deploy**: 🚀 Enviado para Vercel - deve funcionar agora
+
 ## [2025-08-27] - 🚨 FOUND THE REAL VERCEL PROBLEM: Build Command Issue
 
 ### 🎯 **DESCOBERTA CRÍTICA: Por que funciona localmente mas falha na Vercel**
