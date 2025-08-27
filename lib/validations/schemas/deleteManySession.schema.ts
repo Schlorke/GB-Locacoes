@@ -1,4 +1,6 @@
-import { z } from 'zod';
-import { SessionWhereInputObjectSchema } from './objects/SessionWhereInput.schema';
+import { z } from 'zod'
+import { SessionWhereInputObjectSchema } from './objects/SessionWhereInput.schema'
 
-export const SessionDeleteManySchema = z.object({ where: SessionWhereInputObjectSchema.optional()  })
+export const SessionDeleteManySchema = z.object({
+  where: SessionWhereInputObjectSchema.optional(),
+})

@@ -1,11 +1,14 @@
-import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import { z } from 'zod'
+import type { Prisma } from '../../../../node_modules/.prisma/client'
 
-
-const makeSchema = (): z.ZodObject<any> => z.object({
-  identifier: z.string(),
-  token: z.string(),
-  expires: z.date()
-}).strict();
-export const VerificationTokenCreateManyInputObjectSchema: z.ZodType<Prisma.VerificationTokenCreateManyInput> = makeSchema() as unknown as z.ZodType<Prisma.VerificationTokenCreateManyInput>;
-export const VerificationTokenCreateManyInputObjectZodSchema = makeSchema();
+const makeSchema = (): z.ZodObject<any> =>
+  z
+    .object({
+      identifier: z.string(),
+      token: z.string(),
+      expires: z.date(),
+    })
+    .strict()
+export const VerificationTokenCreateManyInputObjectSchema: z.ZodType<Prisma.VerificationTokenCreateManyInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.VerificationTokenCreateManyInput>
+export const VerificationTokenCreateManyInputObjectZodSchema = makeSchema()

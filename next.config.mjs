@@ -31,7 +31,7 @@ const nextConfig = {
     CHROMATIC_PROJECT_TOKEN: 'chpt_ed7c61c0587a8b0',
   },
 
-    // Configuração específica para Vercel + Prisma
+  // Configuração específica para Vercel + Prisma
   serverExternalPackages: ['@prisma/client', 'prisma'],
 }
 

@@ -6,16 +6,6 @@ declare global {
 
 let prismaInstance: PrismaClient | undefined
 
-// Configuração específica para Vercel
-const prismaConfig = {
-  log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL,
-    },
-  },
-} as const
-
 const createPrismaClient = (): PrismaClient => {
   console.log('[Prisma] Creating new client instance')
 
@@ -32,7 +22,14 @@ const createPrismaClient = (): PrismaClient => {
   console.log('[Prisma] DATABASE_URL found, creating client...')
 
   try {
-    const client = new PrismaClient(prismaConfig)
+    // Configuração simplificada para evitar problemas de tipo
+    const client = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL,
+        },
+      },
+    })
     console.log('[Prisma] Client created successfully')
     return client
   } catch (error) {
@@ -48,15 +45,15 @@ const prismaClientProxy = new Proxy({} as PrismaClient, {
       console.log('[Prisma] Lazy initializing client...')
       prismaInstance = createPrismaClient()
     }
-    
+
     const value = prismaInstance[prop as keyof PrismaClient]
-    
+
     if (typeof value === 'function') {
       return value.bind(prismaInstance)
     }
-    
+
     return value
-  }
+  },
 })
 
 // Export principal
@@ -68,6 +65,30 @@ export const getPrisma = (): PrismaClient => {
     prismaInstance = createPrismaClient()
   }
   return prismaInstance
+}
+
+// Função para verificar conexão com banco de dados
+export async function checkDatabaseConnection(): Promise<{
+  connected: boolean
+  error?: string
+  details?: { code: string; type: string }
+}> {
+  try {
+    const client = getPrisma()
+    await client.$queryRaw`SELECT 1`
+    return { connected: true }
+  } catch (error: unknown) {
+    console.error('[Prisma] Database connection failed:', error)
+    const errorObj = error as Error & { code?: string }
+    return {
+      connected: false,
+      error: errorObj?.message || 'Unknown database error',
+      details: {
+        code: errorObj?.code || 'UNKNOWN',
+        type: errorObj?.name || 'Unknown',
+      },
+    }
+  }
 }
 
 // Função para diagnóstico de problemas de deployment
