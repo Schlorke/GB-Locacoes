@@ -33,22 +33,6 @@ const nextConfig = {
 
     // Configuração específica para Vercel + Prisma
   serverExternalPackages: ['@prisma/client', 'prisma'],
-  
-  // Configurações experimentais
-  experimental: {
-    // Outras configurações experimentais se necessário
-  },
-
-  // Configuração webpack específica para Vercel
-  webpack: (config, { isServer, dev }) => {
-    if (isServer && !dev) {
-      // Configuração específica para build de produção na Vercel
-      config.externals.push({
-        '@prisma/client': '@prisma/client',
-      })
-    }
-    return config
-  },
 }
 
 export default nextConfig

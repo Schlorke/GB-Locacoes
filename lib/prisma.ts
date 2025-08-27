@@ -6,6 +6,16 @@ declare global {
 
 let prismaInstance: PrismaClient | undefined
 
+// Configuração específica para Vercel
+const prismaConfig = {
+  log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+} as const
+
 const createPrismaClient = (): PrismaClient => {
   console.log('[Prisma] Creating new client instance')
 
@@ -22,21 +32,7 @@ const createPrismaClient = (): PrismaClient => {
   console.log('[Prisma] DATABASE_URL found, creating client...')
 
   try {
-    // Configuração otimizada para Vercel
-    const client = new PrismaClient({
-      log:
-        process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
-      datasources: {
-        db: {
-          url: process.env.DATABASE_URL,
-        },
-      },
-      // Configuração específica para ambientes serverless
-      ...(process.env.VERCEL && {
-        engineType: 'binary',
-      }),
-    })
-
+    const client = new PrismaClient(prismaConfig)
     console.log('[Prisma] Client created successfully')
     return client
   } catch (error) {
@@ -45,56 +41,34 @@ const createPrismaClient = (): PrismaClient => {
   }
 }
 
-// Função para obter a instância do Prisma com lazy loading
-export const getPrisma = (): PrismaClient => {
-  const globalForPrisma = globalThis as unknown as {
-    prisma: PrismaClient | undefined
-  }
-
-  // Usar instância global se disponível (desenvolvimento)
-  if (process.env.NODE_ENV !== 'production' && globalForPrisma.prisma) {
-    return globalForPrisma.prisma
-  }
-
-  // Usar instância local se disponível
-  if (prismaInstance) {
-    return prismaInstance
-  }
-
-  // Criar nova instância
-  try {
-    prismaInstance = createPrismaClient()
-
-    if (process.env.NODE_ENV !== 'production') {
-      globalForPrisma.prisma = prismaInstance
+// Singleton pattern com Proxy para inicialização lazy
+const prismaClientProxy = new Proxy({} as PrismaClient, {
+  get(target, prop) {
+    if (!prismaInstance) {
+      console.log('[Prisma] Lazy initializing client...')
+      prismaInstance = createPrismaClient()
     }
-
-    return prismaInstance
-  } catch (error) {
-    console.error('[Prisma] Failed to initialize client:', error)
-
-    // Em ambientes de build, tentar uma vez mais
-    if (process.env.VERCEL || process.env.NODE_ENV === 'production') {
-      console.log('[Prisma] Retrying initialization for production/Vercel...')
-      try {
-        prismaInstance = createPrismaClient()
-        return prismaInstance
-      } catch (retryError) {
-        console.error('[Prisma] Retry failed:', retryError)
-        throw retryError
-      }
+    
+    const value = prismaInstance[prop as keyof PrismaClient]
+    
+    if (typeof value === 'function') {
+      return value.bind(prismaInstance)
     }
-
-    throw error
+    
+    return value
   }
-}
-
-// Export para compatibilidade (será lazy)
-export const prisma = new Proxy({} as PrismaClient, {
-  get() {
-    throw new Error('Use getPrisma() instead of direct prisma access')
-  },
 })
+
+// Export principal
+export const prisma = prismaClientProxy
+
+// Função alternativa para casos específicos
+export const getPrisma = (): PrismaClient => {
+  if (!prismaInstance) {
+    prismaInstance = createPrismaClient()
+  }
+  return prismaInstance
+}
 
 // Função para diagnóstico de problemas de deployment
 export function diagnosticInfo(): {
@@ -107,55 +81,8 @@ export function diagnosticInfo(): {
   return {
     environment: process.env.NODE_ENV || 'unknown',
     databaseUrl: !!process.env.DATABASE_URL,
-    prismaVersion:
-      process.env.npm_package_dependencies__prisma_client || 'unknown',
+    prismaVersion: '6.15.0',
     nodeVersion: process.version,
     platform: process.platform,
-  }
-}
-
-// Função para verificar conectividade
-export async function checkDatabaseConnection(): Promise<{
-  connected: boolean
-  error?: string
-  details?: {
-    code?: string
-    type: string
-    timestamp: string
-  }
-}> {
-  try {
-    const prisma = await getPrisma()
-    await prisma.$connect()
-    await prisma.$queryRaw`SELECT 1`
-    await prisma.$disconnect()
-
-    return { connected: true }
-  } catch (error) {
-    return {
-      connected: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-      details: {
-        code:
-          error instanceof Error && 'code' in error
-            ? String(error.code)
-            : undefined,
-        type: error?.constructor?.name || 'Unknown',
-        timestamp: new Date().toISOString(),
-      },
-    }
-  }
-}
-
-// Função para forçar reconexão
-export async function reconnectDatabase(): Promise<void> {
-  try {
-    const prisma = await getPrisma()
-    await prisma.$disconnect()
-    await prisma.$connect()
-    console.log('Database reconnection successful')
-  } catch (error) {
-    console.error('Database reconnection failed:', error)
-    throw error
   }
 }
