@@ -1,43 +1,10 @@
-import type { Prisma } from '@prisma/client'
-import { z } from 'zod'
-import { rental_itemsOrderByWithRelationInputObjectSchema } from './objects/rental_itemsOrderByWithRelationInput.schema'
-import { rental_itemsWhereInputObjectSchema } from './objects/rental_itemsWhereInput.schema'
-import { rental_itemsWhereUniqueInputObjectSchema } from './objects/rental_itemsWhereUniqueInput.schema'
-import { rental_itemsCountAggregateInputObjectSchema } from './objects/rental_itemsCountAggregateInput.schema'
+import type { Prisma } from '@prisma/client';
+import { z } from 'zod';
+import { rental_itemsOrderByWithRelationInputObjectSchema } from './objects/rental_itemsOrderByWithRelationInput.schema';
+import { rental_itemsWhereInputObjectSchema } from './objects/rental_itemsWhereInput.schema';
+import { rental_itemsWhereUniqueInputObjectSchema } from './objects/rental_itemsWhereUniqueInput.schema';
+import { rental_itemsCountAggregateInputObjectSchema } from './objects/rental_itemsCountAggregateInput.schema';
 
-export const rental_itemsCountSchema: z.ZodType<Prisma.rental_itemsCountArgs> =
-  z
-    .object({
-      orderBy: z
-        .union([
-          rental_itemsOrderByWithRelationInputObjectSchema,
-          rental_itemsOrderByWithRelationInputObjectSchema.array(),
-        ])
-        .optional(),
-      where: rental_itemsWhereInputObjectSchema.optional(),
-      cursor: rental_itemsWhereUniqueInputObjectSchema.optional(),
-      take: z.number().optional(),
-      skip: z.number().optional(),
-      select: z
-        .union([z.literal(true), rental_itemsCountAggregateInputObjectSchema])
-        .optional(),
-    })
-    .strict() as unknown as z.ZodType<Prisma.rental_itemsCountArgs>
+export const rental_itemsCountSchema: z.ZodType<Prisma.rental_itemsCountArgs> = z.object({ orderBy: z.union([rental_itemsOrderByWithRelationInputObjectSchema, rental_itemsOrderByWithRelationInputObjectSchema.array()]).optional(), where: rental_itemsWhereInputObjectSchema.optional(), cursor: rental_itemsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), select: z.union([ z.literal(true), rental_itemsCountAggregateInputObjectSchema ]).optional() }).strict() as unknown as z.ZodType<Prisma.rental_itemsCountArgs>;
 
-export const rental_itemsCountZodSchema = z
-  .object({
-    orderBy: z
-      .union([
-        rental_itemsOrderByWithRelationInputObjectSchema,
-        rental_itemsOrderByWithRelationInputObjectSchema.array(),
-      ])
-      .optional(),
-    where: rental_itemsWhereInputObjectSchema.optional(),
-    cursor: rental_itemsWhereUniqueInputObjectSchema.optional(),
-    take: z.number().optional(),
-    skip: z.number().optional(),
-    select: z
-      .union([z.literal(true), rental_itemsCountAggregateInputObjectSchema])
-      .optional(),
-  })
-  .strict()
+export const rental_itemsCountZodSchema = z.object({ orderBy: z.union([rental_itemsOrderByWithRelationInputObjectSchema, rental_itemsOrderByWithRelationInputObjectSchema.array()]).optional(), where: rental_itemsWhereInputObjectSchema.optional(), cursor: rental_itemsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), select: z.union([ z.literal(true), rental_itemsCountAggregateInputObjectSchema ]).optional() }).strict();

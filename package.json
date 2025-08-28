@@ -6,8 +6,8 @@
   "scripts": {
     "vercel-build": "echo 'Starting Vercel build...' && echo 'VERCEL env:' $VERCEL && node scripts/force-prisma-engines.js && node scripts/post-prisma-generate.js && next build && node scripts/patch-prisma.js",
     "prebuild": "prisma generate && node scripts/post-prisma-generate.js",
-    "build": "next build",
-    "postbuild": "node scripts/patch-prisma.js",
+    "build": "cross-env NODE_ENV=production next build",
+    "postbuild": "cross-env NODE_ENV=production node scripts/patch-prisma.js",
     "postinstall": "prisma generate && node scripts/post-prisma-generate.js",
     "check:equipments": "node scripts/check-equipments.mjs",
     "codex:setup": "pnpm install && pnpm db:generate && pnpm db:push",
@@ -190,6 +190,7 @@
     "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.21",
     "chromatic": "^13.1.3",
+    "cross-env": "^10.0.0",
     "eslint-config-next": "15.5.2",
     "eslint-plugin-storybook": "9.1.3",
     "husky": "^9.1.7",
