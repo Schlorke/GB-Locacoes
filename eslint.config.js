@@ -60,7 +60,7 @@ export default [
   },
   // Aplicar as configurações do Next.js aos arquivos restantes
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
-  
+
   // Configuração específica para Next.js plugin
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
