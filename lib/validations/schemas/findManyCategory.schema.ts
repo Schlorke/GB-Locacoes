@@ -1,16 +1,17 @@
-import { Prisma } from '@prisma/client';
-import { z } from 'zod';
-import { CategoryIncludeObjectSchema } from './objects/CategoryInclude.schema';
-import { CategoryOrderByWithRelationInputObjectSchema } from './objects/CategoryOrderByWithRelationInput.schema';
-import { CategoryWhereInputObjectSchema } from './objects/CategoryWhereInput.schema';
-import { CategoryWhereUniqueInputObjectSchema } from './objects/CategoryWhereUniqueInput.schema';
-import { CategoryScalarFieldEnumSchema } from './enums/CategoryScalarFieldEnum.schema';
-import { CategoryCountOutputTypeArgsObjectSchema } from './objects/CategoryCountOutputTypeArgs.schema';
+import { Prisma } from '@prisma/client'
+import { z } from 'zod'
+import { CategoryIncludeObjectSchema } from './objects/CategoryInclude.schema'
+import { CategoryOrderByWithRelationInputObjectSchema } from './objects/CategoryOrderByWithRelationInput.schema'
+import { CategoryWhereInputObjectSchema } from './objects/CategoryWhereInput.schema'
+import { CategoryWhereUniqueInputObjectSchema } from './objects/CategoryWhereUniqueInput.schema'
+import { CategoryScalarFieldEnumSchema } from './enums/CategoryScalarFieldEnum.schema'
+import { CategoryCountOutputTypeArgsObjectSchema } from './objects/CategoryCountOutputTypeArgs.schema'
 
 // Select schema needs to be in file to prevent circular imports
 //------------------------------------------------------
 
-export const CategoryFindManySelectSchema: z.ZodType<Prisma.CategorySelect> = z.object({
+export const CategoryFindManySelectSchema: z.ZodType<Prisma.CategorySelect> = z
+  .object({
     id: z.boolean().optional(),
     name: z.boolean().optional(),
     description: z.boolean().optional(),
@@ -22,10 +23,12 @@ export const CategoryFindManySelectSchema: z.ZodType<Prisma.CategorySelect> = z.
     createdAt: z.boolean().optional(),
     updatedAt: z.boolean().optional(),
     equipments: z.boolean().optional(),
-    _count: z.boolean().optional()
-  }).strict() as unknown as z.ZodType<Prisma.CategorySelect>;
+    _count: z.boolean().optional(),
+  })
+  .strict() as unknown as z.ZodType<Prisma.CategorySelect>
 
-export const CategoryFindManySelectZodSchema = z.object({
+export const CategoryFindManySelectZodSchema = z
+  .object({
     id: z.boolean().optional(),
     name: z.boolean().optional(),
     description: z.boolean().optional(),
@@ -37,9 +40,52 @@ export const CategoryFindManySelectZodSchema = z.object({
     createdAt: z.boolean().optional(),
     updatedAt: z.boolean().optional(),
     equipments: z.boolean().optional(),
-    _count: z.boolean().optional()
-  }).strict();
+    _count: z.boolean().optional(),
+  })
+  .strict()
 
-export const CategoryFindManySchema: z.ZodType<Prisma.CategoryFindManyArgs> = z.object({ select: CategoryFindManySelectSchema.optional(), include: z.lazy(() => CategoryIncludeObjectSchema.optional()), orderBy: z.union([CategoryOrderByWithRelationInputObjectSchema, CategoryOrderByWithRelationInputObjectSchema.array()]).optional(), where: CategoryWhereInputObjectSchema.optional(), cursor: CategoryWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([z.nativeEnum(Prisma.CategoryScalarFieldEnum), z.nativeEnum(Prisma.CategoryScalarFieldEnum).array()]).optional() }).strict() as unknown as z.ZodType<Prisma.CategoryFindManyArgs>;
+export const CategoryFindManySchema: z.ZodType<Prisma.CategoryFindManyArgs> = z
+  .object({
+    select: CategoryFindManySelectSchema.optional(),
+    include: z.lazy(() => CategoryIncludeObjectSchema.optional()),
+    orderBy: z
+      .union([
+        CategoryOrderByWithRelationInputObjectSchema,
+        CategoryOrderByWithRelationInputObjectSchema.array(),
+      ])
+      .optional(),
+    where: CategoryWhereInputObjectSchema.optional(),
+    cursor: CategoryWhereUniqueInputObjectSchema.optional(),
+    take: z.number().optional(),
+    skip: z.number().optional(),
+    distinct: z
+      .union([
+        z.nativeEnum(Prisma.CategoryScalarFieldEnum),
+        z.nativeEnum(Prisma.CategoryScalarFieldEnum).array(),
+      ])
+      .optional(),
+  })
+  .strict() as unknown as z.ZodType<Prisma.CategoryFindManyArgs>
 
-export const CategoryFindManyZodSchema = z.object({ select: CategoryFindManySelectSchema.optional(), include: z.lazy(() => CategoryIncludeObjectSchema.optional()), orderBy: z.union([CategoryOrderByWithRelationInputObjectSchema, CategoryOrderByWithRelationInputObjectSchema.array()]).optional(), where: CategoryWhereInputObjectSchema.optional(), cursor: CategoryWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([z.nativeEnum(Prisma.CategoryScalarFieldEnum), z.nativeEnum(Prisma.CategoryScalarFieldEnum).array()]).optional() }).strict();
+export const CategoryFindManyZodSchema = z
+  .object({
+    select: CategoryFindManySelectSchema.optional(),
+    include: z.lazy(() => CategoryIncludeObjectSchema.optional()),
+    orderBy: z
+      .union([
+        CategoryOrderByWithRelationInputObjectSchema,
+        CategoryOrderByWithRelationInputObjectSchema.array(),
+      ])
+      .optional(),
+    where: CategoryWhereInputObjectSchema.optional(),
+    cursor: CategoryWhereUniqueInputObjectSchema.optional(),
+    take: z.number().optional(),
+    skip: z.number().optional(),
+    distinct: z
+      .union([
+        z.nativeEnum(Prisma.CategoryScalarFieldEnum),
+        z.nativeEnum(Prisma.CategoryScalarFieldEnum).array(),
+      ])
+      .optional(),
+  })
+  .strict()
