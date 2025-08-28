@@ -1,126 +1,24 @@
+// lib/prisma.ts
 import { PrismaClient } from '@prisma/client'
 
 declare global {
-  var __prisma: PrismaClient | undefined
+  // evita recriar em hot-reload
+  var __prisma__: PrismaClient | undefined
 }
 
-let prismaInstance: PrismaClient | undefined
-
-// Configuração específica para Vercel
-const createPrismaConfig = () => {
-  const isVercel = !!process.env.VERCEL
-  const isProduction = process.env.NODE_ENV === 'production'
-  
-  console.log('[Prisma] Environment:', { isVercel, isProduction })
-  
-  // Configuração básica sempre presente
-  const baseConfig = {
+export const prisma =
+  global.__prisma__ ??
+  new PrismaClient({
+    // Se quiser logs, declare tipado:
+    // log: [{ level: 'error', emit: 'stdout' }, { level: 'warn', emit: 'stdout' }],
     datasources: {
       db: {
         url: process.env.DATABASE_URL,
       },
     },
-  }
+  })
 
-  // Configurações condicionais
-  const conditionalConfig: Record<string, unknown> = {}
-
-  // Configuração específica para Vercel
-  if (isVercel && isProduction) {
-    conditionalConfig.engineType = 'binary'
-    console.log('[Prisma] Using binary engine for Vercel production')
-  }
-
-  // Log apenas em desenvolvimento
-  if (!isProduction) {
-    conditionalConfig.log = ['error', 'warn']
-  } else {
-    conditionalConfig.log = ['error']
-  }
-
-  return { ...baseConfig, ...conditionalConfig }
-}
-
-const createPrismaClient = (): PrismaClient => {
-  console.log('[Prisma] Creating new client instance')
-
-  // Verificar se DATABASE_URL existe
-  if (!process.env.DATABASE_URL) {
-    console.error('[Prisma] DATABASE_URL not found in environment variables')
-    console.error(
-      '[Prisma] Available env vars:',
-      Object.keys(process.env).filter((k) => k.includes('DATABASE'))
-    )
-    throw new Error('DATABASE_URL environment variable is required')
-  }
-
-  console.log('[Prisma] DATABASE_URL found, creating client...')
-
-  try {
-    const prismaConfig = createPrismaConfig()
-    console.log('[Prisma] Config:', JSON.stringify(prismaConfig, null, 2))
-    
-    let client: PrismaClient
-    
-    try {
-      client = new PrismaClient(prismaConfig)
-      console.log('[Prisma] Client created successfully')
-    } catch (initError) {
-      console.error('[Prisma] Initial client creation failed:', initError)
-      
-      // Fallback: tentar sem configurações específicas da Vercel
-      if (process.env.VERCEL) {
-        console.log('[Prisma] Tentando fallback sem engineType...')
-        const fallbackConfig: Record<string, unknown> = {
-          datasources: {
-            db: {
-              url: process.env.DATABASE_URL,
-            },
-          },
-          log: ['error'],
-        }
-        client = new PrismaClient(fallbackConfig)
-        console.log('[Prisma] Client criado com fallback')
-      } else {
-        throw initError
-      }
-    }
-    
-    return client
-  } catch (error) {
-    console.error('[Prisma] Failed to create client:', error)
-    throw error
-  }
-}
-
-// Singleton pattern com Proxy para inicialização lazy
-const prismaClientProxy = new Proxy({} as PrismaClient, {
-  get(target, prop) {
-    if (!prismaInstance) {
-      console.log('[Prisma] Lazy initializing client...')
-      prismaInstance = createPrismaClient()
-    }
-
-    const value = prismaInstance[prop as keyof PrismaClient]
-
-    if (typeof value === 'function') {
-      return value.bind(prismaInstance)
-    }
-
-    return value
-  },
-})
-
-// Export principal
-export const prisma = prismaClientProxy
-
-// Função alternativa para casos específicos
-export const getPrisma = (): PrismaClient => {
-  if (!prismaInstance) {
-    prismaInstance = createPrismaClient()
-  }
-  return prismaInstance
-}
+if (process.env.NODE_ENV !== 'production') global.__prisma__ = prisma
 
 // Função para verificar conexão com banco de dados com timeout
 export async function checkDatabaseConnection(): Promise<{
@@ -129,15 +27,13 @@ export async function checkDatabaseConnection(): Promise<{
   details?: { code: string; type: string }
 }> {
   try {
-    const client = getPrisma()
-    
     // Implementar timeout manual para evitar hang
     const timeoutPromise = new Promise((_, reject) => {
       setTimeout(() => reject(new Error('Database connection timeout')), 10000)
     })
-    
-    const queryPromise = client.$queryRaw`SELECT 1`
-    
+
+    const queryPromise = prisma.$queryRaw`SELECT 1`
+
     await Promise.race([queryPromise, timeoutPromise])
     return { connected: true }
   } catch (error: unknown) {
@@ -165,8 +61,14 @@ export function diagnosticInfo(): {
   return {
     environment: process.env.NODE_ENV || 'unknown',
     databaseUrl: !!process.env.DATABASE_URL,
-    prismaVersion: '6.15.0',
+    prismaVersion: '6.13.0',
     nodeVersion: process.version,
     platform: process.platform,
   }
 }
+
+// Export principal
+export default prisma
+
+// Alias para compatibilidade
+export const getPrisma = () => prisma

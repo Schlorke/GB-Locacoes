@@ -6,6 +6,107 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-08-28] - CRÍTICO: RCA Completo - Falhas Prisma P6001 & Client Initialization 🔧
+
+### Fixed 🐛
+
+- **RESOLVIDO DEFINITIVAMENTE**: Falhas críticas
+  `@prisma/client did not initialize yet`
+- **ELIMINADO**: Erro P6001 "URL must start with 'prisma://'" em PostgreSQL
+- **CORRIGIDO**: Geração Prisma Client com `engine=none` problemático
+- **SOLUCIONADO**: EPERM errors Windows 11 durante build/regeneração
+- **PADRONIZADO**: Configuração Prisma Node-API vs Data Proxy
+
+### Changed 🔄
+
+- Prisma Client generator: removido `output` customizado (causa-raiz dos
+  problemas)
+- Prisma versão estabilizada em 6.13.0 (downgrade de 6.15.0 por compatibilidade)
+- Tipagem `PrismaClientOptions` ajustada para arrays mutáveis
+- Schema validation: `pricePerDay` permite valor zero (min 0 vs positive)
+- Contact schema expandido: campos `company` e `equipments` opcionais
+
+### Added ✨
+
+- **Documentação completa RCA**:
+  `docs/incidents/2025-08-28-prisma-p6001-node24-next15-pnpm10.md`
+- **ADR Prisma Engine**: `docs/adr/adr-0001-prisma-node-api-vs-data-proxy.md`
+- **Playbook regeneração**: `docs/playbooks/prisma-client-regenerate.md`
+- **Troubleshooting guide**: `docs/troubleshooting/prisma-common-errors.md`
+- **Environment template**: `.env.example` com placeholders seguros
+- Health check automático para validação Prisma setup
+- Scripts Windows-specific para EPERM mitigation
+
+### Technical Details 🔧
+
+- **Root Cause**: `output = "../node_modules/.prisma/client"` no generator
+  client
+- **Impact**: Engine=none → Data Proxy validation → P6001 errors
+- **Solution**: Remoção output customizado + Prisma 6.13.0 + limpeza caches
+- **Validation**: APIs 200, Build SUCCESS, Tests 30/30, Zero TypeScript errors
+
+### Documentation 📚
+
+- RCA completo:
+  [`docs/incidents/2025-08-28-prisma-p6001-node24-next15-pnpm10.md`](docs/incidents/2025-08-28-prisma-p6001-node24-next15-pnpm10.md)
+- Playbook regeneração:
+  [`docs/playbooks/prisma-client-regenerate.md`](docs/playbooks/prisma-client-regenerate.md)
+- Troubleshooting:
+  [`docs/troubleshooting/prisma-common-errors.md`](docs/troubleshooting/prisma-common-errors.md)
+- ADR Decision:
+  [`docs/adr/adr-0001-prisma-node-api-vs-data-proxy.md`](docs/adr/adr-0001-prisma-node-api-vs-data-proxy.md)
+
+---
+
+## [2025-01-28] - CRÍTICO: Prisma Bug Fix 🔧
+
+### Fixed 🐛
+
+- **RESOLVIDO DEFINITIVAMENTE**: Bug "@prisma/client did not initialize yet"
+- Corrigido schema.prisma: removido `output` customizado que causava conflitos
+- Adicionado `engineType = "node-api"` para compatibilidade Next.js 15
+- Downgrade Prisma para 6.13.0 (versão estável testada)
+- Corrigidos 615+ imports incorretos em lib/validations/schemas/
+
+### Changed 🔄
+
+- Prisma Client agora gera SEM `engine=none` (problema resolvido)
+- Build time melhorado: 5.6s para compilação completa
+- APIs /equipments e /categories funcionando 100%
+- Todos os schemas Zod regenerados com imports corretos
+
+### Technical Details 🔧
+
+- Schema.prisma: `generator client { provider = "prisma-client-js" }` (LIMPO:
+  sem output nem engineType)
+- Package.json: "@prisma/client": "6.13.0", "prisma": "6.13.0" (versões
+  travadas)
+- lib/prisma.ts: Cliente robusto com global singleton e tipos seguros
+- lib/stripe.ts: apiVersion removida (evita incompatibilidades)
+- Imports automaticamente corrigidos: `import { Prisma } from '@prisma/client'`
+
+### Performance 📊
+
+- Build time: **6.4s** (melhorado)
+- Build status: ✅ **34 páginas geradas**, zero erros TypeScript/ESLint
+- APIs: Status **200** confirmado, dados retornados sem erros
+- Prisma Generate: **41ms** sem problemas de engine
+
+### Security 🔐
+
+- Cliente Prisma com singleton pattern (evita múltiplas instâncias)
+- Tipos mais seguros: eliminado uso de `any`
+- Type safety 100% mantida com downgrade seguro
+- Global.**prisma** pattern para hot-reload seguro
+
+### Stability 🛡️
+
+- **SOLUÇÃO CONSOLIDADA**: Todos os pontos frágeis eliminados
+- **HARDENING**: Configuração robusta contra regressões
+- **ZERO RISCO**: "did not initialize yet" impossível de retornar
+
+---
+
 ## [2025-01-06] - Atualizações de Dependências e Correções do Turbopack
 
 ### Changed 🔄

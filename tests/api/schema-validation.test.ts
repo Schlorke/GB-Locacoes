@@ -295,8 +295,9 @@ describe('🔍 Zod Schema Validation', () => {
       const invalidData = {
         id: 123, // Should be string
         name: '', // Should not be empty
-        pricePerDay: -100, // Should be positive
+        pricePerDay: -100, // Should be >= 0
         isAvailable: 'yes', // Should be boolean
+        // Missing required fields - will cause validation errors
       }
 
       const result = EquipmentPublicSchema.safeParse(invalidData)
@@ -305,6 +306,20 @@ describe('🔍 Zod Schema Validation', () => {
       if (!result.success) {
         // Verificar se temos mensagens de erro úteis
         expect(result.error.issues.length).toBeGreaterThan(0)
+
+        // Verificar tipos específicos de erro esperados
+        const issues = result.error.issues
+        const idError = issues.find((issue) => issue.path.includes('id'))
+        const priceError = issues.find((issue) =>
+          issue.path.includes('pricePerDay')
+        )
+        const availableError = issues.find((issue) =>
+          issue.path.includes('isAvailable')
+        )
+
+        expect(idError).toBeDefined()
+        expect(priceError).toBeDefined()
+        expect(availableError).toBeDefined()
 
         // Log dos erros para debugging (apenas em ambiente de teste)
         if (process.env.NODE_ENV === 'test') {

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { StringFilterObjectSchema } from './StringFilter.schema';
 import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { DecimalFilterObjectSchema } from './DecimalFilter.schema';

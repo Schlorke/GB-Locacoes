@@ -49,6 +49,43 @@
 construção civil, desenvolvida com Next.js 15, TypeScript, Prisma, PostgreSQL e
 design system robusto.
 
+### **🧠 PERFIL DE PROMPTS PARA MÁXIMA EFICIÊNCIA**
+
+Como **engenheiro de prompts avançado**, você deve otimizar interações usando:
+
+#### **🎯 Estratégias de Prompt Engineering**
+
+- **Chain-of-Thought**: Quebre problemas complexos em etapas menores
+- **Few-Shot Learning**: Use exemplos concretos do projeto
+- **Context Compression**: Mantenha contexto relevante, elimine ruído
+- **Task Decomposition**: Divida implementações em subtarefas específicas
+- **Error Prevention**: Antecipe erros comuns e previna-os proativamente
+
+#### **📋 Template de Instrução Estruturada**
+
+```
+CONTEXTO: [Breve explicação do que está sendo implementado]
+OBJETIVO: [Meta específica e mensurável]
+RESTRIÇÕES: [Limitações técnicas/compatibilidade]
+PADRÕES: [Design system/arquitetura que deve seguir]
+VALIDAÇÃO: [Como confirmar que foi implementado corretamente]
+```
+
+#### **🎨 Exemplos Práticos de Prompts Otimizados**
+
+**❌ Prompt Vago:**
+
+> "Crie um componente de formulário"
+
+**✅ Prompt Otimizado:**
+
+> **CONTEXTO**: Implementando formulário de orçamento no sistema GB-Locações
+> **OBJETIVO**: Componente FormularioOrcamento que valida dados usando Zod +
+> React Hook Form **RESTRIÇÕES**: Usar apenas componentes de `components/ui/`,
+> manter Prisma 6.13.0 **PADRÕES**: Seguir design system (Orange #ea580c),
+> responsivo mobile-first **VALIDAÇÃO**: Form deve passar em tests + build sem
+> erros TypeScript
+
 ### **🏛️ Stack Tecnológico Principal**
 
 - **Framework**: Next.js 15.4.6 (App Router)
@@ -381,6 +418,8 @@ pnpm format                # Prettier
 - **Solução**: Execute `node scripts/post-prisma-generate.js` ou
   `pnpm db:generate`
 - **Prevenção**: Script automático configurado em `package.json`
+- **Prompt Otimizado**: "Execute o playbook em
+  `docs/playbooks/prisma-client-regenerate.md` linha por linha"
 
 #### **🚨 "TypeScript errors em massa (42+ erros)"**
 
@@ -388,24 +427,87 @@ pnpm format                # Prettier
 - **Solução**: Use interfaces específicas, safe navigation (`?.`), type guards
 - **Exemplo**: `req.headers?.['content-length']` em vez de
   `req.headers['content-length']`
+- **Prompt Otimizado**: "Analise cada erro TypeScript e implemente interfaces
+  específicas sem usar `any`"
 
 #### **🚨 "ESLint overwhelming errors (31k+ problemas)"**
 
 - **Causa**: Arquivos auto-gerados do Prisma incluídos no linting
 - **Solução**: Adicionar patterns em `eslint.config.js` ignores
 - **Já resolvido**: Configuração atualizada exclui `lib/validations/schemas/**`
+- **Prompt Otimizado**: "Consulte `docs/troubleshooting/prisma-common-errors.md`
+  e aplique fix testado"
 
 #### **🚨 "Build failing com 'Did not initialize yet'"**
 
 - **Causa**: PNPM + Next.js 15 + Prisma incompatibilidade
 - **Solução**: Use NPM, mantenha Prisma 6.13.0
 - **Memória**: Usuário prefere não downgrade de dependências
+- **Prompt Otimizado**: "Execute procedimento em
+  `docs/incidents/2025-08-28-prisma-p6001-*` para resolução definitiva"
 
 #### **🚨 "Swagger UI React errors com React 19"**
 
 - **Causa**: swagger-ui-react não compatível com React 19
 - **Solução**: Implementação custom em `app/api-docs/page.tsx`
 - **Resultado**: Documentação API sem dependências externas
+- **Prompt Otimizado**: "Consulte
+  `docs/adr/adr-0001-prisma-node-api-vs-data-proxy.md` para entender decisões
+  arquiteturais"
+
+### **🧠 PROMPTS ESPECIALIZADOS POR CONTEXTO**
+
+#### **🎨 Para Design System & UI**
+
+```
+Você é um especialista em design systems. Implemente [COMPONENTE] seguindo:
+- Base: Radix UI em `components/ui/`
+- Cores: Orange #ea580c (primária), Tailwind scale
+- Tipografia: Inter (sans) + Jost (headings)
+- Responsive: Mobile-first com breakpoints md:768px lg:1024px
+- Acessibilidade: WCAG 2.1 AA, ARIA labels, keyboard nav
+- Referência: `docs/features/design-system.md` + `stories/`
+- Validação: Componente deve funcionar em Storybook
+```
+
+#### **🔧 Para Problemas Críticos & Debugging**
+
+```
+Você é um engenheiro sênior especialista em debugging. Para resolver [PROBLEMA]:
+1. Consulte PRIMEIRO: `docs/troubleshooting/` e `docs/incidents/`
+2. Identifique causa-raiz usando RCA methodology
+3. Aplique solução testada ou crie nova seguindo padrões
+4. Documente no CHANGELOG.md usando formato estabelecido
+5. Valide com build + tests + health check
+6. Se problema persistir, escale para `docs/playbooks/`
+```
+
+#### **🏗️ Para Arquitetura & Performance**
+
+```
+Você é um arquiteto de software sênior. Para implementar [FEATURE]:
+- Arquitetura: Next.js 15 App Router + TypeScript 5.9.2
+- Database: PostgreSQL + Prisma 6.13.0 (TRAVADO)
+- State: Zustand para global, React state para local
+- Validação: Zod schemas sempre
+- Performance: Lazy loading + code splitting + Next.js Image
+- Security: NextAuth.js + middleware + validação server-side
+- Referência: `docs/architecture/overview.md`
+- Validação: P95 latency < 500ms, Lighthouse > 90
+```
+
+#### **📊 Para Analytics & Monitoramento**
+
+```
+Você é um especialista em observabilidade. Para implementar métricas:
+- Telemetria: `lib/telemetry.ts` (simplificado)
+- Métricas: `lib/metrics.ts` (API performance)
+- Segurança: `lib/security-monitoring.ts` (threat detection)
+- Instrumentação: `lib/api-instrumentation.ts` (automática)
+- Dashboard: `/admin/analytics` com Recharts
+- Referência: `docs/features/analytics-dashboard.md`
+- Validação: Métricas coletadas em tempo real sem impact performance
+```
 
 ### **✅ SEMPRE FAÇA**
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { rental_itemsScalarWhereInputObjectSchema } from './rental_itemsScalarWhereInput.schema';
 import { rental_itemsUpdateManyMutationInputObjectSchema } from './rental_itemsUpdateManyMutationInput.schema';
 import { rental_itemsUncheckedUpdateManyWithoutEquipmentsInputObjectSchema } from './rental_itemsUncheckedUpdateManyWithoutEquipmentsInput.schema'

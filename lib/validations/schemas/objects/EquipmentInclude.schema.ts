@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { CategoryArgsObjectSchema } from './CategoryArgs.schema';
 import { QuoteItemFindManySchema } from '../findManyQuoteItem.schema';
 import { Rental_itemsFindManySchema } from '../findManyrental_items.schema';

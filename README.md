@@ -192,6 +192,68 @@ pnpm dev
 
 🎉 **Acesse** `http://localhost:3000` e comece a usar!
 
+## 🏥 **Diagnóstico Rápido & Saúde do Sistema**
+
+### **⚡ Health Check em 30 Segundos**
+
+```powershell
+# Verificações essenciais para confirmar que tudo funciona
+pnpm prisma version  # Deve mostrar "Query Engine (Node-API)"
+pnpm build          # Deve finalizar sem erros TypeScript/ESLint
+pnpm test           # Deve passar 30/30 testes
+```
+
+### **🚨 Problemas Comuns - Soluções Instantâneas**
+
+#### **"@prisma/client did not initialize yet"**
+
+```powershell
+# Fix rápido (resolve 95% dos casos)
+taskkill /F /IM node.exe 2>$null | Out-Null
+Remove-Item -Recurse -Force node_modules
+pnpm install && pnpm prisma generate
+```
+
+#### **"P6001: URL must start with prisma://"**
+
+```powershell
+# Verificar se engine está correta
+pnpm prisma version  # Se mostrar "engine=none", executar regeneração acima
+```
+
+#### **Build Failing com EPERM (Windows)**
+
+```powershell
+# Parar processos e tentar novamente
+taskkill /F /IM node.exe 2>$null
+pnpm build
+```
+
+### **📚 Documentação Completa de Troubleshooting**
+
+- 🚨 **Erros Críticos**:
+  [`docs/troubleshooting/prisma-common-errors.md`](docs/troubleshooting/prisma-common-errors.md)
+- 🔄 **Playbook Completo**:
+  [`docs/playbooks/prisma-client-regenerate.md`](docs/playbooks/prisma-client-regenerate.md)
+- 📋 **Incident Reports**: [`docs/incidents/`](docs/incidents/) - RCA detalhados
+- 🏛️ **Decisões Técnicas**: [`docs/adr/`](docs/adr/) - Architecture Decision
+  Records
+
+### **🎯 Versões Testadas & Compatibilidade**
+
+| Componente     | Versão Estável | Status             | ⚠️ Problemas Conhecidos                       |
+| -------------- | -------------- | ------------------ | --------------------------------------------- |
+| **Node.js**    | 24.6.0+        | ✅ **Recomendado** | Versões < 20 não suportadas                   |
+| **PNPM**       | 10.15.0+       | ✅ **Testado**     | NPM funciona, mas preferir PNPM               |
+| **Prisma**     | **6.13.0**     | ✅ **TRAVADO**     | ❌ **6.14.0+** causa "did not initialize yet" |
+| **Next.js**    | 15.5.2         | ✅ **Compatível**  | App Router obrigatório                        |
+| **TypeScript** | 5.9.2          | ✅ **Estável**     | Strict mode habilitado                        |
+| **Tailwind**   | **3.4.17**     | ✅ **TRAVADO**     | ❌ **4.x** quebra design system               |
+
+> ⚠️ **CRÍTICO**: Não atualize Prisma ou Tailwind além das versões travadas sem
+> consultar
+> [`docs/adr/adr-0001-prisma-node-api-vs-data-proxy.md`](docs/adr/adr-0001-prisma-node-api-vs-data-proxy.md)
+
 ### 🐳 Docker (Opcional)
 
 ```bash

@@ -1,9 +1,52 @@
 ---
-description:
-  GB-Locacoes - Sistema de Locações de Equipamentos para Construção Civil
-globs: ['**/*.{ts,tsx,js,jsx,md,mdx,json,css,scss,env,env.*}']
+description: GB-Locacoes - Sistema de Locações de Equipamentos para Construção Civil | CURSOR OPTIMIZED RULES
+globs: ['**/*.{ts,tsx,js,jsx,md,mdx,json,css,scss,env,env.*,prisma}']
 alwaysApply: true
+priority: high
 ---
+
+# 🏗️ GB-LOCACOES - CURSOR RULES & DEVELOPMENT GUIDELINES
+
+## 🚀 **CURSOR IDE OPTIMIZATION FOR MAXIMUM PERFORMANCE**
+
+### **⚡ FAST-TRACK COMMANDS FOR COMMON TASKS**
+
+```bash
+# 🔥 EMERGENCY PRISMA FIX (30 seconds)
+taskkill /F /IM node.exe 2>$null && rm -rf node_modules && pnpm i && pnpm prisma generate
+
+# 🧪 QUICK HEALTH CHECK
+pnpm prisma version && pnpm build && pnpm test --run
+
+# 🎨 DESIGN SYSTEM VALIDATION  
+pnpm storybook &; sleep 5; curl http://localhost:6006
+
+# 📋 FULL PROJECT LINT & FIX
+pnpm lint:fix && pnpm format && pnpm type-check
+```
+
+### **🎯 CURSOR AUTOCOMPLETE OPTIMIZATION**
+
+#### **Smart Snippets & Context-Aware Suggestions**
+- **React Components**: Always suggest `components/ui/` first
+- **API Routes**: Auto-import from `lib/` utilities
+- **Type Safety**: Prefer interfaces over types for objects
+- **Validation**: Always suggest Zod schemas for data validation
+- **Styling**: Prioritize Tailwind classes from design tokens
+
+#### **Code Intelligence Enhancements**
+- **Jump to Definition**: Optimized for monorepo structure
+- **Find References**: Include Storybook stories and tests
+- **Refactoring**: Safe renames across TypeScript + JSX
+- **Error Detection**: Real-time Prisma schema validation
+
+### **📚 CONTEXTUAL DOCUMENTATION INTEGRATION**
+
+#### **Inline Documentation Access**
+- **Hover**: Show relevant `docs/` sections for components
+- **Quick Fix**: Link to `docs/troubleshooting/` for errors
+- **Code Actions**: Suggest patterns from `docs/features/`
+- **Snippets**: Auto-generate based on `docs/getting-started/development.md`
 
 # 🏗️ GB-LOCACOES - CURSOR RULES & DEVELOPMENT GUIDELINES
 
@@ -548,43 +591,63 @@ const MyForm = () => {
 - ❌ **NUNCA IGNORE**: Warnings de unused imports - sempre limpe
 - ❌ **NUNCA QUEBRE**: Configuração do `tsconfig.json` exclude patterns
 
-## 🎯 **CHECKLIST DE DESENVOLVIMENTO**
+## 🎯 **CURSOR-OPTIMIZED DEVELOPMENT CHECKLIST**
 
-Antes de submeter qualquer código, verifique:
+### **⚡ INSTANT VALIDATION COMMANDS**
+```bash
+# Run these in Cursor's integrated terminal for instant feedback
+pnpm run cursor:validate  # Custom script for full validation
+pnpm run cursor:fix       # Auto-fix common issues  
+pnpm run cursor:health    # Health check with detailed report
+```
 
-### **Funcionalidade**
+### **🚨 CRITICAL PRE-COMMIT CHECKLIST (AUTO-RUNNABLE)**
 
-- [ ] Funcionalidade implementada corretamente
-- [ ] Validação adequada
-- [ ] Tratamento de erros
-- [ ] Loading states
-- [ ] Success/error feedback
+#### **🔧 Code Quality (Zero Tolerance)**
+- [ ] `pnpm type-check` → **TARGET: 0 TypeScript errors**
+- [ ] `pnpm lint` → **TARGET: 0 ESLint problems**  
+- [ ] `pnpm format:check` → **TARGET: 0 formatting issues**
+- [ ] `pnpm test --run` → **TARGET: 30/30 tests passing**
 
-### **Design**
+#### **🏗️ Build & Infrastructure (Mission Critical)**
+- [ ] `pnpm build` → **MUST SUCCEED** (6-8s expected)
+- [ ] `scripts/post-prisma-generate.js` → **NEVER DELETE THIS FILE**
+- [ ] `pnpm prisma version` → **MUST show "Query Engine (Node-API)"**
+- [ ] Zero tipos `any` introduced without extreme justification
 
-- [ ] Segue o design system
-- [ ] Responsivo em todos os breakpoints
-- [ ] Acessível (ARIA, keyboard, contrast)
-- [ ] Animações suaves
-- [ ] Estados visuais (hover, focus, active)
+#### **🎨 Design System Compliance**
+- [ ] Uses only `components/ui/` (Radix UI based)
+- [ ] Follows Orange #ea580c brand colors
+- [ ] Mobile-first responsive (test: Chrome DevTools)
+- [ ] Accessibility: WCAG 2.1 AA compliant
+- [ ] Storybook story created (if new component)
 
-### **Código**
+#### **📝 Documentation & Changelog**
+- [ ] `CHANGELOG.md` updated with clear entry
+- [ ] JSDoc for complex functions (>10 lines)
+- [ ] Props interface well documented
+- [ ] Links to relevant `docs/` sections
 
-- [ ] TypeScript sem erros (TARGET: 0 errors)
-- [ ] ESLint sem warnings (TARGET: 0 problems)
-- [ ] Prettier aplicado
-- [ ] Testes passando (TARGET: 30/30)
-- [ ] Performance adequada
-- [ ] **CRÍTICO**: Build funcionando (`pnpm build` deve succeeder)
-- [ ] **CRÍTICO**: `scripts/post-prisma-generate.js` não foi deletado
-- [ ] **CRÍTICO**: Não introduziu tipos `any` sem justificativa extrema
+### **🚀 CURSOR IDE PERFORMANCE TIPS**
 
-### **Documentação**
+#### **File Exclusions for Performance**
+```json
+// In .vscode/settings.json or Cursor settings
+{
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/lib/validations/schemas": true,
+    "**/.pnpm-store": true
+  }
+}
+```
 
-- [ ] JSDoc para funções complexas
-- [ ] Props bem documentadas
-- [ ] README atualizado se necessário
-- [ ] Storybook stories se aplicável
+#### **Intelligent Code Suggestions**
+- Enable **Copilot** for boilerplate (forms, API routes)
+- Use **Cursor Tab** for component structure following patterns
+- Leverage **Quick Fix** for auto-imports from `@/lib/utils`
+- **Command Palette**: Quick access to project-specific commands
 
 ## 🚀 **COMANDOS ÚTEIS**
 
