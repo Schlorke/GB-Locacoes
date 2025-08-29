@@ -1,39 +1,31 @@
 import { PrismaClient } from '@prisma/client'
 
+declare global {
+  var __prisma: PrismaClient | undefined
+}
+
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Create a lazy-loaded Prisma client to avoid initialization during build
-let _prisma: PrismaClient | undefined
+// Detect if we're in build phase (static generation)
+const isBuildTime = process.env.NODE_ENV === 'production' && 
+  (typeof window === 'undefined' && !process.env.VERCEL_ENV && !process.env.RAILWAY_ENVIRONMENT)
 
-function createPrismaClient() {
-  if (!_prisma) {
-    _prisma = new PrismaClient({
-      datasources: {
-        db: {
-          url: process.env.DIRECT_URL || process.env.DATABASE_URL,
-        },
+// Simple singleton pattern - no Proxy complexity
+export const prisma = 
+  globalForPrisma.prisma ??
+  (isBuildTime ? {} as PrismaClient : new PrismaClient({
+    datasources: {
+      db: {
+        url: process.env.DIRECT_URL || process.env.DATABASE_URL,
       },
-    })
-  }
-  return _prisma
-}
+    },
+  }))
 
-export const prisma = new Proxy({} as PrismaClient, {
-  get(target, prop) {
-    // Skip initialization ONLY during static build phase (when VERCEL_ENV is undefined)
-    if (process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV) {
-      return target[prop as keyof PrismaClient]
-    }
-    
-    const client = globalForPrisma.prisma ?? createPrismaClient()
-    if (process.env.NODE_ENV !== 'production') {
-      globalForPrisma.prisma = client
-    }
-    return client[prop as keyof PrismaClient]
-  },
-})
+if (process.env.NODE_ENV !== 'production' && !isBuildTime) {
+  globalForPrisma.prisma = prisma
+}
 
 // Função de verificação simples para compatibilidade
 export async function checkDatabaseConnection(): Promise<{
