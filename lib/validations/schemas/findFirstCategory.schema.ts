@@ -1,4 +1,4 @@
-import { Prisma } from '../../../node_modules/.prisma/client';
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { CategoryIncludeObjectSchema } from './objects/CategoryInclude.schema';
 import { CategoryOrderByWithRelationInputObjectSchema } from './objects/CategoryOrderByWithRelationInput.schema';

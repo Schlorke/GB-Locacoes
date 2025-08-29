@@ -1,4 +1,4 @@
-import { Prisma } from '../../../node_modules/.prisma/client';
+import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { SessionIncludeObjectSchema } from './objects/SessionInclude.schema';
 import { SessionOrderByWithRelationInputObjectSchema } from './objects/SessionOrderByWithRelationInput.schema';

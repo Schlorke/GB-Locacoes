@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { UserCreateWithoutAccountsInputObjectSchema } from './UserCreateWithoutAccountsInput.schema';
 import { UserUncheckedCreateWithoutAccountsInputObjectSchema } from './UserUncheckedCreateWithoutAccountsInput.schema';
 import { UserCreateOrConnectWithoutAccountsInputObjectSchema } from './UserCreateOrConnectWithoutAccountsInput.schema';

@@ -1,4 +1,4 @@
-import type { Prisma } from '../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { CategoryOrderByWithRelationInputObjectSchema } from './objects/CategoryOrderByWithRelationInput.schema';
 import { CategoryWhereInputObjectSchema } from './objects/CategoryWhereInput.schema';

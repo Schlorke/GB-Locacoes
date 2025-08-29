@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { EquipmentCreateimagesInputObjectSchema } from './EquipmentCreateimagesInput.schema';
 import { CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema } from './CategoryCreateNestedOneWithoutEquipmentsInput.schema';
 import { QuoteItemCreateNestedManyWithoutEquipmentInputObjectSchema } from './QuoteItemCreateNestedManyWithoutEquipmentInput.schema'

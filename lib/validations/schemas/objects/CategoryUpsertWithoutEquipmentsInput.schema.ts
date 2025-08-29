@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { CategoryUpdateWithoutEquipmentsInputObjectSchema } from './CategoryUpdateWithoutEquipmentsInput.schema';
 import { CategoryUncheckedUpdateWithoutEquipmentsInputObjectSchema } from './CategoryUncheckedUpdateWithoutEquipmentsInput.schema';
 import { CategoryCreateWithoutEquipmentsInputObjectSchema } from './CategoryCreateWithoutEquipmentsInput.schema';

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { RoleSchema } from '../enums/Role.schema';
 import { NestedEnumRoleWithAggregatesFilterObjectSchema } from './NestedEnumRoleWithAggregatesFilter.schema';
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';

@@ -1,4 +1,4 @@
-import type { Prisma } from '../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { VerificationTokenOrderByWithRelationInputObjectSchema } from './objects/VerificationTokenOrderByWithRelationInput.schema';
 import { VerificationTokenWhereInputObjectSchema } from './objects/VerificationTokenWhereInput.schema';

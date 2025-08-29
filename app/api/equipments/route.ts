@@ -1,4 +1,3 @@
-import type { Decimal } from '@prisma/client/runtime/library'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
@@ -105,7 +104,7 @@ type EquipmentWithCategory = {
   id: string
   name: string
   description: string | null
-  pricePerDay: Decimal
+  pricePerDay: any // Usar any temporariamente para converter depois
   images: string[]
   available: boolean
   categoryId: string

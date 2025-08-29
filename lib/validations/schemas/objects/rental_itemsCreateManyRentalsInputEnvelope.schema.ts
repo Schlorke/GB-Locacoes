@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { Prisma } from '../../../../node_modules/.prisma/client';
+import type { Prisma } from '@prisma/client';
 import { rental_itemsCreateManyRentalsInputObjectSchema } from './rental_itemsCreateManyRentalsInput.schema'
 
 const makeSchema = (): z.ZodObject<any> => z.object({
