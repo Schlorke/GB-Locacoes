@@ -1,7 +1,11 @@
 import { requireAdmin } from '@/middlewares/require-admin'
 import { NextRequest, NextResponse } from 'next/server'
 
-// Dynamic import to avoid build-time initialization
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+// Runtime-only Prisma import
 async function getPrisma() {
   const { prisma } = await import('@/lib/prisma')
   return prisma
