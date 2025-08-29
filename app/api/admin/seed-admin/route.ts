@@ -1,6 +1,15 @@
-import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
+
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+// Runtime-only Prisma import
+async function getPrisma() {
+  const { prisma } = await import('@/lib/prisma')
+  return prisma
+}
 
 // Define Role enum manually to avoid import issues
 const Role = {
@@ -14,6 +23,8 @@ export async function POST() {
     const adminPassword = 'admin123'
     const adminName = 'Admin'
 
+    const prisma = await getPrisma()
+    
     // Test database connection first
     try {
       await prisma.$connect()
