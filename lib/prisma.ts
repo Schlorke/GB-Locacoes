@@ -5,11 +5,11 @@ declare global {
 }
 
 // Lazy initialization - só cria quando chamado
-let prisma: PrismaClient
+let prismaInstance: PrismaClient
 
 function getPrismaInstance(): PrismaClient {
-  if (!prisma) {
-    prisma = new PrismaClient({
+  if (!prismaInstance) {
+    prismaInstance = new PrismaClient({
       datasources: {
         db: {
           url: process.env.DIRECT_URL || process.env.DATABASE_URL,
@@ -17,7 +17,7 @@ function getPrismaInstance(): PrismaClient {
       },
     })
   }
-  return prisma
+  return prismaInstance
 }
 
 // Export lazy getter
