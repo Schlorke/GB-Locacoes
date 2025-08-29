@@ -22,8 +22,8 @@ function createPrismaClient() {
 
 export const prisma = new Proxy({} as PrismaClient, {
   get(target, prop) {
-    // Skip initialization during build phase
-    if (process.env.NODE_ENV === 'production' && process.env.VERCEL_ENV === undefined) {
+    // Skip initialization ONLY during static build phase (when VERCEL_ENV is undefined)
+    if (process.env.NODE_ENV === 'production' && !process.env.VERCEL_ENV) {
       return target[prop as keyof PrismaClient]
     }
     
