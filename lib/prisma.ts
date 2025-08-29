@@ -4,32 +4,33 @@ declare global {
   var __prisma: PrismaClient | undefined
 }
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
-}
+// Lazy initialization - só cria quando chamado
+let prisma: PrismaClient
 
-// Simplified singleton pattern for Vercel runtime
-export const prisma = 
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    datasources: {
-      db: {
-        url: process.env.DIRECT_URL || process.env.DATABASE_URL,
+function getPrismaInstance(): PrismaClient {
+  if (!prisma) {
+    prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DIRECT_URL || process.env.DATABASE_URL,
+        },
       },
-    },
-  })
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma
+    })
+  }
+  return prisma
 }
 
-// Função de verificação simples para compatibilidade
+// Export lazy getter
+export const prisma = getPrismaInstance()
+
+// Função de verificação
 export async function checkDatabaseConnection(): Promise<{
   connected: boolean
   error?: string
 }> {
   try {
-    await prisma.$queryRaw`SELECT 1`
+    const client = getPrismaInstance()
+    await client.$queryRaw`SELECT 1`
     return { connected: true }
   } catch (error) {
     return {
