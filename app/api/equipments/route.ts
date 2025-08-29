@@ -104,7 +104,7 @@ type EquipmentWithCategory = {
   id: string
   name: string
   description: string | null
-  pricePerDay: any // Usar any temporariamente para converter depois
+  pricePerDay: { toString(): string } // Tipo que aceita Decimal e permite conversão
   images: string[]
   available: boolean
   categoryId: string
