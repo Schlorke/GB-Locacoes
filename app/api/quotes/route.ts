@@ -1,7 +1,16 @@
-import { prisma } from '@/lib/prisma'
 import { QuoteRequestSchema } from '@/lib/validations'
 import { NextResponse } from 'next/server'
 import { ZodError } from 'zod'
+
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+// Runtime-only Prisma import
+async function getPrisma() {
+  const { prisma } = await import('@/lib/prisma')
+  return prisma
+}
 
 /**
  * @openapi
@@ -166,6 +175,8 @@ export async function POST(request: Request) {
     // Calcular total
     let totalAmount = 0
     const quoteItems = []
+
+    const prisma = await getPrisma()
 
     for (const item of items) {
       const equipment = await prisma.equipment.findUnique({
