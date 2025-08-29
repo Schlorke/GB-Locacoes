@@ -27,6 +27,7 @@ export default [
 
       // Config files
       '**/*.config.js',
+      'next-env.d.ts', // Next.js auto-generated file with triple slash references
       '**/*.config.cjs',
       '**/*.config.mjs',
       '**/*.config.ts',
@@ -59,4 +60,14 @@ export default [
   },
   // Aplicar as configurações do Next.js aos arquivos restantes
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
+
+  // Configuração adicional para garantir detecção do plugin Next.js
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    settings: {
+      next: {
+        rootDir: './',
+      },
+    },
+  },
 ]

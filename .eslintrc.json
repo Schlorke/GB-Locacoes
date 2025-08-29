@@ -1,0 +1,32 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {},
+  "ignorePatterns": [
+    ".next/**",
+    "out/**",
+    "dist/**",
+    "build/**",
+    "storybook-static/**",
+    ".turbo/**",
+    "node_modules/**",
+    "**/*.config.js",
+    "next-env.d.ts",
+    "**/*.config.cjs",
+    "**/*.config.mjs",
+    "**/*.config.ts",
+    "tailwind.config.cjs",
+    "postcss.config.cjs",
+    "style-dictionary.config.cjs",
+    "vitest.config.ts",
+    "vitest.storybook.config.ts",
+    "components.json",
+    "*.openapi.json",
+    "public/openapi.json",
+    "tests/api/**",
+    ".storybook/**",
+    "stories/**",
+    "types/global.d.ts",
+    "types/next-auth.d.ts",
+    "types/filters.ts"
+  ]
+}
