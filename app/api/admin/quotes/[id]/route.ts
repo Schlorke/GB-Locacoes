@@ -3,9 +3,16 @@ import {
   requireAdmin,
   requireAdminOrOperator,
 } from '@/middlewares/require-admin'
-import { prisma } from '@/lib/prisma'
 
+// Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+// Runtime-only Prisma import
+async function getPrisma() {
+  const { prisma } = await import('@/lib/prisma')
+  return prisma
+}
 
 export async function GET(
   request: NextRequest,
@@ -22,6 +29,7 @@ export async function GET(
       )
     }
 
+    const prisma = await getPrisma()
     const quote = await prisma.quote.findUnique({
       where: { id: params.id },
       include: {
@@ -88,6 +96,7 @@ export async function PATCH(
     const body = await request.json()
     const { status, ...updateData } = body
 
+    const prisma = await getPrisma()
     const quote = await prisma.quote.update({
       where: { id: params.id },
       data: {
@@ -135,6 +144,7 @@ export async function DELETE(
       )
     }
 
+    const prisma = await getPrisma()
     await prisma.quote.delete({
       where: { id: params.id },
     })
