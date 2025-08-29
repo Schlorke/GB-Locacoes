@@ -15,6 +15,48 @@
 
 ## 🚨 Problemas Críticos
 
+### **❌ CRÍTICO: Prisma 6.15.0 + PRISMA_GENERATE_DATAPROXY="false"**
+
+#### **Problema:**
+
+```bash
+Error P6001: Invalid url "postgresql://...": Currently, only Data Proxy supported.
+```
+
+#### **Causa Raiz:**
+
+O Prisma 6.15.0 introduziu uma mudança crítica onde a variável
+`PRISMA_GENERATE_DATAPROXY="false"` força `engine=none` porque em JavaScript
+`Boolean("false") === true`.
+
+#### **Solução OBRIGATÓRIA:**
+
+```bash
+# ❌ PROBLEMA: Ter esta variável definida (mesmo como "false")
+# PRISMA_GENERATE_DATAPROXY="false"
+
+# ✅ SOLUÇÃO: REMOVER COMPLETAMENTE a variável do .env
+# (Não apenas defini-la como "false")
+
+# Verificar se foi removida
+grep -r "PRISMA_GENERATE_" .env*
+
+# Regenerar cliente
+npx prisma generate
+# Deve mostrar: Generated Prisma Client (v6.15.0, engine=binary)
+
+# Verificar funcionamento
+pnpm run build
+```
+
+#### **Detalhes Técnicos:**
+
+- **Análise completa**: `docs/internal/prisma-6-15-engine-none-analysis.md`
+- **Outras variáveis problemáticas**: `PRISMA_GENERATE_ACCELERATE`,
+  `PRISMA_GENERATE_NO_ENGINE`
+- **Verificação**: `npx prisma generate` deve mostrar `engine=binary`, não
+  `engine=none`
+
 ### **❌ CRÍTICO: Prisma 6.14.0 + Next.js 15.4.6 Incompatibilidade**
 
 #### **Problema:**

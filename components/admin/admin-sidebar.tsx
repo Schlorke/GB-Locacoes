@@ -14,7 +14,6 @@ import {
   UserCircle,
 } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -54,16 +53,12 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
       >
         {!isSidebarCollapsed && (
           <Link href="/" className="flex items-center gap-2 min-w-0">
-            <Image
-              src="/placeholder-logo.svg"
-              alt="Logo"
-              width={40}
-              height={40}
-              priority
-              className="flex-shrink-0 w-auto h-auto"
-            />
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white rounded-xl font-bold text-base shadow-lg shadow-black/20 transition-all duration-200 hover:scale-105 flex-shrink-0 relative flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 rounded-xl pointer-events-none"></div>
+              <span className="relative z-10">GB</span>
+            </div>
             <div className="flex flex-col min-w-0">
-              <h2 className="text-base sm:text-lg font-bold text-white truncate">
+              <h2 className="text-base sm:text-lg font-bold text-white truncate mt-0.5">
                 GB Locações
               </h2>
               <p className="text-xs text-slate-400 truncate">Admin Panel</p>
@@ -75,14 +70,10 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
             href="/"
             className="flex items-center justify-center w-full py-2"
           >
-            <Image
-              src="/placeholder-logo.svg"
-              alt="Logo"
-              width={40}
-              height={40}
-              priority
-              className="w-auto h-auto"
-            />
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white rounded-xl font-bold text-base shadow-lg shadow-black/20 transition-all duration-200 hover:scale-105 relative flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 rounded-xl pointer-events-none"></div>
+              <span className="relative z-10">GB</span>
+            </div>
           </Link>
         )}
       </div>

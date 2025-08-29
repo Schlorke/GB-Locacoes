@@ -222,7 +222,7 @@ export default function EquipmentDetailsPage() {
                 <div className="mt-1">
                   <Badge
                     variant="outline"
-                    className="text-sm"
+                    className="text-sm inline-flex items-center gap-1.5 max-w-[250px] flex-shrink-0"
                     style={{
                       backgroundColor: equipment.category.bgColor || undefined,
                       color: equipment.category.fontColor || undefined,
@@ -254,13 +254,15 @@ export default function EquipmentDetailsPage() {
                                 equipment.category.fontColor ||
                                 'currentColor'
                               }
-                              className="mr-1.5 inline-block"
+                              className="flex-shrink-0"
                             />
                           )
                         }
                         return null
                       })()}
-                    {equipment.category.name}
+                    <span className="truncate min-w-0">
+                      {equipment.category.name}
+                    </span>
                   </Badge>
                 </div>
               </div>

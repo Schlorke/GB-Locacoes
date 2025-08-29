@@ -65,20 +65,28 @@ export default function FeaturedMaterials() {
           <IconComponent
             size={14}
             color={color || 'currentColor'}
-            className="mr-1.5"
+            className="flex-shrink-0"
           />
         )
       }
     } catch {
       // Fallback se o ícone não existir
       return (
-        <Package size={14} color={color || 'currentColor'} className="mr-1.5" />
+        <Package
+          size={14}
+          color={color || 'currentColor'}
+          className="flex-shrink-0"
+        />
       )
     }
 
     // Fallback final
     return (
-      <Package size={14} color={color || 'currentColor'} className="mr-1.5" />
+      <Package
+        size={14}
+        color={color || 'currentColor'}
+        className="flex-shrink-0"
+      />
     )
   }
 
@@ -221,7 +229,7 @@ export default function FeaturedMaterials() {
                       </div>
                       <Badge
                         variant="secondary"
-                        className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors backdrop-blur-sm"
+                        className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors backdrop-blur-sm max-w-[180px] flex-shrink-0"
                         style={{
                           backgroundColor:
                             equipment.category?.bgColor || '#f3f4f6',
@@ -234,7 +242,9 @@ export default function FeaturedMaterials() {
                           equipment.category?.iconColor ||
                             equipment.category?.fontColor
                         )}
-                        {equipment.category?.name || 'Sem categoria'}
+                        <span className="truncate min-w-0">
+                          {equipment.category?.name || 'Sem categoria'}
+                        </span>
                       </Badge>
                     </div>
                   </div>

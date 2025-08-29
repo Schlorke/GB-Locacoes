@@ -47,10 +47,10 @@
 4. **🚨 NÃO ALUCINE**: Se não souber, consulte docs/ primeiro
 5. **📝 DOCUMENTE SEMPRE**: Atualize `CHANGELOG.md` após alterações
 
-### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024) - NÃO REINTRODUZIR**
+### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024 - JAN 2025) - NÃO REINTRODUZIR**
 
-> ⚠️ **ATENÇÃO**: Este projeto passou por correções massivas. NÃO reintroduza
-> problemas resolvidos!
+> ⚠️ **ATENÇÃO**: Este projeto passou por correções massivas em dezembro 2024 e
+> descoberta crítica em janeiro 2025. NÃO reintroduza problemas resolvidos!
 
 #### **🏗️ Build Infrastructure - ESTÁVEL**
 
@@ -67,6 +67,8 @@
 #### **📦 Dependencies - MATRIX ESTÁVEL**
 
 - **❌ NÃO ATUALIZE**: Prisma para 6.14.0+ (quebra build)
+- **🚨 PRISMA 6.15.0**: Variável `PRISMA_GENERATE_DATAPROXY="false"` força
+  `engine=none` causando erro P6001
 - **❌ NÃO USE**: swagger-ui-react (incompatível React 19)
 - **✅ CUSTOM IMPLEMENTATION**: `app/api-docs/page.tsx` para API docs
 
@@ -80,6 +82,8 @@
 
 - **📖 LEIA**: `docs/internal/critical-issues-resolved.md` antes de mudanças
   grandes
+- **🔬 ANÁLISE CRÍTICA**: `docs/internal/prisma-6-15-engine-none-analysis.md` -
+  Problema PRISMA_GENERATE_DATAPROXY
 - **📝 CONSULTE**: `docs/getting-started/troubleshooting.md` para problemas
   conhecidos
 

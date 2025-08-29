@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic'
@@ -7,7 +8,7 @@ export const runtime = 'nodejs'
 
 // Runtime-only Prisma import
 async function getPrisma() {
-  const { prisma } = await import('@/lib/prisma')
+  // Prisma importado estaticamente
   return prisma
 }
 
@@ -27,7 +28,7 @@ export async function POST() {
 
     // Test database connection first
     try {
-      await prisma.$connect()
+      // Conexão automática do Prisma
     } catch (connectError) {
       console.error('❌ [SEED-ADMIN] Erro na conexão Prisma:', connectError)
       throw new Error(
@@ -198,7 +199,7 @@ export async function GET() {
     const adminEmail = 'admin@gblocacoes.com.br'
     const prisma = await getPrisma()
 
-    await prisma.$connect()
+    // Conexão automática do Prisma
 
     const existingAdmin = await prisma.user.findUnique({
       where: { email: adminEmail },

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
 export async function GET() {
   try {
@@ -34,7 +35,7 @@ export async function GET() {
     // Testar conexão com banco se DATABASE_URL estiver configurado
     if (process.env.DATABASE_URL) {
       try {
-        const { prisma } = await import('@/lib/prisma')
+        // Prisma importado estaticamente
 
         // Testar conexão com timeout
         const connectionPromise = prisma.$connect()

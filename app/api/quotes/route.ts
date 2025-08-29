@@ -1,5 +1,6 @@
 import { QuoteRequestSchema } from '@/lib/validations'
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 import { ZodError } from 'zod'
 
 // Force dynamic rendering to prevent static generation issues
@@ -8,7 +9,7 @@ export const runtime = 'nodejs'
 
 // Runtime-only Prisma import
 async function getPrisma() {
-  const { prisma } = await import('@/lib/prisma')
+  // Prisma importado estaticamente
   return prisma
 }
 

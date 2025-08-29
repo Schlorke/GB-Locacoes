@@ -64,7 +64,8 @@
     "check:outdated-safe": "pnpm outdated | grep -E '@radix-ui|@testing-library|date-fns|lucide-react' || true",
     "update:safe": "pnpm update @radix-ui/react-* @testing-library/* date-fns lucide-react clsx",
     "verify:after-update": "pnpm check:compatibility && pnpm run build && pnpm test",
-    "diagnose:database": "node scripts/diagnose-database.js"
+    "diagnose:database": "node scripts/diagnose-database.js",
+    "diagnose:connection": "node scripts/diagnose-connection.js"
   },
   "dependencies": {
     "@auth/core": "0.40.0",

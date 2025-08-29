@@ -177,7 +177,7 @@ export default async function EquipmentDetailPage(props: Props) {
                         )}
                       </span>
                     )}
-                    {equipment.category.name}
+                    <span className="truncate">{equipment.category.name}</span>
                   </div>
                   <ShareButton
                     title={`${equipment.name} - GB Locações`}

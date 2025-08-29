@@ -1,4 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { requireAdminOrOperator } from '@/middlewares/require-admin'
 import crypto from 'node:crypto'
 import { z } from 'zod'
 
@@ -31,10 +33,10 @@ const CategorySchema = z
 // GET /api/admin/categories - List all categories
 export async function GET(request: NextRequest) {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    // Prisma importado estaticamente
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
-    await prisma.$connect()
+    // Conexão automática do Prisma
 
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)
@@ -70,10 +72,10 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/categories - Create new category
 export async function POST(request: NextRequest) {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    // Prisma importado estaticamente
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
-    await prisma.$connect()
+    // Conexão automática do Prisma
 
     // Verificar autenticação de admin
     const adminResult = await requireAdmin(request)

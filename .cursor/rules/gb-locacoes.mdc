@@ -58,10 +58,10 @@ alwaysApply: true
 4. **⚠️ COMPATIBILIDADE**: Verifique SEMPRE em:
    - `docs/references/dependencies.md` - Versões testadas e incompatibilidades
 
-### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024) - NÃO REINTRODUZIR**
+### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024 - JAN 2025) - NÃO REINTRODUZIR**
 
 > ⚠️ **ATENÇÃO CURSOR**: Este projeto passou por correções massivas em dezembro
-> de 2024. NÃO reintroduza problemas que foram resolvidos!
+> de 2024 e descoberta crítica em janeiro 2025. NÃO reintroduza problemas que foram resolvidos!
 
 #### **🏗️ Build Infrastructure - 100% ESTÁVEL**
 
@@ -81,6 +81,7 @@ alwaysApply: true
 #### **📦 Dependencies - MATRIX ESTÁVEL**
 
 - **❌ NÃO ATUALIZE**: Prisma para 6.14.0+ (quebra build completamente)
+- **🚨 PRISMA 6.15.0**: Variável `PRISMA_GENERATE_DATAPROXY="false"` força `engine=none` causando erro P6001
 - **❌ NÃO USE**: swagger-ui-react (incompatível React 19)
 - **✅ IMPLEMENTAÇÃO CUSTOM**: `app/api-docs/page.tsx` para documentação API
 - **🎯 STATUS**: Zero conflitos de dependências
@@ -96,6 +97,7 @@ alwaysApply: true
 
 - **📖 LEIA ANTES**: `docs/internal/critical-issues-resolved.md` - SOURCE OF
   TRUTH
+- **🔬 ANÁLISE CRÍTICA**: `docs/internal/prisma-6-15-engine-none-analysis.md` - Problema PRISMA_GENERATE_DATAPROXY
 - **📝 CONSULTE**: `docs/getting-started/troubleshooting.md` - problemas
   conhecidos
 - **🧠 ENTENDA**: Todas as soluções são DEFINITIVAS e foram testadas
@@ -547,6 +549,13 @@ const MyForm = () => {
 - ❌ **NUNCA INCLUA**: `lib/validations/schemas/**` no linting
 - ❌ **NUNCA IGNORE**: Warnings de unused imports - sempre limpe
 - ❌ **NUNCA QUEBRE**: Configuração do `tsconfig.json` exclude patterns
+
+#### **Environment Variables (CRÍTICO)**
+
+- ❌ **NUNCA DEFINA**: `PRISMA_GENERATE_DATAPROXY` (mesmo como "false")
+- ❌ **NUNCA DEFINA**: `PRISMA_GENERATE_ACCELERATE` ou `PRISMA_GENERATE_NO_ENGINE`
+- ✅ **SEMPRE VERIFIQUE**: `npx prisma generate` deve mostrar `engine=binary`
+- 📖 **CONSULTE**: `docs/internal/prisma-6-15-engine-none-analysis.md` para detalhes
 
 ## 🎯 **CHECKLIST DE DESENVOLVIMENTO**
 

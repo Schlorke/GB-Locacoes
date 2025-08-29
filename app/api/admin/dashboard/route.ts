@@ -1,4 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { requireAdminOrOperator } from '@/middlewares/require-admin'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -231,13 +233,6 @@ export const revalidate = 0
  */
 export async function GET(request: NextRequest) {
   try {
-    const { prisma } = await import('@/lib/prisma')
-    const { requireAdminOrOperator } = await import(
-      '@/middlewares/require-admin'
-    )
-
-    await prisma.$connect()
-
     // Verificar autenticação de admin ou operator
     const authResult = await requireAdminOrOperator(request)
     if (!authResult.success) {

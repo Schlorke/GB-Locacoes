@@ -66,9 +66,11 @@ design system robusto.
 > **OBRIGATÓRIO**: Consulte `docs/references/dependencies.md` antes de atualizar
 > dependências
 
-#### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024)**
+#### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024 - JAN 2025)**
 
 - **Prisma**: Manter em 6.13.0 (6.14.0+ causa erro "did not initialize yet")
+- **Prisma 6.15.0**: Descoberta crítica - variável
+  `PRISMA_GENERATE_DATAPROXY="false"` força `engine=none` causando erro P6001
 - **Tailwind**: Manter em 3.4.17 (usuário prefere versão atual)
 - **PNPM**: Recomendado NPM (PNPM causa conflitos com Prisma)
 - **Build failing**: Script `scripts/post-prisma-generate.js` criado para
@@ -374,6 +376,18 @@ pnpm format                # Prettier
     dependências
 
 ### **🆘 TROUBLESHOOTING - PROBLEMAS COMUNS**
+
+#### **🚨 "Invalid url postgresql://...": Currently, only Data Proxy supported (P6001)**
+
+- **Causa**: Variável `PRISMA_GENERATE_DATAPROXY="false"` presente no ambiente
+  força `engine=none`
+- **Problema**: Em JavaScript, `Boolean("false") === true`, então mesmo
+  `="false"` ativa Data Proxy mode
+- **Solução**: **REMOVER COMPLETAMENTE** a variável do .env - não apenas
+  defini-la como "false"
+- **Verificação**: `npx prisma generate` deve mostrar `engine=binary`, não
+  `engine=none`
+- **Detalhes**: Consulte `docs/internal/prisma-6-15-engine-none-analysis.md`
 
 #### **🚨 "Module not found: Can't resolve '@/lib/validations'"**
 

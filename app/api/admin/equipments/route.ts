@@ -1,6 +1,8 @@
 import { adminApiRateLimit, checkRateLimit } from '@/lib/rate-limit'
 import type { Decimal } from '@prisma/client/runtime/library'
 import { NextResponse, type NextRequest } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { requireAdminOrOperator } from '@/middlewares/require-admin'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -320,7 +322,7 @@ type EquipmentWithCategory = {
 // GET /api/admin/equipments - List all equipments with pagination and filtering
 export async function GET(request: NextRequest) {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    // Prisma importado estaticamente
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
     // Rate limiting
@@ -398,7 +400,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Teste de conexão com o banco
-    await prisma.$connect()
+    // Conexão automática do Prisma
 
     const equipments = await prisma.equipment.findMany({
       where,
@@ -482,10 +484,10 @@ export async function GET(request: NextRequest) {
 // POST /api/admin/equipments - Create new equipment
 export async function POST(request: NextRequest) {
   try {
-    const { prisma } = await import('@/lib/prisma')
+    // Prisma importado estaticamente
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
-    await prisma.$connect()
+    // Conexão automática do Prisma
 
     // Rate limiting para operações de escrita (mais restritivo)
     const rateLimitResult = checkRateLimit(request, adminApiRateLimit)

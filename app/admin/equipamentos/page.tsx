@@ -522,7 +522,7 @@ export default function AdminEquipmentsPage() {
                           <div className="flex items-center justify-start">
                             {equipment.category ? (
                               <Badge
-                                className="text-sm inline-flex items-center gap-1 font-medium px-2.5 py-0.5 rounded-full border-0"
+                                className="text-sm inline-flex items-center gap-1.5 font-medium px-2.5 py-0.5 rounded-full border-0 max-w-[150px] flex-shrink-0"
                                 style={{
                                   backgroundColor:
                                     equipment.category.bgColor || '#e0e0e0',
@@ -535,11 +535,15 @@ export default function AdminEquipmentsPage() {
                                     equipment.category.icon,
                                     equipment.category.iconColor
                                   )}
-                                {equipment.category.name}
+                                <span className="truncate min-w-0">
+                                  {equipment.category.name}
+                                </span>
                               </Badge>
                             ) : (
-                              <Badge className="text-sm inline-flex items-center gap-1 font-medium px-2.5 py-0.5 rounded-full border-0 bg-gray-200 text-gray-600">
-                                Sem categoria
+                              <Badge className="text-sm inline-flex items-center gap-1.5 font-medium px-2.5 py-0.5 rounded-full border-0 bg-gray-200 text-gray-600 max-w-[150px] flex-shrink-0">
+                                <span className="truncate min-w-0">
+                                  Sem categoria
+                                </span>
                               </Badge>
                             )}
                           </div>

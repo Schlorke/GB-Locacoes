@@ -44,8 +44,11 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
 
       <CardContent className="p-4">
         <div className="mb-2 flex items-center justify-between">
-          <Badge variant="secondary" className="text-xs">
-            {equipment.category.name}
+          <Badge
+            variant="secondary"
+            className="text-xs max-w-[150px] flex-shrink-0"
+          >
+            <span className="truncate min-w-0">{equipment.category.name}</span>
           </Badge>
           <Badge
             variant={equipment.isAvailable ? 'default' : 'destructive'}

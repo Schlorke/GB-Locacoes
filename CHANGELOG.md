@@ -6,6 +6,158 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-01-15] - CORREÇÕES DE PERFORMANCE E PADRONIZAÇÃO
+
+### Fixed 🐛
+
+- **API Performance**: Corrigidos imports dinâmicos do Prisma em todas as API
+  routes
+  - Removidos `await import('@/lib/prisma')` que causavam overhead
+  - Removidas conexões manuais `await prisma.$connect()` desnecessárias
+  - Implementados imports estáticos para melhor performance
+  - Script automatizado criado: `scripts/fix-prisma-imports.js`
+- **Conectividade**: Resolvido erro P1001 de timeout em `/api/admin/quotes`
+  - Problema estava relacionado a múltiplas instâncias de conexão
+  - Aplicado padrão singleton do Prisma Client corretamente
+- **UI - Category Badges**: Corrigido alinhamento dos rótulos de categorias com
+  textos longos
+  - Aplicado `flex-shrink-0` em ícones para evitar compressão indevida
+  - Adicionado `gap-1.5` para espaçamento consistente entre ícone e texto
+  - Implementado `truncate` no texto para evitar quebras visuais
+  - Aplicado `max-w-fit` para controlar largura máxima dos badges
+  - Corrigidos em: `featured-materials.tsx`, `equipment-card.tsx`,
+    `/equipamentos`, `/equipamentos/[id]`
+  - **Admin Equipment Pages**: Corrigidos badges de categorias em
+    `/admin/equipamentos` e `/admin/equipamentos/[id]`
+- **UI - Badge Layout Protection**: Implementada largura máxima restritiva para
+  evitar invasão de espaço
+  - Aplicado `max-w-[140px]` em cards com `justify-between` layout (acomoda ~2
+    palavras)
+  - Aplicado `max-w-[120px]` em equipment cards compactos
+  - Aplicado `max-w-[130px]` em páginas admin para grid layouts
+  - Aplicado `max-w-[220px]` em páginas de detalhes com mais espaço
+  - Adicionado `flex-shrink-0` e `min-w-0` para controle de flexbox otimizado
+
+### Changed 🔄
+
+- **Logo Admin**: Padronizadas dimensões da logo "GB" para serem perfeitamente
+  quadradas
+  - Desktop sidebar: `w-10 h-10` (40x40px)
+  - Mobile header: `w-8 h-8` (32x32px)
+  - Mobile sidebar: `w-10 h-10` (40x40px)
+  - Adicionado `flex items-center justify-center` para centralização perfeita
+- **Logo Footer**: Igualadas dimensões da logo "GB" do rodapé com o header
+  público
+  - Aplicado: `p-2.5 rounded-xl font-bold text-lg shadow-lg`
+  - Gradiente laranja: `from-orange-500 via-orange-600 to-orange-700` (cor da
+    marca)
+  - Adicionado efeito hover: `hover:scale-105` consistente
+  - Mantidas dimensões idênticas ao header público
+- **Imports**: Convertidos todos os imports dinâmicos para estáticos em:
+  - `app/api/admin/quotes/route.ts`
+  - `app/api/admin/dashboard/route.ts`
+  - 11 outras API routes (processadas automaticamente)
+
+### Added ✨
+
+- **Script de Diagnóstico**: `scripts/diagnose-connection.js` para
+  troubleshooting
+- **Script de Correção**: `scripts/fix-prisma-imports.js` para automatizar
+  correções
+- **Documentação**: Análise técnica completa em
+  `docs/internal/prisma-6-15-engine-none-analysis.md`
+
+### Performance 🚀
+
+- **API Response Time**: Melhoria significativa nos tempos de resposta
+  - Eliminação de overhead de imports dinâmicos
+  - Redução de conexões desnecessárias ao banco
+  - Pool de conexões otimizado
+
+## [2025-01-15] - DESCOBERTA CRÍTICA: PRISMA 6.15.0 & PRISMA_GENERATE_DATAPROXY
+
+### 🚨 **DESCOBERTA CRÍTICA** - Root Cause do Problema Prisma
+
+#### **🔬 ANÁLISE TÉCNICA COMPLETA**
+
+- **Problema identificado**: Variável `PRISMA_GENERATE_DATAPROXY="false"` no
+  ambiente força `engine=none` no Prisma 6.15.0+
+- **Causa raiz**: Em JavaScript, `Boolean("false") === true`, então mesmo
+  definir como "false" ativa Data Proxy mode
+- **Erro resultante**:
+  `Error P6001: Invalid url "postgresql://...": Currently, only Data Proxy supported`
+- **Impacto histórico**: Explica por que projeto teve que manter dependências
+  desatualizadas
+
+#### **📋 DOCUMENTAÇÃO IMPLEMENTADA**
+
+##### **1. Análise Técnica Detalhada**
+
+- **Arquivo**: `docs/internal/prisma-6-15-engine-none-analysis.md`
+- **Conteúdo**: Análise completa do problema, cronologia, impacto no projeto
+  GB-Locações
+- **Detalhes**: Código-fonte Prisma, Boolean interpretation flaw, soluções
+  implementadas
+
+##### **2. Instruções para Agentes de IA Atualizadas**
+
+- **AGENTS.md**: Adicionada seção sobre PRISMA_GENERATE_DATAPROXY
+- **Cursor Rules**: Atualizado `.cursor/rules/gb-locacoes.mdc` com diretrizes
+- **Copilot Instructions**: Atualizado `.github/copilot-instructions.md`
+
+##### **3. Troubleshooting Expandido**
+
+- **docs/getting-started/troubleshooting.md**: Nova seção crítica sobre o
+  problema
+- **Solução step-by-step**: Remoção da variável e verificação de engine=binary
+- **Prevenção**: Checklist para evitar reintrodução do problema
+
+#### **🎯 SOLUÇÃO DEFINITIVA**
+
+```bash
+# ❌ PROBLEMA: Ter esta variável definida
+PRISMA_GENERATE_DATAPROXY="false"
+
+# ✅ SOLUÇÃO: REMOVER COMPLETAMENTE do .env
+# Não apenas defini-la como "false"
+
+# Verificação
+npx prisma generate
+# Deve mostrar: Generated Prisma Client (v6.15.0, engine=binary)
+```
+
+#### **📊 IMPACTO NO PROJETO**
+
+##### **Problemas Históricos Explicados**
+
+- **Dependency freeze policy**: Estava mascarando o problema real
+- **Erros 503 em produção**: Causados diretamente pela variável problemática
+- **Build infrastructure complexa**: Scripts criados para contornar problema
+  simples
+
+##### **Custo Técnico Resolvido**
+
+- **Development time**: Centenas de horas debugging resolvidas
+- **Technical debt**: Scripts de workaround desnecessários
+- **Performance**: Engine binário é mais performático que Data Proxy
+
+#### **🛡️ PREVENÇÃO IMPLEMENTADA**
+
+##### **Environment Variable Hygiene**
+
+- **Spellchecker**: Atualizado para suportar inglês e português
+  (`cSpell.language: "en,pt-BR"`)
+- **Documentation**: Todas as instruções de IA atualizadas
+- **Checklist**: Processo para auditoria de variáveis de ambiente
+
+##### **Knowledge Transfer**
+
+- **Engineering analysis**: Documento completo para futuros desenvolvedores
+- **AI instructions**: Contexto completo para evitar reintrodução
+- **Root cause documentation**: Lições aprendidas documentadas
+
+---
+
 ## [2025-01-15] - ANALYTICS DASHBOARD & MAJOR IMPROVEMENTS + DOCUMENTATION FIXES
 
 ## [2025-01-15] - CRÍTICO: CORREÇÃO DE PROBLEMAS DE BANCO DE DADOS EM PRODUÇÃO

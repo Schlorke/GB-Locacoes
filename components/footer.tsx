@@ -17,8 +17,8 @@ export default function Footer() {
           {/* Company Info */}
           <div className="flex flex-col space-y-3">
             <div className="flex items-center space-x-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg">
-                <span className="text-base font-bold text-white">GB</span>
+              <div className="bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg transition-all duration-200 hover:scale-105">
+                GB
               </div>
               <div>
                 <div className="font-display text-xl font-bold text-orange-500">

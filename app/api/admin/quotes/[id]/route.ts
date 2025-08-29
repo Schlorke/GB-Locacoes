@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 import {
   requireAdmin,
   requireAdminOrOperator,
@@ -10,7 +11,7 @@ export const runtime = 'nodejs'
 
 // Runtime-only Prisma import
 async function getPrisma() {
-  const { prisma } = await import('@/lib/prisma')
+  // Prisma importado estaticamente
   return prisma
 }
 

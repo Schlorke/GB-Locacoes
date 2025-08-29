@@ -13,7 +13,6 @@ import {
   X,
 } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
@@ -87,14 +86,10 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
           <div className="p-6 pb-4 border-b">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <Image
-                  src="/placeholder-logo.svg"
-                  alt="Logo"
-                  width={32}
-                  height={32}
-                  priority
-                  className="w-8 h-8 flex-shrink-0"
-                />
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white rounded-lg font-bold text-base shadow-lg shadow-black/20 transition-all duration-200 hover:scale-105 flex-shrink-0 relative flex items-center justify-center">
+                  <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 rounded-lg pointer-events-none"></div>
+                  <span className="relative z-10">GB</span>
+                </div>
                 <div className="text-left">
                   <h2 className="text-lg font-bold">GB Locações</h2>
                   <p className="text-sm text-muted-foreground">
