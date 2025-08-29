@@ -4,19 +4,19 @@ generator client {
 
 generator zod {
   provider                         = "prisma-zod-generator"
-  output                          = "../lib/validations"
-  relationModel                   = true
-  modelCase                       = "camelCase"
-  modelSuffix                     = "Schema"
-  useDecimalJs                    = true
-  prismaJsonNullability           = true
-  writeBarrelFiles                = true
-  createInputTypes                = false
-  addInputTypeValidation          = false
-  validateWhereUniqueInput        = false
-  createOptionalDefaultValuesTypes = true
-  createRelationValuesTypes       = true
-  createPartialTypes              = true
+  output                           = "../lib/validations"
+  addInputTypeValidation           = "false"
+  createInputTypes                 = "false"
+  createOptionalDefaultValuesTypes = "true"
+  createPartialTypes               = "true"
+  createRelationValuesTypes        = "true"
+  modelCase                        = "camelCase"
+  modelSuffix                      = "Schema"
+  prismaJsonNullability            = "true"
+  relationModel                    = "true"
+  useDecimalJs                     = "true"
+  validateWhereUniqueInput         = "false"
+  writeBarrelFiles                 = "true"
 }
 
 datasource db {
@@ -176,6 +176,40 @@ model rentals {
   users        User           @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
+model Setting {
+  id                  String   @id @default(uuid())
+  companyPhone        String   @default("")
+  companyIconUrl      String   @default("")
+  aboutUsText         String   @default("")
+  companyAddress      String   @default("")
+  heroCarousel        Json     @default("[]")
+  contactEmail        String   @default("")
+  socialLinks         Json     @default("{}")
+  seoTitle            String   @default("GB Locações - Equipamentos para Construção")
+  seoDescription      String   @default("Locação de equipamentos para construção civil com qualidade e segurança")
+  themeColorPrimary   String   @default("#ea580c")
+  maintenanceMode     Boolean  @default(false)
+  analyticsTrackingId String   @default("")
+  footerText          String   @default("")
+  businessHours       Json     @default("{}")
+  supportChat         Boolean  @default(true)
+  whatsappNumber      String   @default("")
+  favicon             String   @default("")
+  logoSecondary       String   @default("")
+  defaultLanguage     String   @default("pt-BR")
+  baseCurrency        String   @default("BRL")
+  maintenanceMessage  String   @default("Site em manutenção. Voltamos em breve!")
+  smtpConfig          Json     @default("{}")
+  uploadLimits        Json     @default("{}")
+  securityConfig      Json     @default("{}")
+  customCss           String   @default("")
+  customJs            String   @default("")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@map("settings")
+}
+
 enum Role {
   ADMIN
   CLIENT
@@ -266,38 +300,4 @@ enum user_role {
   OPERATOR
   FINANCIAL
   CUSTOMER
-}
-
-model Setting {
-  id                   String   @id @default(uuid())
-  companyPhone         String   @default("")
-  companyIconUrl       String   @default("")
-  aboutUsText          String   @default("")
-  companyAddress       String   @default("")
-  heroCarousel         Json     @default("[]")
-  contactEmail         String   @default("")
-  socialLinks          Json     @default("{}")
-  seoTitle             String   @default("GB Locações - Equipamentos para Construção")
-  seoDescription       String   @default("Locação de equipamentos para construção civil com qualidade e segurança")
-  themeColorPrimary    String   @default("#ea580c")
-  maintenanceMode      Boolean  @default(false)
-  analyticsTrackingId  String   @default("")
-  footerText           String   @default("")
-  businessHours        Json     @default("{}")
-  supportChat          Boolean  @default(true)
-  whatsappNumber       String   @default("")
-  favicon              String   @default("")
-  logoSecondary        String   @default("")
-  defaultLanguage      String   @default("pt-BR")
-  baseCurrency         String   @default("BRL")
-  maintenanceMessage   String   @default("Site em manutenção. Voltamos em breve!")
-  smtpConfig           Json     @default("{}")
-  uploadLimits         Json     @default("{}")
-  securityConfig       Json     @default("{}")
-  customCss            String   @default("")
-  customJs             String   @default("")
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-
-  @@map("settings")
 }

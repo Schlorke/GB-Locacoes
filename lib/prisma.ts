@@ -4,8 +4,16 @@ declare global {
   var __prisma: PrismaClient | undefined
 }
 
-// Configuração simplificada do Prisma Client - conforme Supabase
-const prisma = global.__prisma || new PrismaClient()
+// Configuração explícita do Prisma Client - forçar URLs corretas
+const prisma =
+  global.__prisma ||
+  new PrismaClient({
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
+  })
 
 if (process.env.NODE_ENV !== 'production') {
   global.__prisma = prisma

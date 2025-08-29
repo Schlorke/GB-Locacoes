@@ -24,7 +24,7 @@ export async function POST() {
     const adminName = 'Admin'
 
     const prisma = await getPrisma()
-    
+
     // Test database connection first
     try {
       await prisma.$connect()
@@ -181,6 +181,7 @@ export async function POST() {
     )
   } finally {
     try {
+      const prisma = await getPrisma()
       await prisma.$disconnect()
     } catch (disconnectError) {
       console.error(
@@ -195,6 +196,7 @@ export async function POST() {
 export async function GET() {
   try {
     const adminEmail = 'admin@gblocacoes.com.br'
+    const prisma = await getPrisma()
 
     await prisma.$connect()
 
@@ -252,6 +254,11 @@ export async function GET() {
       { status: 500 }
     )
   } finally {
-    await prisma.$disconnect()
+    try {
+      const prisma = await getPrisma()
+      await prisma.$disconnect()
+    } catch (error) {
+      console.error('Erro ao desconectar Prisma:', error)
+    }
   }
 }
