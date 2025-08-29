@@ -1,6 +1,11 @@
-import { prisma } from '@/lib/prisma'
 import { requireAdmin } from '@/middlewares/require-admin'
 import { NextRequest, NextResponse } from 'next/server'
+
+// Dynamic import to avoid build-time initialization
+async function getPrisma() {
+  const { prisma } = await import('@/lib/prisma')
+  return prisma
+}
 
 export async function GET(
   request: NextRequest,
@@ -16,6 +21,7 @@ export async function GET(
     }
 
     const { id } = await params
+    const prisma = await getPrisma()
     const equipment = await prisma.equipment.findUnique({
       where: { id },
       include: {
@@ -105,6 +111,7 @@ export async function PUT(
 
     console.error('Dados para update:', updateData)
 
+    const prisma = await getPrisma()
     const equipment = await prisma.equipment.update({
       where: { id },
       data: updateData,
@@ -154,6 +161,7 @@ export async function DELETE(
     }
 
     const { id } = await params
+    const prisma = await getPrisma()
     await prisma.equipment.delete({
       where: { id },
     })
