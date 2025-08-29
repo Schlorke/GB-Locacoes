@@ -1,11 +1,21 @@
-import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
+
+// Force dynamic rendering to prevent static generation issues
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+// Runtime-only Prisma import
+async function getPrisma() {
+  const { prisma } = await import('@/lib/prisma')
+  return prisma
+}
 
 export async function POST(request: Request) {
   try {
     const { email, password } = await request.json()
 
+    const prisma = await getPrisma()
     const user = await prisma.user.findUnique({
       where: { email },
     })
