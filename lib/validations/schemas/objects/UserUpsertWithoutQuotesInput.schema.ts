@@ -6,13 +6,10 @@ import { UserCreateWithoutQuotesInputObjectSchema } from './UserCreateWithoutQuo
 import { UserUncheckedCreateWithoutQuotesInputObjectSchema } from './UserUncheckedCreateWithoutQuotesInput.schema';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema'
 
-export const UserUpsertWithoutQuotesInputObjectSchema: z.ZodType<Prisma.UserUpsertWithoutQuotesInput, Prisma.UserUpsertWithoutQuotesInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   update: z.union([z.lazy(() => UserUpdateWithoutQuotesInputObjectSchema), z.lazy(() => UserUncheckedUpdateWithoutQuotesInputObjectSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutQuotesInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutQuotesInputObjectSchema)]),
   where: z.lazy(() => UserWhereInputObjectSchema).optional()
 }).strict();
-export const UserUpsertWithoutQuotesInputObjectZodSchema = z.object({
-  update: z.union([z.lazy(() => UserUpdateWithoutQuotesInputObjectSchema), z.lazy(() => UserUncheckedUpdateWithoutQuotesInputObjectSchema)]),
-  create: z.union([z.lazy(() => UserCreateWithoutQuotesInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutQuotesInputObjectSchema)]),
-  where: z.lazy(() => UserWhereInputObjectSchema).optional()
-}).strict();
+export const UserUpsertWithoutQuotesInputObjectSchema: z.ZodType<Prisma.UserUpsertWithoutQuotesInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUpsertWithoutQuotesInput>;
+export const UserUpsertWithoutQuotesInputObjectZodSchema = makeSchema();

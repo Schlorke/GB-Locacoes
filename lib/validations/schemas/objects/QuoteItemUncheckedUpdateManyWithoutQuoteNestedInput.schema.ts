@@ -10,7 +10,7 @@ import { QuoteItemUpdateWithWhereUniqueWithoutQuoteInputObjectSchema } from './Q
 import { QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema } from './QuoteItemUpdateManyWithWhereWithoutQuoteInput.schema';
 import { QuoteItemScalarWhereInputObjectSchema } from './QuoteItemScalarWhereInput.schema'
 
-export const QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema: z.ZodType<Prisma.QuoteItemUncheckedUpdateManyWithoutQuoteNestedInput, Prisma.QuoteItemUncheckedUpdateManyWithoutQuoteNestedInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema).array(), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => QuoteItemUpsertWithWhereUniqueWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUpsertWithWhereUniqueWithoutQuoteInputObjectSchema).array()]).optional(),
@@ -23,16 +23,5 @@ export const QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema: z.
   updateMany: z.union([z.lazy(() => QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema).array()]).optional(),
   deleteMany: z.union([z.lazy(() => QuoteItemScalarWhereInputObjectSchema), z.lazy(() => QuoteItemScalarWhereInputObjectSchema).array()]).optional()
 }).strict();
-export const QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema).array(), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema).array()]).optional(),
-  connectOrCreate: z.union([z.lazy(() => QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema).array()]).optional(),
-  upsert: z.union([z.lazy(() => QuoteItemUpsertWithWhereUniqueWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUpsertWithWhereUniqueWithoutQuoteInputObjectSchema).array()]).optional(),
-  createMany: z.lazy(() => QuoteItemCreateManyQuoteInputEnvelopeObjectSchema).optional(),
-  set: z.union([z.lazy(() => QuoteItemWhereUniqueInputObjectSchema), z.lazy(() => QuoteItemWhereUniqueInputObjectSchema).array()]).optional(),
-  disconnect: z.union([z.lazy(() => QuoteItemWhereUniqueInputObjectSchema), z.lazy(() => QuoteItemWhereUniqueInputObjectSchema).array()]).optional(),
-  delete: z.union([z.lazy(() => QuoteItemWhereUniqueInputObjectSchema), z.lazy(() => QuoteItemWhereUniqueInputObjectSchema).array()]).optional(),
-  connect: z.union([z.lazy(() => QuoteItemWhereUniqueInputObjectSchema), z.lazy(() => QuoteItemWhereUniqueInputObjectSchema).array()]).optional(),
-  update: z.union([z.lazy(() => QuoteItemUpdateWithWhereUniqueWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUpdateWithWhereUniqueWithoutQuoteInputObjectSchema).array()]).optional(),
-  updateMany: z.union([z.lazy(() => QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema).array()]).optional(),
-  deleteMany: z.union([z.lazy(() => QuoteItemScalarWhereInputObjectSchema), z.lazy(() => QuoteItemScalarWhereInputObjectSchema).array()]).optional()
-}).strict();
+export const QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema: z.ZodType<Prisma.QuoteItemUncheckedUpdateManyWithoutQuoteNestedInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteItemUncheckedUpdateManyWithoutQuoteNestedInput>;
+export const QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectZodSchema = makeSchema();

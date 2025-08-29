@@ -5,7 +5,7 @@ import { NestedEnumRoleWithAggregatesFilterObjectSchema } from './NestedEnumRole
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedEnumRoleFilterObjectSchema } from './NestedEnumRoleFilter.schema'
 
-export const EnumRoleWithAggregatesFilterObjectSchema: z.ZodType<Prisma.EnumRoleWithAggregatesFilter, Prisma.EnumRoleWithAggregatesFilter> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   equals: RoleSchema.optional(),
   in: RoleSchema.array().optional(),
   notIn: RoleSchema.array().optional(),
@@ -14,12 +14,5 @@ export const EnumRoleWithAggregatesFilterObjectSchema: z.ZodType<Prisma.EnumRole
   _min: z.lazy(() => NestedEnumRoleFilterObjectSchema).optional(),
   _max: z.lazy(() => NestedEnumRoleFilterObjectSchema).optional()
 }).strict();
-export const EnumRoleWithAggregatesFilterObjectZodSchema = z.object({
-  equals: RoleSchema.optional(),
-  in: RoleSchema.array().optional(),
-  notIn: RoleSchema.array().optional(),
-  not: z.union([RoleSchema, z.lazy(() => NestedEnumRoleWithAggregatesFilterObjectSchema)]).optional(),
-  _count: z.lazy(() => NestedIntFilterObjectSchema).optional(),
-  _min: z.lazy(() => NestedEnumRoleFilterObjectSchema).optional(),
-  _max: z.lazy(() => NestedEnumRoleFilterObjectSchema).optional()
-}).strict();
+export const EnumRoleWithAggregatesFilterObjectSchema: z.ZodType<Prisma.EnumRoleWithAggregatesFilter> = makeSchema() as unknown as z.ZodType<Prisma.EnumRoleWithAggregatesFilter>;
+export const EnumRoleWithAggregatesFilterObjectZodSchema = makeSchema();

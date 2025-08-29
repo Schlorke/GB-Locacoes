@@ -3,11 +3,9 @@ import type { Prisma } from '../../../../node_modules/.prisma/client';
 import { AccountSelectObjectSchema } from './AccountSelect.schema';
 import { AccountIncludeObjectSchema } from './AccountInclude.schema'
 
-export const AccountArgsObjectSchema = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   select: z.lazy(() => AccountSelectObjectSchema).optional(),
   include: z.lazy(() => AccountIncludeObjectSchema).optional()
 }).strict();
-export const AccountArgsObjectZodSchema = z.object({
-  select: z.lazy(() => AccountSelectObjectSchema).optional(),
-  include: z.lazy(() => AccountIncludeObjectSchema).optional()
-}).strict();
+export const AccountArgsObjectSchema = makeSchema();
+export const AccountArgsObjectZodSchema = makeSchema();

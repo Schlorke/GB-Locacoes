@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Prisma } from '../../../../node_modules/.prisma/client';
 
 
-export const SettingCountAggregateInputObjectSchema: z.ZodType<Prisma.SettingCountAggregateInputType, Prisma.SettingCountAggregateInputType> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.literal(true).optional(),
   companyPhone: z.literal(true).optional(),
   companyIconUrl: z.literal(true).optional(),
@@ -34,35 +34,5 @@ export const SettingCountAggregateInputObjectSchema: z.ZodType<Prisma.SettingCou
   updatedAt: z.literal(true).optional(),
   _all: z.literal(true).optional()
 }).strict();
-export const SettingCountAggregateInputObjectZodSchema = z.object({
-  id: z.literal(true).optional(),
-  companyPhone: z.literal(true).optional(),
-  companyIconUrl: z.literal(true).optional(),
-  aboutUsText: z.literal(true).optional(),
-  companyAddress: z.literal(true).optional(),
-  heroCarousel: z.literal(true).optional(),
-  contactEmail: z.literal(true).optional(),
-  socialLinks: z.literal(true).optional(),
-  seoTitle: z.literal(true).optional(),
-  seoDescription: z.literal(true).optional(),
-  themeColorPrimary: z.literal(true).optional(),
-  maintenanceMode: z.literal(true).optional(),
-  analyticsTrackingId: z.literal(true).optional(),
-  footerText: z.literal(true).optional(),
-  businessHours: z.literal(true).optional(),
-  supportChat: z.literal(true).optional(),
-  whatsappNumber: z.literal(true).optional(),
-  favicon: z.literal(true).optional(),
-  logoSecondary: z.literal(true).optional(),
-  defaultLanguage: z.literal(true).optional(),
-  baseCurrency: z.literal(true).optional(),
-  maintenanceMessage: z.literal(true).optional(),
-  smtpConfig: z.literal(true).optional(),
-  uploadLimits: z.literal(true).optional(),
-  securityConfig: z.literal(true).optional(),
-  customCss: z.literal(true).optional(),
-  customJs: z.literal(true).optional(),
-  createdAt: z.literal(true).optional(),
-  updatedAt: z.literal(true).optional(),
-  _all: z.literal(true).optional()
-}).strict();
+export const SettingCountAggregateInputObjectSchema: z.ZodType<Prisma.SettingCountAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.SettingCountAggregateInputType>;
+export const SettingCountAggregateInputObjectZodSchema = makeSchema();

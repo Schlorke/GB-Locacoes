@@ -4,11 +4,9 @@ import { SessionWhereUniqueInputObjectSchema } from './SessionWhereUniqueInput.s
 import { SessionUpdateWithoutUserInputObjectSchema } from './SessionUpdateWithoutUserInput.schema';
 import { SessionUncheckedUpdateWithoutUserInputObjectSchema } from './SessionUncheckedUpdateWithoutUserInput.schema'
 
-export const SessionUpdateWithWhereUniqueWithoutUserInputObjectSchema: z.ZodType<Prisma.SessionUpdateWithWhereUniqueWithoutUserInput, Prisma.SessionUpdateWithWhereUniqueWithoutUserInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => SessionWhereUniqueInputObjectSchema),
   data: z.union([z.lazy(() => SessionUpdateWithoutUserInputObjectSchema), z.lazy(() => SessionUncheckedUpdateWithoutUserInputObjectSchema)])
 }).strict();
-export const SessionUpdateWithWhereUniqueWithoutUserInputObjectZodSchema = z.object({
-  where: z.lazy(() => SessionWhereUniqueInputObjectSchema),
-  data: z.union([z.lazy(() => SessionUpdateWithoutUserInputObjectSchema), z.lazy(() => SessionUncheckedUpdateWithoutUserInputObjectSchema)])
-}).strict();
+export const SessionUpdateWithWhereUniqueWithoutUserInputObjectSchema: z.ZodType<Prisma.SessionUpdateWithWhereUniqueWithoutUserInput> = makeSchema() as unknown as z.ZodType<Prisma.SessionUpdateWithWhereUniqueWithoutUserInput>;
+export const SessionUpdateWithWhereUniqueWithoutUserInputObjectZodSchema = makeSchema();

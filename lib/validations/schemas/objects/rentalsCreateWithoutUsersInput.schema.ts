@@ -2,23 +2,15 @@ import { z } from 'zod';
 import type { Prisma } from '../../../../node_modules/.prisma/client';
 import { rental_itemsCreateNestedManyWithoutRentalsInputObjectSchema } from './rental_itemsCreateNestedManyWithoutRentalsInput.schema'
 
-export const rentalsCreateWithoutUsersInputObjectSchema: z.ZodType<Prisma.rentalsCreateWithoutUsersInput, Prisma.rentalsCreateWithoutUsersInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.string(),
   startdate: z.date(),
   enddate: z.date(),
   total: z.number(),
-  status: z.string().optional().nullable(),
-  createdat: z.date().optional().nullable(),
-  updatedat: z.date().optional().nullable(),
+  status: z.string().nullish(),
+  createdat: z.date().nullish(),
+  updatedat: z.date().nullish(),
   rental_items: z.lazy(() => rental_itemsCreateNestedManyWithoutRentalsInputObjectSchema).optional()
 }).strict();
-export const rentalsCreateWithoutUsersInputObjectZodSchema = z.object({
-  id: z.string(),
-  startdate: z.date(),
-  enddate: z.date(),
-  total: z.number(),
-  status: z.string().optional().nullable(),
-  createdat: z.date().optional().nullable(),
-  updatedat: z.date().optional().nullable(),
-  rental_items: z.lazy(() => rental_itemsCreateNestedManyWithoutRentalsInputObjectSchema).optional()
-}).strict();
+export const rentalsCreateWithoutUsersInputObjectSchema: z.ZodType<Prisma.rentalsCreateWithoutUsersInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsCreateWithoutUsersInput>;
+export const rentalsCreateWithoutUsersInputObjectZodSchema = makeSchema();

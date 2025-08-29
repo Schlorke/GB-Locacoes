@@ -5,6 +5,6 @@ import { rental_itemsWhereUniqueInputObjectSchema } from './objects/rental_items
 import { rental_itemsCreateInputObjectSchema } from './objects/rental_itemsCreateInput.schema';
 import { rental_itemsUncheckedCreateInputObjectSchema } from './objects/rental_itemsUncheckedCreateInput.schema';
 import { rental_itemsUpdateInputObjectSchema } from './objects/rental_itemsUpdateInput.schema';
-import { rental_itemsUncheckedUpdateInputObjectSchema } from './objects/rental_itemsUncheckedUpdateInput.schema'
+import { rental_itemsUncheckedUpdateInputObjectSchema } from './objects/rental_itemsUncheckedUpdateInput.schema';
 
 export const rental_itemsUpsertSchema = z.object({ select: rental_itemsSelectObjectSchema.optional(), include: rental_itemsIncludeObjectSchema.optional(), where: rental_itemsWhereUniqueInputObjectSchema, create: z.union([ rental_itemsCreateInputObjectSchema, rental_itemsUncheckedCreateInputObjectSchema ]), update: z.union([ rental_itemsUpdateInputObjectSchema, rental_itemsUncheckedUpdateInputObjectSchema ])  })

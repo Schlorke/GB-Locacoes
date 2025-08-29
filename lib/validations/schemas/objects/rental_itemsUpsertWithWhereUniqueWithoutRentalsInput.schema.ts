@@ -6,13 +6,10 @@ import { rental_itemsUncheckedUpdateWithoutRentalsInputObjectSchema } from './re
 import { rental_itemsCreateWithoutRentalsInputObjectSchema } from './rental_itemsCreateWithoutRentalsInput.schema';
 import { rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema } from './rental_itemsUncheckedCreateWithoutRentalsInput.schema'
 
-export const rental_itemsUpsertWithWhereUniqueWithoutRentalsInputObjectSchema: z.ZodType<Prisma.rental_itemsUpsertWithWhereUniqueWithoutRentalsInput, Prisma.rental_itemsUpsertWithWhereUniqueWithoutRentalsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => rental_itemsWhereUniqueInputObjectSchema),
   update: z.union([z.lazy(() => rental_itemsUpdateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUncheckedUpdateWithoutRentalsInputObjectSchema)]),
   create: z.union([z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema)])
 }).strict();
-export const rental_itemsUpsertWithWhereUniqueWithoutRentalsInputObjectZodSchema = z.object({
-  where: z.lazy(() => rental_itemsWhereUniqueInputObjectSchema),
-  update: z.union([z.lazy(() => rental_itemsUpdateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUncheckedUpdateWithoutRentalsInputObjectSchema)]),
-  create: z.union([z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema)])
-}).strict();
+export const rental_itemsUpsertWithWhereUniqueWithoutRentalsInputObjectSchema: z.ZodType<Prisma.rental_itemsUpsertWithWhereUniqueWithoutRentalsInput> = makeSchema() as unknown as z.ZodType<Prisma.rental_itemsUpsertWithWhereUniqueWithoutRentalsInput>;
+export const rental_itemsUpsertWithWhereUniqueWithoutRentalsInputObjectZodSchema = makeSchema();

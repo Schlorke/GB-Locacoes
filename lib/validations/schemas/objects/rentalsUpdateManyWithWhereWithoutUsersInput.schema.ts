@@ -4,11 +4,9 @@ import { rentalsScalarWhereInputObjectSchema } from './rentalsScalarWhereInput.s
 import { rentalsUpdateManyMutationInputObjectSchema } from './rentalsUpdateManyMutationInput.schema';
 import { rentalsUncheckedUpdateManyWithoutUsersInputObjectSchema } from './rentalsUncheckedUpdateManyWithoutUsersInput.schema'
 
-export const rentalsUpdateManyWithWhereWithoutUsersInputObjectSchema: z.ZodType<Prisma.rentalsUpdateManyWithWhereWithoutUsersInput, Prisma.rentalsUpdateManyWithWhereWithoutUsersInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => rentalsScalarWhereInputObjectSchema),
   data: z.union([z.lazy(() => rentalsUpdateManyMutationInputObjectSchema), z.lazy(() => rentalsUncheckedUpdateManyWithoutUsersInputObjectSchema)])
 }).strict();
-export const rentalsUpdateManyWithWhereWithoutUsersInputObjectZodSchema = z.object({
-  where: z.lazy(() => rentalsScalarWhereInputObjectSchema),
-  data: z.union([z.lazy(() => rentalsUpdateManyMutationInputObjectSchema), z.lazy(() => rentalsUncheckedUpdateManyWithoutUsersInputObjectSchema)])
-}).strict();
+export const rentalsUpdateManyWithWhereWithoutUsersInputObjectSchema: z.ZodType<Prisma.rentalsUpdateManyWithWhereWithoutUsersInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsUpdateManyWithWhereWithoutUsersInput>;
+export const rentalsUpdateManyWithWhereWithoutUsersInputObjectZodSchema = makeSchema();

@@ -3,11 +3,9 @@ import type { Prisma } from '../../../../node_modules/.prisma/client';
 import { QuoteItemSelectObjectSchema } from './QuoteItemSelect.schema';
 import { QuoteItemIncludeObjectSchema } from './QuoteItemInclude.schema'
 
-export const QuoteItemArgsObjectSchema = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   select: z.lazy(() => QuoteItemSelectObjectSchema).optional(),
   include: z.lazy(() => QuoteItemIncludeObjectSchema).optional()
 }).strict();
-export const QuoteItemArgsObjectZodSchema = z.object({
-  select: z.lazy(() => QuoteItemSelectObjectSchema).optional(),
-  include: z.lazy(() => QuoteItemIncludeObjectSchema).optional()
-}).strict();
+export const QuoteItemArgsObjectSchema = makeSchema();
+export const QuoteItemArgsObjectZodSchema = makeSchema();

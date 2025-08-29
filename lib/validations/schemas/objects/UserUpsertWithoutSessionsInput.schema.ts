@@ -6,13 +6,10 @@ import { UserCreateWithoutSessionsInputObjectSchema } from './UserCreateWithoutS
 import { UserUncheckedCreateWithoutSessionsInputObjectSchema } from './UserUncheckedCreateWithoutSessionsInput.schema';
 import { UserWhereInputObjectSchema } from './UserWhereInput.schema'
 
-export const UserUpsertWithoutSessionsInputObjectSchema: z.ZodType<Prisma.UserUpsertWithoutSessionsInput, Prisma.UserUpsertWithoutSessionsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   update: z.union([z.lazy(() => UserUpdateWithoutSessionsInputObjectSchema), z.lazy(() => UserUncheckedUpdateWithoutSessionsInputObjectSchema)]),
   create: z.union([z.lazy(() => UserCreateWithoutSessionsInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutSessionsInputObjectSchema)]),
   where: z.lazy(() => UserWhereInputObjectSchema).optional()
 }).strict();
-export const UserUpsertWithoutSessionsInputObjectZodSchema = z.object({
-  update: z.union([z.lazy(() => UserUpdateWithoutSessionsInputObjectSchema), z.lazy(() => UserUncheckedUpdateWithoutSessionsInputObjectSchema)]),
-  create: z.union([z.lazy(() => UserCreateWithoutSessionsInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutSessionsInputObjectSchema)]),
-  where: z.lazy(() => UserWhereInputObjectSchema).optional()
-}).strict();
+export const UserUpsertWithoutSessionsInputObjectSchema: z.ZodType<Prisma.UserUpsertWithoutSessionsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUpsertWithoutSessionsInput>;
+export const UserUpsertWithoutSessionsInputObjectZodSchema = makeSchema();

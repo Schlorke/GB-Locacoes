@@ -4,31 +4,19 @@ import { EquipmentCreateimagesInputObjectSchema } from './EquipmentCreateimagesI
 import { QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema } from './QuoteItemUncheckedCreateNestedManyWithoutEquipmentInput.schema';
 import { rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema } from './rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInput.schema'
 
-export const EquipmentUncheckedCreateInputObjectSchema: z.ZodType<Prisma.EquipmentUncheckedCreateInput, Prisma.EquipmentUncheckedCreateInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.string().optional(),
   name: z.string(),
-  description: z.string().optional().nullable(),
+  description: z.string().nullish(),
   pricePerDay: z.number(),
   images: z.union([z.lazy(() => EquipmentCreateimagesInputObjectSchema), z.string().array()]).optional(),
   available: z.boolean().optional(),
   categoryId: z.string(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
-  category_id: z.string().optional().nullable(),
+  category_id: z.string().nullish(),
   quoteItems: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
   rental_items: z.lazy(() => rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema).optional()
 }).strict();
-export const EquipmentUncheckedCreateInputObjectZodSchema = z.object({
-  id: z.string().optional(),
-  name: z.string(),
-  description: z.string().optional().nullable(),
-  pricePerDay: z.number(),
-  images: z.union([z.lazy(() => EquipmentCreateimagesInputObjectSchema), z.string().array()]).optional(),
-  available: z.boolean().optional(),
-  categoryId: z.string(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  category_id: z.string().optional().nullable(),
-  quoteItems: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
-  rental_items: z.lazy(() => rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema).optional()
-}).strict();
+export const EquipmentUncheckedCreateInputObjectSchema: z.ZodType<Prisma.EquipmentUncheckedCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUncheckedCreateInput>;
+export const EquipmentUncheckedCreateInputObjectZodSchema = makeSchema();

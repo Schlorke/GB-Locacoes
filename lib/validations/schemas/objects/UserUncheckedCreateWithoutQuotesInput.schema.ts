@@ -5,31 +5,19 @@ import { AccountUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './
 import { rentalsUncheckedCreateNestedManyWithoutUsersInputObjectSchema } from './rentalsUncheckedCreateNestedManyWithoutUsersInput.schema';
 import { SessionUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './SessionUncheckedCreateNestedManyWithoutUserInput.schema'
 
-export const UserUncheckedCreateWithoutQuotesInputObjectSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutQuotesInput, Prisma.UserUncheckedCreateWithoutQuotesInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.string().optional(),
-  name: z.string().optional().nullable(),
+  name: z.string().nullish(),
   email: z.string(),
-  password: z.string().optional().nullable(),
+  password: z.string().nullish(),
   role: RoleSchema.optional(),
-  emailVerified: z.date().optional().nullable(),
-  image: z.string().optional().nullable(),
+  emailVerified: z.date().nullish(),
+  image: z.string().nullish(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
   accounts: z.lazy(() => AccountUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional(),
   rentals: z.lazy(() => rentalsUncheckedCreateNestedManyWithoutUsersInputObjectSchema).optional(),
   sessions: z.lazy(() => SessionUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional()
 }).strict();
-export const UserUncheckedCreateWithoutQuotesInputObjectZodSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().optional().nullable(),
-  email: z.string(),
-  password: z.string().optional().nullable(),
-  role: RoleSchema.optional(),
-  emailVerified: z.date().optional().nullable(),
-  image: z.string().optional().nullable(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  accounts: z.lazy(() => AccountUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  rentals: z.lazy(() => rentalsUncheckedCreateNestedManyWithoutUsersInputObjectSchema).optional(),
-  sessions: z.lazy(() => SessionUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional()
-}).strict();
+export const UserUncheckedCreateWithoutQuotesInputObjectSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutQuotesInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUncheckedCreateWithoutQuotesInput>;
+export const UserUncheckedCreateWithoutQuotesInputObjectZodSchema = makeSchema();

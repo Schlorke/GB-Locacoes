@@ -9,17 +9,12 @@ import { QuoteUpdateToOneWithWhereWithoutItemsInputObjectSchema } from './QuoteU
 import { QuoteUpdateWithoutItemsInputObjectSchema } from './QuoteUpdateWithoutItemsInput.schema';
 import { QuoteUncheckedUpdateWithoutItemsInputObjectSchema } from './QuoteUncheckedUpdateWithoutItemsInput.schema'
 
-export const QuoteUpdateOneRequiredWithoutItemsNestedInputObjectSchema: z.ZodType<Prisma.QuoteUpdateOneRequiredWithoutItemsNestedInput, Prisma.QuoteUpdateOneRequiredWithoutItemsNestedInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => QuoteCreateWithoutItemsInputObjectSchema), z.lazy(() => QuoteUncheckedCreateWithoutItemsInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => QuoteCreateOrConnectWithoutItemsInputObjectSchema).optional(),
   upsert: z.lazy(() => QuoteUpsertWithoutItemsInputObjectSchema).optional(),
   connect: z.lazy(() => QuoteWhereUniqueInputObjectSchema).optional(),
   update: z.union([z.lazy(() => QuoteUpdateToOneWithWhereWithoutItemsInputObjectSchema), z.lazy(() => QuoteUpdateWithoutItemsInputObjectSchema), z.lazy(() => QuoteUncheckedUpdateWithoutItemsInputObjectSchema)]).optional()
 }).strict();
-export const QuoteUpdateOneRequiredWithoutItemsNestedInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => QuoteCreateWithoutItemsInputObjectSchema), z.lazy(() => QuoteUncheckedCreateWithoutItemsInputObjectSchema)]).optional(),
-  connectOrCreate: z.lazy(() => QuoteCreateOrConnectWithoutItemsInputObjectSchema).optional(),
-  upsert: z.lazy(() => QuoteUpsertWithoutItemsInputObjectSchema).optional(),
-  connect: z.lazy(() => QuoteWhereUniqueInputObjectSchema).optional(),
-  update: z.union([z.lazy(() => QuoteUpdateToOneWithWhereWithoutItemsInputObjectSchema), z.lazy(() => QuoteUpdateWithoutItemsInputObjectSchema), z.lazy(() => QuoteUncheckedUpdateWithoutItemsInputObjectSchema)]).optional()
-}).strict();
+export const QuoteUpdateOneRequiredWithoutItemsNestedInputObjectSchema: z.ZodType<Prisma.QuoteUpdateOneRequiredWithoutItemsNestedInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteUpdateOneRequiredWithoutItemsNestedInput>;
+export const QuoteUpdateOneRequiredWithoutItemsNestedInputObjectZodSchema = makeSchema();

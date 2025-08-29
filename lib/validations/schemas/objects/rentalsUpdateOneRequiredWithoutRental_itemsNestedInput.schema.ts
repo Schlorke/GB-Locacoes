@@ -9,17 +9,12 @@ import { rentalsUpdateToOneWithWhereWithoutRental_itemsInputObjectSchema } from 
 import { rentalsUpdateWithoutRental_itemsInputObjectSchema } from './rentalsUpdateWithoutRental_itemsInput.schema';
 import { rentalsUncheckedUpdateWithoutRental_itemsInputObjectSchema } from './rentalsUncheckedUpdateWithoutRental_itemsInput.schema'
 
-export const rentalsUpdateOneRequiredWithoutRental_itemsNestedInputObjectSchema: z.ZodType<Prisma.rentalsUpdateOneRequiredWithoutRental_itemsNestedInput, Prisma.rentalsUpdateOneRequiredWithoutRental_itemsNestedInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => rentalsCreateWithoutRental_itemsInputObjectSchema), z.lazy(() => rentalsUncheckedCreateWithoutRental_itemsInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => rentalsCreateOrConnectWithoutRental_itemsInputObjectSchema).optional(),
   upsert: z.lazy(() => rentalsUpsertWithoutRental_itemsInputObjectSchema).optional(),
   connect: z.lazy(() => rentalsWhereUniqueInputObjectSchema).optional(),
   update: z.union([z.lazy(() => rentalsUpdateToOneWithWhereWithoutRental_itemsInputObjectSchema), z.lazy(() => rentalsUpdateWithoutRental_itemsInputObjectSchema), z.lazy(() => rentalsUncheckedUpdateWithoutRental_itemsInputObjectSchema)]).optional()
 }).strict();
-export const rentalsUpdateOneRequiredWithoutRental_itemsNestedInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => rentalsCreateWithoutRental_itemsInputObjectSchema), z.lazy(() => rentalsUncheckedCreateWithoutRental_itemsInputObjectSchema)]).optional(),
-  connectOrCreate: z.lazy(() => rentalsCreateOrConnectWithoutRental_itemsInputObjectSchema).optional(),
-  upsert: z.lazy(() => rentalsUpsertWithoutRental_itemsInputObjectSchema).optional(),
-  connect: z.lazy(() => rentalsWhereUniqueInputObjectSchema).optional(),
-  update: z.union([z.lazy(() => rentalsUpdateToOneWithWhereWithoutRental_itemsInputObjectSchema), z.lazy(() => rentalsUpdateWithoutRental_itemsInputObjectSchema), z.lazy(() => rentalsUncheckedUpdateWithoutRental_itemsInputObjectSchema)]).optional()
-}).strict();
+export const rentalsUpdateOneRequiredWithoutRental_itemsNestedInputObjectSchema: z.ZodType<Prisma.rentalsUpdateOneRequiredWithoutRental_itemsNestedInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsUpdateOneRequiredWithoutRental_itemsNestedInput>;
+export const rentalsUpdateOneRequiredWithoutRental_itemsNestedInputObjectZodSchema = makeSchema();

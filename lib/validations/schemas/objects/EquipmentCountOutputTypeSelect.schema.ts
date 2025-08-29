@@ -2,11 +2,9 @@ import { z } from 'zod';
 import type { Prisma } from '../../../../node_modules/.prisma/client';
 
 
-export const EquipmentCountOutputTypeSelectObjectSchema: z.ZodType<Prisma.EquipmentCountOutputTypeSelect, Prisma.EquipmentCountOutputTypeSelect> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   quoteItems: z.boolean().optional(),
   rental_items: z.boolean().optional()
 }).strict();
-export const EquipmentCountOutputTypeSelectObjectZodSchema = z.object({
-  quoteItems: z.boolean().optional(),
-  rental_items: z.boolean().optional()
-}).strict();
+export const EquipmentCountOutputTypeSelectObjectSchema: z.ZodType<Prisma.EquipmentCountOutputTypeSelect> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentCountOutputTypeSelect>;
+export const EquipmentCountOutputTypeSelectObjectZodSchema = makeSchema();

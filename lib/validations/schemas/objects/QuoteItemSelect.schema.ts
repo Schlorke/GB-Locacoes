@@ -3,7 +3,7 @@ import type { Prisma } from '../../../../node_modules/.prisma/client';
 import { EquipmentArgsObjectSchema } from './EquipmentArgs.schema';
 import { QuoteArgsObjectSchema } from './QuoteArgs.schema'
 
-export const QuoteItemSelectObjectSchema: z.ZodType<Prisma.QuoteItemSelect, Prisma.QuoteItemSelect> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.boolean().optional(),
   quoteId: z.boolean().optional(),
   equipmentId: z.boolean().optional(),
@@ -16,16 +16,5 @@ export const QuoteItemSelectObjectSchema: z.ZodType<Prisma.QuoteItemSelect, Pris
   equipment: z.union([z.boolean(), z.lazy(() => EquipmentArgsObjectSchema)]).optional(),
   quote: z.union([z.boolean(), z.lazy(() => QuoteArgsObjectSchema)]).optional()
 }).strict();
-export const QuoteItemSelectObjectZodSchema = z.object({
-  id: z.boolean().optional(),
-  quoteId: z.boolean().optional(),
-  equipmentId: z.boolean().optional(),
-  quantity: z.boolean().optional(),
-  days: z.boolean().optional(),
-  pricePerDay: z.boolean().optional(),
-  total: z.boolean().optional(),
-  createdAt: z.boolean().optional(),
-  updatedAt: z.boolean().optional(),
-  equipment: z.union([z.boolean(), z.lazy(() => EquipmentArgsObjectSchema)]).optional(),
-  quote: z.union([z.boolean(), z.lazy(() => QuoteArgsObjectSchema)]).optional()
-}).strict();
+export const QuoteItemSelectObjectSchema: z.ZodType<Prisma.QuoteItemSelect> = makeSchema() as unknown as z.ZodType<Prisma.QuoteItemSelect>;
+export const QuoteItemSelectObjectZodSchema = makeSchema();

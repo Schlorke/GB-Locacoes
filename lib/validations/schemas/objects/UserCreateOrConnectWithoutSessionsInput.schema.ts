@@ -4,11 +4,9 @@ import { UserWhereUniqueInputObjectSchema } from './UserWhereUniqueInput.schema'
 import { UserCreateWithoutSessionsInputObjectSchema } from './UserCreateWithoutSessionsInput.schema';
 import { UserUncheckedCreateWithoutSessionsInputObjectSchema } from './UserUncheckedCreateWithoutSessionsInput.schema'
 
-export const UserCreateOrConnectWithoutSessionsInputObjectSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutSessionsInput, Prisma.UserCreateOrConnectWithoutSessionsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => UserWhereUniqueInputObjectSchema),
   create: z.union([z.lazy(() => UserCreateWithoutSessionsInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutSessionsInputObjectSchema)])
 }).strict();
-export const UserCreateOrConnectWithoutSessionsInputObjectZodSchema = z.object({
-  where: z.lazy(() => UserWhereUniqueInputObjectSchema),
-  create: z.union([z.lazy(() => UserCreateWithoutSessionsInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutSessionsInputObjectSchema)])
-}).strict();
+export const UserCreateOrConnectWithoutSessionsInputObjectSchema: z.ZodType<Prisma.UserCreateOrConnectWithoutSessionsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateOrConnectWithoutSessionsInput>;
+export const UserCreateOrConnectWithoutSessionsInputObjectZodSchema = makeSchema();

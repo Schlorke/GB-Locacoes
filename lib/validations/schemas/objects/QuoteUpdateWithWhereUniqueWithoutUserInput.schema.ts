@@ -4,11 +4,9 @@ import { QuoteWhereUniqueInputObjectSchema } from './QuoteWhereUniqueInput.schem
 import { QuoteUpdateWithoutUserInputObjectSchema } from './QuoteUpdateWithoutUserInput.schema';
 import { QuoteUncheckedUpdateWithoutUserInputObjectSchema } from './QuoteUncheckedUpdateWithoutUserInput.schema'
 
-export const QuoteUpdateWithWhereUniqueWithoutUserInputObjectSchema: z.ZodType<Prisma.QuoteUpdateWithWhereUniqueWithoutUserInput, Prisma.QuoteUpdateWithWhereUniqueWithoutUserInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => QuoteWhereUniqueInputObjectSchema),
   data: z.union([z.lazy(() => QuoteUpdateWithoutUserInputObjectSchema), z.lazy(() => QuoteUncheckedUpdateWithoutUserInputObjectSchema)])
 }).strict();
-export const QuoteUpdateWithWhereUniqueWithoutUserInputObjectZodSchema = z.object({
-  where: z.lazy(() => QuoteWhereUniqueInputObjectSchema),
-  data: z.union([z.lazy(() => QuoteUpdateWithoutUserInputObjectSchema), z.lazy(() => QuoteUncheckedUpdateWithoutUserInputObjectSchema)])
-}).strict();
+export const QuoteUpdateWithWhereUniqueWithoutUserInputObjectSchema: z.ZodType<Prisma.QuoteUpdateWithWhereUniqueWithoutUserInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteUpdateWithWhereUniqueWithoutUserInput>;
+export const QuoteUpdateWithWhereUniqueWithoutUserInputObjectZodSchema = makeSchema();

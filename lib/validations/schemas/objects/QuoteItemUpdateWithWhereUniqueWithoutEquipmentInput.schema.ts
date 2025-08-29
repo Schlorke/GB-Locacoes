@@ -4,11 +4,9 @@ import { QuoteItemWhereUniqueInputObjectSchema } from './QuoteItemWhereUniqueInp
 import { QuoteItemUpdateWithoutEquipmentInputObjectSchema } from './QuoteItemUpdateWithoutEquipmentInput.schema';
 import { QuoteItemUncheckedUpdateWithoutEquipmentInputObjectSchema } from './QuoteItemUncheckedUpdateWithoutEquipmentInput.schema'
 
-export const QuoteItemUpdateWithWhereUniqueWithoutEquipmentInputObjectSchema: z.ZodType<Prisma.QuoteItemUpdateWithWhereUniqueWithoutEquipmentInput, Prisma.QuoteItemUpdateWithWhereUniqueWithoutEquipmentInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => QuoteItemWhereUniqueInputObjectSchema),
   data: z.union([z.lazy(() => QuoteItemUpdateWithoutEquipmentInputObjectSchema), z.lazy(() => QuoteItemUncheckedUpdateWithoutEquipmentInputObjectSchema)])
 }).strict();
-export const QuoteItemUpdateWithWhereUniqueWithoutEquipmentInputObjectZodSchema = z.object({
-  where: z.lazy(() => QuoteItemWhereUniqueInputObjectSchema),
-  data: z.union([z.lazy(() => QuoteItemUpdateWithoutEquipmentInputObjectSchema), z.lazy(() => QuoteItemUncheckedUpdateWithoutEquipmentInputObjectSchema)])
-}).strict();
+export const QuoteItemUpdateWithWhereUniqueWithoutEquipmentInputObjectSchema: z.ZodType<Prisma.QuoteItemUpdateWithWhereUniqueWithoutEquipmentInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteItemUpdateWithWhereUniqueWithoutEquipmentInput>;
+export const QuoteItemUpdateWithWhereUniqueWithoutEquipmentInputObjectZodSchema = makeSchema();

@@ -5,13 +5,10 @@ import { CategoryUncheckedCreateWithoutEquipmentsInputObjectSchema } from './Cat
 import { CategoryCreateOrConnectWithoutEquipmentsInputObjectSchema } from './CategoryCreateOrConnectWithoutEquipmentsInput.schema';
 import { CategoryWhereUniqueInputObjectSchema } from './CategoryWhereUniqueInput.schema'
 
-export const CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema: z.ZodType<Prisma.CategoryCreateNestedOneWithoutEquipmentsInput, Prisma.CategoryCreateNestedOneWithoutEquipmentsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => CategoryCreateWithoutEquipmentsInputObjectSchema), z.lazy(() => CategoryUncheckedCreateWithoutEquipmentsInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => CategoryCreateOrConnectWithoutEquipmentsInputObjectSchema).optional(),
   connect: z.lazy(() => CategoryWhereUniqueInputObjectSchema).optional()
 }).strict();
-export const CategoryCreateNestedOneWithoutEquipmentsInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => CategoryCreateWithoutEquipmentsInputObjectSchema), z.lazy(() => CategoryUncheckedCreateWithoutEquipmentsInputObjectSchema)]).optional(),
-  connectOrCreate: z.lazy(() => CategoryCreateOrConnectWithoutEquipmentsInputObjectSchema).optional(),
-  connect: z.lazy(() => CategoryWhereUniqueInputObjectSchema).optional()
-}).strict();
+export const CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema: z.ZodType<Prisma.CategoryCreateNestedOneWithoutEquipmentsInput> = makeSchema() as unknown as z.ZodType<Prisma.CategoryCreateNestedOneWithoutEquipmentsInput>;
+export const CategoryCreateNestedOneWithoutEquipmentsInputObjectZodSchema = makeSchema();

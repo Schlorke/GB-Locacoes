@@ -4,11 +4,9 @@ import { QuoteItemScalarWhereInputObjectSchema } from './QuoteItemScalarWhereInp
 import { QuoteItemUpdateManyMutationInputObjectSchema } from './QuoteItemUpdateManyMutationInput.schema';
 import { QuoteItemUncheckedUpdateManyWithoutQuoteInputObjectSchema } from './QuoteItemUncheckedUpdateManyWithoutQuoteInput.schema'
 
-export const QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema: z.ZodType<Prisma.QuoteItemUpdateManyWithWhereWithoutQuoteInput, Prisma.QuoteItemUpdateManyWithWhereWithoutQuoteInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => QuoteItemScalarWhereInputObjectSchema),
   data: z.union([z.lazy(() => QuoteItemUpdateManyMutationInputObjectSchema), z.lazy(() => QuoteItemUncheckedUpdateManyWithoutQuoteInputObjectSchema)])
 }).strict();
-export const QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectZodSchema = z.object({
-  where: z.lazy(() => QuoteItemScalarWhereInputObjectSchema),
-  data: z.union([z.lazy(() => QuoteItemUpdateManyMutationInputObjectSchema), z.lazy(() => QuoteItemUncheckedUpdateManyWithoutQuoteInputObjectSchema)])
-}).strict();
+export const QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema: z.ZodType<Prisma.QuoteItemUpdateManyWithWhereWithoutQuoteInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteItemUpdateManyWithWhereWithoutQuoteInput>;
+export const QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectZodSchema = makeSchema();

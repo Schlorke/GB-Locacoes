@@ -5,31 +5,19 @@ import { AccountCreateNestedManyWithoutUserInputObjectSchema } from './AccountCr
 import { QuoteCreateNestedManyWithoutUserInputObjectSchema } from './QuoteCreateNestedManyWithoutUserInput.schema';
 import { rentalsCreateNestedManyWithoutUsersInputObjectSchema } from './rentalsCreateNestedManyWithoutUsersInput.schema'
 
-export const UserCreateWithoutSessionsInputObjectSchema: z.ZodType<Prisma.UserCreateWithoutSessionsInput, Prisma.UserCreateWithoutSessionsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.string().optional(),
-  name: z.string().optional().nullable(),
+  name: z.string().nullish(),
   email: z.string(),
-  password: z.string().optional().nullable(),
+  password: z.string().nullish(),
   role: RoleSchema.optional(),
-  emailVerified: z.date().optional().nullable(),
-  image: z.string().optional().nullable(),
+  emailVerified: z.date().nullish(),
+  image: z.string().nullish(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
   accounts: z.lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema).optional(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputObjectSchema).optional(),
   rentals: z.lazy(() => rentalsCreateNestedManyWithoutUsersInputObjectSchema).optional()
 }).strict();
-export const UserCreateWithoutSessionsInputObjectZodSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().optional().nullable(),
-  email: z.string(),
-  password: z.string().optional().nullable(),
-  role: RoleSchema.optional(),
-  emailVerified: z.date().optional().nullable(),
-  image: z.string().optional().nullable(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  accounts: z.lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  rentals: z.lazy(() => rentalsCreateNestedManyWithoutUsersInputObjectSchema).optional()
-}).strict();
+export const UserCreateWithoutSessionsInputObjectSchema: z.ZodType<Prisma.UserCreateWithoutSessionsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateWithoutSessionsInput>;
+export const UserCreateWithoutSessionsInputObjectZodSchema = makeSchema();

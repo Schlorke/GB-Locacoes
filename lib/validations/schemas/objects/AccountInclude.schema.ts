@@ -2,9 +2,8 @@ import { z } from 'zod';
 import type { Prisma } from '../../../../node_modules/.prisma/client';
 import { UserArgsObjectSchema } from './UserArgs.schema'
 
-export const AccountIncludeObjectSchema: z.ZodType<Prisma.AccountInclude, Prisma.AccountInclude> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   user: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional()
 }).strict();
-export const AccountIncludeObjectZodSchema = z.object({
-  user: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional()
-}).strict();
+export const AccountIncludeObjectSchema: z.ZodType<Prisma.AccountInclude> = makeSchema() as unknown as z.ZodType<Prisma.AccountInclude>;
+export const AccountIncludeObjectZodSchema = makeSchema();

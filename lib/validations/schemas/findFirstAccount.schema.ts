@@ -1,16 +1,15 @@
-import type { Prisma } from '../../../node_modules/.prisma/client';
+import { Prisma } from '../../../node_modules/.prisma/client';
 import { z } from 'zod';
 import { AccountIncludeObjectSchema } from './objects/AccountInclude.schema';
 import { AccountOrderByWithRelationInputObjectSchema } from './objects/AccountOrderByWithRelationInput.schema';
 import { AccountWhereInputObjectSchema } from './objects/AccountWhereInput.schema';
 import { AccountWhereUniqueInputObjectSchema } from './objects/AccountWhereUniqueInput.schema';
 import { AccountScalarFieldEnumSchema } from './enums/AccountScalarFieldEnum.schema';
-import { UserArgsObjectSchema } from './objects/UserArgs.schema'
 
 // Select schema needs to be in file to prevent circular imports
 //------------------------------------------------------
 
-export const AccountFindFirstSelectSchema: z.ZodType<Prisma.AccountSelect, Prisma.AccountSelect> = z.object({
+export const AccountFindFirstSelectSchema: z.ZodType<Prisma.AccountSelect> = z.object({
     id: z.boolean().optional(),
     userId: z.boolean().optional(),
     type: z.boolean().optional(),
@@ -24,7 +23,7 @@ export const AccountFindFirstSelectSchema: z.ZodType<Prisma.AccountSelect, Prism
     id_token: z.boolean().optional(),
     session_state: z.boolean().optional(),
     user: z.boolean().optional()
-  }).strict();
+  }).strict() as unknown as z.ZodType<Prisma.AccountSelect>;
 
 export const AccountFindFirstSelectZodSchema = z.object({
     id: z.boolean().optional(),
@@ -42,6 +41,6 @@ export const AccountFindFirstSelectZodSchema = z.object({
     user: z.boolean().optional()
   }).strict();
 
-export const AccountFindFirstSchema: z.ZodType<Prisma.AccountFindFirstArgs, Prisma.AccountFindFirstArgs> = z.object({ select: AccountFindFirstSelectSchema.optional(), include: z.lazy(() => AccountIncludeObjectSchema.optional()), orderBy: z.union([AccountOrderByWithRelationInputObjectSchema, AccountOrderByWithRelationInputObjectSchema.array()]).optional(), where: AccountWhereInputObjectSchema.optional(), cursor: AccountWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([AccountScalarFieldEnumSchema, AccountScalarFieldEnumSchema.array()]).optional() }).strict();
+export const AccountFindFirstSchema: z.ZodType<Prisma.AccountFindFirstArgs> = z.object({ select: AccountFindFirstSelectSchema.optional(), include: z.lazy(() => AccountIncludeObjectSchema.optional()), orderBy: z.union([AccountOrderByWithRelationInputObjectSchema, AccountOrderByWithRelationInputObjectSchema.array()]).optional(), where: AccountWhereInputObjectSchema.optional(), cursor: AccountWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([z.nativeEnum(Prisma.AccountScalarFieldEnum), z.nativeEnum(Prisma.AccountScalarFieldEnum).array()]).optional() }).strict() as unknown as z.ZodType<Prisma.AccountFindFirstArgs>;
 
-export const AccountFindFirstZodSchema = z.object({ select: AccountFindFirstSelectSchema.optional(), include: z.lazy(() => AccountIncludeObjectSchema.optional()), orderBy: z.union([AccountOrderByWithRelationInputObjectSchema, AccountOrderByWithRelationInputObjectSchema.array()]).optional(), where: AccountWhereInputObjectSchema.optional(), cursor: AccountWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([AccountScalarFieldEnumSchema, AccountScalarFieldEnumSchema.array()]).optional() }).strict();
+export const AccountFindFirstZodSchema = z.object({ select: AccountFindFirstSelectSchema.optional(), include: z.lazy(() => AccountIncludeObjectSchema.optional()), orderBy: z.union([AccountOrderByWithRelationInputObjectSchema, AccountOrderByWithRelationInputObjectSchema.array()]).optional(), where: AccountWhereInputObjectSchema.optional(), cursor: AccountWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([z.nativeEnum(Prisma.AccountScalarFieldEnum), z.nativeEnum(Prisma.AccountScalarFieldEnum).array()]).optional() }).strict();

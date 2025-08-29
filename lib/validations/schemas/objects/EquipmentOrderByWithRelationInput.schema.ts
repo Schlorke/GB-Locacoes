@@ -6,7 +6,7 @@ import { CategoryOrderByWithRelationInputObjectSchema } from './CategoryOrderByW
 import { QuoteItemOrderByRelationAggregateInputObjectSchema } from './QuoteItemOrderByRelationAggregateInput.schema';
 import { rental_itemsOrderByRelationAggregateInputObjectSchema } from './rental_itemsOrderByRelationAggregateInput.schema'
 
-export const EquipmentOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.EquipmentOrderByWithRelationInput, Prisma.EquipmentOrderByWithRelationInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: SortOrderSchema.optional(),
   name: SortOrderSchema.optional(),
   description: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
@@ -21,18 +21,5 @@ export const EquipmentOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.Equ
   quoteItems: z.lazy(() => QuoteItemOrderByRelationAggregateInputObjectSchema).optional(),
   rental_items: z.lazy(() => rental_itemsOrderByRelationAggregateInputObjectSchema).optional()
 }).strict();
-export const EquipmentOrderByWithRelationInputObjectZodSchema = z.object({
-  id: SortOrderSchema.optional(),
-  name: SortOrderSchema.optional(),
-  description: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
-  pricePerDay: SortOrderSchema.optional(),
-  images: SortOrderSchema.optional(),
-  available: SortOrderSchema.optional(),
-  categoryId: SortOrderSchema.optional(),
-  createdAt: SortOrderSchema.optional(),
-  updatedAt: SortOrderSchema.optional(),
-  category_id: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
-  category: z.lazy(() => CategoryOrderByWithRelationInputObjectSchema).optional(),
-  quoteItems: z.lazy(() => QuoteItemOrderByRelationAggregateInputObjectSchema).optional(),
-  rental_items: z.lazy(() => rental_itemsOrderByRelationAggregateInputObjectSchema).optional()
-}).strict();
+export const EquipmentOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.EquipmentOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentOrderByWithRelationInput>;
+export const EquipmentOrderByWithRelationInputObjectZodSchema = makeSchema();

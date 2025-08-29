@@ -4,11 +4,9 @@ import { EquipmentWhereUniqueInputObjectSchema } from './EquipmentWhereUniqueInp
 import { EquipmentUpdateWithoutCategoryInputObjectSchema } from './EquipmentUpdateWithoutCategoryInput.schema';
 import { EquipmentUncheckedUpdateWithoutCategoryInputObjectSchema } from './EquipmentUncheckedUpdateWithoutCategoryInput.schema'
 
-export const EquipmentUpdateWithWhereUniqueWithoutCategoryInputObjectSchema: z.ZodType<Prisma.EquipmentUpdateWithWhereUniqueWithoutCategoryInput, Prisma.EquipmentUpdateWithWhereUniqueWithoutCategoryInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => EquipmentWhereUniqueInputObjectSchema),
   data: z.union([z.lazy(() => EquipmentUpdateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentUncheckedUpdateWithoutCategoryInputObjectSchema)])
 }).strict();
-export const EquipmentUpdateWithWhereUniqueWithoutCategoryInputObjectZodSchema = z.object({
-  where: z.lazy(() => EquipmentWhereUniqueInputObjectSchema),
-  data: z.union([z.lazy(() => EquipmentUpdateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentUncheckedUpdateWithoutCategoryInputObjectSchema)])
-}).strict();
+export const EquipmentUpdateWithWhereUniqueWithoutCategoryInputObjectSchema: z.ZodType<Prisma.EquipmentUpdateWithWhereUniqueWithoutCategoryInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUpdateWithWhereUniqueWithoutCategoryInput>;
+export const EquipmentUpdateWithWhereUniqueWithoutCategoryInputObjectZodSchema = makeSchema();

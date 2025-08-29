@@ -4,11 +4,9 @@ import { AccountWhereUniqueInputObjectSchema } from './AccountWhereUniqueInput.s
 import { AccountUpdateWithoutUserInputObjectSchema } from './AccountUpdateWithoutUserInput.schema';
 import { AccountUncheckedUpdateWithoutUserInputObjectSchema } from './AccountUncheckedUpdateWithoutUserInput.schema'
 
-export const AccountUpdateWithWhereUniqueWithoutUserInputObjectSchema: z.ZodType<Prisma.AccountUpdateWithWhereUniqueWithoutUserInput, Prisma.AccountUpdateWithWhereUniqueWithoutUserInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => AccountWhereUniqueInputObjectSchema),
   data: z.union([z.lazy(() => AccountUpdateWithoutUserInputObjectSchema), z.lazy(() => AccountUncheckedUpdateWithoutUserInputObjectSchema)])
 }).strict();
-export const AccountUpdateWithWhereUniqueWithoutUserInputObjectZodSchema = z.object({
-  where: z.lazy(() => AccountWhereUniqueInputObjectSchema),
-  data: z.union([z.lazy(() => AccountUpdateWithoutUserInputObjectSchema), z.lazy(() => AccountUncheckedUpdateWithoutUserInputObjectSchema)])
-}).strict();
+export const AccountUpdateWithWhereUniqueWithoutUserInputObjectSchema: z.ZodType<Prisma.AccountUpdateWithWhereUniqueWithoutUserInput> = makeSchema() as unknown as z.ZodType<Prisma.AccountUpdateWithWhereUniqueWithoutUserInput>;
+export const AccountUpdateWithWhereUniqueWithoutUserInputObjectZodSchema = makeSchema();

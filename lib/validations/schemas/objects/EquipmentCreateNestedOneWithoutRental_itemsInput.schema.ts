@@ -5,13 +5,10 @@ import { EquipmentUncheckedCreateWithoutRental_itemsInputObjectSchema } from './
 import { EquipmentCreateOrConnectWithoutRental_itemsInputObjectSchema } from './EquipmentCreateOrConnectWithoutRental_itemsInput.schema';
 import { EquipmentWhereUniqueInputObjectSchema } from './EquipmentWhereUniqueInput.schema'
 
-export const EquipmentCreateNestedOneWithoutRental_itemsInputObjectSchema: z.ZodType<Prisma.EquipmentCreateNestedOneWithoutRental_itemsInput, Prisma.EquipmentCreateNestedOneWithoutRental_itemsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => EquipmentCreateWithoutRental_itemsInputObjectSchema), z.lazy(() => EquipmentUncheckedCreateWithoutRental_itemsInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => EquipmentCreateOrConnectWithoutRental_itemsInputObjectSchema).optional(),
   connect: z.lazy(() => EquipmentWhereUniqueInputObjectSchema).optional()
 }).strict();
-export const EquipmentCreateNestedOneWithoutRental_itemsInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => EquipmentCreateWithoutRental_itemsInputObjectSchema), z.lazy(() => EquipmentUncheckedCreateWithoutRental_itemsInputObjectSchema)]).optional(),
-  connectOrCreate: z.lazy(() => EquipmentCreateOrConnectWithoutRental_itemsInputObjectSchema).optional(),
-  connect: z.lazy(() => EquipmentWhereUniqueInputObjectSchema).optional()
-}).strict();
+export const EquipmentCreateNestedOneWithoutRental_itemsInputObjectSchema: z.ZodType<Prisma.EquipmentCreateNestedOneWithoutRental_itemsInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentCreateNestedOneWithoutRental_itemsInput>;
+export const EquipmentCreateNestedOneWithoutRental_itemsInputObjectZodSchema = makeSchema();

@@ -9,17 +9,12 @@ import { UserUpdateToOneWithWhereWithoutRentalsInputObjectSchema } from './UserU
 import { UserUpdateWithoutRentalsInputObjectSchema } from './UserUpdateWithoutRentalsInput.schema';
 import { UserUncheckedUpdateWithoutRentalsInputObjectSchema } from './UserUncheckedUpdateWithoutRentalsInput.schema'
 
-export const UserUpdateOneRequiredWithoutRentalsNestedInputObjectSchema: z.ZodType<Prisma.UserUpdateOneRequiredWithoutRentalsNestedInput, Prisma.UserUpdateOneRequiredWithoutRentalsNestedInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => UserCreateWithoutRentalsInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutRentalsInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutRentalsInputObjectSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutRentalsInputObjectSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputObjectSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutRentalsInputObjectSchema), z.lazy(() => UserUpdateWithoutRentalsInputObjectSchema), z.lazy(() => UserUncheckedUpdateWithoutRentalsInputObjectSchema)]).optional()
 }).strict();
-export const UserUpdateOneRequiredWithoutRentalsNestedInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => UserCreateWithoutRentalsInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutRentalsInputObjectSchema)]).optional(),
-  connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutRentalsInputObjectSchema).optional(),
-  upsert: z.lazy(() => UserUpsertWithoutRentalsInputObjectSchema).optional(),
-  connect: z.lazy(() => UserWhereUniqueInputObjectSchema).optional(),
-  update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutRentalsInputObjectSchema), z.lazy(() => UserUpdateWithoutRentalsInputObjectSchema), z.lazy(() => UserUncheckedUpdateWithoutRentalsInputObjectSchema)]).optional()
-}).strict();
+export const UserUpdateOneRequiredWithoutRentalsNestedInputObjectSchema: z.ZodType<Prisma.UserUpdateOneRequiredWithoutRentalsNestedInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUpdateOneRequiredWithoutRentalsNestedInput>;
+export const UserUpdateOneRequiredWithoutRentalsNestedInputObjectZodSchema = makeSchema();

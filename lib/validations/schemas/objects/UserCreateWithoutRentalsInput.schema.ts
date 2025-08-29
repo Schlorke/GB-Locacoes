@@ -5,31 +5,19 @@ import { AccountCreateNestedManyWithoutUserInputObjectSchema } from './AccountCr
 import { QuoteCreateNestedManyWithoutUserInputObjectSchema } from './QuoteCreateNestedManyWithoutUserInput.schema';
 import { SessionCreateNestedManyWithoutUserInputObjectSchema } from './SessionCreateNestedManyWithoutUserInput.schema'
 
-export const UserCreateWithoutRentalsInputObjectSchema: z.ZodType<Prisma.UserCreateWithoutRentalsInput, Prisma.UserCreateWithoutRentalsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.string().optional(),
-  name: z.string().optional().nullable(),
+  name: z.string().nullish(),
   email: z.string(),
-  password: z.string().optional().nullable(),
+  password: z.string().nullish(),
   role: RoleSchema.optional(),
-  emailVerified: z.date().optional().nullable(),
-  image: z.string().optional().nullable(),
+  emailVerified: z.date().nullish(),
+  image: z.string().nullish(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
   accounts: z.lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema).optional(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputObjectSchema).optional(),
   sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputObjectSchema).optional()
 }).strict();
-export const UserCreateWithoutRentalsInputObjectZodSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().optional().nullable(),
-  email: z.string(),
-  password: z.string().optional().nullable(),
-  role: RoleSchema.optional(),
-  emailVerified: z.date().optional().nullable(),
-  image: z.string().optional().nullable(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  accounts: z.lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputObjectSchema).optional(),
-  sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputObjectSchema).optional()
-}).strict();
+export const UserCreateWithoutRentalsInputObjectSchema: z.ZodType<Prisma.UserCreateWithoutRentalsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateWithoutRentalsInput>;
+export const UserCreateWithoutRentalsInputObjectZodSchema = makeSchema();

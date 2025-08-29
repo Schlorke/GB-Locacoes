@@ -3,13 +3,10 @@ import type { Prisma } from '../../../../node_modules/.prisma/client';
 import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
 import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema'
 
-export const VerificationTokenUncheckedUpdateInputObjectSchema: z.ZodType<Prisma.VerificationTokenUncheckedUpdateInput, Prisma.VerificationTokenUncheckedUpdateInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   identifier: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   expires: z.union([z.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional()
 }).strict();
-export const VerificationTokenUncheckedUpdateInputObjectZodSchema = z.object({
-  identifier: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
-  token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
-  expires: z.union([z.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional()
-}).strict();
+export const VerificationTokenUncheckedUpdateInputObjectSchema: z.ZodType<Prisma.VerificationTokenUncheckedUpdateInput> = makeSchema() as unknown as z.ZodType<Prisma.VerificationTokenUncheckedUpdateInput>;
+export const VerificationTokenUncheckedUpdateInputObjectZodSchema = makeSchema();

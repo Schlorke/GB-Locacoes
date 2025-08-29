@@ -4,11 +4,9 @@ import { rental_itemsWhereUniqueInputObjectSchema } from './rental_itemsWhereUni
 import { rental_itemsCreateWithoutRentalsInputObjectSchema } from './rental_itemsCreateWithoutRentalsInput.schema';
 import { rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema } from './rental_itemsUncheckedCreateWithoutRentalsInput.schema'
 
-export const rental_itemsCreateOrConnectWithoutRentalsInputObjectSchema: z.ZodType<Prisma.rental_itemsCreateOrConnectWithoutRentalsInput, Prisma.rental_itemsCreateOrConnectWithoutRentalsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => rental_itemsWhereUniqueInputObjectSchema),
   create: z.union([z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema)])
 }).strict();
-export const rental_itemsCreateOrConnectWithoutRentalsInputObjectZodSchema = z.object({
-  where: z.lazy(() => rental_itemsWhereUniqueInputObjectSchema),
-  create: z.union([z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema)])
-}).strict();
+export const rental_itemsCreateOrConnectWithoutRentalsInputObjectSchema: z.ZodType<Prisma.rental_itemsCreateOrConnectWithoutRentalsInput> = makeSchema() as unknown as z.ZodType<Prisma.rental_itemsCreateOrConnectWithoutRentalsInput>;
+export const rental_itemsCreateOrConnectWithoutRentalsInputObjectZodSchema = makeSchema();

@@ -8,7 +8,7 @@ import { rentalsMaxOrderByAggregateInputObjectSchema } from './rentalsMaxOrderBy
 import { rentalsMinOrderByAggregateInputObjectSchema } from './rentalsMinOrderByAggregateInput.schema';
 import { rentalsSumOrderByAggregateInputObjectSchema } from './rentalsSumOrderByAggregateInput.schema'
 
-export const rentalsOrderByWithAggregationInputObjectSchema: z.ZodType<Prisma.rentalsOrderByWithAggregationInput, Prisma.rentalsOrderByWithAggregationInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: SortOrderSchema.optional(),
   startdate: SortOrderSchema.optional(),
   enddate: SortOrderSchema.optional(),
@@ -23,18 +23,5 @@ export const rentalsOrderByWithAggregationInputObjectSchema: z.ZodType<Prisma.re
   _min: z.lazy(() => rentalsMinOrderByAggregateInputObjectSchema).optional(),
   _sum: z.lazy(() => rentalsSumOrderByAggregateInputObjectSchema).optional()
 }).strict();
-export const rentalsOrderByWithAggregationInputObjectZodSchema = z.object({
-  id: SortOrderSchema.optional(),
-  startdate: SortOrderSchema.optional(),
-  enddate: SortOrderSchema.optional(),
-  total: SortOrderSchema.optional(),
-  status: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
-  userid: SortOrderSchema.optional(),
-  createdat: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
-  updatedat: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
-  _count: z.lazy(() => rentalsCountOrderByAggregateInputObjectSchema).optional(),
-  _avg: z.lazy(() => rentalsAvgOrderByAggregateInputObjectSchema).optional(),
-  _max: z.lazy(() => rentalsMaxOrderByAggregateInputObjectSchema).optional(),
-  _min: z.lazy(() => rentalsMinOrderByAggregateInputObjectSchema).optional(),
-  _sum: z.lazy(() => rentalsSumOrderByAggregateInputObjectSchema).optional()
-}).strict();
+export const rentalsOrderByWithAggregationInputObjectSchema: z.ZodType<Prisma.rentalsOrderByWithAggregationInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsOrderByWithAggregationInput>;
+export const rentalsOrderByWithAggregationInputObjectZodSchema = makeSchema();

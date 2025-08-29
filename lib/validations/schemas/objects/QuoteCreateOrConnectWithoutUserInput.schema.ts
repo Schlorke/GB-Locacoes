@@ -4,11 +4,9 @@ import { QuoteWhereUniqueInputObjectSchema } from './QuoteWhereUniqueInput.schem
 import { QuoteCreateWithoutUserInputObjectSchema } from './QuoteCreateWithoutUserInput.schema';
 import { QuoteUncheckedCreateWithoutUserInputObjectSchema } from './QuoteUncheckedCreateWithoutUserInput.schema'
 
-export const QuoteCreateOrConnectWithoutUserInputObjectSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutUserInput, Prisma.QuoteCreateOrConnectWithoutUserInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   where: z.lazy(() => QuoteWhereUniqueInputObjectSchema),
   create: z.union([z.lazy(() => QuoteCreateWithoutUserInputObjectSchema), z.lazy(() => QuoteUncheckedCreateWithoutUserInputObjectSchema)])
 }).strict();
-export const QuoteCreateOrConnectWithoutUserInputObjectZodSchema = z.object({
-  where: z.lazy(() => QuoteWhereUniqueInputObjectSchema),
-  create: z.union([z.lazy(() => QuoteCreateWithoutUserInputObjectSchema), z.lazy(() => QuoteUncheckedCreateWithoutUserInputObjectSchema)])
-}).strict();
+export const QuoteCreateOrConnectWithoutUserInputObjectSchema: z.ZodType<Prisma.QuoteCreateOrConnectWithoutUserInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteCreateOrConnectWithoutUserInput>;
+export const QuoteCreateOrConnectWithoutUserInputObjectZodSchema = makeSchema();

@@ -2,9 +2,8 @@ import { z } from 'zod';
 import type { Prisma } from '../../../../node_modules/.prisma/client';
 
 
-export const RentalsSumAggregateInputObjectSchema: z.ZodType<Prisma.RentalsSumAggregateInputType, Prisma.RentalsSumAggregateInputType> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   total: z.literal(true).optional()
 }).strict();
-export const RentalsSumAggregateInputObjectZodSchema = z.object({
-  total: z.literal(true).optional()
-}).strict();
+export const RentalsSumAggregateInputObjectSchema: z.ZodType<Prisma.RentalsSumAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.RentalsSumAggregateInputType>;
+export const RentalsSumAggregateInputObjectZodSchema = makeSchema();

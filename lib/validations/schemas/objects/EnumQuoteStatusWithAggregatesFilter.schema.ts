@@ -5,7 +5,7 @@ import { NestedEnumQuoteStatusWithAggregatesFilterObjectSchema } from './NestedE
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedEnumQuoteStatusFilterObjectSchema } from './NestedEnumQuoteStatusFilter.schema'
 
-export const EnumQuoteStatusWithAggregatesFilterObjectSchema: z.ZodType<Prisma.EnumQuoteStatusWithAggregatesFilter, Prisma.EnumQuoteStatusWithAggregatesFilter> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   equals: QuoteStatusSchema.optional(),
   in: QuoteStatusSchema.array().optional(),
   notIn: QuoteStatusSchema.array().optional(),
@@ -14,12 +14,5 @@ export const EnumQuoteStatusWithAggregatesFilterObjectSchema: z.ZodType<Prisma.E
   _min: z.lazy(() => NestedEnumQuoteStatusFilterObjectSchema).optional(),
   _max: z.lazy(() => NestedEnumQuoteStatusFilterObjectSchema).optional()
 }).strict();
-export const EnumQuoteStatusWithAggregatesFilterObjectZodSchema = z.object({
-  equals: QuoteStatusSchema.optional(),
-  in: QuoteStatusSchema.array().optional(),
-  notIn: QuoteStatusSchema.array().optional(),
-  not: z.union([QuoteStatusSchema, z.lazy(() => NestedEnumQuoteStatusWithAggregatesFilterObjectSchema)]).optional(),
-  _count: z.lazy(() => NestedIntFilterObjectSchema).optional(),
-  _min: z.lazy(() => NestedEnumQuoteStatusFilterObjectSchema).optional(),
-  _max: z.lazy(() => NestedEnumQuoteStatusFilterObjectSchema).optional()
-}).strict();
+export const EnumQuoteStatusWithAggregatesFilterObjectSchema: z.ZodType<Prisma.EnumQuoteStatusWithAggregatesFilter> = makeSchema() as unknown as z.ZodType<Prisma.EnumQuoteStatusWithAggregatesFilter>;
+export const EnumQuoteStatusWithAggregatesFilterObjectZodSchema = makeSchema();

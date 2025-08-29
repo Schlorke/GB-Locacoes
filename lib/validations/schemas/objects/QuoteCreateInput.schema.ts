@@ -4,13 +4,13 @@ import { QuoteStatusSchema } from '../enums/QuoteStatus.schema';
 import { QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema } from './QuoteItemCreateNestedManyWithoutQuoteInput.schema';
 import { UserCreateNestedOneWithoutQuotesInputObjectSchema } from './UserCreateNestedOneWithoutQuotesInput.schema'
 
-export const QuoteCreateInputObjectSchema: z.ZodType<Prisma.QuoteCreateInput, Prisma.QuoteCreateInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.string().optional(),
   name: z.string(),
   email: z.string(),
   phone: z.string(),
-  company: z.string().optional().nullable(),
-  message: z.string().optional().nullable(),
+  company: z.string().nullish(),
+  message: z.string().nullish(),
   total: z.number().optional(),
   status: QuoteStatusSchema.optional(),
   createdAt: z.date().optional(),
@@ -18,17 +18,5 @@ export const QuoteCreateInputObjectSchema: z.ZodType<Prisma.QuoteCreateInput, Pr
   items: z.lazy(() => QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema).optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputObjectSchema).optional()
 }).strict();
-export const QuoteCreateInputObjectZodSchema = z.object({
-  id: z.string().optional(),
-  name: z.string(),
-  email: z.string(),
-  phone: z.string(),
-  company: z.string().optional().nullable(),
-  message: z.string().optional().nullable(),
-  total: z.number().optional(),
-  status: QuoteStatusSchema.optional(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  items: z.lazy(() => QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema).optional(),
-  user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputObjectSchema).optional()
-}).strict();
+export const QuoteCreateInputObjectSchema: z.ZodType<Prisma.QuoteCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteCreateInput>;
+export const QuoteCreateInputObjectZodSchema = makeSchema();

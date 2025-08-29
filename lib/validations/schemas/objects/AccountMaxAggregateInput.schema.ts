@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Prisma } from '../../../../node_modules/.prisma/client';
 
 
-export const AccountMaxAggregateInputObjectSchema: z.ZodType<Prisma.AccountMaxAggregateInputType, Prisma.AccountMaxAggregateInputType> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.literal(true).optional(),
   userId: z.literal(true).optional(),
   type: z.literal(true).optional(),
@@ -16,17 +16,5 @@ export const AccountMaxAggregateInputObjectSchema: z.ZodType<Prisma.AccountMaxAg
   id_token: z.literal(true).optional(),
   session_state: z.literal(true).optional()
 }).strict();
-export const AccountMaxAggregateInputObjectZodSchema = z.object({
-  id: z.literal(true).optional(),
-  userId: z.literal(true).optional(),
-  type: z.literal(true).optional(),
-  provider: z.literal(true).optional(),
-  providerAccountId: z.literal(true).optional(),
-  refresh_token: z.literal(true).optional(),
-  access_token: z.literal(true).optional(),
-  expires_at: z.literal(true).optional(),
-  token_type: z.literal(true).optional(),
-  scope: z.literal(true).optional(),
-  id_token: z.literal(true).optional(),
-  session_state: z.literal(true).optional()
-}).strict();
+export const AccountMaxAggregateInputObjectSchema: z.ZodType<Prisma.AccountMaxAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.AccountMaxAggregateInputType>;
+export const AccountMaxAggregateInputObjectZodSchema = makeSchema();

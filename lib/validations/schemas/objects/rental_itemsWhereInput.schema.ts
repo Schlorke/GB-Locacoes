@@ -9,33 +9,21 @@ import { EquipmentWhereInputObjectSchema } from './EquipmentWhereInput.schema';
 import { RentalsScalarRelationFilterObjectSchema } from './RentalsScalarRelationFilter.schema';
 import { rentalsWhereInputObjectSchema } from './rentalsWhereInput.schema'
 
-export const rental_itemsWhereInputObjectSchema: z.ZodType<Prisma.rental_itemsWhereInput, Prisma.rental_itemsWhereInput> = z.object({
-  AND: z.union([z.lazy(() => rental_itemsWhereInputObjectSchema), z.lazy(() => rental_itemsWhereInputObjectSchema).array()]).optional(),
-  OR: z.lazy(() => rental_itemsWhereInputObjectSchema).array().optional(),
-  NOT: z.union([z.lazy(() => rental_itemsWhereInputObjectSchema), z.lazy(() => rental_itemsWhereInputObjectSchema).array()]).optional(),
+const makeSchema = (): z.ZodObject<any> => z.object({
+  AND: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
+  OR: z.lazy(makeSchema).array().optional(),
+  NOT: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
+  id: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   rentalid: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   equipmentid: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   quantity: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
   priceperday: z.union([z.lazy(() => DecimalFilterObjectSchema), z.number()]).optional(),
   totaldays: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
   totalprice: z.union([z.lazy(() => DecimalFilterObjectSchema), z.number()]).optional(),
-  createdat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.date()]).optional().nullable(),
-  updatedat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.date()]).optional().nullable(),
+  createdat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.date()]).nullish(),
+  updatedat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.date()]).nullish(),
   equipments: z.union([z.lazy(() => EquipmentScalarRelationFilterObjectSchema), z.lazy(() => EquipmentWhereInputObjectSchema)]).optional(),
   rentals: z.union([z.lazy(() => RentalsScalarRelationFilterObjectSchema), z.lazy(() => rentalsWhereInputObjectSchema)]).optional()
 }).strict();
-export const rental_itemsWhereInputObjectZodSchema = z.object({
-  AND: z.union([z.lazy(() => rental_itemsWhereInputObjectSchema), z.lazy(() => rental_itemsWhereInputObjectSchema).array()]).optional(),
-  OR: z.lazy(() => rental_itemsWhereInputObjectSchema).array().optional(),
-  NOT: z.union([z.lazy(() => rental_itemsWhereInputObjectSchema), z.lazy(() => rental_itemsWhereInputObjectSchema).array()]).optional(),
-  rentalid: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
-  equipmentid: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
-  quantity: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
-  priceperday: z.union([z.lazy(() => DecimalFilterObjectSchema), z.number()]).optional(),
-  totaldays: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
-  totalprice: z.union([z.lazy(() => DecimalFilterObjectSchema), z.number()]).optional(),
-  createdat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.date()]).optional().nullable(),
-  updatedat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.date()]).optional().nullable(),
-  equipments: z.union([z.lazy(() => EquipmentScalarRelationFilterObjectSchema), z.lazy(() => EquipmentWhereInputObjectSchema)]).optional(),
-  rentals: z.union([z.lazy(() => RentalsScalarRelationFilterObjectSchema), z.lazy(() => rentalsWhereInputObjectSchema)]).optional()
-}).strict();
+export const rental_itemsWhereInputObjectSchema: z.ZodType<Prisma.rental_itemsWhereInput> = makeSchema() as unknown as z.ZodType<Prisma.rental_itemsWhereInput>;
+export const rental_itemsWhereInputObjectZodSchema = makeSchema();

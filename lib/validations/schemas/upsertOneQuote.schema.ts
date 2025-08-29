@@ -5,6 +5,6 @@ import { QuoteWhereUniqueInputObjectSchema } from './objects/QuoteWhereUniqueInp
 import { QuoteCreateInputObjectSchema } from './objects/QuoteCreateInput.schema';
 import { QuoteUncheckedCreateInputObjectSchema } from './objects/QuoteUncheckedCreateInput.schema';
 import { QuoteUpdateInputObjectSchema } from './objects/QuoteUpdateInput.schema';
-import { QuoteUncheckedUpdateInputObjectSchema } from './objects/QuoteUncheckedUpdateInput.schema'
+import { QuoteUncheckedUpdateInputObjectSchema } from './objects/QuoteUncheckedUpdateInput.schema';
 
 export const QuoteUpsertSchema = z.object({ select: QuoteSelectObjectSchema.optional(), include: QuoteIncludeObjectSchema.optional(), where: QuoteWhereUniqueInputObjectSchema, create: z.union([ QuoteCreateInputObjectSchema, QuoteUncheckedCreateInputObjectSchema ]), update: z.union([ QuoteUpdateInputObjectSchema, QuoteUncheckedUpdateInputObjectSchema ])  })

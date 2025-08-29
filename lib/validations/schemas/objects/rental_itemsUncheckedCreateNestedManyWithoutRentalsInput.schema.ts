@@ -6,15 +6,11 @@ import { rental_itemsCreateOrConnectWithoutRentalsInputObjectSchema } from './re
 import { rental_itemsCreateManyRentalsInputEnvelopeObjectSchema } from './rental_itemsCreateManyRentalsInputEnvelope.schema';
 import { rental_itemsWhereUniqueInputObjectSchema } from './rental_itemsWhereUniqueInput.schema'
 
-export const rental_itemsUncheckedCreateNestedManyWithoutRentalsInputObjectSchema: z.ZodType<Prisma.rental_itemsUncheckedCreateNestedManyWithoutRentalsInput, Prisma.rental_itemsUncheckedCreateNestedManyWithoutRentalsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema).array(), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => rental_itemsCreateOrConnectWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsCreateOrConnectWithoutRentalsInputObjectSchema).array()]).optional(),
   createMany: z.lazy(() => rental_itemsCreateManyRentalsInputEnvelopeObjectSchema).optional(),
   connect: z.union([z.lazy(() => rental_itemsWhereUniqueInputObjectSchema), z.lazy(() => rental_itemsWhereUniqueInputObjectSchema).array()]).optional()
 }).strict();
-export const rental_itemsUncheckedCreateNestedManyWithoutRentalsInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema).array(), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema).array()]).optional(),
-  connectOrCreate: z.union([z.lazy(() => rental_itemsCreateOrConnectWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsCreateOrConnectWithoutRentalsInputObjectSchema).array()]).optional(),
-  createMany: z.lazy(() => rental_itemsCreateManyRentalsInputEnvelopeObjectSchema).optional(),
-  connect: z.union([z.lazy(() => rental_itemsWhereUniqueInputObjectSchema), z.lazy(() => rental_itemsWhereUniqueInputObjectSchema).array()]).optional()
-}).strict();
+export const rental_itemsUncheckedCreateNestedManyWithoutRentalsInputObjectSchema: z.ZodType<Prisma.rental_itemsUncheckedCreateNestedManyWithoutRentalsInput> = makeSchema() as unknown as z.ZodType<Prisma.rental_itemsUncheckedCreateNestedManyWithoutRentalsInput>;
+export const rental_itemsUncheckedCreateNestedManyWithoutRentalsInputObjectZodSchema = makeSchema();

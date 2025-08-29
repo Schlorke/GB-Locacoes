@@ -1,4 +1,4 @@
 import { z } from 'zod';
-import { VerificationTokenCreateManyInputObjectSchema } from './objects/VerificationTokenCreateManyInput.schema'
+import { VerificationTokenCreateManyInputObjectSchema } from './objects/VerificationTokenCreateManyInput.schema';
 
 export const VerificationTokenCreateManySchema = z.object({ data: z.union([ VerificationTokenCreateManyInputObjectSchema, z.array(VerificationTokenCreateManyInputObjectSchema) ]), skipDuplicates: z.boolean().optional() })

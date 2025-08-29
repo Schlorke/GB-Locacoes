@@ -3,11 +3,9 @@ import type { Prisma } from '../../../../node_modules/.prisma/client';
 import { SessionSelectObjectSchema } from './SessionSelect.schema';
 import { SessionIncludeObjectSchema } from './SessionInclude.schema'
 
-export const SessionArgsObjectSchema = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   select: z.lazy(() => SessionSelectObjectSchema).optional(),
   include: z.lazy(() => SessionIncludeObjectSchema).optional()
 }).strict();
-export const SessionArgsObjectZodSchema = z.object({
-  select: z.lazy(() => SessionSelectObjectSchema).optional(),
-  include: z.lazy(() => SessionIncludeObjectSchema).optional()
-}).strict();
+export const SessionArgsObjectSchema = makeSchema();
+export const SessionArgsObjectZodSchema = makeSchema();

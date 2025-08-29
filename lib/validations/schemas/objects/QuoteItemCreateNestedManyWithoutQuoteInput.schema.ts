@@ -6,15 +6,11 @@ import { QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema } from './QuoteIt
 import { QuoteItemCreateManyQuoteInputEnvelopeObjectSchema } from './QuoteItemCreateManyQuoteInputEnvelope.schema';
 import { QuoteItemWhereUniqueInputObjectSchema } from './QuoteItemWhereUniqueInput.schema'
 
-export const QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema: z.ZodType<Prisma.QuoteItemCreateNestedManyWithoutQuoteInput, Prisma.QuoteItemCreateNestedManyWithoutQuoteInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema).array(), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema).array()]).optional(),
   createMany: z.lazy(() => QuoteItemCreateManyQuoteInputEnvelopeObjectSchema).optional(),
   connect: z.union([z.lazy(() => QuoteItemWhereUniqueInputObjectSchema), z.lazy(() => QuoteItemWhereUniqueInputObjectSchema).array()]).optional()
 }).strict();
-export const QuoteItemCreateNestedManyWithoutQuoteInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema).array(), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema).array()]).optional(),
-  connectOrCreate: z.union([z.lazy(() => QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema).array()]).optional(),
-  createMany: z.lazy(() => QuoteItemCreateManyQuoteInputEnvelopeObjectSchema).optional(),
-  connect: z.union([z.lazy(() => QuoteItemWhereUniqueInputObjectSchema), z.lazy(() => QuoteItemWhereUniqueInputObjectSchema).array()]).optional()
-}).strict();
+export const QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema: z.ZodType<Prisma.QuoteItemCreateNestedManyWithoutQuoteInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteItemCreateNestedManyWithoutQuoteInput>;
+export const QuoteItemCreateNestedManyWithoutQuoteInputObjectZodSchema = makeSchema();

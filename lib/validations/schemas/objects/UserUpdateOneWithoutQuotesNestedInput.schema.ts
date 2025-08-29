@@ -10,7 +10,7 @@ import { UserUpdateToOneWithWhereWithoutQuotesInputObjectSchema } from './UserUp
 import { UserUpdateWithoutQuotesInputObjectSchema } from './UserUpdateWithoutQuotesInput.schema';
 import { UserUncheckedUpdateWithoutQuotesInputObjectSchema } from './UserUncheckedUpdateWithoutQuotesInput.schema'
 
-export const UserUpdateOneWithoutQuotesNestedInputObjectSchema: z.ZodType<Prisma.UserUpdateOneWithoutQuotesNestedInput, Prisma.UserUpdateOneWithoutQuotesNestedInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => UserCreateWithoutQuotesInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutQuotesInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutQuotesInputObjectSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutQuotesInputObjectSchema).optional(),
@@ -19,12 +19,5 @@ export const UserUpdateOneWithoutQuotesNestedInputObjectSchema: z.ZodType<Prisma
   connect: z.lazy(() => UserWhereUniqueInputObjectSchema).optional(),
   update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutQuotesInputObjectSchema), z.lazy(() => UserUpdateWithoutQuotesInputObjectSchema), z.lazy(() => UserUncheckedUpdateWithoutQuotesInputObjectSchema)]).optional()
 }).strict();
-export const UserUpdateOneWithoutQuotesNestedInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => UserCreateWithoutQuotesInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutQuotesInputObjectSchema)]).optional(),
-  connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutQuotesInputObjectSchema).optional(),
-  upsert: z.lazy(() => UserUpsertWithoutQuotesInputObjectSchema).optional(),
-  disconnect: z.union([z.boolean(), z.lazy(() => UserWhereInputObjectSchema)]).optional(),
-  delete: z.union([z.boolean(), z.lazy(() => UserWhereInputObjectSchema)]).optional(),
-  connect: z.lazy(() => UserWhereUniqueInputObjectSchema).optional(),
-  update: z.union([z.lazy(() => UserUpdateToOneWithWhereWithoutQuotesInputObjectSchema), z.lazy(() => UserUpdateWithoutQuotesInputObjectSchema), z.lazy(() => UserUncheckedUpdateWithoutQuotesInputObjectSchema)]).optional()
-}).strict();
+export const UserUpdateOneWithoutQuotesNestedInputObjectSchema: z.ZodType<Prisma.UserUpdateOneWithoutQuotesNestedInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUpdateOneWithoutQuotesNestedInput>;
+export const UserUpdateOneWithoutQuotesNestedInputObjectZodSchema = makeSchema();

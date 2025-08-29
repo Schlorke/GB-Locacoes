@@ -5,6 +5,6 @@ import { CategoryWhereUniqueInputObjectSchema } from './objects/CategoryWhereUni
 import { CategoryCreateInputObjectSchema } from './objects/CategoryCreateInput.schema';
 import { CategoryUncheckedCreateInputObjectSchema } from './objects/CategoryUncheckedCreateInput.schema';
 import { CategoryUpdateInputObjectSchema } from './objects/CategoryUpdateInput.schema';
-import { CategoryUncheckedUpdateInputObjectSchema } from './objects/CategoryUncheckedUpdateInput.schema'
+import { CategoryUncheckedUpdateInputObjectSchema } from './objects/CategoryUncheckedUpdateInput.schema';
 
 export const CategoryUpsertSchema = z.object({ select: CategorySelectObjectSchema.optional(), include: CategoryIncludeObjectSchema.optional(), where: CategoryWhereUniqueInputObjectSchema, create: z.union([ CategoryCreateInputObjectSchema, CategoryUncheckedCreateInputObjectSchema ]), update: z.union([ CategoryUpdateInputObjectSchema, CategoryUncheckedUpdateInputObjectSchema ])  })

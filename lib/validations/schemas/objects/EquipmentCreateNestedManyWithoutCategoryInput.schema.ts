@@ -6,15 +6,11 @@ import { EquipmentCreateOrConnectWithoutCategoryInputObjectSchema } from './Equi
 import { EquipmentCreateManyCategoryInputEnvelopeObjectSchema } from './EquipmentCreateManyCategoryInputEnvelope.schema';
 import { EquipmentWhereUniqueInputObjectSchema } from './EquipmentWhereUniqueInput.schema'
 
-export const EquipmentCreateNestedManyWithoutCategoryInputObjectSchema: z.ZodType<Prisma.EquipmentCreateNestedManyWithoutCategoryInput, Prisma.EquipmentCreateNestedManyWithoutCategoryInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => EquipmentCreateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentCreateWithoutCategoryInputObjectSchema).array(), z.lazy(() => EquipmentUncheckedCreateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentUncheckedCreateWithoutCategoryInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => EquipmentCreateOrConnectWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentCreateOrConnectWithoutCategoryInputObjectSchema).array()]).optional(),
   createMany: z.lazy(() => EquipmentCreateManyCategoryInputEnvelopeObjectSchema).optional(),
   connect: z.union([z.lazy(() => EquipmentWhereUniqueInputObjectSchema), z.lazy(() => EquipmentWhereUniqueInputObjectSchema).array()]).optional()
 }).strict();
-export const EquipmentCreateNestedManyWithoutCategoryInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => EquipmentCreateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentCreateWithoutCategoryInputObjectSchema).array(), z.lazy(() => EquipmentUncheckedCreateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentUncheckedCreateWithoutCategoryInputObjectSchema).array()]).optional(),
-  connectOrCreate: z.union([z.lazy(() => EquipmentCreateOrConnectWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentCreateOrConnectWithoutCategoryInputObjectSchema).array()]).optional(),
-  createMany: z.lazy(() => EquipmentCreateManyCategoryInputEnvelopeObjectSchema).optional(),
-  connect: z.union([z.lazy(() => EquipmentWhereUniqueInputObjectSchema), z.lazy(() => EquipmentWhereUniqueInputObjectSchema).array()]).optional()
-}).strict();
+export const EquipmentCreateNestedManyWithoutCategoryInputObjectSchema: z.ZodType<Prisma.EquipmentCreateNestedManyWithoutCategoryInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentCreateNestedManyWithoutCategoryInput>;
+export const EquipmentCreateNestedManyWithoutCategoryInputObjectZodSchema = makeSchema();

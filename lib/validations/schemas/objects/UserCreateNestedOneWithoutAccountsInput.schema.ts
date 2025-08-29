@@ -5,13 +5,10 @@ import { UserUncheckedCreateWithoutAccountsInputObjectSchema } from './UserUnche
 import { UserCreateOrConnectWithoutAccountsInputObjectSchema } from './UserCreateOrConnectWithoutAccountsInput.schema';
 import { UserWhereUniqueInputObjectSchema } from './UserWhereUniqueInput.schema'
 
-export const UserCreateNestedOneWithoutAccountsInputObjectSchema: z.ZodType<Prisma.UserCreateNestedOneWithoutAccountsInput, Prisma.UserCreateNestedOneWithoutAccountsInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   create: z.union([z.lazy(() => UserCreateWithoutAccountsInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutAccountsInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutAccountsInputObjectSchema).optional(),
   connect: z.lazy(() => UserWhereUniqueInputObjectSchema).optional()
 }).strict();
-export const UserCreateNestedOneWithoutAccountsInputObjectZodSchema = z.object({
-  create: z.union([z.lazy(() => UserCreateWithoutAccountsInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutAccountsInputObjectSchema)]).optional(),
-  connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutAccountsInputObjectSchema).optional(),
-  connect: z.lazy(() => UserWhereUniqueInputObjectSchema).optional()
-}).strict();
+export const UserCreateNestedOneWithoutAccountsInputObjectSchema: z.ZodType<Prisma.UserCreateNestedOneWithoutAccountsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateNestedOneWithoutAccountsInput>;
+export const UserCreateNestedOneWithoutAccountsInputObjectZodSchema = makeSchema();

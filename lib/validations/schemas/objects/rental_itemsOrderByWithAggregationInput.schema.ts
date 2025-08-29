@@ -8,7 +8,7 @@ import { rental_itemsMaxOrderByAggregateInputObjectSchema } from './rental_items
 import { rental_itemsMinOrderByAggregateInputObjectSchema } from './rental_itemsMinOrderByAggregateInput.schema';
 import { rental_itemsSumOrderByAggregateInputObjectSchema } from './rental_itemsSumOrderByAggregateInput.schema'
 
-export const rental_itemsOrderByWithAggregationInputObjectSchema: z.ZodType<Prisma.rental_itemsOrderByWithAggregationInput, Prisma.rental_itemsOrderByWithAggregationInput> = z.object({
+const makeSchema = (): z.ZodObject<any> => z.object({
   id: SortOrderSchema.optional(),
   rentalid: SortOrderSchema.optional(),
   equipmentid: SortOrderSchema.optional(),
@@ -24,19 +24,5 @@ export const rental_itemsOrderByWithAggregationInputObjectSchema: z.ZodType<Pris
   _min: z.lazy(() => rental_itemsMinOrderByAggregateInputObjectSchema).optional(),
   _sum: z.lazy(() => rental_itemsSumOrderByAggregateInputObjectSchema).optional()
 }).strict();
-export const rental_itemsOrderByWithAggregationInputObjectZodSchema = z.object({
-  id: SortOrderSchema.optional(),
-  rentalid: SortOrderSchema.optional(),
-  equipmentid: SortOrderSchema.optional(),
-  quantity: SortOrderSchema.optional(),
-  priceperday: SortOrderSchema.optional(),
-  totaldays: SortOrderSchema.optional(),
-  totalprice: SortOrderSchema.optional(),
-  createdat: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
-  updatedat: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
-  _count: z.lazy(() => rental_itemsCountOrderByAggregateInputObjectSchema).optional(),
-  _avg: z.lazy(() => rental_itemsAvgOrderByAggregateInputObjectSchema).optional(),
-  _max: z.lazy(() => rental_itemsMaxOrderByAggregateInputObjectSchema).optional(),
-  _min: z.lazy(() => rental_itemsMinOrderByAggregateInputObjectSchema).optional(),
-  _sum: z.lazy(() => rental_itemsSumOrderByAggregateInputObjectSchema).optional()
-}).strict();
+export const rental_itemsOrderByWithAggregationInputObjectSchema: z.ZodType<Prisma.rental_itemsOrderByWithAggregationInput> = makeSchema() as unknown as z.ZodType<Prisma.rental_itemsOrderByWithAggregationInput>;
+export const rental_itemsOrderByWithAggregationInputObjectZodSchema = makeSchema();
