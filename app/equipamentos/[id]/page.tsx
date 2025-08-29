@@ -9,7 +9,11 @@ import { ShareButton } from '@/components/share-button'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { prisma } from '@/lib/prisma'
+// Runtime-only Prisma import for server components
+async function getPrisma() {
+  const { prisma } = await import('@/lib/prisma')
+  return prisma
+}
 import * as LucideIcons from 'lucide-react'
 import {
   ArrowLeft,
@@ -48,6 +52,7 @@ const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
 
 export async function generateMetadata(props: Props) {
   const params = await props.params
+  const prisma = await getPrisma()
   const equipment = await prisma.equipment.findUnique({
     where: { id: params.id },
     include: {
@@ -71,6 +76,7 @@ export async function generateMetadata(props: Props) {
 
 export default async function EquipmentDetailPage(props: Props) {
   const params = await props.params
+  const prisma = await getPrisma()
   const equipment = await prisma.equipment.findUnique({
     where: { id: params.id },
     include: {
