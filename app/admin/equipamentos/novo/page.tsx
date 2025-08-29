@@ -319,7 +319,7 @@ export default function NovoEquipamento() {
                                 categoryId: value,
                               }))
                             }
-                            placeholder="Selecione uma categoria"
+                            placeholder="Escolha uma categoria"
                           >
                             {categories
                               .sort((a, b) => a.name.localeCompare(b.name))

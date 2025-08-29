@@ -15,33 +15,6 @@ interface ChatMessage {
   timestamp: Date
 }
 
-const scrollbarStyles = `
-  .whatsapp-chat-scroll::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  .whatsapp-chat-scroll::-webkit-scrollbar-track {
-    background: #f0f0f0;
-    border-radius: 3px;
-  }
-  
-  .whatsapp-chat-scroll::-webkit-scrollbar-thumb {
-    background: #25D366;
-    border-radius: 3px;
-    opacity: 0.7;
-  }
-  
-  .whatsapp-chat-scroll::-webkit-scrollbar-thumb:hover {
-    background: #128C7E;
-    opacity: 1;
-  }
-  
-  .whatsapp-chat-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: #25D366 #f0f0f0;
-  }
-`
-
 export default function WhatsAppFAB() {
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState('')
@@ -133,7 +106,34 @@ export default function WhatsAppFAB() {
 
   return (
     <>
-      <style jsx>{scrollbarStyles}</style>
+      {/* Estilos inline para garantir prioridade */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+          .whatsapp-chat-scroll::-webkit-scrollbar {
+            width: 6px !important;
+            height: 6px !important;
+          }
+          .whatsapp-chat-scroll::-webkit-scrollbar-track {
+            background: #f0f0f0 !important;
+            border-radius: 3px !important;
+          }
+          .whatsapp-chat-scroll::-webkit-scrollbar-thumb {
+            background: #25D366 !important;
+            border-radius: 3px !important;
+            opacity: 0.8 !important;
+          }
+          .whatsapp-chat-scroll::-webkit-scrollbar-thumb:hover {
+            background: #128C7E !important;
+            opacity: 1 !important;
+          }
+          .whatsapp-chat-scroll {
+            scrollbar-width: thin !important;
+            scrollbar-color: #25D366 #f0f0f0 !important;
+          }
+        `,
+        }}
+      />
       {/* Chat Window */}
       {isOpen && (
         <div className="whatsapp-chat-window fixed bottom-24 right-4 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border z-50 h-[500px] flex flex-col overflow-hidden">

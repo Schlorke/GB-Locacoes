@@ -110,23 +110,14 @@ export default function SobrePage() {
 
             {/* Content */}
             <div className="relative z-10 text-center">
-              <h1
-                className="section-title text-3xl font-bold mb-2 text-white drop-shadow-sm opacity-0"
-                style={{ opacity: 0, transform: 'translateY(60px)' }}
-              >
+              <h1 className="section-title text-3xl font-bold mb-2 text-white drop-shadow-sm">
                 Sobre a GB Locações
               </h1>
-              <p
-                className="section-subtitle text-orange-50 mb-4 font-medium opacity-0"
-                style={{ opacity: 0, transform: 'translateY(60px)' }}
-              >
+              <p className="section-subtitle text-orange-50 mb-4 font-medium">
                 Há mais de 10 anos oferecendo soluções em equipamentos para
                 construção civil
               </p>
-              <div
-                className="hero-search flex items-center justify-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit mx-auto opacity-0"
-                style={{ opacity: 0, transform: 'translateX(-60px)' }}
-              >
+              <div className="hero-search flex items-center justify-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit mx-auto">
                 <Building className="w-5 h-5 text-orange-50" />
                 <span className="font-semibold text-white">
                   Referência em locação de equipamentos
@@ -144,7 +135,7 @@ export default function SobrePage() {
               return (
                 <Card
                   key={stat.label}
-                  className="material-card relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group opacity-0"
+                  className="material-card relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group"
                 >
                   {/* Background gradient */}
                   <div
@@ -174,10 +165,7 @@ export default function SobrePage() {
         {/* Nossa História Section */}
         <div className="mb-12">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div
-              className="hero-title opacity-0"
-              style={{ opacity: 0, transform: 'translateX(-100px)' }}
-            >
+            <div className="hero-title">
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
                 Nossa História
               </h2>
@@ -200,10 +188,7 @@ export default function SobrePage() {
               </div>
             </div>
 
-            <div
-              className="hero-image relative opacity-0 px-4"
-              style={{ opacity: 0, transform: 'translateX(80px)' }}
-            >
+            <div className="hero-image relative px-4">
               <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-8 shadow-xl group">
                 <Image
                   src="/placeholder.svg?height=400&width=500&text=Equipamentos+GB+Locações"
@@ -226,16 +211,10 @@ export default function SobrePage() {
         {/* Nossos Valores Section */}
         <div className="mb-12">
           <div className="text-center mb-12">
-            <h2
-              className="section-title text-3xl font-bold text-gray-900 mb-4 opacity-0"
-              style={{ opacity: 0, transform: 'translateY(60px)' }}
-            >
+            <h2 className="section-title text-3xl font-bold text-gray-900 mb-4">
               Nossos Valores
             </h2>
-            <p
-              className="section-subtitle text-gray-600 text-lg max-w-2xl mx-auto opacity-0"
-              style={{ opacity: 0, transform: 'translateY(60px)' }}
-            >
+            <p className="section-subtitle text-gray-600 text-lg max-w-2xl mx-auto">
               Os princípios que nos guiam em cada projeto e relacionamento com
               nossos clientes
             </p>
@@ -247,7 +226,7 @@ export default function SobrePage() {
               return (
                 <Card
                   key={value.title}
-                  className="benefit-card relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group h-full opacity-0"
+                  className="benefit-card relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group h-full"
                 >
                   <CardContent className="p-6 text-center">
                     <div
@@ -271,16 +250,10 @@ export default function SobrePage() {
         {/* Timeline Section */}
         <div className="mb-12">
           <div className="text-center mb-12">
-            <h2
-              className="section-title text-3xl font-bold text-gray-900 mb-4 opacity-0"
-              style={{ opacity: 0, transform: 'translateY(60px)' }}
-            >
+            <h2 className="section-title text-3xl font-bold text-gray-900 mb-4">
               Nossa Jornada
             </h2>
-            <p
-              className="section-subtitle text-gray-600 text-lg opacity-0"
-              style={{ opacity: 0, transform: 'translateY(60px)' }}
-            >
+            <p className="section-subtitle text-gray-600 text-lg">
               A evolução da GB Locações ao longo dos anos
             </p>
           </div>
@@ -293,8 +266,7 @@ export default function SobrePage() {
               {timeline.map((item) => (
                 <div
                   key={item.year}
-                  className="material-card relative flex items-start opacity-0"
-                  style={{ opacity: 0, transform: 'translateY(60px)' }}
+                  className="material-card relative flex items-start"
                 >
                   {/* Timeline dot */}
                   <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg mr-6 relative z-10">
@@ -318,10 +290,7 @@ export default function SobrePage() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <Card
-            className="cta-section relative overflow-hidden border-0 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 shadow-xl opacity-0"
-            style={{ opacity: 0, transform: 'translateY(20px)' }}
-          >
+          <Card className="cta-section relative overflow-hidden border-0 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 shadow-xl">
             {/* Background pattern */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>

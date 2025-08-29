@@ -125,10 +125,16 @@
   }
   html {
     scroll-behavior: smooth;
-    scrollbar-width: thin;
-    scrollbar-color: #64748b #334155;
     max-width: 100%;
     overflow-x: hidden;
+  }
+
+  /* Scrollbar moderno para navegadores que suportam */
+  @supports (scrollbar-width: thin) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: #64748b #334155;
+    }
   }
 
   /* Inputs com efeito hover shadow e foco azul obrigatório */
@@ -189,14 +195,53 @@
       0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   }
 
-  /* Modal category buttons - remove focus ring completely */
-  .category-modal-button:focus,
-  .category-modal-button:focus-visible,
-  .category-modal-button[aria-controls]:focus,
-  .category-modal-button[aria-controls]:focus-visible {
+  /* NUCLEAR OPTION: Force identical styles for category modal buttons */
+  .category-modal-button-forced {
+    /* Reset all inherited styles */
+    all: unset !important;
+    /* Force consistent base styles */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important; /* 8px gap */
+    white-space: nowrap !important;
+    border-radius: 0.5rem !important; /* rounded-lg */
+    font-size: 0.75rem !important; /* text-xs */
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    /* Exact dimensions and spacing */
+    height: 2rem !important; /* h-8 */
+    padding-left: 0.75rem !important; /* px-3 */
+    padding-right: 0.75rem !important; /* px-3 */
+    /* Consistent styling */
+    border: 1px solid rgb(203 213 225) !important; /* border-slate-300 */
+    background-color: transparent !important;
+    color: rgb(15 23 42) !important; /* text-slate-900 */
+    box-shadow:
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Focus states - remove all focus styles */
+  .category-modal-button-forced:focus,
+  .category-modal-button-forced:focus-visible,
+  .category-modal-button-forced[aria-controls]:focus,
+  .category-modal-button-forced[aria-controls]:focus-visible {
     outline: none !important;
-    box-shadow: none !important;
-    border-color: inherit !important;
+    box-shadow:
+      0 1px 2px 0 rgba(0, 0, 0, 0.05),
+      0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Hover states - identical for both buttons */
+  .category-modal-button-forced:hover {
+    background-color: white !important;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    border-color: rgb(203 213 225) !important;
   }
 
   /* Icon selector buttons - black focus ring */
@@ -275,8 +320,8 @@ header {
   right: 0;
   z-index: 9999;
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(229, 231, 235, 0.8);
 }
 header .max-w-7xl {
@@ -318,8 +363,8 @@ header {
   right: 0;
   z-index: 9999;
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(229, 231, 235, 0.8);
 }
 
@@ -675,8 +720,8 @@ section {
 
 /* Selection styles */
 ::selection {
-  background-color: oklch(88.2% 0.059 254.128);
-  color: oklch(37.9% 0.146 265.522);
+  background-color: #c7d2fe;
+  color: #1e1b4b;
 }
 
 /* =============================== */
@@ -702,10 +747,11 @@ section {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* 
+/*
   IMPORTANTE: Elementos animados começam invisíveis apenas na primeira visita
   Durante navegação interna, eles permanecem visíveis
 */
+/* Elementos com animações - sem regras por padrão, controlado por JavaScript
 .category-card,
 .material-card,
 .benefit-card,
@@ -721,10 +767,9 @@ section {
 .hero-buttons,
 .hero-contact,
 .hero-image {
-  /* Não definir opacity: 0 aqui, será controlado pelo JavaScript */
+  // Não definir opacity: 0 aqui, será controlado pelo JavaScript
 }
-
-/* Para usuários que preferem movimento reduzido */
+*/ /* Para usuários que preferem movimento reduzido */
 @media (prefers-reduced-motion: reduce) {
   .category-card,
   .material-card,
@@ -779,6 +824,74 @@ section {
   z-index: 10;
 }
 
+/* WhatsApp Chat Scroll - Verde específico com máxima prioridade */
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0 !important;
+  border-radius: 3px !important;
+}
+
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-thumb {
+  background: #25d366 !important;
+  border-radius: 3px !important;
+  opacity: 0.8 !important;
+  border: none !important;
+}
+
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-thumb:hover {
+  background: #128c7e !important;
+  opacity: 1 !important;
+}
+
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-corner {
+  background: #f0f0f0 !important;
+}
+
+/* Firefox - WhatsApp scroll verde com máxima especificidade */
+@supports (scrollbar-width: thin) {
+  .whatsapp-chat-window .whatsapp-chat-scroll {
+    scrollbar-width: thin !important;
+    scrollbar-color: #25d366 #f0f0f0 !important;
+  }
+}
+
+/* Forçar aparecimento do scrollbar sempre */
+.whatsapp-chat-scroll {
+  overflow-y: scroll !important;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0 !important;
+  border-radius: 3px !important;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar-thumb {
+  background: #25d366 !important;
+  border-radius: 3px !important;
+  opacity: 0.7 !important;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar-thumb:hover {
+  background: #128c7e !important;
+  opacity: 1 !important;
+}
+
+/* Firefox - WhatsApp scroll verde */
+@supports (scrollbar-width: thin) {
+  .whatsapp-chat-scroll {
+    scrollbar-width: thin !important;
+    scrollbar-color: #25d366 #f0f0f0 !important;
+  }
+}
+
 body.admin-body-layout {
   padding-top: 0 !important;
 }
@@ -828,9 +941,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   z-index: 99999 !important;
 }
 
-/* Garantir centralização perfeita de modais */
-
-[role='dialog']:not(.popover-content) {
+/* Garantir centralização perfeita de modais - EXCLUINDO popovers */
+[role='dialog']:not([data-radix-popover-content]) {
   position: fixed !important;
   left: 50% !important;
   top: 50% !important;
@@ -844,9 +956,9 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   justify-content: center;
 }
 
-/* Responsividade para telas pequenas */
+/* Responsividade para telas pequenas - EXCLUINDO popovers */
 @media (max-width: 640px) {
-  [role='dialog']:not([data-radix-popover-content]):not(.popover-content) {
+  [role='dialog']:not([data-radix-popover-content]) {
     max-width: 95vw !important;
     height: 100% !important;
     max-height: 95vh !important;
@@ -861,14 +973,18 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   /* Fallback para navegadores que não suportam scrollbar-width */
   overflow-y: auto;
 
-  /* Firefox scrollbar styling */
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
-
   /* Garantir que o scroll do mouse funcione */
   pointer-events: auto !important;
   touch-action: pan-y !important;
   overscroll-behavior: contain;
+}
+
+/* Firefox scrollbar styling para modal - com suporte condicional */
+@supports (scrollbar-width: thin) {
+  .modal-preview-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
 }
 
 .modal-preview-scroll::-webkit-scrollbar {
@@ -927,10 +1043,16 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Firefox scrollbar for filter dropdown */
 .filter-dropdown-scroll {
-  scrollbar-width: thin;
-  scrollbar-color: #d1d5db transparent;
   overflow-y: auto !important;
   max-height: 280px !important;
+}
+
+/* Firefox scrollbar styling com suporte condicional */
+@supports (scrollbar-width: thin) {
+  .filter-dropdown-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db transparent;
+  }
 }
 
 /* Classe CSS para grid responsivo de ícones */
@@ -940,7 +1062,6 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   gap: 8px;
   max-height: 200px;
   overflow-y: scroll; /* scrollbar sempre visível */
-  scrollbar-gutter: stable;
   padding: 0.5rem;
 
   /* Garantir que o scroll do mouse funcione no grid */
@@ -983,20 +1104,10 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   transform: scale(1.1);
 }
 
-/* Garantir scroll funcionando em popovers */
-[data-radix-popover-content],
-.popover-content {
-  /* Permitir que o popover cresça conforme o conteúdo interno */
-  max-height: none !important;
-  height: auto !important;
-  overflow: visible !important;
-  /* em mobile Safari: limitar pelo viewport descontando safe areas */
-  /* para casos extremos, usar overflow-y:auto e definir max-height */
-  /* max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) !important; */
-  pointer-events: auto !important;
-  touch-action: pan-y !important;
-  overscroll-behavior: contain !important;
-  display: block !important; /* Override flex layout from generic dialog rule */
+/* Popover específico - sem interferência */
+[data-radix-popover-content] {
+  max-height: 80vh !important;
+  overflow-y: auto !important;
 }
 
 /* =============================== */
@@ -1020,25 +1131,88 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* =============================== */
 /* 15. Grid de Ícones de Categoria */
 /* =============================== */
-/* Categoria: grid de ícones com degradê no fundo */
-
+/* Grid de ícones da categoria - scroll funcional */
 .category-icon-grid-container {
   padding-bottom: 0 !important;
   position: relative;
+  overflow: hidden !important;
+  contain: layout style !important;
 }
 
+/* Grid dos ícones - sem overflow, com scroll */
 .category-icon-grid {
-  max-height: 132px;
-  min-height: 132px;
-  overflow-y: scroll; /* sempre mostra a barra de rolagem */
-  scrollbar-gutter: stable;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 0.5rem;
-  padding-top: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  /* padding-bottom removido para não criar barra inferior */
+  max-height: 160px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  background: transparent;
+}
+
+/* Aplicar scroll padrão (cinza) no grid de ícones do popover */
+@supports (scrollbar-width: thin) {
+  .category-icon-grid {
+    scrollbar-width: thin;
+    scrollbar-color: #64748b #f1f5f9;
+  }
+}
+
+.category-icon-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.category-icon-grid::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.category-icon-grid::-webkit-scrollbar-thumb {
+  background: #64748b;
+  border-radius: 3px;
+  opacity: 0.7;
+}
+
+.category-icon-grid::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+  opacity: 1;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 480px) {
+  .category-icon-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+    max-height: 120px;
+  }
+}
+
+/* Container específico para o popover */
+.popover-content .category-icon-grid {
+  grid-template-columns: repeat(6, 1fr) !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  background: #f8fafc !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Garantir que os botões dos ícones não transbordem */
+.category-icon-grid button {
+  width: 100% !important;
+  max-width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Container do grid deve ter contenção */
+.category-icon-grid-container {
+  padding-bottom: 0 !important;
+  position: relative;
+  overflow: hidden !important;
+  contain: layout style !important;
 }
 
 @media (min-width: 640px) {
@@ -1115,4 +1289,140 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 .filter-active {
   border-color: rgb(251 146 60) !important; /* border-orange-300 */
   background-color: rgb(255 247 237) !important; /* bg-orange-50 */
+}
+
+/* =============================== */
+/* 16. CORREÇÃO DE SCROLL - PÁGINA SOBRE */
+/* =============================== */
+
+/* REMOVER SCROLL SECUNDÁRIO - Deixar apenas o scroll principal da página */
+.sobre-page {
+  /* NÃO criar scroll secundário */
+  overflow: visible !important;
+  position: relative !important;
+  height: auto !important;
+  min-height: 100vh !important;
+}
+
+/* Corrigir problemas de scroll em dispositivos móveis */
+@media (max-width: 768px) {
+  .sobre-page {
+    /* NÃO criar scroll secundário */
+    overflow: visible !important;
+    position: relative !important;
+    height: auto !important;
+  }
+}
+
+/* Garantir que elementos com position: fixed não interfiram no scroll */
+header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.8) !important;
+}
+
+/* Corrigir problemas de scroll em elementos com overflow hidden */
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+/* Garantir que o body tenha scroll funcional */
+body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  /* -webkit-overflow-scrolling: touch !important; */
+  position: relative !important;
+  height: auto !important;
+}
+
+/* Corrigir problemas de scroll em elementos com min-h-screen */
+.min-h-screen {
+  min-height: 100vh !important;
+  /* NÃO forçar overflow - deixar o scroll principal funcionar */
+  position: relative !important;
+  height: auto !important;
+}
+
+/* CORREÇÃO CRÍTICA: NÃO criar scroll secundário na página sobre */
+.sobre-page * {
+  /* NÃO forçar overflow - deixar o scroll principal funcionar */
+  pointer-events: auto !important;
+}
+
+.sobre-page .min-h-screen {
+  /* NÃO criar scroll secundário */
+  overflow: visible !important;
+  position: relative !important;
+  height: auto !important;
+}
+
+/* NÃO forçar scroll secundário em elementos da página sobre */
+.sobre-page .material-card,
+.sobre-page .benefit-card,
+.sobre-page .cta-section {
+  /* NÃO forçar overflow - deixar o scroll principal funcionar */
+  pointer-events: auto !important;
+  position: relative !important;
+}
+
+/* CORREÇÃO FINAL: Garantir que não há scroll secundário em nenhum elemento */
+/* Scrollbar styling para todos os elementos com suporte condicional */
+@supports (scrollbar-width: thin) {
+  * {
+    /* NÃO criar scroll secundário desnecessário */
+    scrollbar-width: thin;
+    scrollbar-color: #64748b #334155;
+  }
+}
+
+/* Garantir que apenas o body tenha scroll */
+html,
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* NÃO permitir scroll em elementos internos */
+div,
+section,
+article {
+  overflow: visible !important;
+}
+
+/* CORREÇÃO CRÍTICA: Garantir que não há scroll secundário na página sobre */
+.min-h-screen {
+  overflow: visible !important;
+  position: relative !important;
+  height: auto !important;
+}
+
+/* NÃO permitir scroll em elementos específicos */
+.material-card,
+.benefit-card,
+.cta-section,
+.hero-title,
+.hero-image,
+.section-title,
+.section-subtitle {
+  overflow: visible !important;
+  position: relative !important;
+}
+
+/* CORREÇÃO FINAL: Garantir que o scroll principal funcione perfeitamente */
+body {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  /* -webkit-overflow-scrolling: touch !important; */
+  scroll-behavior: smooth !important;
+}
+
+/* NÃO permitir scroll em elementos aninhados */
+div > div {
+  overflow: visible !important;
 }

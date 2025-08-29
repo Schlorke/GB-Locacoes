@@ -580,7 +580,7 @@ export function ModernCategoryModal({
                         <Button
                           variant="outline"
                           size="sm"
-                          className="h-8 px-3 text-xs font-medium border-slate-300 hover:bg-white transition-all duration-200 rounded-lg shadow-sm bg-transparent group category-modal-button"
+                          className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group"
                         >
                           <Edit className="w-4 h-4 group-hover:text-orange-600 transition-colors duration-200" />
                           <span className="group-hover:text-orange-600 transition-colors duration-200">
@@ -783,7 +783,7 @@ export function ModernCategoryModal({
                       variant="outline"
                       size="sm"
                       onClick={resetToDefaults}
-                      className="h-8 px-3 text-xs font-medium border-slate-300 hover:bg-white transition-all duration-200 rounded-lg shadow-sm bg-transparent group category-modal-button"
+                      className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group"
                       title="Resetar configurações"
                     >
                       <RotateCcw

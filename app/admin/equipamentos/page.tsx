@@ -403,22 +403,6 @@ export default function AdminEquipmentsPage() {
           />
         </motion.div>
 
-        {/* Componente de Paginação */}
-        {!loading && filteredEquipments.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="mb-6"
-          >
-            <SmartPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </motion.div>
-        )}
-
         {/* Grid de Equipamentos */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -568,31 +552,32 @@ export default function AdminEquipmentsPage() {
                             </span>
                           </div>
 
-                          {/* Linha 2, Coluna 1 - Data de criação */}
-                          <div className="flex items-center gap-2 text-sm text-gray-500 justify-start">
-                            <Calendar className="w-4 h-4 flex-shrink-0" />
-                            <span className="break-words">
-                              Criado em {formatDate(equipment.createdAt)}
+                          {/* Linha 2, Coluna 1 - Status */}
+                          <div className="flex items-center gap-2 text-sm justify-start">
+                            {equipment.isAvailable ? (
+                              <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                            ) : (
+                              <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                            )}
+                            <span
+                              className={`font-medium ${
+                                equipment.isAvailable
+                                  ? 'text-green-600'
+                                  : 'text-red-600'
+                              }`}
+                            >
+                              {equipment.isAvailable
+                                ? 'Disponível'
+                                : 'Indisponível'}
                             </span>
                           </div>
 
-                          {/* Linha 2, Coluna 2 - Status */}
+                          {/* Linha 2, Coluna 2 - Data de criação */}
                           <div className="flex items-center gap-2 text-sm justify-start">
-                            {equipment.isAvailable ? (
-                              <>
-                                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                                <span className="text-green-600 font-medium">
-                                  Disponível
-                                </span>
-                              </>
-                            ) : (
-                              <>
-                                <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-                                <span className="text-red-600 font-medium">
-                                  Indisponível
-                                </span>
-                              </>
-                            )}
+                            <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                            <span className="text-gray-600">
+                              {formatDate(equipment.createdAt)}
+                            </span>
                           </div>
                         </div>
 
@@ -650,6 +635,22 @@ export default function AdminEquipmentsPage() {
             </div>
           )}
         </motion.div>
+
+        {/* Componente de Paginação - MOVIDO PARA BAIXO DOS EQUIPAMENTOS */}
+        {!loading && filteredEquipments.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25 }}
+            className="mt-8"
+          >
+            <SmartPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </motion.div>
+        )}
 
         {/* Modal de Preview do Equipamento */}
         <Dialog
