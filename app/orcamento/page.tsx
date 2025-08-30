@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { useQuote } from '@/contexts/quote-context'
 import { toast } from '@/hooks/use-toast'
 import { formatCurrency } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -35,6 +36,15 @@ interface Equipment {
 interface SelectedEquipment extends Equipment {
   quantity: number
   days: number
+  selectedPeriod?: {
+    id: string
+    label: string
+    period: string
+    multiplier: number
+    discount: number
+    popular?: boolean
+  }
+  finalPrice?: number
 }
 
 interface QuoteFormData {
@@ -46,6 +56,7 @@ interface QuoteFormData {
 
 function QuotePage() {
   const searchParams = useSearchParams()
+  const { selectedEquipmentForQuote, clearSelection } = useQuote()
   const [selectedEquipments, setSelectedEquipments] = useState<
     SelectedEquipment[]
   >([])
@@ -60,6 +71,43 @@ function QuotePage() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  // Efeito para processar equipamento do contexto
+  useEffect(() => {
+    if (selectedEquipmentForQuote) {
+      const equipmentToAdd: SelectedEquipment = {
+        id: selectedEquipmentForQuote.equipmentId,
+        name: selectedEquipmentForQuote.equipmentName,
+        description: selectedEquipmentForQuote.description || '',
+        pricePerDay: selectedEquipmentForQuote.pricePerDay,
+        category: selectedEquipmentForQuote.category || { name: '' },
+        isAvailable: true,
+        quantity: selectedEquipmentForQuote.quantity,
+        days: selectedEquipmentForQuote.selectedPeriod.multiplier,
+        selectedPeriod: selectedEquipmentForQuote.selectedPeriod,
+        finalPrice: selectedEquipmentForQuote.finalPrice,
+        maxStock: selectedEquipmentForQuote.maxStock,
+        imageUrl: selectedEquipmentForQuote.imageUrl,
+        images: selectedEquipmentForQuote.images
+      }
+
+      setSelectedEquipments(prev => {
+        const exists = prev.find(eq => eq.id === selectedEquipmentForQuote.equipmentId)
+        if (exists) {
+          // Atualizar equipamento existente com nova configuração
+          return prev.map(eq => 
+            eq.id === selectedEquipmentForQuote.equipmentId 
+              ? { ...eq, ...equipmentToAdd }
+              : eq
+          )
+        }
+        return [...prev, equipmentToAdd]
+      })
+
+      // Limpar seleção do contexto após processar
+      clearSelection()
+    }
+  }, [selectedEquipmentForQuote, clearSelection])
 
   const fetchEquipmentAndAdd = useCallback(
     async (equipmentId: string) => {
@@ -104,6 +152,25 @@ function QuotePage() {
     }
   }, [searchParams, fetchEquipmentAndAdd])
 
+  // Função para recalcular preço final com base no período selecionado
+  const recalculateFinalPrice = (equipment: SelectedEquipment, newDays: number) => {
+    if (!equipment.selectedPeriod) {
+      return equipment.pricePerDay * newDays
+    }
+
+    // Calcular quantos períodos completos temos
+    const periods = Math.ceil(newDays / equipment.selectedPeriod.multiplier)
+    
+    // Preço base por período
+    const basePricePerPeriod = equipment.pricePerDay * equipment.selectedPeriod.multiplier
+    
+    // Aplicar desconto
+    const discountAmount = basePricePerPeriod * (equipment.selectedPeriod.discount / 100)
+    const finalPricePerPeriod = basePricePerPeriod - discountAmount
+    
+    return finalPricePerPeriod
+  }
+
   const updateQuantity = (id: string, quantity: number) => {
     if (quantity < 1) return
     setSelectedEquipments((prev) => {
@@ -113,7 +180,14 @@ function QuotePage() {
           // Limit quantity to maxStock (default to 999 if not specified)
           const maxStock = eq.maxStock || 999
           const limitedQuantity = Math.min(quantity, maxStock)
-          return { ...eq, quantity: limitedQuantity }
+          
+          // Recalcular finalPrice se necessário
+          const updatedEquipment = { ...eq, quantity: limitedQuantity }
+          if (eq.selectedPeriod) {
+            updatedEquipment.finalPrice = recalculateFinalPrice(eq, eq.days)
+          }
+          
+          return updatedEquipment
         }
         return eq
       })
@@ -124,7 +198,19 @@ function QuotePage() {
     if (days < 1) return
     setSelectedEquipments((prev) => {
       const safePrev = Array.isArray(prev) ? prev : []
-      return safePrev.map((eq) => (eq.id === id ? { ...eq, days } : eq))
+      return safePrev.map((eq) => {
+        if (eq.id === id) {
+          const updatedEquipment = { ...eq, days }
+          
+          // Recalcular finalPrice com os novos dias
+          if (eq.selectedPeriod) {
+            updatedEquipment.finalPrice = recalculateFinalPrice(eq, days)
+          }
+          
+          return updatedEquipment
+        }
+        return eq
+      })
     })
   }
 
@@ -136,8 +222,15 @@ function QuotePage() {
   }
 
   const calculateSubtotal = (equipment: SelectedEquipment) => {
-    const price = Number(equipment.pricePerDay) || 0
     const quantity = Number(equipment.quantity) || 1
+    
+    // Se temos finalPrice (com desconto aplicado), usar ele
+    if (equipment.finalPrice && equipment.selectedPeriod) {
+      return equipment.finalPrice * quantity
+    }
+    
+    // Fallback para cálculo tradicional
+    const price = Number(equipment.pricePerDay) || 0
     const days = Number(equipment.days) || 1
     return price * quantity * days
   }
@@ -319,23 +412,58 @@ function QuotePage() {
                                     <h3 className="font-semibold text-lg truncate">
                                       {equipment.name}
                                     </h3>
-                                    <Badge
-                                      variant="secondary"
-                                      className="text-xs mb-2 rounded-full"
-                                    >
-                                      {equipment.category.name}
-                                    </Badge>
-                                    <p className="text-sm text-gray-600 mb-3">
-                                      {formatCurrency(
-                                        Number(equipment.pricePerDay) || 0
+                                    <div className="flex flex-wrap gap-1 justify-center sm:justify-start mb-2">
+                                      <Badge
+                                        variant="secondary"
+                                        className="text-xs rounded-full"
+                                      >
+                                        {equipment.category.name}
+                                      </Badge>
+                                      {equipment.selectedPeriod && (
+                                        <Badge
+                                          variant="outline"
+                                          className="text-xs rounded-full border-orange-200 text-orange-700 bg-orange-50"
+                                        >
+                                          {equipment.selectedPeriod.label}
+                                          {equipment.selectedPeriod.discount > 0 && (
+                                            <span className="ml-1 font-semibold">
+                                              -{equipment.selectedPeriod.discount}%
+                                            </span>
+                                          )}
+                                        </Badge>
                                       )}
-                                      /dia
-                                    </p>
+                                    </div>
+                                    <div className="text-sm text-gray-600 mb-3">
+                                      {equipment.finalPrice ? (
+                                        <div>
+                                          <span className="font-semibold text-green-600">
+                                            {formatCurrency(equipment.finalPrice)}
+                                          </span>
+                                          {equipment.selectedPeriod && equipment.selectedPeriod.discount > 0 && (
+                                            <span className="ml-2 text-xs text-gray-500 line-through">
+                                              {formatCurrency(
+                                                Number(equipment.pricePerDay) * equipment.selectedPeriod.multiplier
+                                              )}
+                                            </span>
+                                          )}
+                                          <span className="text-xs text-gray-500 ml-1">
+                                            /{equipment.selectedPeriod?.period || 'período'}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <span>
+                                          {formatCurrency(
+                                            Number(equipment.pricePerDay) || 0
+                                          )}
+                                          /dia
+                                        </span>
+                                      )}
+                                    </div>
                                   </div>
 
                                   {/* Controles - Layout Responsivo */}
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <div className="flex items-center justify-center sm:justify-start gap-2">
+                                  <div className="flex items-center gap-x-4">
+                                    <div className="flex items-center gap-2">
                                       <Label className="text-sm font-medium">
                                         Quantidade:
                                       </Label>
@@ -364,7 +492,7 @@ function QuotePage() {
                                                 1
                                             )
                                           }
-                                          className="w-16 text-center h-8"
+                                          className="w-16 h-8 text-center font-medium"
                                           min="1"
                                           max={equipment.maxStock || 999}
                                         />
@@ -388,29 +516,37 @@ function QuotePage() {
                                       </div>
                                       {equipment.maxStock &&
                                         equipment.maxStock < 999 && (
-                                          <div className="text-xs text-gray-500 mt-1">
-                                            Max: {equipment.maxStock} disponível
-                                            {equipment.maxStock > 1 ? 's' : ''}
-                                          </div>
+                                          <span className="text-xs text-gray-500 break-words">
+                                            Max: {equipment.maxStock} disponível{equipment.maxStock > 1 ? 's' : ''}
+                                          </span>
                                         )}
                                     </div>
 
-                                    <div className="flex items-center justify-center sm:justify-start gap-2">
+                                    <div className="flex items-center gap-2">
                                       <Label className="text-sm font-medium">
-                                        Dias:
+                                        {equipment.selectedPeriod ? 'Períodos:' : 'Dias:'}
                                       </Label>
                                       <Input
                                         type="number"
-                                        value={equipment.days}
-                                        onChange={(e) =>
-                                          updateDays(
-                                            equipment.id,
-                                            Number.parseInt(e.target.value) || 1
-                                          )
+                                        value={equipment.selectedPeriod ? 
+                                          Math.ceil(equipment.days / equipment.selectedPeriod.multiplier) : 
+                                          equipment.days
                                         }
-                                        className="w-20 h-8"
+                                        onChange={(e) => {
+                                          const periods = Number.parseInt(e.target.value) || 1
+                                          const days = equipment.selectedPeriod ? 
+                                            periods * equipment.selectedPeriod.multiplier : 
+                                            periods
+                                          updateDays(equipment.id, days)
+                                        }}
+                                        className="w-16 h-8 text-center font-medium"
                                         min="1"
                                       />
+                                      {equipment.selectedPeriod && (
+                                        <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
+                                          ({equipment.days} dias)
+                                        </span>
+                                      )}
                                     </div>
                                   </div>
                                 </div>
@@ -569,15 +705,50 @@ function QuotePage() {
                     {selectedEquipments.map((equipment, index) => (
                       <div
                         key={`summary-${equipment.id}-${index}`}
-                        className="flex justify-between text-sm"
+                        className="space-y-1 pb-3 border-b border-gray-100 last:border-b-0"
                       >
-                        <span className="truncate pr-2">
-                          {equipment.name} ({equipment.quantity}x por{' '}
-                          {equipment.days} dias)
-                        </span>
-                        <span className="font-medium">
-                          {formatCurrency(calculateSubtotal(equipment))}
-                        </span>
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1 pr-2">
+                            <p className="font-medium text-gray-900 text-sm leading-tight">
+                              {equipment.name}
+                            </p>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              <span className="text-xs text-gray-600">
+                                Qtd: {equipment.quantity}x
+                              </span>
+                              {equipment.selectedPeriod ? (
+                                <>
+                                  <span className="text-xs text-gray-400">•</span>
+                                  <span className="text-xs text-orange-600 font-medium">
+                                    {Math.ceil(equipment.days / equipment.selectedPeriod.multiplier)} {equipment.selectedPeriod.label.toLowerCase()}
+                                  </span>
+                                  <span className="text-xs text-gray-400">•</span>
+                                  <span className="text-xs text-gray-600">
+                                    {equipment.days} dias
+                                  </span>
+                                  {equipment.selectedPeriod.discount > 0 && (
+                                    <>
+                                      <span className="text-xs text-gray-400">•</span>
+                                      <span className="text-xs text-green-600 font-medium">
+                                        -{equipment.selectedPeriod.discount}% desc.
+                                      </span>
+                                    </>
+                                  )}
+                                </>
+                              ) : (
+                                <>
+                                  <span className="text-xs text-gray-400">•</span>
+                                  <span className="text-xs text-gray-600">
+                                    {equipment.days} dias
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          <span className="font-semibold text-gray-900 text-sm">
+                            {formatCurrency(calculateSubtotal(equipment))}
+                          </span>
+                        </div>
                       </div>
                     ))}
 

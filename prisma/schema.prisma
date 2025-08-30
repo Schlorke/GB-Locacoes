@@ -110,9 +110,9 @@ model Equipment {
   maxStock          Int?           @default(1) // Maximum available quantity
   // Rental period configurations
   dailyDiscount     Int?           @default(0) // Percentage discount for daily rentals
-  weeklyDiscount    Int?           @default(10) // Percentage discount for weekly rentals
-  biweeklyDiscount  Int?           @default(15) // Percentage discount for biweekly rentals
-  monthlyDiscount   Int?           @default(20) // Percentage discount for monthly rentals
+  weeklyDiscount    Int?           @default(0) // Percentage discount for weekly rentals
+  biweeklyDiscount  Int?           @default(0) // Percentage discount for biweekly rentals
+  monthlyDiscount   Int?           @default(0) // Percentage discount for monthly rentals
   popularPeriod     String?        @default("weekly") // Which period to mark as popular (daily, weekly, biweekly, monthly)
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt

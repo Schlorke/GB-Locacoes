@@ -81,9 +81,9 @@ export default function EditarEquipamento() {
     maxStock: 1,
     // Rental period configurations
     dailyDiscount: 0,
-    weeklyDiscount: 10,
-    biweeklyDiscount: 15,
-    monthlyDiscount: 20,
+    weeklyDiscount: 0,
+    biweeklyDiscount: 0,
+    monthlyDiscount: 0,
     popularPeriod: 'weekly',
   })
   const [specKey, setSpecKey] = useState('')
@@ -113,9 +113,9 @@ export default function EditarEquipamento() {
             maxStock: equipment.maxStock || 1,
             // Rental period configurations
             dailyDiscount: equipment.dailyDiscount || 0,
-            weeklyDiscount: equipment.weeklyDiscount || 10,
-            biweeklyDiscount: equipment.biweeklyDiscount || 15,
-            monthlyDiscount: equipment.monthlyDiscount || 20,
+            weeklyDiscount: equipment.weeklyDiscount || 0,
+            biweeklyDiscount: equipment.biweeklyDiscount || 0,
+            monthlyDiscount: equipment.monthlyDiscount || 0,
             popularPeriod: equipment.popularPeriod || 'weekly',
           })
         }

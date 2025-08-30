@@ -30,9 +30,9 @@ interface EquipmentPricingSelectorProps {
 // Function to generate pricing options based on equipment configuration
 const generatePricingOptions = (
   dailyDiscount = 0,
-  weeklyDiscount = 10,
-  biweeklyDiscount = 15,
-  monthlyDiscount = 20,
+  weeklyDiscount = 0,
+  biweeklyDiscount = 0,
+  monthlyDiscount = 0,
   popularPeriod = 'weekly'
 ): PricingOption[] => [
   {

@@ -582,12 +582,11 @@ export async function POST(request: NextRequest) {
         maxStock: typeof maxStock === 'number' ? maxStock : 1,
         // Rental period configurations
         dailyDiscount: typeof dailyDiscount === 'number' ? dailyDiscount : 0,
-        weeklyDiscount:
-          typeof weeklyDiscount === 'number' ? weeklyDiscount : 10,
+        weeklyDiscount: typeof weeklyDiscount === 'number' ? weeklyDiscount : 0,
         biweeklyDiscount:
-          typeof biweeklyDiscount === 'number' ? biweeklyDiscount : 15,
+          typeof biweeklyDiscount === 'number' ? biweeklyDiscount : 0,
         monthlyDiscount:
-          typeof monthlyDiscount === 'number' ? monthlyDiscount : 20,
+          typeof monthlyDiscount === 'number' ? monthlyDiscount : 0,
         popularPeriod:
           typeof popularPeriod === 'string' ? popularPeriod : 'weekly',
       },

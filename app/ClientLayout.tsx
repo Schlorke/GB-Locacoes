@@ -4,6 +4,7 @@ import Footer from '@/components/footer'
 import Header from '@/components/header'
 import ScrollRevealInit from '@/components/scroll-reveal-init'
 import WhatsAppFAB from '@/components/whatsapp-fab'
+import { QuoteProvider } from '@/contexts/quote-context'
 import { Inter, Jost } from 'next/font/google'
 import { usePathname } from 'next/navigation'
 import React from 'react'
@@ -47,15 +48,17 @@ export default function ClientLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body className={`${inter.className} antialiased overflow-x-hidden`}>
-        {!isAdminRoute && <Header />}
-        <div
-          className={`overflow-x-hidden min-h-screen ${!isAdminRoute ? 'pt-[100px] md:pt-[96px]' : ''}`}
-        >
-          {children}
-        </div>
-        {!isAdminRoute && <Footer />}
-        {!isAdminRoute && <WhatsAppFAB />}
-        <ScrollRevealInit />
+        <QuoteProvider>
+          {!isAdminRoute && <Header />}
+          <div
+            className={`overflow-x-hidden min-h-screen ${!isAdminRoute ? 'pt-[100px] md:pt-[96px]' : ''}`}
+          >
+            {children}
+          </div>
+          {!isAdminRoute && <Footer />}
+          {!isAdminRoute && <WhatsAppFAB />}
+          <ScrollRevealInit />
+        </QuoteProvider>
       </body>
     </html>
   )

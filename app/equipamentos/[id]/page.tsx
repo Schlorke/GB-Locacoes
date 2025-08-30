@@ -4,8 +4,8 @@ import {
   AnimatedSection,
 } from '@/components/equipment-detail-animations'
 import { EquipmentImageGallery } from '@/components/equipment-image-gallery'
-import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
 import { ShareButton } from '@/components/share-button'
+import { SmartEquipmentPricing } from '@/components/smart-equipment-pricing'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -222,45 +222,23 @@ export default async function EquipmentDetailPage(props: Props) {
                   )}
                 </div>
 
-                {/* Sistema de Preços */}
-                <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
-                  <EquipmentPricingSelector
-                    pricePerDay={pricePerDay}
-                    dailyDiscount={equipment.dailyDiscount || 0}
-                    weeklyDiscount={equipment.weeklyDiscount || 10}
-                    biweeklyDiscount={equipment.biweeklyDiscount || 15}
-                    monthlyDiscount={equipment.monthlyDiscount || 20}
-                    popularPeriod={equipment.popularPeriod || 'weekly'}
-                  />
-                </div>
-
-                {/* Call-to-Action Principal */}
-                <div className="space-y-3">
-                  <Button
-                    size="lg"
-                    className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 shadow-lg"
-                    disabled={!equipment.available}
-                    asChild={equipment.available}
-                  >
-                    {equipment.available ? (
-                      <Link href={`/orcamento?equipmentId=${equipment.id}`}>
-                        Solicitar Orçamento Grátis
-                      </Link>
-                    ) : (
-                      <span>Equipamento Indisponível</span>
-                    )}
-                  </Button>
-
-                  <div className="text-center space-y-1">
-                    <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
-                      <MapPin className="h-3 w-3" />
-                      <span>Entrega em Porto Alegre e região</span>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      Resposta em até 2 horas
-                    </div>
-                  </div>
-                </div>
+                {/* Sistema de Preços Inteligente */}
+                <SmartEquipmentPricing
+                  equipmentId={equipment.id}
+                  equipmentName={equipment.name}
+                  pricePerDay={pricePerDay}
+                  isAvailable={equipment.available}
+                  dailyDiscount={equipment.dailyDiscount || 0}
+                  weeklyDiscount={equipment.weeklyDiscount || 0}
+                  biweeklyDiscount={equipment.biweeklyDiscount || 0}
+                  monthlyDiscount={equipment.monthlyDiscount || 0}
+                  popularPeriod={equipment.popularPeriod || 'weekly'}
+                  maxStock={equipment.maxStock}
+                  description={equipment.description}
+                  category={equipment.category}
+                  imageUrl={equipment.imageUrl}
+                  images={equipment.images}
+                />
 
                 {/* Benefícios Rápidos */}
                 <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200">
