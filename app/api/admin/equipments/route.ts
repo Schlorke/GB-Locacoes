@@ -505,8 +505,20 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { name, description, pricePerDay, categoryId, images, isAvailable } =
-      body
+    const {
+      name,
+      description,
+      pricePerDay,
+      categoryId,
+      images,
+      isAvailable,
+      maxStock,
+      dailyDiscount,
+      weeklyDiscount,
+      biweeklyDiscount,
+      monthlyDiscount,
+      popularPeriod,
+    } = body
 
     // Validações
     if (!name || typeof name !== 'string' || name.trim() === '') {
@@ -567,6 +579,18 @@ export async function POST(request: NextRequest) {
           ? images.filter((img) => typeof img === 'string' && img.trim() !== '')
           : [],
         available: typeof isAvailable === 'boolean' ? isAvailable : true,
+        // Inventory management
+        maxStock: typeof maxStock === 'number' ? maxStock : 1,
+        // Rental period configurations
+        dailyDiscount: typeof dailyDiscount === 'number' ? dailyDiscount : 0,
+        weeklyDiscount:
+          typeof weeklyDiscount === 'number' ? weeklyDiscount : 10,
+        biweeklyDiscount:
+          typeof biweeklyDiscount === 'number' ? biweeklyDiscount : 15,
+        monthlyDiscount:
+          typeof monthlyDiscount === 'number' ? monthlyDiscount : 20,
+        popularPeriod:
+          typeof popularPeriod === 'string' ? popularPeriod : 'weekly',
       },
       include: {
         category: true,

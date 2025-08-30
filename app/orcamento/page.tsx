@@ -29,6 +29,7 @@ interface Equipment {
     name: string
   }
   isAvailable: boolean
+  maxStock?: number
 }
 
 interface SelectedEquipment extends Equipment {
@@ -107,7 +108,15 @@ function QuotePage() {
     if (quantity < 1) return
     setSelectedEquipments((prev) => {
       const safePrev = Array.isArray(prev) ? prev : []
-      return safePrev.map((eq) => (eq.id === id ? { ...eq, quantity } : eq))
+      return safePrev.map((eq) => {
+        if (eq.id === id) {
+          // Limit quantity to maxStock (default to 999 if not specified)
+          const maxStock = eq.maxStock || 999
+          const limitedQuantity = Math.min(quantity, maxStock)
+          return { ...eq, quantity: limitedQuantity }
+        }
+        return eq
+      })
     })
   }
 
@@ -357,6 +366,7 @@ function QuotePage() {
                                           }
                                           className="w-16 text-center h-8"
                                           min="1"
+                                          max={equipment.maxStock || 999}
                                         />
                                         <Button
                                           variant="outline"
@@ -367,11 +377,22 @@ function QuotePage() {
                                               equipment.quantity + 1
                                             )
                                           }
+                                          disabled={
+                                            equipment.quantity >=
+                                            (equipment.maxStock || 999)
+                                          }
                                           className="h-8 w-8 p-0"
                                         >
                                           <Plus className="h-3 w-3" />
                                         </Button>
                                       </div>
+                                      {equipment.maxStock &&
+                                        equipment.maxStock < 999 && (
+                                          <div className="text-xs text-gray-500 mt-1">
+                                            Max: {equipment.maxStock} disponível
+                                            {equipment.maxStock > 1 ? 's' : ''}
+                                          </div>
+                                        )}
                                     </div>
 
                                     <div className="flex items-center justify-center sm:justify-start gap-2">

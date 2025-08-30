@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Clock, TrendingDown } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface PricingOption {
   id: string
@@ -19,37 +19,53 @@ interface EquipmentPricingSelectorProps {
   pricePerDay: number
   onPeriodChange?: (option: PricingOption, totalPrice: number) => void
   className?: string
+  // Admin-configured rental periods
+  dailyDiscount?: number
+  weeklyDiscount?: number
+  biweeklyDiscount?: number
+  monthlyDiscount?: number
+  popularPeriod?: string
 }
 
-const pricingOptions: PricingOption[] = [
+// Function to generate pricing options based on equipment configuration
+const generatePricingOptions = (
+  dailyDiscount = 0,
+  weeklyDiscount = 10,
+  biweeklyDiscount = 15,
+  monthlyDiscount = 20,
+  popularPeriod = 'weekly'
+): PricingOption[] => [
   {
     id: 'daily',
     label: 'Diário',
     period: 'dia',
     multiplier: 1,
-    discount: 0,
+    discount: dailyDiscount,
+    popular: popularPeriod === 'daily',
   },
   {
     id: 'weekly',
     label: 'Semanal',
     period: '7 dias',
     multiplier: 7,
-    discount: 10,
-    popular: true,
+    discount: weeklyDiscount,
+    popular: popularPeriod === 'weekly',
   },
   {
     id: 'biweekly',
     label: 'Quinzenal',
     period: '15 dias',
     multiplier: 15,
-    discount: 15,
+    discount: biweeklyDiscount,
+    popular: popularPeriod === 'biweekly',
   },
   {
     id: 'monthly',
     label: 'Mensal',
     period: '30 dias',
     multiplier: 30,
-    discount: 20,
+    discount: monthlyDiscount,
+    popular: popularPeriod === 'monthly',
   },
 ]
 
@@ -64,10 +80,50 @@ export function EquipmentPricingSelector({
   pricePerDay,
   onPeriodChange,
   className,
+  dailyDiscount = 0,
+  weeklyDiscount = 10,
+  biweeklyDiscount = 15,
+  monthlyDiscount = 20,
+  popularPeriod = 'weekly',
 }: EquipmentPricingSelectorProps) {
+  const pricingOptions = generatePricingOptions(
+    dailyDiscount,
+    weeklyDiscount,
+    biweeklyDiscount,
+    monthlyDiscount,
+    popularPeriod
+  )
+
   const [selectedPeriod, setSelectedPeriod] = useState<PricingOption>(
     pricingOptions[0] || pricingOptions.find((opt) => opt.id === 'daily')!
   )
+
+  // Atualizar selectedPeriod quando as props mudarem para manter sincronização
+  useEffect(() => {
+    const currentSelectedOption = pricingOptions.find(
+      (opt) => opt.id === selectedPeriod.id
+    )
+    if (currentSelectedOption) {
+      setSelectedPeriod(currentSelectedOption)
+    }
+  }, [
+    dailyDiscount,
+    weeklyDiscount,
+    biweeklyDiscount,
+    monthlyDiscount,
+    popularPeriod,
+    pricingOptions,
+    selectedPeriod.id,
+  ])
+
+  // Notificar mudanças de preço quando pricePerDay ou descontos mudarem
+  useEffect(() => {
+    if (onPeriodChange) {
+      const totalPrice = calculatePrice(selectedPeriod)
+      onPeriodChange(selectedPeriod, totalPrice)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pricePerDay, selectedPeriod])
 
   const calculatePrice = (option: PricingOption) => {
     const basePrice = pricePerDay * option.multiplier

@@ -6,6 +6,120 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-01-16] - ENHANCED ADMIN UX: INVENTORY & RENTAL PERIOD CONFIGURATION
+
+### Fixed 🐛
+
+- **CRÍTICO**: Correção da lógica reativa no `EquipmentPricingSelector`
+  - Solucionado problema onde mudanças de desconto não atualizavam
+    automaticamente
+  - Implementado `useEffect` para sincronização em tempo real com props
+  - Preview administrativo agora atualiza instantaneamente sem necessidade de
+    re-clique
+  - Interface pública também beneficiada com cálculos mais responsivos
+  - Eliminada necessidade de interação manual para ver valores atualizados
+
+- **CRÍTICO**: Migração do banco de dados para novas funcionalidades
+  - Executado `pnpm db:push` para sincronizar schema Prisma com banco PostgreSQL
+  - Adicionadas colunas: `maxStock`, `dailyDiscount`, `weeklyDiscount`,
+    `biweeklyDiscount`, `monthlyDiscount`, `popularPeriod`
+  - Resolvido erro P2022: "The column `equipments.maxStock` does not exist"
+  - APIs voltaram a funcionar após sincronização do banco
+  - Gerado Prisma Client atualizado com novas funcionalidades
+
+### Added ✨
+
+- **Inventory Management**: Sistema de controle de estoque para equipamentos
+  - Campo `maxStock` no modelo Equipment para definir quantidade máxima
+    disponível
+  - Validação automática nas quotações para respeitar o limite de estoque
+  - Interface visual no painel admin para configurar quantidade máxima
+  - Indicador visual no sistema de orçamento mostrando "Max: X disponível(s)"
+  - Controles de quantidade limitados pelo estoque configurado
+
+- **Rental Period Configuration**: Configuração flexível de períodos de locação
+  - Campos para configurar desconto personalizado por período (Diário, Semanal,
+    Quinzenal, Mensal)
+  - Opção para marcar período como "Popular" com etiqueta vermelha
+  - Interface administrativa para configurar descontos individualmente
+  - Sistema dinâmico que adapta apresentação visual baseado nas configurações
+
+- **Enhanced Admin Forms**: Melhorias nos formulários administrativos
+  - Seção "Configuração de Períodos de Locação" nos formulários de equipamento
+  - **NOVO**: Prévia em tempo real usando o componente EXATO da interface
+    pública
+  - **NOVO**: Reutilização do `EquipmentPricingSelector` original para máxima
+    fidelidade
+  - **NOVO**: Layout otimizado com campos "Quantidade Máxima" e "Período
+    Popular" lado a lado
+  - **NOVO**: Visualização 100% idêntica à interface pública (mesmo CSS, mesma
+    estrutura)
+  - **NOVO**: Container destacado com gradiente azul e animação para a prévia
+  - **NOVO**: Cálculos de preço em tempo real com todas as funcionalidades
+    originais
+  - Validação de entrada para valores de desconto (0-100%)
+  - Interface responsiva com grid 2x2 para configuração de descontos
+
+### Changed 🔄
+
+- **Equipment Model**: Adicionados novos campos ao schema Prisma
+  - `maxStock` (Int, default: 1) - Quantidade máxima disponível
+  - `dailyDiscount` (Int, default: 0) - Desconto para período diário
+  - `weeklyDiscount` (Int, default: 10) - Desconto para período semanal
+  - `biweeklyDiscount` (Int, default: 15) - Desconto para período quinzenal
+  - `monthlyDiscount` (Int, default: 20) - Desconto para período mensal
+  - `popularPeriod` (String, default: "weekly") - Período marcado como popular
+
+- **Equipment APIs**: Atualizadas para suportar novos campos
+  - POST `/api/admin/equipments` inclui validação e criação com novos campos
+  - PUT `/api/admin/equipments/[id]` suporta atualização de configurações
+  - Validação de tipos e valores padrão implementada
+
+- **Public Interface**: Sistema de preços dinâmico baseado em configuração admin
+  - `EquipmentPricingSelector` agora usa configurações específicas do
+    equipamento
+  - Geração dinâmica de opções de período com descontos personalizados
+  - Marcação automática de período popular baseada na configuração admin
+  - Remoção de valores hardcoded em favor de configuração flexível
+
+- **Quote System**: Sistema de orçamento respeitando limites de estoque
+  - Função `updateQuantity` limitada pelo `maxStock` do equipamento
+  - Controles de + e - desabilitados quando limite é atingido
+  - Campo input com atributo `max` baseado no estoque configurado
+  - Interface Equipment atualizada para incluir `maxStock`
+
+### Fixed 🐛
+
+- **HTML Escaping**: Corrigidos caracteres especiais em tooltips
+  - Substituído `"Popular"` por `&quot;Popular&quot;` para compliance ESLint
+  - Aplicado em formulários de criação e edição de equipamentos
+
+### Technical Improvements 🔧
+
+- **Form Validation**: Aprimorada validação de formulários admin
+  - Validação de range para campos de desconto (0-100%)
+  - Validação de quantidade mínima para maxStock (min="1")
+  - Parse seguro de valores numéricos com fallbacks
+
+- **Type Safety**: Melhorado tipagem TypeScript
+  - Interfaces atualizadas para incluir novos campos opcionais
+  - Tipos seguros para configurações de período de locação
+  - Validação de tipos nas APIs com fallbacks apropriados
+
+- **User Experience**: Melhorias na experiência do usuário
+  - **REVOLUCIONÁRIO**: Prévia usando o componente REAL da interface pública
+  - **PERFEITA FIDELIDADE**: Zero diferença visual entre preview admin e
+    interface final
+  - **SMART REUSE**: Reutilização inteligente de código reduz manutenção e
+    garante consistência
+  - **REAL-TIME**: Todas as mudanças refletem instantaneamente com
+    funcionalidades completas
+  - **NOVO**: Container destacado com gradiente e animação para chamar atenção
+  - **NOVO**: Layout otimizado que economiza espaço vertical na tela admin
+  - Feedback visual para limites de estoque no sistema de orçamento
+  - Desabilitação inteligente de controles quando limites são atingidos
+  - Descrições claras sobre funcionalidade de cada campo
+
 ## [2025-01-15] - CORREÇÕES DE PERFORMANCE E PADRONIZAÇÃO
 
 ### Fixed 🐛
@@ -37,6 +151,12 @@ e este projeto adere ao
   - Aplicado `max-w-[130px]` em páginas admin para grid layouts
   - Aplicado `max-w-[220px]` em páginas de detalhes com mais espaço
   - Adicionado `flex-shrink-0` e `min-w-0` para controle de flexbox otimizado
+- **UI - Equipment Details Badge**: Movido ícone CheckCircle para dentro do
+  badge "Disponível"
+  - Ícone agora integrado ao badge com cor branca (`text-white`)
+  - Aplicado `gap-1.5` para espaçamento consistente
+  - Removido ícone duplicado fora do badge
+  - Layout mais limpo e profissional
 
 ### Changed 🔄
 

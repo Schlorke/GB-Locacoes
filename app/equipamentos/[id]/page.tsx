@@ -211,12 +211,10 @@ export default async function EquipmentDetailPage(props: Props) {
                 {/* Status de Disponibilidade */}
                 <div className="flex items-center gap-2">
                   {equipment.available ? (
-                    <>
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                      <Badge className="bg-green-600 hover:bg-green-700 text-xs px-2 py-1">
-                        Disponível
-                      </Badge>
-                    </>
+                    <Badge className="bg-green-600 hover:bg-green-700 text-xs px-2 py-1 inline-flex items-center gap-1.5">
+                      <CheckCircle className="h-3 w-3 text-white flex-shrink-0" />
+                      <span>Disponível</span>
+                    </Badge>
                   ) : (
                     <Badge variant="destructive" className="text-xs px-2 py-1">
                       Indisponível
@@ -226,7 +224,14 @@ export default async function EquipmentDetailPage(props: Props) {
 
                 {/* Sistema de Preços */}
                 <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
-                  <EquipmentPricingSelector pricePerDay={pricePerDay} />
+                  <EquipmentPricingSelector
+                    pricePerDay={pricePerDay}
+                    dailyDiscount={equipment.dailyDiscount || 0}
+                    weeklyDiscount={equipment.weeklyDiscount || 10}
+                    biweeklyDiscount={equipment.biweeklyDiscount || 15}
+                    monthlyDiscount={equipment.monthlyDiscount || 20}
+                    popularPeriod={equipment.popularPeriod || 'weekly'}
+                  />
                 </div>
 
                 {/* Call-to-Action Principal */}

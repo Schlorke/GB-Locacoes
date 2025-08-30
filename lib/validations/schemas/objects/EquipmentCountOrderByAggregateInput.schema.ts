@@ -10,6 +10,12 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   images: SortOrderSchema.optional(),
   available: SortOrderSchema.optional(),
   categoryId: SortOrderSchema.optional(),
+  maxStock: SortOrderSchema.optional(),
+  dailyDiscount: SortOrderSchema.optional(),
+  weeklyDiscount: SortOrderSchema.optional(),
+  biweeklyDiscount: SortOrderSchema.optional(),
+  monthlyDiscount: SortOrderSchema.optional(),
+  popularPeriod: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional(),
   category_id: SortOrderSchema.optional()

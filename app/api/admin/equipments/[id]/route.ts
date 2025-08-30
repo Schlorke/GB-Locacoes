@@ -90,6 +90,12 @@ export async function PUT(
       categoryId,
       images,
       isAvailable,
+      maxStock,
+      dailyDiscount,
+      weeklyDiscount,
+      biweeklyDiscount,
+      monthlyDiscount,
+      popularPeriod,
     } = body
 
     console.error('Dados recebidos:', {
@@ -113,6 +119,18 @@ export async function PUT(
     if (categoryId) updateData.categoryId = categoryId
     if (images && images.length > 0) updateData.images = { set: images }
     if (isAvailable !== undefined) updateData.available = isAvailable
+    // Inventory management
+    if (maxStock !== undefined) updateData.maxStock = parseInt(String(maxStock))
+    // Rental period configurations
+    if (dailyDiscount !== undefined)
+      updateData.dailyDiscount = parseInt(String(dailyDiscount))
+    if (weeklyDiscount !== undefined)
+      updateData.weeklyDiscount = parseInt(String(weeklyDiscount))
+    if (biweeklyDiscount !== undefined)
+      updateData.biweeklyDiscount = parseInt(String(biweeklyDiscount))
+    if (monthlyDiscount !== undefined)
+      updateData.monthlyDiscount = parseInt(String(monthlyDiscount))
+    if (popularPeriod !== undefined) updateData.popularPeriod = popularPeriod
 
     console.error('Dados para update:', updateData)
 

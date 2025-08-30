@@ -6,6 +6,7 @@ import { DecimalFilterObjectSchema } from './DecimalFilter.schema';
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 import { BoolFilterObjectSchema } from './BoolFilter.schema';
 import { UuidFilterObjectSchema } from './UuidFilter.schema';
+import { IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
 import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { UuidNullableFilterObjectSchema } from './UuidNullableFilter.schema';
 import { CategoryScalarRelationFilterObjectSchema } from './CategoryScalarRelationFilter.schema';
@@ -24,6 +25,12 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   images: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   available: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   categoryId: z.union([z.lazy(() => UuidFilterObjectSchema), z.string()]).optional(),
+  maxStock: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).nullish(),
+  dailyDiscount: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).nullish(),
+  weeklyDiscount: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).nullish(),
+  biweeklyDiscount: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).nullish(),
+  monthlyDiscount: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).nullish(),
+  popularPeriod: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).nullish(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.date()]).optional(),
   category_id: z.union([z.lazy(() => UuidNullableFilterObjectSchema), z.string()]).nullish(),
