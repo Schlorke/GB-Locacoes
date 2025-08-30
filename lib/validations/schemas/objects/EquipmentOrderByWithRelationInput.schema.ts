@@ -14,6 +14,7 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   images: SortOrderSchema.optional(),
   available: SortOrderSchema.optional(),
   categoryId: SortOrderSchema.optional(),
+  specifications: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   maxStock: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   dailyDiscount: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   weeklyDiscount: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
@@ -22,7 +23,6 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   popularPeriod: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional(),
-  category_id: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   category: z.lazy(() => CategoryOrderByWithRelationInputObjectSchema).optional(),
   quoteItems: z.lazy(() => QuoteItemOrderByRelationAggregateInputObjectSchema).optional(),
   rental_items: z.lazy(() => rental_itemsOrderByRelationAggregateInputObjectSchema).optional()

@@ -10,6 +10,7 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   images: z.literal(true).optional(),
   available: z.literal(true).optional(),
   categoryId: z.literal(true).optional(),
+  specifications: z.literal(true).optional(),
   maxStock: z.literal(true).optional(),
   dailyDiscount: z.literal(true).optional(),
   weeklyDiscount: z.literal(true).optional(),
@@ -18,7 +19,6 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   popularPeriod: z.literal(true).optional(),
   createdAt: z.literal(true).optional(),
   updatedAt: z.literal(true).optional(),
-  category_id: z.literal(true).optional(),
   _all: z.literal(true).optional()
 }).strict();
 export const EquipmentCountAggregateInputObjectSchema: z.ZodType<Prisma.EquipmentCountAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentCountAggregateInputType>;

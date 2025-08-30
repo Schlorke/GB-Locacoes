@@ -105,6 +105,7 @@ model Equipment {
   images            String[]
   available         Boolean        @default(true)
   categoryId        String         @db.Uuid
+  specifications    Json?          // Technical specifications as JSON
   // Inventory management
   maxStock          Int?           @default(1) // Maximum available quantity
   // Rental period configurations
@@ -115,7 +116,6 @@ model Equipment {
   popularPeriod     String?        @default("weekly") // Which period to mark as popular (daily, weekly, biweekly, monthly)
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
-  category_id       String?        @db.Uuid
   category          Category       @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_category")
   quoteItems        QuoteItem[]
   rental_items      rental_items[]

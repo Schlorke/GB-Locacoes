@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdminOrOperator } from '@/middlewares/require-admin'
 
@@ -231,10 +231,10 @@ export const revalidate = 0
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Verificar autenticação de admin ou operator
-    const authResult = await requireAdminOrOperator(request)
+    const authResult = await requireAdminOrOperator()
     if (!authResult.success) {
       return NextResponse.json(
         { error: authResult.error },

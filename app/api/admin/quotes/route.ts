@@ -200,7 +200,7 @@ export const revalidate = 0
 export async function GET(request: NextRequest) {
   try {
     // Verificar autenticação de admin ou operator
-    const authResult = await requireAdminOrOperator(request)
+    const authResult = await requireAdminOrOperator()
     if (!authResult.success) {
       return NextResponse.json(
         { error: authResult.error },

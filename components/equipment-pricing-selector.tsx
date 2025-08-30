@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Clock, TrendingDown } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 
 interface PricingOption {
   id: string
@@ -86,35 +86,57 @@ export function EquipmentPricingSelector({
   monthlyDiscount = 20,
   popularPeriod = 'weekly',
 }: EquipmentPricingSelectorProps) {
-  const pricingOptions = generatePricingOptions(
-    dailyDiscount,
-    weeklyDiscount,
-    biweeklyDiscount,
-    monthlyDiscount,
-    popularPeriod
+  // Usar useMemo para evitar recriações desnecessárias
+  const pricingOptions = useMemo(
+    () =>
+      generatePricingOptions(
+        dailyDiscount,
+        weeklyDiscount,
+        biweeklyDiscount,
+        monthlyDiscount,
+        popularPeriod
+      ),
+    [
+      dailyDiscount,
+      weeklyDiscount,
+      biweeklyDiscount,
+      monthlyDiscount,
+      popularPeriod,
+    ]
   )
 
-  const [selectedPeriod, setSelectedPeriod] = useState<PricingOption>(
-    pricingOptions[0] || pricingOptions.find((opt) => opt.id === 'daily')!
-  )
-
-  // Atualizar selectedPeriod quando as props mudarem para manter sincronização
-  useEffect(() => {
-    const currentSelectedOption = pricingOptions.find(
-      (opt) => opt.id === selectedPeriod.id
+  const [selectedPeriod, setSelectedPeriod] = useState<PricingOption>(() => {
+    return (
+      pricingOptions[0] || pricingOptions.find((opt) => opt.id === 'daily')!
     )
-    if (currentSelectedOption) {
-      setSelectedPeriod(currentSelectedOption)
+  })
+
+  // Usar ref para rastrear o ID selecionado e evitar loops
+  const selectedIdRef = useRef(selectedPeriod.id)
+  const prevPricingOptionsRef = useRef(pricingOptions)
+
+  // Atualizar selectedPeriod apenas quando pricingOptions mudar (não quando selectedPeriod mudar)
+  useEffect(() => {
+    // Verificar se pricingOptions realmente mudou
+    const optionsChanged =
+      JSON.stringify(prevPricingOptionsRef.current) !==
+      JSON.stringify(pricingOptions)
+
+    if (optionsChanged) {
+      const currentSelectedOption = pricingOptions.find(
+        (opt) => opt.id === selectedIdRef.current
+      )
+      if (currentSelectedOption) {
+        setSelectedPeriod(currentSelectedOption)
+      }
+      prevPricingOptionsRef.current = pricingOptions
     }
-  }, [
-    dailyDiscount,
-    weeklyDiscount,
-    biweeklyDiscount,
-    monthlyDiscount,
-    popularPeriod,
-    pricingOptions,
-    selectedPeriod.id,
-  ])
+  }, [pricingOptions])
+
+  // Atualizar ref quando selectedPeriod mudar
+  useEffect(() => {
+    selectedIdRef.current = selectedPeriod.id
+  }, [selectedPeriod.id])
 
   // Notificar mudanças de preço quando pricePerDay ou descontos mudarem
   useEffect(() => {
@@ -131,7 +153,16 @@ export function EquipmentPricingSelector({
     return basePrice - discountAmount
   }
 
-  const handlePeriodChange = (option: PricingOption) => {
+  const handlePeriodChange = (
+    option: PricingOption,
+    event?: React.MouseEvent
+  ) => {
+    // Prevenir propagação do evento para evitar submit do formulário
+    if (event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+
     setSelectedPeriod(option)
     const totalPrice = calculatePrice(option)
     onPeriodChange?.(option, totalPrice)
@@ -151,6 +182,7 @@ export function EquipmentPricingSelector({
           {pricingOptions.map((option) => (
             <Button
               key={option.id}
+              type="button"
               variant={selectedPeriod.id === option.id ? 'default' : 'outline'}
               size="sm"
               className={cn(
@@ -159,7 +191,7 @@ export function EquipmentPricingSelector({
                   ? 'bg-orange-600 hover:bg-orange-700 text-white border-orange-600 shadow-lg'
                   : 'bg-white border-gray-200 text-gray-700 hover:text-orange-500 hover:!bg-white hover:!border-gray-200'
               )}
-              onClick={() => handlePeriodChange(option)}
+              onClick={(e) => handlePeriodChange(option, e)}
             >
               <div className="text-center">
                 <div className="font-semibold">{option.label}</div>

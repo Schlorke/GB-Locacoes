@@ -255,7 +255,7 @@ export async function GET(request: NextRequest) {
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
     // Verificar autenticação de admin
-    const authResult = await requireAdmin(request)
+    const authResult = await requireAdmin()
     if (!authResult.success) {
       return NextResponse.json(
         { error: authResult.error },

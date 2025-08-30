@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { requireAdminOrOperator } from '@/middlewares/require-admin'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -29,7 +28,7 @@ export async function PUT(
     // Conexão automática do Prisma
 
     // Verificar autenticação de admin
-    const adminResult = await requireAdmin(request)
+    const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(
         { error: adminResult.error },
@@ -87,7 +86,7 @@ export async function DELETE(
     // Conexão automática do Prisma
 
     // Verificar autenticação de admin
-    const adminResult = await requireAdmin(request)
+    const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(
         { error: adminResult.error },

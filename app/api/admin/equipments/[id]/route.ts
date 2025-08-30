@@ -17,7 +17,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const adminResult = await requireAdmin(request)
+    const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(
         { error: adminResult.error },
@@ -73,7 +73,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const adminResult = await requireAdmin(request)
+    const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(
         { error: adminResult.error },
@@ -82,6 +82,10 @@ export async function PUT(
     }
 
     const body = await request.json()
+
+    // Log completo dos dados recebidos
+    console.log('Body completo recebido:', JSON.stringify(body, null, 2))
+
     const {
       name,
       description,
@@ -98,13 +102,48 @@ export async function PUT(
       popularPeriod,
     } = body
 
-    console.error('Dados recebidos:', {
+    // Validação básica dos dados obrigatórios
+    if (!name || typeof name !== 'string') {
+      return NextResponse.json(
+        { error: 'Nome é obrigatório e deve ser uma string' },
+        { status: 400 }
+      )
+    }
+
+    if (!description || typeof description !== 'string') {
+      return NextResponse.json(
+        { error: 'Descrição é obrigatória e deve ser uma string' },
+        { status: 400 }
+      )
+    }
+
+    if (!pricePerDay || isNaN(parseFloat(pricePerDay))) {
+      return NextResponse.json(
+        { error: 'Preço por dia é obrigatório e deve ser um número válido' },
+        { status: 400 }
+      )
+    }
+
+    if (!categoryId || typeof categoryId !== 'string') {
+      return NextResponse.json(
+        { error: 'ID da categoria é obrigatório' },
+        { status: 400 }
+      )
+    }
+
+    console.log('Dados recebidos validados:', {
       name,
       description,
       pricePerDay,
       categoryId,
-      images,
+      images: images?.length || 0,
       isAvailable,
+      maxStock,
+      dailyDiscount,
+      weeklyDiscount,
+      biweeklyDiscount,
+      monthlyDiscount,
+      popularPeriod,
     })
 
     const { id } = await params
@@ -112,29 +151,117 @@ export async function PUT(
     // Preparar dados para atualização
     const updateData: Record<string, unknown> = {}
 
-    if (name) updateData.name = name
-    if (description) updateData.description = description
-    if (specifications) updateData.specifications = specifications
-    if (pricePerDay) updateData.pricePerDay = parseFloat(pricePerDay)
-    if (categoryId) updateData.categoryId = categoryId
-    if (images && images.length > 0) updateData.images = { set: images }
-    if (isAvailable !== undefined) updateData.available = isAvailable
-    // Inventory management
-    if (maxStock !== undefined) updateData.maxStock = parseInt(String(maxStock))
-    // Rental period configurations
-    if (dailyDiscount !== undefined)
-      updateData.dailyDiscount = parseInt(String(dailyDiscount))
-    if (weeklyDiscount !== undefined)
-      updateData.weeklyDiscount = parseInt(String(weeklyDiscount))
-    if (biweeklyDiscount !== undefined)
-      updateData.biweeklyDiscount = parseInt(String(biweeklyDiscount))
-    if (monthlyDiscount !== undefined)
-      updateData.monthlyDiscount = parseInt(String(monthlyDiscount))
-    if (popularPeriod !== undefined) updateData.popularPeriod = popularPeriod
+    // Dados obrigatórios (já validados)
+    updateData.name = name
+    updateData.description = description
+    updateData.pricePerDay = parseFloat(pricePerDay)
 
-    console.error('Dados para update:', updateData)
+    // Usar relação category em vez de categoryId direto
+    if (categoryId) {
+      updateData.category = {
+        connect: { id: categoryId },
+      }
+    }
+
+    // Dados opcionais
+    if (specifications !== undefined) {
+      updateData.specifications = specifications || {}
+    }
+
+    if (images !== undefined) {
+      if (Array.isArray(images)) {
+        updateData.images = { set: images }
+      } else {
+        console.warn('Images não é um array:', images)
+        updateData.images = { set: [] }
+      }
+    }
+
+    if (isAvailable !== undefined) {
+      updateData.available = Boolean(isAvailable)
+    }
+
+    // Inventory management
+    if (maxStock !== undefined) {
+      const maxStockNum = parseInt(String(maxStock))
+      if (!isNaN(maxStockNum) && maxStockNum > 0) {
+        updateData.maxStock = maxStockNum
+      }
+    }
+
+    // Rental period configurations
+    if (dailyDiscount !== undefined) {
+      const dailyDiscountNum = parseInt(String(dailyDiscount))
+      if (
+        !isNaN(dailyDiscountNum) &&
+        dailyDiscountNum >= 0 &&
+        dailyDiscountNum <= 100
+      ) {
+        updateData.dailyDiscount = dailyDiscountNum
+      }
+    }
+
+    if (weeklyDiscount !== undefined) {
+      const weeklyDiscountNum = parseInt(String(weeklyDiscount))
+      if (
+        !isNaN(weeklyDiscountNum) &&
+        weeklyDiscountNum >= 0 &&
+        weeklyDiscountNum <= 100
+      ) {
+        updateData.weeklyDiscount = weeklyDiscountNum
+      }
+    }
+
+    if (biweeklyDiscount !== undefined) {
+      const biweeklyDiscountNum = parseInt(String(biweeklyDiscount))
+      if (
+        !isNaN(biweeklyDiscountNum) &&
+        biweeklyDiscountNum >= 0 &&
+        biweeklyDiscountNum <= 100
+      ) {
+        updateData.biweeklyDiscount = biweeklyDiscountNum
+      }
+    }
+
+    if (monthlyDiscount !== undefined) {
+      const monthlyDiscountNum = parseInt(String(monthlyDiscount))
+      if (
+        !isNaN(monthlyDiscountNum) &&
+        monthlyDiscountNum >= 0 &&
+        monthlyDiscountNum <= 100
+      ) {
+        updateData.monthlyDiscount = monthlyDiscountNum
+      }
+    }
+
+    if (popularPeriod !== undefined) {
+      const validPeriods = ['daily', 'weekly', 'biweekly', 'monthly']
+      if (validPeriods.includes(popularPeriod)) {
+        updateData.popularPeriod = popularPeriod
+      }
+    }
+
+    console.log(
+      'Dados preparados para update:',
+      JSON.stringify(updateData, null, 2)
+    )
 
     const prisma = await getPrisma()
+
+    // Verificar se o equipamento existe antes de atualizar
+    const existingEquipment = await prisma.equipment.findUnique({
+      where: { id },
+    })
+
+    if (!existingEquipment) {
+      return NextResponse.json(
+        { error: 'Equipamento não encontrado' },
+        { status: 404 }
+      )
+    }
+
+    console.log('Equipamento encontrado, iniciando update...')
+
     const equipment = await prisma.equipment.update({
       where: { id },
       data: updateData,
@@ -163,8 +290,19 @@ export async function PUT(
     return NextResponse.json(equipmentResponse)
   } catch (error) {
     console.error('Erro ao atualizar equipamento:', error)
+
+    // Capturar detalhes específicos do erro
+    let errorMessage = 'Erro interno do servidor'
+    if (error instanceof Error) {
+      errorMessage = error.message
+      console.error('Stack trace:', error.stack)
+    }
+
     return NextResponse.json(
-      { error: 'Erro interno do servidor' },
+      {
+        error: errorMessage,
+        details: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 }
     )
   }
@@ -175,7 +313,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const adminResult = await requireAdmin(request)
+    const adminResult = await requireAdmin()
     if (!adminResult.success) {
       return NextResponse.json(
         { error: adminResult.error },

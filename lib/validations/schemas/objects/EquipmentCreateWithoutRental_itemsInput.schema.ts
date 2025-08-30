@@ -1,8 +1,11 @@
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { EquipmentCreateimagesInputObjectSchema } from './EquipmentCreateimagesInput.schema';
+import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
 import { CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema } from './CategoryCreateNestedOneWithoutEquipmentsInput.schema';
 import { QuoteItemCreateNestedManyWithoutEquipmentInputObjectSchema } from './QuoteItemCreateNestedManyWithoutEquipmentInput.schema'
+
+import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
 const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.string().optional(),
@@ -11,6 +14,7 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   pricePerDay: z.number(),
   images: z.union([z.lazy(() => EquipmentCreateimagesInputObjectSchema), z.string().array()]).optional(),
   available: z.boolean().optional(),
+  specifications: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   maxStock: z.number().int().nullish(),
   dailyDiscount: z.number().int().nullish(),
   weeklyDiscount: z.number().int().nullish(),
@@ -19,7 +23,6 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   popularPeriod: z.string().nullish(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
-  category_id: z.string().nullish(),
   category: z.lazy(() => CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema),
   quoteItems: z.lazy(() => QuoteItemCreateNestedManyWithoutEquipmentInputObjectSchema).optional()
 }).strict();

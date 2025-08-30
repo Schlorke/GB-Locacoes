@@ -417,207 +417,270 @@ export default function NovoEquipamento() {
 
                         {/* Rental Period Configuration */}
                         <div className="space-y-6 border-t border-gray-100 pt-4">
-                          <h4 className="text-sm font-semibold text-gray-900">
-                            Configuração de Períodos de Locação
-                          </h4>
+                          <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                            <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center">
+                              <span className="text-xs font-medium text-orange-600">
+                                3
+                              </span>
+                            </div>
+                            <h3 className="text-lg font-medium text-gray-900">
+                              Configuração de Períodos de Locação
+                            </h3>
+                          </div>
 
                           {/* Prévia em Tempo Real - Usando o Componente Original */}
-                          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200/50 shadow-sm">
-                            <div className="flex items-center gap-2 mb-4">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                              <h5 className="text-sm font-semibold text-blue-700">
+                          <div
+                            className="space-y-4 rounded-xl p-6 border shadow-xl backdrop-blur-sm min-h-[200px] transition-all duration-300 hover:shadow-2xl"
+                            style={{
+                              backgroundColor: 'rgb(248, 250, 252)',
+                              borderColor: 'rgb(224, 230, 235)',
+                              borderWidth: '1.5px',
+                              boxShadow:
+                                'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
+                            }}
+                          >
+                            <div className="mb-4">
+                              <h3 className="text-sm font-semibold text-slate-700">
                                 Prévia da Interface Pública
-                              </h5>
+                              </h3>
                             </div>
-
-                            {/* Componente Exato da Interface Pública */}
-                            <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm max-w-sm">
-                              <EquipmentPricingSelector
-                                pricePerDay={formData.pricePerDay}
-                                dailyDiscount={formData.dailyDiscount}
-                                weeklyDiscount={formData.weeklyDiscount}
-                                biweeklyDiscount={formData.biweeklyDiscount}
-                                monthlyDiscount={formData.monthlyDiscount}
-                                popularPeriod={formData.popularPeriod}
-                              />
-                            </div>
-                          </div>
-
-                          {/* Campos de Configuração */}
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <Label
-                                htmlFor="dailyDiscount"
-                                className="text-sm font-medium text-gray-700"
-                              >
-                                Desconto Diário (%)
-                              </Label>
-                              <Input
-                                id="dailyDiscount"
-                                type="number"
-                                min="0"
-                                max="100"
-                                value={formData.dailyDiscount}
-                                onChange={(e) =>
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    dailyDiscount:
-                                      parseInt(e.target.value) || 0,
-                                  }))
-                                }
-                                className="mt-2 border-gray-200 focus:border-blue-500"
-                              />
-                            </div>
-
-                            <div>
-                              <Label
-                                htmlFor="weeklyDiscount"
-                                className="text-sm font-medium text-gray-700"
-                              >
-                                Desconto Semanal (%)
-                              </Label>
-                              <Input
-                                id="weeklyDiscount"
-                                type="number"
-                                min="0"
-                                max="100"
-                                value={formData.weeklyDiscount}
-                                onChange={(e) =>
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    weeklyDiscount:
-                                      parseInt(e.target.value) || 0,
-                                  }))
-                                }
-                                className="mt-2 border-gray-200 focus:border-blue-500"
-                              />
-                            </div>
-
-                            <div>
-                              <Label
-                                htmlFor="biweeklyDiscount"
-                                className="text-sm font-medium text-gray-700"
-                              >
-                                Desconto Quinzenal (%)
-                              </Label>
-                              <Input
-                                id="biweeklyDiscount"
-                                type="number"
-                                min="0"
-                                max="100"
-                                value={formData.biweeklyDiscount}
-                                onChange={(e) =>
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    biweeklyDiscount:
-                                      parseInt(e.target.value) || 0,
-                                  }))
-                                }
-                                className="mt-2 border-gray-200 focus:border-blue-500"
-                              />
-                            </div>
-
-                            <div>
-                              <Label
-                                htmlFor="monthlyDiscount"
-                                className="text-sm font-medium text-gray-700"
-                              >
-                                Desconto Mensal (%)
-                              </Label>
-                              <Input
-                                id="monthlyDiscount"
-                                type="number"
-                                min="0"
-                                max="100"
-                                value={formData.monthlyDiscount}
-                                onChange={(e) =>
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    monthlyDiscount:
-                                      parseInt(e.target.value) || 0,
-                                  }))
-                                }
-                                className="mt-2 border-gray-200 focus:border-blue-500"
-                              />
+                            <div className="flex justify-center">
+                              <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm max-w-sm w-full">
+                                <EquipmentPricingSelector
+                                  pricePerDay={formData.pricePerDay}
+                                  dailyDiscount={formData.dailyDiscount}
+                                  weeklyDiscount={formData.weeklyDiscount}
+                                  biweeklyDiscount={formData.biweeklyDiscount}
+                                  monthlyDiscount={formData.monthlyDiscount}
+                                  popularPeriod={formData.popularPeriod}
+                                />
+                              </div>
                             </div>
                           </div>
 
-                          {/* Campos Organizados Lado a Lado */}
-                          <div className="grid grid-cols-2 gap-4">
-                            {/* Quantidade Máxima Disponível */}
-                            <div>
-                              <Label
-                                htmlFor="maxStock"
-                                className="text-sm font-medium text-gray-700"
-                              >
-                                Quantidade Máxima Disponível *
-                              </Label>
-                              <Input
-                                id="maxStock"
-                                type="number"
-                                min="1"
-                                value={formData.maxStock}
-                                onChange={(e) =>
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    maxStock: parseInt(e.target.value) || 1,
-                                  }))
-                                }
-                                placeholder="Ex: 5"
-                                required
-                                className="mt-2 border-gray-200 focus:border-blue-500"
-                              />
-                              <p className="text-xs text-gray-500 mt-1">
-                                Máximo disponível para locação simultânea
-                              </p>
+                          {/* Campos de Configuração organizados em linhas */}
+                          <div className="space-y-4">
+                            {/* PRIMEIRA LINHA: Quantidade Máxima e Período Popular */}
+                            <div className="grid grid-cols-2 gap-4 items-start">
+                              {/* Quantidade Máxima Disponível */}
+                              <div>
+                                <Label
+                                  htmlFor="maxStock"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  Quantidade Máxima Disponível *
+                                </Label>
+                                <Input
+                                  id="maxStock"
+                                  type="number"
+                                  min="1"
+                                  value={formData.maxStock}
+                                  onChange={(e) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      maxStock: parseInt(e.target.value) || 1,
+                                    }))
+                                  }
+                                  placeholder="Ex: 5"
+                                  required
+                                  className="mt-2 border-gray-200 focus:border-blue-500"
+                                />
+                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
+                                  Máximo disponível para locação simultânea
+                                </p>
+                              </div>
+
+                              {/* Período Popular */}
+                              <div>
+                                <Label
+                                  htmlFor="popularPeriod"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  Período Popular
+                                </Label>
+                                <div className="mt-2">
+                                  <CustomSelect
+                                    value={formData.popularPeriod}
+                                    onValueChange={(value: string) =>
+                                      setFormData((prev) => ({
+                                        ...prev,
+                                        popularPeriod: value,
+                                      }))
+                                    }
+                                    placeholder="Escolha o período popular"
+                                  >
+                                    <CustomSelectItem value="daily">
+                                      Diário
+                                    </CustomSelectItem>
+                                    <CustomSelectItem value="weekly">
+                                      Semanal
+                                    </CustomSelectItem>
+                                    <CustomSelectItem value="biweekly">
+                                      Quinzenal
+                                    </CustomSelectItem>
+                                    <CustomSelectItem value="monthly">
+                                      Mensal
+                                    </CustomSelectItem>
+                                  </CustomSelect>
+                                </div>
+                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
+                                  Destacado com etiqueta &quot;Popular&quot;
+                                </p>
+                              </div>
                             </div>
 
-                            {/* Período Popular */}
-                            <div>
-                              <Label
-                                htmlFor="popularPeriod"
-                                className="text-sm font-medium text-gray-700"
-                              >
-                                Período Popular
-                              </Label>
-                              <CustomSelect
-                                value={formData.popularPeriod}
-                                onValueChange={(value: string) =>
-                                  setFormData((prev) => ({
-                                    ...prev,
-                                    popularPeriod: value,
-                                  }))
-                                }
-                                placeholder="Escolha o período popular"
-                              >
-                                <CustomSelectItem value="daily">
-                                  Diário
-                                </CustomSelectItem>
-                                <CustomSelectItem value="weekly">
-                                  Semanal
-                                </CustomSelectItem>
-                                <CustomSelectItem value="biweekly">
-                                  Quinzenal
-                                </CustomSelectItem>
-                                <CustomSelectItem value="monthly">
-                                  Mensal
-                                </CustomSelectItem>
-                              </CustomSelect>
-                              <p className="text-xs text-gray-500 mt-1">
-                                Destacado com etiqueta &quot;Popular&quot;
-                              </p>
+                            {/* Segunda Linha: Desconto Diário e Semanal */}
+                            <div className="grid grid-cols-2 gap-4 items-start">
+                              <div>
+                                <Label
+                                  htmlFor="dailyDiscount"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  Desconto Diário (%)
+                                </Label>
+                                <Input
+                                  id="dailyDiscount"
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={formData.dailyDiscount}
+                                  onChange={(e) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      dailyDiscount:
+                                        parseInt(e.target.value) || 0,
+                                    }))
+                                  }
+                                  className="mt-2 border-gray-200 focus:border-blue-500"
+                                />
+                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
+                                  &nbsp;
+                                </p>
+                              </div>
+
+                              <div>
+                                <Label
+                                  htmlFor="weeklyDiscount"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  Desconto Semanal (%)
+                                </Label>
+                                <Input
+                                  id="weeklyDiscount"
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={formData.weeklyDiscount}
+                                  onChange={(e) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      weeklyDiscount:
+                                        parseInt(e.target.value) || 0,
+                                    }))
+                                  }
+                                  className="mt-2 border-gray-200 focus:border-blue-500"
+                                />
+                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
+                                  &nbsp;
+                                </p>
+                              </div>
+                            </div>
+
+                            {/* Terceira Linha: Desconto Quinzenal e Mensal */}
+                            <div className="grid grid-cols-2 gap-4 items-start">
+                              <div>
+                                <Label
+                                  htmlFor="biweeklyDiscount"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  Desconto Quinzenal (%)
+                                </Label>
+                                <Input
+                                  id="biweeklyDiscount"
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={formData.biweeklyDiscount}
+                                  onChange={(e) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      biweeklyDiscount:
+                                        parseInt(e.target.value) || 0,
+                                    }))
+                                  }
+                                  className="mt-2 border-gray-200 focus:border-blue-500"
+                                />
+                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
+                                  &nbsp;
+                                </p>
+                              </div>
+
+                              <div>
+                                <Label
+                                  htmlFor="monthlyDiscount"
+                                  className="text-sm font-medium text-gray-700"
+                                >
+                                  Desconto Mensal (%)
+                                </Label>
+                                <Input
+                                  id="monthlyDiscount"
+                                  type="number"
+                                  min="0"
+                                  max="100"
+                                  value={formData.monthlyDiscount}
+                                  onChange={(e) =>
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      monthlyDiscount:
+                                        parseInt(e.target.value) || 0,
+                                    }))
+                                  }
+                                  className="mt-2 border-gray-200 focus:border-blue-500"
+                                />
+                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
+                                  &nbsp;
+                                </p>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Coluna Direita: Imagens do Equipamento (Ocupando toda a altura) */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                        <span className="text-xs font-medium text-green-600">
+                          2
+                        </span>
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-900">
+                        Imagens do Equipamento
+                      </h3>
+                    </div>
+
+                    <ImageUpload
+                      images={formData.images}
+                      onImagesChange={(images) =>
+                        setFormData((prev) => ({ ...prev, images }))
+                      }
+                      maxImages={5}
+                      currentImageIndex={currentImageIndex}
+                      onImageIndexChange={setCurrentImageIndex}
+                      onImageZoom={() => setIsImageZoomed(true)}
+                      nextImage={nextImage}
+                      prevImage={prevImage}
+                      goToImage={goToImage}
+                    />
 
                     {/* Seção: Especificações Técnicas */}
                     <div className="space-y-6 border-t border-gray-100 pt-6">
                       <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
                         <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
                           <span className="text-xs font-medium text-purple-600">
-                            3
+                            4
                           </span>
                         </div>
                         <h3 className="text-lg font-medium text-gray-900">
@@ -712,34 +775,6 @@ export default function NovoEquipamento() {
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Coluna Direita: Imagens do Equipamento (Ocupando toda a altura) */}
-                  <div className="space-y-6">
-                    <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-green-600">
-                          2
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-medium text-gray-900">
-                        Imagens do Equipamento
-                      </h3>
-                    </div>
-
-                    <ImageUpload
-                      images={formData.images}
-                      onImagesChange={(images) =>
-                        setFormData((prev) => ({ ...prev, images }))
-                      }
-                      maxImages={5}
-                      currentImageIndex={currentImageIndex}
-                      onImageIndexChange={setCurrentImageIndex}
-                      onImageZoom={() => setIsImageZoomed(true)}
-                      nextImage={nextImage}
-                      prevImage={prevImage}
-                      goToImage={goToImage}
-                    />
                   </div>
                 </div>
 

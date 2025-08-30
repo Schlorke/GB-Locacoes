@@ -1,8 +1,7 @@
 import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth/next'
-import { NextRequest } from 'next/server'
 
-export async function requireAdmin(_request: NextRequest) {
+export async function requireAdmin() {
   const session = await getServerSession(authOptions)
 
   if (!session) {
@@ -17,7 +16,7 @@ export async function requireAdmin(_request: NextRequest) {
 }
 
 // Versão para rotas que permitem ADMIN e OPERATOR
-export async function requireAdminOrOperator(_request: NextRequest) {
+export async function requireAdminOrOperator() {
   const session = await getServerSession(authOptions)
 
   if (!session) {

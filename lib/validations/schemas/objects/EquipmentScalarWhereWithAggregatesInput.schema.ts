@@ -6,9 +6,9 @@ import { DecimalWithAggregatesFilterObjectSchema } from './DecimalWithAggregates
 import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
 import { BoolWithAggregatesFilterObjectSchema } from './BoolWithAggregatesFilter.schema';
 import { UuidWithAggregatesFilterObjectSchema } from './UuidWithAggregatesFilter.schema';
+import { JsonNullableWithAggregatesFilterObjectSchema } from './JsonNullableWithAggregatesFilter.schema';
 import { IntNullableWithAggregatesFilterObjectSchema } from './IntNullableWithAggregatesFilter.schema';
-import { DateTimeWithAggregatesFilterObjectSchema } from './DateTimeWithAggregatesFilter.schema';
-import { UuidNullableWithAggregatesFilterObjectSchema } from './UuidNullableWithAggregatesFilter.schema'
+import { DateTimeWithAggregatesFilterObjectSchema } from './DateTimeWithAggregatesFilter.schema'
 
 const makeSchema = (): z.ZodObject<any> => z.object({
   AND: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
@@ -21,6 +21,7 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   images: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   available: z.union([z.lazy(() => BoolWithAggregatesFilterObjectSchema), z.boolean()]).optional(),
   categoryId: z.union([z.lazy(() => UuidWithAggregatesFilterObjectSchema), z.string()]).optional(),
+  specifications: z.lazy(() => JsonNullableWithAggregatesFilterObjectSchema).optional(),
   maxStock: z.union([z.lazy(() => IntNullableWithAggregatesFilterObjectSchema), z.number().int()]).nullish(),
   dailyDiscount: z.union([z.lazy(() => IntNullableWithAggregatesFilterObjectSchema), z.number().int()]).nullish(),
   weeklyDiscount: z.union([z.lazy(() => IntNullableWithAggregatesFilterObjectSchema), z.number().int()]).nullish(),
@@ -28,8 +29,7 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   monthlyDiscount: z.union([z.lazy(() => IntNullableWithAggregatesFilterObjectSchema), z.number().int()]).nullish(),
   popularPeriod: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).nullish(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.date()]).optional(),
-  updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.date()]).optional(),
-  category_id: z.union([z.lazy(() => UuidNullableWithAggregatesFilterObjectSchema), z.string()]).nullish()
+  updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.date()]).optional()
 }).strict();
 export const EquipmentScalarWhereWithAggregatesInputObjectSchema: z.ZodType<Prisma.EquipmentScalarWhereWithAggregatesInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentScalarWhereWithAggregatesInput>;
 export const EquipmentScalarWhereWithAggregatesInputObjectZodSchema = makeSchema();

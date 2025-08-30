@@ -1,5 +1,5 @@
 import { getSecurityStats } from '@/lib/security-monitoring'
-import { NextResponse, type NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -222,12 +222,12 @@ export const revalidate = 0
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const { requireAdmin } = await import('@/middlewares/require-admin')
 
     // Verificar autenticação de admin
-    const authResult = await requireAdmin(request)
+    const authResult = await requireAdmin()
     if (!authResult.success) {
       return NextResponse.json(
         { error: authResult.error },

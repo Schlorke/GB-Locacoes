@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { EquipmentCreateimagesInputObjectSchema } from './EquipmentCreateimagesInput.schema'
+import { EquipmentCreateimagesInputObjectSchema } from './EquipmentCreateimagesInput.schema';
+import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema'
+
+import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
 const makeSchema = (): z.ZodObject<any> => z.object({
   id: z.string().optional(),
@@ -10,6 +13,7 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   images: z.union([z.lazy(() => EquipmentCreateimagesInputObjectSchema), z.string().array()]).optional(),
   available: z.boolean().optional(),
   categoryId: z.string(),
+  specifications: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   maxStock: z.number().int().nullish(),
   dailyDiscount: z.number().int().nullish(),
   weeklyDiscount: z.number().int().nullish(),
@@ -17,8 +21,7 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   monthlyDiscount: z.number().int().nullish(),
   popularPeriod: z.string().nullish(),
   createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  category_id: z.string().nullish()
+  updatedAt: z.date().optional()
 }).strict();
 export const EquipmentCreateManyInputObjectSchema: z.ZodType<Prisma.EquipmentCreateManyInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentCreateManyInput>;
 export const EquipmentCreateManyInputObjectZodSchema = makeSchema();
