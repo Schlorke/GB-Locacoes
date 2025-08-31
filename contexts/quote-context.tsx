@@ -23,20 +23,26 @@ export interface SelectedEquipmentForQuote {
   category?: {
     name: string
   }
-  imageUrl?: string
   images?: string[]
+  dailyDiscount?: number
+  weeklyDiscount?: number
+  biweeklyDiscount?: number
+  monthlyDiscount?: number
 }
 
 interface QuoteContextType {
   selectedEquipmentForQuote: SelectedEquipmentForQuote | null
-  setSelectedEquipmentForQuote: (equipment: SelectedEquipmentForQuote | null) => void
+  setSelectedEquipmentForQuote: (
+    equipment: SelectedEquipmentForQuote | null
+  ) => void
   clearSelection: () => void
 }
 
 const QuoteContext = createContext<QuoteContextType | undefined>(undefined)
 
 export function QuoteProvider({ children }: { children: ReactNode }) {
-  const [selectedEquipmentForQuote, setSelectedEquipmentForQuote] = useState<SelectedEquipmentForQuote | null>(null)
+  const [selectedEquipmentForQuote, setSelectedEquipmentForQuote] =
+    useState<SelectedEquipmentForQuote | null>(null)
 
   const clearSelection = () => {
     setSelectedEquipmentForQuote(null)

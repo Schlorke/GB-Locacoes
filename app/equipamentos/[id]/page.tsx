@@ -7,7 +7,7 @@ import { EquipmentImageGallery } from '@/components/equipment-image-gallery'
 import { ShareButton } from '@/components/share-button'
 import { SmartEquipmentPricing } from '@/components/smart-equipment-pricing'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 // Runtime-only Prisma import for server components
 async function getPrisma() {
@@ -15,15 +15,7 @@ async function getPrisma() {
   return prisma
 }
 import * as LucideIcons from 'lucide-react'
-import {
-  ArrowLeft,
-  CheckCircle,
-  MapPin,
-  Shield,
-  Star,
-  Tag,
-  Truck,
-} from 'lucide-react'
+import { ArrowLeft, CheckCircle, Shield, Star, Tag, Truck } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
@@ -233,11 +225,10 @@ export default async function EquipmentDetailPage(props: Props) {
                   biweeklyDiscount={equipment.biweeklyDiscount || 0}
                   monthlyDiscount={equipment.monthlyDiscount || 0}
                   popularPeriod={equipment.popularPeriod || 'weekly'}
-                  maxStock={equipment.maxStock}
-                  description={equipment.description}
+                  maxStock={equipment.maxStock || undefined}
+                  description={equipment.description || undefined}
                   category={equipment.category}
-                  imageUrl={equipment.imageUrl}
-                  images={equipment.images}
+                  images={equipment.images || undefined}
                 />
 
                 {/* Benefícios Rápidos */}

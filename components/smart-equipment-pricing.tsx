@@ -20,7 +20,6 @@ interface SmartEquipmentPricingProps {
   category?: {
     name: string
   }
-  imageUrl?: string
   images?: string[]
   className?: string
 }
@@ -38,17 +37,21 @@ export function SmartEquipmentPricing({
   maxStock,
   description,
   category,
-  imageUrl,
   images,
-  className
+  className,
 }: SmartEquipmentPricingProps) {
-  const [selectedPeriod, setSelectedPeriod] = useState<PricingOption | null>(null)
+  const [selectedPeriod, setSelectedPeriod] = useState<PricingOption | null>(
+    null
+  )
   const [finalPrice, setFinalPrice] = useState<number>(pricePerDay)
 
-  const handlePeriodChange = useCallback((option: PricingOption, totalPrice: number) => {
-    setSelectedPeriod(option)
-    setFinalPrice(totalPrice)
-  }, [])
+  const handlePeriodChange = useCallback(
+    (option: PricingOption, totalPrice: number) => {
+      setSelectedPeriod(option)
+      setFinalPrice(totalPrice)
+    },
+    []
+  )
 
   return (
     <div className={className}>
@@ -78,8 +81,11 @@ export function SmartEquipmentPricing({
             maxStock={maxStock}
             description={description}
             category={category}
-            imageUrl={imageUrl}
             images={images}
+            dailyDiscount={dailyDiscount}
+            weeklyDiscount={weeklyDiscount}
+            biweeklyDiscount={biweeklyDiscount}
+            monthlyDiscount={monthlyDiscount}
             className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 shadow-lg"
           />
         ) : (
@@ -94,29 +100,45 @@ export function SmartEquipmentPricing({
               period: 'dia',
               multiplier: 1,
               discount: dailyDiscount,
-              popular: popularPeriod === 'daily'
+              popular: popularPeriod === 'daily',
             }}
             finalPrice={pricePerDay}
             maxStock={maxStock}
             description={description}
             category={category}
-            imageUrl={imageUrl}
             images={images}
+            dailyDiscount={dailyDiscount}
+            weeklyDiscount={weeklyDiscount}
+            biweeklyDiscount={biweeklyDiscount}
+            monthlyDiscount={monthlyDiscount}
             className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 shadow-lg"
           />
         )}
 
         <div className="text-center space-y-1">
           <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
-            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            <svg
+              className="h-3 w-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+              />
             </svg>
             <span>Entrega em Porto Alegre e região</span>
           </div>
-          <div className="text-xs text-gray-500">
-            Resposta em até 2 horas
-          </div>
+          <div className="text-xs text-gray-500">Resposta em até 2 horas</div>
         </div>
       </div>
     </div>

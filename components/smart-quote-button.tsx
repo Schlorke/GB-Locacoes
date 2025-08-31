@@ -1,8 +1,12 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useQuote, type PricingOption, type SelectedEquipmentForQuote } from '@/contexts/quote-context'
-import Link from 'next/link'
+import {
+  useQuote,
+  type PricingOption,
+  type SelectedEquipmentForQuote,
+} from '@/contexts/quote-context'
+
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
 
@@ -18,8 +22,11 @@ interface SmartQuoteButtonProps {
   category?: {
     name: string
   }
-  imageUrl?: string
   images?: string[]
+  dailyDiscount?: number
+  weeklyDiscount?: number
+  biweeklyDiscount?: number
+  monthlyDiscount?: number
   className?: string
   size?: 'sm' | 'lg' | 'default'
   children?: React.ReactNode
@@ -35,11 +42,14 @@ export function SmartQuoteButton({
   maxStock,
   description,
   category,
-  imageUrl,
   images,
+  dailyDiscount,
+  weeklyDiscount,
+  biweeklyDiscount,
+  monthlyDiscount,
   className,
   size = 'lg',
-  children = 'Solicitar Orçamento Grátis'
+  children = 'Solicitar Orçamento Grátis',
 }: SmartQuoteButtonProps) {
   const { setSelectedEquipmentForQuote } = useQuote()
   const router = useRouter()
@@ -58,8 +68,11 @@ export function SmartQuoteButton({
       maxStock,
       description,
       category,
-      imageUrl,
-      images
+      images,
+      dailyDiscount,
+      weeklyDiscount,
+      biweeklyDiscount,
+      monthlyDiscount,
     }
 
     // Salvar no contexto global
@@ -74,28 +87,28 @@ export function SmartQuoteButton({
     selectedPeriod,
     finalPrice,
     isAvailable,
+    maxStock,
+    description,
+    category,
+    images,
+    dailyDiscount,
+    weeklyDiscount,
+    biweeklyDiscount,
+    monthlyDiscount,
     setSelectedEquipmentForQuote,
-    router
+    router,
   ])
 
   if (!isAvailable) {
     return (
-      <Button
-        size={size}
-        className={className}
-        disabled
-      >
+      <Button size={size} className={className} disabled>
         Equipamento Indisponível
       </Button>
     )
   }
 
   return (
-    <Button
-      size={size}
-      className={className}
-      onClick={handleQuoteRequest}
-    >
+    <Button size={size} className={className} onClick={handleQuoteRequest}>
       {children}
     </Button>
   )

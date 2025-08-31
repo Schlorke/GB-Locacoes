@@ -24,7 +24,6 @@ interface Equipment {
   name: string
   description: string
   pricePerDay: number
-  imageUrl?: string
   images?: string[]
   category: {
     name: string
@@ -45,6 +44,10 @@ interface SelectedEquipment extends Equipment {
     popular?: boolean
   }
   finalPrice?: number
+  dailyDiscount?: number
+  weeklyDiscount?: number
+  biweeklyDiscount?: number
+  monthlyDiscount?: number
 }
 
 interface QuoteFormData {
@@ -87,16 +90,21 @@ function QuotePage() {
         selectedPeriod: selectedEquipmentForQuote.selectedPeriod,
         finalPrice: selectedEquipmentForQuote.finalPrice,
         maxStock: selectedEquipmentForQuote.maxStock,
-        imageUrl: selectedEquipmentForQuote.imageUrl,
-        images: selectedEquipmentForQuote.images
+        images: selectedEquipmentForQuote.images,
+        dailyDiscount: selectedEquipmentForQuote.dailyDiscount,
+        weeklyDiscount: selectedEquipmentForQuote.weeklyDiscount,
+        biweeklyDiscount: selectedEquipmentForQuote.biweeklyDiscount,
+        monthlyDiscount: selectedEquipmentForQuote.monthlyDiscount,
       }
 
-      setSelectedEquipments(prev => {
-        const exists = prev.find(eq => eq.id === selectedEquipmentForQuote.equipmentId)
+      setSelectedEquipments((prev) => {
+        const exists = prev.find(
+          (eq) => eq.id === selectedEquipmentForQuote.equipmentId
+        )
         if (exists) {
           // Atualizar equipamento existente com nova configuração
-          return prev.map(eq => 
-            eq.id === selectedEquipmentForQuote.equipmentId 
+          return prev.map((eq) =>
+            eq.id === selectedEquipmentForQuote.equipmentId
               ? { ...eq, ...equipmentToAdd }
               : eq
           )
@@ -152,23 +160,72 @@ function QuotePage() {
     }
   }, [searchParams, fetchEquipmentAndAdd])
 
+  // Função para determinar o melhor desconto baseado no total de dias
+  const getBestDiscountForDays = (
+    equipment: SelectedEquipment,
+    totalDays: number
+  ) => {
+    if (!equipment.selectedPeriod)
+      return { discount: 0, period: 'daily', multiplier: 1, days: 1 }
+
+    // Definir thresholds para cada tipo de desconto
+    const discounts = [
+      {
+        days: 30,
+        discount: equipment.monthlyDiscount || 0,
+        period: 'monthly',
+        multiplier: 30,
+      },
+      {
+        days: 14,
+        discount: equipment.biweeklyDiscount || 0,
+        period: 'biweekly',
+        multiplier: 15,
+      },
+      {
+        days: 7,
+        discount: equipment.weeklyDiscount || 0,
+        period: 'weekly',
+        multiplier: 7,
+      },
+      {
+        days: 1,
+        discount: equipment.dailyDiscount || 0,
+        period: 'daily',
+        multiplier: 1,
+      },
+    ]
+
+    // Encontrar o melhor desconto baseado no total de dias
+    for (const tier of discounts) {
+      if (totalDays >= tier.days) {
+        return tier
+      }
+    }
+
+    return { discount: 0, period: 'daily', multiplier: 1, days: 1 } // fallback seguro
+  }
+
   // Função para recalcular preço final com base no período selecionado
-  const recalculateFinalPrice = (equipment: SelectedEquipment, newDays: number) => {
+  const recalculateFinalPrice = (
+    equipment: SelectedEquipment,
+    newDays: number
+  ) => {
     if (!equipment.selectedPeriod) {
       return equipment.pricePerDay * newDays
     }
 
-    // Calcular quantos períodos completos temos
-    const periods = Math.ceil(newDays / equipment.selectedPeriod.multiplier)
-    
-    // Preço base por período
-    const basePricePerPeriod = equipment.pricePerDay * equipment.selectedPeriod.multiplier
-    
-    // Aplicar desconto
-    const discountAmount = basePricePerPeriod * (equipment.selectedPeriod.discount / 100)
-    const finalPricePerPeriod = basePricePerPeriod - discountAmount
-    
-    return finalPricePerPeriod
+    // Obter o melhor desconto para o total de dias
+    const bestDiscount = getBestDiscountForDays(equipment, newDays)
+
+    // Calcular preço base total
+    const basePriceTotal = equipment.pricePerDay * newDays
+
+    // Aplicar o melhor desconto disponível
+    const discountAmount = basePriceTotal * (bestDiscount.discount / 100)
+    const finalPriceTotal = basePriceTotal - discountAmount
+
+    return finalPriceTotal
   }
 
   const updateQuantity = (id: string, quantity: number) => {
@@ -180,13 +237,13 @@ function QuotePage() {
           // Limit quantity to maxStock (default to 999 if not specified)
           const maxStock = eq.maxStock || 999
           const limitedQuantity = Math.min(quantity, maxStock)
-          
+
           // Recalcular finalPrice se necessário
           const updatedEquipment = { ...eq, quantity: limitedQuantity }
           if (eq.selectedPeriod) {
             updatedEquipment.finalPrice = recalculateFinalPrice(eq, eq.days)
           }
-          
+
           return updatedEquipment
         }
         return eq
@@ -201,12 +258,12 @@ function QuotePage() {
       return safePrev.map((eq) => {
         if (eq.id === id) {
           const updatedEquipment = { ...eq, days }
-          
+
           // Recalcular finalPrice com os novos dias
           if (eq.selectedPeriod) {
             updatedEquipment.finalPrice = recalculateFinalPrice(eq, days)
           }
-          
+
           return updatedEquipment
         }
         return eq
@@ -223,12 +280,12 @@ function QuotePage() {
 
   const calculateSubtotal = (equipment: SelectedEquipment) => {
     const quantity = Number(equipment.quantity) || 1
-    
+
     // Se temos finalPrice (com desconto aplicado), usar ele
     if (equipment.finalPrice && equipment.selectedPeriod) {
       return equipment.finalPrice * quantity
     }
-    
+
     // Fallback para cálculo tradicional
     const price = Number(equipment.pricePerDay) || 0
     const days = Number(equipment.days) || 1
@@ -287,9 +344,6 @@ function QuotePage() {
   }
 
   const getEquipmentImage = (equipment: Equipment) => {
-    if (equipment.imageUrl && equipment.imageUrl.trim() !== '') {
-      return equipment.imageUrl
-    }
     if (
       equipment.images &&
       equipment.images.length > 0 &&
@@ -415,41 +469,98 @@ function QuotePage() {
                                     <div className="flex flex-wrap gap-1 justify-center sm:justify-start mb-2">
                                       <Badge
                                         variant="secondary"
-                                        className="text-xs rounded-full"
+                                        className="text-sm rounded-full"
                                       >
                                         {equipment.category.name}
                                       </Badge>
-                                      {equipment.selectedPeriod && (
-                                        <Badge
-                                          variant="outline"
-                                          className="text-xs rounded-full border-orange-200 text-orange-700 bg-orange-50"
-                                        >
-                                          {equipment.selectedPeriod.label}
-                                          {equipment.selectedPeriod.discount > 0 && (
-                                            <span className="ml-1 font-semibold">
-                                              -{equipment.selectedPeriod.discount}%
-                                            </span>
-                                          )}
-                                        </Badge>
-                                      )}
+                                      {equipment.selectedPeriod &&
+                                        (() => {
+                                          const bestDiscount =
+                                            getBestDiscountForDays(
+                                              equipment,
+                                              equipment.days
+                                            )
+                                          const actualPeriodLabel =
+                                            bestDiscount.period === 'daily'
+                                              ? 'Diário'
+                                              : bestDiscount.period === 'weekly'
+                                                ? 'Semanal'
+                                                : bestDiscount.period ===
+                                                    'biweekly'
+                                                  ? 'Quinzenal'
+                                                  : bestDiscount.period ===
+                                                      'monthly'
+                                                    ? 'Mensal'
+                                                    : 'Diário'
+
+                                          return (
+                                            <Badge
+                                              variant="outline"
+                                              className="text-sm rounded-full border-orange-200 text-orange-700 bg-orange-50 font-medium"
+                                            >
+                                              {actualPeriodLabel}
+                                              {bestDiscount.discount > 0 && (
+                                                <span className="ml-1 font-semibold">
+                                                  -{bestDiscount.discount}%
+                                                </span>
+                                              )}
+                                            </Badge>
+                                          )
+                                        })()}
                                     </div>
                                     <div className="text-sm text-gray-600 mb-3">
                                       {equipment.finalPrice ? (
-                                        <div>
-                                          <span className="font-semibold text-green-600">
-                                            {formatCurrency(equipment.finalPrice)}
-                                          </span>
-                                          {equipment.selectedPeriod && equipment.selectedPeriod.discount > 0 && (
-                                            <span className="ml-2 text-xs text-gray-500 line-through">
-                                              {formatCurrency(
-                                                Number(equipment.pricePerDay) * equipment.selectedPeriod.multiplier
+                                        (() => {
+                                          const bestDiscount =
+                                            getBestDiscountForDays(
+                                              equipment,
+                                              equipment.days
+                                            )
+                                          const originalPrice =
+                                            Number(equipment.pricePerDay) *
+                                            equipment.days
+                                          const actualPeriodLabel =
+                                            bestDiscount.period === 'daily'
+                                              ? 'diário'
+                                              : bestDiscount.period === 'weekly'
+                                                ? 'semanal'
+                                                : bestDiscount.period ===
+                                                    'biweekly'
+                                                  ? 'quinzenal'
+                                                  : bestDiscount.period ===
+                                                      'monthly'
+                                                    ? 'mensal'
+                                                    : 'diário'
+
+                                          return (
+                                            <div>
+                                              {bestDiscount.discount > 0 && (
+                                                <div className="text-sm text-gray-500 line-through">
+                                                  {formatCurrency(
+                                                    originalPrice
+                                                  )}
+                                                </div>
                                               )}
-                                            </span>
-                                          )}
-                                          <span className="text-xs text-gray-500 ml-1">
-                                            /{equipment.selectedPeriod?.period || 'período'}
-                                          </span>
-                                        </div>
+                                              <div>
+                                                <span className="font-semibold text-green-600 text-base">
+                                                  {formatCurrency(
+                                                    equipment.finalPrice
+                                                  )}
+                                                </span>
+                                                <span className="text-xs text-gray-500 ml-1">
+                                                  total ({equipment.days} dias)
+                                                </span>
+                                              </div>
+                                              {bestDiscount.discount > 0 && (
+                                                <div className="text-xs text-green-600 font-medium">
+                                                  ✓ Desconto {actualPeriodLabel}{' '}
+                                                  aplicado: -
+                                                  {bestDiscount.discount}%
+                                                </div>
+                                              )}
+                                            </div>
+                                          )
+                                        })()
                                       ) : (
                                         <span>
                                           {formatCurrency(
@@ -517,26 +628,37 @@ function QuotePage() {
                                       {equipment.maxStock &&
                                         equipment.maxStock < 999 && (
                                           <span className="text-xs text-gray-500 break-words">
-                                            Max: {equipment.maxStock} disponível{equipment.maxStock > 1 ? 's' : ''}
+                                            Max: {equipment.maxStock} disponível
+                                            {equipment.maxStock > 1 ? 's' : ''}
                                           </span>
                                         )}
                                     </div>
 
                                     <div className="flex items-center gap-2">
                                       <Label className="text-sm font-medium">
-                                        {equipment.selectedPeriod ? 'Períodos:' : 'Dias:'}
+                                        {equipment.selectedPeriod
+                                          ? 'Períodos:'
+                                          : 'Dias:'}
                                       </Label>
                                       <Input
                                         type="number"
-                                        value={equipment.selectedPeriod ? 
-                                          Math.ceil(equipment.days / equipment.selectedPeriod.multiplier) : 
-                                          equipment.days
+                                        value={
+                                          equipment.selectedPeriod
+                                            ? Math.ceil(
+                                                equipment.days /
+                                                  equipment.selectedPeriod
+                                                    .multiplier
+                                              )
+                                            : equipment.days
                                         }
                                         onChange={(e) => {
-                                          const periods = Number.parseInt(e.target.value) || 1
-                                          const days = equipment.selectedPeriod ? 
-                                            periods * equipment.selectedPeriod.multiplier : 
-                                            periods
+                                          const periods =
+                                            Number.parseInt(e.target.value) || 1
+                                          const days = equipment.selectedPeriod
+                                            ? periods *
+                                              equipment.selectedPeriod
+                                                .multiplier
+                                            : periods
                                           updateDays(equipment.id, days)
                                         }}
                                         className="w-16 h-8 text-center font-medium"
@@ -713,41 +835,93 @@ function QuotePage() {
                               {equipment.name}
                             </p>
                             <div className="flex flex-wrap gap-1 mt-1">
-                              <span className="text-xs text-gray-600">
+                              <span className="text-sm text-gray-600 font-medium">
                                 Qtd: {equipment.quantity}x
                               </span>
                               {equipment.selectedPeriod ? (
                                 <>
-                                  <span className="text-xs text-gray-400">•</span>
-                                  <span className="text-xs text-orange-600 font-medium">
-                                    {Math.ceil(equipment.days / equipment.selectedPeriod.multiplier)} {equipment.selectedPeriod.label.toLowerCase()}
+                                  <span className="text-sm text-gray-400">
+                                    •
                                   </span>
-                                  <span className="text-xs text-gray-400">•</span>
-                                  <span className="text-xs text-gray-600">
+                                  <span className="text-sm text-orange-600 font-medium">
+                                    {Math.ceil(
+                                      equipment.days /
+                                        equipment.selectedPeriod.multiplier
+                                    )}{' '}
+                                    {equipment.selectedPeriod.label.toLowerCase()}
+                                  </span>
+                                  <span className="text-sm text-gray-400">
+                                    •
+                                  </span>
+                                  <span className="text-sm text-gray-600 font-medium">
                                     {equipment.days} dias
                                   </span>
-                                  {equipment.selectedPeriod.discount > 0 && (
-                                    <>
-                                      <span className="text-xs text-gray-400">•</span>
-                                      <span className="text-xs text-green-600 font-medium">
-                                        -{equipment.selectedPeriod.discount}% desc.
-                                      </span>
-                                    </>
-                                  )}
+                                  {(() => {
+                                    const bestDiscount = getBestDiscountForDays(
+                                      equipment,
+                                      equipment.days
+                                    )
+                                    const actualPeriodLabel =
+                                      bestDiscount.period === 'daily'
+                                        ? 'Diário'
+                                        : bestDiscount.period === 'weekly'
+                                          ? 'Semanal'
+                                          : bestDiscount.period === 'biweekly'
+                                            ? 'Quinzenal'
+                                            : bestDiscount.period === 'monthly'
+                                              ? 'Mensal'
+                                              : 'Diário'
+
+                                    return (
+                                      bestDiscount.discount > 0 && (
+                                        <>
+                                          <span className="text-sm text-green-600 font-semibold">
+                                            Desc. {actualPeriodLabel}: -
+                                            {bestDiscount.discount}%
+                                          </span>
+                                        </>
+                                      )
+                                    )
+                                  })()}
                                 </>
                               ) : (
                                 <>
-                                  <span className="text-xs text-gray-400">•</span>
-                                  <span className="text-xs text-gray-600">
+                                  <span className="text-sm text-gray-400">
+                                    •
+                                  </span>
+                                  <span className="text-sm text-gray-600 font-medium">
                                     {equipment.days} dias
                                   </span>
                                 </>
                               )}
                             </div>
                           </div>
-                          <span className="font-semibold text-gray-900 text-sm">
-                            {formatCurrency(calculateSubtotal(equipment))}
-                          </span>
+                          <div className="text-right">
+                            {(() => {
+                              const bestDiscount = getBestDiscountForDays(
+                                equipment,
+                                equipment.days
+                              )
+                              const originalPrice =
+                                Number(equipment.pricePerDay) *
+                                equipment.days *
+                                equipment.quantity
+                              const finalPrice = calculateSubtotal(equipment)
+
+                              return (
+                                <div>
+                                  {bestDiscount.discount > 0 && (
+                                    <div className="text-sm text-gray-500 line-through">
+                                      {formatCurrency(originalPrice)}
+                                    </div>
+                                  )}
+                                  <div className="font-semibold text-green-600 text-base">
+                                    {formatCurrency(finalPrice)}
+                                  </div>
+                                </div>
+                              )
+                            })()}
+                          </div>
                         </div>
                       </div>
                     ))}
