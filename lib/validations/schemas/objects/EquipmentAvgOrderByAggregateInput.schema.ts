@@ -8,7 +8,11 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   dailyDiscount: SortOrderSchema.optional(),
   weeklyDiscount: SortOrderSchema.optional(),
   biweeklyDiscount: SortOrderSchema.optional(),
-  monthlyDiscount: SortOrderSchema.optional()
+  monthlyDiscount: SortOrderSchema.optional(),
+  dailyDirectValue: SortOrderSchema.optional(),
+  weeklyDirectValue: SortOrderSchema.optional(),
+  biweeklyDirectValue: SortOrderSchema.optional(),
+  monthlyDirectValue: SortOrderSchema.optional()
 }).strict();
 export const EquipmentAvgOrderByAggregateInputObjectSchema: z.ZodType<Prisma.EquipmentAvgOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentAvgOrderByAggregateInput>;
 export const EquipmentAvgOrderByAggregateInputObjectZodSchema = makeSchema();

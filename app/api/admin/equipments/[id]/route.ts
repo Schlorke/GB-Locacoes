@@ -100,6 +100,16 @@ export async function PUT(
       biweeklyDiscount,
       monthlyDiscount,
       popularPeriod,
+      // Direct value pricing configurations
+      dailyDirectValue,
+      weeklyDirectValue,
+      biweeklyDirectValue,
+      monthlyDirectValue,
+      // Pricing method control (percentage or direct value)
+      dailyUseDirectValue,
+      weeklyUseDirectValue,
+      biweeklyUseDirectValue,
+      monthlyUseDirectValue,
     } = body
 
     // Validação básica dos dados obrigatórios
@@ -192,45 +202,38 @@ export async function PUT(
     // Rental period configurations
     if (dailyDiscount !== undefined) {
       const dailyDiscountNum = parseInt(String(dailyDiscount))
-      if (
-        !isNaN(dailyDiscountNum) &&
-        dailyDiscountNum >= 0 &&
-        dailyDiscountNum <= 100
-      ) {
-        updateData.dailyDiscount = dailyDiscountNum
+      if (!isNaN(dailyDiscountNum)) {
+        updateData.dailyDiscount = Math.min(Math.max(dailyDiscountNum, 0), 100)
       }
     }
 
     if (weeklyDiscount !== undefined) {
       const weeklyDiscountNum = parseInt(String(weeklyDiscount))
-      if (
-        !isNaN(weeklyDiscountNum) &&
-        weeklyDiscountNum >= 0 &&
-        weeklyDiscountNum <= 100
-      ) {
-        updateData.weeklyDiscount = weeklyDiscountNum
+      if (!isNaN(weeklyDiscountNum)) {
+        updateData.weeklyDiscount = Math.min(
+          Math.max(weeklyDiscountNum, 0),
+          100
+        )
       }
     }
 
     if (biweeklyDiscount !== undefined) {
       const biweeklyDiscountNum = parseInt(String(biweeklyDiscount))
-      if (
-        !isNaN(biweeklyDiscountNum) &&
-        biweeklyDiscountNum >= 0 &&
-        biweeklyDiscountNum <= 100
-      ) {
-        updateData.biweeklyDiscount = biweeklyDiscountNum
+      if (!isNaN(biweeklyDiscountNum)) {
+        updateData.biweeklyDiscount = Math.min(
+          Math.max(biweeklyDiscountNum, 0),
+          100
+        )
       }
     }
 
     if (monthlyDiscount !== undefined) {
       const monthlyDiscountNum = parseInt(String(monthlyDiscount))
-      if (
-        !isNaN(monthlyDiscountNum) &&
-        monthlyDiscountNum >= 0 &&
-        monthlyDiscountNum <= 100
-      ) {
-        updateData.monthlyDiscount = monthlyDiscountNum
+      if (!isNaN(monthlyDiscountNum)) {
+        updateData.monthlyDiscount = Math.min(
+          Math.max(monthlyDiscountNum, 0),
+          100
+        )
       }
     }
 
@@ -239,6 +242,52 @@ export async function PUT(
       if (validPeriods.includes(popularPeriod)) {
         updateData.popularPeriod = popularPeriod
       }
+    }
+
+    // Direct value pricing configurations
+    if (dailyDirectValue !== undefined) {
+      const dailyDirectValueNum = parseFloat(String(dailyDirectValue))
+      if (!isNaN(dailyDirectValueNum) && dailyDirectValueNum >= 0) {
+        updateData.dailyDirectValue = dailyDirectValueNum
+      }
+    }
+
+    if (weeklyDirectValue !== undefined) {
+      const weeklyDirectValueNum = parseFloat(String(weeklyDirectValue))
+      if (!isNaN(weeklyDirectValueNum) && weeklyDirectValueNum >= 0) {
+        updateData.weeklyDirectValue = weeklyDirectValueNum
+      }
+    }
+
+    if (biweeklyDirectValue !== undefined) {
+      const biweeklyDirectValueNum = parseFloat(String(biweeklyDirectValue))
+      if (!isNaN(biweeklyDirectValueNum) && biweeklyDirectValueNum >= 0) {
+        updateData.biweeklyDirectValue = biweeklyDirectValueNum
+      }
+    }
+
+    if (monthlyDirectValue !== undefined) {
+      const monthlyDirectValueNum = parseFloat(String(monthlyDirectValue))
+      if (!isNaN(monthlyDirectValueNum) && monthlyDirectValueNum >= 0) {
+        updateData.monthlyDirectValue = monthlyDirectValueNum
+      }
+    }
+
+    // Pricing method control (percentage or direct value)
+    if (dailyUseDirectValue !== undefined) {
+      updateData.dailyUseDirectValue = Boolean(dailyUseDirectValue)
+    }
+
+    if (weeklyUseDirectValue !== undefined) {
+      updateData.weeklyUseDirectValue = Boolean(weeklyUseDirectValue)
+    }
+
+    if (biweeklyUseDirectValue !== undefined) {
+      updateData.biweeklyUseDirectValue = Boolean(biweeklyUseDirectValue)
+    }
+
+    if (monthlyUseDirectValue !== undefined) {
+      updateData.monthlyUseDirectValue = Boolean(monthlyUseDirectValue)
     }
 
     console.log(

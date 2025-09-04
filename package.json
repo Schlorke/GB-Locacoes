@@ -214,7 +214,7 @@
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
-  "packageManager": "pnpm@10.14.0+sha256.297534e65d5842450539c1e8022c8831ab5e1fe2eb74664787a815519542d620",
+  "packageManager": "pnpm@10.15.0",
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=10.0.0"

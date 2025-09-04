@@ -6,6 +6,17 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-01-20] - Implementação Hover Sidebar Button
+
+### Changed 🔄
+
+- **Sidebar Button Hover**: Implementado ícone preto no hover do botão
+  collapse/expand da sidebar admin
+  - Estado normal: Ícone branco (`text-white`)
+  - Estado hover: Ícone preto (`hover:text-accent-foreground`)
+  - Comportamento: Contraste visual claro para indicar interação
+  - Resultado: Feedback visual intuitivo no hover do botão
+
 ## [2025-01-16] - ENHANCED ADMIN UX: INVENTORY & RENTAL PERIOD CONFIGURATION
 
 ### Fixed 🐛

@@ -8,6 +8,7 @@ import { BoolFilterObjectSchema } from './BoolFilter.schema';
 import { UuidFilterObjectSchema } from './UuidFilter.schema';
 import { JsonNullableFilterObjectSchema } from './JsonNullableFilter.schema';
 import { IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
+import { DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema';
 import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { CategoryScalarRelationFilterObjectSchema } from './CategoryScalarRelationFilter.schema';
 import { CategoryWhereInputObjectSchema } from './CategoryWhereInput.schema';
@@ -32,6 +33,14 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   biweeklyDiscount: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).nullish(),
   monthlyDiscount: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).nullish(),
   popularPeriod: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).nullish(),
+  dailyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.number()]).nullish(),
+  weeklyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.number()]).nullish(),
+  biweeklyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.number()]).nullish(),
+  monthlyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.number()]).nullish(),
+  dailyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
+  weeklyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
+  biweeklyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
+  monthlyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.date()]).optional(),
   category: z.union([z.lazy(() => CategoryScalarRelationFilterObjectSchema), z.lazy(() => CategoryWhereInputObjectSchema)]).optional(),

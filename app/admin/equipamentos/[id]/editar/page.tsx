@@ -61,6 +61,16 @@ interface FormData {
   biweeklyDiscount: number
   monthlyDiscount: number
   popularPeriod: string
+  // Direct value pricing configurations
+  dailyDirectValue: number
+  weeklyDirectValue: number
+  biweeklyDirectValue: number
+  monthlyDirectValue: number
+  // Pricing method control (percentage or direct value)
+  dailyUseDirectValue: boolean
+  weeklyUseDirectValue: boolean
+  biweeklyUseDirectValue: boolean
+  monthlyUseDirectValue: boolean
 }
 
 export default function EditarEquipamento() {
@@ -85,6 +95,16 @@ export default function EditarEquipamento() {
     biweeklyDiscount: 0,
     monthlyDiscount: 0,
     popularPeriod: 'weekly',
+    // Direct value pricing configurations
+    dailyDirectValue: 0,
+    weeklyDirectValue: 0,
+    biweeklyDirectValue: 0,
+    monthlyDirectValue: 0,
+    // Pricing method control (percentage or direct value)
+    dailyUseDirectValue: false,
+    weeklyUseDirectValue: false,
+    biweeklyUseDirectValue: false,
+    monthlyUseDirectValue: false,
   })
   const [specKey, setSpecKey] = useState('')
   const [specValue, setSpecValue] = useState('')
@@ -117,6 +137,16 @@ export default function EditarEquipamento() {
             biweeklyDiscount: equipment.biweeklyDiscount || 0,
             monthlyDiscount: equipment.monthlyDiscount || 0,
             popularPeriod: equipment.popularPeriod || 'weekly',
+            // Direct value pricing configurations
+            dailyDirectValue: equipment.dailyDirectValue || 0,
+            weeklyDirectValue: equipment.weeklyDirectValue || 0,
+            biweeklyDirectValue: equipment.biweeklyDirectValue || 0,
+            monthlyDirectValue: equipment.monthlyDirectValue || 0,
+            // Pricing method control (percentage or direct value)
+            dailyUseDirectValue: equipment.dailyUseDirectValue || false,
+            weeklyUseDirectValue: equipment.weeklyUseDirectValue || false,
+            biweeklyUseDirectValue: equipment.biweeklyUseDirectValue || false,
+            monthlyUseDirectValue: equipment.monthlyUseDirectValue || false,
           })
         }
       } catch (error) {
@@ -532,6 +562,14 @@ export default function EditarEquipamento() {
                                   biweeklyDiscount={formData.biweeklyDiscount}
                                   monthlyDiscount={formData.monthlyDiscount}
                                   popularPeriod={formData.popularPeriod}
+                                  dailyDirectValue={formData.dailyDirectValue}
+                                  weeklyDirectValue={formData.weeklyDirectValue}
+                                  biweeklyDirectValue={formData.biweeklyDirectValue}
+                                  monthlyDirectValue={formData.monthlyDirectValue}
+                                  dailyUseDirectValue={formData.dailyUseDirectValue}
+                                  weeklyUseDirectValue={formData.weeklyUseDirectValue}
+                                  biweeklyUseDirectValue={formData.biweeklyUseDirectValue}
+                                  monthlyUseDirectValue={formData.monthlyUseDirectValue}
                                 />
                               </div>
                             </div>
@@ -608,117 +646,370 @@ export default function EditarEquipamento() {
                               </div>
                             </div>
 
-                            {/* Segunda Linha: Desconto Diário e Semanal */}
-                            <div className="grid grid-cols-2 gap-4 items-start">
-                              <div>
-                                <Label
-                                  htmlFor="dailyDiscount"
-                                  className="text-sm font-medium text-gray-700"
-                                >
-                                  Desconto Diário (%)
-                                </Label>
-                                <Input
-                                  id="dailyDiscount"
-                                  type="number"
-                                  min="0"
-                                  max="100"
-                                  value={formData.dailyDiscount}
-                                  onChange={(e) =>
-                                    setFormData((prev) => ({
-                                      ...prev,
-                                      dailyDiscount:
-                                        parseInt(e.target.value) || 0,
-                                    }))
-                                  }
-                                  className="mt-2 border-gray-200 focus:border-blue-500"
-                                />
-                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
-                                  &nbsp;
-                                </p>
+                            {/* Configuração de Preços por Período */}
+                            <div className="space-y-6">
+                              {/* Diário */}
+                              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl" style={{
+                                boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
+                              }}>
+                                <div className="flex items-center justify-between mb-4">
+                                  <h4 className="text-sm font-semibold text-gray-900">Período Diário</h4>
+                                  <div className="flex items-center space-x-4">
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="dailyUsePercentage"
+                                        checked={!formData.dailyUseDirectValue}
+                                        onChange={(e) => {
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            dailyUseDirectValue: !e.target.checked,
+                                          }))
+                                        }}
+                                        className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                                        aria-label="Usar desconto percentual para período diário"
+                                      />
+                                      <Label htmlFor="dailyUsePercentage" className="text-xs text-gray-700">
+                                        Usar desconto percentual
+                                      </Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="dailyUseDirectValue"
+                                        checked={formData.dailyUseDirectValue}
+                                        onChange={(e) => {
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            dailyUseDirectValue: e.target.checked,
+                                          }))
+                                        }}
+                                        className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                                        aria-label="Usar valor direto para período diário"
+                                      />
+                                      <Label htmlFor="dailyUseDirectValue" className="text-xs text-gray-700">
+                                        Usar valor direto
+                                      </Label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="dailyDiscount" className="text-xs text-gray-600">
+                                      Desconto (%)
+                                    </Label>
+                                    <Input
+                                      id="dailyDiscount"
+                                      type="number"
+                                      min="0"
+                                      max="100"
+                                      value={formData.dailyDiscount}
+                                      onChange={(e) => {
+                                        const value = parseInt(e.target.value) || 0
+                                        const clampedValue = Math.min(Math.max(value, 0), 100)
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          dailyDiscount: clampedValue,
+                                        }))
+                                      }}
+                                      disabled={formData.dailyUseDirectValue}
+                                      className="mt-1 text-sm"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="dailyDirectValue" className="text-xs text-gray-600">
+                                      Valor Direto (R$)
+                                    </Label>
+                                    <Input
+                                      id="dailyDirectValue"
+                                      type="number"
+                                      min="0"
+                                      step="0.01"
+                                      value={formData.dailyDirectValue}
+                                      onChange={(e) =>
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          dailyDirectValue: parseFloat(e.target.value) || 0,
+                                        }))
+                                      }
+                                      disabled={!formData.dailyUseDirectValue}
+                                      className="mt-1 text-sm"
+                                    />
+                                  </div>
+                                </div>
                               </div>
 
-                              <div>
-                                <Label
-                                  htmlFor="weeklyDiscount"
-                                  className="text-sm font-medium text-gray-700"
-                                >
-                                  Desconto Semanal (%)
-                                </Label>
-                                <Input
-                                  id="weeklyDiscount"
-                                  type="number"
-                                  min="0"
-                                  max="100"
-                                  value={formData.weeklyDiscount}
-                                  onChange={(e) =>
-                                    setFormData((prev) => ({
-                                      ...prev,
-                                      weeklyDiscount:
-                                        parseInt(e.target.value) || 0,
-                                    }))
-                                  }
-                                  className="mt-2 border-gray-200 focus:border-blue-500"
-                                />
-                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
-                                  &nbsp;
-                                </p>
+                              {/* Semanal */}
+                              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl" style={{
+                                boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
+                              }}>
+                                <div className="flex items-center justify-between mb-4">
+                                  <h4 className="text-sm font-semibold text-gray-900">Período Semanal</h4>
+                                  <div className="flex items-center space-x-4">
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="weeklyUsePercentage"
+                                        checked={!formData.weeklyUseDirectValue}
+                                        onChange={(e) => {
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            weeklyUseDirectValue: !e.target.checked,
+                                          }))
+                                        }}
+                                        className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                                        aria-label="Usar desconto percentual para período semanal"
+                                      />
+                                      <Label htmlFor="weeklyUsePercentage" className="text-xs text-gray-700">
+                                        Usar desconto percentual
+                                      </Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="weeklyUseDirectValue"
+                                        checked={formData.weeklyUseDirectValue}
+                                        onChange={(e) => {
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            weeklyUseDirectValue: e.target.checked,
+                                          }))
+                                        }}
+                                        className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                                        aria-label="Usar valor direto para período semanal"
+                                      />
+                                      <Label htmlFor="weeklyUseDirectValue" className="text-xs text-gray-700">
+                                        Usar valor direto
+                                      </Label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="weeklyDiscount" className="text-xs text-gray-600">
+                                      Desconto (%)
+                                    </Label>
+                                    <Input
+                                      id="weeklyDiscount"
+                                      type="number"
+                                      min="0"
+                                      max="100"
+                                      value={formData.weeklyDiscount}
+                                      onChange={(e) => {
+                                        const value = parseInt(e.target.value) || 0
+                                        const clampedValue = Math.min(Math.max(value, 0), 100)
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          weeklyDiscount: clampedValue,
+                                        }))
+                                      }}
+                                      disabled={formData.weeklyUseDirectValue}
+                                      className="mt-1 text-sm"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="weeklyDirectValue" className="text-xs text-gray-600">
+                                      Valor Direto (R$)
+                                    </Label>
+                                    <Input
+                                      id="weeklyDirectValue"
+                                      type="number"
+                                      min="0"
+                                      step="0.01"
+                                      value={formData.weeklyDirectValue}
+                                      onChange={(e) =>
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          weeklyDirectValue: parseFloat(e.target.value) || 0,
+                                        }))
+                                      }
+                                      disabled={!formData.weeklyUseDirectValue}
+                                      className="mt-1 text-sm"
+                                    />
+                                  </div>
+                                </div>
                               </div>
-                            </div>
 
-                            {/* Terceira Linha: Desconto Quinzenal e Mensal */}
-                            <div className="grid grid-cols-2 gap-4 items-start">
-                              <div>
-                                <Label
-                                  htmlFor="biweeklyDiscount"
-                                  className="text-sm font-medium text-gray-700"
-                                >
-                                  Desconto Quinzenal (%)
-                                </Label>
-                                <Input
-                                  id="biweeklyDiscount"
-                                  type="number"
-                                  min="0"
-                                  max="100"
-                                  value={formData.biweeklyDiscount}
-                                  onChange={(e) =>
-                                    setFormData((prev) => ({
-                                      ...prev,
-                                      biweeklyDiscount:
-                                        parseInt(e.target.value) || 0,
-                                    }))
-                                  }
-                                  className="mt-2 border-gray-200 focus:border-blue-500"
-                                />
-                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
-                                  &nbsp;
-                                </p>
+                              {/* Quinzenal */}
+                              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl" style={{
+                                boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
+                              }}>
+                                <div className="flex items-center justify-between mb-4">
+                                  <h4 className="text-sm font-semibold text-gray-900">Período Quinzenal</h4>
+                                  <div className="flex items-center space-x-4">
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="biweeklyUsePercentage"
+                                        checked={!formData.biweeklyUseDirectValue}
+                                        onChange={(e) => {
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            biweeklyUseDirectValue: !e.target.checked,
+                                          }))
+                                        }}
+                                        className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                                        aria-label="Usar desconto percentual para período quinzenal"
+                                      />
+                                      <Label htmlFor="biweeklyUsePercentage" className="text-xs text-gray-700">
+                                        Usar desconto percentual
+                                      </Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="biweeklyUseDirectValue"
+                                        checked={formData.biweeklyUseDirectValue}
+                                        onChange={(e) => {
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            biweeklyUseDirectValue: e.target.checked,
+                                          }))
+                                        }}
+                                        className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                                        aria-label="Usar valor direto para período quinzenal"
+                                      />
+                                      <Label htmlFor="biweeklyUseDirectValue" className="text-xs text-gray-700">
+                                        Usar valor direto
+                                      </Label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="biweeklyDiscount" className="text-xs text-gray-600">
+                                      Desconto (%)
+                                    </Label>
+                                    <Input
+                                      id="biweeklyDiscount"
+                                      type="number"
+                                      min="0"
+                                      max="100"
+                                      value={formData.biweeklyDiscount}
+                                      onChange={(e) => {
+                                        const value = parseInt(e.target.value) || 0
+                                        const clampedValue = Math.min(Math.max(value, 0), 100)
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          biweeklyDiscount: clampedValue,
+                                        }))
+                                      }}
+                                      disabled={formData.biweeklyUseDirectValue}
+                                      className="mt-1 text-sm"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="biweeklyDirectValue" className="text-xs text-gray-600">
+                                      Valor Direto (R$)
+                                    </Label>
+                                    <Input
+                                      id="biweeklyDirectValue"
+                                      type="number"
+                                      min="0"
+                                      step="0.01"
+                                      value={formData.biweeklyDirectValue}
+                                      onChange={(e) =>
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          biweeklyDirectValue: parseFloat(e.target.value) || 0,
+                                        }))
+                                      }
+                                      disabled={!formData.biweeklyUseDirectValue}
+                                      className="mt-1 text-sm"
+                                    />
+                                  </div>
+                                </div>
                               </div>
 
-                              <div>
-                                <Label
-                                  htmlFor="monthlyDiscount"
-                                  className="text-sm font-medium text-gray-700"
-                                >
-                                  Desconto Mensal (%)
-                                </Label>
-                                <Input
-                                  id="monthlyDiscount"
-                                  type="number"
-                                  min="0"
-                                  max="100"
-                                  value={formData.monthlyDiscount}
-                                  onChange={(e) =>
-                                    setFormData((prev) => ({
-                                      ...prev,
-                                      monthlyDiscount:
-                                        parseInt(e.target.value) || 0,
-                                    }))
-                                  }
-                                  className="mt-2 border-gray-200 focus:border-blue-500"
-                                />
-                                <p className="text-xs text-gray-500 mt-1 min-h-[16px]">
-                                  &nbsp;
-                                </p>
+                              {/* Mensal */}
+                              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl" style={{
+                                boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
+                              }}>
+                                <div className="flex items-center justify-between mb-4">
+                                  <h4 className="text-sm font-semibold text-gray-900">Período Mensal</h4>
+                                  <div className="flex items-center space-x-4">
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="monthlyUsePercentage"
+                                        checked={!formData.monthlyUseDirectValue}
+                                        onChange={(e) => {
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            monthlyUseDirectValue: !e.target.checked,
+                                          }))
+                                        }}
+                                        className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                                        aria-label="Usar desconto percentual para período mensal"
+                                      />
+                                      <Label htmlFor="monthlyUsePercentage" className="text-xs text-gray-700">
+                                        Usar desconto percentual
+                                      </Label>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        type="checkbox"
+                                        id="monthlyUseDirectValue"
+                                        checked={formData.monthlyUseDirectValue}
+                                        onChange={(e) => {
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            monthlyUseDirectValue: e.target.checked,
+                                          }))
+                                        }}
+                                        className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
+                                        aria-label="Usar valor direto para período mensal"
+                                      />
+                                      <Label htmlFor="monthlyUseDirectValue" className="text-xs text-gray-700">
+                                        Usar valor direto
+                                      </Label>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <Label htmlFor="monthlyDiscount" className="text-xs text-gray-600">
+                                      Desconto (%)
+                                    </Label>
+                                    <Input
+                                      id="monthlyDiscount"
+                                      type="number"
+                                      min="0"
+                                      max="100"
+                                      value={formData.monthlyDiscount}
+                                      onChange={(e) => {
+                                        const value = parseInt(e.target.value) || 0
+                                        const clampedValue = Math.min(Math.max(value, 0), 100)
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          monthlyDiscount: clampedValue,
+                                        }))
+                                      }}
+                                      disabled={formData.monthlyUseDirectValue}
+                                      className="mt-1 text-sm"
+                                    />
+                                  </div>
+                                  <div>
+                                    <Label htmlFor="monthlyDirectValue" className="text-xs text-gray-600">
+                                      Valor Direto (R$)
+                                    </Label>
+                                    <Input
+                                      id="monthlyDirectValue"
+                                      type="number"
+                                      min="0"
+                                      step="0.01"
+                                      value={formData.monthlyDirectValue}
+                                      onChange={(e) =>
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          monthlyDirectValue: parseFloat(e.target.value) || 0,
+                                        }))
+                                      }
+                                      disabled={!formData.monthlyUseDirectValue}
+                                      className="mt-1 text-sm"
+                                    />
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>

@@ -517,6 +517,16 @@ export async function POST(request: NextRequest) {
       biweeklyDiscount,
       monthlyDiscount,
       popularPeriod,
+      // Direct value pricing configurations
+      dailyDirectValue,
+      weeklyDirectValue,
+      biweeklyDirectValue,
+      monthlyDirectValue,
+      // Pricing method control (percentage or direct value)
+      dailyUseDirectValue,
+      weeklyUseDirectValue,
+      biweeklyUseDirectValue,
+      monthlyUseDirectValue,
     } = body
 
     // Validações
@@ -581,14 +591,50 @@ export async function POST(request: NextRequest) {
         // Inventory management
         maxStock: typeof maxStock === 'number' ? maxStock : 1,
         // Rental period configurations
-        dailyDiscount: typeof dailyDiscount === 'number' ? dailyDiscount : 0,
-        weeklyDiscount: typeof weeklyDiscount === 'number' ? weeklyDiscount : 0,
+        dailyDiscount:
+          typeof dailyDiscount === 'number'
+            ? Math.min(Math.max(dailyDiscount, 0), 100)
+            : 0,
+        weeklyDiscount:
+          typeof weeklyDiscount === 'number'
+            ? Math.min(Math.max(weeklyDiscount, 0), 100)
+            : 0,
         biweeklyDiscount:
-          typeof biweeklyDiscount === 'number' ? biweeklyDiscount : 0,
+          typeof biweeklyDiscount === 'number'
+            ? Math.min(Math.max(biweeklyDiscount, 0), 100)
+            : 0,
         monthlyDiscount:
-          typeof monthlyDiscount === 'number' ? monthlyDiscount : 0,
+          typeof monthlyDiscount === 'number'
+            ? Math.min(Math.max(monthlyDiscount, 0), 100)
+            : 0,
         popularPeriod:
           typeof popularPeriod === 'string' ? popularPeriod : 'weekly',
+        // Direct value pricing configurations
+        dailyDirectValue:
+          typeof dailyDirectValue === 'number' ? dailyDirectValue : 0,
+        weeklyDirectValue:
+          typeof weeklyDirectValue === 'number' ? weeklyDirectValue : 0,
+        biweeklyDirectValue:
+          typeof biweeklyDirectValue === 'number' ? biweeklyDirectValue : 0,
+        monthlyDirectValue:
+          typeof monthlyDirectValue === 'number' ? monthlyDirectValue : 0,
+        // Pricing method control (percentage or direct value)
+        dailyUseDirectValue:
+          typeof dailyUseDirectValue === 'boolean'
+            ? dailyUseDirectValue
+            : false,
+        weeklyUseDirectValue:
+          typeof weeklyUseDirectValue === 'boolean'
+            ? weeklyUseDirectValue
+            : false,
+        biweeklyUseDirectValue:
+          typeof biweeklyUseDirectValue === 'boolean'
+            ? biweeklyUseDirectValue
+            : false,
+        monthlyUseDirectValue:
+          typeof monthlyUseDirectValue === 'boolean'
+            ? monthlyUseDirectValue
+            : false,
       },
       include: {
         category: true,

@@ -12,6 +12,8 @@ interface PricingOption {
   period: string
   multiplier: number
   discount: number
+  directValue?: number
+  useDirectValue?: boolean
   popular?: boolean
 }
 
@@ -25,6 +27,16 @@ interface EquipmentPricingSelectorProps {
   biweeklyDiscount?: number
   monthlyDiscount?: number
   popularPeriod?: string
+  // Direct value pricing configurations
+  dailyDirectValue?: number
+  weeklyDirectValue?: number
+  biweeklyDirectValue?: number
+  monthlyDirectValue?: number
+  // Pricing method control (percentage or direct value)
+  dailyUseDirectValue?: boolean
+  weeklyUseDirectValue?: boolean
+  biweeklyUseDirectValue?: boolean
+  monthlyUseDirectValue?: boolean
 }
 
 // Function to generate pricing options based on equipment configuration
@@ -33,7 +45,17 @@ const generatePricingOptions = (
   weeklyDiscount = 0,
   biweeklyDiscount = 0,
   monthlyDiscount = 0,
-  popularPeriod = 'weekly'
+  popularPeriod = 'weekly',
+  // Direct value pricing configurations
+  dailyDirectValue = 0,
+  weeklyDirectValue = 0,
+  biweeklyDirectValue = 0,
+  monthlyDirectValue = 0,
+  // Pricing method control (percentage or direct value)
+  dailyUseDirectValue = false,
+  weeklyUseDirectValue = false,
+  biweeklyUseDirectValue = false,
+  monthlyUseDirectValue = false
 ): PricingOption[] => [
   {
     id: 'daily',
@@ -41,6 +63,8 @@ const generatePricingOptions = (
     period: 'dia',
     multiplier: 1,
     discount: dailyDiscount,
+    directValue: dailyDirectValue,
+    useDirectValue: dailyUseDirectValue,
     popular: popularPeriod === 'daily',
   },
   {
@@ -49,6 +73,8 @@ const generatePricingOptions = (
     period: '7 dias',
     multiplier: 7,
     discount: weeklyDiscount,
+    directValue: weeklyDirectValue,
+    useDirectValue: weeklyUseDirectValue,
     popular: popularPeriod === 'weekly',
   },
   {
@@ -57,6 +83,8 @@ const generatePricingOptions = (
     period: '15 dias',
     multiplier: 15,
     discount: biweeklyDiscount,
+    directValue: biweeklyDirectValue,
+    useDirectValue: biweeklyUseDirectValue,
     popular: popularPeriod === 'biweekly',
   },
   {
@@ -65,6 +93,8 @@ const generatePricingOptions = (
     period: '30 dias',
     multiplier: 30,
     discount: monthlyDiscount,
+    directValue: monthlyDirectValue,
+    useDirectValue: monthlyUseDirectValue,
     popular: popularPeriod === 'monthly',
   },
 ]
@@ -85,6 +115,16 @@ export function EquipmentPricingSelector({
   biweeklyDiscount = 15,
   monthlyDiscount = 20,
   popularPeriod = 'weekly',
+  // Direct value pricing configurations
+  dailyDirectValue = 0,
+  weeklyDirectValue = 0,
+  biweeklyDirectValue = 0,
+  monthlyDirectValue = 0,
+  // Pricing method control (percentage or direct value)
+  dailyUseDirectValue = false,
+  weeklyUseDirectValue = false,
+  biweeklyUseDirectValue = false,
+  monthlyUseDirectValue = false,
 }: EquipmentPricingSelectorProps) {
   // Usar useMemo para evitar recriações desnecessárias
   const pricingOptions = useMemo(
@@ -94,7 +134,15 @@ export function EquipmentPricingSelector({
         weeklyDiscount,
         biweeklyDiscount,
         monthlyDiscount,
-        popularPeriod
+        popularPeriod,
+        dailyDirectValue,
+        weeklyDirectValue,
+        biweeklyDirectValue,
+        monthlyDirectValue,
+        dailyUseDirectValue,
+        weeklyUseDirectValue,
+        biweeklyUseDirectValue,
+        monthlyUseDirectValue
       ),
     [
       dailyDiscount,
@@ -102,6 +150,14 @@ export function EquipmentPricingSelector({
       biweeklyDiscount,
       monthlyDiscount,
       popularPeriod,
+      dailyDirectValue,
+      weeklyDirectValue,
+      biweeklyDirectValue,
+      monthlyDirectValue,
+      dailyUseDirectValue,
+      weeklyUseDirectValue,
+      biweeklyUseDirectValue,
+      monthlyUseDirectValue,
     ]
   )
 
@@ -148,6 +204,12 @@ export function EquipmentPricingSelector({
   }, [pricePerDay, selectedPeriod])
 
   const calculatePrice = (option: PricingOption) => {
+    // Se usar valor direto, retornar o valor direto (mesmo que seja 0)
+    if (option.useDirectValue && option.directValue !== undefined && option.directValue !== null) {
+      return option.directValue
+    }
+    
+    // Caso contrário, calcular com desconto percentual
     const basePrice = pricePerDay * option.multiplier
     const discountAmount = basePrice * (option.discount / 100)
     return basePrice - discountAmount
@@ -170,6 +232,10 @@ export function EquipmentPricingSelector({
 
   const selectedPrice = calculatePrice(selectedPeriod)
   const originalPrice = pricePerDay * selectedPeriod.multiplier
+  const isUsingDirectValue =
+    selectedPeriod.useDirectValue &&
+    selectedPeriod.directValue !== undefined &&
+    selectedPeriod.directValue !== null
 
   return (
     <div className={cn('space-y-3', className)}>
@@ -195,11 +261,25 @@ export function EquipmentPricingSelector({
             >
               <div className="text-center">
                 <div className="font-semibold">{option.label}</div>
-                {option.discount > 0 && (
+                {option.useDirectValue &&
+                option.directValue !== undefined &&
+                option.directValue !== null &&
+                option.directValue > 0 ? (
+                  <div className="text-xs opacity-90 mt-1">
+                    {formatCurrency(option.directValue)}
+                  </div>
+                ) : option.useDirectValue &&
+                  option.directValue !== undefined &&
+                  option.directValue !== null &&
+                  option.directValue === 0 ? (
+                  <div className="text-xs opacity-90 mt-1">
+                    R$ 0,00
+                  </div>
+                ) : option.discount > 0 ? (
                   <div className="text-xs opacity-90 mt-1">
                     {option.discount}% OFF
                   </div>
-                )}
+                ) : null}
               </div>
               {option.popular && (
                 <Badge
@@ -221,7 +301,7 @@ export function EquipmentPricingSelector({
             <Clock className="h-3 w-3" />
             <span>Preço por {selectedPeriod.period}</span>
           </div>
-          {selectedPeriod.discount > 0 && (
+          {!isUsingDirectValue && selectedPeriod.discount > 0 && (
             <div className="flex items-center gap-1 text-green-600">
               <TrendingDown className="h-3 w-3" />
               <span className="text-xs font-medium">
@@ -232,7 +312,7 @@ export function EquipmentPricingSelector({
         </div>
 
         <div className="space-y-1">
-          {selectedPeriod.discount > 0 && (
+          {!isUsingDirectValue && selectedPeriod.discount > 0 && (
             <div className="text-xs text-gray-500 line-through">
               De: {formatCurrency(originalPrice)}
             </div>
@@ -240,7 +320,7 @@ export function EquipmentPricingSelector({
           <div className="text-2xl font-bold text-orange-600">
             {formatCurrency(selectedPrice)}
           </div>
-          {selectedPeriod.multiplier > 1 && (
+          {!isUsingDirectValue && selectedPeriod.multiplier > 1 && (
             <div className="text-xs text-gray-600">
               {formatCurrency(selectedPrice / selectedPeriod.multiplier)} por
               dia
@@ -254,8 +334,8 @@ export function EquipmentPricingSelector({
         </div>
       </div>
 
-      {/* Informações Adicionais */}
-      {selectedPeriod.discount > 0 && (
+      {/* Informações Adicionais - apenas para desconto percentual */}
+      {!isUsingDirectValue && selectedPeriod.discount > 0 && (
         <div className="text-xs bg-green-50 p-2.5 rounded-md border border-green-200">
           <div className="flex items-center gap-1.5 text-green-700 font-medium">
             <TrendingDown className="h-3 w-3" />

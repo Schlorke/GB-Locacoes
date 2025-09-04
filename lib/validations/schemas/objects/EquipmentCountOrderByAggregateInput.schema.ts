@@ -17,6 +17,14 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   biweeklyDiscount: SortOrderSchema.optional(),
   monthlyDiscount: SortOrderSchema.optional(),
   popularPeriod: SortOrderSchema.optional(),
+  dailyDirectValue: SortOrderSchema.optional(),
+  weeklyDirectValue: SortOrderSchema.optional(),
+  biweeklyDirectValue: SortOrderSchema.optional(),
+  monthlyDirectValue: SortOrderSchema.optional(),
+  dailyUseDirectValue: SortOrderSchema.optional(),
+  weeklyUseDirectValue: SortOrderSchema.optional(),
+  biweeklyUseDirectValue: SortOrderSchema.optional(),
+  monthlyUseDirectValue: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional()
 }).strict();

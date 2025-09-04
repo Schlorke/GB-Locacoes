@@ -174,7 +174,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           size="icon"
           onClick={toggleSidebarCollapse}
-          className="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-600 hover:from-slate-700 hover:via-slate-600 hover:to-slate-500 text-white rounded-full h-10 w-10 border-2 border-slate-500/30 shadow-xl transition-all duration-300 hover:scale-110 hover:shadow-2xl backdrop-blur-sm hover:border-slate-400/50 z-[9999]"
+          className="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-600 hover:from-slate-700 hover:via-slate-600 hover:to-slate-500 text-white hover:text-accent-foreground rounded-full h-10 w-10 border-2 border-slate-500/30 shadow-xl transition-all duration-300 hover:scale-110 hover:shadow-2xl backdrop-blur-sm hover:border-slate-400/50 z-[9999]"
           title={isSidebarCollapsed ? 'Expandir sidebar' : 'Recolher sidebar'}
         >
           {isSidebarCollapsed ? (
