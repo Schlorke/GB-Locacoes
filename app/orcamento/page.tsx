@@ -30,6 +30,22 @@ interface Equipment {
   }
   isAvailable: boolean
   maxStock?: number
+  // Campos de desconto
+  dailyDiscount?: number
+  weeklyDiscount?: number
+  biweeklyDiscount?: number
+  monthlyDiscount?: number
+  // Campos de valor direto
+  dailyDirectValue?: number
+  weeklyDirectValue?: number
+  biweeklyDirectValue?: number
+  monthlyDirectValue?: number
+  // Campos de controle de método de preço
+  dailyUseDirectValue?: boolean
+  weeklyUseDirectValue?: boolean
+  biweeklyUseDirectValue?: boolean
+  monthlyUseDirectValue?: boolean
+  popularPeriod?: string
 }
 
 interface SelectedEquipment extends Equipment {
@@ -142,6 +158,23 @@ function QuotePage() {
               pricePerDay: price,
               quantity: 1,
               days: 1,
+              // Incluir campos de desconto e valor direto
+              dailyDiscount: equipment.dailyDiscount || 0,
+              weeklyDiscount: equipment.weeklyDiscount || 0,
+              biweeklyDiscount: equipment.biweeklyDiscount || 0,
+              monthlyDiscount: equipment.monthlyDiscount || 0,
+              // Incluir campos de valor direto
+              dailyDirectValue: equipment.dailyDirectValue || 0,
+              weeklyDirectValue: equipment.weeklyDirectValue || 0,
+              biweeklyDirectValue: equipment.biweeklyDirectValue || 0,
+              monthlyDirectValue: equipment.monthlyDirectValue || 0,
+              // Incluir campos de controle de método de preço
+              dailyUseDirectValue: equipment.dailyUseDirectValue || false,
+              weeklyUseDirectValue: equipment.weeklyUseDirectValue || false,
+              biweeklyUseDirectValue: equipment.biweeklyUseDirectValue || false,
+              monthlyUseDirectValue: equipment.monthlyUseDirectValue || false,
+              popularPeriod: equipment.popularPeriod || 'weekly',
+              maxStock: equipment.maxStock || 1,
             }
             return [...safePrev, equipmentToAdd]
           })
@@ -160,72 +193,105 @@ function QuotePage() {
     }
   }, [searchParams, fetchEquipmentAndAdd])
 
-  // Função para determinar o melhor desconto baseado no total de dias
-  const getBestDiscountForDays = (
+  // Função inteligente para determinar preço baseado nas configurações do admin
+  const getIntelligentPricing = (
     equipment: SelectedEquipment,
     totalDays: number
   ) => {
-    if (!equipment.selectedPeriod)
-      return { discount: 0, period: 'daily', multiplier: 1, days: 1 }
-
-    // Definir thresholds para cada tipo de desconto
-    const discounts = [
+    // Definir configurações de período em ordem de prioridade (maior para menor)
+    const periodConfigs = [
       {
-        days: 30,
-        discount: equipment.monthlyDiscount || 0,
+        threshold: 30,
         period: 'monthly',
         multiplier: 30,
+        discount: equipment.monthlyDiscount || 0,
+        directValue: equipment.monthlyDirectValue || 0,
+        useDirectValue: equipment.monthlyUseDirectValue || false,
       },
       {
-        days: 14,
-        discount: equipment.biweeklyDiscount || 0,
+        threshold: 15,
         period: 'biweekly',
         multiplier: 15,
+        discount: equipment.biweeklyDiscount || 0,
+        directValue: equipment.biweeklyDirectValue || 0,
+        useDirectValue: equipment.biweeklyUseDirectValue || false,
       },
       {
-        days: 7,
-        discount: equipment.weeklyDiscount || 0,
+        threshold: 7,
         period: 'weekly',
         multiplier: 7,
+        discount: equipment.weeklyDiscount || 0,
+        directValue: equipment.weeklyDirectValue || 0,
+        useDirectValue: equipment.weeklyUseDirectValue || false,
       },
       {
-        days: 1,
-        discount: equipment.dailyDiscount || 0,
+        threshold: 1,
         period: 'daily',
         multiplier: 1,
+        discount: equipment.dailyDiscount || 0,
+        directValue: equipment.dailyDirectValue || 0,
+        useDirectValue: equipment.dailyUseDirectValue || false,
       },
     ]
 
-    // Encontrar o melhor desconto baseado no total de dias
-    for (const tier of discounts) {
-      if (totalDays >= tier.days) {
-        return tier
-      }
-    }
+    // Encontrar a configuração apropriada baseada nos dias
+    const selectedConfig =
+      periodConfigs.find((config) => totalDays >= config.threshold) ||
+      periodConfigs[3] // fallback para daily
 
-    return { discount: 0, period: 'daily', multiplier: 1, days: 1 } // fallback seguro
+    return {
+      ...selectedConfig,
+      days: selectedConfig.threshold,
+    }
   }
 
-  // Função para recalcular preço final com base no período selecionado
+  // Função inteligente para calcular preço final
+  const calculateIntelligentPrice = (
+    equipment: SelectedEquipment,
+    totalDays: number
+  ) => {
+    const pricingConfig = getIntelligentPricing(equipment, totalDays)
+
+    // Se usar valor direto, calcular de forma proporcional
+    if (
+      pricingConfig.useDirectValue &&
+      pricingConfig.directValue !== undefined &&
+      pricingConfig.directValue !== null
+    ) {
+      if (pricingConfig.directValue === 0) {
+        // Se valor direto é 0, usar esse valor (equipamento gratuito no período)
+        return 0
+      }
+
+      // Calcular quantos períodos completos + dias restantes
+      const completePeriods = Math.floor(totalDays / pricingConfig.multiplier)
+      const remainingDays = totalDays % pricingConfig.multiplier
+
+      let totalPrice = completePeriods * pricingConfig.directValue
+
+      // Para dias restantes, usar valor proporcional do período
+      if (remainingDays > 0) {
+        const proportionalValue =
+          (pricingConfig.directValue / pricingConfig.multiplier) * remainingDays
+        totalPrice += proportionalValue
+      }
+
+      return totalPrice
+    }
+
+    // Se usar desconto percentual, calcular com desconto
+    const basePrice = equipment.pricePerDay * totalDays
+    const discountAmount = basePrice * (pricingConfig.discount / 100)
+    return basePrice - discountAmount
+  }
+
+  // Função para recalcular preço final usando lógica inteligente
   const recalculateFinalPrice = (
     equipment: SelectedEquipment,
     newDays: number
   ) => {
-    if (!equipment.selectedPeriod) {
-      return equipment.pricePerDay * newDays
-    }
-
-    // Obter o melhor desconto para o total de dias
-    const bestDiscount = getBestDiscountForDays(equipment, newDays)
-
-    // Calcular preço base total
-    const basePriceTotal = equipment.pricePerDay * newDays
-
-    // Aplicar o melhor desconto disponível
-    const discountAmount = basePriceTotal * (bestDiscount.discount / 100)
-    const finalPriceTotal = basePriceTotal - discountAmount
-
-    return finalPriceTotal
+    // Usar a nova função inteligente de cálculo
+    return calculateIntelligentPrice(equipment, newDays)
   }
 
   const updateQuantity = (id: string, quantity: number) => {
@@ -280,16 +346,12 @@ function QuotePage() {
 
   const calculateSubtotal = (equipment: SelectedEquipment) => {
     const quantity = Number(equipment.quantity) || 1
-
-    // Se temos finalPrice (com desconto aplicado), usar ele
-    if (equipment.finalPrice && equipment.selectedPeriod) {
-      return equipment.finalPrice * quantity
-    }
-
-    // Fallback para cálculo tradicional
-    const price = Number(equipment.pricePerDay) || 0
     const days = Number(equipment.days) || 1
-    return price * quantity * days
+
+    // Usar a nova lógica inteligente para calcular o preço
+    const intelligentPrice = calculateIntelligentPrice(equipment, days)
+
+    return intelligentPrice * quantity
   }
 
   const calculateTotal = () => {
@@ -473,46 +535,49 @@ function QuotePage() {
                                       >
                                         {equipment.category.name}
                                       </Badge>
-                                      {equipment.selectedPeriod &&
-                                        (() => {
-                                          const bestDiscount =
-                                            getBestDiscountForDays(
-                                              equipment,
-                                              equipment.days
-                                            )
-                                          const actualPeriodLabel =
-                                            bestDiscount.period === 'daily'
-                                              ? 'Diário'
-                                              : bestDiscount.period === 'weekly'
-                                                ? 'Semanal'
-                                                : bestDiscount.period ===
-                                                    'biweekly'
-                                                  ? 'Quinzenal'
-                                                  : bestDiscount.period ===
-                                                      'monthly'
-                                                    ? 'Mensal'
-                                                    : 'Diário'
-
-                                          return (
-                                            <Badge
-                                              variant="outline"
-                                              className="text-sm rounded-full border-orange-200 text-orange-700 bg-orange-50 font-medium"
-                                            >
-                                              {actualPeriodLabel}
-                                              {bestDiscount.discount > 0 && (
-                                                <span className="ml-1 font-semibold">
-                                                  -{bestDiscount.discount}%
-                                                </span>
-                                              )}
-                                            </Badge>
+                                      {(() => {
+                                        const pricingConfig =
+                                          getIntelligentPricing(
+                                            equipment,
+                                            equipment.days
                                           )
-                                        })()}
+                                        const actualPeriodLabel =
+                                          pricingConfig.period === 'daily'
+                                            ? 'Diário'
+                                            : pricingConfig.period === 'weekly'
+                                              ? 'Semanal'
+                                              : pricingConfig.period ===
+                                                  'biweekly'
+                                                ? 'Quinzenal'
+                                                : pricingConfig.period ===
+                                                    'monthly'
+                                                  ? 'Mensal'
+                                                  : 'Diário'
+
+                                        return (
+                                          <Badge
+                                            variant="outline"
+                                            className="text-sm rounded-full border-orange-200 text-orange-700 bg-orange-50 font-medium"
+                                          >
+                                            {actualPeriodLabel}
+                                            {pricingConfig.useDirectValue ? (
+                                              <span className="ml-1 font-semibold">
+                                                Valor Fixo
+                                              </span>
+                                            ) : pricingConfig.discount > 0 ? (
+                                              <span className="ml-1 font-semibold">
+                                                -{pricingConfig.discount}%
+                                              </span>
+                                            ) : null}
+                                          </Badge>
+                                        )
+                                      })()}
                                     </div>
                                     <div className="text-sm text-gray-600 mb-3">
                                       {equipment.finalPrice ? (
                                         (() => {
-                                          const bestDiscount =
-                                            getBestDiscountForDays(
+                                          const pricingConfig =
+                                            getIntelligentPricing(
                                               equipment,
                                               equipment.days
                                             )
@@ -520,21 +585,22 @@ function QuotePage() {
                                             Number(equipment.pricePerDay) *
                                             equipment.days
                                           const actualPeriodLabel =
-                                            bestDiscount.period === 'daily'
+                                            pricingConfig.period === 'daily'
                                               ? 'diário'
-                                              : bestDiscount.period === 'weekly'
+                                              : pricingConfig.period ===
+                                                  'weekly'
                                                 ? 'semanal'
-                                                : bestDiscount.period ===
+                                                : pricingConfig.period ===
                                                     'biweekly'
                                                   ? 'quinzenal'
-                                                  : bestDiscount.period ===
+                                                  : pricingConfig.period ===
                                                       'monthly'
                                                     ? 'mensal'
                                                     : 'diário'
 
                                           return (
                                             <div>
-                                              {bestDiscount.discount > 0 && (
+                                              {pricingConfig.discount > 0 && (
                                                 <div className="text-sm text-gray-500 line-through">
                                                   {formatCurrency(
                                                     originalPrice
@@ -551,11 +617,11 @@ function QuotePage() {
                                                   total ({equipment.days} dias)
                                                 </span>
                                               </div>
-                                              {bestDiscount.discount > 0 && (
+                                              {pricingConfig.discount > 0 && (
                                                 <div className="text-xs text-green-600 font-medium">
                                                   ✓ Desconto {actualPeriodLabel}{' '}
                                                   aplicado: -
-                                                  {bestDiscount.discount}%
+                                                  {pricingConfig.discount}%
                                                 </div>
                                               )}
                                             </div>
@@ -857,27 +923,27 @@ function QuotePage() {
                                     {equipment.days} dias
                                   </span>
                                   {(() => {
-                                    const bestDiscount = getBestDiscountForDays(
+                                    const pricingConfig = getIntelligentPricing(
                                       equipment,
                                       equipment.days
                                     )
                                     const actualPeriodLabel =
-                                      bestDiscount.period === 'daily'
+                                      pricingConfig.period === 'daily'
                                         ? 'Diário'
-                                        : bestDiscount.period === 'weekly'
+                                        : pricingConfig.period === 'weekly'
                                           ? 'Semanal'
-                                          : bestDiscount.period === 'biweekly'
+                                          : pricingConfig.period === 'biweekly'
                                             ? 'Quinzenal'
-                                            : bestDiscount.period === 'monthly'
+                                            : pricingConfig.period === 'monthly'
                                               ? 'Mensal'
                                               : 'Diário'
 
                                     return (
-                                      bestDiscount.discount > 0 && (
+                                      pricingConfig.discount > 0 && (
                                         <>
                                           <span className="text-sm text-green-600 font-semibold">
                                             Desc. {actualPeriodLabel}: -
-                                            {bestDiscount.discount}%
+                                            {pricingConfig.discount}%
                                           </span>
                                         </>
                                       )
@@ -898,7 +964,7 @@ function QuotePage() {
                           </div>
                           <div className="text-right">
                             {(() => {
-                              const bestDiscount = getBestDiscountForDays(
+                              const pricingConfig = getIntelligentPricing(
                                 equipment,
                                 equipment.days
                               )
@@ -910,7 +976,7 @@ function QuotePage() {
 
                               return (
                                 <div>
-                                  {bestDiscount.discount > 0 && (
+                                  {pricingConfig.discount > 0 && (
                                     <div className="text-sm text-gray-500 line-through">
                                       {formatCurrency(originalPrice)}
                                     </div>

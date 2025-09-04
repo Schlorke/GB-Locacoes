@@ -110,6 +110,24 @@ type EquipmentWithCategory = {
   categoryId: string
   createdAt: Date
   updatedAt: Date
+  // Inventory management
+  maxStock: number | null
+  // Rental period configurations
+  dailyDiscount: number | null
+  weeklyDiscount: number | null
+  biweeklyDiscount: number | null
+  monthlyDiscount: number | null
+  popularPeriod: string | null
+  // Direct value pricing configurations
+  dailyDirectValue: { toString(): string } | null
+  weeklyDirectValue: { toString(): string } | null
+  biweeklyDirectValue: { toString(): string } | null
+  monthlyDirectValue: { toString(): string } | null
+  // Pricing method control
+  dailyUseDirectValue: boolean
+  weeklyUseDirectValue: boolean
+  biweeklyUseDirectValue: boolean
+  monthlyUseDirectValue: boolean
   category: {
     id: string
     name: string
@@ -278,6 +296,23 @@ export async function GET() {
             fontColor: equipment.category.fontColor,
           },
           reviews: [],
+          // Campos de desconto e configuração de períodos
+          dailyDiscount: equipment.dailyDiscount || 0,
+          weeklyDiscount: equipment.weeklyDiscount || 0,
+          biweeklyDiscount: equipment.biweeklyDiscount || 0,
+          monthlyDiscount: equipment.monthlyDiscount || 0,
+          popularPeriod: equipment.popularPeriod || 'weekly',
+          maxStock: equipment.maxStock || 1,
+          // Campos de valor direto
+          dailyDirectValue: Number(equipment.dailyDirectValue) || 0,
+          weeklyDirectValue: Number(equipment.weeklyDirectValue) || 0,
+          biweeklyDirectValue: Number(equipment.biweeklyDirectValue) || 0,
+          monthlyDirectValue: Number(equipment.monthlyDirectValue) || 0,
+          // Campos de controle de método de preço
+          dailyUseDirectValue: equipment.dailyUseDirectValue || false,
+          weeklyUseDirectValue: equipment.weeklyUseDirectValue || false,
+          biweeklyUseDirectValue: equipment.biweeklyUseDirectValue || false,
+          monthlyUseDirectValue: equipment.monthlyUseDirectValue || false,
         }
 
         return formattedEquipment

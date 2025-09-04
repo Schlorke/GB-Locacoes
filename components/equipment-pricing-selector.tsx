@@ -205,10 +205,14 @@ export function EquipmentPricingSelector({
 
   const calculatePrice = (option: PricingOption) => {
     // Se usar valor direto, retornar o valor direto (mesmo que seja 0)
-    if (option.useDirectValue && option.directValue !== undefined && option.directValue !== null) {
+    if (
+      option.useDirectValue &&
+      option.directValue !== undefined &&
+      option.directValue !== null
+    ) {
       return option.directValue
     }
-    
+
     // Caso contrário, calcular com desconto percentual
     const basePrice = pricePerDay * option.multiplier
     const discountAmount = basePrice * (option.discount / 100)
@@ -272,9 +276,7 @@ export function EquipmentPricingSelector({
                   option.directValue !== undefined &&
                   option.directValue !== null &&
                   option.directValue === 0 ? (
-                  <div className="text-xs opacity-90 mt-1">
-                    R$ 0,00
-                  </div>
+                  <div className="text-xs opacity-90 mt-1">R$ 0,00</div>
                 ) : option.discount > 0 ? (
                   <div className="text-xs opacity-90 mt-1">
                     {option.discount}% OFF

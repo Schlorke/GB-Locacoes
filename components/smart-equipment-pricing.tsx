@@ -22,6 +22,16 @@ interface SmartEquipmentPricingProps {
   }
   images?: string[]
   className?: string
+  // Campos de valor direto
+  dailyDirectValue?: number
+  weeklyDirectValue?: number
+  biweeklyDirectValue?: number
+  monthlyDirectValue?: number
+  // Campos de controle de método de preço
+  dailyUseDirectValue?: boolean
+  weeklyUseDirectValue?: boolean
+  biweeklyUseDirectValue?: boolean
+  monthlyUseDirectValue?: boolean
 }
 
 export function SmartEquipmentPricing({
@@ -39,6 +49,16 @@ export function SmartEquipmentPricing({
   category,
   images,
   className,
+  // Campos de valor direto
+  dailyDirectValue = 0,
+  weeklyDirectValue = 0,
+  biweeklyDirectValue = 0,
+  monthlyDirectValue = 0,
+  // Campos de controle de método de preço
+  dailyUseDirectValue = false,
+  weeklyUseDirectValue = false,
+  biweeklyUseDirectValue = false,
+  monthlyUseDirectValue = false,
 }: SmartEquipmentPricingProps) {
   const [selectedPeriod, setSelectedPeriod] = useState<PricingOption | null>(
     null
@@ -64,6 +84,14 @@ export function SmartEquipmentPricing({
           biweeklyDiscount={biweeklyDiscount}
           monthlyDiscount={monthlyDiscount}
           popularPeriod={popularPeriod}
+          dailyDirectValue={dailyDirectValue}
+          weeklyDirectValue={weeklyDirectValue}
+          biweeklyDirectValue={biweeklyDirectValue}
+          monthlyDirectValue={monthlyDirectValue}
+          dailyUseDirectValue={dailyUseDirectValue}
+          weeklyUseDirectValue={weeklyUseDirectValue}
+          biweeklyUseDirectValue={biweeklyUseDirectValue}
+          monthlyUseDirectValue={monthlyUseDirectValue}
           onPeriodChange={handlePeriodChange}
         />
       </div>

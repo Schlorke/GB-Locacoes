@@ -236,6 +236,14 @@ export default function EditarEquipamento() {
     }
   }, [formData.images, currentImageIndex])
 
+  // Função para prevenir submit ao pressionar Enter
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      // Não fazer nada - apenas prevenir o submit
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -425,6 +433,7 @@ export default function EditarEquipamento() {
                             placeholder="Ex: Betoneira 400L"
                             required
                             className="mt-1 focus:border-blue-500"
+                            onKeyDown={handleKeyDown}
                           />
                         </div>
 
@@ -478,6 +487,7 @@ export default function EditarEquipamento() {
                             rows={4}
                             required
                             className="mt-1 focus:border-blue-500"
+                            onKeyDown={handleKeyDown}
                           />
                         </div>
 
@@ -499,6 +509,7 @@ export default function EditarEquipamento() {
                             }
                             required
                             className="mt-1 focus:border-blue-500"
+                            onKeyDown={handleKeyDown}
                           />
                         </div>
 
@@ -564,12 +575,24 @@ export default function EditarEquipamento() {
                                   popularPeriod={formData.popularPeriod}
                                   dailyDirectValue={formData.dailyDirectValue}
                                   weeklyDirectValue={formData.weeklyDirectValue}
-                                  biweeklyDirectValue={formData.biweeklyDirectValue}
-                                  monthlyDirectValue={formData.monthlyDirectValue}
-                                  dailyUseDirectValue={formData.dailyUseDirectValue}
-                                  weeklyUseDirectValue={formData.weeklyUseDirectValue}
-                                  biweeklyUseDirectValue={formData.biweeklyUseDirectValue}
-                                  monthlyUseDirectValue={formData.monthlyUseDirectValue}
+                                  biweeklyDirectValue={
+                                    formData.biweeklyDirectValue
+                                  }
+                                  monthlyDirectValue={
+                                    formData.monthlyDirectValue
+                                  }
+                                  dailyUseDirectValue={
+                                    formData.dailyUseDirectValue
+                                  }
+                                  weeklyUseDirectValue={
+                                    formData.weeklyUseDirectValue
+                                  }
+                                  biweeklyUseDirectValue={
+                                    formData.biweeklyUseDirectValue
+                                  }
+                                  monthlyUseDirectValue={
+                                    formData.monthlyUseDirectValue
+                                  }
                                 />
                               </div>
                             </div>
@@ -649,11 +672,17 @@ export default function EditarEquipamento() {
                             {/* Configuração de Preços por Período */}
                             <div className="space-y-6">
                               {/* Diário */}
-                              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl" style={{
-                                boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
-                              }}>
+                              <div
+                                className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl"
+                                style={{
+                                  boxShadow:
+                                    'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
+                                }}
+                              >
                                 <div className="flex items-center justify-between mb-4">
-                                  <h4 className="text-sm font-semibold text-gray-900">Período Diário</h4>
+                                  <h4 className="text-sm font-semibold text-gray-900">
+                                    Período Diário
+                                  </h4>
                                   <div className="flex items-center space-x-4">
                                     <div className="flex items-center space-x-2">
                                       <input
@@ -663,13 +692,17 @@ export default function EditarEquipamento() {
                                         onChange={(e) => {
                                           setFormData((prev) => ({
                                             ...prev,
-                                            dailyUseDirectValue: !e.target.checked,
+                                            dailyUseDirectValue:
+                                              !e.target.checked,
                                           }))
                                         }}
                                         className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                         aria-label="Usar desconto percentual para período diário"
                                       />
-                                      <Label htmlFor="dailyUsePercentage" className="text-xs text-gray-700">
+                                      <Label
+                                        htmlFor="dailyUsePercentage"
+                                        className="text-xs text-gray-700"
+                                      >
                                         Usar desconto percentual
                                       </Label>
                                     </div>
@@ -681,13 +714,17 @@ export default function EditarEquipamento() {
                                         onChange={(e) => {
                                           setFormData((prev) => ({
                                             ...prev,
-                                            dailyUseDirectValue: e.target.checked,
+                                            dailyUseDirectValue:
+                                              e.target.checked,
                                           }))
                                         }}
                                         className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                         aria-label="Usar valor direto para período diário"
                                       />
-                                      <Label htmlFor="dailyUseDirectValue" className="text-xs text-gray-700">
+                                      <Label
+                                        htmlFor="dailyUseDirectValue"
+                                        className="text-xs text-gray-700"
+                                      >
                                         Usar valor direto
                                       </Label>
                                     </div>
@@ -695,7 +732,10 @@ export default function EditarEquipamento() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                   <div>
-                                    <Label htmlFor="dailyDiscount" className="text-xs text-gray-600">
+                                    <Label
+                                      htmlFor="dailyDiscount"
+                                      className="text-xs text-gray-600"
+                                    >
                                       Desconto (%)
                                     </Label>
                                     <Input
@@ -705,8 +745,12 @@ export default function EditarEquipamento() {
                                       max="100"
                                       value={formData.dailyDiscount}
                                       onChange={(e) => {
-                                        const value = parseInt(e.target.value) || 0
-                                        const clampedValue = Math.min(Math.max(value, 0), 100)
+                                        const value =
+                                          parseInt(e.target.value) || 0
+                                        const clampedValue = Math.min(
+                                          Math.max(value, 0),
+                                          100
+                                        )
                                         setFormData((prev) => ({
                                           ...prev,
                                           dailyDiscount: clampedValue,
@@ -714,10 +758,14 @@ export default function EditarEquipamento() {
                                       }}
                                       disabled={formData.dailyUseDirectValue}
                                       className="mt-1 text-sm"
+                                      onKeyDown={handleKeyDown}
                                     />
                                   </div>
                                   <div>
-                                    <Label htmlFor="dailyDirectValue" className="text-xs text-gray-600">
+                                    <Label
+                                      htmlFor="dailyDirectValue"
+                                      className="text-xs text-gray-600"
+                                    >
                                       Valor Direto (R$)
                                     </Label>
                                     <Input
@@ -729,22 +777,30 @@ export default function EditarEquipamento() {
                                       onChange={(e) =>
                                         setFormData((prev) => ({
                                           ...prev,
-                                          dailyDirectValue: parseFloat(e.target.value) || 0,
+                                          dailyDirectValue:
+                                            parseFloat(e.target.value) || 0,
                                         }))
                                       }
                                       disabled={!formData.dailyUseDirectValue}
                                       className="mt-1 text-sm"
+                                      onKeyDown={handleKeyDown}
                                     />
                                   </div>
                                 </div>
                               </div>
 
                               {/* Semanal */}
-                              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl" style={{
-                                boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
-                              }}>
+                              <div
+                                className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl"
+                                style={{
+                                  boxShadow:
+                                    'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
+                                }}
+                              >
                                 <div className="flex items-center justify-between mb-4">
-                                  <h4 className="text-sm font-semibold text-gray-900">Período Semanal</h4>
+                                  <h4 className="text-sm font-semibold text-gray-900">
+                                    Período Semanal
+                                  </h4>
                                   <div className="flex items-center space-x-4">
                                     <div className="flex items-center space-x-2">
                                       <input
@@ -754,13 +810,17 @@ export default function EditarEquipamento() {
                                         onChange={(e) => {
                                           setFormData((prev) => ({
                                             ...prev,
-                                            weeklyUseDirectValue: !e.target.checked,
+                                            weeklyUseDirectValue:
+                                              !e.target.checked,
                                           }))
                                         }}
                                         className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                         aria-label="Usar desconto percentual para período semanal"
                                       />
-                                      <Label htmlFor="weeklyUsePercentage" className="text-xs text-gray-700">
+                                      <Label
+                                        htmlFor="weeklyUsePercentage"
+                                        className="text-xs text-gray-700"
+                                      >
                                         Usar desconto percentual
                                       </Label>
                                     </div>
@@ -772,13 +832,17 @@ export default function EditarEquipamento() {
                                         onChange={(e) => {
                                           setFormData((prev) => ({
                                             ...prev,
-                                            weeklyUseDirectValue: e.target.checked,
+                                            weeklyUseDirectValue:
+                                              e.target.checked,
                                           }))
                                         }}
                                         className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                         aria-label="Usar valor direto para período semanal"
                                       />
-                                      <Label htmlFor="weeklyUseDirectValue" className="text-xs text-gray-700">
+                                      <Label
+                                        htmlFor="weeklyUseDirectValue"
+                                        className="text-xs text-gray-700"
+                                      >
                                         Usar valor direto
                                       </Label>
                                     </div>
@@ -786,7 +850,10 @@ export default function EditarEquipamento() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                   <div>
-                                    <Label htmlFor="weeklyDiscount" className="text-xs text-gray-600">
+                                    <Label
+                                      htmlFor="weeklyDiscount"
+                                      className="text-xs text-gray-600"
+                                    >
                                       Desconto (%)
                                     </Label>
                                     <Input
@@ -796,8 +863,12 @@ export default function EditarEquipamento() {
                                       max="100"
                                       value={formData.weeklyDiscount}
                                       onChange={(e) => {
-                                        const value = parseInt(e.target.value) || 0
-                                        const clampedValue = Math.min(Math.max(value, 0), 100)
+                                        const value =
+                                          parseInt(e.target.value) || 0
+                                        const clampedValue = Math.min(
+                                          Math.max(value, 0),
+                                          100
+                                        )
                                         setFormData((prev) => ({
                                           ...prev,
                                           weeklyDiscount: clampedValue,
@@ -805,10 +876,14 @@ export default function EditarEquipamento() {
                                       }}
                                       disabled={formData.weeklyUseDirectValue}
                                       className="mt-1 text-sm"
+                                      onKeyDown={handleKeyDown}
                                     />
                                   </div>
                                   <div>
-                                    <Label htmlFor="weeklyDirectValue" className="text-xs text-gray-600">
+                                    <Label
+                                      htmlFor="weeklyDirectValue"
+                                      className="text-xs text-gray-600"
+                                    >
                                       Valor Direto (R$)
                                     </Label>
                                     <Input
@@ -820,38 +895,52 @@ export default function EditarEquipamento() {
                                       onChange={(e) =>
                                         setFormData((prev) => ({
                                           ...prev,
-                                          weeklyDirectValue: parseFloat(e.target.value) || 0,
+                                          weeklyDirectValue:
+                                            parseFloat(e.target.value) || 0,
                                         }))
                                       }
                                       disabled={!formData.weeklyUseDirectValue}
                                       className="mt-1 text-sm"
+                                      onKeyDown={handleKeyDown}
                                     />
                                   </div>
                                 </div>
                               </div>
 
                               {/* Quinzenal */}
-                              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl" style={{
-                                boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
-                              }}>
+                              <div
+                                className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl"
+                                style={{
+                                  boxShadow:
+                                    'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
+                                }}
+                              >
                                 <div className="flex items-center justify-between mb-4">
-                                  <h4 className="text-sm font-semibold text-gray-900">Período Quinzenal</h4>
+                                  <h4 className="text-sm font-semibold text-gray-900">
+                                    Período Quinzenal
+                                  </h4>
                                   <div className="flex items-center space-x-4">
                                     <div className="flex items-center space-x-2">
                                       <input
                                         type="checkbox"
                                         id="biweeklyUsePercentage"
-                                        checked={!formData.biweeklyUseDirectValue}
+                                        checked={
+                                          !formData.biweeklyUseDirectValue
+                                        }
                                         onChange={(e) => {
                                           setFormData((prev) => ({
                                             ...prev,
-                                            biweeklyUseDirectValue: !e.target.checked,
+                                            biweeklyUseDirectValue:
+                                              !e.target.checked,
                                           }))
                                         }}
                                         className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                         aria-label="Usar desconto percentual para período quinzenal"
                                       />
-                                      <Label htmlFor="biweeklyUsePercentage" className="text-xs text-gray-700">
+                                      <Label
+                                        htmlFor="biweeklyUsePercentage"
+                                        className="text-xs text-gray-700"
+                                      >
                                         Usar desconto percentual
                                       </Label>
                                     </div>
@@ -859,17 +948,23 @@ export default function EditarEquipamento() {
                                       <input
                                         type="checkbox"
                                         id="biweeklyUseDirectValue"
-                                        checked={formData.biweeklyUseDirectValue}
+                                        checked={
+                                          formData.biweeklyUseDirectValue
+                                        }
                                         onChange={(e) => {
                                           setFormData((prev) => ({
                                             ...prev,
-                                            biweeklyUseDirectValue: e.target.checked,
+                                            biweeklyUseDirectValue:
+                                              e.target.checked,
                                           }))
                                         }}
                                         className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                         aria-label="Usar valor direto para período quinzenal"
                                       />
-                                      <Label htmlFor="biweeklyUseDirectValue" className="text-xs text-gray-700">
+                                      <Label
+                                        htmlFor="biweeklyUseDirectValue"
+                                        className="text-xs text-gray-700"
+                                      >
                                         Usar valor direto
                                       </Label>
                                     </div>
@@ -877,7 +972,10 @@ export default function EditarEquipamento() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                   <div>
-                                    <Label htmlFor="biweeklyDiscount" className="text-xs text-gray-600">
+                                    <Label
+                                      htmlFor="biweeklyDiscount"
+                                      className="text-xs text-gray-600"
+                                    >
                                       Desconto (%)
                                     </Label>
                                     <Input
@@ -887,8 +985,12 @@ export default function EditarEquipamento() {
                                       max="100"
                                       value={formData.biweeklyDiscount}
                                       onChange={(e) => {
-                                        const value = parseInt(e.target.value) || 0
-                                        const clampedValue = Math.min(Math.max(value, 0), 100)
+                                        const value =
+                                          parseInt(e.target.value) || 0
+                                        const clampedValue = Math.min(
+                                          Math.max(value, 0),
+                                          100
+                                        )
                                         setFormData((prev) => ({
                                           ...prev,
                                           biweeklyDiscount: clampedValue,
@@ -896,10 +998,14 @@ export default function EditarEquipamento() {
                                       }}
                                       disabled={formData.biweeklyUseDirectValue}
                                       className="mt-1 text-sm"
+                                      onKeyDown={handleKeyDown}
                                     />
                                   </div>
                                   <div>
-                                    <Label htmlFor="biweeklyDirectValue" className="text-xs text-gray-600">
+                                    <Label
+                                      htmlFor="biweeklyDirectValue"
+                                      className="text-xs text-gray-600"
+                                    >
                                       Valor Direto (R$)
                                     </Label>
                                     <Input
@@ -911,38 +1017,54 @@ export default function EditarEquipamento() {
                                       onChange={(e) =>
                                         setFormData((prev) => ({
                                           ...prev,
-                                          biweeklyDirectValue: parseFloat(e.target.value) || 0,
+                                          biweeklyDirectValue:
+                                            parseFloat(e.target.value) || 0,
                                         }))
                                       }
-                                      disabled={!formData.biweeklyUseDirectValue}
+                                      disabled={
+                                        !formData.biweeklyUseDirectValue
+                                      }
                                       className="mt-1 text-sm"
+                                      onKeyDown={handleKeyDown}
                                     />
                                   </div>
                                 </div>
                               </div>
 
                               {/* Mensal */}
-                              <div className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl" style={{
-                                boxShadow: 'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
-                              }}>
+                              <div
+                                className="border border-gray-200 rounded-lg p-4 bg-gray-50/50 shadow-xl transition-all duration-300 hover:shadow-2xl"
+                                style={{
+                                  boxShadow:
+                                    'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.1) 0px 4px 6px -4px',
+                                }}
+                              >
                                 <div className="flex items-center justify-between mb-4">
-                                  <h4 className="text-sm font-semibold text-gray-900">Período Mensal</h4>
+                                  <h4 className="text-sm font-semibold text-gray-900">
+                                    Período Mensal
+                                  </h4>
                                   <div className="flex items-center space-x-4">
                                     <div className="flex items-center space-x-2">
                                       <input
                                         type="checkbox"
                                         id="monthlyUsePercentage"
-                                        checked={!formData.monthlyUseDirectValue}
+                                        checked={
+                                          !formData.monthlyUseDirectValue
+                                        }
                                         onChange={(e) => {
                                           setFormData((prev) => ({
                                             ...prev,
-                                            monthlyUseDirectValue: !e.target.checked,
+                                            monthlyUseDirectValue:
+                                              !e.target.checked,
                                           }))
                                         }}
                                         className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                         aria-label="Usar desconto percentual para período mensal"
                                       />
-                                      <Label htmlFor="monthlyUsePercentage" className="text-xs text-gray-700">
+                                      <Label
+                                        htmlFor="monthlyUsePercentage"
+                                        className="text-xs text-gray-700"
+                                      >
                                         Usar desconto percentual
                                       </Label>
                                     </div>
@@ -954,13 +1076,17 @@ export default function EditarEquipamento() {
                                         onChange={(e) => {
                                           setFormData((prev) => ({
                                             ...prev,
-                                            monthlyUseDirectValue: e.target.checked,
+                                            monthlyUseDirectValue:
+                                              e.target.checked,
                                           }))
                                         }}
                                         className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                                         aria-label="Usar valor direto para período mensal"
                                       />
-                                      <Label htmlFor="monthlyUseDirectValue" className="text-xs text-gray-700">
+                                      <Label
+                                        htmlFor="monthlyUseDirectValue"
+                                        className="text-xs text-gray-700"
+                                      >
                                         Usar valor direto
                                       </Label>
                                     </div>
@@ -968,7 +1094,10 @@ export default function EditarEquipamento() {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                   <div>
-                                    <Label htmlFor="monthlyDiscount" className="text-xs text-gray-600">
+                                    <Label
+                                      htmlFor="monthlyDiscount"
+                                      className="text-xs text-gray-600"
+                                    >
                                       Desconto (%)
                                     </Label>
                                     <Input
@@ -978,8 +1107,12 @@ export default function EditarEquipamento() {
                                       max="100"
                                       value={formData.monthlyDiscount}
                                       onChange={(e) => {
-                                        const value = parseInt(e.target.value) || 0
-                                        const clampedValue = Math.min(Math.max(value, 0), 100)
+                                        const value =
+                                          parseInt(e.target.value) || 0
+                                        const clampedValue = Math.min(
+                                          Math.max(value, 0),
+                                          100
+                                        )
                                         setFormData((prev) => ({
                                           ...prev,
                                           monthlyDiscount: clampedValue,
@@ -987,10 +1120,14 @@ export default function EditarEquipamento() {
                                       }}
                                       disabled={formData.monthlyUseDirectValue}
                                       className="mt-1 text-sm"
+                                      onKeyDown={handleKeyDown}
                                     />
                                   </div>
                                   <div>
-                                    <Label htmlFor="monthlyDirectValue" className="text-xs text-gray-600">
+                                    <Label
+                                      htmlFor="monthlyDirectValue"
+                                      className="text-xs text-gray-600"
+                                    >
                                       Valor Direto (R$)
                                     </Label>
                                     <Input
@@ -1002,11 +1139,13 @@ export default function EditarEquipamento() {
                                       onChange={(e) =>
                                         setFormData((prev) => ({
                                           ...prev,
-                                          monthlyDirectValue: parseFloat(e.target.value) || 0,
+                                          monthlyDirectValue:
+                                            parseFloat(e.target.value) || 0,
                                         }))
                                       }
                                       disabled={!formData.monthlyUseDirectValue}
                                       className="mt-1 text-sm"
+                                      onKeyDown={handleKeyDown}
                                     />
                                   </div>
                                 </div>

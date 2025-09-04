@@ -229,6 +229,20 @@ export default async function EquipmentDetailPage(props: Props) {
                   description={equipment.description || undefined}
                   category={equipment.category}
                   images={equipment.images || undefined}
+                  dailyDirectValue={Number(equipment.dailyDirectValue) || 0}
+                  weeklyDirectValue={Number(equipment.weeklyDirectValue) || 0}
+                  biweeklyDirectValue={
+                    Number(equipment.biweeklyDirectValue) || 0
+                  }
+                  monthlyDirectValue={Number(equipment.monthlyDirectValue) || 0}
+                  dailyUseDirectValue={equipment.dailyUseDirectValue || false}
+                  weeklyUseDirectValue={equipment.weeklyUseDirectValue || false}
+                  biweeklyUseDirectValue={
+                    equipment.biweeklyUseDirectValue || false
+                  }
+                  monthlyUseDirectValue={
+                    equipment.monthlyUseDirectValue || false
+                  }
                 />
 
                 {/* Benefícios Rápidos */}
