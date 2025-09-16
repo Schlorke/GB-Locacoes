@@ -5,7 +5,7 @@ import { SettingCountOrderByAggregateInputObjectSchema } from './SettingCountOrd
 import { SettingMaxOrderByAggregateInputObjectSchema } from './SettingMaxOrderByAggregateInput.schema';
 import { SettingMinOrderByAggregateInputObjectSchema } from './SettingMinOrderByAggregateInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   companyPhone: SortOrderSchema.optional(),
   companyIconUrl: SortOrderSchema.optional(),

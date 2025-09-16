@@ -468,9 +468,7 @@ export default function EquipmentsPage() {
                               className="w-full hover:scale-105 transition-transform duration-200"
                             >
                               {equipment.isAvailable ? (
-                                <Link
-                                  href={`/orcamento?equipmentId=${equipment.id}`}
-                                >
+                                <Link href={`/equipamentos/${equipment.id}`}>
                                   Solicitar Orçamento
                                 </Link>
                               ) : (

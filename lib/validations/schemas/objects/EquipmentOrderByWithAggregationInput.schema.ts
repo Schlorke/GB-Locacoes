@@ -8,7 +8,7 @@ import { EquipmentMaxOrderByAggregateInputObjectSchema } from './EquipmentMaxOrd
 import { EquipmentMinOrderByAggregateInputObjectSchema } from './EquipmentMinOrderByAggregateInput.schema';
 import { EquipmentSumOrderByAggregateInputObjectSchema } from './EquipmentSumOrderByAggregateInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   name: SortOrderSchema.optional(),
   description: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),

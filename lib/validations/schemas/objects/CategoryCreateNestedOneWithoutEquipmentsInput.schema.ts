@@ -5,7 +5,7 @@ import { CategoryUncheckedCreateWithoutEquipmentsInputObjectSchema } from './Cat
 import { CategoryCreateOrConnectWithoutEquipmentsInputObjectSchema } from './CategoryCreateOrConnectWithoutEquipmentsInput.schema';
 import { CategoryWhereUniqueInputObjectSchema } from './CategoryWhereUniqueInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => CategoryCreateWithoutEquipmentsInputObjectSchema), z.lazy(() => CategoryUncheckedCreateWithoutEquipmentsInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => CategoryCreateOrConnectWithoutEquipmentsInputObjectSchema).optional(),
   connect: z.lazy(() => CategoryWhereUniqueInputObjectSchema).optional()

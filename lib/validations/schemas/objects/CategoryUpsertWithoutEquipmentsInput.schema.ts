@@ -6,7 +6,7 @@ import { CategoryCreateWithoutEquipmentsInputObjectSchema } from './CategoryCrea
 import { CategoryUncheckedCreateWithoutEquipmentsInputObjectSchema } from './CategoryUncheckedCreateWithoutEquipmentsInput.schema';
 import { CategoryWhereInputObjectSchema } from './CategoryWhereInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   update: z.union([z.lazy(() => CategoryUpdateWithoutEquipmentsInputObjectSchema), z.lazy(() => CategoryUncheckedUpdateWithoutEquipmentsInputObjectSchema)]),
   create: z.union([z.lazy(() => CategoryCreateWithoutEquipmentsInputObjectSchema), z.lazy(() => CategoryUncheckedCreateWithoutEquipmentsInputObjectSchema)]),
   where: z.lazy(() => CategoryWhereInputObjectSchema).optional()

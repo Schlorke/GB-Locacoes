@@ -8,7 +8,7 @@ import { rentalsMaxOrderByAggregateInputObjectSchema } from './rentalsMaxOrderBy
 import { rentalsMinOrderByAggregateInputObjectSchema } from './rentalsMinOrderByAggregateInput.schema';
 import { rentalsSumOrderByAggregateInputObjectSchema } from './rentalsSumOrderByAggregateInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   startdate: SortOrderSchema.optional(),
   enddate: SortOrderSchema.optional(),

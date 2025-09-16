@@ -6,7 +6,7 @@ import { UserCountOrderByAggregateInputObjectSchema } from './UserCountOrderByAg
 import { UserMaxOrderByAggregateInputObjectSchema } from './UserMaxOrderByAggregateInput.schema';
 import { UserMinOrderByAggregateInputObjectSchema } from './UserMinOrderByAggregateInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   name: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   email: SortOrderSchema.optional(),

@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { rentalsSelectObjectSchema } from './rentalsSelect.schema';
 import { rentalsIncludeObjectSchema } from './rentalsInclude.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   select: z.lazy(() => rentalsSelectObjectSchema).optional(),
   include: z.lazy(() => rentalsIncludeObjectSchema).optional()
 }).strict();

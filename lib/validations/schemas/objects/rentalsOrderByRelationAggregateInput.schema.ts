@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   _count: SortOrderSchema.optional()
 }).strict();
 export const rentalsOrderByRelationAggregateInputObjectSchema: z.ZodType<Prisma.rentalsOrderByRelationAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsOrderByRelationAggregateInput>;

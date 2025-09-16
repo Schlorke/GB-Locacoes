@@ -5,10 +5,10 @@ import { IntFilterObjectSchema } from './IntFilter.schema';
 import { DecimalFilterObjectSchema } from './DecimalFilter.schema';
 import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
-  AND: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
-  OR: z.lazy(makeSchema).array().optional(),
-  NOT: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
+const quoteitemscalarwhereinputSchema = z.object({
+  AND: z.union([z.lazy(() => QuoteItemScalarWhereInputObjectSchema), z.lazy(() => QuoteItemScalarWhereInputObjectSchema).array()]).optional(),
+  OR: z.lazy(() => QuoteItemScalarWhereInputObjectSchema).array().optional(),
+  NOT: z.union([z.lazy(() => QuoteItemScalarWhereInputObjectSchema), z.lazy(() => QuoteItemScalarWhereInputObjectSchema).array()]).optional(),
   id: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   quoteId: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   equipmentId: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
@@ -16,8 +16,8 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   days: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
   pricePerDay: z.union([z.lazy(() => DecimalFilterObjectSchema), z.number()]).optional(),
   total: z.union([z.lazy(() => DecimalFilterObjectSchema), z.number()]).optional(),
-  createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.date()]).optional(),
-  updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.date()]).optional()
+  createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
+  updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional()
 }).strict();
-export const QuoteItemScalarWhereInputObjectSchema: z.ZodType<Prisma.QuoteItemScalarWhereInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteItemScalarWhereInput>;
-export const QuoteItemScalarWhereInputObjectZodSchema = makeSchema();
+export const QuoteItemScalarWhereInputObjectSchema: z.ZodType<Prisma.QuoteItemScalarWhereInput> = quoteitemscalarwhereinputSchema as unknown as z.ZodType<Prisma.QuoteItemScalarWhereInput>;
+export const QuoteItemScalarWhereInputObjectZodSchema = quoteitemscalarwhereinputSchema;

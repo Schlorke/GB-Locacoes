@@ -9,7 +9,7 @@ import { UserUpdateToOneWithWhereWithoutRentalsInputObjectSchema } from './UserU
 import { UserUpdateWithoutRentalsInputObjectSchema } from './UserUpdateWithoutRentalsInput.schema';
 import { UserUncheckedUpdateWithoutRentalsInputObjectSchema } from './UserUncheckedUpdateWithoutRentalsInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => UserCreateWithoutRentalsInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutRentalsInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutRentalsInputObjectSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutRentalsInputObjectSchema).optional(),

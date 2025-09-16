@@ -271,7 +271,7 @@ export default function FeaturedMaterials() {
                       className="flex-1"
                     >
                       {equipment.isAvailable ? (
-                        <Link href={`/orcamento?equipmentId=${equipment.id}`}>
+                        <Link href={`/equipamentos/${equipment.id}`}>
                           Solicitar
                         </Link>
                       ) : (

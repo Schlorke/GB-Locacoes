@@ -241,7 +241,7 @@ function QuotePage() {
 
     return {
       ...selectedConfig,
-      days: selectedConfig.threshold,
+      days: selectedConfig?.threshold || 1,
     }
   }
 
@@ -264,15 +264,16 @@ function QuotePage() {
       }
 
       // Calcular quantos períodos completos + dias restantes
-      const completePeriods = Math.floor(totalDays / pricingConfig.multiplier)
-      const remainingDays = totalDays % pricingConfig.multiplier
+      const multiplier = pricingConfig.multiplier || 1
+      const completePeriods = Math.floor(totalDays / multiplier)
+      const remainingDays = totalDays % multiplier
 
       let totalPrice = completePeriods * pricingConfig.directValue
 
       // Para dias restantes, usar valor proporcional do período
       if (remainingDays > 0) {
         const proportionalValue =
-          (pricingConfig.directValue / pricingConfig.multiplier) * remainingDays
+          (pricingConfig.directValue / multiplier) * remainingDays
         totalPrice += proportionalValue
       }
 
@@ -281,7 +282,8 @@ function QuotePage() {
 
     // Se usar desconto percentual, calcular com desconto
     const basePrice = equipment.pricePerDay * totalDays
-    const discountAmount = basePrice * (pricingConfig.discount / 100)
+    const discount = pricingConfig.discount || 0
+    const discountAmount = basePrice * (discount / 100)
     return basePrice - discountAmount
   }
 
@@ -564,7 +566,8 @@ function QuotePage() {
                                               <span className="ml-1 font-semibold">
                                                 Valor Fixo
                                               </span>
-                                            ) : pricingConfig.discount > 0 ? (
+                                            ) : (pricingConfig.discount || 0) >
+                                              0 ? (
                                               <span className="ml-1 font-semibold">
                                                 -{pricingConfig.discount}%
                                               </span>
@@ -600,7 +603,8 @@ function QuotePage() {
 
                                           return (
                                             <div>
-                                              {pricingConfig.discount > 0 && (
+                                              {(pricingConfig.discount || 0) >
+                                                0 && (
                                                 <div className="text-sm text-gray-500 line-through">
                                                   {formatCurrency(
                                                     originalPrice
@@ -617,7 +621,8 @@ function QuotePage() {
                                                   total ({equipment.days} dias)
                                                 </span>
                                               </div>
-                                              {pricingConfig.discount > 0 && (
+                                              {(pricingConfig.discount || 0) >
+                                                0 && (
                                                 <div className="text-xs text-green-600 font-medium">
                                                   ✓ Desconto {actualPeriodLabel}{' '}
                                                   aplicado: -
@@ -939,7 +944,7 @@ function QuotePage() {
                                               : 'Diário'
 
                                     return (
-                                      pricingConfig.discount > 0 && (
+                                      (pricingConfig.discount || 0) > 0 && (
                                         <>
                                           <span className="text-sm text-green-600 font-semibold">
                                             Desc. {actualPeriodLabel}: -
@@ -976,7 +981,7 @@ function QuotePage() {
 
                               return (
                                 <div>
-                                  {pricingConfig.discount > 0 && (
+                                  {(pricingConfig.discount || 0) > 0 && (
                                     <div className="text-sm text-gray-500 line-through">
                                       {formatCurrency(originalPrice)}
                                     </div>

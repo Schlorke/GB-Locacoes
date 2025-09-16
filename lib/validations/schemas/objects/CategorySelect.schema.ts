@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { EquipmentFindManySchema } from '../findManyEquipment.schema';
 import { CategoryCountOutputTypeArgsObjectSchema } from './CategoryCountOutputTypeArgs.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: z.boolean().optional(),
   name: z.boolean().optional(),
   description: z.boolean().optional(),

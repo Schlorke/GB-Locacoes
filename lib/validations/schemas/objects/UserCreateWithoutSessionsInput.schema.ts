@@ -5,16 +5,16 @@ import { AccountCreateNestedManyWithoutUserInputObjectSchema } from './AccountCr
 import { QuoteCreateNestedManyWithoutUserInputObjectSchema } from './QuoteCreateNestedManyWithoutUserInput.schema';
 import { rentalsCreateNestedManyWithoutUsersInputObjectSchema } from './rentalsCreateNestedManyWithoutUsersInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: z.string().optional(),
-  name: z.string().nullish(),
+  name: z.string().optional().nullable(),
   email: z.string(),
-  password: z.string().nullish(),
+  password: z.string().optional().nullable(),
   role: RoleSchema.optional(),
-  emailVerified: z.date().nullish(),
-  image: z.string().nullish(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  emailVerified: z.coerce.date().optional().nullable(),
+  image: z.string().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
   accounts: z.lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema).optional(),
   quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputObjectSchema).optional(),
   rentals: z.lazy(() => rentalsCreateNestedManyWithoutUsersInputObjectSchema).optional()

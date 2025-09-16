@@ -6,7 +6,7 @@ import { EquipmentCreateOrConnectWithoutCategoryInputObjectSchema } from './Equi
 import { EquipmentCreateManyCategoryInputEnvelopeObjectSchema } from './EquipmentCreateManyCategoryInputEnvelope.schema';
 import { EquipmentWhereUniqueInputObjectSchema } from './EquipmentWhereUniqueInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => EquipmentCreateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentCreateWithoutCategoryInputObjectSchema).array(), z.lazy(() => EquipmentUncheckedCreateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentUncheckedCreateWithoutCategoryInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => EquipmentCreateOrConnectWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentCreateOrConnectWithoutCategoryInputObjectSchema).array()]).optional(),
   createMany: z.lazy(() => EquipmentCreateManyCategoryInputEnvelopeObjectSchema).optional(),

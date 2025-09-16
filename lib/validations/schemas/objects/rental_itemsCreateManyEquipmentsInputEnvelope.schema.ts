@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { rental_itemsCreateManyEquipmentsInputObjectSchema } from './rental_itemsCreateManyEquipmentsInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   data: z.union([z.lazy(() => rental_itemsCreateManyEquipmentsInputObjectSchema), z.lazy(() => rental_itemsCreateManyEquipmentsInputObjectSchema).array()]),
   skipDuplicates: z.boolean().optional()
 }).strict();

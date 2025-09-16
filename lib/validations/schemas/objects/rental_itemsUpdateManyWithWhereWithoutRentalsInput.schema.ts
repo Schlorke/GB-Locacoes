@@ -4,7 +4,7 @@ import { rental_itemsScalarWhereInputObjectSchema } from './rental_itemsScalarWh
 import { rental_itemsUpdateManyMutationInputObjectSchema } from './rental_itemsUpdateManyMutationInput.schema';
 import { rental_itemsUncheckedUpdateManyWithoutRentalsInputObjectSchema } from './rental_itemsUncheckedUpdateManyWithoutRentalsInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => rental_itemsScalarWhereInputObjectSchema),
   data: z.union([z.lazy(() => rental_itemsUpdateManyMutationInputObjectSchema), z.lazy(() => rental_itemsUncheckedUpdateManyWithoutRentalsInputObjectSchema)])
 }).strict();

@@ -1,11 +1,10 @@
-import { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { EquipmentIncludeObjectSchema } from './objects/EquipmentInclude.schema';
 import { EquipmentOrderByWithRelationInputObjectSchema } from './objects/EquipmentOrderByWithRelationInput.schema';
 import { EquipmentWhereInputObjectSchema } from './objects/EquipmentWhereInput.schema';
 import { EquipmentWhereUniqueInputObjectSchema } from './objects/EquipmentWhereUniqueInput.schema';
 import { EquipmentScalarFieldEnumSchema } from './enums/EquipmentScalarFieldEnum.schema';
-import { EquipmentCountOutputTypeArgsObjectSchema } from './objects/EquipmentCountOutputTypeArgs.schema';
 
 // Select schema needs to be in file to prevent circular imports
 //------------------------------------------------------
@@ -72,6 +71,6 @@ export const EquipmentFindFirstOrThrowSelectZodSchema = z.object({
     _count: z.boolean().optional()
   }).strict();
 
-export const EquipmentFindFirstOrThrowSchema: z.ZodType<Prisma.EquipmentFindFirstOrThrowArgs> = z.object({ select: EquipmentFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => EquipmentIncludeObjectSchema.optional()), orderBy: z.union([EquipmentOrderByWithRelationInputObjectSchema, EquipmentOrderByWithRelationInputObjectSchema.array()]).optional(), where: EquipmentWhereInputObjectSchema.optional(), cursor: EquipmentWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([z.nativeEnum(Prisma.EquipmentScalarFieldEnum), z.nativeEnum(Prisma.EquipmentScalarFieldEnum).array()]).optional() }).strict() as unknown as z.ZodType<Prisma.EquipmentFindFirstOrThrowArgs>;
+export const EquipmentFindFirstOrThrowSchema: z.ZodType<Prisma.EquipmentFindFirstOrThrowArgs> = z.object({ select: EquipmentFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => EquipmentIncludeObjectSchema.optional()), orderBy: z.union([EquipmentOrderByWithRelationInputObjectSchema, EquipmentOrderByWithRelationInputObjectSchema.array()]).optional(), where: EquipmentWhereInputObjectSchema.optional(), cursor: EquipmentWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([EquipmentScalarFieldEnumSchema, EquipmentScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.EquipmentFindFirstOrThrowArgs>;
 
-export const EquipmentFindFirstOrThrowZodSchema = z.object({ select: EquipmentFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => EquipmentIncludeObjectSchema.optional()), orderBy: z.union([EquipmentOrderByWithRelationInputObjectSchema, EquipmentOrderByWithRelationInputObjectSchema.array()]).optional(), where: EquipmentWhereInputObjectSchema.optional(), cursor: EquipmentWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([z.nativeEnum(Prisma.EquipmentScalarFieldEnum), z.nativeEnum(Prisma.EquipmentScalarFieldEnum).array()]).optional() }).strict();
+export const EquipmentFindFirstOrThrowZodSchema = z.object({ select: EquipmentFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => EquipmentIncludeObjectSchema.optional()), orderBy: z.union([EquipmentOrderByWithRelationInputObjectSchema, EquipmentOrderByWithRelationInputObjectSchema.array()]).optional(), where: EquipmentWhereInputObjectSchema.optional(), cursor: EquipmentWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([EquipmentScalarFieldEnumSchema, EquipmentScalarFieldEnumSchema.array()]).optional() }).strict();

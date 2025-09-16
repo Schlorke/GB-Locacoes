@@ -4,7 +4,7 @@ import { SessionScalarWhereInputObjectSchema } from './SessionScalarWhereInput.s
 import { SessionUpdateManyMutationInputObjectSchema } from './SessionUpdateManyMutationInput.schema';
 import { SessionUncheckedUpdateManyWithoutUserInputObjectSchema } from './SessionUncheckedUpdateManyWithoutUserInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => SessionScalarWhereInputObjectSchema),
   data: z.union([z.lazy(() => SessionUpdateManyMutationInputObjectSchema), z.lazy(() => SessionUncheckedUpdateManyWithoutUserInputObjectSchema)])
 }).strict();

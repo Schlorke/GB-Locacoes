@@ -8,7 +8,7 @@ import { AccountMaxOrderByAggregateInputObjectSchema } from './AccountMaxOrderBy
 import { AccountMinOrderByAggregateInputObjectSchema } from './AccountMinOrderByAggregateInput.schema';
 import { AccountSumOrderByAggregateInputObjectSchema } from './AccountSumOrderByAggregateInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   userId: SortOrderSchema.optional(),
   type: SortOrderSchema.optional(),

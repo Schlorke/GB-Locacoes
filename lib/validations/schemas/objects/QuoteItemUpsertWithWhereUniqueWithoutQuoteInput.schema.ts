@@ -6,7 +6,7 @@ import { QuoteItemUncheckedUpdateWithoutQuoteInputObjectSchema } from './QuoteIt
 import { QuoteItemCreateWithoutQuoteInputObjectSchema } from './QuoteItemCreateWithoutQuoteInput.schema';
 import { QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema } from './QuoteItemUncheckedCreateWithoutQuoteInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => QuoteItemWhereUniqueInputObjectSchema),
   update: z.union([z.lazy(() => QuoteItemUpdateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUncheckedUpdateWithoutQuoteInputObjectSchema)]),
   create: z.union([z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema)])

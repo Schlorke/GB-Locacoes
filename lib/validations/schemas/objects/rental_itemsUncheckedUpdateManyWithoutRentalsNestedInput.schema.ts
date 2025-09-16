@@ -10,7 +10,7 @@ import { rental_itemsUpdateWithWhereUniqueWithoutRentalsInputObjectSchema } from
 import { rental_itemsUpdateManyWithWhereWithoutRentalsInputObjectSchema } from './rental_itemsUpdateManyWithWhereWithoutRentalsInput.schema';
 import { rental_itemsScalarWhereInputObjectSchema } from './rental_itemsScalarWhereInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsCreateWithoutRentalsInputObjectSchema).array(), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUncheckedCreateWithoutRentalsInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => rental_itemsCreateOrConnectWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsCreateOrConnectWithoutRentalsInputObjectSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => rental_itemsUpsertWithWhereUniqueWithoutRentalsInputObjectSchema), z.lazy(() => rental_itemsUpsertWithWhereUniqueWithoutRentalsInputObjectSchema).array()]).optional(),

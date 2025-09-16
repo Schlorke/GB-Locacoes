@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { QuoteStatusSchema } from '../enums/QuoteStatus.schema';
 import { NestedEnumQuoteStatusFilterObjectSchema } from './NestedEnumQuoteStatusFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: QuoteStatusSchema.optional(),
   in: QuoteStatusSchema.array().optional(),
   notIn: QuoteStatusSchema.array().optional(),

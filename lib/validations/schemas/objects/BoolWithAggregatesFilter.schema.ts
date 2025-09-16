@@ -4,7 +4,7 @@ import { NestedBoolWithAggregatesFilterObjectSchema } from './NestedBoolWithAggr
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedBoolFilterObjectSchema } from './NestedBoolFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: z.boolean().optional(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolWithAggregatesFilterObjectSchema)]).optional(),
   _count: z.lazy(() => NestedIntFilterObjectSchema).optional(),

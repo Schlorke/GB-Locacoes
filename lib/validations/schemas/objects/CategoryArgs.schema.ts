@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { CategorySelectObjectSchema } from './CategorySelect.schema';
 import { CategoryIncludeObjectSchema } from './CategoryInclude.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   select: z.lazy(() => CategorySelectObjectSchema).optional(),
   include: z.lazy(() => CategoryIncludeObjectSchema).optional()
 }).strict();

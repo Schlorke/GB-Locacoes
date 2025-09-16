@@ -10,7 +10,7 @@ import { QuoteItemUpdateWithWhereUniqueWithoutEquipmentInputObjectSchema } from 
 import { QuoteItemUpdateManyWithWhereWithoutEquipmentInputObjectSchema } from './QuoteItemUpdateManyWithWhereWithoutEquipmentInput.schema';
 import { QuoteItemScalarWhereInputObjectSchema } from './QuoteItemScalarWhereInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => QuoteItemCreateWithoutEquipmentInputObjectSchema), z.lazy(() => QuoteItemCreateWithoutEquipmentInputObjectSchema).array(), z.lazy(() => QuoteItemUncheckedCreateWithoutEquipmentInputObjectSchema), z.lazy(() => QuoteItemUncheckedCreateWithoutEquipmentInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => QuoteItemCreateOrConnectWithoutEquipmentInputObjectSchema), z.lazy(() => QuoteItemCreateOrConnectWithoutEquipmentInputObjectSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => QuoteItemUpsertWithWhereUniqueWithoutEquipmentInputObjectSchema), z.lazy(() => QuoteItemUpsertWithWhereUniqueWithoutEquipmentInputObjectSchema).array()]).optional(),

@@ -4,7 +4,7 @@ import { NestedDateTimeWithAggregatesFilterObjectSchema } from './NestedDateTime
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedDateTimeFilterObjectSchema } from './NestedDateTimeFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: z.date().optional(),
   in: z.union([z.date().array(), z.string().datetime().array()]).optional(),
   notIn: z.union([z.date().array(), z.string().datetime().array()]).optional(),

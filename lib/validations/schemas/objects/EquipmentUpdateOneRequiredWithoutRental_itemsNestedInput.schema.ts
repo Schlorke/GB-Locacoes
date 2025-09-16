@@ -9,7 +9,7 @@ import { EquipmentUpdateToOneWithWhereWithoutRental_itemsInputObjectSchema } fro
 import { EquipmentUpdateWithoutRental_itemsInputObjectSchema } from './EquipmentUpdateWithoutRental_itemsInput.schema';
 import { EquipmentUncheckedUpdateWithoutRental_itemsInputObjectSchema } from './EquipmentUncheckedUpdateWithoutRental_itemsInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => EquipmentCreateWithoutRental_itemsInputObjectSchema), z.lazy(() => EquipmentUncheckedCreateWithoutRental_itemsInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => EquipmentCreateOrConnectWithoutRental_itemsInputObjectSchema).optional(),
   upsert: z.lazy(() => EquipmentUpsertWithoutRental_itemsInputObjectSchema).optional(),

@@ -2,8 +2,8 @@ import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 
 
-const makeSchema = (): z.ZodObject<any> => z.object({
-  set: z.number().nullish(),
+const makeSchema = () => z.object({
+  set: z.number().optional(),
   increment: z.number().optional(),
   decrement: z.number().optional(),
   multiply: z.number().optional(),

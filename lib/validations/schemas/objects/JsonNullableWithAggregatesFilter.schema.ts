@@ -6,16 +6,16 @@ import { NestedJsonNullableFilterObjectSchema } from './NestedJsonNullableFilter
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: jsonSchema.optional(),
   path: z.string().array().optional(),
   mode: QueryModeSchema.optional(),
   string_contains: z.string().optional(),
   string_starts_with: z.string().optional(),
   string_ends_with: z.string().optional(),
-  array_starts_with: jsonSchema.nullish(),
-  array_ends_with: jsonSchema.nullish(),
-  array_contains: jsonSchema.nullish(),
+  array_starts_with: jsonSchema.optional().nullable(),
+  array_ends_with: jsonSchema.optional().nullable(),
+  array_contains: jsonSchema.optional().nullable(),
   lt: jsonSchema.optional(),
   lte: jsonSchema.optional(),
   gt: jsonSchema.optional(),

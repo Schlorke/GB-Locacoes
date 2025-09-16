@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { EquipmentFindManySchema } from '../findManyEquipment.schema';
 import { CategoryCountOutputTypeArgsObjectSchema } from './CategoryCountOutputTypeArgs.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equipments: z.union([z.boolean(), z.lazy(() => EquipmentFindManySchema)]).optional(),
   _count: z.union([z.boolean(), z.lazy(() => CategoryCountOutputTypeArgsObjectSchema)]).optional()
 }).strict();

@@ -6,7 +6,7 @@ import { SessionUncheckedUpdateWithoutUserInputObjectSchema } from './SessionUnc
 import { SessionCreateWithoutUserInputObjectSchema } from './SessionCreateWithoutUserInput.schema';
 import { SessionUncheckedCreateWithoutUserInputObjectSchema } from './SessionUncheckedCreateWithoutUserInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => SessionWhereUniqueInputObjectSchema),
   update: z.union([z.lazy(() => SessionUpdateWithoutUserInputObjectSchema), z.lazy(() => SessionUncheckedUpdateWithoutUserInputObjectSchema)]),
   create: z.union([z.lazy(() => SessionCreateWithoutUserInputObjectSchema), z.lazy(() => SessionUncheckedCreateWithoutUserInputObjectSchema)])

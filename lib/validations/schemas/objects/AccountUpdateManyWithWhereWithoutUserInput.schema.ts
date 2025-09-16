@@ -4,7 +4,7 @@ import { AccountScalarWhereInputObjectSchema } from './AccountScalarWhereInput.s
 import { AccountUpdateManyMutationInputObjectSchema } from './AccountUpdateManyMutationInput.schema';
 import { AccountUncheckedUpdateManyWithoutUserInputObjectSchema } from './AccountUncheckedUpdateManyWithoutUserInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => AccountScalarWhereInputObjectSchema),
   data: z.union([z.lazy(() => AccountUpdateManyMutationInputObjectSchema), z.lazy(() => AccountUncheckedUpdateManyWithoutUserInputObjectSchema)])
 }).strict();

@@ -7,7 +7,7 @@ import { QuoteItemMaxOrderByAggregateInputObjectSchema } from './QuoteItemMaxOrd
 import { QuoteItemMinOrderByAggregateInputObjectSchema } from './QuoteItemMinOrderByAggregateInput.schema';
 import { QuoteItemSumOrderByAggregateInputObjectSchema } from './QuoteItemSumOrderByAggregateInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   quoteId: SortOrderSchema.optional(),
   equipmentId: SortOrderSchema.optional(),

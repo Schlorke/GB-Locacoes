@@ -6,7 +6,7 @@ import { QuoteCreateOrConnectWithoutUserInputObjectSchema } from './QuoteCreateO
 import { QuoteCreateManyUserInputEnvelopeObjectSchema } from './QuoteCreateManyUserInputEnvelope.schema';
 import { QuoteWhereUniqueInputObjectSchema } from './QuoteWhereUniqueInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => QuoteCreateWithoutUserInputObjectSchema), z.lazy(() => QuoteCreateWithoutUserInputObjectSchema).array(), z.lazy(() => QuoteUncheckedCreateWithoutUserInputObjectSchema), z.lazy(() => QuoteUncheckedCreateWithoutUserInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => QuoteCreateOrConnectWithoutUserInputObjectSchema), z.lazy(() => QuoteCreateOrConnectWithoutUserInputObjectSchema).array()]).optional(),
   createMany: z.lazy(() => QuoteCreateManyUserInputEnvelopeObjectSchema).optional(),

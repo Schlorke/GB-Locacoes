@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { EquipmentArgsObjectSchema } from './EquipmentArgs.schema';
 import { rentalsArgsObjectSchema } from './rentalsArgs.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equipments: z.union([z.boolean(), z.lazy(() => EquipmentArgsObjectSchema)]).optional(),
   rentals: z.union([z.boolean(), z.lazy(() => rentalsArgsObjectSchema)]).optional()
 }).strict();

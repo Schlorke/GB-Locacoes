@@ -5,10 +5,10 @@ import { IntWithAggregatesFilterObjectSchema } from './IntWithAggregatesFilter.s
 import { DecimalWithAggregatesFilterObjectSchema } from './DecimalWithAggregatesFilter.schema';
 import { DateTimeWithAggregatesFilterObjectSchema } from './DateTimeWithAggregatesFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
-  AND: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
-  OR: z.lazy(makeSchema).array().optional(),
-  NOT: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
+const quoteitemscalarwherewithaggregatesinputSchema = z.object({
+  AND: z.union([z.lazy(() => QuoteItemScalarWhereWithAggregatesInputObjectSchema), z.lazy(() => QuoteItemScalarWhereWithAggregatesInputObjectSchema).array()]).optional(),
+  OR: z.lazy(() => QuoteItemScalarWhereWithAggregatesInputObjectSchema).array().optional(),
+  NOT: z.union([z.lazy(() => QuoteItemScalarWhereWithAggregatesInputObjectSchema), z.lazy(() => QuoteItemScalarWhereWithAggregatesInputObjectSchema).array()]).optional(),
   id: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
   quoteId: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
   equipmentId: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
@@ -16,8 +16,8 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   days: z.union([z.lazy(() => IntWithAggregatesFilterObjectSchema), z.number().int()]).optional(),
   pricePerDay: z.union([z.lazy(() => DecimalWithAggregatesFilterObjectSchema), z.number()]).optional(),
   total: z.union([z.lazy(() => DecimalWithAggregatesFilterObjectSchema), z.number()]).optional(),
-  createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.date()]).optional(),
-  updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.date()]).optional()
+  createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.coerce.date()]).optional(),
+  updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.coerce.date()]).optional()
 }).strict();
-export const QuoteItemScalarWhereWithAggregatesInputObjectSchema: z.ZodType<Prisma.QuoteItemScalarWhereWithAggregatesInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteItemScalarWhereWithAggregatesInput>;
-export const QuoteItemScalarWhereWithAggregatesInputObjectZodSchema = makeSchema();
+export const QuoteItemScalarWhereWithAggregatesInputObjectSchema: z.ZodType<Prisma.QuoteItemScalarWhereWithAggregatesInput> = quoteitemscalarwherewithaggregatesinputSchema as unknown as z.ZodType<Prisma.QuoteItemScalarWhereWithAggregatesInput>;
+export const QuoteItemScalarWhereWithAggregatesInputObjectZodSchema = quoteitemscalarwherewithaggregatesinputSchema;

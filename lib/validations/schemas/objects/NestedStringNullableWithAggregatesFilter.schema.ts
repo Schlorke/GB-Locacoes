@@ -3,10 +3,10 @@ import type { Prisma } from '@prisma/client';
 import { NestedIntNullableFilterObjectSchema } from './NestedIntNullableFilter.schema';
 import { NestedStringNullableFilterObjectSchema } from './NestedStringNullableFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
-  equals: z.string().nullish(),
-  in: z.string().array().nullish(),
-  notIn: z.string().array().nullish(),
+const nestedstringnullablewithaggregatesfilterSchema = z.object({
+  equals: z.string().optional().nullable(),
+  in: z.string().array().optional().nullable(),
+  notIn: z.string().array().optional().nullable(),
   lt: z.string().optional(),
   lte: z.string().optional(),
   gt: z.string().optional(),
@@ -14,10 +14,10 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
-  not: z.union([z.string(), z.lazy(makeSchema)]).nullish(),
+  not: z.union([z.string(), z.lazy(() => NestedStringNullableWithAggregatesFilterObjectSchema)]).optional().nullable(),
   _count: z.lazy(() => NestedIntNullableFilterObjectSchema).optional(),
   _min: z.lazy(() => NestedStringNullableFilterObjectSchema).optional(),
   _max: z.lazy(() => NestedStringNullableFilterObjectSchema).optional()
 }).strict();
-export const NestedStringNullableWithAggregatesFilterObjectSchema: z.ZodType<Prisma.NestedStringNullableWithAggregatesFilter> = makeSchema() as unknown as z.ZodType<Prisma.NestedStringNullableWithAggregatesFilter>;
-export const NestedStringNullableWithAggregatesFilterObjectZodSchema = makeSchema();
+export const NestedStringNullableWithAggregatesFilterObjectSchema: z.ZodType<Prisma.NestedStringNullableWithAggregatesFilter> = nestedstringnullablewithaggregatesfilterSchema as unknown as z.ZodType<Prisma.NestedStringNullableWithAggregatesFilter>;
+export const NestedStringNullableWithAggregatesFilterObjectZodSchema = nestedstringnullablewithaggregatesfilterSchema;

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: z.number().int().optional(),
   in: z.number().int().array().optional(),
   notIn: z.number().int().array().optional(),

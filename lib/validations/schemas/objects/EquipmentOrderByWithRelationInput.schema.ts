@@ -6,7 +6,7 @@ import { CategoryOrderByWithRelationInputObjectSchema } from './CategoryOrderByW
 import { QuoteItemOrderByRelationAggregateInputObjectSchema } from './QuoteItemOrderByRelationAggregateInput.schema';
 import { rental_itemsOrderByRelationAggregateInputObjectSchema } from './rental_itemsOrderByRelationAggregateInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   name: SortOrderSchema.optional(),
   description: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),

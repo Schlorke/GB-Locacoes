@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedStringFilterObjectSchema } from './NestedStringFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const nesteduuidwithaggregatesfilterSchema = z.object({
   equals: z.string().optional(),
   in: z.string().array().optional(),
   notIn: z.string().array().optional(),
@@ -11,10 +11,10 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   lte: z.string().optional(),
   gt: z.string().optional(),
   gte: z.string().optional(),
-  not: z.union([z.string(), z.lazy(makeSchema)]).optional(),
+  not: z.union([z.string(), z.lazy(() => NestedUuidWithAggregatesFilterObjectSchema)]).optional(),
   _count: z.lazy(() => NestedIntFilterObjectSchema).optional(),
   _min: z.lazy(() => NestedStringFilterObjectSchema).optional(),
   _max: z.lazy(() => NestedStringFilterObjectSchema).optional()
 }).strict();
-export const NestedUuidWithAggregatesFilterObjectSchema: z.ZodType<Prisma.NestedUuidWithAggregatesFilter> = makeSchema() as unknown as z.ZodType<Prisma.NestedUuidWithAggregatesFilter>;
-export const NestedUuidWithAggregatesFilterObjectZodSchema = makeSchema();
+export const NestedUuidWithAggregatesFilterObjectSchema: z.ZodType<Prisma.NestedUuidWithAggregatesFilter> = nesteduuidwithaggregatesfilterSchema as unknown as z.ZodType<Prisma.NestedUuidWithAggregatesFilter>;
+export const NestedUuidWithAggregatesFilterObjectZodSchema = nesteduuidwithaggregatesfilterSchema;

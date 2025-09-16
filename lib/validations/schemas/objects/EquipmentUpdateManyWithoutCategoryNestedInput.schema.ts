@@ -10,7 +10,7 @@ import { EquipmentUpdateWithWhereUniqueWithoutCategoryInputObjectSchema } from '
 import { EquipmentUpdateManyWithWhereWithoutCategoryInputObjectSchema } from './EquipmentUpdateManyWithWhereWithoutCategoryInput.schema';
 import { EquipmentScalarWhereInputObjectSchema } from './EquipmentScalarWhereInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => EquipmentCreateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentCreateWithoutCategoryInputObjectSchema).array(), z.lazy(() => EquipmentUncheckedCreateWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentUncheckedCreateWithoutCategoryInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => EquipmentCreateOrConnectWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentCreateOrConnectWithoutCategoryInputObjectSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => EquipmentUpsertWithWhereUniqueWithoutCategoryInputObjectSchema), z.lazy(() => EquipmentUpsertWithWhereUniqueWithoutCategoryInputObjectSchema).array()]).optional(),

@@ -5,7 +5,7 @@ import { SessionCountOrderByAggregateInputObjectSchema } from './SessionCountOrd
 import { SessionMaxOrderByAggregateInputObjectSchema } from './SessionMaxOrderByAggregateInput.schema';
 import { SessionMinOrderByAggregateInputObjectSchema } from './SessionMinOrderByAggregateInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   sessionToken: SortOrderSchema.optional(),
   userId: SortOrderSchema.optional(),

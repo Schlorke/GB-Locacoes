@@ -5,7 +5,7 @@ import { NestedStringWithAggregatesFilterObjectSchema } from './NestedStringWith
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedStringFilterObjectSchema } from './NestedStringFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: z.string().optional(),
   in: z.string().array().optional(),
   notIn: z.string().array().optional(),

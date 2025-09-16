@@ -4,7 +4,7 @@ import { NestedDecimalWithAggregatesFilterObjectSchema } from './NestedDecimalWi
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedDecimalFilterObjectSchema } from './NestedDecimalFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: z.number().optional(),
   in: z.number().array().optional(),
   notIn: z.number().array().optional(),

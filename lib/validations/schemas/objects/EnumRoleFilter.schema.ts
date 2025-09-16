@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { RoleSchema } from '../enums/Role.schema';
 import { NestedEnumRoleFilterObjectSchema } from './NestedEnumRoleFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: RoleSchema.optional(),
   in: RoleSchema.array().optional(),
   notIn: RoleSchema.array().optional(),

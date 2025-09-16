@@ -3,14 +3,13 @@ import type { Prisma } from '@prisma/client';
 import { EquipmentCreateNestedOneWithoutQuoteItemsInputObjectSchema } from './EquipmentCreateNestedOneWithoutQuoteItemsInput.schema';
 import { QuoteCreateNestedOneWithoutItemsInputObjectSchema } from './QuoteCreateNestedOneWithoutItemsInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: z.string().optional(),
   quantity: z.number().int().optional(),
   days: z.number().int().optional(),
   pricePerDay: z.number(),
   total: z.number(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
+  createdAt: z.coerce.date().optional(),
   equipment: z.lazy(() => EquipmentCreateNestedOneWithoutQuoteItemsInputObjectSchema),
   quote: z.lazy(() => QuoteCreateNestedOneWithoutItemsInputObjectSchema)
 }).strict();

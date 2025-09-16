@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const nestedstringfilterSchema = z.object({
   equals: z.string().optional(),
   in: z.string().array().optional(),
   notIn: z.string().array().optional(),
@@ -13,7 +13,7 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   contains: z.string().optional(),
   startsWith: z.string().optional(),
   endsWith: z.string().optional(),
-  not: z.union([z.string(), z.lazy(makeSchema)]).optional()
+  not: z.union([z.string(), z.lazy(() => NestedStringFilterObjectSchema)]).optional()
 }).strict();
-export const NestedStringFilterObjectSchema: z.ZodType<Prisma.NestedStringFilter> = makeSchema() as unknown as z.ZodType<Prisma.NestedStringFilter>;
-export const NestedStringFilterObjectZodSchema = makeSchema();
+export const NestedStringFilterObjectSchema: z.ZodType<Prisma.NestedStringFilter> = nestedstringfilterSchema as unknown as z.ZodType<Prisma.NestedStringFilter>;
+export const NestedStringFilterObjectZodSchema = nestedstringfilterSchema;

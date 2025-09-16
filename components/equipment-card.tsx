@@ -86,14 +86,7 @@ export function EquipmentCard({ equipment }: EquipmentCardProps) {
             </Button>
           </Link>
 
-          <Link
-            href={`/orcamento?equipmentId=${equipment.id}`}
-            className="w-full"
-            onClick={() => {
-              // Força scroll para o topo após navegação
-              setTimeout(() => window.scrollTo(0, 0), 100)
-            }}
-          >
+          <Link href={`/equipamentos/${equipment.id}`} className="w-full">
             <Button
               className="w-full"
               size="sm"

@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { QuoteItemWhereInputObjectSchema } from './objects/QuoteItemWhereInput.schema';
 import { QuoteItemOrderByWithAggregationInputObjectSchema } from './objects/QuoteItemOrderByWithAggregationInput.schema';
@@ -6,5 +7,9 @@ import { QuoteItemScalarFieldEnumSchema } from './enums/QuoteItemScalarFieldEnum
 import { QuoteItemCountAggregateInputObjectSchema } from './objects/QuoteItemCountAggregateInput.schema';
 import { QuoteItemMinAggregateInputObjectSchema } from './objects/QuoteItemMinAggregateInput.schema';
 import { QuoteItemMaxAggregateInputObjectSchema } from './objects/QuoteItemMaxAggregateInput.schema';
+import { QuoteItemAvgAggregateInputObjectSchema } from './objects/QuoteItemAvgAggregateInput.schema';
+import { QuoteItemSumAggregateInputObjectSchema } from './objects/QuoteItemSumAggregateInput.schema';
 
-export const QuoteItemGroupBySchema = z.object({ where: QuoteItemWhereInputObjectSchema.optional(), orderBy: z.union([QuoteItemOrderByWithAggregationInputObjectSchema, QuoteItemOrderByWithAggregationInputObjectSchema.array()]).optional(), having: QuoteItemScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(QuoteItemScalarFieldEnumSchema), _count: z.union([ z.literal(true), QuoteItemCountAggregateInputObjectSchema ]).optional(), _min: QuoteItemMinAggregateInputObjectSchema.optional(), _max: QuoteItemMaxAggregateInputObjectSchema.optional() })
+export const QuoteItemGroupBySchema: z.ZodType<Prisma.QuoteItemGroupByArgs> = z.object({ where: QuoteItemWhereInputObjectSchema.optional(), orderBy: z.union([QuoteItemOrderByWithAggregationInputObjectSchema, QuoteItemOrderByWithAggregationInputObjectSchema.array()]).optional(), having: QuoteItemScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(QuoteItemScalarFieldEnumSchema), _count: z.union([ z.literal(true), QuoteItemCountAggregateInputObjectSchema ]).optional(), _min: QuoteItemMinAggregateInputObjectSchema.optional(), _max: QuoteItemMaxAggregateInputObjectSchema.optional(), _avg: QuoteItemAvgAggregateInputObjectSchema.optional(), _sum: QuoteItemSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.QuoteItemGroupByArgs>;
+
+export const QuoteItemGroupByZodSchema = z.object({ where: QuoteItemWhereInputObjectSchema.optional(), orderBy: z.union([QuoteItemOrderByWithAggregationInputObjectSchema, QuoteItemOrderByWithAggregationInputObjectSchema.array()]).optional(), having: QuoteItemScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(QuoteItemScalarFieldEnumSchema), _count: z.union([ z.literal(true), QuoteItemCountAggregateInputObjectSchema ]).optional(), _min: QuoteItemMinAggregateInputObjectSchema.optional(), _max: QuoteItemMaxAggregateInputObjectSchema.optional(), _avg: QuoteItemAvgAggregateInputObjectSchema.optional(), _sum: QuoteItemSumAggregateInputObjectSchema.optional() }).strict();

@@ -4,7 +4,7 @@ import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { EquipmentOrderByWithRelationInputObjectSchema } from './EquipmentOrderByWithRelationInput.schema';
 import { QuoteOrderByWithRelationInputObjectSchema } from './QuoteOrderByWithRelationInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   quoteId: SortOrderSchema.optional(),
   equipmentId: SortOrderSchema.optional(),

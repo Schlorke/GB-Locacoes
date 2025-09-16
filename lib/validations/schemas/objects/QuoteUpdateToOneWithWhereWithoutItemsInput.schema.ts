@@ -4,7 +4,7 @@ import { QuoteWhereInputObjectSchema } from './QuoteWhereInput.schema';
 import { QuoteUpdateWithoutItemsInputObjectSchema } from './QuoteUpdateWithoutItemsInput.schema';
 import { QuoteUncheckedUpdateWithoutItemsInputObjectSchema } from './QuoteUncheckedUpdateWithoutItemsInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => QuoteWhereInputObjectSchema).optional(),
   data: z.union([z.lazy(() => QuoteUpdateWithoutItemsInputObjectSchema), z.lazy(() => QuoteUncheckedUpdateWithoutItemsInputObjectSchema)])
 }).strict();

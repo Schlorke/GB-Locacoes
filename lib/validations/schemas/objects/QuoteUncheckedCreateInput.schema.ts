@@ -3,19 +3,18 @@ import type { Prisma } from '@prisma/client';
 import { QuoteStatusSchema } from '../enums/QuoteStatus.schema';
 import { QuoteItemUncheckedCreateNestedManyWithoutQuoteInputObjectSchema } from './QuoteItemUncheckedCreateNestedManyWithoutQuoteInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: z.string().optional(),
   name: z.string(),
   email: z.string(),
   phone: z.string(),
-  company: z.string().nullish(),
-  message: z.string().nullish(),
+  company: z.string().optional().nullable(),
+  message: z.string().optional().nullable(),
   total: z.number().optional(),
   status: QuoteStatusSchema.optional(),
-  userId: z.string().nullish(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-  items: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutQuoteInputObjectSchema).optional()
+  userId: z.string().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  items: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutQuoteInputObjectSchema)
 }).strict();
 export const QuoteUncheckedCreateInputObjectSchema: z.ZodType<Prisma.QuoteUncheckedCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteUncheckedCreateInput>;
 export const QuoteUncheckedCreateInputObjectZodSchema = makeSchema();

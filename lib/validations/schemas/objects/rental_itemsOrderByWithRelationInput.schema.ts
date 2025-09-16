@@ -5,7 +5,7 @@ import { SortOrderInputObjectSchema } from './SortOrderInput.schema';
 import { EquipmentOrderByWithRelationInputObjectSchema } from './EquipmentOrderByWithRelationInput.schema';
 import { rentalsOrderByWithRelationInputObjectSchema } from './rentalsOrderByWithRelationInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
   rentalid: SortOrderSchema.optional(),
   equipmentid: SortOrderSchema.optional(),

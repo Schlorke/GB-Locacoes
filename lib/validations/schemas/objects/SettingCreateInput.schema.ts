@@ -4,7 +4,7 @@ import { JsonNullValueInputSchema } from '../enums/JsonNullValueInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: z.string().optional(),
   companyPhone: z.string().optional(),
   companyIconUrl: z.string().optional(),
@@ -32,8 +32,7 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   securityConfig: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   customCss: z.string().optional(),
   customJs: z.string().optional(),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional()
+  createdAt: z.coerce.date().optional()
 }).strict();
 export const SettingCreateInputObjectSchema: z.ZodType<Prisma.SettingCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.SettingCreateInput>;
 export const SettingCreateInputObjectZodSchema = makeSchema();

@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { NestedBoolFilterObjectSchema } from './NestedBoolFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: z.boolean().optional(),
   not: z.union([z.boolean(), z.lazy(() => NestedBoolFilterObjectSchema)]).optional()
 }).strict();

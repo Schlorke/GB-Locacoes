@@ -10,7 +10,7 @@ import { UserUpdateToOneWithWhereWithoutQuotesInputObjectSchema } from './UserUp
 import { UserUpdateWithoutQuotesInputObjectSchema } from './UserUpdateWithoutQuotesInput.schema';
 import { UserUncheckedUpdateWithoutQuotesInputObjectSchema } from './UserUncheckedUpdateWithoutQuotesInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => UserCreateWithoutQuotesInputObjectSchema), z.lazy(() => UserUncheckedCreateWithoutQuotesInputObjectSchema)]).optional(),
   connectOrCreate: z.lazy(() => UserCreateOrConnectWithoutQuotesInputObjectSchema).optional(),
   upsert: z.lazy(() => UserUpsertWithoutQuotesInputObjectSchema).optional(),

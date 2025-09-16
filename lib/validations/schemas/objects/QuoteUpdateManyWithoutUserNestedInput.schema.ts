@@ -10,7 +10,7 @@ import { QuoteUpdateWithWhereUniqueWithoutUserInputObjectSchema } from './QuoteU
 import { QuoteUpdateManyWithWhereWithoutUserInputObjectSchema } from './QuoteUpdateManyWithWhereWithoutUserInput.schema';
 import { QuoteScalarWhereInputObjectSchema } from './QuoteScalarWhereInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => QuoteCreateWithoutUserInputObjectSchema), z.lazy(() => QuoteCreateWithoutUserInputObjectSchema).array(), z.lazy(() => QuoteUncheckedCreateWithoutUserInputObjectSchema), z.lazy(() => QuoteUncheckedCreateWithoutUserInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => QuoteCreateOrConnectWithoutUserInputObjectSchema), z.lazy(() => QuoteCreateOrConnectWithoutUserInputObjectSchema).array()]).optional(),
   upsert: z.union([z.lazy(() => QuoteUpsertWithWhereUniqueWithoutUserInputObjectSchema), z.lazy(() => QuoteUpsertWithWhereUniqueWithoutUserInputObjectSchema).array()]).optional(),

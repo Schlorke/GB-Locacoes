@@ -6,7 +6,7 @@ import { rental_itemsCreateOrConnectWithoutEquipmentsInputObjectSchema } from '.
 import { rental_itemsCreateManyEquipmentsInputEnvelopeObjectSchema } from './rental_itemsCreateManyEquipmentsInputEnvelope.schema';
 import { rental_itemsWhereUniqueInputObjectSchema } from './rental_itemsWhereUniqueInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   create: z.union([z.lazy(() => rental_itemsCreateWithoutEquipmentsInputObjectSchema), z.lazy(() => rental_itemsCreateWithoutEquipmentsInputObjectSchema).array(), z.lazy(() => rental_itemsUncheckedCreateWithoutEquipmentsInputObjectSchema), z.lazy(() => rental_itemsUncheckedCreateWithoutEquipmentsInputObjectSchema).array()]).optional(),
   connectOrCreate: z.union([z.lazy(() => rental_itemsCreateOrConnectWithoutEquipmentsInputObjectSchema), z.lazy(() => rental_itemsCreateOrConnectWithoutEquipmentsInputObjectSchema).array()]).optional(),
   createMany: z.lazy(() => rental_itemsCreateManyEquipmentsInputEnvelopeObjectSchema).optional(),

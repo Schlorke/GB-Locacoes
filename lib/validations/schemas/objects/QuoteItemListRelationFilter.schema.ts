@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { QuoteItemWhereInputObjectSchema } from './QuoteItemWhereInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   every: z.lazy(() => QuoteItemWhereInputObjectSchema).optional(),
   some: z.lazy(() => QuoteItemWhereInputObjectSchema).optional(),
   none: z.lazy(() => QuoteItemWhereInputObjectSchema).optional()

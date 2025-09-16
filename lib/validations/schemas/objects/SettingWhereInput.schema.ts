@@ -5,10 +5,10 @@ import { JsonFilterObjectSchema } from './JsonFilter.schema';
 import { BoolFilterObjectSchema } from './BoolFilter.schema';
 import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
-  AND: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
-  OR: z.lazy(makeSchema).array().optional(),
-  NOT: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
+const settingwhereinputSchema = z.object({
+  AND: z.union([z.lazy(() => SettingWhereInputObjectSchema), z.lazy(() => SettingWhereInputObjectSchema).array()]).optional(),
+  OR: z.lazy(() => SettingWhereInputObjectSchema).array().optional(),
+  NOT: z.union([z.lazy(() => SettingWhereInputObjectSchema), z.lazy(() => SettingWhereInputObjectSchema).array()]).optional(),
   id: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   companyPhone: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   companyIconUrl: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
@@ -36,8 +36,8 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   securityConfig: z.lazy(() => JsonFilterObjectSchema).optional(),
   customCss: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   customJs: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
-  createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.date()]).optional(),
-  updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.date()]).optional()
+  createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
+  updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional()
 }).strict();
-export const SettingWhereInputObjectSchema: z.ZodType<Prisma.SettingWhereInput> = makeSchema() as unknown as z.ZodType<Prisma.SettingWhereInput>;
-export const SettingWhereInputObjectZodSchema = makeSchema();
+export const SettingWhereInputObjectSchema: z.ZodType<Prisma.SettingWhereInput> = settingwhereinputSchema as unknown as z.ZodType<Prisma.SettingWhereInput>;
+export const SettingWhereInputObjectZodSchema = settingwhereinputSchema;

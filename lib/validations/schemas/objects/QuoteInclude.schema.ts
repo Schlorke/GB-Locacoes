@@ -4,7 +4,7 @@ import { QuoteItemFindManySchema } from '../findManyQuoteItem.schema';
 import { UserArgsObjectSchema } from './UserArgs.schema';
 import { QuoteCountOutputTypeArgsObjectSchema } from './QuoteCountOutputTypeArgs.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   items: z.union([z.boolean(), z.lazy(() => QuoteItemFindManySchema)]).optional(),
   user: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional(),
   _count: z.union([z.boolean(), z.lazy(() => QuoteCountOutputTypeArgsObjectSchema)]).optional()

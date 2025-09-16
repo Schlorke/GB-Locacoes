@@ -6,7 +6,7 @@ import { rentalsUncheckedUpdateWithoutUsersInputObjectSchema } from './rentalsUn
 import { rentalsCreateWithoutUsersInputObjectSchema } from './rentalsCreateWithoutUsersInput.schema';
 import { rentalsUncheckedCreateWithoutUsersInputObjectSchema } from './rentalsUncheckedCreateWithoutUsersInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => rentalsWhereUniqueInputObjectSchema),
   update: z.union([z.lazy(() => rentalsUpdateWithoutUsersInputObjectSchema), z.lazy(() => rentalsUncheckedUpdateWithoutUsersInputObjectSchema)]),
   create: z.union([z.lazy(() => rentalsCreateWithoutUsersInputObjectSchema), z.lazy(() => rentalsUncheckedCreateWithoutUsersInputObjectSchema)])

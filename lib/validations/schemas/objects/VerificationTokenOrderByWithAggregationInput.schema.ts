@@ -5,7 +5,7 @@ import { VerificationTokenCountOrderByAggregateInputObjectSchema } from './Verif
 import { VerificationTokenMaxOrderByAggregateInputObjectSchema } from './VerificationTokenMaxOrderByAggregateInput.schema';
 import { VerificationTokenMinOrderByAggregateInputObjectSchema } from './VerificationTokenMinOrderByAggregateInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   identifier: SortOrderSchema.optional(),
   token: SortOrderSchema.optional(),
   expires: SortOrderSchema.optional(),

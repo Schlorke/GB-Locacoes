@@ -7,7 +7,7 @@ import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldU
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   companyPhone: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   companyIconUrl: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -35,8 +35,8 @@ const makeSchema = (): z.ZodObject<any> => z.object({
   securityConfig: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   customCss: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   customJs: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
-  createdAt: z.union([z.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
-  updatedAt: z.union([z.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional()
+  createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
+  updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional()
 }).strict();
 export const SettingUncheckedUpdateManyInputObjectSchema: z.ZodType<Prisma.SettingUncheckedUpdateManyInput> = makeSchema() as unknown as z.ZodType<Prisma.SettingUncheckedUpdateManyInput>;
 export const SettingUncheckedUpdateManyInputObjectZodSchema = makeSchema();

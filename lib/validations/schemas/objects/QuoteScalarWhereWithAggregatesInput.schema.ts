@@ -7,21 +7,21 @@ import { EnumQuoteStatusWithAggregatesFilterObjectSchema } from './EnumQuoteStat
 import { QuoteStatusSchema } from '../enums/QuoteStatus.schema';
 import { DateTimeWithAggregatesFilterObjectSchema } from './DateTimeWithAggregatesFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
-  AND: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
-  OR: z.lazy(makeSchema).array().optional(),
-  NOT: z.union([z.lazy(makeSchema), z.lazy(makeSchema).array()]).optional(),
+const quotescalarwherewithaggregatesinputSchema = z.object({
+  AND: z.union([z.lazy(() => QuoteScalarWhereWithAggregatesInputObjectSchema), z.lazy(() => QuoteScalarWhereWithAggregatesInputObjectSchema).array()]).optional(),
+  OR: z.lazy(() => QuoteScalarWhereWithAggregatesInputObjectSchema).array().optional(),
+  NOT: z.union([z.lazy(() => QuoteScalarWhereWithAggregatesInputObjectSchema), z.lazy(() => QuoteScalarWhereWithAggregatesInputObjectSchema).array()]).optional(),
   id: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
   name: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
   email: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
   phone: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
-  company: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).nullish(),
-  message: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).nullish(),
+  company: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).optional().nullable(),
+  message: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).optional().nullable(),
   total: z.union([z.lazy(() => DecimalWithAggregatesFilterObjectSchema), z.number()]).optional(),
   status: z.union([z.lazy(() => EnumQuoteStatusWithAggregatesFilterObjectSchema), QuoteStatusSchema]).optional(),
-  userId: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).nullish(),
-  createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.date()]).optional(),
-  updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.date()]).optional()
+  userId: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).optional().nullable(),
+  createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.coerce.date()]).optional(),
+  updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.coerce.date()]).optional()
 }).strict();
-export const QuoteScalarWhereWithAggregatesInputObjectSchema: z.ZodType<Prisma.QuoteScalarWhereWithAggregatesInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteScalarWhereWithAggregatesInput>;
-export const QuoteScalarWhereWithAggregatesInputObjectZodSchema = makeSchema();
+export const QuoteScalarWhereWithAggregatesInputObjectSchema: z.ZodType<Prisma.QuoteScalarWhereWithAggregatesInput> = quotescalarwherewithaggregatesinputSchema as unknown as z.ZodType<Prisma.QuoteScalarWhereWithAggregatesInput>;
+export const QuoteScalarWhereWithAggregatesInputObjectZodSchema = quotescalarwherewithaggregatesinputSchema;

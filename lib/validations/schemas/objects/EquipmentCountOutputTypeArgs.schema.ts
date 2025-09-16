@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { EquipmentCountOutputTypeSelectObjectSchema } from './EquipmentCountOutputTypeSelect.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   select: z.lazy(() => EquipmentCountOutputTypeSelectObjectSchema).optional()
 }).strict();
 export const EquipmentCountOutputTypeArgsObjectSchema = makeSchema();

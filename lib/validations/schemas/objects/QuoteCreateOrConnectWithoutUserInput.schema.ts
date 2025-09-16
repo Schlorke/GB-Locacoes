@@ -4,7 +4,7 @@ import { QuoteWhereUniqueInputObjectSchema } from './QuoteWhereUniqueInput.schem
 import { QuoteCreateWithoutUserInputObjectSchema } from './QuoteCreateWithoutUserInput.schema';
 import { QuoteUncheckedCreateWithoutUserInputObjectSchema } from './QuoteUncheckedCreateWithoutUserInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => QuoteWhereUniqueInputObjectSchema),
   create: z.union([z.lazy(() => QuoteCreateWithoutUserInputObjectSchema), z.lazy(() => QuoteUncheckedCreateWithoutUserInputObjectSchema)])
 }).strict();

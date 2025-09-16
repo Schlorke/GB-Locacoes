@@ -4,7 +4,7 @@ import { NestedIntWithAggregatesFilterObjectSchema } from './NestedIntWithAggreg
 import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
 import { NestedFloatFilterObjectSchema } from './NestedFloatFilter.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   equals: z.number().int().optional(),
   in: z.number().int().array().optional(),
   notIn: z.number().int().array().optional(),

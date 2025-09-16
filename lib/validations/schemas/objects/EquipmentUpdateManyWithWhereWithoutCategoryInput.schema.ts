@@ -4,7 +4,7 @@ import { EquipmentScalarWhereInputObjectSchema } from './EquipmentScalarWhereInp
 import { EquipmentUpdateManyMutationInputObjectSchema } from './EquipmentUpdateManyMutationInput.schema';
 import { EquipmentUncheckedUpdateManyWithoutCategoryInputObjectSchema } from './EquipmentUncheckedUpdateManyWithoutCategoryInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => EquipmentScalarWhereInputObjectSchema),
   data: z.union([z.lazy(() => EquipmentUpdateManyMutationInputObjectSchema), z.lazy(() => EquipmentUncheckedUpdateManyWithoutCategoryInputObjectSchema)])
 }).strict();

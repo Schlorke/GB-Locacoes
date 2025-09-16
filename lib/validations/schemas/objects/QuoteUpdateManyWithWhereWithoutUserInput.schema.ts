@@ -4,7 +4,7 @@ import { QuoteScalarWhereInputObjectSchema } from './QuoteScalarWhereInput.schem
 import { QuoteUpdateManyMutationInputObjectSchema } from './QuoteUpdateManyMutationInput.schema';
 import { QuoteUncheckedUpdateManyWithoutUserInputObjectSchema } from './QuoteUncheckedUpdateManyWithoutUserInput.schema'
 
-const makeSchema = (): z.ZodObject<any> => z.object({
+const makeSchema = () => z.object({
   where: z.lazy(() => QuoteScalarWhereInputObjectSchema),
   data: z.union([z.lazy(() => QuoteUpdateManyMutationInputObjectSchema), z.lazy(() => QuoteUncheckedUpdateManyWithoutUserInputObjectSchema)])
 }).strict();
