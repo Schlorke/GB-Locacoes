@@ -6,7 +6,17 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2025-01-20] - Atualização Massiva de Dependências
+## [2025-01-20] - Atualização Massiva de Dependências + Upgrade PostgreSQL
+
+### Security 🔐
+
+- **PostgreSQL Upgrade**: 17.4.1.043 → 17.6.1.003
+  - Aplicados patches de segurança críticos
+  - Upgrade in-place via Supabase Dashboard
+  - Downtime: ~5 minutos (8GB database)
+  - Validação completa: Build ✅, Tests ✅, API ✅
+
+### Updated 📦
 
 ### Updated 📦
 

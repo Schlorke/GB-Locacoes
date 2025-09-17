@@ -208,6 +208,7 @@
     "stylelint": "^16.24.0",
     "stylelint-config-standard": "^39.0.0",
     "stylelint-config-tailwindcss": "^1.0.0",
+    "supabase": "^2.40.7",
     "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "3.4.17",
     "tsx": "^4.20.4",
@@ -230,18 +231,13 @@
       "node-domexception": "npm:@types/node@*"
     },
     "onlyBuiltDependencies": [
-      "@bundled-es-modules/glob",
       "@prisma/client",
       "@prisma/engines",
-      "@swc/core",
       "@vercel/speed-insights",
-      "core-js-pure",
       "esbuild",
       "prisma",
-      "scrollreveal",
       "sharp",
-      "style-dictionary",
-      "unrs-resolver"
+      "supabase"
     ]
   }
 }
