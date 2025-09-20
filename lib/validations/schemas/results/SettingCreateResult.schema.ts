@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 export const SettingCreateResultSchema = z.object({
   id: z.string(),
   companyPhone: z.string(),
@@ -28,5 +28,5 @@ export const SettingCreateResultSchema = z.object({
   customCss: z.string(),
   customJs: z.string(),
   createdAt: z.date(),
-  updatedAt: z.date()
-});
+  updatedAt: z.date(),
+})

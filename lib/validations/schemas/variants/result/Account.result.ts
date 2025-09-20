@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 // prettier-ignore
 export const AccountResultSchema = z.object({
@@ -17,4 +17,4 @@ export const AccountResultSchema = z.object({
     user: z.unknown()
 }).strict();
 
-export type AccountResultType = z.infer<typeof AccountResultSchema>;
+export type AccountResultType = z.infer<typeof AccountResultSchema>

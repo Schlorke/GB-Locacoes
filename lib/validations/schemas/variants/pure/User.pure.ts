@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
-import { RoleSchema } from '../../enums/Role.schema';
+import { RoleSchema } from '../../enums/Role.schema'
 // prettier-ignore
 export const UserModelSchema = z.object({
     id: z.string(),
@@ -12,10 +12,10 @@ export const UserModelSchema = z.object({
     image: z.string().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    accounts: z.array(z.unknown()),
-    quotes: z.array(z.unknown()),
-    rentals: z.array(z.unknown()),
-    sessions: z.array(z.unknown())
+    accounts: z.array(z.unknown()).array(),
+    quotes: z.array(z.unknown()).array(),
+    rentals: z.array(z.unknown()).array(),
+    sessions: z.array(z.unknown()).array()
 }).strict();
 
-export type UserModelType = z.infer<typeof UserModelSchema>;
+export type UserModelType = z.infer<typeof UserModelSchema>

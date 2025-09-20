@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 // prettier-ignore
 export const SettingInputSchema = z.object({
@@ -33,4 +33,4 @@ export const SettingInputSchema = z.object({
     updatedAt: z.date()
 }).strict();
 
-export type SettingInputType = z.infer<typeof SettingInputSchema>;
+export type SettingInputType = z.infer<typeof SettingInputSchema>

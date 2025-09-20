@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 export const CategoryUpsertResultSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -10,5 +10,5 @@ export const CategoryUpsertResultSchema = z.object({
   slug: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  equipments: z.array(z.unknown())
-});
+  equipments: z.array(z.unknown()),
+})

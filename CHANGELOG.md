@@ -6,6 +6,97 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-01-21] - Implementação Completa do Autocomplete Search Bar
+
+### Added ✨
+
+- **Search Bar com Autocomplete**: Sistema completo de busca inteligente na Hero
+  section
+  - Busca em tempo real no banco de dados com debounce de 300ms
+  - API Route `/api/equipamentos/search` para queries otimizadas
+  - Navegação por teclado (setas, Enter, Escape) totalmente funcional
+  - Seleção por click ou Enter com atualização correta do input
+  - Redirecionamento inteligente: item selecionado → detalhes, texto → busca
+  - Feedback visual com ring verde para seleção válida
+  - Loading state com spinner durante as buscas
+
+### Fixed 🐛
+
+- **Dropdown z-index**: Corrigido problema de dropdown aparecer atrás de outras
+  seções
+  - Container com `z-[9998]` e dropdown com `z-[99999]`
+  - Removido `overflow-hidden` do Hero section
+  - Posicionamento absoluto correto relativo ao input
+
+- **Substituição de texto**: Input não atualizava com item selecionado
+  - Implementado `useCallback` com batch update
+  - Força atualização do DOM quando necessário
+  - Mudança de `onClick` para `onMouseDown` para captura correta
+
+- **Botão X (Clear)**: Lógica inconsistente de exibição
+  - Agora aparece apenas quando há texto no input
+  - Aria-label dinâmico: "Limpar seleção" vs "Limpar busca"
+  - Cores visíveis: `text-gray-600 hover:text-gray-800`
+
+- **Acessibilidade**: Múltiplos problemas de ARIA corrigidos
+  - `aria-selected` com valores string corretos ('true'/'false')
+  - `aria-label`, `title`, `name` e `id` no input
+  - `role="combobox"` com atributos apropriados
+  - `role="listbox"` e `role="option"` nas sugestões
+
+- **Click outside**: Dropdown não fechava corretamente
+  - Adicionado `dropdownRef` para detectar clicks fora
+  - Previne fechamento ao clicar nas sugestões
+  - Fecha ao fazer scroll para melhor UX
+
+- **Flash inicial**: Search bar aparecia brevemente antes da animação
+  - Estado `isSearchVisible` com delay de 100ms
+  - Transição suave de opacity e translateY
+
+### Changed 🔄
+
+- **API de busca**: Otimizada para performance
+  - Filtro por `available: true` (corrigido de `isActive`)
+  - Limite de 8 resultados para resposta rápida
+  - Ordenação alfabética por nome
+  - Select apenas campos necessários
+
+- **Lógica de redirecionamento**: Simplificada e inteligente
+  - `handleEquipmentSelect`: sempre vai para `/equipamentos/[id]`
+  - `handleSearch`: busca genérica vai para `/equipamentos?search=query`
+  - Botão lupa detecta contexto: seleção válida vs texto livre
+
+### Technical Details 🔧
+
+- **Debounce**: 300ms para evitar requests excessivos
+- **Error handling**: Try/catch com console.error em dev
+- **TypeScript**: Interface `Equipment` completa com tipagem segura
+- **Performance**: `useCallback` para funções críticas
+- **Refs**: `inputRef`, `listRef`, `dropdownRef` para manipulação DOM
+- **State management**: 6 estados para controle completo do componente
+
+### Known Issues & Solutions 📋
+
+#### Problema 1: "pricePerDay.toFixed is not a function"
+
+- **Causa**: Prisma retorna Decimal como string/objeto
+- **Solução**: `Number(equipment.pricePerDay).toFixed(2)`
+
+#### Problema 2: Dropdown atrás de outras seções
+
+- **Causa**: z-index baixo e stacking context
+- **Solução**: z-index alto (99999) + parent com stacking context próprio
+
+#### Problema 3: Input não atualiza após seleção
+
+- **Causa**: React batching e event timing
+- **Solução**: `setTimeout` com batch update + força DOM update se necessário
+
+#### Problema 4: useSearchParams build error
+
+- **Causa**: Next.js 15 requer Suspense boundary
+- **Solução**: Wrapper component com Suspense
+
 ## [2025-01-20] - Atualização Massiva de Dependências + Upgrade PostgreSQL
 
 ### Security 🔐

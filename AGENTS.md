@@ -12,7 +12,7 @@
 3. **🎯 SIGA OS PADRÕES**: Use apenas componentes e práticas documentadas
 4. **📝 DOCUMENTE MUDANÇAS**: SEMPRE atualize o `CHANGELOG.md` após alterações
 
-### **📁 ESTRUTURA DA DOCUMENTAÇÃO (ATUALIZADA - DEZ 2024)**
+### **📁 ESTRUTURA DA DOCUMENTAÇÃO (ATUALIZADA - JAN 2025)**
 
 ```
 📁 docs/                          # CONSULTAR SEMPRE PRIMEIRO
@@ -28,7 +28,8 @@
 │   └── 📄 security.md           # Aspectos de segurança
 ├── 📁 features/                  # Funcionalidades específicas
 │   ├── 📄 admin-system.md       # Sistema admin COMPLETO
-│   └── 📄 design-system.md      # Identidade visual + componentes
+│   ├── 📄 design-system.md      # Identidade visual + componentes
+│   └── 📄 autocomplete-search.md # 🆕 Sistema de busca autocomplete
 ├── 📁 guides/                    # Guias específicos
 │   ├── 📄 storybook.md          # Documentação Storybook
 │   ├── 📄 accessibility.md      # Melhorias de acessibilidade
@@ -421,6 +422,27 @@ pnpm format                # Prettier
 - **Solução**: Implementação custom em `app/api-docs/page.tsx`
 - **Resultado**: Documentação API sem dependências externas
 
+#### **🚨 "Autocomplete dropdown atrás de outras seções"**
+
+- **Causa**: Z-index insuficiente ou stacking context incorreto
+- **Solução**: Container com `z-[9998]`, dropdown com `z-[99999]`, remover
+  `overflow-hidden`
+- **Prevenção**: Sempre criar novo stacking context com `relative`
+- **Detalhes**: Consulte `docs/features/autocomplete-search.md`
+
+#### **🚨 "Input não atualiza após seleção no autocomplete"**
+
+- **Causa**: React batching e timing de eventos com blur
+- **Solução**: `useCallback` com `setTimeout`, mudar para `onMouseDown`
+- **Força update**: `inputRef.current.value = equipment.name` quando necessário
+- **Detalhes**: Consulte `docs/features/autocomplete-search.md`
+
+#### **🚨 "Erro pricePerDay.toFixed is not a function"**
+
+- **Causa**: Prisma retorna Decimal como string/objeto
+- **Solução**: `Number(equipment.pricePerDay).toFixed(2)`
+- **Prevenção**: Sempre converter Decimal para Number antes de métodos numéricos
+
 ### **✅ SEMPRE FAÇA**
 
 1. **✅ SEMPRE** consulte `docs/` antes de implementar
@@ -450,6 +472,27 @@ pnpm format                # Prettier
 ---
 
 ## 🆕 **RECURSOS IMPLEMENTADOS (JAN 2025)**
+
+### **🔍 Autocomplete Search Bar (NOVO - JAN 2025)**
+
+- **Status**: ✅ IMPLEMENTADO E FUNCIONAL
+- **Localização**: `components/ui/autocomplete.tsx`
+- **Integração**: Hero section da homepage
+- **Características**:
+  - 🔍 Busca em tempo real com debounce de 300ms
+  - ⌨️ Navegação completa por teclado (setas, Enter, Escape)
+  - 🖱️ Seleção por click com atualização correta do input
+  - 🎯 Redirecionamento inteligente (item → detalhes, texto → busca)
+  - 💚 Feedback visual com ring verde para seleção válida
+  - ⚡ Loading state com spinner durante buscas
+  - ♿ 100% acessível com ARIA labels corretos
+  - 📱 Totalmente responsivo
+- **API Endpoint**: `/api/equipamentos/search`
+  - Busca por nome e descrição
+  - Filtro por equipamentos disponíveis
+  - Limite de 8 resultados
+  - Ordenação alfabética
+- **Documentação Completa**: `docs/features/autocomplete-search.md`
 
 ### **📊 Dashboard de Analytics (`/admin/analytics`)**
 
@@ -516,4 +559,4 @@ documentação primeiro!
 
 ---
 
-_Última atualização: dezembro 2024 | Versão: 2.0_
+_Última atualização: janeiro 2025 | Versão: 2.1_

@@ -1,272 +1,234 @@
-# GB Locações – Instruções para GitHub Copilot
+# 🤖 GitHub Copilot Instructions - GB-Locações
 
-## 📚 **DOCUMENTAÇÃO COMO FONTE DE VERDADE**
+## 📚 CRITICAL: Documentation is the Single Source of Truth
 
-> ⚠️ **CRÍTICO**: SEMPRE consulte a documentação em `docs/` antes de implementar
-> qualquer funcionalidade
+**MANDATORY**: Always consult documentation in `docs/` before implementing any
+feature. The project has comprehensive documentation that must be followed to
+maintain consistency and quality.
 
-### **📁 Estrutura da Documentação Oficial**
+### 📁 Documentation Structure
 
 ```
-📁 docs/                          # CONSULTAR SEMPRE PRIMEIRO
-├── 📁 getting-started/           # Setup, desenvolvimento, deploy
-│   ├── 📄 installation.md       # Setup inicial + compatibilidade
-│   ├── 📄 development.md        # Padrões de desenvolvimento
-│   ├── 📄 deployment.md         # Deploy e produção
-│   └── 📄 troubleshooting.md    # Soluções de problemas
-├── 📁 architecture/              # Arquitetura técnica
-│   ├── 📄 overview.md           # Stack + arquitetura completa
-│   ├── 📄 api.md                # Documentação das APIs
-│   └── 📄 security.md           # Aspectos de segurança
-├── 📁 features/                  # Funcionalidades específicas
-│   ├── 📄 admin-system.md       # Sistema admin COMPLETO
-│   ├── 📄 analytics-dashboard.md # Dashboard Analytics NOVO (JAN 2025)
-│   └── 📄 design-system.md      # Identidade visual + componentes
-├── 📁 guides/                    # Guias específicos
-│   ├── 📄 storybook.md          # Documentação Storybook
-│   ├── 📄 accessibility.md      # Melhorias de acessibilidade
-│   └── 📄 scroll-reveal.md      # Sistema scroll reveal
-├── 📁 references/                # Referências técnicas
-│   └── 📄 dependencies.md       # Compatibilidade dependências
-└── 📁 internal/                  # Documentação interna
-    ├── 📄 cursor-setup.md       # Setup específico Cursor
-    ├── 📄 project-decisions.md  # Decisões arquiteturais
-    └── 📄 tools.md              # Ferramentas internas
+docs/
+├── getting-started/     # Setup, development, deployment
+├── architecture/        # Technical architecture
+├── features/           # Specific features documentation
+│   ├── admin-system.md
+│   ├── design-system.md
+│   └── autocomplete-search.md  # NEW: Autocomplete implementation
+├── guides/             # Specific guides
+├── references/         # Technical references
+└── internal/           # Internal documentation
 ```
 
-### **🧠 Anti-Alucinação Protocol**
+## 🎯 Project Context
 
-1. **📖 LEIA PRIMEIRO**: Antes de qualquer implementação:
-   - `docs/architecture/overview.md` - Entender a arquitetura
-   - `docs/features/design-system.md` - Componentes e estilos
-   - `docs/features/admin-system.md` - Funcionalidades admin
-   - `docs/getting-started/development.md` - Padrões de código
+**GB-Locações** is a modern equipment rental platform for civil construction,
+built with:
 
-2. **🎨 DESIGN SYSTEM**: Use APENAS componentes documentados
-3. **⚠️ COMPATIBILIDADE**: Verifique `docs/references/dependencies.md`
-4. **🚨 NÃO ALUCINE**: Se não souber, consulte docs/ primeiro
-5. **📝 DOCUMENTE SEMPRE**: Atualize `CHANGELOG.md` após alterações
+- Next.js 15.4.6 (App Router)
+- TypeScript 5.9.2
+- React 19.1.1 + Tailwind CSS 3.4.17
+- PostgreSQL + Prisma 6.13.0
+- NextAuth.js, Zustand, React Hook Form
+- Radix UI + Storybook
 
-### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024 - JAN 2025) - NÃO REINTRODUZIR**
+## ⚠️ Critical Compatibility Issues (DO NOT REINTRODUCE)
 
-> ⚠️ **ATENÇÃO**: Este projeto passou por correções massivas em dezembro 2024 e
-> descoberta crítica em janeiro 2025. NÃO reintroduza problemas resolvidos!
+### 🚨 Known Issues and Solutions
 
-#### **🏗️ Build Infrastructure - ESTÁVEL**
+1. **Prisma Version Lock**
+   - **KEEP**: Prisma at 6.13.0 (6.14.0+ causes "did not initialize yet" error)
+   - **CRITICAL**: Never set `PRISMA_GENERATE_DATAPROXY` environment variable
+   - **SOLUTION**: See `docs/internal/prisma-6-15-engine-none-analysis.md`
 
-- **❌ NÃO DELETE**: `scripts/post-prisma-generate.js` - crítico para build
-- **❌ NÃO MODIFIQUE**: Scripts em `package.json` sem entender dependências
-- **✅ FUNCIONANDO**: Build automation para `lib/validations/index.ts`
+2. **Build Infrastructure**
+   - **NEVER DELETE**: `scripts/post-prisma-generate.js`
+   - **PURPOSE**: Recreates `lib/validations/index.ts` after Prisma generate
+   - **AUTOMATED**: Runs on prebuild, postinstall, and db:generate
 
-#### **🔒 TypeScript - 100% TYPE SAFE**
+3. **TypeScript Standards**
+   - **NEVER USE**: `any` type without extreme justification
+   - **ALWAYS USE**: Safe navigation (`?.`) and type guards
+   - **TARGET**: 0 TypeScript errors
 
-- **❌ NÃO USE**: Tipos `any` - sempre crie interfaces específicas
-- **✅ USE**: Safe navigation (`?.`) em objetos potencialmente undefined
-- **✅ USE**: Type guards e casts seguros (`as NextResponse`, `as const`)
+4. **Dependencies**
+   - **Tailwind**: Keep at 3.4.17 (user preference)
+   - **Package Manager**: Use NPM (PNPM causes conflicts)
+   - **React 19**: swagger-ui-react incompatible, use custom implementation
 
-#### **📦 Dependencies - MATRIX ESTÁVEL**
+5. **Autocomplete Specific Issues**
+   - **Z-index**: Use high values (99999) for dropdowns
+   - **Event Handling**: Use `onMouseDown` instead of `onClick` for selections
+   - **Decimal Handling**: Convert Prisma Decimal with `Number()` before numeric
+     methods
+   - **ARIA**: Use boolean values for `aria-selected`, not strings
 
-- **❌ NÃO ATUALIZE**: Prisma para 6.14.0+ (quebra build)
-- **🚨 PRISMA 6.15.0**: Variável `PRISMA_GENERATE_DATAPROXY="false"` força
-  `engine=none` causando erro P6001
-- **❌ NÃO USE**: swagger-ui-react (incompatível React 19)
-- **✅ CUSTOM IMPLEMENTATION**: `app/api-docs/page.tsx` para API docs
+## 🏗️ Architecture Standards
 
-#### **🎯 ESLint - ZERO PROBLEMS**
+### Design System Rules
 
-- **❌ NÃO INCLUA**: Arquivos auto-gerados no linting
-- **✅ MANTENHA**: Exclusões em `tsconfig.json` para
-  `lib/validations/schemas/**`
+1. **ONLY USE** components from `components/ui/` (Radix UI based)
+2. **CONSULT** `stories/` for visual documentation
+3. **COLORS**: Orange-600 (#ea580c) as primary brand color
+4. **TYPOGRAPHY**: Inter (sans) + Jost (headings)
+5. **NEVER CREATE** components outside the design system
 
-#### **📚 DOCUMENTAÇÃO CRÍTICA**
+### Component Patterns
 
-- **📖 LEIA**: `docs/internal/critical-issues-resolved.md` antes de mudanças
-  grandes
-- **🔬 ANÁLISE CRÍTICA**: `docs/internal/prisma-6-15-engine-none-analysis.md` -
-  Problema PRISMA_GENERATE_DATAPROXY
-- **📝 CONSULTE**: `docs/getting-started/troubleshooting.md` para problemas
-  conhecidos
+```typescript
+// Standard component structure
+'use client'
 
-Este repositório é um sistema completo de e-commerce de locação de equipamentos
-para construção civil, com foco em performance, UX e arquitetura escalável.
+import { cn } from '@/lib/utils'
+import { cva, type VariantProps } from 'class-variance-authority'
+import * as React from 'react'
 
----
-
-## 🧱 Tecnologias Obrigatórias
-
-- **Next.js (App Router)** com SSR, ISR e Server Actions
-- **TypeScript**
-- **TailwindCSS** com design system da **ShadCN UI**
-- **Prisma ORM** com **Supabase (PostgreSQL)**
-- **NextAuth** com suporte a autenticação 2FA
-- **Cloudflare R2** (ou AWS S3) para upload de arquivos
-- **SendGrid** (ou Resend) para e-mail transacional
-- **ZapSign** para contrato digital
-- **Stripe / Mercado Pago** para pagamentos
-- **Melhor Envio** para logística
-- **Vercel AI SDK** para integração com IA generativa
-
----
-
-## 📁 Estrutura esperada
-
-- **`app/`**: páginas e rotas (App Router)
-- **`components/`**: componentes reutilizáveis
-- **`lib/`**: integrações externas e utilidades (mocks inclusos)
-- **`types/`**: tipagens globais
-- **`schemas/`**: validações com Zod
-- **`middlewares/`**: controle de acesso, autenticação, logs
-- **`prisma/`**: banco de dados e seed
-- **`public/`**: arquivos estáticos
-
----
-
-## ✅ Regras e Convenções
-
-- **Jamais modifique o estilo visual, animações ou layout existentes.** → Apenas
-  estenda ou componha.
-- Código deve ser limpo, seguro, modular, performático e com tipagem estrita.
-- Não usar: **Upstash** ou quaisquer libs deprecated.
-- Separar componentes, actions e hooks por responsabilidade.
-- Evitar lógica duplicada em múltiplas rotas.
-- Usar `zod` para validação de dados e formular entradas confiáveis.
-- Utilizar middlewares para controle de permissão (admin/cliente).
-- **📝 OBRIGATÓRIO**: Atualizar `CHANGELOG.md` após toda implementação.
-
----
-
-## 🔥 Foco acessível (padrão azul)
-
-Todo elemento interativo **DEVE** mostrar feedback de foco em azul:
-
-- **Borda**: Utilize **`focus:border-blue-500`** **e/ou**
-  `focus:outline-blue-500 focus:outline-2`.
-- **Padrão**: Nunca deixe o navegador aplicar apenas o cinza padrão.
-- **Ring**: `focus:ring` deve ficar **desativado** (`focus:ring-0`) salvo
-  exceções de design.
-
-Exemplo canônico:
-
-```tsx
-<input className="border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0" />
-```
-
-### Regra global (Tailwind Layer Base)
-
-```css
-@layer base {
-  input:not([type="checkbox"]):not([type="radio"]),
-  select,
-  textarea {
-    @apply border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0;
+const componentVariants = cva(
+  'base-classes',
+  {
+    variants: {
+      variant: {
+        default: 'default-classes',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
   }
+)
+
+export interface ComponentProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof componentVariants> {
+  // specific props
 }
+
+const Component = React.forwardRef<HTMLDivElement, ComponentProps>(
+  ({ className, variant, ...props }, ref) => {
+    return (
+      <div
+        className={cn(componentVariants({ variant, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Component.displayName = 'Component'
+
+export { Component }
 ```
 
----
+### Form Handling
 
-## 🔐 Segurança
+ALWAYS use React Hook Form + Zod:
 
-- **NextAuth**: Utilizar `NextAuth` com `getServerSession()` em rotas protegidas
-- **2FA**: Autenticação com 2FA e validação de token
-- **Ataques**: Prevenir XSS, CSRF, brute force e session fixation
-- **OWASP**: Seguir OWASP Top 10 e princípios Zero Trust
-- **Variáveis**: Armazenar variáveis sensíveis apenas no `.env`
+```typescript
+const formSchema = z.object({
+  name: z.string().min(1, "Required"),
+  email: z.string().email("Invalid email")
+})
 
----
+type FormData = z.infer<typeof formSchema>
 
-## 🧪 Testes, CI/CD e qualidade
+const form = useForm<FormData>({
+  resolver: zodResolver(formSchema)
+})
+```
 
-- **Vitest**: Testes com **Vitest**
-- **Cobertura**: Cobertura com `--coverage`
-- **CI/CD**: CI via GitHub Actions (`.github/workflows/test.yml`)
-- **Lint**: Lint + Prettier obrigatórios antes de cada commit/PR
-- **Commits**: Commit semântico: `feat:`, `fix:`, `chore:`, `refactor:`, `test:`
+## 🆕 Recently Implemented Features (Jan 2025)
 
----
+### 🔍 Autocomplete Search Bar
 
-## 🐳 Docker
+- **Location**: `components/ui/autocomplete.tsx`
+- **Integration**: Hero section
+- **Features**:
+  - Real-time search with 300ms debounce
+  - Full keyboard navigation (arrows, Enter, Escape)
+  - Click selection with proper input update
+  - Smart redirection (item → details, text → search)
+  - Green ring visual feedback for valid selection
+  - Loading state with spinner
+  - 100% accessible with ARIA labels
+  - Fully responsive
+- **API**: `/api/equipamentos/search`
+- **Documentation**: `docs/features/autocomplete-search.md`
+
+### 📊 Analytics Dashboard
+
+- **Location**: `/admin/analytics`
+- **Features**: Real-time metrics, anomaly detection, interactive charts
+- **Backend**: Telemetry system, metrics collection, security monitoring
+
+## 📝 Development Workflow
+
+1. **READ** relevant documentation first
+2. **CHECK** compatibility in `docs/references/dependencies.md`
+3. **USE** only documented components
+4. **IMPLEMENT** following established patterns
+5. **UPDATE** CHANGELOG.md with changes
+6. **TEST** against documentation
+
+## 🚀 Useful Commands
 
 ```bash
-docker-compose up --build
+# Development
+npm run dev                 # Start development
+npm run build              # Production build
+npm run type-check         # Check types
+
+# Database
+npm run db:generate        # Generate Prisma client
+npm run db:push           # Push schema
+npm run db:studio         # Prisma Studio
+
+# Quality
+npm run lint              # ESLint
+npm run lint:fix          # Auto-fix
+npm run format            # Prettier
+
+# Testing
+npm test                  # Unit tests
+npm run test:e2e         # E2E tests
+npm run storybook        # Storybook
 ```
 
-- Imagens configuradas com multi-stage para build otimizado
-- `.env.docker` define ambiente de execução para container
+## ❌ Anti-Patterns (DO NOT DO)
+
+1. **DON'T** update Prisma beyond 6.13.0
+2. **DON'T** change Tailwind CSS version
+3. **DON'T** use PNPM
+4. **DON'T** create components outside design system
+5. **DON'T** ignore CHANGELOG protocol
+6. **DON'T** use `any` type
+7. **DON'T** implement without consulting docs
+8. **DON'T** delete `scripts/post-prisma-generate.js`
+9. **DON'T** modify build scripts without understanding
+10. **DON'T** set `PRISMA_GENERATE_DATAPROXY` environment variable
+
+## 🎯 Quality Targets
+
+- TypeScript Errors: 0
+- ESLint Problems: 0
+- Build Success: 100%
+- Test Coverage: Adequate
+- Performance: Optimized
+- Accessibility: WCAG 2.1 AA
+
+## 📚 Key Documentation Links
+
+- **Getting Started**: `docs/getting-started/installation.md`
+- **Architecture**: `docs/architecture/overview.md`
+- **Design System**: `docs/features/design-system.md`
+- **Admin System**: `docs/features/admin-system.md`
+- **Troubleshooting**: `docs/getting-started/troubleshooting.md`
+- **Dependencies**: `docs/references/dependencies.md`
 
 ---
 
-## 💡 UI/UX e Responsividade
+**REMEMBER**: This project has established patterns, professional documentation,
+and specific compatibilities. NEVER hallucinate - always consult the
+documentation first!
 
-- **Design**: Baseado em benchmarks: **Apple**, **Amazon**, **Shopify**
-- **Animações**: Suaves com **Framer Motion**
-- **Microinterações**: Distribuídas com propósito
-- **UX**: Telas com UX fluido (sem scroll vertical desnecessário)
-- **Acessibilidade**: Alta acessibilidade: uso de elementos semânticos e
-  navegação por teclado
-
----
-
-## 📄 Documentação e Inteligência Artificial
-
-- **AGENTS.md**: Leia `AGENTS.md` para instruções detalhadas de atuação da IA
-- **Foco da IA**: A IA Copilot deve focar em:
-  - **Criação**: De novos arquivos/componentes
-  - **Mocks**: Geração de mocks (ZapSign, Stripe, etc.)
-  - **Refatoração**: De lógica
-  - **Testes**: E cobertura
-- **Restrição**: **Não** deve interferir no design, layout ou animações
-  existentes
-
----
-
-## 📊 Banco de Dados
-
-- **ORM**: Estruturado com Prisma e Supabase
-- **Tabelas**: Principais: Categoria, Equipamento, Marca, Modelo, Usuário,
-  Locação, Endereço, Pagamento, Contrato
-- **Seeds**: Uso de seeds em `prisma/seed.ts`
-
----
-
-## 🎯 Funcionalidades principais
-
-- **Catálogo**: Com filtros dinâmicos
-- **Orçamento**: Interativo com carrinho
-- **Painel Cliente**: Com histórico e contratos
-- **Painel Admin**: CRUD completo
-- **Autenticação**: Login/cadastro com autenticação segura
-- **Dashboard**: Administrativo com métricas
-- **📊 Analytics**: Dashboard completo com monitoramento de API (NOVO -
-  JAN 2025)
-- **🔧 Telemetria**: Sistema de rastreamento de performance (NOVO - JAN 2025)
-- **📋 OpenAPI**: Documentação automática da API (NOVO - JAN 2025)
-
-## 🆕 **RECURSOS IMPLEMENTADOS (JAN 2025)**
-
-### **📊 Dashboard de Analytics**
-
-- **Rota**: `/admin/analytics`
-- **Arquivo**: `app/admin/analytics/page.tsx`
-- **Funcionalidades**: Métricas em tempo real, gráficos interativos, detecção de
-  anomalias
-- **Status**: ✅ IMPLEMENTADO E FUNCIONAL
-
-### **🔧 Sistema de Monitoramento**
-
-- **Telemetria**: `lib/telemetry.ts` - Rastreamento simplificado
-- **Métricas**: `lib/metrics.ts` - Coleta automática de dados da API
-- **Segurança**: `lib/security-monitoring.ts` - Detecção de ameaças
-- **Instrumentação**: `lib/api-instrumentation.ts` - Wrapper automático
-
-### **📋 Documentação de API**
-
-- **OpenAPI**: Interface em `/api-docs`
-- **Endpoints**: 19 rotas documentadas
-- **Schemas**: Integração com Zod para validação
-
----
-
-**❗ Observação final:** Todas as sugestões do Copilot devem seguir
-rigorosamente estas diretrizes. O feedback de foco **deve** ser azul; qualquer
-sugestão que descumpra as regras acima deve ser considerada inválida.
+_Last updated: January 2025 | Version: 1.0_

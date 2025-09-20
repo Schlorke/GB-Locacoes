@@ -1,16 +1,8 @@
----
-description:
-  GB-Locacoes - Sistema de Locações de Equipamentos para Construção Civil
-globs: ['**/*.{ts,tsx,js,jsx,md,mdx,json,css,scss}']
-alwaysApply: true
----
-
 # 🏗️ GB-LOCACOES - CURSOR RULES & DEVELOPMENT GUIDELINES
 
 ## 📚 **DOCUMENTAÇÃO COMO FONTE DE VERDADE**
 
-> ⚠️ **FUNDAMENTAL**: SEMPRE consulte a documentação em `docs/` antes de
-> implementar qualquer funcionalidade
+> ⚠️ **FUNDAMENTAL**: SEMPRE consulte a documentação em `docs/` antes de implementar qualquer funcionalidade
 
 ### **📁 Estrutura da Documentação Oficial**
 
@@ -28,6 +20,7 @@ alwaysApply: true
 ├── 📁 features/                  # Funcionalidades específicas
 │   ├── 📄 admin-system.md       # Sistema admin COMPLETO
 │   ├── 📄 analytics-dashboard.md # Dashboard Analytics NOVO (JAN 2025)
+│   ├── 📄 autocomplete-search.md # 🆕 Sistema de busca autocomplete
 │   └── 📄 design-system.md      # Identidade visual + componentes
 ├── 📁 guides/                    # Guias específicos
 │   └── 📄 storybook.md          # Documentação Storybook
@@ -60,13 +53,11 @@ alwaysApply: true
 
 ### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024 - JAN 2025) - NÃO REINTRODUZIR**
 
-> ⚠️ **ATENÇÃO CURSOR**: Este projeto passou por correções massivas em dezembro
-> de 2024 e descoberta crítica em janeiro 2025. NÃO reintroduza problemas que foram resolvidos!
+> ⚠️ **ATENÇÃO CURSOR**: Este projeto passou por correções massivas em dezembro de 2024 e descoberta crítica em janeiro 2025. NÃO reintroduza problemas que foram resolvidos!
 
 #### **🏗️ Build Infrastructure - 100% ESTÁVEL**
 
-- **❌ NUNCA DELETE**: `scripts/post-prisma-generate.js` - arquivo CRÍTICO para
-  build
+- **❌ NUNCA DELETE**: `scripts/post-prisma-generate.js` - arquivo CRÍTICO para build
 - **❌ NUNCA MODIFIQUE**: Scripts em `package.json` sem entender dependências
 - **✅ FUNCIONANDO**: Build automation que recria `lib/validations/index.ts`
 - **🎯 STATUS**: Build time 6-8s, 100% success rate
@@ -89,29 +80,23 @@ alwaysApply: true
 #### **🎯 ESLint - ZERO PROBLEMS ACHIEVED**
 
 - **❌ NÃO INCLUA**: Arquivos auto-gerados no linting
-- **✅ MANTENHA**: Exclusões em `tsconfig.json` para
-  `lib/validations/schemas/**`
+- **✅ MANTENHA**: Exclusões em `tsconfig.json` para `lib/validations/schemas/**`
 - **🎯 STATUS**: 31,469 → 0 problemas ESLint (100% resolvido)
 
 #### **📚 DOCUMENTAÇÃO CRÍTICA PARA CURSOR**
 
-- **📖 LEIA ANTES**: `docs/internal/critical-issues-resolved.md` - SOURCE OF
-  TRUTH
+- **📖 LEIA ANTES**: `docs/internal/critical-issues-resolved.md` - SOURCE OF TRUTH
 - **🔬 ANÁLISE CRÍTICA**: `docs/internal/prisma-6-15-engine-none-analysis.md` - Problema PRISMA_GENERATE_DATAPROXY
-- **📝 CONSULTE**: `docs/getting-started/troubleshooting.md` - problemas
-  conhecidos
+- **📝 CONSULTE**: `docs/getting-started/troubleshooting.md` - problemas conhecidos
 - **🧠 ENTENDA**: Todas as soluções são DEFINITIVAS e foram testadas
-- **⚡ MÉTRICAS**: TypeScript 0 errors, ESLint 0 problems, Build SUCCESS, Tests
-  30/30
+- **⚡ MÉTRICAS**: TypeScript 0 errors, ESLint 0 problems, Build SUCCESS, Tests 30/30
 
 ### **🚨 REGRAS CRÍTICAS DE DOCUMENTAÇÃO**
 
 1. **NÃO ALUCINE**: Se não souber algo, consulte `docs/` primeiro
 2. **NÃO INVENTE**: Use apenas componentes e padrões documentados
-3. **NÃO QUEBRE**: Siga as versões específicas em
-   `docs/references/dependencies.md`
-4. **NÃO IGNORE**: Toda funcionalidade deve seguir os padrões em
-   `docs/getting-started/development.md`
+3. **NÃO QUEBRE**: Siga as versões específicas em `docs/references/dependencies.md`
+4. **NÃO IGNORE**: Toda funcionalidade deve seguir os padrões em `docs/getting-started/development.md`
 5. **📝 DOCUMENTE SEMPRE**: Atualize o `CHANGELOG.md` após qualquer alteração
 
 ### **📖 Fluxo de Trabalho Obrigatório**
@@ -132,10 +117,7 @@ alwaysApply: true
 
 ## 🎯 **VISÃO GERAL DO PROJETO**
 
-**GB-Locacoes** é uma plataforma moderna de locação de equipamentos para
-construção civil, desenvolvida com Next.js 15, TypeScript, Prisma, PostgreSQL e
-um design system robusto. O projeto segue princípios de arquitetura limpa,
-componentização inteligente e experiência do usuário excepcional.
+**GB-Locacoes** é uma plataforma moderna de locação de equipamentos para construção civil, desenvolvida com Next.js 15, TypeScript, Prisma, PostgreSQL e um design system robusto. O projeto segue princípios de arquitetura limpa, componentização inteligente e experiência do usuário excepcional.
 
 ## 🏛️ **ARQUITETURA & ESTRUTURA**
 
@@ -174,8 +156,7 @@ GB-Locacoes/
 
 ### **Princípios de Design**
 
-1. **Consistência**: Todos os componentes devem seguir o design system
-   estabelecido
+1. **Consistência**: Todos os componentes devem seguir o design system estabelecido
 2. **Acessibilidade**: WCAG 2.1 AA compliance obrigatório
 3. **Responsividade**: Mobile-first approach
 4. **Performance**: Otimização para Core Web Vitals
@@ -196,11 +177,9 @@ GB-Locacoes/
 
 ### **Componentes Base (Radix UI)**
 
-SEMPRE utilize os componentes do diretório `components/ui/` que são baseados em
-Radix UI:
+SEMPRE utilize os componentes do diretório `components/ui/` que são baseados em Radix UI:
 
-- `Button` - Botões com variantes: default, destructive, outline, secondary,
-  ghost, reset, link
+- `Button` - Botões com variantes: default, destructive, outline, secondary, ghost, reset, link
 - `Card` - Containers de conteúdo
 - `Dialog` - Modais e overlays
 - `Form` - Formulários com React Hook Form + Zod
@@ -287,8 +266,7 @@ export { Component, componentVariants }
 ### **TypeScript**
 
 - **Strict Mode**: Sempre habilitado
-- **Interfaces vs Types**: Use interfaces para objetos, types para
-  unions/intersections
+- **Interfaces vs Types**: Use interfaces para objetos, types para unions/intersections
 - **Generics**: Utilize quando apropriado para reutilização
 - **Utility Types**: Aproveite `Pick`, `Omit`, `Partial`, `Required`
 
@@ -382,9 +360,20 @@ const MyForm = () => {
 - **Sistema de Telemetria**: `lib/telemetry.ts` - Rastreamento simplificado
 - **Métricas de API**: `lib/metrics.ts` - Coleta automática de performance
 - **Security Monitoring**: `lib/security-monitoring.ts` - Detecção de ameaças
-- **API Instrumentation**: `lib/api-instrumentation.ts` - Instrumentação
-  automática
+- **API Instrumentation**: `lib/api-instrumentation.ts` - Instrumentação automática
 - **OpenAPI Documentation**: `/api-docs` - Documentação interativa da API
+
+### **🔍 Autocomplete Search (NOVO - JAN 2025)**
+
+- **Componente**: `components/ui/autocomplete.tsx` - Busca inteligente reutilizável
+- **API Endpoint**: `/api/equipamentos/search` - Busca otimizada no banco
+- **Funcionalidades**:
+  - Debounce de 300ms para performance
+  - Navegação completa por teclado
+  - Feedback visual com ring verde
+  - Redirecionamento contextual inteligente
+  - 100% acessível com ARIA labels
+- **Documentação Completa**: `docs/features/autocomplete-search.md`
 
 ### **Performance**
 
@@ -525,18 +514,15 @@ const MyForm = () => {
 
 #### **Build & Infrastructure**
 
-- ❌ **NUNCA DELETE**: `scripts/post-prisma-generate.js` - quebra build
-  completamente
-- ❌ **NUNCA MODIFIQUE**: Scripts `prebuild`, `postinstall`, `db:generate` sem
-  entender
+- ❌ **NUNCA DELETE**: `scripts/post-prisma-generate.js` - quebra build completamente
+- ❌ **NUNCA MODIFIQUE**: Scripts `prebuild`, `postinstall`, `db:generate` sem entender
 - ❌ **NUNCA IGNORE**: Arquivos auto-gerados - sempre exclua do linting
 
 #### **Dependencies & Compatibility**
 
 - ❌ **NUNCA ATUALIZE**: Prisma para 6.14.0+ - incompatível com Next.js 15
 - ❌ **NUNCA USE**: swagger-ui-react - incompatível com React 19
-- ❌ **NUNCA ASSUMA**: Compatibilidade de packages - sempre consulte
-  `docs/references/dependencies.md`
+- ❌ **NUNCA ASSUMA**: Compatibilidade de packages - sempre consulte `docs/references/dependencies.md`
 
 #### **Type Safety (CRÍTICO)**
 
@@ -556,6 +542,14 @@ const MyForm = () => {
 - ❌ **NUNCA DEFINA**: `PRISMA_GENERATE_ACCELERATE` ou `PRISMA_GENERATE_NO_ENGINE`
 - ✅ **SEMPRE VERIFIQUE**: `npx prisma generate` deve mostrar `engine=binary`
 - 📖 **CONSULTE**: `docs/internal/prisma-6-15-engine-none-analysis.md` para detalhes
+
+#### **Autocomplete Specific (NOVO)**
+
+- ❌ **NUNCA USE**: `onClick` para seleção - use `onMouseDown`
+- ❌ **NUNCA IGNORE**: Event bubbling - sempre use `preventDefault()`
+- ❌ **NUNCA ESQUEÇA**: De limpar o dropdown ao selecionar
+- ❌ **NUNCA USE**: Z-index baixo - mínimo `z-[9999]` para dropdowns
+- ✅ **SEMPRE TESTE**: Em diferentes resoluções e com scroll
 
 ## 🎯 **CHECKLIST DE DESENVOLVIMENTO**
 
@@ -643,12 +637,11 @@ Crie código que seja:
 - **Testável**: Coberto por testes adequados
 - **Documentado**: Bem explicado e exemplificado
 
-**Lembre-se**: Qualidade sobre velocidade. Um código bem escrito hoje economiza
-horas de debugging amanhã.
+**Lembre-se**: Qualidade sobre velocidade. Um código bem escrito hoje economiza horas de debugging amanhã.
 
 ---
 
-## 🏆 **STATUS ATUAL DO PROJETO (DEZ 2024)**
+## 🏆 **STATUS ATUAL DO PROJETO (JAN 2025)**
 
 ### **🎯 MÉTRICAS DE SUCESSO ALCANÇADAS**
 
@@ -678,13 +671,8 @@ horas de debugging amanhã.
 
 ---
 
-**🧠 MENSAGEM FINAL PARA CURSOR**: Este projeto alcançou um estado de excelência
-técnica. Todas as ferramentas, padrões e documentação estão alinhados. Use este
-documento como fonte de verdade e mantenha os altos padrões de qualidade
-estabelecidos.
+**🧠 MENSAGEM FINAL PARA CURSOR**: Este projeto alcançou um estado de excelência técnica. Todas as ferramentas, padrões e documentação estão alinhados. Use este documento como fonte de verdade e mantenha os altos padrões de qualidade estabelecidos.
 
 ---
 
-_Esta documentação foi atualizada em dezembro 2024 após resolução de problemas
-críticos. Mantenha-a sempre atualizada e siga rigorosamente estas diretrizes
-para garantir consistência e qualidade em todo o projeto._
+_Esta documentação foi atualizada em janeiro 2025 após implementação do sistema de autocomplete. Mantenha-a sempre atualizada e siga rigorosamente estas diretrizes para garantir consistência e qualidade em todo o projeto._

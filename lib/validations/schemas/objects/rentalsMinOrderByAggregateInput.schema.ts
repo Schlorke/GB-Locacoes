@@ -1,16 +1,20 @@
-import { z } from 'zod';
-import type { Prisma } from '@prisma/client';
+import { z } from 'zod'
+import type { Prisma } from '@prisma/client'
 import { SortOrderSchema } from '../enums/SortOrder.schema'
 
-const makeSchema = () => z.object({
-  id: SortOrderSchema.optional(),
-  startdate: SortOrderSchema.optional(),
-  enddate: SortOrderSchema.optional(),
-  total: SortOrderSchema.optional(),
-  status: SortOrderSchema.optional(),
-  userid: SortOrderSchema.optional(),
-  createdat: SortOrderSchema.optional(),
-  updatedat: SortOrderSchema.optional()
-}).strict();
-export const rentalsMinOrderByAggregateInputObjectSchema: z.ZodType<Prisma.rentalsMinOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsMinOrderByAggregateInput>;
-export const rentalsMinOrderByAggregateInputObjectZodSchema = makeSchema();
+const makeSchema = () =>
+  z
+    .object({
+      id: SortOrderSchema.optional(),
+      startdate: SortOrderSchema.optional(),
+      enddate: SortOrderSchema.optional(),
+      total: SortOrderSchema.optional(),
+      status: SortOrderSchema.optional(),
+      userid: SortOrderSchema.optional(),
+      createdat: SortOrderSchema.optional(),
+      updatedat: SortOrderSchema.optional(),
+    })
+    .strict()
+export const rentalsMinOrderByAggregateInputObjectSchema: z.ZodType<Prisma.rentalsMinOrderByAggregateInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.rentalsMinOrderByAggregateInput>
+export const rentalsMinOrderByAggregateInputObjectZodSchema = makeSchema()

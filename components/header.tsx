@@ -63,14 +63,14 @@ export default function Header() {
                 className="text-slate-200 hover:text-white transition-all duration-200 font-medium hover:scale-105"
                 onClick={handleInternalNavigation}
               >
-                Área do Cliente
+                Sign In
               </Link>
               <Link
-                href="/admin/login"
+                href="/login"
                 className="text-slate-200 hover:text-white transition-all duration-200 font-medium hover:scale-105"
                 onClick={handleInternalNavigation}
               >
-                Admin
+                Log In
               </Link>
             </div>
           </div>
@@ -206,7 +206,16 @@ export default function Header() {
                 className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
               >
                 <Link href="/login" onClick={handleInternalNavigation}>
-                  Área do Cliente
+                  Sign In
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                asChild
+                className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
+              >
+                <Link href="/login" onClick={handleInternalNavigation}>
+                  Log In
                 </Link>
               </Button>
             </div>

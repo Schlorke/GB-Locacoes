@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 // prettier-ignore
 export const VerificationTokenResultSchema = z.object({
@@ -7,4 +7,6 @@ export const VerificationTokenResultSchema = z.object({
     expires: z.date()
 }).strict();
 
-export type VerificationTokenResultType = z.infer<typeof VerificationTokenResultSchema>;
+export type VerificationTokenResultType = z.infer<
+  typeof VerificationTokenResultSchema
+>

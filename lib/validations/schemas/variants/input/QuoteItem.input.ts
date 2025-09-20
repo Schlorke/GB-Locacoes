@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 // prettier-ignore
 export const QuoteItemInputSchema = z.object({
@@ -15,4 +15,4 @@ export const QuoteItemInputSchema = z.object({
     quote: z.unknown()
 }).strict();
 
-export type QuoteItemInputType = z.infer<typeof QuoteItemInputSchema>;
+export type QuoteItemInputType = z.infer<typeof QuoteItemInputSchema>

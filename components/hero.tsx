@@ -1,12 +1,41 @@
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { ArrowRight, MapPin, Phone, Play, Search } from 'lucide-react'
+'use client'
+
+import { Autocomplete } from '@/components/ui/autocomplete'
+import { ArrowRight, MapPin, Phone, Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
 
 export default function Hero() {
+  const router = useRouter()
+  const [isSearchVisible, setIsSearchVisible] = useState(false)
+
+  const handleEquipmentSelect = (equipment: any) => {
+    // Sempre que onSelect for chamado (seja por seleção ou clique na lupa com item selecionado)
+    // redireciona para a página de detalhes do equipamento
+    if (equipment.id) {
+      router.push(`/equipamentos/${equipment.id}`)
+    }
+  }
+
+  const handleSearch = (query: string) => {
+    // Chamado apenas quando não há equipamento selecionado
+    // Redireciona para a página de equipamentos com a busca por texto
+    router.push(`/equipamentos?search=${encodeURIComponent(query)}`)
+  }
+
+  // Controlar a visibilidade do search bar para evitar flash
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsSearchVisible(true)
+    }, 100) // Pequeno delay para evitar flash
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
-    <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden">
+    <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden z-[1]">
         <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
@@ -28,21 +57,20 @@ export default function Hero() {
               obras e serviços em altura. Segurança, qualidade e manutenção
               constante.
             </p>
-            {/* Animated Search Bar */}
-            <div className="hero-search bg-white rounded-2xl p-2 flex gap-2 max-w-md border border-white/20 transition-all duration-300 opacity-0">
-              <Input
-                type="search"
+            {/* Animated Search Bar with Autocomplete */}
+            <div
+              className={`hero-search bg-white rounded-2xl p-2 max-w-md border border-white/20 transition-all duration-300 relative z-[9998] ${
+                isSearchVisible
+                  ? 'opacity-100 translate-y-0'
+                  : 'opacity-0 translate-y-4'
+              }`}
+            >
+              <Autocomplete
                 placeholder="Buscar equipamentos (ex: andaime, betoneira)"
-                className=" border-gray-200 focus:border-blue-500 bg-transparent text-gray-900 placeholder:text-gray-500"
-                aria-label="Buscar equipamentos de construção"
+                onSelect={handleEquipmentSelect}
+                onSearch={handleSearch}
+                className="w-full"
               />
-              <Button
-                size="sm"
-                className="bg-yellow-500 hover:bg-yellow-600 hover:text-white text-gray-900 font-semibold rounded-xl hover:scale-105 transition-all h-10"
-              >
-                <Search className="h-4 w-4" />
-                <span className="sr-only">Buscar</span>
-              </Button>
             </div>
             {/* Hero Buttons - Tamanho reduzido */}
             <div className="hero-buttons flex flex-col sm:flex-row gap-4 opacity-0">

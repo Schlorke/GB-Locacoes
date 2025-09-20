@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 // prettier-ignore
 export const CategoryResultSchema = z.object({
@@ -12,7 +12,7 @@ export const CategoryResultSchema = z.object({
     slug: z.string(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    equipments: z.array(z.unknown())
+    equipments: z.array(z.unknown()).array()
 }).strict();
 
-export type CategoryResultType = z.infer<typeof CategoryResultSchema>;
+export type CategoryResultType = z.infer<typeof CategoryResultSchema>

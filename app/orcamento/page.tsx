@@ -70,6 +70,8 @@ interface QuoteFormData {
   name: string
   email: string
   phone: string
+  cpf: string
+  cnpj: string
   message: string
 }
 
@@ -83,9 +85,89 @@ function QuotePage() {
     name: '',
     email: '',
     phone: '',
+    cpf: '',
+    cnpj: '',
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  // Função para formatar telefone brasileiro
+  const formatPhoneNumber = (value: string) => {
+    // Remove todos os caracteres não numéricos
+    const numbers = value.replace(/\D/g, '')
+
+    // Aplica a formatação baseada no tamanho
+    if (numbers.length <= 2) {
+      return numbers
+    } else if (numbers.length <= 7) {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`
+    } else {
+      return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`
+    }
+  }
+
+  // Função para formatar CPF brasileiro
+  const formatCPF = (value: string) => {
+    // Remove todos os caracteres não numéricos
+    const numbers = value.replace(/\D/g, '')
+
+    // Aplica a formatação baseada no tamanho
+    if (numbers.length <= 3) {
+      return numbers
+    } else if (numbers.length <= 6) {
+      return `${numbers.slice(0, 3)}.${numbers.slice(3)}`
+    } else if (numbers.length <= 9) {
+      return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`
+    } else {
+      return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6, 9)}-${numbers.slice(9, 11)}`
+    }
+  }
+
+  // Função para formatar CNPJ brasileiro
+  const formatCNPJ = (value: string) => {
+    // Remove todos os caracteres não numéricos
+    const numbers = value.replace(/\D/g, '')
+
+    // Aplica a formatação baseada no tamanho
+    if (numbers.length <= 2) {
+      return numbers
+    } else if (numbers.length <= 5) {
+      return `${numbers.slice(0, 2)}.${numbers.slice(2)}`
+    } else if (numbers.length <= 8) {
+      return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(5)}`
+    } else if (numbers.length <= 12) {
+      return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(5, 8)}/${numbers.slice(8)}`
+    } else {
+      return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(5, 8)}/${numbers.slice(8, 12)}-${numbers.slice(12, 14)}`
+    }
+  }
+
+  // Função para lidar com mudanças no campo de telefone
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value)
+    setFormData((prev) => ({
+      ...prev,
+      phone: formatted,
+    }))
+  }
+
+  // Função para lidar com mudanças no campo de CPF
+  const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCPF(e.target.value)
+    setFormData((prev) => ({
+      ...prev,
+      cpf: formatted,
+    }))
+  }
+
+  // Função para lidar com mudanças no campo de CNPJ
+  const handleCNPJChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCNPJ(e.target.value)
+    setFormData((prev) => ({
+      ...prev,
+      cnpj: formatted,
+    }))
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -365,6 +447,17 @@ function QuotePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Validação: pelo menos um dos campos CPF ou CNPJ deve ser preenchido
+    if (!formData.cpf.trim() && !formData.cnpj.trim()) {
+      toast({
+        title: 'Erro de Validação',
+        description: 'Por favor, preencha pelo menos o CPF ou CNPJ.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -392,7 +485,14 @@ function QuotePage() {
             'Orçamento enviado com sucesso. Entraremos em contato em breve.',
         })
         setSelectedEquipments([])
-        setFormData({ name: '', email: '', phone: '', message: '' })
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          cpf: '',
+          cnpj: '',
+          message: '',
+        })
       } else {
         throw new Error('Erro ao enviar orçamento')
       }
@@ -788,7 +888,11 @@ function QuotePage() {
                 </p>
               </CardHeader>
               <CardContent className="relative z-10">
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form
+                  id="quote-form"
+                  onSubmit={handleSubmit}
+                  className="space-y-4"
+                >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="name">Nome Completo *</Label>
@@ -810,15 +914,36 @@ function QuotePage() {
                       <Input
                         id="phone"
                         value={formData.phone}
-                        onChange={(e) =>
-                          setFormData((prev) => ({
-                            ...prev,
-                            phone: e.target.value,
-                          }))
-                        }
+                        onChange={handlePhoneChange}
                         required
                         className="mt-1"
                         placeholder="(51) 99999-9999"
+                        maxLength={15}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="cpf">CPF</Label>
+                      <Input
+                        id="cpf"
+                        value={formData.cpf}
+                        onChange={handleCPFChange}
+                        className="mt-1"
+                        placeholder="000.000.000-00"
+                        maxLength={14}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="cnpj">CNPJ</Label>
+                      <Input
+                        id="cnpj"
+                        value={formData.cnpj}
+                        onChange={handleCNPJChange}
+                        className="mt-1"
+                        placeholder="00.000.000/0000-00"
+                        maxLength={18}
                       />
                     </div>
                   </div>
@@ -856,17 +981,6 @@ function QuotePage() {
                       rows={4}
                       className="mt-1"
                     />
-                  </div>
-
-                  <div className="pt-2">
-                    <Button
-                      type="submit"
-                      className="block w-fit mx-auto hover:scale-105 transition-transform duration-200"
-                      size="lg"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? 'Enviando...' : 'Solicitar Orçamento'}
-                    </Button>
                   </div>
                 </form>
               </CardContent>
@@ -1010,6 +1124,19 @@ function QuotePage() {
                       *Valor estimado. Orçamento final pode variar conforme
                       condições específicas.
                     </p>
+
+                    {/* Botão Solicitar Orçamento - Visível apenas quando há equipamentos selecionados */}
+                    <div className="pt-4">
+                      <Button
+                        type="submit"
+                        form="quote-form"
+                        className="w-full hover:scale-105 transition-transform duration-200"
+                        size="lg"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? 'Enviando...' : 'Solicitar Orçamento'}
+                      </Button>
+                    </div>
                   </>
                 ) : (
                   <div className="text-center py-4">
