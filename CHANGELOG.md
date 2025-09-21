@@ -6,6 +6,38 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-01-21] - Correções Críticas de Produção
+
+### Fixed 🐛
+
+- **Favicon 404**: Criado `favicon.ico` baseado no `favicon.svg` existente
+  - Adicionado suporte a múltiplos formatos de favicon no layout
+  - Configuração otimizada para diferentes navegadores e dispositivos
+- **Open Graph Images**: Criado `og-image.jpg` temporário
+  - Resolve problema de imagens não aparecendo em compartilhamentos
+  - URLs de metadados agora funcionam corretamente
+  - Previews do WhatsApp, Facebook e Twitter funcionando
+
+- **Elementos Redundantes Removidos**: Interface mais limpa
+  - Removidos botões duplicados de "Equipamento Certificado", "Entrega Gratuita"
+    e "Suporte 24h"
+  - Informações mantidas apenas no header principal
+  - Reduzida redundância visual na página de equipamentos
+
+### Technical Details 🔧
+
+- **Favicon**: Múltiplos formatos (ICO + SVG) para compatibilidade
+- **Metadados**: URLs absolutas para imagens Open Graph
+- **UX**: Interface mais focada sem elementos desnecessários
+
+### Remaining Issues ⚠️
+
+- **Database Connection**: Erro P1001 - verificar variáveis ambiente Vercel
+- **HTTP Auth Modal**: Investigar configurações de autenticação básica
+- **Server Components**: Erro digest '3743254170' em produção
+
+---
+
 ## [2025-01-21] - Otimização Completa de SEO e Conversão
 
 ### Added ✨
