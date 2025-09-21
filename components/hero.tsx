@@ -11,7 +11,7 @@ export default function Hero() {
   const router = useRouter()
   const [isSearchVisible, setIsSearchVisible] = useState(false)
 
-  const handleEquipmentSelect = (equipment: any) => {
+  const handleEquipmentSelect = (equipment: { id: string; name: string }) => {
     // Sempre que onSelect for chamado (seja por seleção ou clique na lupa com item selecionado)
     // redireciona para a página de detalhes do equipamento
     if (equipment.id) {

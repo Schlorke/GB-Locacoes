@@ -325,7 +325,7 @@ export function Autocomplete({
                     <li
                       key={equipment.id}
                       role="option"
-                      {...(isSelected && { 'aria-selected': true })}
+                      aria-selected={isSelected}
                       className={cn(
                         'px-4 py-3 cursor-pointer transition-colors text-gray-900',
                         isSelected
