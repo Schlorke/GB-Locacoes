@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 // prettier-ignore
 export const SessionResultSchema = z.object({
@@ -9,4 +9,4 @@ export const SessionResultSchema = z.object({
     user: z.unknown()
 }).strict();
 
-export type SessionResultType = z.infer<typeof SessionResultSchema>
+export type SessionResultType = z.infer<typeof SessionResultSchema>;

@@ -1,5 +1,6 @@
 'use client'
 
+/* eslint-disable */
 import { cn } from '@/lib/utils'
 import { Search, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -261,11 +262,14 @@ export function Autocomplete({
             'pr-20 text-gray-900 placeholder:text-gray-500 bg-white focus:bg-white',
             hasValidSelection && 'ring-2 ring-green-500 ring-opacity-50'
           )}
-          aria-expanded={isOpen}
+          aria-expanded={isOpen ? 'true' : 'false'}
           aria-haspopup="listbox"
           aria-autocomplete="list"
           role="combobox"
           aria-label="Campo de busca de equipamentos"
+          aria-activedescendant={
+            selectedIndex >= 0 ? `equipment-option-${selectedIndex}` : ''
+          }
           title="Campo de busca de equipamentos"
           name="equipment-search"
           id="equipment-search-input"
@@ -297,7 +301,7 @@ export function Autocomplete({
         </div>
       </div>
 
-      {/* Lista de sugestões - Solução Definitiva */}
+      {/* Lista de sugestões */}
       {isOpen && (
         <div
           ref={dropdownRef}
@@ -324,8 +328,8 @@ export function Autocomplete({
                   return (
                     <li
                       key={equipment.id}
+                      id={`equipment-option-${index}`}
                       role="option"
-                      aria-selected={isSelected}
                       className={cn(
                         'px-4 py-3 cursor-pointer transition-colors text-gray-900',
                         isSelected

@@ -1,16 +1,15 @@
-import type { Prisma } from '@prisma/client'
-import { z } from 'zod'
-import { rentalsIncludeObjectSchema } from './objects/rentalsInclude.schema'
-import { rentalsOrderByWithRelationInputObjectSchema } from './objects/rentalsOrderByWithRelationInput.schema'
-import { rentalsWhereInputObjectSchema } from './objects/rentalsWhereInput.schema'
-import { rentalsWhereUniqueInputObjectSchema } from './objects/rentalsWhereUniqueInput.schema'
-import { RentalsScalarFieldEnumSchema } from './enums/RentalsScalarFieldEnum.schema'
+import type { Prisma } from '@prisma/client';
+import { z } from 'zod';
+import { rentalsIncludeObjectSchema } from './objects/rentalsInclude.schema';
+import { rentalsOrderByWithRelationInputObjectSchema } from './objects/rentalsOrderByWithRelationInput.schema';
+import { rentalsWhereInputObjectSchema } from './objects/rentalsWhereInput.schema';
+import { rentalsWhereUniqueInputObjectSchema } from './objects/rentalsWhereUniqueInput.schema';
+import { RentalsScalarFieldEnumSchema } from './enums/RentalsScalarFieldEnum.schema';
 
 // Select schema needs to be in file to prevent circular imports
 //------------------------------------------------------
 
-export const rentalsFindFirstSelectSchema: z.ZodType<Prisma.rentalsSelect> = z
-  .object({
+export const rentalsFindFirstSelectSchema: z.ZodType<Prisma.rentalsSelect> = z.object({
     id: z.boolean().optional(),
     startdate: z.boolean().optional(),
     enddate: z.boolean().optional(),
@@ -21,12 +20,10 @@ export const rentalsFindFirstSelectSchema: z.ZodType<Prisma.rentalsSelect> = z
     updatedat: z.boolean().optional(),
     rental_items: z.boolean().optional(),
     users: z.boolean().optional(),
-    _count: z.boolean().optional(),
-  })
-  .strict() as unknown as z.ZodType<Prisma.rentalsSelect>
+    _count: z.boolean().optional()
+  }).strict() as unknown as z.ZodType<Prisma.rentalsSelect>;
 
-export const rentalsFindFirstSelectZodSchema = z
-  .object({
+export const rentalsFindFirstSelectZodSchema = z.object({
     id: z.boolean().optional(),
     startdate: z.boolean().optional(),
     enddate: z.boolean().optional(),
@@ -37,52 +34,9 @@ export const rentalsFindFirstSelectZodSchema = z
     updatedat: z.boolean().optional(),
     rental_items: z.boolean().optional(),
     users: z.boolean().optional(),
-    _count: z.boolean().optional(),
-  })
-  .strict()
+    _count: z.boolean().optional()
+  }).strict();
 
-export const rentalsFindFirstSchema: z.ZodType<Prisma.rentalsFindFirstArgs> = z
-  .object({
-    select: rentalsFindFirstSelectSchema.optional(),
-    include: z.lazy(() => rentalsIncludeObjectSchema.optional()),
-    orderBy: z
-      .union([
-        rentalsOrderByWithRelationInputObjectSchema,
-        rentalsOrderByWithRelationInputObjectSchema.array(),
-      ])
-      .optional(),
-    where: rentalsWhereInputObjectSchema.optional(),
-    cursor: rentalsWhereUniqueInputObjectSchema.optional(),
-    take: z.number().optional(),
-    skip: z.number().optional(),
-    distinct: z
-      .union([
-        RentalsScalarFieldEnumSchema,
-        RentalsScalarFieldEnumSchema.array(),
-      ])
-      .optional(),
-  })
-  .strict() as unknown as z.ZodType<Prisma.rentalsFindFirstArgs>
+export const rentalsFindFirstSchema: z.ZodType<Prisma.rentalsFindFirstArgs> = z.object({ select: rentalsFindFirstSelectSchema.optional(), include: z.lazy(() => rentalsIncludeObjectSchema.optional()), orderBy: z.union([rentalsOrderByWithRelationInputObjectSchema, rentalsOrderByWithRelationInputObjectSchema.array()]).optional(), where: rentalsWhereInputObjectSchema.optional(), cursor: rentalsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([RentalsScalarFieldEnumSchema, RentalsScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.rentalsFindFirstArgs>;
 
-export const rentalsFindFirstZodSchema = z
-  .object({
-    select: rentalsFindFirstSelectSchema.optional(),
-    include: z.lazy(() => rentalsIncludeObjectSchema.optional()),
-    orderBy: z
-      .union([
-        rentalsOrderByWithRelationInputObjectSchema,
-        rentalsOrderByWithRelationInputObjectSchema.array(),
-      ])
-      .optional(),
-    where: rentalsWhereInputObjectSchema.optional(),
-    cursor: rentalsWhereUniqueInputObjectSchema.optional(),
-    take: z.number().optional(),
-    skip: z.number().optional(),
-    distinct: z
-      .union([
-        RentalsScalarFieldEnumSchema,
-        RentalsScalarFieldEnumSchema.array(),
-      ])
-      .optional(),
-  })
-  .strict()
+export const rentalsFindFirstZodSchema = z.object({ select: rentalsFindFirstSelectSchema.optional(), include: z.lazy(() => rentalsIncludeObjectSchema.optional()), orderBy: z.union([rentalsOrderByWithRelationInputObjectSchema, rentalsOrderByWithRelationInputObjectSchema.array()]).optional(), where: rentalsWhereInputObjectSchema.optional(), cursor: rentalsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([RentalsScalarFieldEnumSchema, RentalsScalarFieldEnumSchema.array()]).optional() }).strict();

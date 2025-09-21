@@ -1,65 +1,43 @@
-import { z } from 'zod'
-import type { Prisma } from '@prisma/client'
+import { z } from 'zod';
+import type { Prisma } from '@prisma/client';
 import { VerificationTokenIdentifierTokenCompoundUniqueInputObjectSchema } from './VerificationTokenIdentifierTokenCompoundUniqueInput.schema'
 
-const makeSchema = () =>
-  z
-    .object({
-      token: z.string().optional(),
-      identifier_token: z
-        .lazy(
-          () => VerificationTokenIdentifierTokenCompoundUniqueInputObjectSchema
-        )
-        .optional(),
-    })
-    .strict()
-    .superRefine((obj, ctx) => {
-      const presentTop = (k: string) => (obj as any)[k] != null
-      const singles: string[] = ['token'] as string[]
-      const groups: string[][] = [['identifier', 'token']] as string[][]
+const makeSchema = () => z.object({
+  token: z.string().optional(),
+  identifier_token: z.lazy(() => VerificationTokenIdentifierTokenCompoundUniqueInputObjectSchema).optional()
+}).strict().superRefine((obj, ctx) => {
+        const presentTop = (k: string) => (obj as any)[k] != null;
+        const singles: string[] = ["token"] as string[];
+        const groups: string[][] = [["identifier","token"]] as string[][];
 
-      const anySingle =
-        Array.isArray(singles) && singles.length > 0
-          ? singles.some(presentTop)
-          : false
+        const anySingle = Array.isArray(singles) && singles.length > 0 ? singles.some(presentTop) : false;
 
-      let anyComposite = false
-      if (Array.isArray(groups) && groups.length > 0) {
-        // Iterate over nested composite selectors (e.g., { composite_key_name: { a: ..., b: ... } })
-        for (const [propKey, composite] of Object.entries(
-          obj as Record<string, unknown>
-        )) {
-          if (!composite || typeof composite !== 'object') continue
-          for (const g of groups as string[][]) {
-            if (!Array.isArray(g) || g.length === 0) continue
-            const presentInComposite = (k: string) =>
-              (composite as any)[k] != null
-            const provided = (g as string[]).filter(presentInComposite).length
-            if (provided > 0 && provided < g.length) {
-              for (const f of g as string[]) {
-                if (!presentInComposite(f)) {
-                  ctx.addIssue({
-                    code: 'custom',
-                    message: 'All fields of composite unique must be provided',
-                    path: [propKey, f],
-                  })
+        let anyComposite = false;
+        if (Array.isArray(groups) && groups.length > 0) {
+          // Iterate over nested composite selectors (e.g., { composite_key_name: { a: ..., b: ... } })
+          for (const [propKey, composite] of Object.entries(obj as Record<string, unknown>)) {
+            if (!composite || typeof composite !== 'object') continue;
+            for (const g of groups as string[][]) {
+              if (!Array.isArray(g) || g.length === 0) continue;
+              const presentInComposite = (k: string) => (composite as any)[k] != null;
+              const provided = (g as string[]).filter(presentInComposite).length;
+              if (provided > 0 && provided < g.length) {
+                for (const f of g as string[]) {
+                  if (!presentInComposite(f)) {
+                    ctx.addIssue({ code: 'custom', message: 'All fields of composite unique must be provided', path: [propKey, f] });
+                  }
                 }
               }
-            }
-            if (provided === g.length && g.length > 0) {
-              anyComposite = true
+              if (provided === g.length && g.length > 0) {
+                anyComposite = true;
+              }
             }
           }
         }
-      }
 
-      if (!anySingle && !anyComposite) {
-        ctx.addIssue({
-          code: 'custom',
-          message: 'Provide at least one unique selector',
-        })
-      }
-    })
-export const VerificationTokenWhereUniqueInputObjectSchema: z.ZodType<Prisma.VerificationTokenWhereUniqueInput> =
-  makeSchema() as unknown as z.ZodType<Prisma.VerificationTokenWhereUniqueInput>
-export const VerificationTokenWhereUniqueInputObjectZodSchema = makeSchema()
+        if (!anySingle && !anyComposite) {
+          ctx.addIssue({ code: 'custom', message: 'Provide at least one unique selector' });
+        }
+      });
+export const VerificationTokenWhereUniqueInputObjectSchema: z.ZodType<Prisma.VerificationTokenWhereUniqueInput> = makeSchema() as unknown as z.ZodType<Prisma.VerificationTokenWhereUniqueInput>;
+export const VerificationTokenWhereUniqueInputObjectZodSchema = makeSchema();

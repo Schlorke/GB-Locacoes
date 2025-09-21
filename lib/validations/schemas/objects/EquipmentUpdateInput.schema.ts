@@ -1,185 +1,47 @@
-import { z } from 'zod'
-import type { Prisma } from '@prisma/client'
-import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema'
-import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema'
-import { DecimalFieldUpdateOperationsInputObjectSchema } from './DecimalFieldUpdateOperationsInput.schema'
-import { EquipmentUpdateimagesInputObjectSchema } from './EquipmentUpdateimagesInput.schema'
-import { BoolFieldUpdateOperationsInputObjectSchema } from './BoolFieldUpdateOperationsInput.schema'
-import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema'
-import { NullableIntFieldUpdateOperationsInputObjectSchema } from './NullableIntFieldUpdateOperationsInput.schema'
-import { NullableDecimalFieldUpdateOperationsInputObjectSchema } from './NullableDecimalFieldUpdateOperationsInput.schema'
-import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema'
-import { CategoryUpdateOneRequiredWithoutEquipmentsNestedInputObjectSchema } from './CategoryUpdateOneRequiredWithoutEquipmentsNestedInput.schema'
-import { QuoteItemUpdateManyWithoutEquipmentNestedInputObjectSchema } from './QuoteItemUpdateManyWithoutEquipmentNestedInput.schema'
+import { z } from 'zod';
+import type { Prisma } from '@prisma/client';
+import { StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
+import { NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
+import { DecimalFieldUpdateOperationsInputObjectSchema } from './DecimalFieldUpdateOperationsInput.schema';
+import { EquipmentUpdateimagesInputObjectSchema } from './EquipmentUpdateimagesInput.schema';
+import { BoolFieldUpdateOperationsInputObjectSchema } from './BoolFieldUpdateOperationsInput.schema';
+import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
+import { NullableIntFieldUpdateOperationsInputObjectSchema } from './NullableIntFieldUpdateOperationsInput.schema';
+import { NullableDecimalFieldUpdateOperationsInputObjectSchema } from './NullableDecimalFieldUpdateOperationsInput.schema';
+import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
+import { CategoryUpdateOneRequiredWithoutEquipmentsNestedInputObjectSchema } from './CategoryUpdateOneRequiredWithoutEquipmentsNestedInput.schema';
+import { QuoteItemUpdateManyWithoutEquipmentNestedInputObjectSchema } from './QuoteItemUpdateManyWithoutEquipmentNestedInput.schema';
 import { rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema } from './rental_itemsUpdateManyWithoutEquipmentsNestedInput.schema'
 
-import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers'
+import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
-const makeSchema = () =>
-  z
-    .object({
-      id: z
-        .union([
-          z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      name: z
-        .union([
-          z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      description: z
-        .union([
-          z.string(),
-          z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      pricePerDay: z
-        .union([
-          z.number(),
-          z.lazy(() => DecimalFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      images: z
-        .union([
-          z.lazy(() => EquipmentUpdateimagesInputObjectSchema),
-          z.string().array(),
-        ])
-        .optional(),
-      available: z
-        .union([
-          z.boolean(),
-          z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      specifications: z
-        .union([NullableJsonNullValueInputSchema, jsonSchema])
-        .optional(),
-      maxStock: z
-        .union([
-          z.number().int(),
-          z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      dailyDiscount: z
-        .union([
-          z.number().int(),
-          z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      weeklyDiscount: z
-        .union([
-          z.number().int(),
-          z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      biweeklyDiscount: z
-        .union([
-          z.number().int(),
-          z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      monthlyDiscount: z
-        .union([
-          z.number().int(),
-          z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      popularPeriod: z
-        .union([
-          z.string(),
-          z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      dailyDirectValue: z
-        .union([
-          z.number(),
-          z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      weeklyDirectValue: z
-        .union([
-          z.number(),
-          z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      biweeklyDirectValue: z
-        .union([
-          z.number(),
-          z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      monthlyDirectValue: z
-        .union([
-          z.number(),
-          z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional()
-        .nullable(),
-      dailyUseDirectValue: z
-        .union([
-          z.boolean(),
-          z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      weeklyUseDirectValue: z
-        .union([
-          z.boolean(),
-          z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      biweeklyUseDirectValue: z
-        .union([
-          z.boolean(),
-          z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      monthlyUseDirectValue: z
-        .union([
-          z.boolean(),
-          z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      createdAt: z
-        .union([
-          z.coerce.date(),
-          z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      updatedAt: z
-        .union([
-          z.coerce.date(),
-          z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      category: z
-        .lazy(
-          () =>
-            CategoryUpdateOneRequiredWithoutEquipmentsNestedInputObjectSchema
-        )
-        .optional(),
-      quoteItems: z
-        .lazy(() => QuoteItemUpdateManyWithoutEquipmentNestedInputObjectSchema)
-        .optional(),
-      rental_items: z
-        .lazy(
-          () => rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema
-        )
-        .optional(),
-    })
-    .strict()
-export const EquipmentUpdateInputObjectSchema: z.ZodType<Prisma.EquipmentUpdateInput> =
-  makeSchema() as unknown as z.ZodType<Prisma.EquipmentUpdateInput>
-export const EquipmentUpdateInputObjectZodSchema = makeSchema()
+const makeSchema = () => z.object({
+  id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
+  name: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
+  description: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  pricePerDay: z.union([z.number(), z.lazy(() => DecimalFieldUpdateOperationsInputObjectSchema)]).optional(),
+  images: z.union([z.lazy(() => EquipmentUpdateimagesInputObjectSchema), z.string().array()]).optional(),
+  available: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema)]).optional(),
+  specifications: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
+  maxStock: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  dailyDiscount: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  weeklyDiscount: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  biweeklyDiscount: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  monthlyDiscount: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  popularPeriod: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  dailyDirectValue: z.union([z.number(), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  weeklyDirectValue: z.union([z.number(), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  biweeklyDirectValue: z.union([z.number(), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  monthlyDirectValue: z.union([z.number(), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  dailyUseDirectValue: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema)]).optional(),
+  weeklyUseDirectValue: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema)]).optional(),
+  biweeklyUseDirectValue: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema)]).optional(),
+  monthlyUseDirectValue: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema)]).optional(),
+  createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
+  updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
+  category: z.lazy(() => CategoryUpdateOneRequiredWithoutEquipmentsNestedInputObjectSchema).optional(),
+  quoteItems: z.lazy(() => QuoteItemUpdateManyWithoutEquipmentNestedInputObjectSchema).optional(),
+  rental_items: z.lazy(() => rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema).optional()
+}).strict();
+export const EquipmentUpdateInputObjectSchema: z.ZodType<Prisma.EquipmentUpdateInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUpdateInput>;
+export const EquipmentUpdateInputObjectZodSchema = makeSchema();
