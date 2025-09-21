@@ -252,21 +252,6 @@ export default async function EquipmentDetailPage(props: Props) {
             </Link>
           </div>
 
-          {/* Quick Info Bar */}
-          <div className="flex flex-wrap items-center gap-4 text-white/80 text-sm mb-2">
-            <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-green-400" />
-              <span>Equipamento Certificado</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Truck className="h-4 w-4 text-blue-400" />
-              <span>Entrega Gratuita</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-orange-400" />
-              <span>Suporte 24h</span>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -382,19 +367,6 @@ export default async function EquipmentDetailPage(props: Props) {
                   }
                 />
 
-                {/* Benefícios Rápidos */}
-                <div className="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200">
-                  <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-green-600" />
-                    <span className="text-xs text-gray-700">Certificado</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Truck className="h-4 w-4 text-blue-600" />
-                    <span className="text-xs text-gray-700">
-                      Entrega grátis
-                    </span>
-                  </div>
-                </div>
               </div>
             </div>
           </Card>
