@@ -1,9 +1,5 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
-export const JsonNullValueFilterSchema = z.enum([
-  'DbNull',
-  'JsonNull',
-  'AnyNull',
-])
+export const JsonNullValueFilterSchema = z.enum(['DbNull', 'JsonNull', 'AnyNull'])
 
-export type JsonNullValueFilter = z.infer<typeof JsonNullValueFilterSchema>
+export type JsonNullValueFilter = z.infer<typeof JsonNullValueFilterSchema>;

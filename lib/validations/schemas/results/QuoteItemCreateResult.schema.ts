@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 export const QuoteItemCreateResultSchema = z.object({
   id: z.string(),
   quoteId: z.string(),
@@ -10,5 +10,5 @@ export const QuoteItemCreateResultSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   equipment: z.unknown(),
-  quote: z.unknown(),
-})
+  quote: z.unknown()
+});

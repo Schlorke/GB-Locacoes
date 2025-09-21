@@ -1,14 +1,11 @@
-import { z } from 'zod'
-import type { Prisma } from '@prisma/client'
-import { EquipmentSelectObjectSchema } from './EquipmentSelect.schema'
+import { z } from 'zod';
+import type { Prisma } from '@prisma/client';
+import { EquipmentSelectObjectSchema } from './EquipmentSelect.schema';
 import { EquipmentIncludeObjectSchema } from './EquipmentInclude.schema'
 
-const makeSchema = () =>
-  z
-    .object({
-      select: z.lazy(() => EquipmentSelectObjectSchema).optional(),
-      include: z.lazy(() => EquipmentIncludeObjectSchema).optional(),
-    })
-    .strict()
-export const EquipmentArgsObjectSchema = makeSchema()
-export const EquipmentArgsObjectZodSchema = makeSchema()
+const makeSchema = () => z.object({
+  select: z.lazy(() => EquipmentSelectObjectSchema).optional(),
+  include: z.lazy(() => EquipmentIncludeObjectSchema).optional()
+}).strict();
+export const EquipmentArgsObjectSchema = makeSchema();
+export const EquipmentArgsObjectZodSchema = makeSchema();

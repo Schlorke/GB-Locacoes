@@ -6,6 +6,11 @@ import {
 import { EquipmentImageGallery } from '@/components/equipment-image-gallery'
 import { ShareButton } from '@/components/share-button'
 import { SmartEquipmentPricing } from '@/components/smart-equipment-pricing'
+import {
+  StructuredData,
+  DEFAULT_LOCAL_BUSINESS,
+} from '@/components/structured-data'
+import { EquipmentBreadcrumb } from '@/components/ui/breadcrumb'
 import { Badge } from '@/components/ui/badge'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -57,12 +62,97 @@ export async function generateMetadata(props: Props) {
   })
 
   if (!equipment) {
-    return { title: 'Equipamento não encontrado' }
+    return {
+      title: 'Equipamento não encontrado | GB Locações',
+      description:
+        'O equipamento solicitado não foi encontrado. Confira nosso catálogo completo de equipamentos para locação.',
+    }
   }
 
+  // Criar descrição otimizada para SEO (máximo 160 caracteres)
+  const seoDescription = equipment.description
+    ? `${equipment.description.slice(0, 140)}... Solicite seu orçamento em Porto Alegre!`
+    : `Aluguel de ${equipment.name} para construção civil. Locação profissional em Porto Alegre. Solicite seu orçamento!`
+
+  // Título SEO otimizado
+  const seoTitle = `Aluguel de ${equipment.name} em Porto Alegre | GB Locações`
+
+  // URL canônica
+  const canonicalUrl = `https://gblocacoes.com.br/equipamentos/${params.id}`
+
+  // Imagem principal (primeira da galeria ou placeholder)
+  const primaryImage = equipment.images?.[0] || '/placeholder.jpg'
+  const imageUrl = primaryImage.startsWith('http')
+    ? primaryImage
+    : `https://gblocacoes.com.br${primaryImage}`
+
   return {
-    title: `${equipment.name} | GB Locações`,
-    description: equipment.description,
+    title: seoTitle,
+    description:
+      seoDescription.length <= 160
+        ? seoDescription
+        : seoDescription.slice(0, 157) + '...',
+    keywords: [
+      `aluguel ${equipment.name.toLowerCase()}`,
+      `locação ${equipment.name.toLowerCase()}`,
+      'equipamentos construção civil porto alegre',
+      'gb locações',
+      equipment.category?.name?.toLowerCase() || '',
+      'locação equipamentos obras',
+    ],
+    authors: [{ name: 'GB Locações' }],
+    creator: 'GB Locações',
+    publisher: 'GB Locações',
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `Aluguel de ${equipment.name} | GB Locações`,
+      description:
+        seoDescription.length <= 160
+          ? seoDescription
+          : seoDescription.slice(0, 157) + '...',
+      url: canonicalUrl,
+      siteName: 'GB Locações',
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${equipment.name} para locação - GB Locações`,
+          type: 'image/jpeg',
+        },
+      ],
+      locale: 'pt_BR',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `Aluguel de ${equipment.name} | GB Locações`,
+      description:
+        seoDescription.length <= 160
+          ? seoDescription
+          : seoDescription.slice(0, 157) + '...',
+      images: [
+        {
+          url: imageUrl,
+          alt: `${equipment.name} para locação - GB Locações`,
+        },
+      ],
+      creator: '@gblocacoes',
+      site: '@gblocacoes',
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
   }
 }
 
@@ -93,8 +183,48 @@ export default async function EquipmentDetailPage(props: Props) {
   // Converter Decimal para number para cálculos
   const pricePerDay = Number(equipment.pricePerDay)
 
+  // Dados estruturados para SEO
+  const structuredDataProduct = {
+    name: equipment.name,
+    description:
+      equipment.description ||
+      `Aluguel de ${equipment.name} para construção civil`,
+    image: equipment.images || ['/placeholder.jpg'],
+    brand: 'GB Locações',
+    sku: equipment.id,
+    offers: {
+      price: pricePerDay,
+      priceCurrency: 'BRL',
+      availability: equipment.available
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      url: `https://gblocacoes.com.br/equipamentos/${params.id}`,
+    },
+    category: equipment.category?.name || 'Equipamentos para Construção',
+    manufacturer: 'GB Locações',
+  }
+
+  const breadcrumbs = [
+    { name: 'Home', url: 'https://gblocacoes.com.br' },
+    { name: 'Equipamentos', url: 'https://gblocacoes.com.br/equipamentos' },
+    {
+      name: equipment.category?.name || 'Categoria',
+      url: `https://gblocacoes.com.br/equipamentos?categoria=${equipment.category?.slug || ''}`,
+    },
+    {
+      name: equipment.name,
+      url: `https://gblocacoes.com.br/equipamentos/${params.id}`,
+    },
+  ]
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50/30">
+      <StructuredData
+        localBusiness={DEFAULT_LOCAL_BUSINESS}
+        product={structuredDataProduct}
+        breadcrumbs={breadcrumbs}
+      />
+
       {/* Hero Section com Background Gradient do Footer - Altura fixa 184px */}
       <div
         className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-black overflow-hidden"
@@ -105,15 +235,22 @@ export default async function EquipmentDetailPage(props: Props) {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <nav className="mb-5 pt-12">
+          <div className="mb-5 pt-12">
+            <EquipmentBreadcrumb
+              currentPage={equipment.name}
+              categoryName={equipment.category?.name}
+              categorySlug={equipment.category?.slug}
+              variant="default"
+              className="text-orange-100"
+            />
             <Link
               href="/equipamentos"
-              className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors font-medium"
+              className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors font-medium mt-3"
             >
               <ArrowLeft className="h-5 w-5 mr-2" />
               Voltar aos Equipamentos
             </Link>
-          </nav>
+          </div>
 
           {/* Quick Info Bar */}
           <div className="flex flex-wrap items-center gap-4 text-white/80 text-sm mb-2">

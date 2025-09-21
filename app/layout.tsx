@@ -1,4 +1,5 @@
 import { SpeedInsights } from '@vercel/speed-insights/next' // ✅ Importado aqui
+import { Analytics } from '@vercel/analytics/next' // ✅ Vercel Analytics
 import type { Metadata } from 'next'
 import React from 'react'
 import ClientLayout from './ClientLayout'
@@ -82,6 +83,7 @@ export default function RootLayout({
     <ClientLayout>
       {children}
       <SpeedInsights />
+      <Analytics />
     </ClientLayout>
   )
 }

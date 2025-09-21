@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 export const rentalsCreateManyResultSchema = z.object({
-  count: z.number(),
-})
+  count: z.number()
+});

@@ -1,0 +1,68 @@
+# GB Locações - Robots.txt
+# Otimizado para SEO e crawling eficiente
+
+# Permitir todos os crawlers para as páginas principais
+User-agent: *
+Allow: /
+
+# Páginas importantes para indexação prioritária
+Allow: /equipamentos
+Allow: /equipamentos/*
+Allow: /sobre
+Allow: /contato
+Allow: /orcamento
+
+# Bloquear área administrativa
+Disallow: /admin
+Disallow: /admin/*
+
+# Bloquear API routes (não devem ser indexadas)
+Disallow: /api/
+Disallow: /api/*
+
+# Bloquear páginas de autenticação
+Disallow: /login
+Disallow: /area-cliente/login
+
+# Bloquear arquivos temporários e de build
+Disallow: /_next/
+Disallow: /node_modules/
+Disallow: *.json$
+Disallow: *.xml$
+
+# Permitir acesso a assets importantes
+Allow: /favicon.ico
+Allow: /favicon.svg
+Allow: /images/
+Allow: /icons/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.webp$
+Allow: /*.svg$
+Allow: /*.css$
+Allow: /*.js$
+
+# Configurações específicas para Google Bot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+# Configurações específicas para Bing Bot
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Bloquear crawlers maliciosos conhecidos
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Links importantes
+Sitemap: https://gblocacoes.com.br/sitemap.xml
+Host: https://gblocacoes.com.br

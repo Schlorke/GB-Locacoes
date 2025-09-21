@@ -359,22 +359,95 @@ pnpm format                # Prettier
 
 ---
 
-## 🚨 **ALERTAS CRÍTICOS PARA IAs**
+## 🚨 **PROTOCOLO ANTI-ALUCINAÇÃO (OBRIGATÓRIO)**
 
-### **❌ NÃO FAÇA (Anti-Padrões)**
+> **⚠️ LEIA PRIMEIRO**: Antes de implementar QUALQUER funcionalidade, siga este
+> protocolo EXATO
 
-1. **❌ NÃO** atualize Prisma para 6.14.0+ (quebra build)
-2. **❌ NÃO** mude Tailwind CSS (usuário prefere versão atual)
-3. **❌ NÃO** use PNPM (causa conflitos, preferir NPM)
-4. **❌ NÃO** crie componentes fora do design system
-5. **❌ NÃO** ignore o protocolo de CHANGELOG
-6. **❌ NÃO** modifique animações/responsividade existentes
-7. **❌ NÃO** use `any` em TypeScript
-8. **❌ NÃO** implemente sem consultar docs/
-9. **❌ NÃO** delete ou modifique `scripts/post-prisma-generate.js` (crítico
-   para build)
-10. **❌ NÃO** modifique `package.json` scripts de build sem entender
-    dependências
+### **🔍 PROTOCOLO DE VERIFICAÇÃO (OBRIGATÓRIO)**
+
+#### **Antes de criar qualquer componente, SEMPRE perguntar:**
+
+1. **"Este componente já existe?"**
+   - ✅ Consulte `docs/internal/seo-optimization-implementation.md`
+   - ✅ Verifique `/components/ui/` e `/components/`
+   - ✅ Procure por variantes ou similares
+
+2. **"Posso usar um componente existente?"**
+   - ✅ `QuoteForm` para qualquer formulário multi-step
+   - ✅ `CTAButton` para qualquer botão de ação
+   - ✅ `EquipmentCard` para cards de produto
+   - ✅ `Breadcrumb` para navegação
+
+3. **"Os dados estruturados já estão implementados?"**
+   - ✅ `StructuredData` já tem LocalBusiness + Product + Breadcrumb
+   - ✅ `DEFAULT_LOCAL_BUSINESS` já configurado para GB Locações
+   - ✅ **NÃO** recriar schemas JSON-LD
+
+#### **📝 CHECKLIST OBRIGATÓRIO ANTES DE CODIFICAR**
+
+- [ ] Li `docs/internal/seo-optimization-implementation.md`
+- [ ] Verifiquei se componente similar já existe
+- [ ] Confirmei que não há duplicação de funcionalidade
+- [ ] Revisei os componentes pré-configurados disponíveis
+- [ ] Entendi a arquitetura de CTAs e tracking analytics
+- [ ] Verifiquei se structured data já está coberto
+
+### **🛡️ COMPONENTES PRÉ-IMPLEMENTADOS (NÃO RECRIAR)**
+
+| Funcionalidade               | Componente Existente                  | Localização                      |
+| ---------------------------- | ------------------------------------- | -------------------------------- |
+| **Formulários de orçamento** | `QuoteForm`                           | `components/quote-form.tsx`      |
+| **Botões de ação/CTA**       | `CTAButton`, `QuoteCTA`, `ContactCTA` | `components/ui/cta-button.tsx`   |
+| **Cards de produto**         | `EquipmentCard` (3 variantes)         | `components/equipment-card.tsx`  |
+| **Navegação breadcrumb**     | `Breadcrumb`, `EquipmentBreadcrumb`   | `components/ui/breadcrumb.tsx`   |
+| **SEO structured data**      | `StructuredData`                      | `components/structured-data.tsx` |
+| **Metadados dinâmicos**      | `generateMetadata()`                  | `app/equipamentos/[id]/page.tsx` |
+| **Sitemap**                  | `sitemap.ts`                          | `app/sitemap.ts`                 |
+| **Controle de crawling**     | `robots.txt`                          | `public/robots.txt`              |
+
+### **⚠️ PALAVRAS-CHAVE DE ALERTA**
+
+**Se o usuário mencionar estas palavras, SEMPRE consultar componentes existentes
+primeiro:**
+
+- **"formulário"** → Use `QuoteForm`
+- **"botão"** → Use `CTAButton` ou variantes
+- **"card"** → Use `EquipmentCard`
+- **"navegação"** → Use `Breadcrumb`
+- **"SEO"** → Verifique `StructuredData` e `generateMetadata`
+- **"schema"** → Use `StructuredData` existente
+- **"orçamento"** → Use `QuoteForm` + `QuoteCTA`
+- **"contato"** → Use `ContactCTA` + `QuoteForm`
+- **"WhatsApp"** → Use `WhatsAppCTA`
+
+### **❌ NÃO FAÇA (Anti-Padrões Expandidos)**
+
+#### **🚫 Componentes (NÃO RECRIAR):**
+
+1. **❌ NÃO** crie novos formulários → Use `QuoteForm` como base
+2. **❌ NÃO** crie botões customizados → Use `CTAButton` system
+3. **❌ NÃO** crie cards de produto → Use `EquipmentCard` variantes
+4. **❌ NÃO** implemente breadcrumbs → Use `Breadcrumb` component
+5. **❌ NÃO** adicione Schema.org manualmente → Use `StructuredData`
+6. **❌ NÃO** crie modais de orçamento → Use `QuoteForm` variant modal
+
+#### **🚫 Funcionalidades (NÃO RECRIAR):**
+
+7. **❌ NÃO** implemente tracking analytics → Use `trackingId` do CTAButton
+8. **❌ NÃO** crie metadados manuais → Use `generateMetadata` pattern
+9. **❌ NÃO** modifique sitemap.xml → É gerado automaticamente
+10. **❌ NÃO** altere robots.txt → Já configurado otimamente
+
+#### **🚫 Técnicos (MANTER PADRÕES):**
+
+11. **❌ NÃO** atualize Prisma para 6.14.0+ (quebra build)
+12. **❌ NÃO** mude Tailwind CSS (usuário prefere versão atual)
+13. **❌ NÃO** use PNPM (causa conflitos, preferir NPM)
+14. **❌ NÃO** use `any` em TypeScript → Use tipos específicos
+15. **❌ NÃO** use `@ts-ignore` → Use `@ts-expect-error` com descrição
+16. **❌ NÃO** delete `scripts/post-prisma-generate.js` (crítico para build)
+17. **❌ NÃO** modifique `package.json` scripts sem entender dependências
 
 ### **🆘 TROUBLESHOOTING - PROBLEMAS COMUNS**
 
@@ -473,7 +546,91 @@ pnpm format                # Prettier
 
 ## 🆕 **RECURSOS IMPLEMENTADOS (JAN 2025)**
 
-### **🔍 Autocomplete Search Bar (NOVO - JAN 2025)**
+### **🎯 Sistema Completo de SEO e Conversão (NOVO - JAN 2025)**
+
+> **⚠️ CRÍTICO**: Consulte `docs/internal/seo-optimization-implementation.md`
+> antes de modificar qualquer componente relacionado
+
+- **Status**: ✅ IMPLEMENTADO E 100% FUNCIONAL
+- **Impacto**: Zero breaking changes, 100% compatível com código existente
+- **Cobertura**: 8 novos componentes + 4 funcionalidades SEO
+
+#### **📦 COMPONENTES IMPLEMENTADOS (NÃO RECRIAR)**
+
+##### **1. StructuredData Component**
+
+- **Localização**: `components/structured-data.tsx`
+- **Função**: Gera JSON-LD schemas para SEO
+- **Uso**:
+  `<StructuredData localBusiness={DEFAULT_LOCAL_BUSINESS} product={productData} />`
+- **Schemas**: LocalBusiness, Product, BreadcrumbList
+- **⚠️ Dados configurados**: `DEFAULT_LOCAL_BUSINESS` já tem dados da GB
+  Locações
+
+##### **2. QuoteForm Component**
+
+- **Localização**: `components/quote-form.tsx`
+- **Função**: Formulário multi-step com validação Zod (3 etapas)
+- **Uso**: `<QuoteForm prefilledEquipment={{ id, name }} variant="modal" />`
+- **Características**: Validação tempo real, animações, loading states
+- **⚠️ NÃO criar formulários similares**: Use este componente como base
+
+##### **3. CTAButton System**
+
+- **Localização**: `components/ui/cta-button.tsx`
+- **Função**: Sistema completo de botões CTA com analytics
+- **Componentes pré-configurados**:
+  - `QuoteCTA`: Para orçamentos
+  - `ContactCTA`: Para contato
+  - `PhoneCTA`: Para chamadas
+  - `WhatsAppCTA`: Para WhatsApp
+- **Uso**: `<QuoteCTA href="/orcamento" />` ou `<CTAButton trackingId="..." />`
+- **⚠️ Tracking automático**: Google Analytics integrado
+
+##### **4. Breadcrumb Component**
+
+- **Localização**: `components/ui/breadcrumb.tsx`
+- **Função**: Navegação + Schema.org automático
+- **Variantes**: default, minimal, pills
+- **Pré-configurados**: `EquipmentBreadcrumb`, `CategoryBreadcrumb`
+- **Uso**: `<EquipmentBreadcrumb currentPage={equipment.name} />`
+- **⚠️ JSON-LD automático**: Não implementar Schema manualmente
+
+##### **5. EquipmentCard Enhanced**
+
+- **Localização**: `components/equipment-card.tsx` (MELHORADO)
+- **Variantes**: default, featured, compact
+- **Recursos**: Hover effects, ratings, badges, CTAs otimizados
+- **Uso**: `<EquipmentCard equipment={data} variant="featured" />`
+- **⚠️ Cards existentes**: Use este em vez de criar novos
+
+#### **🔍 FUNCIONALIDADES SEO (IMPLEMENTADAS)**
+
+##### **1. Metadados Dinâmicos**
+
+- **Localização**: `app/equipamentos/[id]/page.tsx`
+- **Função**: `generateMetadata()` completa com Open Graph + Twitter Cards
+- **⚠️ Padrão estabelecido**: "Aluguel de [Nome] em Porto Alegre | GB Locações"
+
+##### **2. Sitemap Dinâmico**
+
+- **Localização**: `app/sitemap.ts`
+- **Função**: Gera sitemap.xml com todas URLs + prioridades
+- **⚠️ Auto-atualização**: Inclui equipamentos disponíveis automaticamente
+
+##### **3. Robots.txt Otimizado**
+
+- **Localização**: `public/robots.txt`
+- **Função**: Controle de crawling + link para sitemap
+- **⚠️ Configurado**: Bloqueia admin/api, permite equipamentos
+
+##### **4. Schema.org Completo**
+
+- **Implementado via**: StructuredData component
+- **Schemas ativos**: LocalBusiness, Product, BreadcrumbList
+- **⚠️ Dados configurados**: GB Locações pré-configurada
+
+### **🔍 Autocomplete Search Bar (IMPLEMENTADO - JAN 2025)**
 
 - **Status**: ✅ IMPLEMENTADO E FUNCIONAL
 - **Localização**: `components/ui/autocomplete.tsx`

@@ -1,0 +1,5 @@
+import { z } from 'zod';
+
+export const PaymentTypeSchema = z.enum(['RENTAL', 'DEPOSIT', 'FINE', 'DAMAGE', 'LATE_FEE'])
+
+export type PaymentType = z.infer<typeof PaymentTypeSchema>;

@@ -1,12 +1,5 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
-export const TransactionIsolationLevelSchema = z.enum([
-  'ReadUncommitted',
-  'ReadCommitted',
-  'RepeatableRead',
-  'Serializable',
-])
+export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted', 'ReadCommitted', 'RepeatableRead', 'Serializable'])
 
-export type TransactionIsolationLevel = z.infer<
-  typeof TransactionIsolationLevelSchema
->
+export type TransactionIsolationLevel = z.infer<typeof TransactionIsolationLevelSchema>;

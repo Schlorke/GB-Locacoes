@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 export const EquipmentUpsertResultSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -26,5 +26,5 @@ export const EquipmentUpsertResultSchema = z.object({
   updatedAt: z.date(),
   category: z.unknown(),
   quoteItems: z.array(z.unknown()),
-  rental_items: z.array(z.unknown()),
-})
+  rental_items: z.array(z.unknown())
+});
