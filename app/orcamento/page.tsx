@@ -551,26 +551,26 @@ function QuotePage() {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Equipamentos Selecionados - Coluna Principal */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="lg:col-span-2 space-y-8"
+            className="lg:col-span-2 space-y-6 lg:space-y-8"
           >
             <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
               {/* Clean depth layers for equipment card */}
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-              <CardHeader className="relative z-10">
-                <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
-                  <ShoppingCart className="h-7 w-7 text-orange-600" />
+              <CardHeader className="relative z-10 p-4 sm:p-6 lg:p-6">
+                <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-gray-900">
+                  <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 text-orange-600" />
                   Equipamentos Selecionados ({selectedEquipments.length})
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10">
+              <CardContent className="relative z-10 p-4 sm:p-6 lg:p-6 pt-0">
                 {selectedEquipments.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
                     <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -744,102 +744,167 @@ function QuotePage() {
                                   </div>
 
                                   {/* Controles - Layout Responsivo */}
-                                  <div className="flex items-center gap-x-4">
-                                    <div className="flex items-center gap-2">
-                                      <Label className="text-sm font-medium">
+                                  <div className="flex flex-row gap-4 max-[1170px]:flex-col">
+                                    {/* Controle de Quantidade */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                      <Label className="text-sm font-medium text-gray-700 text-center sm:text-left sm:w-20">
                                         Quantidade:
                                       </Label>
-                                      <div className="flex items-center gap-1">
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          onClick={() =>
-                                            updateQuantity(
-                                              equipment.id,
-                                              equipment.quantity - 1
-                                            )
-                                          }
-                                          disabled={equipment.quantity <= 1}
-                                          className="h-8 w-8 p-0"
-                                        >
-                                          <Minus className="h-3 w-3" />
-                                        </Button>
-                                        <Input
-                                          type="number"
-                                          value={equipment.quantity}
-                                          onChange={(e) =>
-                                            updateQuantity(
-                                              equipment.id,
-                                              Number.parseInt(e.target.value) ||
-                                                1
-                                            )
-                                          }
-                                          className="w-16 h-8 text-center font-medium"
-                                          min="1"
-                                          max={equipment.maxStock || 999}
-                                        />
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          onClick={() =>
-                                            updateQuantity(
-                                              equipment.id,
-                                              equipment.quantity + 1
-                                            )
-                                          }
-                                          disabled={
-                                            equipment.quantity >=
-                                            (equipment.maxStock || 999)
-                                          }
-                                          className="h-8 w-8 p-0"
-                                        >
-                                          <Plus className="h-3 w-3" />
-                                        </Button>
+                                      <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-2">
+                                        <div className="flex items-center justify-center gap-2">
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                              updateQuantity(
+                                                equipment.id,
+                                                equipment.quantity - 1
+                                              )
+                                            }
+                                            disabled={equipment.quantity <= 1}
+                                            className="h-8 w-8 p-0 flex-shrink-0"
+                                          >
+                                            <Minus className="h-3 w-3" />
+                                          </Button>
+                                          <Input
+                                            type="number"
+                                            value={equipment.quantity}
+                                            onChange={(e) =>
+                                              updateQuantity(
+                                                equipment.id,
+                                                Number.parseInt(
+                                                  e.target.value
+                                                ) || 1
+                                              )
+                                            }
+                                            className="w-12 h-8 text-center font-medium [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                                            min="1"
+                                            max={equipment.maxStock || 999}
+                                          />
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                              updateQuantity(
+                                                equipment.id,
+                                                equipment.quantity + 1
+                                              )
+                                            }
+                                            disabled={
+                                              equipment.quantity >=
+                                              (equipment.maxStock || 999)
+                                            }
+                                            className="h-8 w-8 p-0 flex-shrink-0"
+                                          >
+                                            <Plus className="h-3 w-3" />
+                                          </Button>
+                                        </div>
+                                        {equipment.maxStock &&
+                                          equipment.maxStock < 999 && (
+                                            <span className="text-xs text-gray-500 sm:ml-2">
+                                              Max: {equipment.maxStock}{' '}
+                                              disponível
+                                            </span>
+                                          )}
                                       </div>
-                                      {equipment.maxStock &&
-                                        equipment.maxStock < 999 && (
-                                          <span className="text-xs text-gray-500 break-words">
-                                            Max: {equipment.maxStock} disponível
-                                            {equipment.maxStock > 1 ? 's' : ''}
-                                          </span>
-                                        )}
                                     </div>
 
-                                    <div className="flex items-center gap-2">
-                                      <Label className="text-sm font-medium">
+                                    {/* Controle de Período */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                      <Label className="text-sm font-medium text-gray-700 text-center sm:text-left">
                                         {equipment.selectedPeriod
                                           ? 'Períodos:'
                                           : 'Dias:'}
                                       </Label>
-                                      <Input
-                                        type="number"
-                                        value={
-                                          equipment.selectedPeriod
-                                            ? Math.ceil(
-                                                equipment.days /
-                                                  equipment.selectedPeriod
-                                                    .multiplier
+                                      <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-2">
+                                        <div className="flex items-center justify-center gap-2">
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                              const currentValue =
+                                                equipment.selectedPeriod
+                                                  ? Math.ceil(
+                                                      equipment.days /
+                                                        equipment.selectedPeriod
+                                                          .multiplier
+                                                    )
+                                                  : equipment.days
+                                              const newValue = Math.max(
+                                                1,
+                                                currentValue - 1
                                               )
-                                            : equipment.days
-                                        }
-                                        onChange={(e) => {
-                                          const periods =
-                                            Number.parseInt(e.target.value) || 1
-                                          const days = equipment.selectedPeriod
-                                            ? periods *
+                                              const days =
+                                                equipment.selectedPeriod
+                                                  ? newValue *
+                                                    equipment.selectedPeriod
+                                                      .multiplier
+                                                  : newValue
+                                              updateDays(equipment.id, days)
+                                            }}
+                                            className="h-8 w-8 p-0 flex-shrink-0"
+                                          >
+                                            <Minus className="h-3 w-3" />
+                                          </Button>
+                                          <Input
+                                            type="number"
+                                            value={
                                               equipment.selectedPeriod
-                                                .multiplier
-                                            : periods
-                                          updateDays(equipment.id, days)
-                                        }}
-                                        className="w-16 h-8 text-center font-medium"
-                                        min="1"
-                                      />
-                                      {equipment.selectedPeriod && (
-                                        <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
-                                          ({equipment.days} dias)
-                                        </span>
-                                      )}
+                                                ? Math.ceil(
+                                                    equipment.days /
+                                                      equipment.selectedPeriod
+                                                        .multiplier
+                                                  )
+                                                : equipment.days
+                                            }
+                                            onChange={(e) => {
+                                              const periods =
+                                                Number.parseInt(
+                                                  e.target.value
+                                                ) || 1
+                                              const days =
+                                                equipment.selectedPeriod
+                                                  ? periods *
+                                                    equipment.selectedPeriod
+                                                      .multiplier
+                                                  : periods
+                                              updateDays(equipment.id, days)
+                                            }}
+                                            className="w-12 h-8 text-center font-medium [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                                            min="1"
+                                          />
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                              const currentValue =
+                                                equipment.selectedPeriod
+                                                  ? Math.ceil(
+                                                      equipment.days /
+                                                        equipment.selectedPeriod
+                                                          .multiplier
+                                                    )
+                                                  : equipment.days
+                                              const newValue = currentValue + 1
+                                              const days =
+                                                equipment.selectedPeriod
+                                                  ? newValue *
+                                                    equipment.selectedPeriod
+                                                      .multiplier
+                                                  : newValue
+                                              updateDays(equipment.id, days)
+                                            }}
+                                            className="h-8 w-8 p-0 flex-shrink-0"
+                                          >
+                                            <Plus className="h-3 w-3" />
+                                          </Button>
+                                        </div>
+                                        {equipment.selectedPeriod && (
+                                          <span className="text-sm font-medium text-gray-600 whitespace-nowrap sm:ml-2">
+                                            ({equipment.days} dias)
+                                          </span>
+                                        )}
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -878,16 +943,16 @@ function QuotePage() {
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-              <CardHeader className="relative z-10">
-                <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
-                  <User className="h-7 w-7 text-orange-600" />
+              <CardHeader className="relative z-10 p-4 sm:p-6 lg:p-6">
+                <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-gray-900">
+                  <User className="h-6 w-6 sm:h-7 sm:w-7 text-orange-600" />
                   Dados para Contato
                 </CardTitle>
                 <p className="text-sm text-gray-600">
                   Preencha seus dados para receber o orçamento personalizado
                 </p>
               </CardHeader>
-              <CardContent className="relative z-10">
+              <CardContent className="relative z-10 p-4 sm:p-6 lg:p-6 pt-0">
                 <form
                   id="quote-form"
                   onSubmit={handleSubmit}
@@ -994,18 +1059,18 @@ function QuotePage() {
             transition={{ delay: 0.2 }}
             className="lg:col-span-1"
           >
-            <Card className="sticky top-24 overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+            <Card className="lg:sticky lg:top-24 overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
               {/* Clean depth layers for summary card */}
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-              <CardHeader className="relative z-10">
-                <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
-                  <Package className="h-7 w-7 text-orange-600" />
+              <CardHeader className="relative z-10 p-4 sm:p-6 lg:p-6">
+                <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-gray-900">
+                  <Package className="h-6 w-6 sm:h-7 sm:w-7 text-orange-600" />
                   Resumo do Pedido
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 space-y-4">
+              <CardContent className="relative z-10 space-y-4 p-4 sm:p-6 lg:p-6 pt-0">
                 {Array.isArray(selectedEquipments) &&
                 selectedEquipments.length > 0 ? (
                   <>
