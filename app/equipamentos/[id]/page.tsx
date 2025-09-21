@@ -281,9 +281,9 @@ export default async function EquipmentDetailPage(props: Props) {
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-            <div className="relative z-10 grid lg:grid-cols-3 gap-0">
+            <div className="relative z-10 flex flex-col lg:grid lg:grid-cols-3 gap-0">
               {/* Coluna Esquerda - Galeria de Imagens (2/3) */}
-              <div className="lg:col-span-2 p-8 lg:p-12">
+              <div className="lg:col-span-2 p-4 sm:p-6 lg:p-12">
                 <EquipmentImageGallery
                   images={equipment.images || []}
                   altText={equipment.name}
@@ -291,7 +291,7 @@ export default async function EquipmentDetailPage(props: Props) {
               </div>
 
               {/* Coluna Direita - Informações do Produto (1/3) */}
-              <div className="bg-gradient-to-br from-gray-50/80 to-gray-100/40 p-8 lg:p-10 space-y-6">
+              <div className="bg-gradient-to-br from-gray-50/80 to-gray-100/40 p-4 sm:p-6 lg:p-10 space-y-6">
                 {/* Header com Categoria e Compartilhar */}
                 <div className="flex items-center justify-between -mb-4">
                   <div
@@ -392,7 +392,7 @@ export default async function EquipmentDetailPage(props: Props) {
         {/* Seção de Descrição e Especificações */}
         <AnimatedSection
           delay={0.1}
-          className="grid lg:grid-cols-3 gap-8 mb-12"
+          className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8 mb-12"
         >
           {/* Descrição Principal */}
           {equipment.description && (
@@ -402,12 +402,12 @@ export default async function EquipmentDetailPage(props: Props) {
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-                <CardHeader className="relative z-10">
-                  <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
+                <CardHeader className="relative z-10 p-4 sm:p-6 lg:p-6">
+                  <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-gray-900">
                     Sobre este equipamento
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="relative z-10">
+                <CardContent className="relative z-10 p-4 sm:p-6 lg:p-6 pt-0">
                   <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-base">
                     {equipment.description}
                   </p>
@@ -423,12 +423,12 @@ export default async function EquipmentDetailPage(props: Props) {
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-              <CardHeader className="relative z-10">
-                <CardTitle className="flex items-center gap-3 text-2xl font-bold text-gray-900">
+              <CardHeader className="relative z-10 p-4 sm:p-6 lg:p-6">
+                <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-gray-900">
                   Informações
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 space-y-6">
+              <CardContent className="relative z-10 space-y-6 p-4 sm:p-6 lg:p-6 pt-0">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-3 border-b border-gray-100">
                     <span className="text-gray-600 font-medium">Categoria</span>
@@ -491,9 +491,9 @@ export default async function EquipmentDetailPage(props: Props) {
             <div className="absolute inset-0 bg-gradient-to-br from-slate-800/30 via-transparent to-gray-900/40"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-slate-700/10 to-slate-800/30"></div>
 
-            <CardContent className="relative z-10 p-8 lg:p-12">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold mb-3">
+            <CardContent className="relative z-10 p-4 sm:p-6 lg:p-12">
+              <div className="text-center mb-6 lg:mb-8">
+                <h3 className="text-xl sm:text-2xl font-bold mb-3">
                   Por que escolher a GB Locações?
                 </h3>
                 <p className="text-gray-300 text-sm">
@@ -501,7 +501,7 @@ export default async function EquipmentDetailPage(props: Props) {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
                 <AnimatedBenefit delay={0.3} className="text-center group">
                   <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:shadow-2xl group-hover:scale-110 transition-all duration-300">
                     <Shield className="h-8 w-8 text-white" />
