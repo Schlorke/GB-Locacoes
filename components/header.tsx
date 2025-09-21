@@ -16,6 +16,12 @@ export default function Header() {
     setIsMenuOpen(false)
   }
 
+  const handleEquipmentsNavigation = () => {
+    // Limpar qualquer filtro e ir para equipamentos sem parâmetros
+    window.location.href = '/equipamentos'
+    setIsMenuOpen(false)
+  }
+
   const navigation = [
     { name: 'Início', href: '/' },
     { name: 'Equipamentos', href: '/equipamentos' },
@@ -103,6 +109,7 @@ export default function Header() {
           <nav className="hidden lg:flex items-center space-x-8">
             {navigation.map((item) => {
               const isActive = isActivePage(item.href)
+              const isEquipments = item.name === 'Equipamentos'
               return (
                 <Link
                   key={item.name}
@@ -112,7 +119,7 @@ export default function Header() {
                       ? 'text-orange-600'
                       : 'text-slate-700 hover:text-orange-600'
                   }`}
-                  onClick={handleInternalNavigation}
+                  onClick={isEquipments ? handleEquipmentsNavigation : handleInternalNavigation}
                 >
                   {item.name}
                   <span
@@ -183,6 +190,7 @@ export default function Header() {
             <nav className="space-y-1">
               {navigation.map((item) => {
                 const isActive = isActivePage(item.href)
+                const isEquipments = item.name === 'Equipamentos'
                 return (
                   <Link
                     key={item.name}
@@ -192,7 +200,7 @@ export default function Header() {
                         ? 'text-orange-600 bg-orange-50'
                         : 'text-slate-700 hover:text-orange-600 hover:bg-orange-50'
                     }`}
-                    onClick={handleInternalNavigation}
+                    onClick={isEquipments ? handleEquipmentsNavigation : handleInternalNavigation}
                   >
                     {item.name}
                   </Link>
