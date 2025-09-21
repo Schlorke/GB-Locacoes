@@ -47,7 +47,7 @@ export default function Hero() {
               constante.
             </p>
             {/* Animated Search Bar with Autocomplete */}
-            <div className="hero-search bg-white rounded-2xl p-2 max-w-md border border-white/20 transition-all duration-300 relative z-[9998]">
+            <div className="hero-search bg-white rounded-2xl p-2 max-w-md border border-white/20 transition-all duration-300 relative z-[9998] opacity-0">
               <Autocomplete
                 placeholder="Buscar equipamentos (ex: andaime, betoneira)"
                 onSelect={handleEquipmentSelect}
