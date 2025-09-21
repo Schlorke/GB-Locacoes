@@ -22,6 +22,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 // Icon mapping
@@ -66,6 +67,7 @@ interface Equipment {
 interface Category {
   id: string
   name: string
+  slug: string
   bgColor?: string
   fontColor?: string
   icon?: string
@@ -73,6 +75,7 @@ interface Category {
 }
 
 export default function EquipmentsPage() {
+  const searchParams = useSearchParams()
   const [equipments, setEquipments] = useState<Equipment[]>([])
   const [filteredEquipments, setFilteredEquipments] = useState<Equipment[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -133,6 +136,20 @@ export default function EquipmentsPage() {
   useEffect(() => {
     fetchData()
   }, [])
+
+  // Processar parâmetro categoria da URL
+  useEffect(() => {
+    const categoriaParam = searchParams.get('categoria')
+    if (categoriaParam && categories.length > 0) {
+      // Encontrar a categoria pelo slug
+      const foundCategory = categories.find(cat => 
+        cat.slug === categoriaParam
+      )
+      if (foundCategory) {
+        setCategoryFilter(foundCategory.id)
+      }
+    }
+  }, [searchParams, categories])
 
   useEffect(() => {
     // Garantir que equipments é sempre um array

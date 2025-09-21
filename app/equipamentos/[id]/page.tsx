@@ -233,29 +233,38 @@ export default async function EquipmentDetailPage(props: Props) {
         {/* Pattern overlay sutil */}
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.03%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
-          <div className="mb-5 pt-12">
-            <EquipmentBreadcrumb
-              currentPage={equipment.name}
-              categoryName={equipment.category?.name}
-              categorySlug={equipment.category?.slug}
-              variant="default"
-              className="text-orange-100"
-            />
-            <Link
-              href="/equipamentos"
-              className="inline-flex items-center text-orange-400 hover:text-orange-300 transition-colors font-medium mt-3"
-            >
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              Voltar aos Equipamentos
-            </Link>
-          </div>
+         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           {/* Breadcrumb */}
+           <nav className="pt-12 mb-8">
+             <EquipmentBreadcrumb
+               currentPage={equipment.name}
+               categoryName={equipment.category?.name}
+               categorySlug={equipment.category?.slug}
+               variant="default"
+               className="text-orange-100"
+             />
+           </nav>
 
-        </div>
-      </div>
+           <div className="flex flex-wrap items-center gap-4 text-white/80 text-sm mb-2">
+             <div className="flex items-center gap-2">
+               <Shield className="h-4 w-4 text-green-400" />
+               <span>Equipamento Certificado</span>
+             </div>
+             <div className="flex items-center gap-2">
+               <Truck className="h-4 w-4 text-blue-400" />
+               <span>Entrega Gratuita</span>
+             </div>
+             <div className="flex items-center gap-2">
+               <CheckCircle className="h-4 w-4 text-orange-400" />
+               <span>Suporte 24h</span>
+             </div>
+           </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10">
+         </div>
+       </div>
+
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10">
+
         {/* Card Principal do Produto */}
         <AnimatedMainCard>
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm mb-12 hover:shadow-2xl transition-all duration-300">

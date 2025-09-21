@@ -53,7 +53,7 @@ export default function Breadcrumb({
   const itemClasses = {
     default: {
       link: 'hover:text-orange-600 transition-colors duration-200',
-      current: 'text-gray-900 font-medium',
+      current: 'text-orange-400 font-medium',
       separator: 'text-gray-400',
     },
     minimal: {
