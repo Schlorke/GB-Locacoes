@@ -5,11 +5,9 @@ import { ArrowRight, MapPin, Phone, Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
 
 export default function Hero() {
   const router = useRouter()
-  const [isSearchVisible, setIsSearchVisible] = useState(false)
 
   const handleEquipmentSelect = (equipment: { id: string; name: string }) => {
     // Sempre que onSelect for chamado (seja por seleção ou clique na lupa com item selecionado)
@@ -24,15 +22,6 @@ export default function Hero() {
     // Redireciona para a página de equipamentos com a busca por texto
     router.push(`/equipamentos?search=${encodeURIComponent(query)}`)
   }
-
-  // Controlar a visibilidade do search bar para evitar flash
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsSearchVisible(true)
-    }, 100) // Pequeno delay para evitar flash
-
-    return () => clearTimeout(timer)
-  }, [])
 
   return (
     <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white">
@@ -58,13 +47,7 @@ export default function Hero() {
               constante.
             </p>
             {/* Animated Search Bar with Autocomplete */}
-            <div
-              className={`hero-search bg-white rounded-2xl p-2 max-w-md border border-white/20 transition-all duration-300 relative z-[9998] ${
-                isSearchVisible
-                  ? 'opacity-100 translate-y-0'
-                  : 'opacity-0 translate-y-4'
-              }`}
-            >
+            <div className="hero-search bg-white rounded-2xl p-2 max-w-md border border-white/20 transition-all duration-300 relative z-[9998]">
               <Autocomplete
                 placeholder="Buscar equipamentos (ex: andaime, betoneira)"
                 onSelect={handleEquipmentSelect}
