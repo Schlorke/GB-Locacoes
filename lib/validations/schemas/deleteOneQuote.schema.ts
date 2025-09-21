@@ -1,6 +1,10 @@
-import { z } from 'zod';
-import { QuoteSelectObjectSchema } from './objects/QuoteSelect.schema';
-import { QuoteIncludeObjectSchema } from './objects/QuoteInclude.schema';
-import { QuoteWhereUniqueInputObjectSchema } from './objects/QuoteWhereUniqueInput.schema';
+import { z } from 'zod'
+import { QuoteSelectObjectSchema } from './objects/QuoteSelect.schema'
+import { QuoteIncludeObjectSchema } from './objects/QuoteInclude.schema'
+import { QuoteWhereUniqueInputObjectSchema } from './objects/QuoteWhereUniqueInput.schema'
 
-export const QuoteDeleteOneSchema = z.object({ select: QuoteSelectObjectSchema.optional(), include: QuoteIncludeObjectSchema.optional(), where: QuoteWhereUniqueInputObjectSchema  })
+export const QuoteDeleteOneSchema = z.object({
+  select: QuoteSelectObjectSchema.optional(),
+  include: QuoteIncludeObjectSchema.optional(),
+  where: QuoteWhereUniqueInputObjectSchema,
+})

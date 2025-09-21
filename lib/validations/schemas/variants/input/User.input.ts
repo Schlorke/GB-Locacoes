@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
-import { RoleSchema } from '../../enums/Role.schema';
+import { RoleSchema } from '../../enums/Role.schema'
 // prettier-ignore
 export const UserInputSchema = z.object({
     id: z.string(),
@@ -18,4 +18,4 @@ export const UserInputSchema = z.object({
     sessions: z.array(z.unknown()).array()
 }).strict();
 
-export type UserInputType = z.infer<typeof UserInputSchema>;
+export type UserInputType = z.infer<typeof UserInputSchema>

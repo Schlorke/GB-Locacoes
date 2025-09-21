@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 // prettier-ignore
 export const rentalsModelSchema = z.object({
@@ -14,4 +14,4 @@ export const rentalsModelSchema = z.object({
     users: z.unknown()
 }).strict();
 
-export type rentalsModelType = z.infer<typeof rentalsModelSchema>;
+export type rentalsModelType = z.infer<typeof rentalsModelSchema>

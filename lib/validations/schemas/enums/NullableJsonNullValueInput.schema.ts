@@ -1,5 +1,7 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const NullableJsonNullValueInputSchema = z.enum(['DbNull', 'JsonNull'])
 
-export type NullableJsonNullValueInput = z.infer<typeof NullableJsonNullValueInputSchema>;
+export type NullableJsonNullValueInput = z.infer<
+  typeof NullableJsonNullValueInputSchema
+>

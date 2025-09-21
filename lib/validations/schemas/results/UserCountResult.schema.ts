@@ -1,2 +1,2 @@
-import { z } from 'zod';
-export const UserCountResultSchema = z.number();
+import { z } from 'zod'
+export const UserCountResultSchema = z.number()

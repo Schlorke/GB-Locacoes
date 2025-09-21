@@ -1,2 +1,2 @@
-import { z } from 'zod';
-export const rental_itemsCountResultSchema = z.number();
+import { z } from 'zod'
+export const rental_itemsCountResultSchema = z.number()

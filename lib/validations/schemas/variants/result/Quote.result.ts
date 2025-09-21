@@ -1,6 +1,6 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
-import { QuoteStatusSchema } from '../../enums/QuoteStatus.schema';
+import { QuoteStatusSchema } from '../../enums/QuoteStatus.schema'
 // prettier-ignore
 export const QuoteResultSchema = z.object({
     id: z.string(),
@@ -18,4 +18,4 @@ export const QuoteResultSchema = z.object({
     user: z.unknown().nullable()
 }).strict();
 
-export type QuoteResultType = z.infer<typeof QuoteResultSchema>;
+export type QuoteResultType = z.infer<typeof QuoteResultSchema>

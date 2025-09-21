@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 export const AccountUpsertResultSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -12,5 +12,5 @@ export const AccountUpsertResultSchema = z.object({
   scope: z.string().optional(),
   id_token: z.string().optional(),
   session_state: z.string().optional(),
-  user: z.unknown()
-});
+  user: z.unknown(),
+})

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 // prettier-ignore
 export const EquipmentInputSchema = z.object({
@@ -31,4 +31,4 @@ export const EquipmentInputSchema = z.object({
     rental_items: z.array(z.unknown()).array()
 }).strict();
 
-export type EquipmentInputType = z.infer<typeof EquipmentInputSchema>;
+export type EquipmentInputType = z.infer<typeof EquipmentInputSchema>
