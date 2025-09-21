@@ -142,8 +142,8 @@ export default function EquipmentsPage() {
     const categoriaParam = searchParams.get('categoria')
     if (categoriaParam && categories.length > 0) {
       // Encontrar a categoria pelo slug
-      const foundCategory = categories.find(cat => 
-        cat.slug === categoriaParam
+      const foundCategory = categories.find(
+        (cat) => cat.slug === categoriaParam
       )
       if (foundCategory) {
         setCategoryFilter(foundCategory.id)

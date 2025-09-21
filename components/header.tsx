@@ -119,7 +119,11 @@ export default function Header() {
                       ? 'text-orange-600'
                       : 'text-slate-700 hover:text-orange-600'
                   }`}
-                  onClick={isEquipments ? handleEquipmentsNavigation : handleInternalNavigation}
+                  onClick={
+                    isEquipments
+                      ? handleEquipmentsNavigation
+                      : handleInternalNavigation
+                  }
                 >
                   {item.name}
                   <span
@@ -200,7 +204,11 @@ export default function Header() {
                         ? 'text-orange-600 bg-orange-50'
                         : 'text-slate-700 hover:text-orange-600 hover:bg-orange-50'
                     }`}
-                    onClick={isEquipments ? handleEquipmentsNavigation : handleInternalNavigation}
+                    onClick={
+                      isEquipments
+                        ? handleEquipmentsNavigation
+                        : handleInternalNavigation
+                    }
                   >
                     {item.name}
                   </Link>
