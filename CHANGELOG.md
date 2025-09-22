@@ -39,6 +39,37 @@ e este projeto adere ao
 
 ---
 
+## [2025-09-22] - Ajuste de Centralização da Página de Login
+
+### Fixed 🐛
+
+- Corrigida disparidade entre seção e rodapé na página de login
+  - Removido Header duplicado (já renderizado pelo ClientLayout)
+  - Aplicado `-mt-[100px] md:-mt-[96px]` para compensar o padding do container
+    principal
+  - Eliminada faixa branca entre seção e rodapé
+  - Centralização agora funciona corretamente com o layout global
+
+### Enhanced 🔄
+
+- Melhorada responsividade para mobile
+  - Adicionado `pt-[120px] md:pt-0` no container do login
+  - Garante que o bloco não fique ofuscado pelo header no mobile
+  - Mantém centralização perfeita no desktop
+  - Configurações específicas para cada breakpoint sem interferência
+
+---
+
+## [2025-09-22] - WhatsApp Chat acima de todo conteúdo
+
+### Fixed 🐛
+
+- Chat do WhatsApp ficava sob o cabeçalho fixo
+  - Elevado z-index do botão e da janela (`z-[99999]`/`z-[100000]`)
+  - Garante sobreposição acima do header e demais elementos
+
+---
+
 ## [2025-01-21] - Otimização Completa de SEO e Conversão
 
 ### Added ✨

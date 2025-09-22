@@ -136,7 +136,7 @@ export default function WhatsAppFAB() {
       />
       {/* Chat Window */}
       {isOpen && (
-        <div className="whatsapp-chat-window fixed bottom-24 right-4 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border z-50 h-[500px] flex flex-col overflow-hidden">
+        <div className="whatsapp-chat-window fixed bottom-24 right-4 w-80 sm:w-96 bg-white rounded-xl shadow-2xl border z-[99999] h-[500px] flex flex-col overflow-hidden">
           {/* Header - cor verde WhatsApp e sem bordas brancas */}
           <div className="whatsapp-header text-white p-4 flex items-center justify-between rounded-t-xl flex-shrink-0">
             <div className="flex items-center gap-3">
@@ -237,7 +237,7 @@ export default function WhatsAppFAB() {
       )}
 
       {/* FAB Button - cor verde WhatsApp */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-6 z-[100000]">
         {/* Notification Badge - estilo numérico */}
         {unreadCount > 0 && !isOpen && (
           <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold min-w-[20px] h-5 rounded-full flex items-center justify-center px-1 animate-pulse border-2 border-white shadow-lg z-10">

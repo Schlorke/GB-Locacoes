@@ -1,6 +1,5 @@
 'use client'
 
-import Header from '@/components/header'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
@@ -101,9 +100,8 @@ function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200">
-      <Header />
-      <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 -mt-[100px] md:-mt-[96px]">
+      <div className="flex min-h-screen items-center justify-center px-4 pt-[120px] md:pt-0">
         {/* Container do login centralizado */}
         <div className="w-full max-w-md relative z-10">
           <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in">
