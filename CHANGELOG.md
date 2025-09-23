@@ -6,6 +6,23 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-09-23] - Atualizações de Dependências (Patch)
+
+### Updated 📦
+
+- **framer-motion**: 12.23.16 → 12.23.18
+- **svelte**: 5.39.3 → 5.39.4
+- **@sveltejs/kit**: 2.42.2 → 2.43.1
+- **@typescript-eslint/eslint-plugin**: 8.44.0 → 8.44.1
+- **@typescript-eslint/parser**: 8.44.0 → 8.44.1
+
+### Notes 📝
+
+- Tailwind CSS mantido sem alterações (3.4.17), conforme política do projeto
+- Build ✅, Type-check ✅, Testes ✅ (30/30)
+
+---
+
 ## [2025-09-22] - Correções de Scroll em Modais e Campo CEP
 
 ### Added ✨
