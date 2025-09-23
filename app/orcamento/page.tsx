@@ -14,6 +14,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useQuote } from '@/contexts/quote-context'
 import { toast } from '@/hooks/use-toast'
 import { formatCurrency } from '@/lib/utils'
+import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Minus, Package, Plus, ShoppingCart, Trash2, User } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
@@ -91,7 +92,7 @@ function QuotePage() {
     cep: '',
     message: '',
   })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  // Removido: estado de isSubmitting não utilizado
 
   // Função para formatar telefone brasileiro
   const formatPhoneNumber = (value: string) => {
@@ -482,7 +483,7 @@ function QuotePage() {
       return
     }
 
-    setIsSubmitting(true)
+    // início envio (estado visual não utilizado)
 
     try {
       const safeSelectedEquipments = Array.isArray(selectedEquipments)
@@ -528,7 +529,87 @@ function QuotePage() {
         variant: 'destructive',
       })
     } finally {
-      setIsSubmitting(false)
+      // fim envio (estado visual não utilizado)
+    }
+  }
+
+  const handleWhatsAppSubmit = () => {
+    // Validação: pelo menos um dos campos CPF ou CNPJ deve ser preenchido
+    if (!formData.cpf.trim() && !formData.cnpj.trim()) {
+      toast({
+        title: 'Erro de Validação',
+        description: 'Por favor, preencha pelo menos o CPF ou CNPJ.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    // Validação: campos obrigatórios
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.phone.trim()
+    ) {
+      toast({
+        title: 'Erro de Validação',
+        description: 'Por favor, preencha todos os campos obrigatórios.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    try {
+      const safeSelectedEquipments = Array.isArray(selectedEquipments)
+        ? selectedEquipments
+        : []
+
+      // Converter dados para formato WhatsApp
+      const whatsappData = convertFormDataToWhatsApp(
+        formData,
+        safeSelectedEquipments.map((eq) => ({
+          name: eq.name,
+          quantity: eq.quantity,
+          days: eq.days,
+          pricePerDay: Number(eq.pricePerDay),
+          finalPrice: calculateSubtotal(eq),
+          id: eq.id,
+          discount: (() => {
+            const pricingConfig = getIntelligentPricing(eq, eq.days)
+            if (pricingConfig.discount && pricingConfig.discount > 0) {
+              return {
+                type: 'percentage' as const,
+                value: pricingConfig.discount,
+                period:
+                  pricingConfig.period === 'daily'
+                    ? 'diário'
+                    : pricingConfig.period === 'weekly'
+                      ? 'semanal'
+                      : pricingConfig.period === 'biweekly'
+                        ? 'quinzenal'
+                        : pricingConfig.period === 'monthly'
+                          ? 'mensal'
+                          : 'diário',
+              }
+            }
+            return undefined
+          })(),
+        }))
+      )
+
+      // Abrir WhatsApp com mensagem formatada
+      openWhatsAppQuote(whatsappData, '555198205163') // Número da GB Locações
+
+      toast({
+        title: 'Orçamento Preparado! 📱',
+        description: 'WhatsApp aberto com sua solicitação formatada.',
+      })
+    } catch (error) {
+      console.error('Erro ao preparar mensagem WhatsApp:', error)
+      toast({
+        title: 'Erro',
+        description: 'Erro ao preparar mensagem para WhatsApp.',
+        variant: 'destructive',
+      })
     }
   }
 
@@ -1228,16 +1309,14 @@ function QuotePage() {
                       condições específicas.
                     </p>
 
-                    {/* Botão Solicitar Orçamento - Visível apenas quando há equipamentos selecionados */}
+                    {/* Botão Principal - Solicitar Orçamento */}
                     <div className="pt-4">
                       <Button
-                        type="submit"
-                        form="quote-form"
+                        onClick={handleWhatsAppSubmit}
                         className="w-full hover:scale-105 transition-transform duration-200"
                         size="lg"
-                        disabled={isSubmitting}
                       >
-                        {isSubmitting ? 'Enviando...' : 'Solicitar Orçamento'}
+                        Solicitar Orçamento
                       </Button>
                     </div>
                   </>

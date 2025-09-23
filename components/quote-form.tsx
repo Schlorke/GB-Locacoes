@@ -13,12 +13,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from '@/hooks/use-toast'
+import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
 
 import {
   ArrowLeft,
   ArrowRight,
   Check,
-  Loader2,
   Phone,
   Mail,
   Building,
@@ -73,7 +73,7 @@ export default function QuoteForm({
   onCancel,
 }: QuoteFormProps) {
   const [currentStep, setCurrentStep] = useState(1)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  // Removido: estado de isSubmitting não utilizado
   const totalSteps = 3
 
   const {
@@ -130,8 +130,6 @@ export default function QuoteForm({
   }
 
   const onSubmit = async (data: QuoteFormData) => {
-    setIsSubmitting(true)
-
     try {
       const response = await fetch('/api/orcamentos', {
         method: 'POST',
@@ -185,7 +183,64 @@ export default function QuoteForm({
         variant: 'destructive',
       })
     } finally {
-      setIsSubmitting(false)
+      // fim envio (estado visual removido)
+    }
+  }
+
+  const handleWhatsAppSubmit = () => {
+    const data = watchedData
+
+    // Validação: campos obrigatórios
+    if (
+      !data.customerName.trim() ||
+      !data.customerEmail.trim() ||
+      !data.customerPhone.trim()
+    ) {
+      toast({
+        title: 'Erro de Validação',
+        description: 'Por favor, preencha todos os campos obrigatórios.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    try {
+      // Converter dados para formato WhatsApp
+      const whatsappData = convertFormDataToWhatsApp(
+        {
+          name: data.customerName,
+          phone: data.customerPhone,
+          email: data.customerEmail,
+          message: data.message || undefined,
+        },
+        data.equipmentId && data.equipmentName
+          ? [
+              {
+                name: data.equipmentName,
+                quantity: 1,
+                days: data.rentalDays,
+                pricePerDay: 0, // Será calculado pelo sistema
+                finalPrice: 0, // Será calculado pelo sistema
+                id: data.equipmentId,
+              },
+            ]
+          : []
+      )
+
+      // Abrir WhatsApp com mensagem formatada
+      openWhatsAppQuote(whatsappData, '555198205163') // Número da GB Locações
+
+      toast({
+        title: 'Orçamento Preparado! 📱',
+        description: 'WhatsApp aberto com sua solicitação formatada.',
+      })
+    } catch (error) {
+      console.error('Erro ao preparar mensagem WhatsApp:', error)
+      toast({
+        title: 'Erro',
+        description: 'Erro ao preparar mensagem para WhatsApp.',
+        variant: 'destructive',
+      })
     }
   }
 
@@ -610,16 +665,13 @@ export default function QuoteForm({
               </Button>
             ) : (
               <Button
-                type="submit"
-                disabled={isSubmitting || !isValid}
-                className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+                onClick={handleWhatsAppSubmit}
+                disabled={!isValid}
+                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 w-full hover:scale-105 transition-transform duration-200"
+                size="lg"
               >
-                {isSubmitting ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Check className="w-4 h-4" />
-                )}
-                {isSubmitting ? 'Enviando...' : 'Solicitar Orçamento'}
+                <Check className="w-4 h-4" />
+                Solicitar Orçamento
               </Button>
             )}
           </div>

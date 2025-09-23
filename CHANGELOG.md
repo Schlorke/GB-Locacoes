@@ -6,21 +6,79 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2025-09-23] - Atualizações de Dependências (Patch)
+## [2025-09-23] - Integração WhatsApp + Atualizações de Dependências
+
+### Added ✨
+
+- **Integração WhatsApp para Orçamentos**: Sistema completo de envio via
+  WhatsApp
+  - Botão "Enviar via WhatsApp" em formulários de orçamento
+  - Mensagem estruturada e formatada automaticamente
+  - Inclui todos os dados do cliente e detalhes do pedido
+  - Formatação profissional com emojis e organização clara
+  - Validação de campos obrigatórios antes do envio
+  - Suporte a CPF/CNPJ, CEP e observações opcionais
+  - Cálculo automático de descontos e valores finais
+  - Integração com sistema de preços inteligente existente
+
+- **Componente WhatsAppButton**: Botão reutilizável para ações WhatsApp
+  - Design consistente com identidade visual GB Locações
+  - Cores verde WhatsApp com hover effects
+  - Ícone MessageCircle integrado
+  - Suporte a diferentes variantes e tamanhos
+
+- **Utilitários WhatsApp (`lib/whatsapp.ts`)**:
+  - `formatWhatsAppMessage()`: Formata dados em mensagem estruturada
+  - `generateWhatsAppURL()`: Gera URL do WhatsApp Web com mensagem
+  - `openWhatsAppQuote()`: Abre WhatsApp em nova aba
+  - `convertFormDataToWhatsApp()`: Converte dados do formulário
+  - `formatPhoneForWhatsApp()`: Formata números para WhatsApp
 
 ### Updated 📦
 
-- **framer-motion**: 12.23.16 → 12.23.18
-- **svelte**: 5.39.3 → 5.39.4
-- **@sveltejs/kit**: 2.42.2 → 2.43.1
-- **@typescript-eslint/eslint-plugin**: 8.44.0 → 8.44.1
-- **@typescript-eslint/parser**: 8.44.0 → 8.44.1
-- **typescript-eslint**: 8.44.0 → 8.44.1
+- **@next/bundle-analyzer**: 15.5.3 → 15.5.4
+- **@next/eslint-plugin-next**: 15.5.3 → 15.5.4
+- **@storybook/nextjs**: 9.1.7 → 9.1.8
+- **@sveltejs/kit**: 2.43.1 → 2.43.2
+- **eslint-config-next**: 15.5.3 → 15.5.4
+- **eslint-plugin-storybook**: 9.1.7 → 9.1.8
+- **framer-motion**: 12.23.18 → 12.23.19
+- **next**: 15.5.3 → 15.5.4
+- **playwright**: 1.55.0 → 1.55.1
+- **svelte**: 5.39.4 → 5.39.5
+
+### Enhanced 🔄
+
+- **Página de Orçamento (`/orcamento`)**:
+  - Botão WhatsApp adicionado ao lado do botão tradicional
+  - Validação aprimorada para campos obrigatórios
+  - Integração com sistema de preços inteligente
+  - Suporte a múltiplos equipamentos com descontos
+
+- **Componente QuoteForm**:
+  - Botão WhatsApp na etapa final do formulário
+  - Validação de dados antes do envio
+  - Mensagem formatada com dados do equipamento
+
+### Technical Details 🔧
+
+- **Número WhatsApp**: Configurado para GB Locações (51) 9820-5163
+- **Formatação de Telefone**: Suporte automático a códigos brasileiros
+- **Mensagem Estruturada**:
+  - Dados do cliente (nome, telefone, email, CPF/CNPJ, CEP)
+  - Lista detalhada de equipamentos com quantidades e períodos
+  - Valores unitários e totais com descontos aplicados
+  - Observações e data/hora da solicitação
+- **Validação**: Campos obrigatórios e pelo menos CPF ou CNPJ
+- **UX**: Toast notifications para feedback do usuário
+- **TypeScript**: Tipagem completa e segura
 
 ### Notes 📝
 
 - Tailwind CSS mantido sem alterações (3.4.17), conforme política do projeto
-- Build ✅, Type-check ✅, Testes ✅ (30/30)
+- Type-check ✅ executado com sucesso
+- Integração WhatsApp 100% funcional
+- Mensagem formatada automaticamente com todos os dados solicitados
 
 ---
 
