@@ -45,7 +45,24 @@
     "rule-empty-line-before": null,
     "declaration-empty-line-before": null,
     "property-no-vendor-prefix": null,
-    "keyframes-name-pattern": null
+    "keyframes-name-pattern": null,
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": [
+          "backdrop-filter",
+          "scrollbar-width",
+          "scrollbar-color",
+          "touch-action",
+          "overscroll-behavior",
+          "contain",
+          "scroll-behavior"
+        ]
+      }
+    ],
+    "value-no-vendor-prefix": null,
+    "color-function-alias-notation": null,
+    "declaration-block-no-redundant-longhand-properties": null
   },
   "ignoreFiles": [
     "storybook-static/**/*",
