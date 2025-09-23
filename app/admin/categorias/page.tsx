@@ -15,7 +15,6 @@ import {
   ModernCategoryModal,
   type CategoryData,
 } from '@/components/ui/modern-category-modal'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
@@ -520,14 +519,10 @@ export default function AdminCategoriesPage() {
         >
           <DialogContent
             closeButtonClassName="hover:bg-white"
-            className="w-full max-w-lg h-[100svh] max-h-[100svh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
+            className="w-full max-w-lg max-h-[80vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
             style={{
-              paddingTop: 'env(safe-area-inset-top)',
-              paddingBottom: 'env(safe-area-inset-bottom)',
-              height:
-                'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
-              maxHeight:
-                'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+              height: '80vh',
+              maxHeight: '80vh',
             }}
           >
             <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
@@ -539,7 +534,10 @@ export default function AdminCategoriesPage() {
               </DialogTitle>
             </DialogHeader>
 
-            <ScrollArea className="flex-1 min-h-0 max-h-full w-full overflow-y-auto">
+            <div
+              className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll"
+              style={{ maxHeight: 'calc(80vh - 120px)' }}
+            >
               <div className="p-6 space-y-6 xs:p-4 xs:space-y-4 w-full max-w-full">
                 {selectedCategory && (
                   <>
@@ -572,9 +570,9 @@ export default function AdminCategoriesPage() {
                           <Package className="w-4 h-4" />
                           Informações da Categoria
                         </h3>
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-4 max-w-full">
                           {/* Coluna Esquerda */}
-                          <div className="space-y-4">
+                          <div className="space-y-4 min-w-0 max-w-full">
                             <div className="flex items-center gap-3">
                               <Tag className="w-4 h-4 text-gray-400" />
                               <div>
@@ -588,17 +586,22 @@ export default function AdminCategoriesPage() {
                             </div>
 
                             <div className="flex items-start gap-3">
-                              <FileText className="w-4 h-4 text-gray-400 mt-1" />
-                              <div className="flex-1 min-w-0">
+                              <FileText className="w-4 h-4 text-gray-400 mt-1 flex-shrink-0" />
+                              <div className="flex-1 min-w-0 max-w-full">
                                 <div className="text-xs text-gray-500">
                                   Descrição
                                 </div>
                                 <div
-                                  className="font-medium text-sm truncate"
+                                  className="font-medium text-sm break-words hyphens-auto leading-relaxed"
                                   title={
                                     selectedCategory.description ||
                                     'Sem descrição'
                                   }
+                                  style={{
+                                    wordBreak: 'break-word',
+                                    overflowWrap: 'break-word',
+                                    hyphens: 'auto',
+                                  }}
                                 >
                                   {selectedCategory.description ||
                                     'Sem descrição'}
@@ -608,7 +611,7 @@ export default function AdminCategoriesPage() {
                           </div>
 
                           {/* Coluna Direita */}
-                          <div className="space-y-4">
+                          <div className="space-y-4 min-w-0 max-w-full">
                             <div className="flex items-center gap-3">
                               <Package className="w-4 h-4 text-gray-400" />
                               <div>
@@ -640,7 +643,7 @@ export default function AdminCategoriesPage() {
                   </>
                 )}
               </div>
-            </ScrollArea>
+            </div>
 
             <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 p-6 border-t bg-gray-50 rounded-b-lg xs:p-4 xs:rounded-b-md w-full max-w-full flex-shrink-0">
               <div className="flex gap-4 w-full xs:gap-2 flex-wrap">

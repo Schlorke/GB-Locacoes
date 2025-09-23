@@ -11,6 +11,12 @@
 2. **📖 LEIA ANTES DE AGIR**: Consulte a documentação antes de implementar
 3. **🎯 SIGA OS PADRÕES**: Use apenas componentes e práticas documentadas
 4. **📝 DOCUMENTE MUDANÇAS**: SEMPRE atualize o `CHANGELOG.md` após alterações
+5. **🗓️ NUNCA INVENTE DATAS**: SEMPRE use datas reais dos commits Git para o
+   CHANGELOG
+   - Use `git log --pretty=format:"%h %ad %s" --date=short` para verificar datas
+     reais
+   - NUNCA invente datas como "2024-12-20" ou "2025-01-15" sem verificar commits
+   - SEMPRE consulte o histórico Git antes de adicionar entradas ao CHANGELOG
 
 ### **📁 ESTRUTURA DA DOCUMENTAÇÃO (ATUALIZADA - JAN 2025)**
 
@@ -297,6 +303,34 @@ pnpm format                # Prettier
 ## 📝 **PROTOCOLO DE CHANGELOG OBRIGATÓRIO**
 
 ### **🚨 REGRA CRÍTICA**: Toda alteração DEVE ser documentada no `CHANGELOG.md`
+
+### **🗓️ PROTOCOLO DE DATAS - OBRIGATÓRIO**
+
+**⚠️ ERRO CRÍTICO COMETIDO**: Em 22/09/2025, foram inventadas datas falsas no
+CHANGELOG, causando perda de histórico real.
+
+**✅ PROTOCOLO CORRETO PARA DATAS:**
+
+1. **SEMPRE verifique datas reais**:
+
+   ```bash
+   git log --pretty=format:"%h %ad %s" --date=short -10
+   ```
+
+2. **NUNCA invente datas** como:
+   - ❌ "2024-12-20" (projeto não existia)
+   - ❌ "2025-01-15" (datas inventadas)
+   - ❌ Qualquer data sem verificação Git
+
+3. **Use APENAS datas dos commits reais**:
+   - ✅ Verificar `git log` antes de adicionar entrada
+   - ✅ Usar data do commit atual para mudanças novas
+   - ✅ Manter histórico real intacto
+
+4. **Comando para verificar datas atuais**:
+   ```bash
+   git log --oneline -5  # Últimos 5 commits com datas
+   ```
 
 #### **Formato Obrigatório:**
 

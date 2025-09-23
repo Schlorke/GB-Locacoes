@@ -197,6 +197,26 @@ const isAvailable = equipment.available ?? equipment.isAvailable ?? true
 4. New breadcrumb components (use `Breadcrumb`)
 5. Manual Schema.org implementations (use `StructuredData`)
 
+### **🚨 CRITICAL: CHANGELOG DATES - NEVER INVENT**
+
+**⚠️ FORBIDDEN**: Inventing dates for CHANGELOG.md entries
+
+❌ **NEVER DO:**
+
+- Add dates like "2024-12-20" without checking Git history
+- Create CHANGELOG entries with placeholder dates
+- Invent dates based on assumptions
+
+✅ **ALWAYS DO:**
+
+- Check real commit dates: `git log --oneline -5`
+- Use actual commit dates for entries
+- Verify with: `git log --pretty=format:"%h %ad %s" --date=short`
+- Only add entries for actual changes
+
+**Historical Error**: On 2025-09-22, fake dates were invented, causing loss of
+real project history.
+
 ### **DO NOT MODIFY:**
 
 1. `scripts/post-prisma-generate.js` (critical for build)

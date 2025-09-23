@@ -295,6 +295,26 @@ trackingId = "page-section-action"
 4. Manual SEO implementations (StructuredData exists)
 5. Custom breadcrumb components (Breadcrumb exists)
 
+### **🚨 CRITICAL: CHANGELOG DATES**
+
+**⚠️ NEVER SUGGEST INVENTING DATES** for CHANGELOG.md entries:
+
+❌ **DON'T SUGGEST:**
+
+- Inventing dates like "2024-12-20" or "2025-01-15"
+- Adding CHANGELOG entries without checking Git history
+- Using placeholder dates or estimated dates
+
+✅ **ALWAYS SUGGEST:**
+
+- Check real commit dates first: `git log --oneline -5`
+- Use actual commit dates for CHANGELOG entries
+- Verify dates with: `git log --pretty=format:"%h %ad %s" --date=short`
+- Add entries only for actual changes made
+
+**Historical Error**: On 2025-09-22, fake dates were invented causing loss of
+real project history.
+
 ### **Don't Suggest Using:**
 
 1. `any` TypeScript types

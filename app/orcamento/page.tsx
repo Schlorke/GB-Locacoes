@@ -72,6 +72,7 @@ interface QuoteFormData {
   phone: string
   cpf: string
   cnpj: string
+  cep: string
   message: string
 }
 
@@ -87,6 +88,7 @@ function QuotePage() {
     phone: '',
     cpf: '',
     cnpj: '',
+    cep: '',
     message: '',
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -142,6 +144,19 @@ function QuotePage() {
     }
   }
 
+  // Função para formatar CEP brasileiro
+  const formatCEP = (value: string) => {
+    // Remove todos os caracteres não numéricos
+    const numbers = value.replace(/\D/g, '')
+
+    // Aplica a formatação baseada no tamanho
+    if (numbers.length <= 5) {
+      return numbers
+    } else {
+      return `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`
+    }
+  }
+
   // Função para lidar com mudanças no campo de telefone
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatPhoneNumber(e.target.value)
@@ -166,6 +181,15 @@ function QuotePage() {
     setFormData((prev) => ({
       ...prev,
       cnpj: formatted,
+    }))
+  }
+
+  // Função para lidar com mudanças no campo de CEP
+  const handleCEPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCEP(e.target.value)
+    setFormData((prev) => ({
+      ...prev,
+      cep: formatted,
     }))
   }
 
@@ -491,6 +515,7 @@ function QuotePage() {
           phone: '',
           cpf: '',
           cnpj: '',
+          cep: '',
           message: '',
         })
       } else {
@@ -1013,22 +1038,35 @@ function QuotePage() {
                     </div>
                   </div>
 
-                  <div>
-                    <Label htmlFor="email">E-mail *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          email: e.target.value,
-                        }))
-                      }
-                      required
-                      className="mt-1"
-                      placeholder="seu@email.com"
-                    />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="email">E-mail *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            email: e.target.value,
+                          }))
+                        }
+                        required
+                        className="mt-1"
+                        placeholder="seu@email.com"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="cep">CEP</Label>
+                      <Input
+                        id="cep"
+                        value={formData.cep}
+                        onChange={handleCEPChange}
+                        className="mt-1"
+                        placeholder="00000-000"
+                        maxLength={9}
+                      />
+                    </div>
                   </div>
 
                   <div>

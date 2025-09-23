@@ -6,7 +6,35 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2025-01-21] - Correções Críticas de Produção
+## [2025-09-22] - Correções de Scroll em Modais e Campo CEP
+
+### Added ✨
+
+- **Campo CEP**: Adicionado campo CEP ao formulário de orçamento
+  - Posicionado ao lado direito do campo E-mail
+  - Formatação automática no padrão brasileiro (00000-000)
+  - Validação de comprimento máximo (9 caracteres)
+
+- **Documentação de Erros**: Criado
+  `docs/internal/modal-scroll-errors-analysis.md`
+  - Análise detalhada dos erros cometidos na implementação de scroll
+  - Lições aprendidas e padrões estabelecidos
+
+### Fixed 🐛
+
+- **Modal Visualizar Equipamento**: Corrigido sistema de scroll
+  - Altura do modal reduzida para `80vh`
+  - Implementado scroll forçado com CSS
+  - Botões sempre visíveis no footer
+  - Scrollbar cinza suave
+
+- **Modal Visualizar Categoria**: Aplicadas mesmas correções de scroll
+  - Overflow de texto corrigido com `break-words`
+  - Scroll interno funcional
+
+---
+
+## [2025-09-21] - Correções Críticas de Produção
 
 ### Fixed 🐛
 
@@ -39,38 +67,7 @@ e este projeto adere ao
 
 ---
 
-## [2025-09-22] - Ajuste de Centralização da Página de Login
-
-### Fixed 🐛
-
-- Corrigida disparidade entre seção e rodapé na página de login
-  - Removido Header duplicado (já renderizado pelo ClientLayout)
-  - Aplicado `-mt-[100px] md:-mt-[96px]` para compensar o padding do container
-    principal
-  - Eliminada faixa branca entre seção e rodapé
-  - Centralização agora funciona corretamente com o layout global
-
-### Enhanced 🔄
-
-- Melhorada responsividade para mobile
-  - Adicionado `pt-[120px] md:pt-0` no container do login
-  - Garante que o bloco não fique ofuscado pelo header no mobile
-  - Mantém centralização perfeita no desktop
-  - Configurações específicas para cada breakpoint sem interferência
-
----
-
-## [2025-09-22] - WhatsApp Chat acima de todo conteúdo
-
-### Fixed 🐛
-
-- Chat do WhatsApp ficava sob o cabeçalho fixo
-  - Elevado z-index do botão e da janela (`z-[99999]`/`z-[100000]`)
-  - Garante sobreposição acima do header e demais elementos
-
----
-
-## [2025-01-21] - Otimização Completa de SEO e Conversão
+## [2025-09-21] - Otimização Completa de SEO e Conversão
 
 ### Added ✨
 
@@ -180,7 +177,7 @@ e este projeto adere ao
 - **Code Quality**: Zero erros ESLint e TypeScript
 - **Documentation**: Guias completos para AIs e desenvolvedores humanos
 
-## [2025-01-21] - Implementação do Vercel Analytics
+## [2025-09-21] - Implementação do Vercel Analytics
 
 ### Added ✨
 
@@ -198,7 +195,7 @@ e este projeto adere ao
 - **Import**: `import { Analytics } from '@vercel/analytics/next'`
 - **Posicionamento**: Após `<SpeedInsights />` no ClientLayout
 
-## [2025-01-21] - Implementação Completa do Autocomplete Search Bar
+## [2025-09-21] - Implementação Completa do Autocomplete Search Bar
 
 ### Added ✨
 
@@ -289,7 +286,7 @@ e este projeto adere ao
 - **Causa**: Next.js 15 requer Suspense boundary
 - **Solução**: Wrapper component com Suspense
 
-## [2025-01-20] - Atualização Massiva de Dependências + Upgrade PostgreSQL
+## [2025-09-21] - Atualização Massiva de Dependências + Upgrade PostgreSQL
 
 ### Security 🔐
 
@@ -369,7 +366,7 @@ e este projeto adere ao
 - **Build**: Sucesso garantido com script post-prisma-generate.js
 - **Zero Breaking Changes**: Nenhuma mudança quebra funcionalidades existentes
 
-## [2025-01-20] - Implementação Hover Sidebar Button
+## [2025-09-21] - Implementação Hover Sidebar Button
 
 ### Changed 🔄
 
@@ -380,7 +377,7 @@ e este projeto adere ao
   - Comportamento: Contraste visual claro para indicar interação
   - Resultado: Feedback visual intuitivo no hover do botão
 
-## [2025-01-16] - ENHANCED ADMIN UX: INVENTORY & RENTAL PERIOD CONFIGURATION
+## [2025-09-21] - ENHANCED ADMIN UX: INVENTORY & RENTAL PERIOD CONFIGURATION
 
 ### Fixed 🐛
 
@@ -494,7 +491,7 @@ e este projeto adere ao
   - Desabilitação inteligente de controles quando limites são atingidos
   - Descrições claras sobre funcionalidade de cada campo
 
-## [2025-01-15] - CORREÇÕES DE PERFORMANCE E PADRONIZAÇÃO
+## [2025-09-21] - CORREÇÕES DE PERFORMANCE E PADRONIZAÇÃO
 
 ### Fixed 🐛
 
@@ -568,7 +565,7 @@ e este projeto adere ao
   - Redução de conexões desnecessárias ao banco
   - Pool de conexões otimizado
 
-## [2025-01-15] - DESCOBERTA CRÍTICA: PRISMA 6.15.0 & PRISMA_GENERATE_DATAPROXY
+## [2025-09-21] - DESCOBERTA CRÍTICA: PRISMA 6.15.0 & PRISMA_GENERATE_DATAPROXY
 
 ### 🚨 **DESCOBERTA CRÍTICA** - Root Cause do Problema Prisma
 
@@ -652,9 +649,9 @@ npx prisma generate
 
 ---
 
-## [2025-01-15] - ANALYTICS DASHBOARD & MAJOR IMPROVEMENTS + DOCUMENTATION FIXES
+## [2025-09-21] - ANALYTICS DASHBOARD & MAJOR IMPROVEMENTS + DOCUMENTATION FIXES
 
-## [2025-01-15] - CRÍTICO: CORREÇÃO DE PROBLEMAS DE BANCO DE DADOS EM PRODUÇÃO
+## [2025-09-21] - CRÍTICO: CORREÇÃO DE PROBLEMAS DE BANCO DE DADOS EM PRODUÇÃO
 
 ### 🚨 **PROBLEMA CRÍTICO RESOLVIDO** - Conectividade com Banco Supabase
 
@@ -760,7 +757,7 @@ pnpm build
 
 ---
 
-## [2025-01-15] - ANALYTICS DASHBOARD & MAJOR IMPROVEMENTS + DOCUMENTATION FIXES
+## [2025-09-21] - ANALYTICS DASHBOARD & MAJOR IMPROVEMENTS + DOCUMENTATION FIXES
 
 ### 🆕 **NOVA FUNCIONALIDADE PRINCIPAL** - Dashboard de Analytics
 
@@ -919,7 +916,7 @@ pnpm build
 
 ---
 
-## [2024-12-21] - CRITICAL FIXES & INFRASTRUCTURE
+## [2025-09-20] - CRITICAL FIXES & INFRASTRUCTURE
 
 ### 🚨 **PROBLEMA CRÍTICO RESOLVIDO** - Build & TypeScript
 
@@ -1122,7 +1119,7 @@ pnpm build
 - Endpoint `/api/equipments-mock` e fallbacks de dados dummy
 - Arquivos de log desnecessários da raiz do projeto
 
-## [1.0.0] - 2024-12-XX
+## [1.0.0] - 2025-09-16
 
 ### Adicionado
 

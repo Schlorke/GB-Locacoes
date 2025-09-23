@@ -118,5 +118,33 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate'), require('tailwind-scrollbar')],
+  plugins: [
+    require('tailwindcss-animate'),
+    require('tailwind-scrollbar'),
+    // Plugin para adicionar prefixos de compatibilidade
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.backdrop-blur-compat': {
+          '-webkit-backdrop-filter': 'blur(8px)',
+          'backdrop-filter': 'blur(8px)',
+        },
+        '.appearance-compat': {
+          '-webkit-appearance': 'none',
+          '-moz-appearance': 'none',
+          appearance: 'none',
+        },
+        '.text-size-adjust-compat': {
+          '-webkit-text-size-adjust': '100%',
+          'text-size-adjust': '100%',
+        },
+        '.line-clamp-compat': {
+          display: '-webkit-box',
+          '-webkit-line-clamp': 'var(--line-clamp, 1)',
+          '-webkit-box-orient': 'vertical',
+          overflow: 'hidden',
+        },
+      }
+      addUtilities(newUtilities)
+    },
+  ],
 }

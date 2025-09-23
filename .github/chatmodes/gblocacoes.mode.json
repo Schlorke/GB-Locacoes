@@ -10,7 +10,13 @@
     "scripts/post-prisma-generate.js",
     "package.json",
     "tsconfig.json",
-    "lib/validations/index.ts"
+    "lib/validations/index.ts",
+    "CHANGELOG.md"
+  ],
+  "criticalRules": [
+    "NEVER invent dates for CHANGELOG entries - always check git log first",
+    "Use real commit dates for all CHANGELOG entries",
+    "Verify dates with: git log --pretty=format:\"%h %ad %s\" --date=short"
   ],
   "stableMetrics": {
     "typescriptErrors": 0,

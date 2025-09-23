@@ -24,6 +24,7 @@
 - ❌ **NÃO ATUALIZE** Prisma para 6.14.0+ - quebra build
 - ❌ **NÃO USE** swagger-ui-react - incompatível React 19
 - ❌ **NÃO INCLUA** arquivos auto-gerados no linting
+- ❌ **NUNCA INVENTE DATAS** no CHANGELOG - sempre verificar `git log` primeiro
 
 ### **✅ SEMPRE FAÇA**
 

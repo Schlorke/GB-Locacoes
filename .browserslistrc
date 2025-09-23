@@ -1,0 +1,20 @@
+# Browserslist configuration for better CSS compatibility
+# This file defines which browsers to support for CSS autoprefixing
+
+# Production browsers
+> 1%
+last 2 versions
+not dead
+
+# Specific browser versions for better compatibility
+Chrome >= 54
+ChromeAndroid >= 54
+Edge >= 79
+Firefox >= 60
+Safari >= 9
+iOS >= 9
+Samsung >= 6.0
+
+# Exclude IE
+not IE 11
+not IE_Mob 11

@@ -3,6 +3,17 @@
 module.exports = {
   plugins: {
     tailwindcss: {},
-    autoprefixer: {},
+    autoprefixer: {
+      flexbox: 'no-2009',
+      overrideBrowserslist: [
+        'last 2 versions',
+        '> 1%',
+        'iOS >= 9',
+        'Safari >= 9',
+        'Chrome >= 54',
+        'Edge >= 79',
+        'Firefox >= 60',
+      ],
+    },
   },
 }

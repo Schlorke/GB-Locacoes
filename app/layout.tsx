@@ -1,9 +1,27 @@
 import { SpeedInsights } from '@vercel/speed-insights/next' // ✅ Importado aqui
 import { Analytics } from '@vercel/analytics/next' // ✅ Vercel Analytics
 import type { Metadata } from 'next'
+import { Inter, Jost } from 'next/font/google'
 import React from 'react'
 import ClientLayout from './ClientLayout'
 import './globals.css'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+  preload: true,
+  fallback: ['system-ui', 'arial'],
+})
+
+const jost = Jost({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jost',
+  preload: true,
+  fallback: ['Georgia', 'serif'],
+  adjustFontFallback: false,
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gblocacoes.com.br'),
@@ -83,10 +101,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClientLayout>
-      {children}
-      <SpeedInsights />
-      <Analytics />
-    </ClientLayout>
+    <html lang="pt-BR" className={`${inter.variable} ${jost.variable}`}>
+      <body className="min-h-screen bg-background font-sans antialiased">
+        <ClientLayout>
+          {children}
+          <SpeedInsights />
+          <Analytics />
+        </ClientLayout>
+      </body>
+    </html>
   )
 }

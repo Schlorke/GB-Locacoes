@@ -17,7 +17,8 @@
     "NÃO ATUALIZAR Prisma para 6.14.0+ - quebra build",
     "NÃO USAR swagger-ui-react - incompatível React 19",
     "NÃO INCLUIR arquivos auto-gerados no linting",
-    "SEMPRE usar safe navigation (?.) em objetos undefined"
+    "SEMPRE usar safe navigation (?.) em objetos undefined",
+    "NUNCA INVENTAR DATAS no CHANGELOG - sempre verificar git log primeiro"
   ],
   "documentation_priority": [
     "SEMPRE consultar docs/ antes de implementar",

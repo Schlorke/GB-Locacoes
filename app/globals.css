@@ -932,6 +932,58 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* =============================== */
 /* 12. Modal, Popover, e Layouts   */
 /* =============================== */
+
+/* Scroll customizado para modais administrativos */
+.modal-scroll-area {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.modal-scroll-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-scroll-area::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.modal-scroll-area::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.modal-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Scroll forçado para modais - sempre visível */
+.force-scroll {
+  overflow-y: scroll !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #cbd5e1 #f8fafc !important;
+}
+
+.force-scroll::-webkit-scrollbar {
+  width: 8px !important;
+  background: #f8fafc !important;
+}
+
+.force-scroll::-webkit-scrollbar-track {
+  background: #f8fafc !important;
+  border-radius: 4px !important;
+}
+
+.force-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+  border-radius: 4px !important;
+  border: 1px solid #f8fafc !important;
+}
+
+.force-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
+}
+
 /* Modal e Popover - Centralização perfeita */
 [data-radix-popper-content-wrapper] {
   position: fixed !important;
