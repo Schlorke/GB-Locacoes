@@ -15,6 +15,7 @@ e este projeto adere ao
 - **@sveltejs/kit**: 2.42.2 → 2.43.1
 - **@typescript-eslint/eslint-plugin**: 8.44.0 → 8.44.1
 - **@typescript-eslint/parser**: 8.44.0 → 8.44.1
+- **typescript-eslint**: 8.44.0 → 8.44.1
 
 ### Notes 📝
 
