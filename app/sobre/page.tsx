@@ -188,8 +188,8 @@ export default function SobrePage() {
               </div>
             </div>
 
-            <div className="hero-image relative px-4">
-              <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-8 shadow-xl group">
+            <div className="hero-image relative px-0 sm:px-0 md:px-8">
+              <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl group">
                 <Image
                   src="/placeholder.svg?height=400&width=500&text=Equipamentos+GB+Locações"
                   alt="Equipamentos GB Locações"
@@ -199,7 +199,7 @@ export default function SobrePage() {
                 />
 
                 {/* Floating badge - estilo quadrado como na hero */}
-                <div className="absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 bg-white/90 backdrop-blur-sm text-orange-600 p-3 sm:p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                   <div className="text-2xl font-bold">10+</div>
                   <div className="text-sm font-medium">Anos de Experiência</div>
                 </div>
