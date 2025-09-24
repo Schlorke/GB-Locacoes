@@ -105,7 +105,7 @@ export function generateOpenAPISpec() {
     info: { title: "GB-Locações API", version: "1.0.0" },
     servers: [
       { url: "http://localhost:3000/api", description: "Development" },
-      { url: "https://gblocacoes.vercel.app/api", description: "Production" }
+      { url: "https://locacoesgb.com.br/api", description: "Production" }
     ]
     // ... schemas e paths
   }
@@ -115,7 +115,7 @@ export function generateOpenAPISpec() {
 ### **🚀 Acesso à Documentação**
 
 - **URL Local**: `http://localhost:3000/api-docs`
-- **URL Produção**: `https://gblocacoes.vercel.app/api-docs`
+- **URL Produção**: `https://locacoesgb.com.br/api-docs`
 - **Especificação**: `/openapi.json` (OpenAPI 3.0)
 
 ### **✅ Vantagens da Implementação Custom**
@@ -206,7 +206,7 @@ export default withAuth(
 
 ```
 Development: http://localhost:3000/api
-Production:  https://gblocacoes.com.br/api
+Production:  https://locacoesgb.com.br/api
 ```
 
 ### 📋 Lista de Endpoints

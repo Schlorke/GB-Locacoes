@@ -64,5 +64,5 @@ User-agent: DotBot
 Disallow: /
 
 # Links importantes
-Sitemap: https://gblocacoes.com.br/sitemap.xml
-Host: https://gblocacoes.com.br
+Sitemap: https://locacoesgb.com.br/sitemap.xml
+Host: https://locacoesgb.com.br

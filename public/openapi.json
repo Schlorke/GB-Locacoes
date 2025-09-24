@@ -11,7 +11,7 @@
       "description": "Local development server"
     },
     {
-      "url": "https://gblocacoes.vercel.app/api",
+      "url": "https://locacoesgb.com.br/api",
       "description": "Production server"
     }
   ],

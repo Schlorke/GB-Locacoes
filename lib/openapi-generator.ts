@@ -51,11 +51,11 @@ e modelos Prisma do projeto, garantindo consistência perfeita.
       contact: {
         name: 'GB-Locações',
         email: 'contato@gblocacoes.com.br',
-        url: 'https://gblocacoes.vercel.app',
+        url: 'https://locacoesgb.com.br',
       },
       license: {
         name: 'Proprietary',
-        url: 'https://gblocacoes.vercel.app/termos',
+        url: 'https://locacoesgb.com.br/termos',
       },
     },
     servers: [
@@ -64,7 +64,7 @@ e modelos Prisma do projeto, garantindo consistência perfeita.
         description: 'Servidor de desenvolvimento',
       },
       {
-        url: 'https://gblocacoes.vercel.app',
+        url: 'https://locacoesgb.com.br',
         description: 'Servidor de produção',
       },
     ],

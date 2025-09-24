@@ -36,7 +36,7 @@ async function main() {
 
     console.log('\n🔗 Acesse a documentação em:')
     console.log('   http://localhost:3000/api-docs (desenvolvimento)')
-    console.log('   https://gblocacoes.vercel.app/api-docs (produção)')
+    console.log('   https://locacoesgb.com.br/api-docs (produção)')
   } catch (error) {
     console.error('❌ Erro ao gerar especificação OpenAPI:', error)
     process.exit(1)

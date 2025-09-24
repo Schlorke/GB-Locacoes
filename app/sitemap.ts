@@ -7,7 +7,7 @@ async function getPrisma() {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://gblocacoes.com.br'
+  const baseUrl = 'https://locacoesgb.com.br'
 
   // URLs estáticas principais
   const staticRoutes: MetadataRoute.Sitemap = [

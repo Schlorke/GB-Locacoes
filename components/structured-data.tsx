@@ -60,7 +60,7 @@ export function StructuredData({
     schemas.push({
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
-      '@id': 'https://gblocacoes.com.br/#business',
+      '@id': 'https://locacoesgb.com.br/#business',
       name: localBusiness.name,
       description: localBusiness.description,
       url: localBusiness.url,
@@ -133,7 +133,7 @@ export function StructuredData({
         seller: {
           '@type': 'Organization',
           name: 'GB Locações',
-          url: 'https://gblocacoes.com.br',
+          url: 'https://locacoesgb.com.br',
         },
         priceValidUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
           .toISOString()
@@ -181,7 +181,7 @@ export const DEFAULT_LOCAL_BUSINESS: LocalBusinessData = {
   name: 'GB Locações',
   description:
     'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
-  url: 'https://gblocacoes.com.br',
+  url: 'https://locacoesgb.com.br',
   telephone: '+55 51 9999-9999', // Substitua pelo telefone real
   email: 'contato@gblocacoes.com.br', // Substitua pelo email real
   address: {
@@ -197,8 +197,8 @@ export const DEFAULT_LOCAL_BUSINESS: LocalBusinessData = {
   },
   openingHours: ['Mo-Fr 08:00-18:00', 'Sa 08:00-12:00'],
   sameAs: [
-    'https://www.facebook.com/gblocacoes', // Substitua pelas redes sociais reais
-    'https://www.instagram.com/gblocacoes',
+    'https://www.facebook.com/locacoesgb', // Substitua pelas redes sociais reais
+    'https://www.instagram.com/locacoesgb',
     'https://api.whatsapp.com/send?phone=5551999999999', // Substitua pelo WhatsApp real
   ],
 }

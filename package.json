@@ -65,7 +65,8 @@
     "update:safe": "pnpm update @radix-ui/react-* @testing-library/* date-fns lucide-react clsx",
     "verify:after-update": "pnpm check:compatibility && pnpm run build && pnpm test",
     "diagnose:database": "node scripts/diagnose-database.js",
-    "diagnose:connection": "node scripts/diagnose-connection.js"
+    "diagnose:connection": "node scripts/diagnose-connection.js",
+    "supabase": "npx -y supabase"
   },
   "dependencies": {
     "@auth/core": "0.40.0",
@@ -216,7 +217,7 @@
     "typescript-eslint": "^8.44.1",
     "vitest": "^3.2.4"
   },
-  "packageManager": "pnpm@10.17.0",
+  "packageManager": "pnpm@10.17.1",
   "engines": {
     "node": ">=20.0.0",
     "pnpm": ">=10.0.0"

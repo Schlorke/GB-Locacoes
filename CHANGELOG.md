@@ -6,6 +6,50 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-09-24] - Migração de Domínio para locacoesgb.com.br
+
+### Changed 🔄
+
+- **Migração Completa de Domínio**: Atualizado de `gblocacoes.vercel.app` para
+  `locacoesgb.com.br`
+  - **Metadados SEO**: `app/layout.tsx` - metadataBase e OpenGraph URLs
+  - **Sitemap**: `app/sitemap.ts` - baseUrl atualizada
+  - **Robots.txt**: `public/robots.txt` - sitemap e host URLs
+  - **Structured Data**: `components/structured-data.tsx` - JSON-LD schemas
+  - **OpenAPI**: `public/openapi.json` e `next.openapi.json` - server URLs
+  - **WhatsApp**: `lib/whatsapp.ts` - baseUrl para mensagens
+  - **Scripts**: `scripts/generate-openapi-zod.*` - URLs de documentação
+  - **Documentação**: `docs/architecture/api.md` - URLs de produção
+  - **Breadcrumbs**: `components/ui/breadcrumb.tsx` - URLs canônicas
+  - **Equipamentos**: `app/equipamentos/[id]/page.tsx` - metadados dinâmicos
+
+### Technical Details 🔧
+
+- **SEO Impact**: Todas as URLs canônicas e metadados atualizados
+- **Social Media**: OpenGraph e Twitter Cards com novo domínio
+- **API Documentation**: Endpoints de produção atualizados
+- **Structured Data**: Schema.org LocalBusiness com nova URL
+- **Sitemap**: Geração automática com novo domínio base
+- **WhatsApp Integration**: Mensagens com links corretos
+
+### Files Modified 📝
+
+- `app/layout.tsx` - Metadados principais
+- `app/sitemap.ts` - Sitemap base URL
+- `public/robots.txt` - Sitemap e host
+- `components/structured-data.tsx` - JSON-LD schemas
+- `lib/whatsapp.ts` - Base URL para WhatsApp
+- `public/openapi.json` - API server URLs
+- `next.openapi.json` - API server URLs
+- `scripts/generate-openapi-zod.ts` - Documentation URLs
+- `scripts/generate-openapi-zod.mjs` - Documentation URLs
+- `docs/architecture/api.md` - Production URLs
+- `components/ui/breadcrumb.tsx` - Canonical URLs
+- `app/equipamentos/[id]/page.tsx` - Dynamic metadata
+- `lib/openapi-generator.ts` - OpenAPI server configs
+
+---
+
 ## [2025-09-23] - Integração WhatsApp + Atualizações de Dependências
 
 ### Added ✨

@@ -78,13 +78,13 @@ export async function generateMetadata(props: Props) {
   const seoTitle = `Aluguel de ${equipment.name} em Porto Alegre | GB Locações`
 
   // URL canônica
-  const canonicalUrl = `https://gblocacoes.com.br/equipamentos/${params.id}`
+  const canonicalUrl = `https://locacoesgb.com.br/equipamentos/${params.id}`
 
   // Imagem principal (primeira da galeria ou placeholder)
   const primaryImage = equipment.images?.[0] || '/placeholder.jpg'
   const imageUrl = primaryImage.startsWith('http')
     ? primaryImage
-    : `https://gblocacoes.com.br${primaryImage}`
+    : `https://locacoesgb.com.br${primaryImage}`
 
   return {
     title: seoTitle,
@@ -139,8 +139,8 @@ export async function generateMetadata(props: Props) {
           alt: `${equipment.name} para locação - GB Locações`,
         },
       ],
-      creator: '@gblocacoes',
-      site: '@gblocacoes',
+      creator: '@locacoesgb',
+      site: '@locacoesgb',
     },
     robots: {
       index: true,
@@ -198,22 +198,22 @@ export default async function EquipmentDetailPage(props: Props) {
       availability: equipment.available
         ? 'https://schema.org/InStock'
         : 'https://schema.org/OutOfStock',
-      url: `https://gblocacoes.com.br/equipamentos/${params.id}`,
+      url: `https://locacoesgb.com.br/equipamentos/${params.id}`,
     },
     category: equipment.category?.name || 'Equipamentos para Construção',
     manufacturer: 'GB Locações',
   }
 
   const breadcrumbs = [
-    { name: 'Home', url: 'https://gblocacoes.com.br' },
-    { name: 'Equipamentos', url: 'https://gblocacoes.com.br/equipamentos' },
+    { name: 'Home', url: 'https://locacoesgb.com.br' },
+    { name: 'Equipamentos', url: 'https://locacoesgb.com.br/equipamentos' },
     {
       name: equipment.category?.name || 'Categoria',
-      url: `https://gblocacoes.com.br/equipamentos?categoria=${equipment.category?.slug || ''}`,
+      url: `https://locacoesgb.com.br/equipamentos?categoria=${equipment.category?.slug || ''}`,
     },
     {
       name: equipment.name,
-      url: `https://gblocacoes.com.br/equipamentos/${params.id}`,
+      url: `https://locacoesgb.com.br/equipamentos/${params.id}`,
     },
   ]
 

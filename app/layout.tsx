@@ -24,7 +24,7 @@ const jost = Jost({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://gblocacoes.com.br'),
+  metadataBase: new URL('https://locacoesgb.com.br'),
   title: {
     default:
       'GB Locações - Especializada em Locação de Equipamentos para Construção Civil',
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://gblocacoes.com.br',
+    url: 'https://locacoesgb.com.br',
     siteName: 'GB Locações',
     title:
       'GB Locações - Especializada em Locação de Equipamentos para Construção Civil',

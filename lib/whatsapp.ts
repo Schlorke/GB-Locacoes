@@ -176,7 +176,7 @@ export function convertFormDataToWhatsApp(
       period: string
     }
   }>,
-  baseUrl: string = 'https://gblocacoes.vercel.app'
+  baseUrl: string = 'https://locacoesgb.com.br'
 ): WhatsAppQuoteData {
   const totalAmount = equipments.reduce((total, eq) => {
     return total + (eq.finalPrice || eq.pricePerDay * eq.quantity * eq.days)

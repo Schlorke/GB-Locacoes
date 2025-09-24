@@ -38,7 +38,7 @@ export default function Breadcrumb({
       '@type': 'ListItem',
       position: index + 1,
       name: item.name,
-      item: item.href ? `https://gblocacoes.com.br${item.href}` : undefined,
+      item: item.href ? `https://locacoesgb.com.br${item.href}` : undefined,
     })),
   }
 
