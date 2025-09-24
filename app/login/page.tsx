@@ -169,7 +169,7 @@ function LoginForm() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="admin@gblocacoes.com.br"
+                      placeholder="seu@email.com"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -293,20 +293,8 @@ function LoginForm() {
                   </div>
                 </div>
 
-                {/* Seção de informações melhorada e centralizada */}
+                {/* Seção de informações */}
                 <div className="text-center space-y-2 pt-3 border-t border-slate-200/60 max-w-sm mx-auto">
-                  <div className="text-xs text-slate-500">
-                    <p className="font-semibold mb-2 text-slate-600 text-sm">
-                      Credenciais de acesso:
-                    </p>
-                    <div
-                      className="font-mono text-xs bg-gradient-to-r from-slate-100 to-slate-50 px-3 py-2.5 rounded-md text-slate-700 border border-slate-200/50 shadow-sm hover:shadow-md transition-shadow duration-200"
-                      style={{ boxShadow: '0 1px 4px 0 rgba(0,0,0,0.06)' }}
-                    >
-                      <div className="font-medium">admin@gblocacoes.com.br</div>
-                      <div className="font-medium mt-1">admin123</div>
-                    </div>
-                  </div>
                   <p className="text-xs text-slate-400 pt-2 leading-relaxed">
                     © 2024 GB Locações - Sistema de Acesso
                   </p>
