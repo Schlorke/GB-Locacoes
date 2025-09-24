@@ -115,12 +115,12 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 -mt-[100px] md:-mt-[96px]">
-      <div className="flex min-h-screen items-center justify-center px-4 pt-[120px] md:pt-0">
+      <div className="flex min-h-screen items-center justify-center px-4 py-20">
         {/* Container do login centralizado */}
         <div className="w-full max-w-md relative z-10">
           <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in">
             <div className="overflow-y-auto rounded-2xl max-h-[85vh]">
-              <CardHeader className="text-center space-y-3 py-4 px-6 animate-fade-in-up">
+              <CardHeader className="text-center space-y-4 py-8 px-8 animate-fade-in-up">
                 {/* Logo melhorado com animação */}
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white shadow-xl animate-scale-in relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-60"></div>
@@ -139,10 +139,10 @@ function LoginForm() {
                 </div>
               </CardHeader>
 
-              <CardContent className="px-6 pb-4 space-y-4">
+              <CardContent className="px-8 pb-8 space-y-6">
                 <form
                   onSubmit={handleSubmit}
-                  className="space-y-4 max-w-sm mx-auto"
+                  className="space-y-6 max-w-sm mx-auto"
                 >
                   {error && (
                     <Alert
@@ -159,7 +159,7 @@ function LoginForm() {
                     </Alert>
                   )}
 
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Label
                       htmlFor="email"
                       className="text-slate-700 font-semibold text-sm block text-left"
@@ -179,7 +179,7 @@ function LoginForm() {
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <Label
                       htmlFor="password"
                       className="text-slate-700 font-semibold text-sm block text-left"
@@ -218,7 +218,7 @@ function LoginForm() {
                     </div>
                   </div>
 
-                  <div className="pt-1">
+                  <div className="pt-2">
                     <Button
                       type="submit"
                       className="w-full h-12 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none rounded-md"
@@ -248,7 +248,7 @@ function LoginForm() {
                 </div>
 
                 {/* Botões de login social */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   <Button
                     type="button"
                     variant="outline"
@@ -279,7 +279,7 @@ function LoginForm() {
                 </div>
 
                 {/* Links de navegação */}
-                <div className="text-center space-y-2">
+                <div className="text-center space-y-3">
                   <div className="text-sm text-slate-600">
                     Não tem uma conta?{' '}
                     <Link href="/cadastro" className="text-slate-700 hover:text-slate-900 font-medium underline">
