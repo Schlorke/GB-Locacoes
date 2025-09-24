@@ -260,7 +260,7 @@ export const SeoPreview = memo(function SeoPreview({ data }: SeoPreviewProps) {
               className="w-4 h-4"
             />
           )}
-          <span className="text-green-600 text-sm">gblocacoes.com.br</span>
+          <span className="text-green-600 text-sm">locacoesgb.com.br</span>
         </div>
 
         <h4 className="text-blue-600 text-lg hover:underline cursor-pointer">

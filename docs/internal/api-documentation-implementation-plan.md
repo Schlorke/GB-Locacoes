@@ -91,7 +91,7 @@ module.exports = {
       description: "Development"
     },
     {
-      url: "https://gb-locacoes.vercel.app",
+      url: "https://locacoesgb.com.br",
       description: "Production"
     }
   ]

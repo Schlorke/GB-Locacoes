@@ -79,7 +79,7 @@ SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
 # =================================================================
 # 🔑 NEXTAUTH (PRODUÇÃO)
 # =================================================================
-NEXTAUTH_URL="https://your-domain.vercel.app"
+NEXTAUTH_URL="https://locacoesgb.com.br"
 NEXTAUTH_SECRET="your-production-secret-256-bits"
 
 # =================================================================

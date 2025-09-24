@@ -156,7 +156,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     openGraph: {
       title: pageTitle,
       description: "Descrição",
-      url: `https://gblocacoes.com.br${pathname}`,
+      url: `https://locacoesgb.com.br${pathname}`,
       siteName: "GB Locações"
     },
     twitter: {
@@ -260,7 +260,7 @@ const isAvailable = equipment.available ?? equipment.isAvailable ?? true
 const imageUrl = equipment.images?.[0] || "/placeholder.jpg"
 const fullImageUrl = imageUrl.startsWith("http")
   ? imageUrl
-  : `https://gblocacoes.com.br${imageUrl}`
+  : `https://locacoesgb.com.br${imageUrl}`
 ```
 
 ## 📊 **ANALYTICS & TRACKING**

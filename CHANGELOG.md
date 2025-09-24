@@ -1272,7 +1272,7 @@ pnpm build
 
 ## 🔗 Links
 
-- [🏠 Homepage](https://gblocacoes.com.br)
+- [🏠 Homepage](https://locacoesgb.com.br)
 - [📚 Documentação](./docs/)
 - [🤝 Como Contribuir](./CONTRIBUTING.md)
 - [🐛 Reportar Bugs](https://github.com/GBLocacoes/GB-Locacoes/issues)

@@ -359,7 +359,7 @@ User-agent: Googlebot
 Crawl-delay: 1
 
 # Link para sitemap
-Sitemap: https://gblocacoes.com.br/sitemap.xml
+Sitemap: https://locacoesgb.com.br/sitemap.xml
 ```
 
 ---

@@ -15,7 +15,7 @@ module.exports = {
       description: 'Development',
     },
     {
-      url: 'https://gb-locacoes.vercel.app',
+      url: 'https://locacoesgb.com.br',
       description: 'Production',
     },
   ],
@@ -48,7 +48,7 @@ module.exports = {
     `,
     contact: {
       name: 'GB-Locações',
-      url: 'https://gb-locacoes.vercel.app',
+      url: 'https://locacoesgb.com.br',
       email: 'contato@gb-locacoes.com',
     },
   },

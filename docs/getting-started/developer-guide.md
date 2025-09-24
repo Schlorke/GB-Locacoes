@@ -203,13 +203,13 @@ import {
       price: equipment.pricePerDay,
       priceCurrency: "BRL",
       availability: equipment.available ? "InStock" : "OutOfStock",
-      url: `https://gblocacoes.com.br/equipamentos/${equipment.id}`
+      url: `https://locacoesgb.com.br/equipamentos/${equipment.id}`
     }
   }}
   breadcrumbs={[
     // For breadcrumb schema
-    { name: "Home", url: "https://gblocacoes.com.br" },
-    { name: "Equipment", url: "https://gblocacoes.com.br/equipamentos" }
+    { name: "Home", url: "https://locacoesgb.com.br" },
+    { name: "Equipment", url: "https://locacoesgb.com.br/equipamentos" }
   ]}
 />
 ```
@@ -242,12 +242,12 @@ export async function generateMetadata({ params }): Promise<Metadata> {
       "gb locações"
     ],
     alternates: {
-      canonical: `https://gblocacoes.com.br${pathname}`
+      canonical: `https://locacoesgb.com.br${pathname}`
     },
     openGraph: {
       title: data.name,
       description: data.description,
-      url: `https://gblocacoes.com.br${pathname}`,
+      url: `https://locacoesgb.com.br${pathname}`,
       siteName: "GB Locações",
       images: [
         {
@@ -491,7 +491,7 @@ export const getImageUrl = (
   if (imageUrl.startsWith("http")) return imageUrl
 
   // If relative URL, make absolute
-  return `https://gblocacoes.com.br${imageUrl}`
+  return `https://locacoesgb.com.br${imageUrl}`
 }
 
 // Get primary image from equipment
@@ -682,7 +682,7 @@ npm start            # Start production server
 # .env.local (production)
 DATABASE_URL="postgresql://..."
 NEXTAUTH_SECRET="your-secret"
-NEXTAUTH_URL="https://gblocacoes.com.br"
+NEXTAUTH_URL="https://locacoesgb.com.br"
 RESEND_API_KEY="your-resend-key"
 VERCEL_ANALYTICS_ID="your-analytics-id"
 ```

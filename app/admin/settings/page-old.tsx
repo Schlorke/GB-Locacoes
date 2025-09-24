@@ -309,7 +309,7 @@ export default function SettingsPage() {
                         onChange={(e) =>
                           updateField('contactEmail', e.target.value)
                         }
-                        placeholder="contato@gblocacoes.com"
+                        placeholder="contato@gblocacoes.com.br"
                         className="mt-1 focus:border-blue-500"
                       />
                     </div>
@@ -442,7 +442,7 @@ export default function SettingsPage() {
                       onChange={(e) =>
                         updateSocialLinks('facebook', e.target.value)
                       }
-                      placeholder="https://facebook.com/gblocacoes"
+                      placeholder="https://facebook.com/locacoesgb"
                       className="mt-1 focus:border-blue-500"
                     />
                   </div>
@@ -457,7 +457,7 @@ export default function SettingsPage() {
                       onChange={(e) =>
                         updateSocialLinks('instagram', e.target.value)
                       }
-                      placeholder="https://instagram.com/gblocacoes"
+                      placeholder="https://instagram.com/locacoesgb"
                       className="mt-1 focus:border-blue-500"
                     />
                   </div>
@@ -472,7 +472,7 @@ export default function SettingsPage() {
                       onChange={(e) =>
                         updateSocialLinks('linkedin', e.target.value)
                       }
-                      placeholder="https://linkedin.com/company/gblocacoes"
+                      placeholder="https://linkedin.com/company/locacoesgb"
                       className="mt-1 focus:border-blue-500"
                     />
                   </div>
@@ -487,7 +487,7 @@ export default function SettingsPage() {
                       onChange={(e) =>
                         updateSocialLinks('youtube', e.target.value)
                       }
-                      placeholder="https://youtube.com/@gblocacoes"
+                      placeholder="https://youtube.com/@locacoesgb"
                       className="mt-1 focus:border-blue-500"
                     />
                   </div>
@@ -502,7 +502,7 @@ export default function SettingsPage() {
                       onChange={(e) =>
                         updateSocialLinks('twitter', e.target.value)
                       }
-                      placeholder="https://twitter.com/gblocacoes"
+                      placeholder="https://twitter.com/locacoesgb"
                       className="mt-1 focus:border-blue-500"
                     />
                   </div>

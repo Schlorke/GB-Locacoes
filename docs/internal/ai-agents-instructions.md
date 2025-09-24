@@ -267,7 +267,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     openGraph: {
       title: data.name,
       description: "OG description",
-      url: `https://gblocacoes.com.br/${params.slug}`,
+      url: `https://locacoesgb.com.br/${params.slug}`,
       images: [{ url: data.image, width: 1200, height: 630 }]
     },
     twitter: {
