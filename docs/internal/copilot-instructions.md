@@ -325,7 +325,7 @@ real project history.
 
 ### **Don't Suggest Modifying:**
 
-1. Prisma version (locked at 6.13.0)
+1. Prisma version (keep stable)
 2. Tailwind version (user preference)
 3. Build scripts in package.json
 4. Critical files like `scripts/post-prisma-generate.js`

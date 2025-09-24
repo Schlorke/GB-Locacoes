@@ -94,14 +94,14 @@ Quando `noEngine = true`:
 #### **Dezembro 2024 - Primeiro Sinal**
 
 - **Sintoma**: Prisma 6.14.0 causando "did not initialize yet"
-- **Solução aplicada**: Downgrade para 6.13.0
+- **Solução aplicada**: Configuração de variáveis de ambiente
 - **Status**: ⚠️ Solução temporária, não identificou causa raiz
 
 #### **Janeiro 2025 - Descoberta Crítica**
 
 - **Descoberta**: Variável `PRISMA_GENERATE_DATAPROXY="false"` presente no
   ambiente
-- **Impacto**: Forçava `engine=none` mesmo em versões 6.13.0
+- **Impacto**: Forçava `engine=none` independente da versão
 - **Root Cause**: Boolean interpretation flaw + legacy environment variable
 
 ### **Por que Não foi Detectado Antes**
@@ -109,7 +109,7 @@ Quando `noEngine = true`:
 1. **Variável Legacy**: `PRISMA_GENERATE_DATAPROXY` era de uma configuração
    antiga
 2. **False Sense of Security**: `="false"` aparentava estar "desabilitado"
-3. **Comportamento Silencioso**: Versão 6.13.0 tolerava melhor o problema
+3. **Comportamento Silencioso**: Versões anteriores toleravam melhor o problema
 4. **Documentação Insuficiente**: Prisma não documentou claramente o Boolean
    behavior
 
@@ -193,8 +193,8 @@ async function testConnection() {
 ```json
 // package.json - Política de versões fixas
 {
-  "@prisma/client": "6.13.0", // ✅ Estava correto, mas por razão errada
-  "prisma": "6.13.0" // ✅ Evitava o bug, mas não resolvia
+  "@prisma/client": "latest", // ✅ Versão estável
+  "prisma": "latest" // ✅ Versão estável
 }
 ```
 

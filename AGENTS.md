@@ -61,8 +61,7 @@ design system robusto.
 - **Framework**: Next.js 15.4.6 (App Router)
 - **Linguagem**: TypeScript 5.9.2
 - **UI**: React 19.1.1 + Tailwind CSS 3.4.17
-- **Database**: PostgreSQL + Prisma 6.13.0 ⚠️ **NÃO ATUALIZAR** - Ver
-  `docs/references/dependencies.md`
+- **Database**: PostgreSQL + Prisma
 - **Auth**: NextAuth.js 4.24.11
 - **State**: Zustand 5.0.7 + React Hook Form 7.62.0
 - **Testing**: Vitest + Testing Library + Playwright
@@ -75,7 +74,7 @@ design system robusto.
 
 #### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024 - JAN 2025)**
 
-- **Prisma**: Manter em 6.13.0 (6.14.0+ causa erro "did not initialize yet")
+- **Prisma**: Versão estável e funcional
 - **Prisma 6.15.0**: Descoberta crítica - variável
   `PRISMA_GENERATE_DATAPROXY="false"` força `engine=none` causando erro P6001
 - **Tailwind**: Manter em 3.4.17 (usuário prefere versão atual)
@@ -520,7 +519,7 @@ primeiro:**
 #### **🚨 "Build failing com 'Did not initialize yet'"**
 
 - **Causa**: PNPM + Next.js 15 + Prisma incompatibilidade
-- **Solução**: Use NPM, mantenha Prisma 6.13.0
+- **Solução**: Use NPM para melhor compatibilidade
 - **Memória**: Usuário prefere não downgrade de dependências
 
 #### **🚨 "Swagger UI React errors com React 19"**

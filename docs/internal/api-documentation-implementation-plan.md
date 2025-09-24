@@ -37,7 +37,7 @@ garantindo contexto sempre atualizado.
 
 - ✅ **Next.js 15.4.6** (App Router)
 - ✅ **TypeScript 5.9.2** (strict)
-- ✅ **Prisma 6.13.0** (models definidos)
+- ✅ **Prisma ORM** (models definidos)
 - ✅ **Zod** (validação parcial)
 - ✅ **NextAuth.js** (autenticação)
 

@@ -6,12 +6,20 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2025-09-24] - Migração de Domínio para locacoesgb.com.br
+## [2025-09-24] - Migração de Domínio + Limpeza de Compatibilidade
 
 ### Changed 🔄
 
 - **Migração Completa de Domínio**: Atualizado de `gblocacoes.vercel.app` para
   `locacoesgb.com.br`
+- **Remoção de Testes Desnecessários**: Removido teste de verificação de versão
+  específica do Prisma
+  - **Motivo**: Problema real eram variáveis de ambiente, não versão do Prisma
+  - **Arquivo**: `.github/workflows/ci.yml` - removido step "Check dependency
+    compatibility"
+  - **Scripts**: Removidos `scripts/check-compatibility.js` e
+    `scripts/check-compatibility.cjs`
+  - **Package.json**: Removido comando `check:compatibility`
   - **Metadados SEO**: `app/layout.tsx` - metadataBase e OpenGraph URLs
   - **Sitemap**: `app/sitemap.ts` - baseUrl atualizada
   - **Robots.txt**: `public/robots.txt` - sitemap e host URLs

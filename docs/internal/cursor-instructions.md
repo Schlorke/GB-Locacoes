@@ -129,7 +129,7 @@ import {
 
 ### **Dependencies (DO NOT MODIFY)**
 
-- Prisma: `6.13.0` (DO NOT UPDATE to 6.14.0+)
+- Prisma: Versão estável (manter atual)
 - Tailwind: `3.4.17` (User preference - do not update)
 - Package Manager: `npm` (not pnpm - causes conflicts)
 
@@ -220,7 +220,7 @@ real project history.
 ### **DO NOT MODIFY:**
 
 1. `scripts/post-prisma-generate.js` (critical for build)
-2. Prisma version (keep at 6.13.0)
+2. Prisma version (keep stable)
 3. Tailwind version (user preference)
 4. Package manager configs (npm only)
 
@@ -284,7 +284,7 @@ const form = useForm({
 
 ### **Build Issues**
 
-- Check Prisma version (must be 6.13.0)
+- Check Prisma version (keep stable)
 - Run `node scripts/post-prisma-generate.js`
 - Use `npm` instead of `pnpm`
 

@@ -66,7 +66,7 @@ graph TB
     end
 
     subgraph "🗄️ Data Layer"
-        Q[Prisma 6.13.0<br/>ORM]
+        Q[Prisma ORM<br/>Database]
         R[PostgreSQL 15+<br/>Database]
         S[Supabase<br/>BaaS Platform]
         T[Redis<br/>Caching - Future]
@@ -223,21 +223,21 @@ await prisma.$transaction([
 
 ### **🎯 Versões Estáveis (Testadas)**
 
-| Categoria         | Tecnologia      | Versão     | Status     | Notas               |
-| ----------------- | --------------- | ---------- | ---------- | ------------------- |
-| **Framework**     | Next.js         | 15.4.6     | ✅ Estável | App Router completo |
-| **UI Library**    | React           | 19.1.1     | ✅ Estável | Server Components   |
-| **Language**      | TypeScript      | 5.9.2      | ✅ Estável | Strict mode         |
-| **Database**      | PostgreSQL      | 15+        | ✅ Estável | JSON, Indexes       |
-| **ORM**           | Prisma          | **6.13.0** | ⚠️ Travado | NÃO atualizar       |
-| **Styling**       | Tailwind CSS    | **3.4.17** | ⚠️ Travado | NÃO atualizar       |
-| **UI Components** | Radix UI        | Latest     | ✅ Estável | Atualizável         |
-| **State**         | Zustand         | 5.0.7      | ✅ Estável | Global state        |
-| **Forms**         | React Hook Form | 7.62.0     | ✅ Estável | Performance         |
-| **Validation**    | Zod             | 4.0.17     | ✅ Estável | Type inference      |
-| **Auth**          | NextAuth.js     | 4.24.11    | ✅ Estável | JWT + Database      |
-| **Testing**       | Vitest          | 3.2.4      | ✅ Estável | Fast testing        |
-| **E2E**           | Playwright      | 1.54.2     | ✅ Estável | Cross-browser       |
+| Categoria         | Tecnologia      | Versão      | Status       | Notas               |
+| ----------------- | --------------- | ----------- | ------------ | ------------------- |
+| **Framework**     | Next.js         | 15.4.6      | ✅ Estável   | App Router completo |
+| **UI Library**    | React           | 19.1.1      | ✅ Estável   | Server Components   |
+| **Language**      | TypeScript      | 5.9.2       | ✅ Estável   | Strict mode         |
+| **Database**      | PostgreSQL      | 15+         | ✅ Estável   | JSON, Indexes       |
+| **ORM**           | Prisma          | **Estável** | ✅ Funcional | Versão atual        |
+| **Styling**       | Tailwind CSS    | **3.4.17**  | ⚠️ Travado   | NÃO atualizar       |
+| **UI Components** | Radix UI        | Latest      | ✅ Estável   | Atualizável         |
+| **State**         | Zustand         | 5.0.7       | ✅ Estável   | Global state        |
+| **Forms**         | React Hook Form | 7.62.0      | ✅ Estável   | Performance         |
+| **Validation**    | Zod             | 4.0.17      | ✅ Estável   | Type inference      |
+| **Auth**          | NextAuth.js     | 4.24.11     | ✅ Estável   | JWT + Database      |
+| **Testing**       | Vitest          | 3.2.4       | ✅ Estável   | Fast testing        |
+| **E2E**           | Playwright      | 1.54.2      | ✅ Estável   | Cross-browser       |
 
 ### **⚠️ Incompatibilidades Críticas**
 

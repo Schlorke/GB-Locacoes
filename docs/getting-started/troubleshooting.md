@@ -71,7 +71,7 @@ Please run "prisma generate" and try to import it again.
 ```bash
 # ❌ NÃO ATUALIZAR para 6.14.0
 # ✅ MANTER na versão estável
-pnpm add @prisma/client@6.13.0 prisma@6.13.0
+npm install
 
 # Regenerar cliente
 pnpm db:generate
@@ -88,7 +88,7 @@ pnpm update @prisma/client prisma
 pnpm run build  # <- CRÍTICO: Este passo detecta problemas
 
 # Se build falhar, reverter imediatamente
-pnpm add @prisma/client@6.13.0 prisma@6.13.0
+npm install
 ```
 
 ### **❌ CRÍTICO: Tailwind CSS 4.x Breaking Changes**
@@ -421,7 +421,7 @@ curl https://your-domain.com/api/health
 
 ```bash
 # ✅ Verificação completa do sistema
-pnpm check:compatibility     # Dependências
+pnpm type-check             # Tipos TypeScript
 pnpm check:prisma           # Banco de dados
 pnpm type-check             # TypeScript
 pnpm lint                   # Code quality

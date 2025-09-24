@@ -58,11 +58,11 @@
   - Ignore patterns refinados em `eslint.config.js`
 - **Status**: ✅ Zero ESLint problems - Developer experience perfeita
 
-#### **📦 DEPENDENCY COMPATIBILITY MATRIX**
+#### **📦 DEPENDENCY MANAGEMENT**
 
 - **Decisão**: Manter matrix rigorosa de compatibilidade para stability
 - **Implementação**:
-  - Prisma: MANTER 6.13.0 (6.14.0+ quebra build)
+  - Prisma: Manter versão estável e funcional
   - React 19: Overrides para dependências incompatíveis
   - swagger-ui-react: REMOVIDO, implementação custom criada
   - node-domexception: Override com `npm:@types/node@*`
@@ -109,8 +109,8 @@ pnpm test
 
 ```bash
 # ❌ Prisma 6.14.0+ causa erro de inicialização
-@prisma/client@6.13.0  # MANTER nesta versão
-prisma@6.13.0          # MANTER nesta versão
+@prisma/client@latest  # Manter versão estável
+prisma@latest          # Manter versão estável
 
 # ❌ Tailwind 4.x quebra o design system
 tailwindcss@3.4.17     # MANTER nesta versão

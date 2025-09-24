@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](#licença)
 [![Next.js](https://img.shields.io/badge/Next.js-15.4.6-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue)](https://www.typescriptlang.org/)
-[![Prisma](https://img.shields.io/badge/Prisma-6.13.0-2D3748)](https://www.prisma.io/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748)](https://www.prisma.io/)
 [![Storybook](https://img.shields.io/badge/Storybook-9.1.1-FF4785)](https://storybook.js.org/)
 
 > **Plataforma moderna e completa para locação de equipamentos de construção
@@ -68,7 +68,7 @@ funcionalidades!
 - ✅ **TypeScript**: 42 erros → 0 erros com tipos seguros
 - ✅ **ESLint**: 31,469 problemas → 0 problemas com automação
 - ✅ **Dependencies**: Conflitos React 19 → Overrides e implementações custom
-- ✅ **Prisma compatibility**: Build automation para esquemas gerados
+- ✅ **Prisma ORM**: Mapeamento objeto-relacional robusto
 
 **Métricas**: `Build: 6-8s` | `Tests: 30/30` | `Zero Warnings` | `Type Safe`
 
@@ -260,13 +260,13 @@ pnpm db:studio
 
 ### 🔧 Versões Testadas e Estáveis
 
-| Dependência      | Versão Estável | ⚠️ Problemas Conhecidos                   |
-| ---------------- | -------------- | ----------------------------------------- |
-| **Next.js**      | 15.4.6         | ✅ Funcionando perfeitamente              |
-| **Prisma**       | **6.13.0**     | ❌ **6.14.0** causa erro de inicialização |
-| **React**        | 19.1.1         | ✅ Funcionando perfeitamente              |
-| **TypeScript**   | 5.9.2          | ✅ Funcionando perfeitamente              |
-| **Tailwind CSS** | **3.4.17**     | ❌ **4.x** quebra o projeto               |
+| Dependência      | Versão Estável | ⚠️ Problemas Conhecidos      |
+| ---------------- | -------------- | ---------------------------- |
+| **Next.js**      | 15.4.6         | ✅ Funcionando perfeitamente |
+| **Prisma**       | **Estável**    | ✅ ORM robusto e funcional   |
+| **React**        | 19.1.1         | ✅ Funcionando perfeitamente |
+| **TypeScript**   | 5.9.2          | ✅ Funcionando perfeitamente |
+| **Tailwind CSS** | **3.4.17**     | ❌ **4.x** quebra o projeto  |
 
 ### 🚨 Incompatibilidades Críticas
 
@@ -274,8 +274,8 @@ pnpm db:studio
 
 ```bash
 # ❌ ERRO: "@prisma/client did not initialize yet"
-# ✅ SOLUÇÃO: Manter Prisma em 6.13.0
-pnpm add @prisma/client@6.13.0 prisma@6.13.0
+# ✅ SOLUÇÃO: Usar NPM para melhor compatibilidade
+npm install
 ```
 
 #### **Tailwind CSS 4.x**
@@ -597,7 +597,7 @@ pnpm fix:md                # Formatar markdown
 ### 🔧 Compatibilidade
 
 ```bash
-pnpm check:compatibility   # Verificar compatibilidade
+pnpm type-check          # Verificar tipos TypeScript
 pnpm check:outdated-safe   # Ver atualizações seguras
 pnpm update:safe           # Atualizar dependências seguras
 pnpm verify:after-update   # Verificar após atualizações

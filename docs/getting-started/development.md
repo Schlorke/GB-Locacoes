@@ -525,7 +525,7 @@ pnpm quality:check           # Verificação completa
 pnpm quality:fix             # Correção automática
 
 # Compatibilidade
-pnpm check:compatibility     # Verificar dependências
+pnpm type-check             # Verificar tipos TypeScript
 pnpm update:safe             # Atualizar seguramente
 ```
 

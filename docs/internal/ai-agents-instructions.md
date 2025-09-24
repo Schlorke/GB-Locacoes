@@ -48,7 +48,7 @@
 - **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript 5.9 (strict mode)
 - **UI**: React 19 + Tailwind CSS 3.4.17
-- **Database**: PostgreSQL + Prisma 6.13.0 (DO NOT UPDATE)
+- **Database**: PostgreSQL + Prisma (versão estável)
 - **Animation**: Framer Motion
 - **Forms**: React Hook Form + Zod validation
 - **Package Manager**: npm (NOT pnpm)
@@ -339,7 +339,7 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat("pt-BR").format(date)
 
 ### **Never Modify:**
 
-1. Prisma version (must stay 6.13.0)
+1. Prisma version (keep stable)
 2. Tailwind version (user preference)
 3. `scripts/post-prisma-generate.js` (critical)
 4. Build scripts in `package.json`

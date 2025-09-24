@@ -193,8 +193,8 @@ pnpm db:studio
 Error: @prisma/client did not initialize yet.
 Please run "prisma generate" and try to import it again.
 
-# ✅ SOLUÇÃO: Manter Prisma em 6.13.0
-pnpm add @prisma/client@6.13.0 prisma@6.13.0
+# ✅ SOLUÇÃO: Usar NPM para melhor compatibilidade
+npm install
 ```
 
 #### **❌ Tailwind CSS 4.x + Design System**
@@ -206,13 +206,13 @@ pnpm add @prisma/client@6.13.0 prisma@6.13.0
 
 ### ✅ **Versões Testadas e Estáveis**
 
-| Dependência      | Versão Estável | Status     | Notas                        |
-| ---------------- | -------------- | ---------- | ---------------------------- |
-| **Next.js**      | 15.4.6         | ✅ Estável | App Router funcionando       |
-| **Prisma**       | **6.13.0**     | ✅ Estável | ⚠️ NÃO atualizar para 6.14.0 |
-| **React**        | 19.1.1         | ✅ Estável | Sem problemas conhecidos     |
-| **TypeScript**   | 5.9.2          | ✅ Estável | Strict mode habilitado       |
-| **Tailwind CSS** | **3.4.17**     | ✅ Estável | ⚠️ NÃO atualizar para 4.x    |
+| Dependência      | Versão Estável | Status       | Notas                     |
+| ---------------- | -------------- | ------------ | ------------------------- |
+| **Next.js**      | 15.4.6         | ✅ Estável   | App Router funcionando    |
+| **Prisma**       | **Estável**    | ✅ Funcional | ✅ Versão atual           |
+| **React**        | 19.1.1         | ✅ Estável   | Sem problemas conhecidos  |
+| **TypeScript**   | 5.9.2          | ✅ Estável   | Strict mode habilitado    |
+| **Tailwind CSS** | **3.4.17**     | ✅ Estável   | ⚠️ NÃO atualizar para 4.x |
 
 ### 🔄 **Processo de Atualização Segura**
 
@@ -233,7 +233,7 @@ pnpm run build  # <- Verificar se funciona
 # Ler changelog antes de atualizar Next.js, React, etc.
 
 # 3. ✅ Comandos seguros disponíveis
-pnpm check:compatibility     # Verificar dependências
+pnpm type-check             # Verificar tipos TypeScript
 pnpm check:outdated-safe     # Ver atualizações seguras
 pnpm update:safe             # Atualizar apenas dependências seguras
 pnpm verify:after-update     # Verificar após atualizações
@@ -249,7 +249,7 @@ pnpm verify:after-update     # Verificar após atualizações
 
 ```bash
 # Solução:
-pnpm add @prisma/client@6.13.0 prisma@6.13.0
+npm install
 rm -rf node_modules/.prisma
 pnpm db:generate
 pnpm run build

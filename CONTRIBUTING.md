@@ -28,8 +28,8 @@ fornece diretrizes para contribuições.
 
 ```bash
 # ❌ Prisma 6.14.0+ quebra o build
-@prisma/client@6.13.0  # MANTER
-prisma@6.13.0          # MANTER
+@prisma/client@latest  # Manter versão estável
+prisma@latest          # Manter versão estável
 
 # ❌ Tailwind 4.x quebra design system
 tailwindcss@3.4.17     # MANTER

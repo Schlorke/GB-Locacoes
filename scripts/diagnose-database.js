@@ -193,7 +193,7 @@ console.log('\n🔧 COMANDOS DE RECUPERAÇÃO:')
 console.log('   pnpm db:generate          # Regenerar cliente Prisma')
 console.log('   pnpm build                # Fazer build completo')
 console.log('   pnpm check:prisma         # Verificar Prisma')
-console.log('   pnpm check:compatibility  # Verificar compatibilidade')
+console.log('   pnpm type-check          # Verificar tipos TypeScript')
 
 console.log('\n📊 VERIFICAÇÃO COMPLETA!')
 console.log('='.repeat(60))

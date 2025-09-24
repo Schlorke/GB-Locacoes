@@ -47,7 +47,7 @@ Please run "prisma generate" and try to import it again.
 pnpm update @prisma/client prisma
 
 # ✅ FAZER (manter versão estável)
-pnpm add @prisma/client@6.13.0 prisma@6.13.0
+npm install
 pnpm db:generate
 pnpm run build  # Verificar se funciona
 ```
@@ -90,10 +90,10 @@ pnpm update tailwindcss
 
 ### 🗄️ **Database & ORM**
 
-| Dependência        | Versão Estável | Status     | Notas                        |
-| ------------------ | -------------- | ---------- | ---------------------------- |
-| **@prisma/client** | **6.13.0**     | ✅ Estável | ⚠️ NÃO atualizar para 6.14.0 |
-| **prisma**         | **6.13.0**     | ✅ Estável | ⚠️ NÃO atualizar para 6.14.0 |
+| Dependência        | Versão Estável | Status       | Notas           |
+| ------------------ | -------------- | ------------ | --------------- |
+| **@prisma/client** | **Estável**    | ✅ Funcional | ✅ Versão atual |
+| **prisma**         | **Estável**    | ✅ Funcional | ✅ Versão atual |
 
 ### 🎨 **Styling & UI**
 
@@ -173,8 +173,8 @@ pnpm test
 
 ```bash
 # ❌ Database/ORM - VERSÃO FIXA
-# @prisma/client@6.13.0
-# prisma@6.13.0
+# @prisma/client@latest
+# prisma@latest
 
 # ❌ Styling - VERSÃO FIXA
 # tailwindcss@3.4.17
@@ -215,7 +215,7 @@ git commit -m "fix: lock dependency versions"
 # ✅ Usar versões exatas para dependências críticas
 # package.json:
 {
-  "@prisma/client": "6.13.0",  // Exata, não ^6.13.0
+  "@prisma/client": "latest",  // Versão estável
   "tailwindcss": "3.4.17"     // Exata, não ^3.4.17
 }
 ```
@@ -240,7 +240,7 @@ ignore:
 
 ```bash
 # ✅ Script de verificação de compatibilidade
-pnpm run check:compatibility
+pnpm type-check
 
 # ✅ Alertas automáticos para atualizações críticas
 pnpm outdated | grep -E "(prisma|tailwind|next)"
@@ -257,7 +257,7 @@ pnpm outdated | grep -E "(prisma|tailwind|next)"
 - **Data**: Janeiro 2025
 - **Problema**: Build falha com erro "client did not initialize yet"
 - **Causa**: Mudanças internas no Prisma 6.14.0 incompatíveis com Next.js 15.4.6
-- **Solução**: Reverter para 6.13.0
+- **Solução**: Configurar variáveis de ambiente corretamente
 - **Status**: 🔴 **BLOQUEADO** - Não atualizar Prisma
 
 #### **Tailwind CSS 4.x Breaking Changes**
@@ -285,7 +285,7 @@ pnpm outdated | grep -E "(prisma|tailwind|next)"
 # package.json - Adicionar scripts úteis
 {
   "scripts": {
-    "check:compatibility": "node scripts/check-compatibility.js",
+    "check:types": "pnpm type-check",
     "check:outdated": "pnpm outdated | grep -E '(prisma|tailwind|next)'",
     "safe:update": "pnpm update @radix-ui/* @testing-library/*",
     "verify:build": "pnpm run build && pnpm test"
@@ -296,13 +296,13 @@ pnpm outdated | grep -E "(prisma|tailwind|next)"
 ### 📝 **Script de Verificação**
 
 ```javascript
-// scripts/check-compatibility.js
+// scripts/check-types.js
 const { execSync } = require("child_process")
 const fs = require("fs")
 
 const BLOCKED_UPDATES = {
-  "@prisma/client": "6.13.0",
-  prisma: "6.13.0",
+  "@prisma/client": "latest",
+  prisma: "latest",
   tailwindcss: "3.4.17"
 }
 

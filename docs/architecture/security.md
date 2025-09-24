@@ -170,7 +170,7 @@ diferentes rotas.
 
 ### 🔧 **Manutenção**
 
-1. **Dependências**: Continuar fixando versões críticas (Prisma 6.13.0)
+1. **Dependências**: Manter versões estáveis e atualizar com segurança
 2. **Atualizações**: Testar rate limiting após mudanças de infraestrutura
 3. **Auditoria**: Revisar logs de rate limiting periodicamente
 

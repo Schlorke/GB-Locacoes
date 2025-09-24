@@ -505,7 +505,7 @@ pnpm test                    # Testes passando
 pnpm type-check              # TypeScript OK
 pnpm lint                    # Linting OK
 pnpm build                   # Build sucesso
-pnpm check:compatibility     # Dependências OK
+pnpm type-check             # Tipos TypeScript OK
 
 # ✅ Pós-deploy checklist
 curl https://your-domain.com/api/health  # Health check
