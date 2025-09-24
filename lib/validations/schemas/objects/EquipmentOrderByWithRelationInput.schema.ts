@@ -4,7 +4,8 @@ import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { SortOrderInputObjectSchema } from './SortOrderInput.schema';
 import { CategoryOrderByWithRelationInputObjectSchema } from './CategoryOrderByWithRelationInput.schema';
 import { QuoteItemOrderByRelationAggregateInputObjectSchema } from './QuoteItemOrderByRelationAggregateInput.schema';
-import { rental_itemsOrderByRelationAggregateInputObjectSchema } from './rental_itemsOrderByRelationAggregateInput.schema'
+import { rental_itemsOrderByRelationAggregateInputObjectSchema } from './rental_itemsOrderByRelationAggregateInput.schema';
+import { CartItemOrderByRelationAggregateInputObjectSchema } from './CartItemOrderByRelationAggregateInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
@@ -33,7 +34,8 @@ const makeSchema = () => z.object({
   updatedAt: SortOrderSchema.optional(),
   category: z.lazy(() => CategoryOrderByWithRelationInputObjectSchema).optional(),
   quoteItems: z.lazy(() => QuoteItemOrderByRelationAggregateInputObjectSchema).optional(),
-  rental_items: z.lazy(() => rental_itemsOrderByRelationAggregateInputObjectSchema).optional()
+  rental_items: z.lazy(() => rental_itemsOrderByRelationAggregateInputObjectSchema).optional(),
+  cartItems: z.lazy(() => CartItemOrderByRelationAggregateInputObjectSchema).optional()
 }).strict();
 export const EquipmentOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.EquipmentOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentOrderByWithRelationInput>;
 export const EquipmentOrderByWithRelationInputObjectZodSchema = makeSchema();

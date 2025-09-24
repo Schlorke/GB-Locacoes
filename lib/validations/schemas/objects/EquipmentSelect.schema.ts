@@ -3,6 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { CategoryArgsObjectSchema } from './CategoryArgs.schema';
 import { QuoteItemFindManySchema } from '../findManyQuoteItem.schema';
 import { rental_itemsFindManySchema } from '../findManyrental_items.schema';
+import { CartItemFindManySchema } from '../findManyCartItem.schema';
 import { EquipmentCountOutputTypeArgsObjectSchema } from './EquipmentCountOutputTypeArgs.schema'
 
 const makeSchema = () => z.object({
@@ -33,6 +34,7 @@ const makeSchema = () => z.object({
   category: z.union([z.boolean(), z.lazy(() => CategoryArgsObjectSchema)]).optional(),
   quoteItems: z.union([z.boolean(), z.lazy(() => QuoteItemFindManySchema)]).optional(),
   rental_items: z.union([z.boolean(), z.lazy(() => rental_itemsFindManySchema)]).optional(),
+  cartItems: z.union([z.boolean(), z.lazy(() => CartItemFindManySchema)]).optional(),
   _count: z.union([z.boolean(), z.lazy(() => EquipmentCountOutputTypeArgsObjectSchema)]).optional()
 }).strict();
 export const EquipmentSelectObjectSchema: z.ZodType<Prisma.EquipmentSelect> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentSelect>;

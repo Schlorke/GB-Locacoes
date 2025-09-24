@@ -26,7 +26,8 @@ export const EquipmentAggregateResultSchema = z.object({  _count: z.object({
     updatedAt: z.number(),
     category: z.number(),
     quoteItems: z.number(),
-    rental_items: z.number()
+    rental_items: z.number(),
+    cartItems: z.number()
   }).optional(),
   _sum: z.object({
     pricePerDay: z.number().nullable(),

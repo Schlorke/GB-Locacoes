@@ -13,7 +13,8 @@ import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { CategoryScalarRelationFilterObjectSchema } from './CategoryScalarRelationFilter.schema';
 import { CategoryWhereInputObjectSchema } from './CategoryWhereInput.schema';
 import { QuoteItemListRelationFilterObjectSchema } from './QuoteItemListRelationFilter.schema';
-import { Rental_itemsListRelationFilterObjectSchema } from './Rental_itemsListRelationFilter.schema'
+import { Rental_itemsListRelationFilterObjectSchema } from './Rental_itemsListRelationFilter.schema';
+import { CartItemListRelationFilterObjectSchema } from './CartItemListRelationFilter.schema'
 
 const equipmentwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => EquipmentWhereInputObjectSchema), z.lazy(() => EquipmentWhereInputObjectSchema).array()]).optional(),
@@ -45,7 +46,8 @@ const equipmentwhereinputSchema = z.object({
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   category: z.union([z.lazy(() => CategoryScalarRelationFilterObjectSchema), z.lazy(() => CategoryWhereInputObjectSchema)]).optional(),
   quoteItems: z.lazy(() => QuoteItemListRelationFilterObjectSchema).optional(),
-  rental_items: z.lazy(() => Rental_itemsListRelationFilterObjectSchema).optional()
+  rental_items: z.lazy(() => Rental_itemsListRelationFilterObjectSchema).optional(),
+  cartItems: z.lazy(() => CartItemListRelationFilterObjectSchema).optional()
 }).strict();
 export const EquipmentWhereInputObjectSchema: z.ZodType<Prisma.EquipmentWhereInput> = equipmentwhereinputSchema as unknown as z.ZodType<Prisma.EquipmentWhereInput>;
 export const EquipmentWhereInputObjectZodSchema = equipmentwhereinputSchema;

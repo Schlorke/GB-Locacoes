@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter, Jost } from 'next/font/google'
 import React from 'react'
 import ClientLayout from './ClientLayout'
+import SessionProviderWrapper from '@/components/session-provider-wrapper'
 import './globals.css'
 
 const inter = Inter({
@@ -103,11 +104,13 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${inter.variable} ${jost.variable}`}>
       <body className="min-h-screen bg-background font-sans antialiased">
-        <ClientLayout>
-          {children}
-          <SpeedInsights />
-          <Analytics />
-        </ClientLayout>
+        <SessionProviderWrapper>
+          <ClientLayout>
+            {children}
+            <SpeedInsights />
+            <Analytics />
+          </ClientLayout>
+        </SessionProviderWrapper>
       </body>
     </html>
   )

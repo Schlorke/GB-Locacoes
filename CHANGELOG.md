@@ -6,6 +6,75 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-09-24] - Sistema Completo de Usuários e Carrinho Persistente
+
+### Added ✨
+
+- **Sistema de Usuários Completo**: Implementação completa de autenticação e
+  gerenciamento de usuários
+  - **Cadastro de Usuários**: Página `/cadastro` com campos para nome, email,
+    senha, telefone, CPF/CNPJ
+  - **Autenticação Social**: Login com Google e Facebook via NextAuth.js
+  - **Verificação de Email**: Sistema de verificação por email com tokens
+    seguros
+  - **Recuperação de Senha**: Fluxo completo de reset de senha via email
+  - **Área do Cliente**: Dashboard completo em `/area-cliente` com navegação
+    lateral
+  - **Gerenciamento de Perfil**: Edição de dados pessoais e status da conta
+  - **Gerenciamento de Endereços**: CRUD completo de endereços de entrega
+  - **Histórico de Locações**: Visualização e filtros de solicitações anteriores
+
+- **Carrinho Persistente**: Sistema robusto de carrinho com sincronização entre
+  dispositivos
+  - **Store Zustand**: Substituição do QuoteContext por store persistente com
+    localStorage
+  - **Sincronização Automática**: Merge automático de carrinho local com
+    carrinho do usuário logado
+  - **Persistência Multi-dispositivo**: Carrinho sincronizado entre diferentes
+    dispositivos
+  - **APIs de Carrinho**: Endpoints para merge e sincronização de carrinho
+
+- **Banco de Dados Expandido**: Novos modelos para suporte completo ao sistema
+  de usuários
+  - **Modelo Address**: Endereços de entrega dos usuários
+  - **Modelo Cart**: Carrinho persistente por usuário
+  - **Modelo CartItem**: Itens do carrinho com relacionamentos
+  - **Campos de Usuário**: Adicionados phone, cpf, cnpj ao modelo User
+
+### Changed 🔄
+
+- **Refatoração Completa do Carrinho**: Migração de sistema de item único para
+  multi-itens
+  - **QuoteContext Removido**: Substituído por `useCartStore` com Zustand
+  - **Página de Orçamento**: Atualizada para trabalhar com múltiplos itens
+  - **Componentes de Equipamento**: Integrados com novo sistema de carrinho
+  - **ClientLayout**: Removida dependência do QuoteProvider
+
+- **Sistema de Autenticação**: Expansão significativa das capacidades de auth
+  - **NextAuth.js Configurado**: Providers Google, Facebook e Credentials
+  - **Páginas de Login**: Atualizada para suportar clientes e administradores
+  - **Callbacks de Sessão**: Configurados para sincronização de carrinho
+
+### Fixed 🐛
+
+- **Bug Crítico do Carrinho**: Corrigido problema onde novos itens substituíam
+  existentes
+  - **Causa**: QuoteContext armazenava apenas um item por vez
+  - **Solução**: Store Zustand com array de itens e persistência
+  - **Resultado**: Múltiplos itens podem ser adicionados e mantidos
+
+- **Compatibilidade de Build**: Resolvidos erros de importação e dependências
+  - **QuoteContext**: Removidas todas as referências ao contexto antigo
+  - **Imports**: Corrigidos imports quebrados após refatoração
+  - **TypeScript**: Tipos atualizados para novo sistema de carrinho
+
+### Security 🔐
+
+- **Validação Robusta**: Schemas Zod para todos os formulários de usuário
+- **Hash de Senhas**: Bcrypt para segurança de senhas
+- **Tokens Seguros**: Sistema de tokens para verificação e reset de senha
+- **Sanitização**: Validação e sanitização de todos os inputs
+
 ## [2025-09-24] - Migração de Domínio + Limpeza de Compatibilidade
 
 ### Changed 🔄

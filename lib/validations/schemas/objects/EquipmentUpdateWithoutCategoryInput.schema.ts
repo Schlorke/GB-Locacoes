@@ -10,7 +10,8 @@ import { NullableIntFieldUpdateOperationsInputObjectSchema } from './NullableInt
 import { NullableDecimalFieldUpdateOperationsInputObjectSchema } from './NullableDecimalFieldUpdateOperationsInput.schema';
 import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
 import { QuoteItemUpdateManyWithoutEquipmentNestedInputObjectSchema } from './QuoteItemUpdateManyWithoutEquipmentNestedInput.schema';
-import { rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema } from './rental_itemsUpdateManyWithoutEquipmentsNestedInput.schema'
+import { rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema } from './rental_itemsUpdateManyWithoutEquipmentsNestedInput.schema';
+import { CartItemUpdateManyWithoutEquipmentNestedInputObjectSchema } from './CartItemUpdateManyWithoutEquipmentNestedInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -39,7 +40,8 @@ const makeSchema = () => z.object({
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
   quoteItems: z.lazy(() => QuoteItemUpdateManyWithoutEquipmentNestedInputObjectSchema).optional(),
-  rental_items: z.lazy(() => rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema).optional()
+  rental_items: z.lazy(() => rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema).optional(),
+  cartItems: z.lazy(() => CartItemUpdateManyWithoutEquipmentNestedInputObjectSchema).optional()
 }).strict();
 export const EquipmentUpdateWithoutCategoryInputObjectSchema: z.ZodType<Prisma.EquipmentUpdateWithoutCategoryInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUpdateWithoutCategoryInput>;
 export const EquipmentUpdateWithoutCategoryInputObjectZodSchema = makeSchema();

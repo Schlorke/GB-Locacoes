@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { useQuote } from '@/contexts/quote-context'
+import { useCartStore } from '@/stores/useCartStore'
 import { toast } from '@/hooks/use-toast'
 import { formatCurrency } from '@/lib/utils'
 import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
@@ -79,10 +79,7 @@ interface QuoteFormData {
 
 function QuotePage() {
   const searchParams = useSearchParams()
-  const { selectedEquipmentForQuote, clearSelection } = useQuote()
-  const [selectedEquipments, setSelectedEquipments] = useState<
-    SelectedEquipment[]
-  >([])
+  const { items: selectedEquipments, removeItem, updateItemQuantity, updateItemDays, clearCart } = useCartStore()
   const [formData, setFormData] = useState<QuoteFormData>({
     name: '',
     email: '',
@@ -198,47 +195,7 @@ function QuotePage() {
     window.scrollTo(0, 0)
   }, [])
 
-  // Efeito para processar equipamento do contexto
-  useEffect(() => {
-    if (selectedEquipmentForQuote) {
-      const equipmentToAdd: SelectedEquipment = {
-        id: selectedEquipmentForQuote.equipmentId,
-        name: selectedEquipmentForQuote.equipmentName,
-        description: selectedEquipmentForQuote.description || '',
-        pricePerDay: selectedEquipmentForQuote.pricePerDay,
-        category: selectedEquipmentForQuote.category || { name: '' },
-        isAvailable: true,
-        quantity: selectedEquipmentForQuote.quantity,
-        days: selectedEquipmentForQuote.selectedPeriod.multiplier,
-        selectedPeriod: selectedEquipmentForQuote.selectedPeriod,
-        finalPrice: selectedEquipmentForQuote.finalPrice,
-        maxStock: selectedEquipmentForQuote.maxStock,
-        images: selectedEquipmentForQuote.images,
-        dailyDiscount: selectedEquipmentForQuote.dailyDiscount,
-        weeklyDiscount: selectedEquipmentForQuote.weeklyDiscount,
-        biweeklyDiscount: selectedEquipmentForQuote.biweeklyDiscount,
-        monthlyDiscount: selectedEquipmentForQuote.monthlyDiscount,
-      }
-
-      setSelectedEquipments((prev) => {
-        const exists = prev.find(
-          (eq) => eq.id === selectedEquipmentForQuote.equipmentId
-        )
-        if (exists) {
-          // Atualizar equipamento existente com nova configuração
-          return prev.map((eq) =>
-            eq.id === selectedEquipmentForQuote.equipmentId
-              ? { ...eq, ...equipmentToAdd }
-              : eq
-          )
-        }
-        return [...prev, equipmentToAdd]
-      })
-
-      // Limpar seleção do contexto após processar
-      clearSelection()
-    }
-  }, [selectedEquipmentForQuote, clearSelection])
+  // Removido: lógica de processamento do contexto - agora usamos diretamente o store
 
   const fetchEquipmentAndAdd = useCallback(
     async (equipmentId: string) => {
@@ -251,46 +208,31 @@ function QuotePage() {
         )
 
         if (equipment) {
-          setSelectedEquipments((prev) => {
-            const safePrev = Array.isArray(prev) ? prev : []
-            // Verificar se o equipamento já existe
-            const exists = safePrev.find((eq) => eq.id === equipmentId)
-            if (exists) {
-              return safePrev // Não adicionar duplicados
-            }
-
-            const price = Number(equipment.pricePerDay) || 0
-            const equipmentToAdd = {
-              ...equipment,
-              pricePerDay: price,
-              quantity: 1,
-              days: 1,
-              // Incluir campos de desconto e valor direto
-              dailyDiscount: equipment.dailyDiscount || 0,
-              weeklyDiscount: equipment.weeklyDiscount || 0,
-              biweeklyDiscount: equipment.biweeklyDiscount || 0,
-              monthlyDiscount: equipment.monthlyDiscount || 0,
-              // Incluir campos de valor direto
-              dailyDirectValue: equipment.dailyDirectValue || 0,
-              weeklyDirectValue: equipment.weeklyDirectValue || 0,
-              biweeklyDirectValue: equipment.biweeklyDirectValue || 0,
-              monthlyDirectValue: equipment.monthlyDirectValue || 0,
-              // Incluir campos de controle de método de preço
-              dailyUseDirectValue: equipment.dailyUseDirectValue || false,
-              weeklyUseDirectValue: equipment.weeklyUseDirectValue || false,
-              biweeklyUseDirectValue: equipment.biweeklyUseDirectValue || false,
-              monthlyUseDirectValue: equipment.monthlyUseDirectValue || false,
-              popularPeriod: equipment.popularPeriod || 'weekly',
-              maxStock: equipment.maxStock || 1,
-            }
-            return [...safePrev, equipmentToAdd]
-          })
+          const price = Number(equipment.pricePerDay) || 0
+          const equipmentToAdd = {
+            equipmentId: equipment.id,
+            equipmentName: equipment.name,
+            pricePerDay: price,
+            quantity: 1,
+            days: 1,
+            description: equipment.description,
+            category: equipment.category,
+            images: equipment.images,
+            maxStock: equipment.maxStock || 1,
+            dailyDiscount: equipment.dailyDiscount || 0,
+            weeklyDiscount: equipment.weeklyDiscount || 0,
+            biweeklyDiscount: equipment.biweeklyDiscount || 0,
+            monthlyDiscount: equipment.monthlyDiscount || 0,
+          }
+          
+          // Usar o store para adicionar o item
+          useCartStore.getState().addItem(equipmentToAdd)
         }
       } catch {
         // Error handled silently for user experience
       }
     },
-    [] // Remover selectedEquipments da dependência para evitar loop
+    []
   )
 
   useEffect(() => {
@@ -302,7 +244,7 @@ function QuotePage() {
 
   // Função inteligente para determinar preço baseado nas configurações do admin
   const getIntelligentPricing = (
-    equipment: SelectedEquipment,
+    equipment: CartItem,
     totalDays: number
   ) => {
     // Definir configurações de período em ordem de prioridade (maior para menor)
@@ -354,7 +296,7 @@ function QuotePage() {
 
   // Função inteligente para calcular preço final
   const calculateIntelligentPrice = (
-    equipment: SelectedEquipment,
+    equipment: CartItem,
     totalDays: number
   ) => {
     const pricingConfig = getIntelligentPricing(equipment, totalDays)
@@ -396,7 +338,7 @@ function QuotePage() {
 
   // Função para recalcular preço final usando lógica inteligente
   const recalculateFinalPrice = (
-    equipment: SelectedEquipment,
+    equipment: CartItem,
     newDays: number
   ) => {
     // Usar a nova função inteligente de cálculo
@@ -405,55 +347,24 @@ function QuotePage() {
 
   const updateQuantity = (id: string, quantity: number) => {
     if (quantity < 1) return
-    setSelectedEquipments((prev) => {
-      const safePrev = Array.isArray(prev) ? prev : []
-      return safePrev.map((eq) => {
-        if (eq.id === id) {
-          // Limit quantity to maxStock (default to 999 if not specified)
-          const maxStock = eq.maxStock || 999
-          const limitedQuantity = Math.min(quantity, maxStock)
-
-          // Recalcular finalPrice se necessário
-          const updatedEquipment = { ...eq, quantity: limitedQuantity }
-          if (eq.selectedPeriod) {
-            updatedEquipment.finalPrice = recalculateFinalPrice(eq, eq.days)
-          }
-
-          return updatedEquipment
-        }
-        return eq
-      })
-    })
+    const item = selectedEquipments.find((eq) => eq.equipmentId === id)
+    if (item) {
+      const maxStock = item.maxStock || 999
+      const limitedQuantity = Math.min(quantity, maxStock)
+      updateItemQuantity(id, limitedQuantity)
+    }
   }
 
   const updateDays = (id: string, days: number) => {
     if (days < 1) return
-    setSelectedEquipments((prev) => {
-      const safePrev = Array.isArray(prev) ? prev : []
-      return safePrev.map((eq) => {
-        if (eq.id === id) {
-          const updatedEquipment = { ...eq, days }
-
-          // Recalcular finalPrice com os novos dias
-          if (eq.selectedPeriod) {
-            updatedEquipment.finalPrice = recalculateFinalPrice(eq, days)
-          }
-
-          return updatedEquipment
-        }
-        return eq
-      })
-    })
+    updateItemDays(id, days)
   }
 
   const removeEquipment = (id: string) => {
-    setSelectedEquipments((prev) => {
-      const safePrev = Array.isArray(prev) ? prev : []
-      return safePrev.filter((eq) => eq.id !== id)
-    })
+    removeItem(id)
   }
 
-  const calculateSubtotal = (equipment: SelectedEquipment) => {
+  const calculateSubtotal = (equipment: CartItem) => {
     const quantity = Number(equipment.quantity) || 1
     const days = Number(equipment.days) || 1
 
@@ -486,16 +397,13 @@ function QuotePage() {
     // início envio (estado visual não utilizado)
 
     try {
-      const safeSelectedEquipments = Array.isArray(selectedEquipments)
-        ? selectedEquipments
-        : []
       const response = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          equipments: safeSelectedEquipments.map((eq) => ({
-            equipmentId: eq.id,
+          equipments: selectedEquipments.map((eq) => ({
+            equipmentId: eq.equipmentId,
             quantity: eq.quantity,
             days: eq.days,
           })),
@@ -509,7 +417,7 @@ function QuotePage() {
           description:
             'Orçamento enviado com sucesso. Entraremos em contato em breve.',
         })
-        setSelectedEquipments([])
+        clearCart()
         setFormData({
           name: '',
           email: '',
@@ -559,20 +467,16 @@ function QuotePage() {
     }
 
     try {
-      const safeSelectedEquipments = Array.isArray(selectedEquipments)
-        ? selectedEquipments
-        : []
-
       // Converter dados para formato WhatsApp
       const whatsappData = convertFormDataToWhatsApp(
         formData,
-        safeSelectedEquipments.map((eq) => ({
-          name: eq.name,
+        selectedEquipments.map((eq) => ({
+          name: eq.equipmentName,
           quantity: eq.quantity,
           days: eq.days,
           pricePerDay: Number(eq.pricePerDay),
           finalPrice: calculateSubtotal(eq),
-          id: eq.id,
+          id: eq.equipmentId,
           discount: (() => {
             const pricingConfig = getIntelligentPricing(eq, eq.days)
             if (pricingConfig.discount && pricingConfig.discount > 0) {
@@ -613,7 +517,7 @@ function QuotePage() {
     }
   }
 
-  const getEquipmentImage = (equipment: Equipment) => {
+  const getEquipmentImage = (equipment: CartItem) => {
     if (
       equipment.images &&
       equipment.images.length > 0 &&
@@ -622,7 +526,7 @@ function QuotePage() {
     ) {
       return equipment.images[0]
     }
-    return `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.name)}`
+    return `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.equipmentName)}`
   }
 
   return (
@@ -697,12 +601,11 @@ function QuotePage() {
                 ) : (
                   <div className="space-y-4">
                     <AnimatePresence>
-                      {Array.isArray(selectedEquipments) &&
-                        selectedEquipments.map((equipment, index) => {
+                      {selectedEquipments.map((equipment, index) => {
                           const imageUrl = getEquipmentImage(equipment)
                           return (
                             <motion.div
-                              key={`equipment-${equipment.id}-${index}`}
+                              key={`equipment-${equipment.equipmentId}-${index}`}
                               initial={{ opacity: 0, y: 20 }}
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -20 }}
@@ -717,7 +620,7 @@ function QuotePage() {
                                 <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden mx-auto sm:mx-0 shadow-sm flex items-center justify-center">
                                   <Image
                                     src={imageUrl || '/placeholder.svg'}
-                                    alt={equipment.name}
+                                    alt={equipment.equipmentName}
                                     width={80}
                                     height={80}
                                     priority
@@ -725,7 +628,7 @@ function QuotePage() {
                                     onError={(e) => {
                                       const target =
                                         e.target as HTMLImageElement
-                                      target.src = `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.name)}`
+                                      target.src = `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.equipmentName)}`
                                     }}
                                   />
                                 </div>
@@ -734,7 +637,7 @@ function QuotePage() {
                                 <div className="flex-1 min-w-0">
                                   <div className="text-center sm:text-left">
                                     <h3 className="font-semibold text-lg truncate">
-                                      {equipment.name}
+                                      {equipment.equipmentName}
                                     </h3>
                                     <div className="flex flex-wrap gap-1 justify-center sm:justify-start mb-2">
                                       <Badge
@@ -863,7 +766,7 @@ function QuotePage() {
                                             size="sm"
                                             onClick={() =>
                                               updateQuantity(
-                                                equipment.id,
+                                                equipment.equipmentId,
                                                 equipment.quantity - 1
                                               )
                                             }
@@ -877,7 +780,7 @@ function QuotePage() {
                                             value={equipment.quantity}
                                             onChange={(e) =>
                                               updateQuantity(
-                                                equipment.id,
+                                                equipment.equipmentId,
                                                 Number.parseInt(
                                                   e.target.value
                                                 ) || 1
@@ -892,7 +795,7 @@ function QuotePage() {
                                             size="sm"
                                             onClick={() =>
                                               updateQuantity(
-                                                equipment.id,
+                                                equipment.equipmentId,
                                                 equipment.quantity + 1
                                               )
                                             }
@@ -946,7 +849,7 @@ function QuotePage() {
                                                     equipment.selectedPeriod
                                                       .multiplier
                                                   : newValue
-                                              updateDays(equipment.id, days)
+                                              updateDays(equipment.equipmentId, days)
                                             }}
                                             className="h-8 w-8 p-0 flex-shrink-0"
                                           >
@@ -974,7 +877,7 @@ function QuotePage() {
                                                     equipment.selectedPeriod
                                                       .multiplier
                                                   : periods
-                                              updateDays(equipment.id, days)
+                                              updateDays(equipment.equipmentId, days)
                                             }}
                                             className="w-12 h-8 text-center font-medium [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                                             min="1"
@@ -998,7 +901,7 @@ function QuotePage() {
                                                     equipment.selectedPeriod
                                                       .multiplier
                                                   : newValue
-                                              updateDays(equipment.id, days)
+                                              updateDays(equipment.equipmentId, days)
                                             }}
                                             className="h-8 w-8 p-0 flex-shrink-0"
                                           >
@@ -1026,7 +929,7 @@ function QuotePage() {
                                     variant="ghost"
                                     size="sm"
                                     onClick={() =>
-                                      removeEquipment(equipment.id)
+                                      removeEquipment(equipment.equipmentId)
                                     }
                                     className="text-red-600 hover:text-red-700 hover:bg-red-50"
                                   >
@@ -1190,18 +1093,17 @@ function QuotePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="relative z-10 space-y-4 p-4 sm:p-6 lg:p-6 pt-0">
-                {Array.isArray(selectedEquipments) &&
-                selectedEquipments.length > 0 ? (
+                {selectedEquipments.length > 0 ? (
                   <>
                     {selectedEquipments.map((equipment, index) => (
                       <div
-                        key={`summary-${equipment.id}-${index}`}
+                        key={`summary-${equipment.equipmentId}-${index}`}
                         className="space-y-1 pb-3 border-b border-gray-100 last:border-b-0"
                       >
                         <div className="flex justify-between items-start">
                           <div className="flex-1 pr-2">
                             <p className="font-medium text-gray-900 text-sm leading-tight">
-                              {equipment.name}
+                              {equipment.equipmentName}
                             </p>
                             <div className="flex flex-wrap gap-1 mt-1">
                               <span className="text-sm text-gray-600 font-medium">

@@ -27,7 +27,8 @@ export const EquipmentFindManyResultSchema = z.object({
   updatedAt: z.date(),
   category: z.unknown(),
   quoteItems: z.array(z.unknown()),
-  rental_items: z.array(z.unknown())
+  rental_items: z.array(z.unknown()),
+  cartItems: z.array(z.unknown())
 })),
   pagination: z.object({
   page: z.number().int().min(1),

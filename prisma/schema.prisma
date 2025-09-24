@@ -30,6 +30,9 @@ model User {
   name          String?
   email         String    @unique
   password      String?
+  phone         String?   // NOVO
+  cpf           String?   @unique // NOVO
+  cnpj          String?   @unique // NOVO
   role          Role      @default(CLIENT)
   emailVerified DateTime?
   image         String?
@@ -39,6 +42,8 @@ model User {
   quotes        Quote[]
   rentals       rentals[]
   sessions      Session[]
+  addresses     Address[] // NOVO
+  cart          Cart?     // NOVO
 
   @@map("users")
 }
@@ -79,6 +84,54 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+// NOVO MODELO
+model Address {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  street       String
+  number       String
+  complement   String?
+  neighborhood String
+  city         String
+  state        String
+  zipCode      String
+  isPrimary    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("addresses")
+}
+
+// NOVO MODELO
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("carts")
+}
+
+// NOVO MODELO
+model CartItem {
+  id          String    @id @default(cuid())
+  cartId      String
+  cart        Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  quantity    Int
+  days        Int
+  pricePerDay Decimal
+  finalPrice  Decimal?
+  createdAt   DateTime  @default(now())
+
+  @@unique([cartId, equipmentId])
+  @@map("cart_items")
 }
 
 model Category {
@@ -131,6 +184,7 @@ model Equipment {
   category          Category       @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_category")
   quoteItems        QuoteItem[]
   rental_items      rental_items[]
+  cartItems         CartItem[] // NOVO
 
   @@map("equipments")
 }

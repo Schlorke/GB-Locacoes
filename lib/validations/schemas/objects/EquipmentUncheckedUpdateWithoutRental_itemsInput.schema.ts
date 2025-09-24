@@ -9,7 +9,8 @@ import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValue
 import { NullableIntFieldUpdateOperationsInputObjectSchema } from './NullableIntFieldUpdateOperationsInput.schema';
 import { NullableDecimalFieldUpdateOperationsInputObjectSchema } from './NullableDecimalFieldUpdateOperationsInput.schema';
 import { DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
-import { QuoteItemUncheckedUpdateManyWithoutEquipmentNestedInputObjectSchema } from './QuoteItemUncheckedUpdateManyWithoutEquipmentNestedInput.schema'
+import { QuoteItemUncheckedUpdateManyWithoutEquipmentNestedInputObjectSchema } from './QuoteItemUncheckedUpdateManyWithoutEquipmentNestedInput.schema';
+import { CartItemUncheckedUpdateManyWithoutEquipmentNestedInputObjectSchema } from './CartItemUncheckedUpdateManyWithoutEquipmentNestedInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -38,7 +39,8 @@ const makeSchema = () => z.object({
   monthlyUseDirectValue: z.union([z.boolean(), z.lazy(() => BoolFieldUpdateOperationsInputObjectSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
-  quoteItems: z.lazy(() => QuoteItemUncheckedUpdateManyWithoutEquipmentNestedInputObjectSchema).optional()
+  quoteItems: z.lazy(() => QuoteItemUncheckedUpdateManyWithoutEquipmentNestedInputObjectSchema).optional(),
+  cartItems: z.lazy(() => CartItemUncheckedUpdateManyWithoutEquipmentNestedInputObjectSchema).optional()
 }).strict();
 export const EquipmentUncheckedUpdateWithoutRental_itemsInputObjectSchema: z.ZodType<Prisma.EquipmentUncheckedUpdateWithoutRental_itemsInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUncheckedUpdateWithoutRental_itemsInput>;
 export const EquipmentUncheckedUpdateWithoutRental_itemsInputObjectZodSchema = makeSchema();

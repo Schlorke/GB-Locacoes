@@ -1,14 +1,18 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import {
-  useQuote,
-  type PricingOption,
-  type SelectedEquipmentForQuote,
-} from '@/contexts/quote-context'
-
+import { useCartStore, type CartItem } from '@/stores/useCartStore'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
+
+export interface PricingOption {
+  id: string
+  label: string
+  period: string
+  multiplier: number
+  discount: number
+  popular?: boolean
+}
 
 interface SmartQuoteButtonProps {
   equipmentId: string
@@ -51,20 +55,21 @@ export function SmartQuoteButton({
   size = 'lg',
   children = 'Solicitar Orçamento Grátis',
 }: SmartQuoteButtonProps) {
-  const { setSelectedEquipmentForQuote } = useQuote()
+  const { addItem } = useCartStore()
   const router = useRouter()
 
   const handleQuoteRequest = useCallback(() => {
     if (!isAvailable) return
 
     // Preparar dados do equipamento selecionado
-    const equipmentForQuote: SelectedEquipmentForQuote = {
+    const equipmentForQuote: CartItem = {
       equipmentId,
       equipmentName,
       pricePerDay,
+      quantity: 1,
+      days: selectedPeriod.multiplier,
       selectedPeriod,
       finalPrice,
-      quantity: 1,
       maxStock,
       description,
       category,
@@ -75,8 +80,8 @@ export function SmartQuoteButton({
       monthlyDiscount,
     }
 
-    // Salvar no contexto global
-    setSelectedEquipmentForQuote(equipmentForQuote)
+    // Adicionar ao carrinho
+    addItem(equipmentForQuote)
 
     // Navegar para página de orçamento
     router.push('/orcamento')
@@ -95,7 +100,7 @@ export function SmartQuoteButton({
     weeklyDiscount,
     biweeklyDiscount,
     monthlyDiscount,
-    setSelectedEquipmentForQuote,
+    addItem,
     router,
   ])
 

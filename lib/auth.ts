@@ -1,6 +1,8 @@
 import bcrypt from 'bcryptjs'
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import GoogleProvider from 'next-auth/providers/google'
+import FacebookProvider from 'next-auth/providers/facebook'
 
 // Runtime-only Prisma import to prevent build-time initialization
 async function getPrisma() {
@@ -19,14 +21,17 @@ const debugLog = (message: string, data?: unknown) => {
   }
 }
 
-// Use the Role enum from Prisma instead of defining our own
-const Role = {
-  ADMIN: 'ADMIN' as const,
-  CLIENT: 'CLIENT' as const,
-}
-
 export const authOptions: NextAuthOptions = {
+  // adapter: PrismaAdapter(await getPrisma()), // Temporariamente desabilitado devido a incompatibilidade de versões
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID!,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       name: 'credentials',
       credentials: {
@@ -69,11 +74,6 @@ export const authOptions: NextAuthOptions = {
             return null
           }
 
-          if (user.role === Role.CLIENT) {
-            debugLog('Role não autorizada', { role: user.role })
-            return null
-          }
-
           debugLog('Autenticação bem-sucedida', {
             id: user.id,
             email: user.email,
@@ -112,9 +112,14 @@ export const authOptions: NextAuthOptions = {
       }
       return session
     },
+    async signIn({ user, account, profile }) {
+      // Sincronização do carrinho será feita no cliente após o login
+      // O cliente fará uma chamada para /api/cart/merge com os itens do localStorage
+      return true
+    },
   },
   pages: {
-    signIn: '/admin/login',
+    signIn: '/login',
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: false, // Disabled to prevent warnings

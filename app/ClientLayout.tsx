@@ -4,7 +4,6 @@ import Footer from '@/components/footer'
 import Header from '@/components/header'
 import ScrollRevealInit from '@/components/scroll-reveal-init'
 import WhatsAppFAB from '@/components/whatsapp-fab'
-import { QuoteProvider } from '@/contexts/quote-context'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 
@@ -18,17 +17,15 @@ export default function ClientLayout({
 
   return (
     <div data-scroll-behavior="smooth">
-      <QuoteProvider>
-        {!isAdminRoute && <Header />}
-        <div
-          className={`overflow-x-hidden min-h-screen ${!isAdminRoute ? 'pt-[100px] md:pt-[96px]' : ''}`}
-        >
-          {children}
-        </div>
-        {!isAdminRoute && <Footer />}
-        {!isAdminRoute && <WhatsAppFAB />}
-        <ScrollRevealInit />
-      </QuoteProvider>
+      {!isAdminRoute && <Header />}
+      <div
+        className={`overflow-x-hidden min-h-screen ${!isAdminRoute ? 'pt-[100px] md:pt-[96px]' : ''}`}
+      >
+        {children}
+      </div>
+      {!isAdminRoute && <Footer />}
+      {!isAdminRoute && <WhatsAppFAB />}
+      <ScrollRevealInit />
     </div>
   )
 }

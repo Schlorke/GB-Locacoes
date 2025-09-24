@@ -2,7 +2,8 @@ import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { EquipmentCreateimagesInputObjectSchema } from './EquipmentCreateimagesInput.schema';
 import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
-import { rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema } from './rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInput.schema'
+import { rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema } from './rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInput.schema';
+import { CartItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema } from './CartItemUncheckedCreateNestedManyWithoutEquipmentInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -31,7 +32,8 @@ const makeSchema = () => z.object({
   monthlyUseDirectValue: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  rental_items: z.lazy(() => rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema).optional()
+  rental_items: z.lazy(() => rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema).optional(),
+  cartItems: z.lazy(() => CartItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional()
 }).strict();
 export const EquipmentUncheckedCreateWithoutQuoteItemsInputObjectSchema: z.ZodType<Prisma.EquipmentUncheckedCreateWithoutQuoteItemsInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUncheckedCreateWithoutQuoteItemsInput>;
 export const EquipmentUncheckedCreateWithoutQuoteItemsInputObjectZodSchema = makeSchema();

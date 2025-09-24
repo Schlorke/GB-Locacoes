@@ -14,6 +14,9 @@ export const UserFindFirstOrThrowSelectSchema: z.ZodType<Prisma.UserSelect> = z.
     name: z.boolean().optional(),
     email: z.boolean().optional(),
     password: z.boolean().optional(),
+    phone: z.boolean().optional(),
+    cpf: z.boolean().optional(),
+    cnpj: z.boolean().optional(),
     role: z.boolean().optional(),
     emailVerified: z.boolean().optional(),
     image: z.boolean().optional(),
@@ -23,6 +26,8 @@ export const UserFindFirstOrThrowSelectSchema: z.ZodType<Prisma.UserSelect> = z.
     quotes: z.boolean().optional(),
     rentals: z.boolean().optional(),
     sessions: z.boolean().optional(),
+    addresses: z.boolean().optional(),
+    cart: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.UserSelect>;
 
@@ -31,6 +36,9 @@ export const UserFindFirstOrThrowSelectZodSchema = z.object({
     name: z.boolean().optional(),
     email: z.boolean().optional(),
     password: z.boolean().optional(),
+    phone: z.boolean().optional(),
+    cpf: z.boolean().optional(),
+    cnpj: z.boolean().optional(),
     role: z.boolean().optional(),
     emailVerified: z.boolean().optional(),
     image: z.boolean().optional(),
@@ -40,6 +48,8 @@ export const UserFindFirstOrThrowSelectZodSchema = z.object({
     quotes: z.boolean().optional(),
     rentals: z.boolean().optional(),
     sessions: z.boolean().optional(),
+    addresses: z.boolean().optional(),
+    cart: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict();
 

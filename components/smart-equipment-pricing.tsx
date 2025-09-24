@@ -2,8 +2,16 @@
 
 import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
 import { SmartQuoteButton } from '@/components/smart-quote-button'
-import { type PricingOption } from '@/contexts/quote-context'
 import { useState, useCallback } from 'react'
+
+export interface PricingOption {
+  id: string
+  label: string
+  period: string
+  multiplier: number
+  discount: number
+  popular?: boolean
+}
 
 interface SmartEquipmentPricingProps {
   equipmentId: string

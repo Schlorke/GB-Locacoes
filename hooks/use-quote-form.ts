@@ -1,7 +1,7 @@
 'use client'
 
 import type React from 'react'
-
+import { useCartStore, type CartItem } from '@/stores/useCartStore'
 import { useCallback, useState } from 'react'
 
 // Supondo que 'materials' venha de props ou context, ou seja buscado aqui
@@ -35,9 +35,7 @@ export interface FormData {
 }
 
 export function useQuoteForm(materialsData = initialMaterials) {
-  const [selectedMaterials, setSelectedMaterials] = useState<
-    SelectedMaterial[]
-  >([])
+  const { items: selectedEquipments, addItem, removeItem, clearCart } = useCartStore()
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -53,40 +51,42 @@ export function useQuoteForm(materialsData = initialMaterials) {
 
   const addMaterial = useCallback(
     (materialId: number) => {
-      if (!selectedMaterials.find((m) => m.id === materialId)) {
-        setSelectedMaterials((prev) => [
-          ...prev,
-          { id: materialId, quantity: 1, days: 1 },
-        ])
+      const material = materialsData.find((m) => m.id === materialId)
+      if (material && !selectedEquipments.find((eq) => eq.equipmentId === materialId.toString())) {
+        const cartItem: CartItem = {
+          equipmentId: materialId.toString(),
+          equipmentName: material.name,
+          pricePerDay: material.price,
+          quantity: 1,
+          days: 1,
+        }
+        addItem(cartItem)
       }
     },
-    [selectedMaterials]
+    [selectedEquipments, materialsData, addItem]
   )
 
   const updateMaterial = useCallback(
     (materialId: number, field: 'quantity' | 'days', value: number) => {
-      setSelectedMaterials((prev) =>
-        prev.map((m) =>
-          m.id === materialId ? { ...m, [field]: Math.max(1, value) } : m
-        )
-      )
+      const equipmentId = materialId.toString()
+      if (field === 'quantity') {
+        useCartStore.getState().updateItemQuantity(equipmentId, Math.max(1, value))
+      } else if (field === 'days') {
+        useCartStore.getState().updateItemDays(equipmentId, Math.max(1, value))
+      }
     },
     []
   )
 
   const removeMaterial = useCallback((materialId: number) => {
-    setSelectedMaterials((prev) => prev.filter((m) => m.id !== materialId))
-  }, [])
+    removeItem(materialId.toString())
+  }, [removeItem])
 
   const calculateTotal = useCallback(() => {
-    return selectedMaterials.reduce((total, selected) => {
-      const material = materialsData.find((m) => m.id === selected.id)
-      return (
-        total +
-        (material ? material.price * selected.quantity * selected.days : 0)
-      )
+    return selectedEquipments.reduce((total, equipment) => {
+      return total + (equipment.pricePerDay * equipment.quantity * equipment.days)
     }, 0)
-  }, [selectedMaterials, materialsData])
+  }, [selectedEquipments])
 
   const handleFormInputChange = useCallback(
     (
@@ -110,7 +110,7 @@ export function useQuoteForm(materialsData = initialMaterials) {
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault()
-      if (selectedMaterials.length === 0) {
+      if (selectedEquipments.length === 0) {
         // Idealmente, usar toast aqui
         alert('Selecione ao menos um material.')
         return
@@ -118,17 +118,17 @@ export function useQuoteForm(materialsData = initialMaterials) {
       setIsSubmitting(true)
       try {
         // Aqui você faria a chamada para sua API de criação de orçamento
-        // Ex: await fetch('/api/quotes', { method: 'POST', body: JSON.stringify({ formData, selectedMaterials }) });
+        // Ex: await fetch('/api/quotes', { method: 'POST', body: JSON.stringify({ formData, selectedEquipments }) });
         await new Promise((resolve) => setTimeout(resolve, 2000)) // Simulação
         console.warn('Form submitted:', {
           formData,
-          selectedMaterials,
+          selectedEquipments,
           total: calculateTotal(),
         })
         // Idealmente, usar toast aqui
         alert('Orçamento enviado com sucesso! Entraremos em contato em breve.')
         // Limpar formulário ou redirecionar
-        setSelectedMaterials([])
+        clearCart()
         // setFormData(initialFormDataState); // Resetar se necessário
       } catch (error) {
         console.error('Error submitting form:', error)
@@ -138,11 +138,11 @@ export function useQuoteForm(materialsData = initialMaterials) {
         setIsSubmitting(false)
       }
     },
-    [formData, selectedMaterials, calculateTotal]
+    [formData, selectedEquipments, calculateTotal, clearCart]
   )
 
   return {
-    selectedMaterials,
+    selectedMaterials: selectedEquipments,
     formData,
     isSubmitting,
     addMaterial,

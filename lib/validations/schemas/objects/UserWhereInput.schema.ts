@@ -9,7 +9,10 @@ import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { AccountListRelationFilterObjectSchema } from './AccountListRelationFilter.schema';
 import { QuoteListRelationFilterObjectSchema } from './QuoteListRelationFilter.schema';
 import { RentalsListRelationFilterObjectSchema } from './RentalsListRelationFilter.schema';
-import { SessionListRelationFilterObjectSchema } from './SessionListRelationFilter.schema'
+import { SessionListRelationFilterObjectSchema } from './SessionListRelationFilter.schema';
+import { AddressListRelationFilterObjectSchema } from './AddressListRelationFilter.schema';
+import { CartNullableScalarRelationFilterObjectSchema } from './CartNullableScalarRelationFilter.schema';
+import { CartWhereInputObjectSchema } from './CartWhereInput.schema'
 
 const userwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => UserWhereInputObjectSchema), z.lazy(() => UserWhereInputObjectSchema).array()]).optional(),
@@ -19,6 +22,9 @@ const userwhereinputSchema = z.object({
   name: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
   email: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   password: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  phone: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  cpf: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  cnpj: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
   role: z.union([z.lazy(() => EnumRoleFilterObjectSchema), RoleSchema]).optional(),
   emailVerified: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
   image: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
@@ -27,7 +33,9 @@ const userwhereinputSchema = z.object({
   accounts: z.lazy(() => AccountListRelationFilterObjectSchema).optional(),
   quotes: z.lazy(() => QuoteListRelationFilterObjectSchema).optional(),
   rentals: z.lazy(() => RentalsListRelationFilterObjectSchema).optional(),
-  sessions: z.lazy(() => SessionListRelationFilterObjectSchema).optional()
+  sessions: z.lazy(() => SessionListRelationFilterObjectSchema).optional(),
+  addresses: z.lazy(() => AddressListRelationFilterObjectSchema).optional(),
+  cart: z.union([z.lazy(() => CartNullableScalarRelationFilterObjectSchema), z.lazy(() => CartWhereInputObjectSchema)]).optional()
 }).strict();
 export const UserWhereInputObjectSchema: z.ZodType<Prisma.UserWhereInput> = userwhereinputSchema as unknown as z.ZodType<Prisma.UserWhereInput>;
 export const UserWhereInputObjectZodSchema = userwhereinputSchema;

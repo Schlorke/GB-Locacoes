@@ -28,7 +28,8 @@ export const EquipmentModelSchema = z.object({
     updatedAt: z.date(),
     category: z.unknown(),
     quoteItems: z.array(z.unknown()).array(),
-    rental_items: z.array(z.unknown()).array()
+    rental_items: z.array(z.unknown()).array(),
+    cartItems: z.array(z.unknown()).array()
 }).strict();
 
 export type EquipmentModelType = z.infer<typeof EquipmentModelSchema>;
