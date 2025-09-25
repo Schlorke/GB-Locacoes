@@ -47,11 +47,12 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          debugLog('Buscando usuário', { email: credentials.email })
+          const normalizedEmail = credentials.email.trim().toLowerCase()
+          debugLog('Buscando usuário', { email: normalizedEmail })
 
           const prisma = await getPrisma()
           const user = await prisma.user.findUnique({
-            where: { email: credentials.email },
+            where: { email: normalizedEmail },
           })
 
           if (!user) {
@@ -70,8 +71,23 @@ export const authOptions: NextAuthOptions = {
           )
 
           if (!isValidPassword) {
-            debugLog('Senha inválida')
-            return null
+            // Fallback: se a senha no banco estiver em texto puro de versões antigas,
+            // aceita uma única vez e re-hash automaticamente para bcrypt.
+            if (credentials.password === user.password) {
+              debugLog('Senha em texto puro detectada. Realizando re-hash automático.')
+              try {
+                const hashed = bcrypt.hashSync(credentials.password, 12)
+                await prisma.user.update({
+                  where: { id: user.id },
+                  data: { password: hashed },
+                })
+              } catch (rehashErr) {
+                console.error('[AUTH] Falha ao re-hash da senha antiga:', rehashErr)
+              }
+            } else {
+              debugLog('Senha inválida')
+              return null
+            }
           }
 
           debugLog('Autenticação bem-sucedida', {
