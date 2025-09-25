@@ -78,16 +78,16 @@ export default function AreaClientePage() {
       <section className="py-8 relative">
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           
-          {/* Stats Grid - 2x2 em mobile, 4x1 em desktop */}
+          {/* Stats Grid - 1 coluna em mobile, 4 colunas em desktop */}
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-8"
+            className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-6 mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             
             {/* Card Carrinho - Otimizado */}
-            <div className="col-span-1 relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
               <div className="relative z-10 p-4">
                 <div className="flex items-center justify-between mb-2">
@@ -104,7 +104,7 @@ export default function AreaClientePage() {
             </div>
 
             {/* Card Orçamentos - Otimizado */}
-            <div className="col-span-1 relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <div className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
               <div className="relative z-10 p-4">
                 <div className="flex items-center justify-between mb-2">
@@ -120,8 +120,8 @@ export default function AreaClientePage() {
               </div>
             </div>
 
-            {/* Card Total - Span 2 colunas em mobile */}
-            <div className="col-span-2 md:col-span-2 relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+            {/* Card Total - Otimizado */}
+            <div className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-50"></div>
               <div className="relative z-10 p-4">
                 <div className="flex items-center justify-between">
