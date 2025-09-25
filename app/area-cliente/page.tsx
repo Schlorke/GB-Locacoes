@@ -36,7 +36,7 @@ export default function AreaClientePage() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-300/5 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 relative z-10">
           <motion.div
             className="text-center space-y-3"
             initial={{ opacity: 0, y: 20 }}
@@ -75,12 +75,12 @@ export default function AreaClientePage() {
       </section>
 
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
-      <section className="py-8 relative">
-        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-12 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Stats Grid - 1 coluna em mobile, 4 colunas em desktop */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-4 gap-3 md:gap-6 mb-8"
+            className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -140,7 +140,7 @@ export default function AreaClientePage() {
 
           {/* Seções Principais - Layout Otimizado */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 gap-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -228,7 +228,7 @@ export default function AreaClientePage() {
 
           {/* Atividade Recente - Seção Compacta */}
           <motion.div
-            className="mt-8"
+            className="mt-12"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
