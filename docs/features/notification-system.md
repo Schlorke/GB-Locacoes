@@ -20,10 +20,8 @@ compras.
 
 ### 2. **Notificações do Carrinho**
 
-- Contador de itens no carrinho
-- Notificações de adição/remoção de itens
-- Alertas de carrinho abandonado
-- Atualizações de preço
+- Contador de itens no carrinho (badge visual)
+- Alertas de carrinho abandonado (após 5 minutos de inatividade)
 
 ### 3. **Interface Visual**
 
@@ -188,6 +186,15 @@ helpers.promotion(
 )
 ```
 
+### Carrinho
+
+```typescript
+import { cartNotificationHelpers } from "@/hooks/use-cart-notifications"
+
+// Carrinho abandonado
+cartNotificationHelpers.cartAbandoned(3)
+```
+
 ## 📄 Página de Notificações
 
 ### Localização
@@ -248,21 +255,23 @@ helpers.promotion(
 
 ## 🧪 Testes
 
-### Componente de Demo
+### Teste de Notificações
+
+Para testar notificações, use diretamente o hook `useNotifications`:
 
 ```tsx
-import { NotificationDemo } from "@/components/notification-demo"
+import { useNotifications } from "@/hooks/use-notifications"
 
-// Renderiza botões para testar cada tipo de notificação
-;<NotificationDemo />
-```
+const { addNotification } = useNotifications()
 
-### Hook de Demo
-
-```tsx
-import { useNotificationDemo } from "@/hooks/use-notification-demo"
-
-const { testQuoteNotification } = useNotificationDemo()
+// Adicionar notificação de teste
+addNotification({
+  type: "quote",
+  title: "Teste de Notificação",
+  message: "Esta é uma notificação de teste",
+  priority: "medium",
+  actionUrl: "/orcamento"
+})
 ```
 
 ## 🚀 Uso Prático

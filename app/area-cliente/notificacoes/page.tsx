@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge'
 // Tabs removidos (não utilizados)
 import { Bell, Check, X, Trash2, ExternalLink, Search } from 'lucide-react'
 import { useNotifications, Notification } from '@/hooks/use-notifications'
-import { NotificationDemo } from '@/components/notification-demo'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
@@ -191,8 +190,6 @@ export default function NotificacoesPage() {
         </div>
       </div>
 
-      {/* Demo de Notificações */}
-      <NotificationDemo />
 
       {/* Filtros e Busca */}
       <Card>
