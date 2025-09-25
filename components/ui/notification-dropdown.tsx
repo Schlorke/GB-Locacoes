@@ -18,21 +18,23 @@ interface NotificationDropdownProps {
 export function NotificationDropdown({ className }: NotificationDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  
+
   const {
     notifications,
-    unreadNotifications,
     stats,
     markAsRead,
     markAllAsRead,
     removeNotification,
-    clearAll
+    clearAll,
   } = useNotifications()
 
   // Fechar dropdown ao clicar fora
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false)
       }
     }
@@ -43,17 +45,19 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date()
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
-    
+    const diffInMinutes = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60)
+    )
+
     if (diffInMinutes < 1) return 'Agora mesmo'
     if (diffInMinutes < 60) return `${diffInMinutes}m atrás`
-    
+
     const diffInHours = Math.floor(diffInMinutes / 60)
     if (diffInHours < 24) return `${diffInHours}h atrás`
-    
+
     const diffInDays = Math.floor(diffInHours / 24)
     if (diffInDays < 7) return `${diffInDays}d atrás`
-    
+
     return date.toLocaleDateString('pt-BR')
   }
 
@@ -168,16 +172,18 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
                           <div className="text-lg">
                             {getNotificationIcon(notification.type)}
                           </div>
-                          
+
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
-                              <h4 className={cn(
-                                'text-sm font-medium text-gray-900',
-                                !notification.isRead && 'font-semibold'
-                              )}>
+                              <h4
+                                className={cn(
+                                  'text-sm font-medium text-gray-900',
+                                  !notification.isRead && 'font-semibold'
+                                )}
+                              >
                                 {notification.title}
                               </h4>
-                              
+
                               <div className="flex items-center gap-1">
                                 <Badge
                                   variant="outline"
@@ -188,22 +194,22 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
                                 >
                                   {notification.priority}
                                 </Badge>
-                                
+
                                 {!notification.isRead && (
                                   <div className="w-2 h-2 bg-blue-500 rounded-full" />
                                 )}
                               </div>
                             </div>
-                            
+
                             <p className="text-sm text-gray-600 mt-1 line-clamp-2">
                               {notification.message}
                             </p>
-                            
+
                             <div className="flex items-center justify-between mt-2">
                               <span className="text-xs text-gray-400">
                                 {formatTimeAgo(notification.createdAt)}
                               </span>
-                              
+
                               <div className="flex items-center gap-1">
                                 {notification.actionUrl && (
                                   <Link href={notification.actionUrl}>
@@ -211,19 +217,23 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
                                       variant="ghost"
                                       size="sm"
                                       className="h-6 px-2 text-xs"
-                                      onClick={() => markAsRead(notification.id)}
+                                      onClick={() =>
+                                        markAsRead(notification.id)
+                                      }
                                     >
                                       <ExternalLink className="h-3 w-3 mr-1" />
                                       Ver
                                     </Button>
                                   </Link>
                                 )}
-                                
+
                                 <Button
                                   variant="ghost"
                                   size="sm"
                                   className="h-6 w-6 p-0 text-gray-400 hover:text-red-600"
-                                  onClick={() => removeNotification(notification.id)}
+                                  onClick={() =>
+                                    removeNotification(notification.id)
+                                  }
                                 >
                                   <X className="h-3 w-3" />
                                 </Button>
@@ -233,7 +243,7 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
                         </div>
                       </motion.div>
                     ))}
-                    
+
                     {notifications.length > 10 && (
                       <div className="p-4 text-center">
                         <Button variant="ghost" size="sm" className="text-xs">

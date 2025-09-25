@@ -19,7 +19,7 @@ export function NotificationBadge({
   size = 'md',
   className,
   showZero = false,
-  maxCount = 99
+  maxCount = 99,
 }: NotificationBadgeProps) {
   const [isMounted, setIsMounted] = useState(false)
 
@@ -35,13 +35,13 @@ export function NotificationBadge({
   const sizeClasses = {
     sm: 'h-4 w-4 text-xs',
     md: 'h-5 w-5 text-xs',
-    lg: 'h-6 w-6 text-sm'
+    lg: 'h-6 w-6 text-sm',
   }
 
   const dotSizeClasses = {
     sm: 'h-2 w-2',
     md: 'h-2.5 w-2.5',
-    lg: 'h-3 w-3'
+    lg: 'h-3 w-3',
   }
 
   if (variant === 'dot') {
@@ -130,7 +130,7 @@ export function NotificationBadgeWrapper({
   size = 'md',
   className,
   showZero = false,
-  maxCount = 99
+  maxCount = 99,
 }: NotificationBadgeWrapperProps) {
   const [isMounted, setIsMounted] = useState(false)
 
@@ -139,14 +139,14 @@ export function NotificationBadgeWrapper({
   }, [])
 
   return (
-    <div className="relative inline-block">
+    <div className={cn('relative inline-block', className)}>
       {children}
       {isMounted && (
         <NotificationBadge
           count={count}
           variant={variant}
           size={size}
-          className={className}
+          className={undefined}
           showZero={showZero}
           maxCount={maxCount}
         />

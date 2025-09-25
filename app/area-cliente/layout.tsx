@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useEffect } from 'react'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
@@ -12,7 +12,12 @@ import {
   Phone,
   Settings,
   Bell,
+  Home,
+  LogOut,
+  ChevronRight,
 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Loader2 } from 'lucide-react'
 
 export default function AreaClienteLayout({
   children,
@@ -21,6 +26,7 @@ export default function AreaClienteLayout({
 }) {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     if (status === 'loading') return
@@ -31,11 +37,17 @@ export default function AreaClienteLayout({
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Carregando...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <Loader2 className="h-12 w-12 animate-spin text-orange-600 mx-auto mb-4" />
+          <p className="text-lg text-muted-foreground">
+            Carregando sua área...
+          </p>
+        </motion.div>
       </div>
     )
   }
@@ -44,64 +56,152 @@ export default function AreaClienteLayout({
     return null
   }
 
+  const navigationItems = [
+    {
+      href: '/area-cliente',
+      icon: Home,
+      label: 'Dashboard',
+      isActive: pathname === '/area-cliente',
+    },
+    {
+      href: '/area-cliente/perfil',
+      icon: User,
+      label: 'Meu Perfil',
+      isActive: pathname === '/area-cliente/perfil',
+    },
+    {
+      href: '/area-cliente/orcamentos',
+      icon: FileText,
+      label: 'Meus Orçamentos',
+      isActive: pathname.startsWith('/area-cliente/orcamentos'),
+    },
+    {
+      href: '/area-cliente/historico',
+      icon: Clock,
+      label: 'Histórico',
+      isActive: pathname === '/area-cliente/historico',
+    },
+    {
+      href: '/area-cliente/enderecos',
+      icon: Settings,
+      label: 'Endereços',
+      isActive: pathname === '/area-cliente/enderecos',
+    },
+    {
+      href: '/area-cliente/notificacoes',
+      icon: Bell,
+      label: 'Notificações',
+      isActive: pathname === '/area-cliente/notificacoes',
+    },
+    {
+      href: '/contato',
+      icon: Phone,
+      label: 'Suporte',
+      isActive: pathname === '/contato',
+    },
+  ]
+
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <div className="md:col-span-1">
-            <Card>
-              <CardContent className="p-0">
-                <nav className="space-y-1">
-                  <Link
-                    href="/area-cliente"
-                    className="flex items-center px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors"
-                  >
-                    <User className="h-4 w-4 mr-3" />
-                    Meu Perfil
-                  </Link>
-                  <Link
-                    href="/area-cliente/orcamentos"
-                    className="flex items-center px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors"
-                  >
-                    <FileText className="h-4 w-4 mr-3" />
-                    Meus Orçamentos
-                  </Link>
-                  <Link
-                    href="/area-cliente/historico"
-                    className="flex items-center px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors"
-                  >
-                    <Clock className="h-4 w-4 mr-3" />
-                    Histórico
-                  </Link>
-                  <Link
-                    href="/area-cliente/enderecos"
-                    className="flex items-center px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors"
-                  >
-                    <Settings className="h-4 w-4 mr-3" />
-                    Endereços
-                  </Link>
-                  <Link
-                    href="/area-cliente/notificacoes"
-                    className="flex items-center px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors"
-                  >
-                    <Bell className="h-4 w-4 mr-3" />
-                    Notificações
-                  </Link>
-                  <Link
-                    href="/contato"
-                    className="flex items-center px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 rounded-md transition-colors"
-                  >
-                    <Phone className="h-4 w-4 mr-3" />
-                    Suporte
-                  </Link>
-                </nav>
-              </CardContent>
-            </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Sidebar com Identidade Visual */}
+          <div className="lg:col-span-1">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Card className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-30"></div>
+
+                {/* Header da Sidebar */}
+                <div className="relative z-10 p-6 border-b border-gray-100">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
+                      <User className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-700">
+                        Área do Cliente
+                      </h3>
+                      <p className="text-xs text-gray-500">
+                        {session?.user?.name || 'Cliente'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Navegação */}
+                <CardContent className="p-0 relative z-10">
+                  <nav className="space-y-1 p-4">
+                    {navigationItems.map((item, index) => (
+                      <motion.div
+                        key={item.href}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                      >
+                        <Link
+                          href={item.href}
+                          className={`group flex items-center justify-between px-4 py-3 text-sm font-medium rounded-xl transition-colors duration-200 ${
+                            item.isActive
+                              ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
+                              : 'text-gray-700 hover:bg-gray-50 hover:text-orange-600'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <item.icon
+                              className={`h-5 w-5 ${item.isActive ? 'text-white' : 'text-gray-500'}`}
+                            />
+                            <span>{item.label}</span>
+                          </div>
+                          <ChevronRight
+                            className={`h-4 w-4 ${item.isActive ? 'text-white' : 'text-gray-400'}`}
+                          />
+                        </Link>
+                      </motion.div>
+                    ))}
+
+                    {/* Separador */}
+                    <div className="my-4 border-t border-gray-200"></div>
+
+                    {/* Logout */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{
+                        duration: 0.3,
+                        delay: navigationItems.length * 0.1,
+                      }}
+                    >
+                      <button
+                        onClick={() => router.push('/api/auth/signout')}
+                        className="group flex items-center justify-between w-full px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-orange-600 rounded-xl transition-colors duration-200"
+                      >
+                        <div className="flex items-center gap-3">
+                          <LogOut className="h-5 w-5 text-gray-500" />
+                          <span>Sair</span>
+                        </div>
+                        <ChevronRight className="h-4 w-4 text-gray-400" />
+                      </button>
+                    </motion.div>
+                  </nav>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
 
-          {/* Content */}
-          <div className="md:col-span-3">{children}</div>
+          {/* Content com Animações */}
+          <div className="lg:col-span-3">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              {children}
+            </motion.div>
+          </div>
         </div>
       </div>
     </div>

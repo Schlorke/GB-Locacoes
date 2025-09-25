@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "generatorVersion": "unknown",
-  "generatedAt": "2025-09-25T01:12:44.471Z",
+  "generatorVersion": "0.1.0",
+  "generatedAt": "2025-09-25T07:30:36.876Z",
   "outputPath": "C:\\Projetos\\GB-Locacoes\\lib\\validations",
   "files": [
     "schemas\\enums\\TransactionIsolationLevel.schema.ts",

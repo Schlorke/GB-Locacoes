@@ -13,49 +13,53 @@ export function useCartNotifications() {
 
   // Notificar quando item é adicionado ao carrinho
   useEffect(() => {
-    if (items.length > 0) {
-      const lastItem = items[items.length - 1]
-      
-      // Verificar se é um item novo (não uma atualização)
-      const isNewItem = items.filter(item => item.equipmentId === lastItem.equipmentId).length === 1
-      
-      if (isNewItem) {
-        addNotification({
-          type: 'equipment',
-          title: 'Item Adicionado ao Carrinho',
-          message: `${lastItem.equipmentName} foi adicionado ao seu carrinho. Total: ${itemCount} item${itemCount > 1 ? 's' : ''}`,
-          priority: 'low',
-          actionUrl: '/orcamento'
-        })
-      }
+    if (items.length === 0) return
+
+    const lastItem = items[items.length - 1]
+    if (!lastItem) return
+
+    // Verificar se é um item novo (não uma atualização)
+    const isNewItem =
+      items.filter((item) => item.equipmentId === lastItem.equipmentId)
+        .length === 1
+
+    if (isNewItem) {
+      addNotification({
+        type: 'equipment',
+        title: 'Item Adicionado ao Carrinho',
+        message: `${lastItem.equipmentName} foi adicionado ao seu carrinho. Total: ${itemCount} item${itemCount > 1 ? 's' : ''}`,
+        priority: 'low',
+        actionUrl: '/orcamento',
+      })
     }
-  }, [items.length, addNotification, itemCount])
+  }, [items, addNotification, itemCount])
 
   // Notificar quando carrinho fica vazio
   useEffect(() => {
     if (items.length === 0 && itemCount === 0) {
       // Só notifica se o carrinho estava com itens antes
       // Isso evita notificação no carregamento inicial
-      const wasEmpty = localStorage.getItem('gb-locacoes-cart-was-empty') === 'true'
+      const wasEmpty =
+        localStorage.getItem('gb-locacoes-cart-was-empty') === 'true'
       if (!wasEmpty) {
         addNotification({
           type: 'equipment',
           title: 'Carrinho Esvaziado',
           message: 'Todos os itens foram removidos do seu carrinho.',
           priority: 'low',
-          actionUrl: '/equipamentos'
+          actionUrl: '/equipamentos',
         })
       }
     } else {
       localStorage.setItem('gb-locacoes-cart-was-empty', 'false')
     }
-  }, [items.length, itemCount, addNotification])
+  }, [items, itemCount, addNotification])
 
   return {
     itemCount,
     totalPrice,
     hasItems: items.length > 0,
-    items
+    items,
   }
 }
 
@@ -66,7 +70,7 @@ export const cartNotificationHelpers = {
     title: 'Item Adicionado ao Carrinho',
     message: `${equipmentName} foi adicionado ao seu carrinho. Total: ${totalItems} item${totalItems > 1 ? 's' : ''}`,
     priority: 'low' as const,
-    actionUrl: '/orcamento'
+    actionUrl: '/orcamento',
   }),
 
   cartEmptied: () => ({
@@ -74,7 +78,7 @@ export const cartNotificationHelpers = {
     title: 'Carrinho Esvaziado',
     message: 'Todos os itens foram removidos do seu carrinho.',
     priority: 'low' as const,
-    actionUrl: '/equipamentos'
+    actionUrl: '/equipamentos',
   }),
 
   cartAbandoned: (itemsCount: number) => ({
@@ -82,15 +86,19 @@ export const cartNotificationHelpers = {
     title: 'Carrinho Abandonado',
     message: `Você tem ${itemsCount} item${itemsCount > 1 ? 's' : ''} aguardando no seu carrinho. Finalize sua compra!`,
     priority: 'medium' as const,
-    actionUrl: '/orcamento'
+    actionUrl: '/orcamento',
   }),
 
-  priceChanged: (equipmentName: string, oldPrice: number, newPrice: number) => ({
+  priceChanged: (
+    equipmentName: string,
+    oldPrice: number,
+    newPrice: number
+  ) => ({
     type: 'equipment' as const,
     title: 'Preço Atualizado',
     message: `O preço de ${equipmentName} mudou de R$ ${oldPrice.toFixed(2)} para R$ ${newPrice.toFixed(2)}`,
     priority: 'medium' as const,
-    actionUrl: '/orcamento'
+    actionUrl: '/orcamento',
   }),
 
   stockLow: (equipmentName: string, remainingStock: number) => ({
@@ -98,6 +106,6 @@ export const cartNotificationHelpers = {
     title: 'Estoque Baixo',
     message: `Apenas ${remainingStock} unidade${remainingStock > 1 ? 's' : ''} de ${equipmentName} restante${remainingStock > 1 ? 's' : ''}!`,
     priority: 'high' as const,
-    actionUrl: '/orcamento'
-  })
+    actionUrl: '/orcamento',
+  }),
 }

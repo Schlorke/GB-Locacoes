@@ -155,7 +155,7 @@ export default function Header() {
               <Search className="h-5 w-5" />
               <span className="sr-only">Buscar</span>
             </Button>
-            
+
             {/* Usuário com notificação */}
             {session ? (
               <NotificationBadgeWrapper count={stats.unread} size="sm">
@@ -184,7 +184,7 @@ export default function Header() {
                 </Link>
               </Button>
             )}
-            
+
             {/* Carrinho com notificação */}
             <NotificationBadgeWrapper count={itemCount} size="sm">
               <Button
@@ -253,26 +253,40 @@ export default function Header() {
             <div className="mt-6 pt-4 border-t border-slate-200/50 px-2 space-y-2">
               {session ? (
                 <div className="space-y-2">
-                  <NotificationBadgeWrapper count={stats.unread} size="md" className="w-full">
+                  <NotificationBadgeWrapper
+                    count={stats.unread}
+                    size="md"
+                    className="w-full"
+                  >
                     <Button
                       variant="outline"
                       asChild
                       className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
                       onClick={markAllAsRead}
                     >
-                      <Link href="/area-cliente" onClick={handleInternalNavigation}>
+                      <Link
+                        href="/area-cliente"
+                        onClick={handleInternalNavigation}
+                      >
                         <User className="h-5 w-5 mr-2" />
                         Minha Conta
                       </Link>
                     </Button>
                   </NotificationBadgeWrapper>
-                  <NotificationBadgeWrapper count={itemCount} size="md" className="w-full">
+                  <NotificationBadgeWrapper
+                    count={itemCount}
+                    size="md"
+                    className="w-full"
+                  >
                     <Button
                       variant="outline"
                       asChild
                       className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
                     >
-                      <Link href="/orcamento" onClick={handleInternalNavigation}>
+                      <Link
+                        href="/orcamento"
+                        onClick={handleInternalNavigation}
+                      >
                         <ShoppingCart className="h-5 w-5 mr-2" />
                         Carrinho
                       </Link>

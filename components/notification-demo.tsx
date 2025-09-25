@@ -11,7 +11,7 @@ export function NotificationDemo() {
     testOrderNotification,
     testPaymentNotification,
     testEquipmentNotification,
-    testSystemNotification
+    testSystemNotification,
   } = useNotificationDemo()
 
   return (

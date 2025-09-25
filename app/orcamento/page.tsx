@@ -69,12 +69,12 @@ function QuotePage() {
     clearCart,
   } = useCartStore()
   const [displayedItems, setDisplayedItems] = useState<CartItem[]>([])
-  
+
   // Sincronizar itens exibidos com o store
   useEffect(() => {
     setDisplayedItems(selectedEquipments)
   }, [selectedEquipments])
-  
+
   const [formData, setFormData] = useState<QuoteFormData>({
     name: '',
     email: '',
@@ -342,18 +342,18 @@ function QuotePage() {
 
   const removeEquipment = (id: string) => {
     // Marca o item como removendo na lista exibida (inicia animação)
-    setDisplayedItems(prev => 
-      prev.map(item => 
-        item.equipmentId === id 
-          ? { ...item, isRemoving: true }
-          : item
+    setDisplayedItems((prev) =>
+      prev.map((item) =>
+        item.equipmentId === id ? { ...item, isRemoving: true } : item
       )
     )
-    
+
     // Remove do store e da lista exibida após a animação completar
     setTimeout(() => {
       removeItem(id)
-      setDisplayedItems(prev => prev.filter(item => item.equipmentId !== id))
+      setDisplayedItems((prev) =>
+        prev.filter((item) => item.equipmentId !== id)
+      )
     }, 300) // Duração da animação de fade out (sincronizada com container)
   }
 
@@ -564,423 +564,443 @@ function QuotePage() {
           >
             <motion.div
               animate={{
-                height: "auto"
+                height: 'auto',
               }}
               transition={{
                 duration: 0.6,
-                ease: [0.25, 0.46, 0.45, 0.94]
+                ease: [0.25, 0.46, 0.45, 0.94],
               }}
             >
               <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
-              {/* Clean depth layers for equipment card */}
-              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+                {/* Clean depth layers for equipment card */}
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-              <CardHeader className="relative z-10 p-4 sm:p-6 lg:p-6">
-                <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-gray-900">
-                  <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 text-orange-600" />
-                  Equipamentos Selecionados ({selectedEquipments.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="relative z-10 p-4 sm:p-6 lg:p-6 pt-0">
-                {selectedEquipments.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
-                    <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p className="text-base font-medium">
-                      Nenhum equipamento selecionado
-                    </p>
-                    <p className="text-small text-gray-400 mt-2">
-                      Você pode solicitar um orçamento geral ou{' '}
-                      <Link
-                        href="/equipamentos"
-                        className="text-orange-600 hover:text-orange-700 underline"
-                      >
-                        navegar pelos equipamentos
-                      </Link>{' '}
-                      para adicionar itens específicos
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <AnimatePresence mode="popLayout">
-                      {displayedItems.map((equipment) => {
-                        const imageUrl = getEquipmentImage(equipment)
-                        // Verificar se o item está sendo removido
-                        const isRemoving = 'isRemoving' in equipment ? (equipment as CartItem & { isRemoving: boolean }).isRemoving : false
-                        return (
-                          <motion.div
-                            key={equipment.equipmentId}
-                            initial={false}
-                            animate={false}
-                            exit={{ 
-                              opacity: 0
-                            }}
-                            transition={{ 
-                              duration: 0.3
-                            }}
-                            className={`relative overflow-hidden border-0 bg-white rounded-lg p-4 shadow-lg transition-all duration-300 ${
-                              isRemoving 
-                                ? 'pointer-events-none' 
-                                : 'hover:shadow-xl hover:scale-[1.01]'
-                            }`}
-                          >
-                            {/* Clean depth layers for equipment item card */}
-                            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/30 via-transparent to-gray-100/20"></div>
-                            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-gray-50/30"></div>
-                            
-                            {/* Conteúdo do item */}
-                            <motion.div 
-                              className="relative z-10 flex flex-col sm:flex-row gap-4"
-                              animate={isRemoving ? {
+                <CardHeader className="relative z-10 p-4 sm:p-6 lg:p-6">
+                  <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-gray-900">
+                    <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 text-orange-600" />
+                    Equipamentos Selecionados ({selectedEquipments.length})
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="relative z-10 p-4 sm:p-6 lg:p-6 pt-0">
+                  {selectedEquipments.length === 0 ? (
+                    <div className="text-center py-8 text-gray-500">
+                      <Package className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p className="text-base font-medium">
+                        Nenhum equipamento selecionado
+                      </p>
+                      <p className="text-small text-gray-400 mt-2">
+                        Você pode solicitar um orçamento geral ou{' '}
+                        <Link
+                          href="/equipamentos"
+                          className="text-orange-600 hover:text-orange-700 underline"
+                        >
+                          navegar pelos equipamentos
+                        </Link>{' '}
+                        para adicionar itens específicos
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <AnimatePresence mode="popLayout">
+                        {displayedItems.map((equipment) => {
+                          const imageUrl = getEquipmentImage(equipment)
+                          // Verificar se o item está sendo removido
+                          const isRemoving =
+                            'isRemoving' in equipment
+                              ? (
+                                  equipment as CartItem & {
+                                    isRemoving: boolean
+                                  }
+                                ).isRemoving
+                              : false
+                          return (
+                            <motion.div
+                              key={equipment.equipmentId}
+                              initial={false}
+                              animate={false}
+                              exit={{
                                 opacity: 0,
-                                scale: 0.95,
-                                y: -5
-                              } : {
-                                opacity: 1,
-                                scale: 1,
-                                y: 0
                               }}
                               transition={{
-                                duration: 0.5,
-                                ease: [0.25, 0.46, 0.45, 0.94]
+                                duration: 0.3,
                               }}
+                              className={`relative overflow-hidden border-0 bg-white rounded-lg p-4 shadow-lg transition-all duration-300 ${
+                                isRemoving
+                                  ? 'pointer-events-none'
+                                  : 'hover:shadow-xl hover:scale-[1.01]'
+                              }`}
                             >
-                              {/* Imagem */}
-                              <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden mx-auto sm:mx-0 shadow-sm flex items-center justify-center">
-                                <Image
-                                  src={imageUrl || '/placeholder.svg'}
-                                  alt={equipment.equipmentName}
-                                  width={80}
-                                  height={80}
-                                  priority
-                                  className="max-w-full max-h-full object-contain"
-                                  onError={(e) => {
-                                    const target = e.target as HTMLImageElement
-                                    target.src = `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.equipmentName)}`
-                                  }}
-                                />
-                              </div>
+                              {/* Clean depth layers for equipment item card */}
+                              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/30 via-transparent to-gray-100/20"></div>
+                              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-gray-50/30"></div>
 
-                              {/* Informações do Equipamento */}
-                              <div className="flex-1 min-w-0">
-                                <div className="text-center sm:text-left">
-                                  <h3 className="font-semibold text-lg truncate">
-                                    {equipment.equipmentName}
-                                  </h3>
-                                  <div className="flex flex-wrap gap-1 justify-center sm:justify-start mb-2">
-                                    {equipment.category && (
-                                      <Badge
-                                        variant="secondary"
-                                        className="text-sm rounded-full"
-                                      >
-                                        {equipment.category.name}
-                                      </Badge>
-                                    )}
-                                    {(() => {
-                                      const pricingConfig =
-                                        getIntelligentPricing(
-                                          equipment,
-                                          equipment.days
-                                        )
-                                      const actualPeriodLabel =
-                                        pricingConfig.period === 'daily'
-                                          ? 'Diário'
-                                          : pricingConfig.period === 'weekly'
-                                            ? 'Semanal'
-                                            : pricingConfig.period ===
-                                                'biweekly'
-                                              ? 'Quinzenal'
-                                              : pricingConfig.period ===
-                                                  'monthly'
-                                                ? 'Mensal'
-                                                : 'Diário'
+                              {/* Conteúdo do item */}
+                              <motion.div
+                                className="relative z-10 flex flex-col sm:flex-row gap-4"
+                                animate={
+                                  isRemoving
+                                    ? {
+                                        opacity: 0,
+                                        scale: 0.95,
+                                        y: -5,
+                                      }
+                                    : {
+                                        opacity: 1,
+                                        scale: 1,
+                                        y: 0,
+                                      }
+                                }
+                                transition={{
+                                  duration: 0.5,
+                                  ease: [0.25, 0.46, 0.45, 0.94],
+                                }}
+                              >
+                                {/* Imagem */}
+                                <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden mx-auto sm:mx-0 shadow-sm flex items-center justify-center">
+                                  <Image
+                                    src={imageUrl || '/placeholder.svg'}
+                                    alt={equipment.equipmentName}
+                                    width={80}
+                                    height={80}
+                                    priority
+                                    className="max-w-full max-h-full object-contain"
+                                    onError={(e) => {
+                                      const target =
+                                        e.target as HTMLImageElement
+                                      target.src = `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.equipmentName)}`
+                                    }}
+                                  />
+                                </div>
 
-                                      return (
+                                {/* Informações do Equipamento */}
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-center sm:text-left">
+                                    <h3 className="font-semibold text-lg truncate">
+                                      {equipment.equipmentName}
+                                    </h3>
+                                    <div className="flex flex-wrap gap-1 justify-center sm:justify-start mb-2">
+                                      {equipment.category && (
                                         <Badge
-                                          variant="outline"
-                                          className="text-sm rounded-full border-orange-200 text-orange-700 bg-orange-50 font-medium"
+                                          variant="secondary"
+                                          className="text-sm rounded-full"
                                         >
-                                          {actualPeriodLabel}
-                                          {pricingConfig.useDirectValue ? (
-                                            <span className="ml-1 font-semibold">
-                                              Valor Fixo
-                                            </span>
-                                          ) : (pricingConfig.discount || 0) >
-                                            0 ? (
-                                            <span className="ml-1 font-semibold">
-                                              -{pricingConfig.discount}%
-                                            </span>
-                                          ) : null}
+                                          {equipment.category.name}
                                         </Badge>
-                                      )
-                                    })()}
-                                  </div>
-                                  <div className="text-sm text-gray-600 mb-3">
-                                    {equipment.finalPrice ? (
-                                      (() => {
+                                      )}
+                                      {(() => {
                                         const pricingConfig =
                                           getIntelligentPricing(
                                             equipment,
                                             equipment.days
                                           )
-                                        const originalPrice =
-                                          Number(equipment.pricePerDay) *
-                                          equipment.days
                                         const actualPeriodLabel =
                                           pricingConfig.period === 'daily'
-                                            ? 'diário'
+                                            ? 'Diário'
                                             : pricingConfig.period === 'weekly'
-                                              ? 'semanal'
+                                              ? 'Semanal'
                                               : pricingConfig.period ===
                                                   'biweekly'
-                                                ? 'quinzenal'
+                                                ? 'Quinzenal'
                                                 : pricingConfig.period ===
                                                     'monthly'
-                                                  ? 'mensal'
-                                                  : 'diário'
+                                                  ? 'Mensal'
+                                                  : 'Diário'
 
                                         return (
-                                          <div>
-                                            {(pricingConfig.discount || 0) >
-                                              0 && (
-                                              <div className="text-sm text-gray-500 line-through">
-                                                {formatCurrency(originalPrice)}
-                                              </div>
-                                            )}
-                                            <div>
-                                              <span className="font-semibold text-green-600 text-base">
-                                                {formatCurrency(
-                                                  equipment.finalPrice
-                                                )}
+                                          <Badge
+                                            variant="outline"
+                                            className="text-sm rounded-full border-orange-200 text-orange-700 bg-orange-50 font-medium"
+                                          >
+                                            {actualPeriodLabel}
+                                            {pricingConfig.useDirectValue ? (
+                                              <span className="ml-1 font-semibold">
+                                                Valor Fixo
                                               </span>
-                                              <span className="text-xs text-gray-500 ml-1">
-                                                total ({equipment.days} dias)
+                                            ) : (pricingConfig.discount || 0) >
+                                              0 ? (
+                                              <span className="ml-1 font-semibold">
+                                                -{pricingConfig.discount}%
                                               </span>
-                                            </div>
-                                            {(pricingConfig.discount || 0) >
-                                              0 && (
-                                              <div className="text-xs text-green-600 font-medium">
-                                                ✓ Desconto {actualPeriodLabel}{' '}
-                                                aplicado: -
-                                                {pricingConfig.discount}%
-                                              </div>
-                                            )}
-                                          </div>
+                                            ) : null}
+                                          </Badge>
                                         )
-                                      })()
-                                    ) : (
-                                      <span>
-                                        {formatCurrency(
-                                          Number(equipment.pricePerDay) || 0
-                                        )}
-                                        /dia
-                                      </span>
-                                    )}
-                                  </div>
-                                </div>
-
-                                {/* Controles - Layout Responsivo */}
-                                <div className="flex flex-row gap-4 max-[1170px]:flex-col">
-                                  {/* Controle de Quantidade */}
-                                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                    <Label className="text-sm font-medium text-gray-700 text-center sm:text-left sm:w-20">
-                                      Quantidade:
-                                    </Label>
-                                    <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-2">
-                                      <div className="flex items-center justify-center gap-2">
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          onClick={() =>
-                                            updateQuantity(
-                                              equipment.equipmentId,
-                                              equipment.quantity - 1
-                                            )
-                                          }
-                                          disabled={equipment.quantity <= 1}
-                                          className="h-8 w-8 p-0 flex-shrink-0"
-                                        >
-                                          <Minus className="h-3 w-3" />
-                                        </Button>
-                                        <Input
-                                          type="number"
-                                          value={equipment.quantity}
-                                          onChange={(e) =>
-                                            updateQuantity(
-                                              equipment.equipmentId,
-                                              Number.parseInt(e.target.value) ||
-                                                1
-                                            )
-                                          }
-                                          className="w-12 h-8 text-center font-medium [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                                          min="1"
-                                          max={equipment.maxStock || 999}
-                                        />
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          onClick={() =>
-                                            updateQuantity(
-                                              equipment.equipmentId,
-                                              equipment.quantity + 1
-                                            )
-                                          }
-                                          disabled={
-                                            equipment.quantity >=
-                                            (equipment.maxStock || 999)
-                                          }
-                                          className="h-8 w-8 p-0 flex-shrink-0"
-                                        >
-                                          <Plus className="h-3 w-3" />
-                                        </Button>
-                                      </div>
-                                      {equipment.maxStock &&
-                                        equipment.maxStock < 999 && (
-                                          <span className="text-xs text-gray-500 sm:ml-2">
-                                            Max: {equipment.maxStock} disponível
-                                          </span>
-                                        )}
+                                      })()}
                                     </div>
-                                  </div>
+                                    <div className="text-sm text-gray-600 mb-3">
+                                      {equipment.finalPrice ? (
+                                        (() => {
+                                          const pricingConfig =
+                                            getIntelligentPricing(
+                                              equipment,
+                                              equipment.days
+                                            )
+                                          const originalPrice =
+                                            Number(equipment.pricePerDay) *
+                                            equipment.days
+                                          const actualPeriodLabel =
+                                            pricingConfig.period === 'daily'
+                                              ? 'diário'
+                                              : pricingConfig.period ===
+                                                  'weekly'
+                                                ? 'semanal'
+                                                : pricingConfig.period ===
+                                                    'biweekly'
+                                                  ? 'quinzenal'
+                                                  : pricingConfig.period ===
+                                                      'monthly'
+                                                    ? 'mensal'
+                                                    : 'diário'
 
-                                  {/* Controle de Período */}
-                                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                    <Label className="text-sm font-medium text-gray-700 text-center sm:text-left">
-                                      {equipment.selectedPeriod
-                                        ? 'Períodos:'
-                                        : 'Dias:'}
-                                    </Label>
-                                    <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-2">
-                                      <div className="flex items-center justify-center gap-2">
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          onClick={() => {
-                                            const currentValue =
-                                              equipment.selectedPeriod
-                                                ? Math.ceil(
-                                                    equipment.days /
-                                                      equipment.selectedPeriod
-                                                        .multiplier
-                                                  )
-                                                : equipment.days
-                                            const newValue = Math.max(
-                                              1,
-                                              currentValue - 1
-                                            )
-                                            const days =
-                                              equipment.selectedPeriod
-                                                ? newValue *
-                                                  equipment.selectedPeriod
-                                                    .multiplier
-                                                : newValue
-                                            updateDays(
-                                              equipment.equipmentId,
-                                              days
-                                            )
-                                          }}
-                                          className="h-8 w-8 p-0 flex-shrink-0"
-                                        >
-                                          <Minus className="h-3 w-3" />
-                                        </Button>
-                                        <Input
-                                          type="number"
-                                          value={
-                                            equipment.selectedPeriod
-                                              ? Math.ceil(
-                                                  equipment.days /
-                                                    equipment.selectedPeriod
-                                                      .multiplier
-                                                )
-                                              : equipment.days
-                                          }
-                                          onChange={(e) => {
-                                            const periods =
-                                              Number.parseInt(e.target.value) ||
-                                              1
-                                            const days =
-                                              equipment.selectedPeriod
-                                                ? periods *
-                                                  equipment.selectedPeriod
-                                                    .multiplier
-                                                : periods
-                                            updateDays(
-                                              equipment.equipmentId,
-                                              days
-                                            )
-                                          }}
-                                          className="w-12 h-8 text-center font-medium [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-                                          min="1"
-                                        />
-                                        <Button
-                                          variant="outline"
-                                          size="sm"
-                                          onClick={() => {
-                                            const currentValue =
-                                              equipment.selectedPeriod
-                                                ? Math.ceil(
-                                                    equipment.days /
-                                                      equipment.selectedPeriod
-                                                        .multiplier
-                                                  )
-                                                : equipment.days
-                                            const newValue = currentValue + 1
-                                            const days =
-                                              equipment.selectedPeriod
-                                                ? newValue *
-                                                  equipment.selectedPeriod
-                                                    .multiplier
-                                                : newValue
-                                            updateDays(
-                                              equipment.equipmentId,
-                                              days
-                                            )
-                                          }}
-                                          className="h-8 w-8 p-0 flex-shrink-0"
-                                        >
-                                          <Plus className="h-3 w-3" />
-                                        </Button>
-                                      </div>
-                                      {equipment.selectedPeriod && (
-                                        <span className="text-sm font-medium text-gray-600 whitespace-nowrap sm:ml-2">
-                                          ({equipment.days} dias)
+                                          return (
+                                            <div>
+                                              {(pricingConfig.discount || 0) >
+                                                0 && (
+                                                <div className="text-sm text-gray-500 line-through">
+                                                  {formatCurrency(
+                                                    originalPrice
+                                                  )}
+                                                </div>
+                                              )}
+                                              <div>
+                                                <span className="font-semibold text-green-600 text-base">
+                                                  {formatCurrency(
+                                                    equipment.finalPrice
+                                                  )}
+                                                </span>
+                                                <span className="text-xs text-gray-500 ml-1">
+                                                  total ({equipment.days} dias)
+                                                </span>
+                                              </div>
+                                              {(pricingConfig.discount || 0) >
+                                                0 && (
+                                                <div className="text-xs text-green-600 font-medium">
+                                                  ✓ Desconto {actualPeriodLabel}{' '}
+                                                  aplicado: -
+                                                  {pricingConfig.discount}%
+                                                </div>
+                                              )}
+                                            </div>
+                                          )
+                                        })()
+                                      ) : (
+                                        <span>
+                                          {formatCurrency(
+                                            Number(equipment.pricePerDay) || 0
+                                          )}
+                                          /dia
                                         </span>
                                       )}
                                     </div>
                                   </div>
-                                </div>
-                              </div>
 
-                              {/* Preço e Ações */}
-                              <div className="text-center sm:text-right flex-shrink-0">
-                                <p className="text-base font-semibold text-primary mb-2">
-                                  {formatCurrency(calculateSubtotal(equipment))}
-                                </p>
-                                <motion.div
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() =>
-                                      removeEquipment(equipment.equipmentId)
-                                    }
-                                    className="text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors duration-200"
+                                  {/* Controles - Layout Responsivo */}
+                                  <div className="flex flex-row gap-4 max-[1170px]:flex-col">
+                                    {/* Controle de Quantidade */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                      <Label className="text-sm font-medium text-gray-700 text-center sm:text-left sm:w-20">
+                                        Quantidade:
+                                      </Label>
+                                      <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-2">
+                                        <div className="flex items-center justify-center gap-2">
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                              updateQuantity(
+                                                equipment.equipmentId,
+                                                equipment.quantity - 1
+                                              )
+                                            }
+                                            disabled={equipment.quantity <= 1}
+                                            className="h-8 w-8 p-0 flex-shrink-0"
+                                          >
+                                            <Minus className="h-3 w-3" />
+                                          </Button>
+                                          <Input
+                                            type="number"
+                                            value={equipment.quantity}
+                                            onChange={(e) =>
+                                              updateQuantity(
+                                                equipment.equipmentId,
+                                                Number.parseInt(
+                                                  e.target.value
+                                                ) || 1
+                                              )
+                                            }
+                                            className="w-12 h-8 text-center font-medium [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                                            min="1"
+                                            max={equipment.maxStock || 999}
+                                          />
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() =>
+                                              updateQuantity(
+                                                equipment.equipmentId,
+                                                equipment.quantity + 1
+                                              )
+                                            }
+                                            disabled={
+                                              equipment.quantity >=
+                                              (equipment.maxStock || 999)
+                                            }
+                                            className="h-8 w-8 p-0 flex-shrink-0"
+                                          >
+                                            <Plus className="h-3 w-3" />
+                                          </Button>
+                                        </div>
+                                        {equipment.maxStock &&
+                                          equipment.maxStock < 999 && (
+                                            <span className="text-xs text-gray-500 sm:ml-2">
+                                              Max: {equipment.maxStock}{' '}
+                                              disponível
+                                            </span>
+                                          )}
+                                      </div>
+                                    </div>
+
+                                    {/* Controle de Período */}
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                      <Label className="text-sm font-medium text-gray-700 text-center sm:text-left">
+                                        {equipment.selectedPeriod
+                                          ? 'Períodos:'
+                                          : 'Dias:'}
+                                      </Label>
+                                      <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-2">
+                                        <div className="flex items-center justify-center gap-2">
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                              const currentValue =
+                                                equipment.selectedPeriod
+                                                  ? Math.ceil(
+                                                      equipment.days /
+                                                        equipment.selectedPeriod
+                                                          .multiplier
+                                                    )
+                                                  : equipment.days
+                                              const newValue = Math.max(
+                                                1,
+                                                currentValue - 1
+                                              )
+                                              const days =
+                                                equipment.selectedPeriod
+                                                  ? newValue *
+                                                    equipment.selectedPeriod
+                                                      .multiplier
+                                                  : newValue
+                                              updateDays(
+                                                equipment.equipmentId,
+                                                days
+                                              )
+                                            }}
+                                            className="h-8 w-8 p-0 flex-shrink-0"
+                                          >
+                                            <Minus className="h-3 w-3" />
+                                          </Button>
+                                          <Input
+                                            type="number"
+                                            value={
+                                              equipment.selectedPeriod
+                                                ? Math.ceil(
+                                                    equipment.days /
+                                                      equipment.selectedPeriod
+                                                        .multiplier
+                                                  )
+                                                : equipment.days
+                                            }
+                                            onChange={(e) => {
+                                              const periods =
+                                                Number.parseInt(
+                                                  e.target.value
+                                                ) || 1
+                                              const days =
+                                                equipment.selectedPeriod
+                                                  ? periods *
+                                                    equipment.selectedPeriod
+                                                      .multiplier
+                                                  : periods
+                                              updateDays(
+                                                equipment.equipmentId,
+                                                days
+                                              )
+                                            }}
+                                            className="w-12 h-8 text-center font-medium [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                                            min="1"
+                                          />
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                              const currentValue =
+                                                equipment.selectedPeriod
+                                                  ? Math.ceil(
+                                                      equipment.days /
+                                                        equipment.selectedPeriod
+                                                          .multiplier
+                                                    )
+                                                  : equipment.days
+                                              const newValue = currentValue + 1
+                                              const days =
+                                                equipment.selectedPeriod
+                                                  ? newValue *
+                                                    equipment.selectedPeriod
+                                                      .multiplier
+                                                  : newValue
+                                              updateDays(
+                                                equipment.equipmentId,
+                                                days
+                                              )
+                                            }}
+                                            className="h-8 w-8 p-0 flex-shrink-0"
+                                          >
+                                            <Plus className="h-3 w-3" />
+                                          </Button>
+                                        </div>
+                                        {equipment.selectedPeriod && (
+                                          <span className="text-sm font-medium text-gray-600 whitespace-nowrap sm:ml-2">
+                                            ({equipment.days} dias)
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Preço e Ações */}
+                                <div className="text-center sm:text-right flex-shrink-0">
+                                  <p className="text-base font-semibold text-primary mb-2">
+                                    {formatCurrency(
+                                      calculateSubtotal(equipment)
+                                    )}
+                                  </p>
+                                  <motion.div
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.95 }}
                                   >
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </motion.div>
-                              </div>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() =>
+                                        removeEquipment(equipment.equipmentId)
+                                      }
+                                      className="text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors duration-200"
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </motion.div>
+                                </div>
+                              </motion.div>
                             </motion.div>
-                          </motion.div>
-                        )
-                      })}
-                    </AnimatePresence>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                          )
+                        })}
+                      </AnimatePresence>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </motion.div>
 
             {/* Formulário de Contato - SEMPRE VISÍVEL */}

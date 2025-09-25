@@ -14,11 +14,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import {
-  AlertTriangle,
-  Eye,
-  EyeOff,
-} from 'lucide-react'
+import { AlertTriangle, Eye, EyeOff } from 'lucide-react'
 import { signIn } from 'next-auth/react'
 
 function CadastroForm() {
@@ -426,7 +422,9 @@ function CadastroForm() {
                           }
                           disabled={isLoading}
                           aria-label={
-                            showConfirmPassword ? 'Ocultar confirmação' : 'Mostrar confirmação'
+                            showConfirmPassword
+                              ? 'Ocultar confirmação'
+                              : 'Mostrar confirmação'
                           }
                         >
                           {showConfirmPassword ? (

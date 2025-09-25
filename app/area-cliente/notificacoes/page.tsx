@@ -2,53 +2,56 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { 
-  Bell, 
-  Check, 
-  X, 
-  Trash2, 
-  ExternalLink, 
-  Filter,
-  Search,
-  MoreVertical
-} from 'lucide-react'
+// Tabs removidos (não utilizados)
+import { Bell, Check, X, Trash2, ExternalLink, Search } from 'lucide-react'
 import { useNotifications, Notification } from '@/hooks/use-notifications'
 import { NotificationDemo } from '@/components/notification-demo'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
+type FilterType =
+  | 'all'
+  | 'unread'
+  | 'quote'
+  | 'order'
+  | 'payment'
+  | 'equipment'
+  | 'system'
+
+type SortBy = 'newest' | 'oldest' | 'priority'
+
 export default function NotificacoesPage() {
   const {
     notifications,
-    unreadNotifications,
     stats,
     markAsRead,
     markAllAsRead,
     removeNotification,
-    clearAll
+    clearAll,
   } = useNotifications()
 
   const [searchTerm, setSearchTerm] = useState('')
-  const [filterType, setFilterType] = useState<'all' | 'unread' | 'quote' | 'order' | 'payment' | 'equipment' | 'system'>('all')
-  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'priority'>('newest')
+  const [filterType, setFilterType] = useState<FilterType>('all')
+  const [sortBy, setSortBy] = useState<SortBy>('newest')
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date()
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
-    
+    const diffInMinutes = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60)
+    )
+
     if (diffInMinutes < 1) return 'Agora mesmo'
     if (diffInMinutes < 60) return `${diffInMinutes}m atrás`
-    
+
     const diffInHours = Math.floor(diffInMinutes / 60)
     if (diffInHours < 24) return `${diffInHours}h atrás`
-    
+
     const diffInDays = Math.floor(diffInHours / 24)
     if (diffInDays < 7) return `${diffInDays}d atrás`
-    
+
     return date.toLocaleDateString('pt-BR')
   }
 
@@ -101,7 +104,7 @@ export default function NotificacoesPage() {
 
   // Filtrar e ordenar notificações
   const filteredNotifications = notifications
-    .filter(notification => {
+    .filter((notification) => {
       // Filtro por texto
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase()
@@ -110,7 +113,7 @@ export default function NotificacoesPage() {
           notification.message.toLowerCase().includes(searchLower)
         )
       }
-      
+
       // Filtro por tipo
       if (filterType === 'unread') {
         return !notification.isRead
@@ -118,7 +121,7 @@ export default function NotificacoesPage() {
       if (filterType !== 'all') {
         return notification.type === filterType
       }
-      
+
       return true
     })
     .sort((a, b) => {
@@ -139,14 +142,14 @@ export default function NotificacoesPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   }
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    visible: { opacity: 1, y: 0 },
   }
 
   return (
@@ -156,10 +159,11 @@ export default function NotificacoesPage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-800">Notificações</h1>
           <p className="text-slate-600 mt-1">
-            {stats.total} notificação{stats.total !== 1 ? 'ões' : ''} • {stats.unread} não lida{stats.unread !== 1 ? 's' : ''}
+            {stats.total} notificação{stats.total !== 1 ? 'ões' : ''} •{' '}
+            {stats.unread} não lida{stats.unread !== 1 ? 's' : ''}
           </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {stats.unread > 0 && (
             <Button
@@ -172,7 +176,7 @@ export default function NotificacoesPage() {
               Marcar todas como lidas
             </Button>
           )}
-          
+
           {notifications.length > 0 && (
             <Button
               variant="outline"
@@ -205,12 +209,12 @@ export default function NotificacoesPage() {
                 className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
             </div>
-            
+
             {/* Filtros */}
             <div className="flex gap-2">
               <select
                 value={filterType}
-                onChange={(e) => setFilterType(e.target.value as any)}
+                onChange={(e) => setFilterType(e.target.value as FilterType)}
                 className="px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 aria-label="Filtrar notificações por tipo"
               >
@@ -222,10 +226,10 @@ export default function NotificacoesPage() {
                 <option value="equipment">Equipamentos</option>
                 <option value="system">Sistema</option>
               </select>
-              
+
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as SortBy)}
                 className="px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 aria-label="Ordenar notificações"
               >
@@ -244,13 +248,14 @@ export default function NotificacoesPage() {
           <CardContent className="p-12 text-center">
             <Bell className="h-16 w-16 mx-auto mb-4 text-gray-300" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {searchTerm || filterType !== 'all' ? 'Nenhuma notificação encontrada' : 'Nenhuma notificação'}
+              {searchTerm || filterType !== 'all'
+                ? 'Nenhuma notificação encontrada'
+                : 'Nenhuma notificação'}
             </h3>
             <p className="text-gray-500">
-              {searchTerm || filterType !== 'all' 
+              {searchTerm || filterType !== 'all'
                 ? 'Tente ajustar os filtros de busca'
-                : 'Você está em dia! Novas notificações aparecerão aqui.'
-              }
+                : 'Você está em dia! Novas notificações aparecerão aqui.'}
             </p>
           </CardContent>
         </Card>
@@ -267,8 +272,8 @@ export default function NotificacoesPage() {
               variants={itemVariants}
               className={cn(
                 'p-4 border rounded-lg transition-all duration-200 hover:shadow-md',
-                !notification.isRead 
-                  ? 'bg-blue-50/50 border-blue-200' 
+                !notification.isRead
+                  ? 'bg-blue-50/50 border-blue-200'
                   : 'bg-white border-gray-200'
               )}
             >
@@ -276,22 +281,24 @@ export default function NotificacoesPage() {
                 <div className="text-2xl">
                   {getNotificationIcon(notification.type)}
                 </div>
-                
+
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
-                      <h4 className={cn(
-                        'text-sm font-medium text-gray-900',
-                        !notification.isRead && 'font-semibold'
-                      )}>
+                      <h4
+                        className={cn(
+                          'text-sm font-medium text-gray-900',
+                          !notification.isRead && 'font-semibold'
+                        )}
+                      >
                         {notification.title}
                       </h4>
-                      
+
                       <p className="text-sm text-gray-600 mt-1">
                         {notification.message}
                       </p>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       <Badge
                         variant="outline"
@@ -302,25 +309,25 @@ export default function NotificacoesPage() {
                       >
                         {notification.priority}
                       </Badge>
-                      
+
                       <Badge
                         variant="outline"
                         className="text-xs px-2 py-0.5 bg-gray-100 text-gray-700"
                       >
                         {getTypeLabel(notification.type)}
                       </Badge>
-                      
+
                       {!notification.isRead && (
                         <div className="w-2 h-2 bg-blue-500 rounded-full" />
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-between mt-3">
                     <span className="text-xs text-gray-400">
                       {formatTimeAgo(notification.createdAt)}
                     </span>
-                    
+
                     <div className="flex items-center gap-2">
                       {notification.actionUrl && (
                         <Link href={notification.actionUrl}>
@@ -335,7 +342,7 @@ export default function NotificacoesPage() {
                           </Button>
                         </Link>
                       )}
-                      
+
                       {!notification.isRead && (
                         <Button
                           variant="ghost"
@@ -347,7 +354,7 @@ export default function NotificacoesPage() {
                           Marcar como lida
                         </Button>
                       )}
-                      
+
                       <Button
                         variant="ghost"
                         size="sm"
