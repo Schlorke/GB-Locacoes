@@ -36,7 +36,7 @@ export default function AreaClientePage() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-300/5 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 relative z-10">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 md:py-14 relative z-10">
           <motion.div
             className="text-center space-y-3"
             initial={{ opacity: 0, y: 20 }}
@@ -75,12 +75,12 @@ export default function AreaClientePage() {
       </section>
 
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
-      <section className="py-12 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-6 md:py-8 relative">
+        <div className="px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           
           {/* Stats Grid - 1 coluna em mobile, 4 colunas em desktop */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 mb-8"
+            className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-6 mb-6 md:mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -89,7 +89,7 @@ export default function AreaClientePage() {
             {/* Card Carrinho - Otimizado */}
             <div className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-              <div className="relative z-10 p-4">
+              <div className="relative z-10 p-3 md:p-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                     <ShoppingCart className="h-5 w-5" />
@@ -106,7 +106,7 @@ export default function AreaClientePage() {
             {/* Card Orçamentos - Otimizado */}
             <div className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
-              <div className="relative z-10 p-4">
+              <div className="relative z-10 p-3 md:p-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
                     <FileText className="h-5 w-5" />
@@ -123,7 +123,7 @@ export default function AreaClientePage() {
             {/* Card Total - Otimizado */}
             <div className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-50"></div>
-              <div className="relative z-10 p-4">
+              <div className="relative z-10 p-3 md:p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 mb-1">Total Estimado</p>
@@ -140,7 +140,7 @@ export default function AreaClientePage() {
 
           {/* Seções Principais - Layout Otimizado */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-8"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -149,7 +149,7 @@ export default function AreaClientePage() {
             {/* Meu Carrinho - Compacto */}
             <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-3">
+              <CardHeader className="relative z-10 pb-2 md:pb-3">
                 <CardTitle className="flex items-center gap-3 text-lg font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                     <ShoppingCart className="h-5 w-5" />
@@ -203,7 +203,7 @@ export default function AreaClientePage() {
             {/* Meus Orçamentos - Compacto */}
             <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-3">
+              <CardHeader className="relative z-10 pb-2 md:pb-3">
                 <CardTitle className="flex items-center gap-3 text-lg font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
                     <FileText className="h-5 w-5" />
@@ -228,14 +228,14 @@ export default function AreaClientePage() {
 
           {/* Atividade Recente - Seção Compacta */}
           <motion.div
-            className="mt-12"
+            className="mt-6 md:mt-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
             <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-3">
+              <CardHeader className="relative z-10 pb-2 md:pb-3">
                 <CardTitle className="flex items-center gap-3 text-lg font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-gray-500 to-gray-600 rounded-lg text-white">
                     <Clock className="h-5 w-5" />
