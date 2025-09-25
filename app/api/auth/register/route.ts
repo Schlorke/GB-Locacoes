@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
-import { Resend } from 'resend'
+import getResend from '@/lib/resend'
 
 const prisma = new PrismaClient()
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = getResend()
 
 const registerSchema = z
   .object({
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
     })
 
     // Enviar email de verificação (temporariamente desabilitado para desenvolvimento)
-    if (process.env.NODE_ENV === 'production' && process.env.RESEND_API_KEY) {
+    if (process.env.NODE_ENV === 'production' && resend) {
       try {
         await resend.emails.send({
           from: process.env.FROM_EMAIL!,
