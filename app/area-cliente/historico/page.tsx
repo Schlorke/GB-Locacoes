@@ -2,26 +2,19 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { 
-  History, 
-  Search, 
-  Filter, 
-  Calendar, 
-  Package, 
-  Clock, 
-  CheckCircle, 
+import {
+  History,
+  Search,
+  Calendar,
+  Package,
+  Clock,
+  CheckCircle,
   XCircle,
   AlertCircle,
-  Eye
+  Eye,
 } from 'lucide-react'
 
 interface RentalHistory {
@@ -40,7 +33,7 @@ interface RentalHistory {
 export default function HistoricoPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
-  
+
   // Dados mockados - em produção viriam da API
   const [rentals] = useState<RentalHistory[]>([
     {
@@ -48,91 +41,94 @@ export default function HistoricoPage() {
       equipmentName: 'Betoneira 400L',
       quantity: 1,
       days: 7,
-      totalPrice: 350.00,
+      totalPrice: 350.0,
       status: 'completed',
       createdAt: '2024-01-15',
       startDate: '2024-01-16',
       endDate: '2024-01-23',
-      description: 'Locação para obra residencial'
+      description: 'Locação para obra residencial',
     },
     {
       id: '2',
       equipmentName: 'Martelo Demolidor',
       quantity: 2,
       days: 3,
-      totalPrice: 180.00,
+      totalPrice: 180.0,
       status: 'in_progress',
       createdAt: '2024-01-20',
       startDate: '2024-01-21',
-      description: 'Demolição de parede'
+      description: 'Demolição de parede',
     },
     {
       id: '3',
       equipmentName: 'Gerador 5KVA',
       quantity: 1,
       days: 15,
-      totalPrice: 450.00,
+      totalPrice: 450.0,
       status: 'approved',
       createdAt: '2024-01-22',
       startDate: '2024-01-25',
-      description: 'Backup de energia para evento'
+      description: 'Backup de energia para evento',
     },
     {
       id: '4',
       equipmentName: 'Andaime 2x2m',
       quantity: 4,
       days: 10,
-      totalPrice: 800.00,
+      totalPrice: 800.0,
       status: 'cancelled',
       createdAt: '2024-01-18',
-      description: 'Cancelado pelo cliente'
-    }
+      description: 'Cancelado pelo cliente',
+    },
   ])
 
   const getStatusInfo = (status: string) => {
     switch (status) {
       case 'pending':
-        return { 
-          label: 'Pendente', 
+        return {
+          label: 'Pendente',
           color: 'bg-yellow-100 text-yellow-800',
-          icon: Clock
+          icon: Clock,
         }
       case 'approved':
-        return { 
-          label: 'Aprovado', 
+        return {
+          label: 'Aprovado',
           color: 'bg-blue-100 text-blue-800',
-          icon: CheckCircle
+          icon: CheckCircle,
         }
       case 'in_progress':
-        return { 
-          label: 'Em Andamento', 
+        return {
+          label: 'Em Andamento',
           color: 'bg-orange-100 text-orange-800',
-          icon: Package
+          icon: Package,
         }
       case 'completed':
-        return { 
-          label: 'Concluído', 
+        return {
+          label: 'Concluído',
           color: 'bg-green-100 text-green-800',
-          icon: CheckCircle
+          icon: CheckCircle,
         }
       case 'cancelled':
-        return { 
-          label: 'Cancelado', 
+        return {
+          label: 'Cancelado',
           color: 'bg-red-100 text-red-800',
-          icon: XCircle
+          icon: XCircle,
         }
       default:
-        return { 
-          label: 'Desconhecido', 
+        return {
+          label: 'Desconhecido',
           color: 'bg-gray-100 text-gray-800',
-          icon: AlertCircle
+          icon: AlertCircle,
         }
     }
   }
 
-  const filteredRentals = rentals.filter(rental => {
-    const matchesSearch = rental.equipmentName.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === 'all' || rental.status === statusFilter
+  const filteredRentals = rentals.filter((rental) => {
+    const matchesSearch = rental.equipmentName
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+    const matchesStatus =
+      statusFilter === 'all' || rental.status === statusFilter
     return matchesSearch && matchesStatus
   })
 
@@ -141,8 +137,12 @@ export default function HistoricoPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Histórico de Locações</h1>
-          <p className="text-slate-600">Acompanhe todas as suas solicitações de orçamento</p>
+          <h1 className="text-2xl font-bold text-slate-900">
+            Histórico de Locações
+          </h1>
+          <p className="text-slate-600">
+            Acompanhe todas as suas solicitações de orçamento
+          </p>
         </div>
       </div>
 
@@ -201,16 +201,19 @@ export default function HistoricoPage() {
                         {statusInfo.label}
                       </Badge>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-600">
                       <div>
-                        <span className="font-medium">Quantidade:</span> {rental.quantity}
+                        <span className="font-medium">Quantidade:</span>{' '}
+                        {rental.quantity}
                       </div>
                       <div>
-                        <span className="font-medium">Período:</span> {rental.days} dias
+                        <span className="font-medium">Período:</span>{' '}
+                        {rental.days} dias
                       </div>
                       <div>
-                        <span className="font-medium">Valor Total:</span> R$ {rental.totalPrice.toFixed(2)}
+                        <span className="font-medium">Valor Total:</span> R${' '}
+                        {rental.totalPrice.toFixed(2)}
                       </div>
                     </div>
 
@@ -223,18 +226,23 @@ export default function HistoricoPage() {
                     <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
                       <div className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        Criado em: {new Date(rental.createdAt).toLocaleDateString('pt-BR')}
+                        Criado em:{' '}
+                        {new Date(rental.createdAt).toLocaleDateString('pt-BR')}
                       </div>
                       {rental.startDate && (
                         <div className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          Início: {new Date(rental.startDate).toLocaleDateString('pt-BR')}
+                          Início:{' '}
+                          {new Date(rental.startDate).toLocaleDateString(
+                            'pt-BR'
+                          )}
                         </div>
                       )}
                       {rental.endDate && (
                         <div className="flex items-center gap-1">
                           <Clock className="h-3 w-3" />
-                          Fim: {new Date(rental.endDate).toLocaleDateString('pt-BR')}
+                          Fim:{' '}
+                          {new Date(rental.endDate).toLocaleDateString('pt-BR')}
                         </div>
                       )}
                     </div>
@@ -246,7 +254,11 @@ export default function HistoricoPage() {
                       Ver Detalhes
                     </Button>
                     {rental.status === 'pending' && (
-                      <Button variant="outline" size="sm" className="text-red-600">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="text-red-600"
+                      >
                         Cancelar
                       </Button>
                     )}
@@ -266,15 +278,12 @@ export default function HistoricoPage() {
               Nenhuma locação encontrada
             </h3>
             <p className="text-slate-600 mb-4">
-              {searchTerm || statusFilter !== 'all' 
+              {searchTerm || statusFilter !== 'all'
                 ? 'Tente ajustar os filtros de busca'
-                : 'Você ainda não possui histórico de locações'
-              }
+                : 'Você ainda não possui histórico de locações'}
             </p>
             {!searchTerm && statusFilter === 'all' && (
-              <Button>
-                Solicitar Primeiro Orçamento
-              </Button>
+              <Button>Solicitar Primeiro Orçamento</Button>
             )}
           </CardContent>
         </Card>

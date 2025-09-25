@@ -112,7 +112,7 @@ export const authOptions: NextAuthOptions = {
       }
       return session
     },
-    async signIn({ user, account, profile }) {
+    async signIn() {
       // Sincronização do carrinho será feita no cliente após o login
       // O cliente fará uma chamada para /api/cart/merge com os itens do localStorage
       return true

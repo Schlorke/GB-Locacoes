@@ -55,9 +55,9 @@ export default function EnderecosPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }))
   }
 
@@ -66,11 +66,11 @@ export default function EnderecosPage() {
     try {
       if (editingId) {
         // Editar endereço existente
-        setAddresses(prev => prev.map(addr => 
-          addr.id === editingId 
-            ? { ...addr, ...formData }
-            : addr
-        ))
+        setAddresses((prev) =>
+          prev.map((addr) =>
+            addr.id === editingId ? { ...addr, ...formData } : addr
+          )
+        )
         toast.success('Endereço atualizado com sucesso!')
         setEditingId(null)
       } else {
@@ -80,7 +80,7 @@ export default function EnderecosPage() {
           ...formData,
           isPrimary: addresses.length === 0,
         }
-        setAddresses(prev => [...prev, newAddress])
+        setAddresses((prev) => [...prev, newAddress])
         toast.success('Endereço adicionado com sucesso!')
         setIsAdding(false)
       }
@@ -93,7 +93,7 @@ export default function EnderecosPage() {
         state: '',
         zipCode: '',
       })
-    } catch (error) {
+    } catch {
       toast.error('Erro ao salvar endereço')
     }
   }
@@ -113,15 +113,17 @@ export default function EnderecosPage() {
   }
 
   const handleDelete = (id: string) => {
-    setAddresses(prev => prev.filter(addr => addr.id !== id))
+    setAddresses((prev) => prev.filter((addr) => addr.id !== id))
     toast.success('Endereço removido com sucesso!')
   }
 
   const handleSetPrimary = (id: string) => {
-    setAddresses(prev => prev.map(addr => ({
-      ...addr,
-      isPrimary: addr.id === id
-    })))
+    setAddresses((prev) =>
+      prev.map((addr) => ({
+        ...addr,
+        isPrimary: addr.id === id,
+      }))
+    )
     toast.success('Endereço definido como principal!')
   }
 

@@ -35,7 +35,12 @@ export interface FormData {
 }
 
 export function useQuoteForm(materialsData = initialMaterials) {
-  const { items: selectedEquipments, addItem, removeItem, clearCart } = useCartStore()
+  const {
+    items: selectedEquipments,
+    addItem,
+    removeItem,
+    clearCart,
+  } = useCartStore()
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -52,7 +57,12 @@ export function useQuoteForm(materialsData = initialMaterials) {
   const addMaterial = useCallback(
     (materialId: number) => {
       const material = materialsData.find((m) => m.id === materialId)
-      if (material && !selectedEquipments.find((eq) => eq.equipmentId === materialId.toString())) {
+      if (
+        material &&
+        !selectedEquipments.find(
+          (eq) => eq.equipmentId === materialId.toString()
+        )
+      ) {
         const cartItem: CartItem = {
           equipmentId: materialId.toString(),
           equipmentName: material.name,
@@ -70,7 +80,9 @@ export function useQuoteForm(materialsData = initialMaterials) {
     (materialId: number, field: 'quantity' | 'days', value: number) => {
       const equipmentId = materialId.toString()
       if (field === 'quantity') {
-        useCartStore.getState().updateItemQuantity(equipmentId, Math.max(1, value))
+        useCartStore
+          .getState()
+          .updateItemQuantity(equipmentId, Math.max(1, value))
       } else if (field === 'days') {
         useCartStore.getState().updateItemDays(equipmentId, Math.max(1, value))
       }
@@ -78,13 +90,16 @@ export function useQuoteForm(materialsData = initialMaterials) {
     []
   )
 
-  const removeMaterial = useCallback((materialId: number) => {
-    removeItem(materialId.toString())
-  }, [removeItem])
+  const removeMaterial = useCallback(
+    (materialId: number) => {
+      removeItem(materialId.toString())
+    },
+    [removeItem]
+  )
 
   const calculateTotal = useCallback(() => {
     return selectedEquipments.reduce((total, equipment) => {
-      return total + (equipment.pricePerDay * equipment.quantity * equipment.days)
+      return total + equipment.pricePerDay * equipment.quantity * equipment.days
     }, 0)
   }, [selectedEquipments])
 

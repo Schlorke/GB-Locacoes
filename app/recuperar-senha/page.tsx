@@ -1,17 +1,21 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertTriangle, CheckCircle, Mail, ArrowLeft } from 'lucide-react'
 
 export default function RecuperarSenhaPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -65,7 +69,8 @@ export default function RecuperarSenhaPage() {
                     Email Enviado!
                   </CardTitle>
                   <CardDescription className="text-slate-600 text-sm">
-                    Verifique sua caixa de entrada e siga as instruções para redefinir sua senha.
+                    Verifique sua caixa de entrada e siga as instruções para
+                    redefinir sua senha.
                   </CardDescription>
                 </div>
               </CardHeader>
@@ -73,12 +78,14 @@ export default function RecuperarSenhaPage() {
               <CardContent className="px-6 pb-6 space-y-4">
                 <div className="text-center space-y-4">
                   <p className="text-sm text-slate-600">
-                    Enviamos um link de recuperação para <strong>{email}</strong>
+                    Enviamos um link de recuperação para{' '}
+                    <strong>{email}</strong>
                   </p>
                   <p className="text-xs text-slate-500">
-                    O link expira em 1 hora. Se você não receber o email, verifique sua pasta de spam.
+                    O link expira em 1 hora. Se você não receber o email,
+                    verifique sua pasta de spam.
                   </p>
-                  
+
                   <div className="pt-4 space-y-3">
                     <Button
                       onClick={() => {
@@ -90,7 +97,7 @@ export default function RecuperarSenhaPage() {
                     >
                       Enviar Novamente
                     </Button>
-                    
+
                     <Link href="/login">
                       <Button
                         variant="ghost"
@@ -135,7 +142,10 @@ export default function RecuperarSenhaPage() {
             <CardContent className="px-6 pb-6 space-y-4">
               <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                  <Alert variant="destructive" className="border-red-200 bg-red-50/90">
+                  <Alert
+                    variant="destructive"
+                    className="border-red-200 bg-red-50/90"
+                  >
                     <AlertTriangle className="h-4 w-4" />
                     <AlertTitle className="text-red-800 text-sm font-semibold">
                       Erro
@@ -147,7 +157,10 @@ export default function RecuperarSenhaPage() {
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-slate-700 font-semibold text-sm">
+                  <Label
+                    htmlFor="email"
+                    className="text-slate-700 font-semibold text-sm"
+                  >
                     E-mail
                   </Label>
                   <div className="relative">

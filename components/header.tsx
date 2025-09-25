@@ -2,14 +2,21 @@
 
 import { Button } from '@/components/ui/button'
 import { CloseButton } from '@/components/ui/close-button'
+import { NotificationBadgeWrapper } from '@/components/ui/notification-badge'
 import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { useCartNotifications } from '@/hooks/use-cart-notifications'
+import { useNotifications } from '@/hooks/use-notifications'
+import { useSession } from 'next-auth/react'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { data: session } = useSession()
+  const { itemCount } = useCartNotifications()
+  const { stats, markAllAsRead } = useNotifications()
 
   const handleInternalNavigation = () => {
     sessionStorage.setItem('internalNavigation', 'true')
@@ -65,7 +72,7 @@ export default function Header() {
             </div>
             <div className="flex items-center gap-4">
               <Link
-                href="/login"
+                href="/cadastro"
                 className="text-slate-200 hover:text-white transition-all duration-200 font-medium hover:scale-105"
                 onClick={handleInternalNavigation}
               >
@@ -148,22 +155,50 @@ export default function Header() {
               <Search className="h-5 w-5" />
               <span className="sr-only">Buscar</span>
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
-            >
-              <User className="h-5 w-5" />
-              <span className="sr-only">Minha conta</span>
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              <span className="sr-only">Carrinho</span>
-            </Button>
+            
+            {/* Usuário com notificação */}
+            {session ? (
+              <NotificationBadgeWrapper count={stats.unread} size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
+                  asChild
+                >
+                  <Link href="/area-cliente" onClick={markAllAsRead}>
+                    <User className="h-5 w-5" />
+                    <span className="sr-only">Minha conta</span>
+                  </Link>
+                </Button>
+              </NotificationBadgeWrapper>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
+                asChild
+              >
+                <Link href="/login">
+                  <User className="h-5 w-5" />
+                  <span className="sr-only">Minha conta</span>
+                </Link>
+              </Button>
+            )}
+            
+            {/* Carrinho com notificação */}
+            <NotificationBadgeWrapper count={itemCount} size="sm">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
+                asChild
+              >
+                <Link href="/orcamento">
+                  <ShoppingCart className="h-5 w-5" />
+                  <span className="sr-only">Carrinho</span>
+                </Link>
+              </Button>
+            </NotificationBadgeWrapper>
           </div>
 
           {/* Mobile Menu Button */}
@@ -216,24 +251,56 @@ export default function Header() {
               })}
             </nav>
             <div className="mt-6 pt-4 border-t border-slate-200/50 px-2 space-y-2">
-              <Button
-                variant="outline"
-                asChild
-                className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
-              >
-                <Link href="/login" onClick={handleInternalNavigation}>
-                  Sign In
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                asChild
-                className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
-              >
-                <Link href="/login" onClick={handleInternalNavigation}>
-                  Log In
-                </Link>
-              </Button>
+              {session ? (
+                <div className="space-y-2">
+                  <NotificationBadgeWrapper count={stats.unread} size="md" className="w-full">
+                    <Button
+                      variant="outline"
+                      asChild
+                      className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
+                      onClick={markAllAsRead}
+                    >
+                      <Link href="/area-cliente" onClick={handleInternalNavigation}>
+                        <User className="h-5 w-5 mr-2" />
+                        Minha Conta
+                      </Link>
+                    </Button>
+                  </NotificationBadgeWrapper>
+                  <NotificationBadgeWrapper count={itemCount} size="md" className="w-full">
+                    <Button
+                      variant="outline"
+                      asChild
+                      className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
+                    >
+                      <Link href="/orcamento" onClick={handleInternalNavigation}>
+                        <ShoppingCart className="h-5 w-5 mr-2" />
+                        Carrinho
+                      </Link>
+                    </Button>
+                  </NotificationBadgeWrapper>
+                </div>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
+                  >
+                    <Link href="/cadastro" onClick={handleInternalNavigation}>
+                      Sign In
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
+                  >
+                    <Link href="/login" onClick={handleInternalNavigation}>
+                      Log In
+                    </Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         )}

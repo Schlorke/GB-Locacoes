@@ -12,13 +12,12 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
-import { User, Mail, Phone, MapPin, Building, Save, Edit } from 'lucide-react'
+import { User, Mail, Phone, Building, Save, Edit } from 'lucide-react'
 import { toast } from 'sonner'
 
 export default function PerfilPage() {
-  const { data: session, update } = useSession()
+  const { data: session } = useSession()
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
     name: session?.user?.name || '',
@@ -29,11 +28,13 @@ export default function PerfilPage() {
     company: '',
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }))
   }
 
@@ -43,7 +44,7 @@ export default function PerfilPage() {
       // Por exemplo, uma chamada para a API
       toast.success('Perfil atualizado com sucesso!')
       setIsEditing(false)
-    } catch (error) {
+    } catch {
       toast.error('Erro ao atualizar perfil')
     }
   }
@@ -69,7 +70,7 @@ export default function PerfilPage() {
           <p className="text-slate-600">Gerencie suas informações pessoais</p>
         </div>
         <Button
-          variant={isEditing ? "outline" : "default"}
+          variant={isEditing ? 'outline' : 'default'}
           onClick={() => setIsEditing(!isEditing)}
         >
           {isEditing ? (
@@ -191,9 +192,7 @@ export default function PerfilPage() {
             <Mail className="h-5 w-5" />
             Status da Conta
           </CardTitle>
-          <CardDescription>
-            Verificação e status da sua conta
-          </CardDescription>
+          <CardDescription>Verificação e status da sua conta</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -226,22 +225,24 @@ export default function PerfilPage() {
       <Card>
         <CardHeader>
           <CardTitle>Segurança</CardTitle>
-          <CardDescription>
-            Gerencie a segurança da sua conta
-          </CardDescription>
+          <CardDescription>Gerencie a segurança da sua conta</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">Alterar Senha</p>
-              <p className="text-sm text-slate-600">Atualize sua senha regularmente</p>
+              <p className="text-sm text-slate-600">
+                Atualize sua senha regularmente
+              </p>
             </div>
             <Button variant="outline">Alterar</Button>
           </div>
           <div className="flex items-center justify-between">
             <div>
               <p className="font-medium">Sessões Ativas</p>
-              <p className="text-sm text-slate-600">Gerencie seus dispositivos conectados</p>
+              <p className="text-sm text-slate-600">
+                Gerencie seus dispositivos conectados
+              </p>
             </div>
             <Button variant="outline">Gerenciar</Button>
           </div>

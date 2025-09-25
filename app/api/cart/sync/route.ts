@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { PrismaClient } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
-export async function GET(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-  
+export async function GET() {
+  const session = await getServerSession(authOptions)
+
   if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
   }
 
   try {
@@ -24,46 +24,46 @@ export async function GET(request: NextRequest) {
           },
         },
       },
-    });
+    })
 
     if (!userCart) {
-      return NextResponse.json({ items: [] });
+      return NextResponse.json({ items: [] })
     }
 
-    return NextResponse.json(userCart);
-  } catch (error) {
+    return NextResponse.json(userCart)
+  } catch {
     return NextResponse.json(
       { error: 'Erro ao buscar carrinho' },
       { status: 500 }
-    );
+    )
   }
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-  
+  const session = await getServerSession(authOptions)
+
   if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Não autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
   }
 
   try {
-    const { items } = await request.json();
+    const { items } = await request.json()
 
     // Buscar ou criar carrinho do usuário
     let userCart = await prisma.cart.findUnique({
       where: { userId: session.user.id },
-    });
+    })
 
     if (!userCart) {
       userCart = await prisma.cart.create({
         data: { userId: session.user.id },
-      });
+      })
     }
 
     // Limpar itens existentes
     await prisma.cartItem.deleteMany({
       where: { cartId: userCart.id },
-    });
+    })
 
     // Adicionar novos itens
     for (const item of items) {
@@ -76,14 +76,14 @@ export async function POST(request: NextRequest) {
           pricePerDay: item.pricePerDay,
           finalPrice: item.finalPrice,
         },
-      });
+      })
     }
 
-    return NextResponse.json({ message: 'Carrinho sincronizado com sucesso' });
-  } catch (error) {
+    return NextResponse.json({ message: 'Carrinho sincronizado com sucesso' })
+  } catch {
     return NextResponse.json(
       { error: 'Erro ao sincronizar carrinho' },
       { status: 500 }
-    );
+    )
   }
 }

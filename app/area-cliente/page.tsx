@@ -9,8 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { User, FileText, Clock, Phone, ShoppingCart, Plus, TrendingUp } from 'lucide-react'
+import { FileText, Clock, ShoppingCart, Plus, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 import { useCartStore } from '@/stores/useCartStore'
 
@@ -37,7 +36,9 @@ export default function AreaClientePage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-600">Carrinho</p>
-                <p className="text-2xl font-bold text-slate-900">{getItemCount()}</p>
+                <p className="text-2xl font-bold text-slate-900">
+                  {getItemCount()}
+                </p>
                 <p className="text-sm text-slate-500">itens selecionados</p>
               </div>
               <ShoppingCart className="h-8 w-8 text-orange-500" />
@@ -62,7 +63,9 @@ export default function AreaClientePage() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-600">Total Estimado</p>
+                <p className="text-sm font-medium text-slate-600">
+                  Total Estimado
+                </p>
                 <p className="text-2xl font-bold text-slate-900">
                   R$ {getTotalPrice().toFixed(2)}
                 </p>
@@ -83,23 +86,23 @@ export default function AreaClientePage() {
               Meu Carrinho
             </CardTitle>
             <CardDescription>
-              {getItemCount() > 0 
+              {getItemCount() > 0
                 ? `${getItemCount()} itens selecionados para orçamento`
-                : 'Nenhum item no carrinho'
-              }
+                : 'Nenhum item no carrinho'}
             </CardDescription>
           </CardHeader>
           <CardContent>
             {getItemCount() > 0 ? (
               <div className="space-y-3">
                 <p className="text-sm text-slate-600">
-                  Total estimado: <span className="font-semibold text-lg">R$ {getTotalPrice().toFixed(2)}</span>
+                  Total estimado:{' '}
+                  <span className="font-semibold text-lg">
+                    R$ {getTotalPrice().toFixed(2)}
+                  </span>
                 </p>
                 <div className="flex gap-2">
                   <Link href="/orcamento" className="flex-1">
-                    <Button className="w-full">
-                      Ver Carrinho
-                    </Button>
+                    <Button className="w-full">Ver Carrinho</Button>
                   </Link>
                   <Link href="/equipamentos">
                     <Button variant="outline">
@@ -156,9 +159,7 @@ export default function AreaClientePage() {
             <Clock className="h-5 w-5" />
             Atividade Recente
           </CardTitle>
-          <CardDescription>
-            Suas últimas ações na plataforma
-          </CardDescription>
+          <CardDescription>Suas últimas ações na plataforma</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
