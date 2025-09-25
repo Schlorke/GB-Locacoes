@@ -27,30 +27,50 @@ export default function AreaClientePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section Otimizado */}
-      <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white py-12 md:py-16">
+      {/* Hero Section com Identidade Visual Completa */}
+      <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden">
         {/* Elementos animados de background */}
         <div className="absolute inset-0 overflow-hidden z-[1]">
-          <div className="absolute top-10 left-5 w-48 h-48 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-10 right-5 w-64 h-64 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-300/5 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
-        
-        {/* Container com padding otimizado */}
-        <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 relative z-10">
           <motion.div
-            className="text-center space-y-4"
+            className="text-center space-y-3"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight">
               Bem-vindo de volta,
-              <span className="text-yellow-300 block">{session?.user?.name || 'Cliente'}!</span>
+              <span className="text-yellow-300 relative block mt-1">
+                {session?.user?.name || 'Cliente'}!
+                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-yellow-300/90 rounded-full"></div>
+              </span>
             </h1>
-            <p className="text-lg md:text-xl text-orange-100 leading-relaxed max-w-2xl mx-auto">
-              Gerencie seus orçamentos, acompanhe suas locações e tenha controle total sobre seus equipamentos
+            <p className="text-base md:text-lg text-orange-100 leading-relaxed max-w-2xl mx-auto">
+              Gerencie seus orçamentos, acompanhe suas locações e tenha controle
+              total sobre seus equipamentos
             </p>
           </motion.div>
+        </div>
+
+        {/* Onda SVG no final */}
+        <div className="relative w-full overflow-hidden">
+          <svg
+            className="relative block w-full h-6"
+            data-name="Layer 1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+              className="fill-gray-50"
+            />
+          </svg>
         </div>
       </section>
 
