@@ -74,7 +74,9 @@ export const authOptions: NextAuthOptions = {
             // Fallback: se a senha no banco estiver em texto puro de versões antigas,
             // aceita uma única vez e re-hash automaticamente para bcrypt.
             if (credentials.password === user.password) {
-              debugLog('Senha em texto puro detectada. Realizando re-hash automático.')
+              debugLog(
+                'Senha em texto puro detectada. Realizando re-hash automático.'
+              )
               try {
                 const hashed = bcrypt.hashSync(credentials.password, 12)
                 await prisma.user.update({
@@ -82,7 +84,10 @@ export const authOptions: NextAuthOptions = {
                   data: { password: hashed },
                 })
               } catch (rehashErr) {
-                console.error('[AUTH] Falha ao re-hash da senha antiga:', rehashErr)
+                console.error(
+                  '[AUTH] Falha ao re-hash da senha antiga:',
+                  rehashErr
+                )
               }
             } else {
               debugLog('Senha inválida')

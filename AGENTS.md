@@ -122,11 +122,131 @@ design system robusto.
 4. **Tipografia**: Inter (sans) + Jost (headings)
 5. **Não invente** novos componentes sem consultar design system
 
-### **📱 Responsive Design**
+### **📱 Responsive Design - DOUTRINA OBRIGATÓRIA**
 
-- **Mobile-first**: Sempre comece com estilos mobile
-- **Breakpoints**: sm: 640px, md: 768px, lg: 1024px, xl: 1280px
-- **Teste**: Em dispositivos reais sempre
+#### **🚨 REGRA FUNDAMENTAL**
+
+**TODA nova implementação DEVE seguir RIGOROSAMENTE os padrões de responsividade
+e espaçamento já estabelecidos no projeto.**
+
+#### **📏 SISTEMA DE ESPAÇAMENTO OBRIGATÓRIO**
+
+**Containers Principais:**
+
+- **Mobile**: `px-4` (16px lateral)
+- **Tablet**: `sm:px-6` (24px lateral)
+- **Desktop**: `lg:px-8` (32px lateral)
+- **Padrão Completo**: `px-4 sm:px-6 lg:px-8`
+
+**Espaçamento Vertical Entre Seções:**
+
+- **Mobile**: `py-8` ou `py-12` (32px-48px)
+- **Tablet**: `md:py-12` ou `md:py-16` (48px-64px)
+- **Desktop**: `lg:py-16` ou `lg:py-20` (64px-80px)
+- **Padrão Completo**: `py-12 md:py-16 lg:py-20`
+
+**Gaps em Grids:**
+
+- **Mobile**: `gap-4` ou `gap-6` (16px-24px)
+- **Tablet**: `md:gap-6` ou `md:gap-8` (24px-32px)
+- **Desktop**: `lg:gap-8` ou `lg:gap-12` (32px-48px)
+- **Padrão Completo**: `gap-6 md:gap-8 lg:gap-12`
+
+#### **🏗️ PADRÕES DE GRID RESPONSIVO OBRIGATÓRIOS**
+
+**Grid de Cards/Produtos:**
+
+```typescript
+// PADRÃO OBRIGATÓRIO para listagem de itens
+className =
+  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+
+// Para cards maiores (destaque)
+className = "grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
+
+// Para estatísticas/métricas
+className = "grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+```
+
+**Layout de Conteúdo:**
+
+```typescript
+// Sidebar + Conteúdo
+className = "grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12"
+
+// Duas colunas equilibradas
+className = "grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
+
+// Três colunas (features, benefícios)
+className = "grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+```
+
+#### **📝 TIPOGRAFIA RESPONSIVA OBRIGATÓRIA**
+
+**Hierarquia de Títulos:**
+
+```typescript
+// H1 - Títulos principais
+className = "text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold"
+
+// H2 - Títulos de seção
+className = "text-2xl md:text-3xl lg:text-4xl font-bold"
+
+// H3 - Subtítulos
+className = "text-xl md:text-2xl lg:text-3xl font-semibold"
+
+// H4 - Títulos menores
+className = "text-lg md:text-xl lg:text-2xl font-semibold"
+```
+
+**Texto Corpo:**
+
+```typescript
+// Texto principal
+className = "text-base md:text-lg leading-relaxed"
+
+// Texto secundário
+className = "text-sm md:text-base text-gray-600"
+
+// Texto pequeno (legendas, etc.)
+className = "text-xs md:text-sm text-gray-500"
+```
+
+#### **❌ ANTI-PADRÕES - NUNCA FAÇA**
+
+**Espaçamento Proibido:**
+
+- ❌ NUNCA use valores fixos sem responsividade: `p-8` (sem `md:p-12`)
+- ❌ NUNCA ignore breakpoints: `px-4` sem `sm:px-6 lg:px-8`
+- ❌ NUNCA use espaçamentos inconsistentes com o projeto
+
+**Grid Proibido:**
+
+- ❌ NUNCA use grids sem responsividade: `grid-cols-3` (sem `md:grid-cols-3`)
+- ❌ NUNCA ignore o padrão mobile-first
+- ❌ NUNCA use layouts que quebrem em mobile
+
+**Tipografia Proibida:**
+
+- ❌ NUNCA use tamanhos fixos sem responsividade
+- ❌ NUNCA ignore a hierarquia estabelecida
+- ❌ NUNCA use fontes que não sejam do design system
+
+#### **Breakpoints Padrão**
+
+- **Mobile**: < 640px
+- **Small**: 640px+ (`sm:`)
+- **Medium**: 768px+ (`md:`)
+- **Large**: 1024px+ (`lg:`)
+- **Extra Large**: 1280px+ (`xl:`)
+- **2XL**: 1536px+ (`2xl:`)
+
+#### **Mobile-First Obrigatório**
+
+- Comece sempre com estilos mobile
+- Use `sm:`, `md:`, `lg:`, `xl:`, `2xl:` para breakpoints maiores
+- Teste em dispositivos reais sempre
+- Mantenha consistência com padrões estabelecidos
 
 ---
 

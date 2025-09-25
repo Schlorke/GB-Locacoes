@@ -9,14 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  FileText,
-  Clock,
-  ShoppingCart,
-  Plus,
-  TrendingUp,
-  ArrowRight,
-} from 'lucide-react'
+import { FileText, Clock, ShoppingCart, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 import { useCartStore } from '@/stores/useCartStore'
 import { motion } from 'framer-motion'
@@ -31,19 +24,18 @@ export default function AreaClientePage() {
       <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden">
         {/* Elementos animados de background */}
         <div className="absolute inset-0 overflow-hidden z-[1]">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-300/5 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-6 md:py-14 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16 relative z-10">
           <motion.div
             className="text-center space-y-3"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight">
+            <h1 className="text-3xl font-bold leading-tight">
               Bem-vindo de volta,
               <span className="text-yellow-300 relative block mt-1">
                 {session?.user?.name || 'Cliente'}!
@@ -75,152 +67,183 @@ export default function AreaClientePage() {
       </section>
 
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
-      <section className="py-6 md:py-8 relative">
-        <div className="px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          
-          {/* Stats Grid - 1 coluna em mobile, 4 colunas em desktop */}
+      <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          {/* Stats Grid - 1 coluna em mobile, 3 colunas em desktop */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-6 mb-6 md:mb-8"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 h-auto"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            
-            {/* Card Carrinho - Otimizado */}
-            <div className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-              <div className="relative z-10 p-3 md:p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
-                    <ShoppingCart className="h-5 w-5" />
+            {/* Card Carrinho - Padrão Histórico */}
+            <Link href="/orcamento" className="block">
+              <div
+                className="relative h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer"
+                style={{ backgroundColor: 'white' }}
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Carrinho
+                      </p>
+                      <p className="text-3xl font-bold text-gray-900">
+                        {getItemCount()}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        itens selecionados
+                      </p>
+                    </div>
+                    <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white group-hover:scale-110 transition-transform">
+                      <ShoppingCart className="h-8 w-8" />
+                    </div>
                   </div>
                 </div>
-                <div className="space-y-1">
-                  <p className="text-sm text-gray-600">Carrinho</p>
-                  <p className="text-2xl font-bold text-gray-900">{getItemCount()}</p>
-                  <p className="text-xs text-gray-500">itens selecionados</p>
-                </div>
               </div>
-            </div>
+            </Link>
 
-            {/* Card Orçamentos - Otimizado */}
-            <div className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
-              <div className="relative z-10 p-3 md:p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
-                    <FileText className="h-5 w-5" />
+            {/* Card Orçamentos - Padrão Histórico */}
+            <Link href="/orcamento" className="block">
+              <div
+                className="relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer"
+                style={{ backgroundColor: 'white' }}
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Orçamentos
+                      </p>
+                      <p className="text-3xl font-bold text-gray-900">0</p>
+                      <p className="text-sm text-gray-500">solicitações</p>
+                    </div>
+                    <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white group-hover:scale-110 transition-transform">
+                      <FileText className="h-8 w-8" />
+                    </div>
                   </div>
                 </div>
-                <div className="space-y-1">
-                  <p className="text-sm text-gray-600">Orçamentos</p>
-                  <p className="text-2xl font-bold text-gray-900">0</p>
-                  <p className="text-xs text-gray-500">solicitações</p>
-                </div>
               </div>
-            </div>
+            </Link>
 
-            {/* Card Total - Otimizado */}
-            <div className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-50"></div>
-              <div className="relative z-10 p-3 md:p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-gray-600 mb-1">Total Estimado</p>
-                    <p className="text-3xl md:text-4xl font-bold text-green-600">R$ {getTotalPrice().toFixed(2)}</p>
-                    <p className="text-xs text-gray-500">no carrinho</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-lg text-white">
-                    <TrendingUp className="h-6 w-6" />
+            {/* Card Total - Padrão Histórico */}
+            <Link href="/orcamento" className="block">
+              <div
+                className="relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer"
+                style={{ backgroundColor: 'white' }}
+              >
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Total Estimado
+                      </p>
+                      <p className="text-3xl font-bold text-gray-900">
+                        R$ {getTotalPrice().toFixed(2)}
+                      </p>
+                      <p className="text-sm text-gray-500">no carrinho</p>
+                    </div>
+                    <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white group-hover:scale-110 transition-transform">
+                      <TrendingUp className="h-8 w-8" />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           </motion.div>
 
-          {/* Seções Principais - Layout Otimizado */}
+          {/* Seções Principais - Layout Proporcional à linha superior */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            
-            {/* Meu Carrinho - Compacto */}
-            <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+            {/* Meu Carrinho - Layout com Botões no Fundo */}
+            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-2 md:pb-3">
-                <CardTitle className="flex items-center gap-3 text-lg font-bold text-gray-900">
+              <CardHeader className="relative z-10 pb-6 md:pb-8">
+                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                     <ShoppingCart className="h-5 w-5" />
                   </div>
                   Meu Carrinho
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0">
+              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
                 {getItemCount() > 0 ? (
-                  <div className="space-y-4">
-                    <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl p-4">
-                      <p className="text-sm text-gray-600">
+                  <div className="flex flex-col flex-1">
+                    <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl p-6 mb-6">
+                      <p className="text-base text-gray-600">
                         Total estimado:{' '}
                         <span className="font-bold text-2xl text-orange-600">
                           R$ {getTotalPrice().toFixed(2)}
                         </span>
                       </p>
                     </div>
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <Link href="/orcamento" className="flex-1">
-                        <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg  transition-all duration-300 shadow-lg hover:shadow-xl">
-                          Ver Carrinho
-                          <ArrowRight className="h-4 w-4 ml-2" />
-                        </Button>
-                      </Link>
-                      <Link href="/equipamentos">
-                        <Button className="w-full sm:w-auto bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl">
-                          <Plus className="h-4 w-4 mr-2" />
-                          Adicionar Mais
-                        </Button>
-                      </Link>
+                    <div className="flex gap-2 w-full mt-auto">
+                      <Button
+                        size="sm"
+                        asChild
+                        className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                      >
+                        <Link href="/orcamento">Ver Carrinho</Link>
+                      </Button>
+                      <Button
+                        size="sm"
+                        asChild
+                        className="flex-1 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                      >
+                        <Link href="/equipamentos">Adicionar Mais</Link>
+                      </Button>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-6">
-                    <ShoppingCart className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                    <p className="text-gray-500 mb-4">Seu carrinho está vazio</p>
-                    <div className="flex flex-col sm:flex-row gap-2">
-                      <Link href="/equipamentos" className="flex-1">
-                        <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg  transition-all duration-300 shadow-lg hover:shadow-xl">
-                          <Plus className="h-4 w-4 mr-2" />
-                          Adicionar Equipamentos
-                        </Button>
-                      </Link>
+                  <div className="text-center flex flex-col flex-1 justify-center">
+                    <ShoppingCart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500 mb-8">
+                      Seu carrinho está vazio
+                    </p>
+                    <div className="flex gap-2 w-full mt-auto">
+                      <Button
+                        size="sm"
+                        asChild
+                        className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                      >
+                        <Link href="/equipamentos">Adicionar Equipamentos</Link>
+                      </Button>
                     </div>
                   </div>
                 )}
               </CardContent>
             </Card>
 
-            {/* Meus Orçamentos - Compacto */}
-            <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+            {/* Meus Orçamentos - Layout com Botões no Fundo */}
+            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-2 md:pb-3">
-                <CardTitle className="flex items-center gap-3 text-lg font-bold text-gray-900">
+              <CardHeader className="relative z-10 pb-6 md:pb-8">
+                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
                     <FileText className="h-5 w-5" />
                   </div>
                   Meus Orçamentos
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0">
-                <div className="text-center py-6">
-                  <FileText className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500 mb-4">Nenhum orçamento encontrado</p>
-                  <Link href="/orcamento">
-                    <Button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg  transition-all duration-300 shadow-lg hover:shadow-xl">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Solicitar Orçamento
+              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
+                <div className="text-center flex flex-col flex-1 justify-center">
+                  <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 mb-8">
+                    Nenhum orçamento encontrado
+                  </p>
+                  <div className="flex gap-2 w-full mt-auto">
+                    <Button
+                      size="sm"
+                      asChild
+                      className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                    >
+                      <Link href="/orcamento">Solicitar Orçamento</Link>
                     </Button>
-                  </Link>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -228,26 +251,30 @@ export default function AreaClientePage() {
 
           {/* Atividade Recente - Seção Compacta */}
           <motion.div
-            className="mt-6 md:mt-8"
+            className="mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-2 md:pb-3">
-                <CardTitle className="flex items-center gap-3 text-lg font-bold text-gray-900">
+              <CardHeader className="relative z-10 pb-6 md:pb-8">
+                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-gray-500 to-gray-600 rounded-lg text-white">
                     <Clock className="h-5 w-5" />
                   </div>
                   Atividade Recente
                 </CardTitle>
-                <CardDescription>Suas últimas ações na plataforma</CardDescription>
+                <CardDescription>
+                  Suas últimas ações na plataforma
+                </CardDescription>
               </CardHeader>
               <CardContent className="relative z-10 pt-0">
-                <div className="text-center py-8">
-                  <Clock className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">Nenhuma atividade recente</p>
+                <div className="text-center py-16">
+                  <Clock className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 text-lg">
+                    Nenhuma atividade recente
+                  </p>
                 </div>
               </CardContent>
             </Card>

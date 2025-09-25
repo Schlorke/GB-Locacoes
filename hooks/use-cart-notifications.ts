@@ -15,15 +15,18 @@ export function useCartNotifications() {
   useEffect(() => {
     if (items.length === 0) return
 
-    const timer = setTimeout(() => {
-      addNotification({
-        type: 'equipment',
-        title: 'Carrinho Abandonado',
-        message: `Você tem ${itemCount} item${itemCount > 1 ? 's' : ''} aguardando no seu carrinho. Finalize sua compra!`,
-        priority: 'medium',
-        actionUrl: '/orcamento',
-      })
-    }, 5 * 60 * 1000) // 5 minutos
+    const timer = setTimeout(
+      () => {
+        addNotification({
+          type: 'equipment',
+          title: 'Carrinho Abandonado',
+          message: `Você tem ${itemCount} item${itemCount > 1 ? 's' : ''} aguardando no seu carrinho. Finalize sua compra!`,
+          priority: 'medium',
+          actionUrl: '/orcamento',
+        })
+      },
+      5 * 60 * 1000
+    ) // 5 minutos
 
     return () => clearTimeout(timer)
   }, [items, addNotification, itemCount])

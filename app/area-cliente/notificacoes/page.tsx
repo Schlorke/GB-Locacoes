@@ -190,7 +190,6 @@ export default function NotificacoesPage() {
         </div>
       </div>
 
-
       {/* Filtros e Busca */}
       <Card>
         <CardContent className="p-4">

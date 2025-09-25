@@ -176,7 +176,129 @@ bg - orange - 50 // Light background
 border - orange - 200 // Subtle borders
 ```
 
-### **Responsive Design**
+### **Responsive Design - DOUTRINA OBRIGATÓRIA**
+
+#### **🚨 REGRA FUNDAMENTAL**
+
+**TODA nova implementação DEVE seguir RIGOROSAMENTE os padrões de responsividade
+e espaçamento já estabelecidos no projeto.**
+
+#### **📏 SISTEMA DE ESPAÇAMENTO OBRIGATÓRIO**
+
+**Containers Principais:**
+
+```tsx
+// ✅ PADRÃO OBRIGATÓRIO
+className = "px-4 sm:px-6 lg:px-8"
+// Mobile: 16px, Tablet: 24px, Desktop: 32px
+```
+
+**Espaçamento Vertical Entre Seções:**
+
+```tsx
+// ✅ PADRÃO OBRIGATÓRIO
+className = "py-12 md:py-16 lg:py-20"
+// Mobile: 48px, Tablet: 64px, Desktop: 80px
+```
+
+**Gaps em Grids:**
+
+```tsx
+// ✅ PADRÃO OBRIGATÓRIO
+className = "gap-6 md:gap-8 lg:gap-12"
+// Mobile: 24px, Tablet: 32px, Desktop: 48px
+```
+
+#### **🏗️ PADRÕES DE GRID RESPONSIVO OBRIGATÓRIOS**
+
+**Grid de Cards/Produtos:**
+
+```tsx
+// ✅ PADRÃO OBRIGATÓRIO para listagem de itens
+className =
+  "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+
+// ✅ Para cards maiores (destaque)
+className = "grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
+
+// ✅ Para estatísticas/métricas
+className = "grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+```
+
+**Layout de Conteúdo:**
+
+```tsx
+// ✅ Sidebar + Conteúdo
+className = "grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12"
+
+// ✅ Duas colunas equilibradas
+className = "grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
+
+// ✅ Três colunas (features, benefícios)
+className = "grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+```
+
+#### **📝 TIPOGRAFIA RESPONSIVA OBRIGATÓRIA**
+
+**Hierarquia de Títulos:**
+
+```tsx
+// ✅ H1 - Títulos principais
+className = "text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold"
+
+// ✅ H2 - Títulos de seção
+className = "text-2xl md:text-3xl lg:text-4xl font-bold"
+
+// ✅ H3 - Subtítulos
+className = "text-xl md:text-2xl lg:text-3xl font-semibold"
+
+// ✅ H4 - Títulos menores
+className = "text-lg md:text-xl lg:text-2xl font-semibold"
+```
+
+**Texto Corpo:**
+
+```tsx
+// ✅ Texto principal
+className = "text-base md:text-lg leading-relaxed"
+
+// ✅ Texto secundário
+className = "text-sm md:text-base text-gray-600"
+
+// ✅ Texto pequeno (legendas, etc.)
+className = "text-xs md:text-sm text-gray-500"
+```
+
+#### **❌ ANTI-PADRÕES - NUNCA FAÇA**
+
+**Espaçamento Proibido:**
+
+- ❌ NUNCA use valores fixos sem responsividade: `p-8` (sem `md:p-12`)
+- ❌ NUNCA ignore breakpoints: `px-4` sem `sm:px-6 lg:px-8`
+- ❌ NUNCA use espaçamentos inconsistentes com o projeto
+
+**Grid Proibido:**
+
+- ❌ NUNCA use grids sem responsividade: `grid-cols-3` (sem `md:grid-cols-3`)
+- ❌ NUNCA ignore o padrão mobile-first
+- ❌ NUNCA use layouts que quebrem em mobile
+
+**Tipografia Proibida:**
+
+- ❌ NUNCA use tamanhos fixos sem responsividade
+- ❌ NUNCA ignore a hierarquia estabelecida
+- ❌ NUNCA use fontes que não sejam do design system
+
+#### **Breakpoints Padrão**
+
+- **Mobile**: < 640px
+- **Small**: 640px+ (`sm:`)
+- **Medium**: 768px+ (`md:`)
+- **Large**: 1024px+ (`lg:`)
+- **Extra Large**: 1280px+ (`xl:`)
+- **2XL**: 1536px+ (`2xl:`)
+
+#### **Mobile-First Obrigatório**
 
 ```tsx
 // ✅ ALWAYS mobile-first
