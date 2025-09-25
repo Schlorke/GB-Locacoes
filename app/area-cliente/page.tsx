@@ -87,11 +87,11 @@ export default function AreaClientePage() {
           >
             
             {/* Card Carrinho - Otimizado */}
-            <div className="col-span-1 relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+            <div className="col-span-1 relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
               <div className="relative z-10 p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white group-hover:scale-110 transition-transform">
+                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                     <ShoppingCart className="h-5 w-5" />
                   </div>
                 </div>
@@ -104,11 +104,11 @@ export default function AreaClientePage() {
             </div>
 
             {/* Card Orçamentos - Otimizado */}
-            <div className="col-span-1 relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+            <div className="col-span-1 relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
               <div className="relative z-10 p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white group-hover:scale-110 transition-transform">
+                  <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
                     <FileText className="h-5 w-5" />
                   </div>
                 </div>
@@ -121,7 +121,7 @@ export default function AreaClientePage() {
             </div>
 
             {/* Card Total - Span 2 colunas em mobile */}
-            <div className="col-span-2 md:col-span-2 relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+            <div className="col-span-2 md:col-span-2 relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-50"></div>
               <div className="relative z-10 p-4">
                 <div className="flex items-center justify-between">
@@ -130,7 +130,7 @@ export default function AreaClientePage() {
                     <p className="text-3xl md:text-4xl font-bold text-green-600">R$ {getTotalPrice().toFixed(2)}</p>
                     <p className="text-xs text-gray-500">no carrinho</p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-lg text-white group-hover:scale-110 transition-transform">
+                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-lg text-white">
                     <TrendingUp className="h-6 w-6" />
                   </div>
                 </div>
@@ -147,11 +147,11 @@ export default function AreaClientePage() {
           >
             
             {/* Meu Carrinho - Compacto */}
-            <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+            <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-3">
                 <CardTitle className="flex items-center gap-3 text-lg font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white group-hover:scale-110 transition-transform">
+                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                     <ShoppingCart className="h-5 w-5" />
                   </div>
                   Meu Carrinho
@@ -170,7 +170,7 @@ export default function AreaClientePage() {
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <Link href="/orcamento" className="flex-1">
-                        <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg  transition-all duration-300 shadow-lg hover:shadow-xl">
                           Ver Carrinho
                           <ArrowRight className="h-4 w-4 ml-2" />
                         </Button>
@@ -189,7 +189,7 @@ export default function AreaClientePage() {
                     <p className="text-gray-500 mb-4">Seu carrinho está vazio</p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <Link href="/equipamentos" className="flex-1">
-                        <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                        <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg  transition-all duration-300 shadow-lg hover:shadow-xl">
                           <Plus className="h-4 w-4 mr-2" />
                           Adicionar Equipamentos
                         </Button>
@@ -201,11 +201,11 @@ export default function AreaClientePage() {
             </Card>
 
             {/* Meus Orçamentos - Compacto */}
-            <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+            <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-3">
                 <CardTitle className="flex items-center gap-3 text-lg font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white group-hover:scale-110 transition-transform">
+                  <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
                     <FileText className="h-5 w-5" />
                   </div>
                   Meus Orçamentos
@@ -216,7 +216,7 @@ export default function AreaClientePage() {
                   <FileText className="h-12 w-12 text-gray-300 mx-auto mb-3" />
                   <p className="text-gray-500 mb-4">Nenhum orçamento encontrado</p>
                   <Link href="/orcamento">
-                    <Button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <Button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg  transition-all duration-300 shadow-lg hover:shadow-xl">
                       <Plus className="h-4 w-4 mr-2" />
                       Solicitar Orçamento
                     </Button>
@@ -233,7 +233,7 @@ export default function AreaClientePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg">
+            <Card className="relative overflow-hidden bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-3">
                 <CardTitle className="flex items-center gap-3 text-lg font-bold text-gray-900">
