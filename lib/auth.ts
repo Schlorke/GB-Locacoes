@@ -51,8 +51,8 @@ export const authOptions: NextAuthOptions = {
           debugLog('Buscando usuário', { email: normalizedEmail })
 
           const prisma = await getPrisma()
-          const user = await prisma.user.findUnique({
-            where: { email: normalizedEmail },
+          const user = await prisma.user.findFirst({
+            where: { email: { equals: normalizedEmail, mode: 'insensitive' } },
           })
 
           if (!user) {
