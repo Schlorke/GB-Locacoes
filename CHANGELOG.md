@@ -6,6 +6,22 @@ O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 e este projeto adere ao
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2025-09-25] - Alinhamento Consistente dos Cards da Área do Cliente
+
+### Fixed 🐛
+
+- **Alinhamento dos Cards**: Correção do alinhamento interno dos blocos da
+  primeira linha
+  - **Layout Flexbox**: Implementação de `flex flex-col` para estrutura vertical
+    consistente
+  - **Alinhamento Vertical**: Uso de `justify-center` para centralizar conteúdo
+    verticalmente
+  - **Posicionamento dos Ícones**: Adicionado `self-center` para centralizar
+    ícones em relação ao conteúdo
+  - **Espaçamento Consistente**: Padronização de `mb-1` entre elementos de texto
+  - **Altura Uniforme**: Garantia de que todos os cards tenham `h-full` para
+    altura consistente
+
 ## [2025-09-25] - Otimização Mobile da Área do Cliente + Transformação Completa da Identidade Visual
 
 ### Added ✨

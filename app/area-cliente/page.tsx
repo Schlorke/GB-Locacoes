@@ -28,7 +28,7 @@ export default function AreaClientePage() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-300/5 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 lg:py-16 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 lg:py-14 relative z-10">
           <motion.div
             className="text-center space-y-3"
             initial={{ opacity: 0, y: 20 }}
@@ -71,32 +71,29 @@ export default function AreaClientePage() {
         <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           {/* Stats Grid - 1 coluna em mobile, 3 colunas em desktop */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 h-auto"
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 items-stretch"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             {/* Card Carrinho - Padrão Histórico */}
-            <Link href="/orcamento" className="block">
-              <div
-                className="relative h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer"
-                style={{ backgroundColor: 'white' }}
-              >
-                <div className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600">
+            <Link href="/orcamento" className="flex-1 h-full">
+              <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
+                <div className="p-6 h-full flex flex-col">
+                  <div className="flex items-start justify-between h-full">
+                    <div className="flex flex-col justify-center h-full">
+                      <p className="text-sm font-medium text-gray-600 mb-1">
                         Carrinho
                       </p>
-                      <p className="text-3xl font-bold text-gray-900">
+                      <p className="text-3xl font-bold text-gray-900 mb-1">
                         {getItemCount()}
                       </p>
                       <p className="text-sm text-gray-500">
                         itens selecionados
                       </p>
                     </div>
-                    <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white group-hover:scale-110 transition-transform">
-                      <ShoppingCart className="h-8 w-8" />
+                    <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                      <ShoppingCart className="h-6 w-6" />
                     </div>
                   </div>
                 </div>
@@ -104,22 +101,19 @@ export default function AreaClientePage() {
             </Link>
 
             {/* Card Orçamentos - Padrão Histórico */}
-            <Link href="/orcamento" className="block">
-              <div
-                className="relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer"
-                style={{ backgroundColor: 'white' }}
-              >
-                <div className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600">
+            <Link href="/orcamento" className="flex-2 h-full">
+              <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
+                <div className="p-6 h-full flex flex-col">
+                  <div className="flex items-start justify-between h-full">
+                    <div className="flex flex-col justify-center h-full">
+                      <p className="text-sm font-medium text-gray-600 mb-1">
                         Orçamentos
                       </p>
-                      <p className="text-3xl font-bold text-gray-900">0</p>
+                      <p className="text-3xl font-bold text-gray-900 mb-1">0</p>
                       <p className="text-sm text-gray-500">solicitações</p>
                     </div>
-                    <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white group-hover:scale-110 transition-transform">
-                      <FileText className="h-8 w-8" />
+                    <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                      <FileText className="h-6 w-6" />
                     </div>
                   </div>
                 </div>
@@ -127,24 +121,21 @@ export default function AreaClientePage() {
             </Link>
 
             {/* Card Total - Padrão Histórico */}
-            <Link href="/orcamento" className="block">
-              <div
-                className="relative overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer"
-                style={{ backgroundColor: 'white' }}
-              >
-                <div className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600">
+            <Link href="/orcamento" className="flex-3 h-full">
+              <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
+                <div className="p-6 h-full flex flex-col">
+                  <div className="flex items-start justify-between h-full">
+                    <div className="flex flex-col justify-center h-full">
+                      <p className="text-sm font-medium text-gray-600 mb-1">
                         Total Estimado
                       </p>
-                      <p className="text-3xl font-bold text-gray-900">
+                      <p className="text-3xl font-bold text-gray-900 mb-1">
                         R$ {getTotalPrice().toFixed(2)}
                       </p>
                       <p className="text-sm text-gray-500">no carrinho</p>
                     </div>
-                    <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white group-hover:scale-110 transition-transform">
-                      <TrendingUp className="h-8 w-8" />
+                    <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                      <TrendingUp className="h-6 w-6" />
                     </div>
                   </div>
                 </div>

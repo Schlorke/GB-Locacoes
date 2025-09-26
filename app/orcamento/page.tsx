@@ -1256,9 +1256,9 @@ function QuotePage() {
 
                     <Separator />
 
-                    <div className="flex justify-between items-center text-lg font-bold">
+                    <div className="flex justify-between items-center text-xl font-bold">
                       <span>Total:</span>
-                      <span className="text-primary">
+                      <span className="text-primary text-xl">
                         {formatCurrency(calculateTotal())}
                       </span>
                     </div>
