@@ -152,12 +152,20 @@ export default function AreaClienteLayout({
                         >
                           <div className="flex items-center gap-3">
                             <item.icon
-                              className={`h-5 w-5 ${item.isActive ? 'text-white' : 'text-gray-500'}`}
+                              className={`h-5 w-5 transition-colors duration-200 ${
+                                item.isActive 
+                                  ? 'text-white' 
+                                  : 'text-gray-500 group-hover:text-orange-600'
+                              }`}
                             />
                             <span>{item.label}</span>
                           </div>
                           <ChevronRight
-                            className={`h-4 w-4 ${item.isActive ? 'text-white' : 'text-gray-400'}`}
+                            className={`h-4 w-4 transition-colors duration-200 ${
+                              item.isActive 
+                                ? 'text-white' 
+                                : 'text-gray-400 group-hover:text-orange-600'
+                            }`}
                           />
                         </Link>
                       </motion.div>
@@ -180,10 +188,10 @@ export default function AreaClienteLayout({
                         className="group flex items-center justify-between w-full px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-orange-600 rounded-xl transition-colors duration-200"
                       >
                         <div className="flex items-center gap-3">
-                          <LogOut className="h-5 w-5 text-gray-500" />
+                          <LogOut className="h-5 w-5 text-gray-500 group-hover:text-orange-600 transition-colors duration-200" />
                           <span>Sair</span>
                         </div>
-                        <ChevronRight className="h-4 w-4 text-gray-400" />
+                        <ChevronRight className="h-4 w-4 text-gray-400 group-hover:text-orange-600 transition-colors duration-200" />
                       </button>
                     </motion.div>
                   </nav>
