@@ -153,8 +153,8 @@ export default function AreaClienteLayout({
                           <div className="flex items-center gap-3">
                             <item.icon
                               className={`h-5 w-5 transition-colors duration-200 ${
-                                item.isActive 
-                                  ? 'text-white' 
+                                item.isActive
+                                  ? 'text-white'
                                   : 'text-gray-500 group-hover:text-orange-600'
                               }`}
                             />
@@ -162,8 +162,8 @@ export default function AreaClienteLayout({
                           </div>
                           <ChevronRight
                             className={`h-4 w-4 transition-colors duration-200 ${
-                              item.isActive 
-                                ? 'text-white' 
+                              item.isActive
+                                ? 'text-white'
                                 : 'text-gray-400 group-hover:text-orange-600'
                             }`}
                           />
