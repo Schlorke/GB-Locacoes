@@ -42,7 +42,7 @@ export default function AreaClientePage() {
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-yellow-300/90 rounded-full"></div>
               </span>
             </h1>
-            <p className="text-base md:text-lg text-orange-100 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
               Gerencie seus orçamentos, acompanhe suas locações e tenha controle
               total sobre seus equipamentos
             </p>

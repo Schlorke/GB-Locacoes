@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useSession } from 'next-auth/react'
+// import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -40,7 +40,8 @@ interface Address {
 }
 
 export default function EnderecosPage() {
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  // TODO: Use session data for user-specific address management
   const [addresses, setAddresses] = useState<Address[]>([
     {
       id: '1',
@@ -171,9 +172,7 @@ export default function EnderecosPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-3xl font-bold leading-tight">
-              Endereços
-            </h1>
+            <h1 className="text-3xl font-bold leading-tight">Endereços</h1>
             <p className="text-base md:text-lg text-orange-100 leading-relaxed max-w-2xl mx-auto">
               Gerencie seus endereços de entrega e retirada
             </p>
@@ -236,7 +235,7 @@ export default function EnderecosPage() {
                       Principal
                     </p>
                     <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {addresses.filter(a => a.isPrimary).length}
+                      {addresses.filter((a) => a.isPrimary).length}
                     </p>
                     <p className="text-sm text-gray-500">definido</p>
                   </div>
@@ -256,7 +255,7 @@ export default function EnderecosPage() {
                       Cidades
                     </p>
                     <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {new Set(addresses.map(a => a.city)).size}
+                      {new Set(addresses.map((a) => a.city)).size}
                     </p>
                     <p className="text-sm text-gray-500">diferentes</p>
                   </div>
@@ -297,7 +296,7 @@ export default function EnderecosPage() {
                       onClick={() => setIsAdding(true)}
                       className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
                     >
-          <Plus className="h-4 w-4 mr-2" />
+                      <Plus className="h-4 w-4 mr-2" />
                       Novo Endereço
                     </Button>
                   </div>
@@ -317,10 +316,10 @@ export default function EnderecosPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
-                {addresses.find(a => a.isPrimary) ? (
+                {addresses.find((a) => a.isPrimary) ? (
                   <div className="flex-1">
                     {(() => {
-                      const primaryAddress = addresses.find(a => a.isPrimary)!
+                      const primaryAddress = addresses.find((a) => a.isPrimary)!
                       return (
                         <div className="space-y-4">
                           <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 mb-6">
@@ -336,7 +335,8 @@ export default function EnderecosPage() {
                               </p>
                             )}
                             <p className="text-sm text-blue-700">
-                              {primaryAddress.neighborhood} - {primaryAddress.city}/{primaryAddress.state}
+                              {primaryAddress.neighborhood} -{' '}
+                              {primaryAddress.city}/{primaryAddress.state}
                             </p>
                           </div>
                           <div className="flex gap-2 w-full mt-auto">
@@ -347,8 +347,8 @@ export default function EnderecosPage() {
                             >
                               <Edit className="h-4 w-4 mr-2" />
                               Editar
-        </Button>
-      </div>
+                            </Button>
+                          </div>
                         </div>
                       )
                     })()}
@@ -366,7 +366,7 @@ export default function EnderecosPage() {
           </motion.div>
 
           {/* Formulário de Adicionar/Editar */}
-      {isAdding && (
+          {isAdding && (
             <motion.div
               className="mb-8"
               initial={{ opacity: 0, y: 40 }}
@@ -378,120 +378,145 @@ export default function EnderecosPage() {
                 <CardHeader className="relative z-10">
                   <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                     <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg text-white">
-                      {editingId ? <Edit className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+                      {editingId ? (
+                        <Edit className="h-5 w-5" />
+                      ) : (
+                        <Plus className="h-5 w-5" />
+                      )}
                     </div>
-              {editingId ? 'Editar Endereço' : 'Adicionar Novo Endereço'}
-            </CardTitle>
-            <CardDescription>
-              Preencha os dados do endereço de entrega
-            </CardDescription>
-          </CardHeader>
+                    {editingId ? 'Editar Endereço' : 'Adicionar Novo Endereço'}
+                  </CardTitle>
+                  <CardDescription>
+                    Preencha os dados do endereço de entrega
+                  </CardDescription>
+                </CardHeader>
                 <CardContent className="relative z-10">
                   <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                        <Label htmlFor="street" className="text-sm font-medium text-gray-700">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="street"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           Rua
                         </Label>
-                  <Input
-                    id="street"
-                    name="street"
-                    value={formData.street}
-                    onChange={handleInputChange}
-                    required
+                        <Input
+                          id="street"
+                          name="street"
+                          value={formData.street}
+                          onChange={handleInputChange}
+                          required
                           className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                        <Label htmlFor="number" className="text-sm font-medium text-gray-700">
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="number"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           Número
                         </Label>
-                  <Input
-                    id="number"
-                    name="number"
-                    value={formData.number}
-                    onChange={handleInputChange}
-                    required
+                        <Input
+                          id="number"
+                          name="number"
+                          value={formData.number}
+                          onChange={handleInputChange}
+                          required
                           className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                        <Label htmlFor="complement" className="text-sm font-medium text-gray-700">
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="complement"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           Complemento
                         </Label>
-                  <Input
-                    id="complement"
-                    name="complement"
-                    value={formData.complement}
-                    onChange={handleInputChange}
-                    placeholder="Apto, sala, etc."
+                        <Input
+                          id="complement"
+                          name="complement"
+                          value={formData.complement}
+                          onChange={handleInputChange}
+                          placeholder="Apto, sala, etc."
                           className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                        <Label htmlFor="neighborhood" className="text-sm font-medium text-gray-700">
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="neighborhood"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           Bairro
                         </Label>
-                  <Input
-                    id="neighborhood"
-                    name="neighborhood"
-                    value={formData.neighborhood}
-                    onChange={handleInputChange}
-                    required
+                        <Input
+                          id="neighborhood"
+                          name="neighborhood"
+                          value={formData.neighborhood}
+                          onChange={handleInputChange}
+                          required
                           className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                        <Label htmlFor="city" className="text-sm font-medium text-gray-700">
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="city"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           Cidade
                         </Label>
-                  <Input
-                    id="city"
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    required
+                        <Input
+                          id="city"
+                          name="city"
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          required
                           className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                  />
-                </div>
-                <div className="space-y-2">
-                        <Label htmlFor="state" className="text-sm font-medium text-gray-700">
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label
+                          htmlFor="state"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           Estado
                         </Label>
-                  <Input
-                    id="state"
-                    name="state"
-                    value={formData.state}
-                    onChange={handleInputChange}
-                    required
-                    maxLength={2}
-                    placeholder="RS"
+                        <Input
+                          id="state"
+                          name="state"
+                          value={formData.state}
+                          onChange={handleInputChange}
+                          required
+                          maxLength={2}
+                          placeholder="RS"
                           className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                  />
-                </div>
-                <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="zipCode" className="text-sm font-medium text-gray-700">
+                        />
+                      </div>
+                      <div className="space-y-2 md:col-span-2">
+                        <Label
+                          htmlFor="zipCode"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           CEP
                         </Label>
-                  <Input
-                    id="zipCode"
-                    name="zipCode"
-                    value={formData.zipCode}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="00000-000"
+                        <Input
+                          id="zipCode"
+                          name="zipCode"
+                          value={formData.zipCode}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="00000-000"
                           className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                  />
-                </div>
-              </div>
+                        />
+                      </div>
+                    </div>
                     <div className="flex gap-3 pt-4">
                       <Button
                         type="submit"
                         className="inline-flex items-center gap-2 px-6 h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
                       >
                         <Save className="h-4 w-4" />
-                  {editingId ? 'Atualizar' : 'Adicionar'} Endereço
-                </Button>
+                        {editingId ? 'Atualizar' : 'Adicionar'} Endereço
+                      </Button>
                       <Button
                         type="button"
                         variant="outline"
@@ -499,12 +524,12 @@ export default function EnderecosPage() {
                         className="inline-flex items-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-gray-200 hover:border-orange-300"
                       >
                         <X className="h-4 w-4" />
-                  Cancelar
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+                        Cancelar
+                      </Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
             </motion.div>
           )}
 
@@ -530,88 +555,89 @@ export default function EnderecosPage() {
               </CardHeader>
               <CardContent className="relative z-10 pt-0">
                 {addresses.length > 0 ? (
-      <div className="space-y-4">
-        {addresses.map((address) => (
+                  <div className="space-y-4">
+                    {addresses.map((address) => (
                       <div
                         key={address.id}
                         className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-orange-50 hover:to-orange-100 transition-all duration-300 border border-gray-200 hover:border-orange-200"
                       >
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                               <MapPin className="h-5 w-5 text-gray-500" />
                               <span className="font-medium text-gray-900">
-                      {address.street}, {address.number}
-                    </span>
-                    {address.isPrimary && (
+                                {address.street}, {address.number}
+                              </span>
+                              {address.isPrimary && (
                                 <Badge className="bg-orange-100 text-orange-800">
-                        <Star className="h-3 w-3 mr-1" />
-                        Principal
-                      </Badge>
-                    )}
-                  </div>
-                  {address.complement && (
+                                  <Star className="h-3 w-3 mr-1" />
+                                  Principal
+                                </Badge>
+                              )}
+                            </div>
+                            {address.complement && (
                               <p className="text-sm text-gray-600 mb-1 ml-8">
-                      {address.complement}
-                    </p>
-                  )}
+                                {address.complement}
+                              </p>
+                            )}
                             <p className="text-sm text-gray-600 ml-8">
-                    {address.neighborhood} - {address.city}/{address.state}
-                  </p>
+                              {address.neighborhood} - {address.city}/
+                              {address.state}
+                            </p>
                             <p className="text-sm text-gray-600 ml-8">
-                    CEP: {address.zipCode}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  {!address.isPrimary && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleSetPrimary(address.id)}
+                              CEP: {address.zipCode}
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            {!address.isPrimary && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleSetPrimary(address.id)}
                                 className="bg-white hover:bg-yellow-50 text-gray-900 hover:text-yellow-600 font-semibold rounded-lg transition-all duration-300"
-                    >
-                      <Star className="h-4 w-4 mr-1" />
-                      Principal
-                    </Button>
-                  )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleEdit(address)}
+                              >
+                                <Star className="h-4 w-4 mr-1" />
+                                Principal
+                              </Button>
+                            )}
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEdit(address)}
                               className="bg-white hover:bg-blue-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDelete(address.id)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDelete(address.id)}
                               className="bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold rounded-lg transition-all duration-300"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-        ))}
-      </div>
+                    ))}
+                  </div>
                 ) : (
                   <div className="text-center py-16">
                     <MapPin className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                     <p className="text-gray-500 text-lg mb-4">
-              Nenhum endereço cadastrado
-            </p>
+                      Nenhum endereço cadastrado
+                    </p>
                     <Button
                       onClick={() => setIsAdding(true)}
                       className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
                     >
-              <Plus className="h-4 w-4 mr-2" />
-              Adicionar Primeiro Endereço
-            </Button>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Adicionar Primeiro Endereço
+                    </Button>
                   </div>
                 )}
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
           </motion.div>
         </div>
       </section>

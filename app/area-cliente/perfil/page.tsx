@@ -61,17 +61,18 @@ export default function PerfilPage() {
     }
   }
 
-  const handleCancel = () => {
-    setFormData({
-      name: session?.user?.name || '',
-      email: session?.user?.email || '',
-      phone: '',
-      cpf: '',
-      cnpj: '',
-      company: '',
-    })
-    setIsEditing(false)
-  }
+  // TODO: Implement cancel functionality
+  // const handleCancel = () => {
+  //   setFormData({
+  //     name: session?.user?.name || '',
+  //     email: session?.user?.email || '',
+  //     phone: '',
+  //     cpf: '',
+  //     cnpj: '',
+  //     company: '',
+  //   })
+  //   setIsEditing(false)
+  // }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -90,9 +91,7 @@ export default function PerfilPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-3xl font-bold leading-tight">
-              Meu Perfil
-            </h1>
+            <h1 className="text-3xl font-bold leading-tight">Meu Perfil</h1>
             <p className="text-base md:text-lg text-orange-100 leading-relaxed max-w-2xl mx-auto">
               Gerencie suas informações pessoais e configurações
             </p>
@@ -160,7 +159,10 @@ export default function PerfilPage() {
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                        <Label
+                          htmlFor="name"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           Nome Completo
                         </Label>
                         <Input
@@ -173,7 +175,10 @@ export default function PerfilPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                        <Label
+                          htmlFor="email"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           E-mail
                         </Label>
                         <Input
@@ -187,7 +192,10 @@ export default function PerfilPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
+                        <Label
+                          htmlFor="phone"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           Telefone
                         </Label>
                         <Input
@@ -202,7 +210,10 @@ export default function PerfilPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="company" className="text-sm font-medium text-gray-700">
+                        <Label
+                          htmlFor="company"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           Empresa
                         </Label>
                         <Input
@@ -216,7 +227,10 @@ export default function PerfilPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="cpf" className="text-sm font-medium text-gray-700">
+                        <Label
+                          htmlFor="cpf"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           CPF
                         </Label>
                         <Input
@@ -230,7 +244,10 @@ export default function PerfilPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="cnpj" className="text-sm font-medium text-gray-700">
+                        <Label
+                          htmlFor="cnpj"
+                          className="text-sm font-medium text-gray-700"
+                        >
                           CNPJ
                         </Label>
                         <Input

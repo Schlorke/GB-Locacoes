@@ -5,251 +5,250 @@
 /* =============================== */
 /* 2. Variáveis e Temas Globais    */
 /* =============================== */
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --header-height: 5rem;
-    --ring: 0 0% 3.9%;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-    --z-dropdown: 9999;
-    --z-modal: 10000;
-    --z-popover: 10001;
-    --z-tooltip: 10002;
-  }
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-  * {
-    border-color: hsl(var(--border));
-  }
-  body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: var(--font-inter), sans-serif;
-    font-size: 1rem;
-    margin: 0;
-    overflow-x: hidden;
-  }
-  h1 {
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
-    line-height: 1.2;
-    font-family: var(--font-jost), sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-  }
-  h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-    line-height: 1.3;
-    font-family: var(--font-jost), sans-serif;
-    font-weight: 600;
-    letter-spacing: -0.025em;
-  }
-  h3 {
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
-    line-height: 1.4;
-    font-family: var(--font-jost), sans-serif;
-    font-weight: 600;
-  }
-  p {
-    font-size: clamp(1rem, 2vw, 1.125rem);
-    line-height: 1.6;
-  }
-  small {
-    font-size: clamp(0.875rem, 1.5vw, 1rem);
-    line-height: 1.5;
-  }
-  button {
-    font-size: clamp(1rem, 2vw, 1.125rem);
-    line-height: 1.6;
-  }
+/* @layer base */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --radius: 0.5rem;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --header-height: 5rem;
+  --ring: 0 0% 3.9%;
+  --sidebar-background: 0 0% 98%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+  --z-dropdown: 9999;
+  --z-modal: 10000;
+  --z-popover: 10001;
+  --z-tooltip: 10002;
+}
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+  --sidebar-background: 240 5.9% 10%;
+  --sidebar-foreground: 240 4.8% 95.9%;
+  --sidebar-primary: 224.3 76.3% 48%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 3.7% 15.9%;
+  --sidebar-accent-foreground: 240 4.8% 95.9%;
+  --sidebar-border: 240 3.7% 15.9%;
+  --sidebar-ring: 217.2 91.2% 59.8%;
+}
+* {
+  border-color: hsl(var(--border));
+}
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-inter), sans-serif;
+  font-size: 1rem;
+  margin: 0;
+  overflow-x: hidden;
+}
+h1 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: 1.2;
+  font-family: var(--font-jost), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.3;
+  font-family: var(--font-jost), sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.4;
+  font-family: var(--font-jost), sans-serif;
+  font-weight: 600;
+}
+p {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.6;
+}
+small {
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  line-height: 1.5;
+}
+button {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.6;
+}
+html {
+  /* scroll-behavior: smooth; */
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Scrollbar moderno para navegadores que suportam */
+@supports (scrollbar-width: thin) {
   html {
-    scroll-behavior: smooth;
-    max-width: 100%;
-    overflow-x: hidden;
+    /* scrollbar-width: thin; */
+    /* scrollbar-color: #64748b #334155; */
   }
+}
 
-  /* Scrollbar moderno para navegadores que suportam */
-  @supports (scrollbar-width: thin) {
-    html {
-      scrollbar-width: thin;
-      scrollbar-color: #64748b #334155;
-    }
-  }
+/* Inputs com efeito hover shadow e foco azul obrigatório */
+input:not([type='checkbox']):not([type='radio']),
+select,
+textarea,
+button[role='combobox'],
+button[aria-controls],
+[data-radix-select-trigger],
+.select-trigger {
+  @apply border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 transition-all duration-200;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
 
-  /* Inputs com efeito hover shadow e foco azul obrigatório */
-  input:not([type='checkbox']):not([type='radio']),
-  select,
-  textarea,
-  button[role='combobox'],
-  button[aria-controls],
-  [data-radix-select-trigger],
-  .select-trigger {
-    @apply border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 transition-all duration-200;
-    box-shadow:
-      0 1px 2px 0 rgba(0, 0, 0, 0.05),
-      0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-  }
+/* Botão de reset - sem foco azul, mas com outras propriedades */
+.admin-reset-button,
+.filter-reset-button {
+  @apply border-gray-200 focus:ring-0 transition-all duration-200;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
 
-  /* Botão de reset - sem foco azul, mas com outras propriedades */
-  .admin-reset-button,
-  .filter-reset-button {
-    @apply border-gray-200 focus:ring-0 transition-all duration-200;
-    box-shadow:
-      0 1px 2px 0 rgba(0, 0, 0, 0.05),
-      0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-  }
+input:not([type='checkbox']):not([type='radio']):hover,
+select:hover,
+textarea:hover,
+button[role='combobox']:hover,
+button[aria-controls]:hover,
+[data-radix-select-trigger]:hover,
+.select-trigger:hover,
+.admin-reset-button:hover,
+.filter-reset-button:hover {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
 
-  input:not([type='checkbox']):not([type='radio']):hover,
-  select:hover,
-  textarea:hover,
-  button[role='combobox']:hover,
-  button[aria-controls]:hover,
-  [data-radix-select-trigger]:hover,
-  .select-trigger:hover,
-  .admin-reset-button:hover,
-  .filter-reset-button:hover {
-    box-shadow:
-      0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  }
+input:not([type='checkbox']):not([type='radio']):focus,
+select:focus,
+textarea:focus,
+button[role='combobox']:focus,
+button[aria-controls]:focus,
+[data-radix-select-trigger]:focus,
+.select-trigger:focus {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
 
-  input:not([type='checkbox']):not([type='radio']):focus,
-  select:focus,
-  textarea:focus,
-  button[role='combobox']:focus,
-  button[aria-controls]:focus,
-  [data-radix-select-trigger]:focus,
-  .select-trigger:focus {
-    box-shadow:
-      0 10px 15px -3px rgba(0, 0, 0, 0.1),
-      0 4px 6px -2px rgba(0, 0, 0, 0.05),
-      0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-  }
+/* Botão de reset - foco com sombra mas sem borda/outline azul */
+.admin-reset-button:focus,
+.filter-reset-button:focus {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
 
-  /* Botão de reset - foco com sombra mas sem borda/outline azul */
-  .admin-reset-button:focus,
-  .filter-reset-button:focus {
-    box-shadow:
-      0 10px 15px -3px rgba(0, 0, 0, 0.1),
-      0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-  }
+/* NUCLEAR OPTION: Force identical styles for category modal buttons */
+.category-modal-button-forced {
+  /* Reset all inherited styles */
+  all: unset !important;
+  /* Force consistent base styles */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important; /* 8px gap */
+  white-space: nowrap !important;
+  border-radius: 0.5rem !important; /* rounded-lg */
+  font-size: 0.75rem !important; /* text-xs */
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  /* Exact dimensions and spacing */
+  height: 2rem !important; /* h-8 */
+  padding-left: 0.75rem !important; /* px-3 */
+  padding-right: 0.75rem !important; /* px-3 */
+  /* Consistent styling */
+  border: 1px solid rgb(203 213 225) !important; /* border-slate-300 */
+  background-color: transparent !important;
+  color: rgb(15 23 42) !important; /* text-slate-900 */
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
 
-  /* NUCLEAR OPTION: Force identical styles for category modal buttons */
-  .category-modal-button-forced {
-    /* Reset all inherited styles */
-    all: unset !important;
-    /* Force consistent base styles */
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0.5rem !important; /* 8px gap */
-    white-space: nowrap !important;
-    border-radius: 0.5rem !important; /* rounded-lg */
-    font-size: 0.75rem !important; /* text-xs */
-    font-weight: 500 !important;
-    transition: all 0.2s ease !important;
-    cursor: pointer !important;
-    pointer-events: auto !important;
-    /* Exact dimensions and spacing */
-    height: 2rem !important; /* h-8 */
-    padding-left: 0.75rem !important; /* px-3 */
-    padding-right: 0.75rem !important; /* px-3 */
-    /* Consistent styling */
-    border: 1px solid rgb(203 213 225) !important; /* border-slate-300 */
-    background-color: transparent !important;
-    color: rgb(15 23 42) !important; /* text-slate-900 */
-    box-shadow:
-      0 1px 2px 0 rgba(0, 0, 0, 0.05),
-      0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-  }
+/* Focus states - remove all focus styles */
+.category-modal-button-forced:focus,
+.category-modal-button-forced:focus-visible,
+.category-modal-button-forced[aria-controls]:focus,
+.category-modal-button-forced[aria-controls]:focus-visible {
+  outline: none !important;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
 
-  /* Focus states - remove all focus styles */
-  .category-modal-button-forced:focus,
-  .category-modal-button-forced:focus-visible,
-  .category-modal-button-forced[aria-controls]:focus,
-  .category-modal-button-forced[aria-controls]:focus-visible {
-    outline: none !important;
-    box-shadow:
-      0 1px 2px 0 rgba(0, 0, 0, 0.05),
-      0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-  }
+/* Hover states - identical for both buttons */
+.category-modal-button-forced:hover {
+  background-color: white !important;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  border-color: rgb(203 213 225) !important;
+}
 
-  /* Hover states - identical for both buttons */
-  .category-modal-button-forced:hover {
-    background-color: white !important;
-    box-shadow:
-      0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-    border-color: rgb(203 213 225) !important;
-  }
-
-  /* Icon selector buttons - black focus ring */
-  .icon-selector-button:focus,
-  .icon-selector-button:focus-visible {
-    outline: 1px solid black !important;
-    outline-offset: 1px !important;
-  }
+/* Icon selector buttons - black focus ring */
+.icon-selector-button:focus,
+.icon-selector-button:focus-visible {
+  outline: 1px solid black !important;
+  outline-offset: 1px !important;
 }
 
 /* =============================== */
@@ -321,7 +320,7 @@ header {
   z-index: 9999;
   background: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  /* backdrop-filter: blur(8px); */
   border-bottom: 1px solid rgba(229, 231, 235, 0.8);
 }
 header .max-w-7xl {
@@ -364,7 +363,7 @@ header {
   z-index: 9999;
   background: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  /* backdrop-filter: blur(8px); */
   border-bottom: 1px solid rgba(229, 231, 235, 0.8);
 }
 
@@ -641,17 +640,16 @@ section {
   animation: count-up 1s ease-out forwards;
 }
 
-@layer utilities {
-  /* =============================== */
-  /* 8. Tailwind Utility Layer       */
-  /* =============================== */
-  .animation-delay-1000 {
-    animation-delay: 1s;
-  }
+/* @layer utilities */
+/* =============================== */
+/* 8. Tailwind Utility Layer       */
+/* =============================== */
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
 
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 
 /* =============================== */
@@ -823,7 +821,7 @@ section {
 /* Garantir que o input do WhatsApp seja sempre visível */
 .whatsapp-input-area {
   position: -webkit-sticky;
-  position: sticky;
+  /* position: sticky; */
   bottom: 0;
   z-index: 10;
 }
@@ -858,8 +856,8 @@ section {
 /* Firefox - WhatsApp scroll verde com máxima especificidade */
 @supports (scrollbar-width: thin) {
   .whatsapp-chat-window .whatsapp-chat-scroll {
-    scrollbar-width: thin !important;
-    scrollbar-color: #25d366 #f0f0f0 !important;
+    /* scrollbar-width: thin !important; */
+    /* scrollbar-color: #25d366 #f0f0f0 !important; */
   }
 }
 
@@ -891,8 +889,8 @@ section {
 /* Firefox - WhatsApp scroll verde */
 @supports (scrollbar-width: thin) {
   .whatsapp-chat-scroll {
-    scrollbar-width: thin !important;
-    scrollbar-color: #25d366 #f0f0f0 !important;
+    /* scrollbar-width: thin !important; */
+    /* scrollbar-color: #25d366 #f0f0f0 !important; */
   }
 }
 
@@ -939,8 +937,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Scroll customizado para modais administrativos */
 .modal-scroll-area {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 #f1f5f9;
+  /* scrollbar-width: thin; */
+  /* scrollbar-color: #cbd5e1 #f1f5f9; */
 }
 
 .modal-scroll-area::-webkit-scrollbar {
@@ -964,8 +962,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* Scroll forçado para modais - sempre visível */
 .force-scroll {
   overflow-y: scroll !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: #cbd5e1 #f8fafc !important;
+  /* scrollbar-width: thin !important; */
+  /* scrollbar-color: #cbd5e1 #f8fafc !important; */
 }
 
 .force-scroll::-webkit-scrollbar {
@@ -1032,16 +1030,16 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   /* Garantir que o scroll do mouse funcione */
   pointer-events: auto !important;
   -webkit-touch-action: pan-y !important;
-  touch-action: pan-y !important;
+  /* touch-action: pan-y !important; */
   -webkit-overscroll-behavior: contain;
-  overscroll-behavior: contain;
+  /* overscroll-behavior: contain; */
 }
 
 /* Firefox scrollbar styling para modal - com suporte condicional */
 @supports (scrollbar-width: thin) {
   .modal-preview-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 transparent;
+    /* scrollbar-width: thin; */
+    /* scrollbar-color: #cbd5e1 transparent; */
   }
 }
 
@@ -1108,19 +1106,19 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* Firefox scrollbar styling com suporte condicional */
 @supports (scrollbar-width: thin) {
   .filter-dropdown-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: #d1d5db transparent;
+    /* scrollbar-width: thin; */
+    /* scrollbar-color: #d1d5db transparent; */
   }
 }
 
 /* Classe CSS para grid responsivo de ícones */
 .icon-grid-responsive {
   display: -ms-grid;
-  display: grid;
+  /* display: grid; */
   -ms-grid-columns: repeat(auto-fill, minmax(40px, 1fr));
-  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  /* grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); */
   -webkit-gap: 8px;
-  gap: 8px;
+  /* gap: 8px; */
   max-height: 200px;
   overflow-y: scroll; /* scrollbar sempre visível */
   padding: 0.5rem;
@@ -1128,9 +1126,9 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   /* Garantir que o scroll do mouse funcione no grid */
   pointer-events: auto !important;
   -webkit-touch-action: pan-y !important;
-  touch-action: pan-y !important;
+  /* touch-action: pan-y !important; */
   -webkit-overscroll-behavior: contain !important;
-  overscroll-behavior: contain !important;
+  /* overscroll-behavior: contain !important; */
 }
 
 /* Responsividade específica para diferentes tamanhos */
@@ -1204,17 +1202,17 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   position: relative;
   overflow: hidden !important;
   -webkit-contain: layout style !important;
-  contain: layout style !important;
+  /* contain: layout style !important; */
 }
 
 /* Grid dos ícones - sem overflow, com scroll */
 .category-icon-grid {
   display: -ms-grid;
-  display: grid;
+  /* display: grid; */
   -ms-grid-columns: repeat(6, 1fr);
-  grid-template-columns: repeat(6, 1fr);
+  /* grid-template-columns: repeat(6, 1fr); */
   -webkit-gap: 0.5rem;
-  gap: 0.5rem;
+  /* gap: 0.5rem; */
   max-height: 160px;
   overflow-y: auto;
   padding: 0.5rem;
@@ -1226,8 +1224,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* Aplicar scroll padrão (cinza) no grid de ícones do popover */
 @supports (scrollbar-width: thin) {
   .category-icon-grid {
-    scrollbar-width: thin;
-    scrollbar-color: #64748b #f1f5f9;
+    /* scrollbar-width: thin; */
+    /* scrollbar-color: #64748b #f1f5f9; */
   }
 }
 
@@ -1287,7 +1285,7 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   position: relative;
   overflow: hidden !important;
   -webkit-contain: layout style !important;
-  contain: layout style !important;
+  /* contain: layout style !important; */
 }
 
 @media (min-width: 640px) {
@@ -1398,7 +1396,7 @@ header {
   z-index: 9999 !important;
   background: rgba(255, 255, 255, 0.95) !important;
   -webkit-backdrop-filter: blur(8px) !important;
-  backdrop-filter: blur(8px) !important;
+  /* backdrop-filter: blur(8px) !important; */
   border-bottom: 1px solid rgba(229, 231, 235, 0.8) !important;
 }
 
@@ -1451,8 +1449,8 @@ body {
 @supports (scrollbar-width: thin) {
   * {
     /* NÃO criar scroll secundário desnecessário */
-    scrollbar-width: thin;
-    scrollbar-color: #64748b #334155;
+    /* scrollbar-width: thin; */
+    /* scrollbar-color: #64748b #334155; */
   }
 }
 
@@ -1495,7 +1493,7 @@ body {
   overflow-x: hidden !important;
   /* -webkit-overflow-scrolling: touch !important; */
   -webkit-scroll-behavior: smooth !important;
-  scroll-behavior: smooth !important;
+  /* scroll-behavior: smooth !important; */
 }
 
 /* NÃO permitir scroll em elementos aninhados */

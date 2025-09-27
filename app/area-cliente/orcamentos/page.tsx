@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useSession } from 'next-auth/react'
+// import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -25,26 +25,36 @@ import {
   Calendar,
   Clock,
   Search,
-  Filter,
   Eye,
   Download,
   Plus,
   TrendingUp,
-  AlertCircle,
   CheckCircle,
   XCircle,
 } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
+// Types
+type OrcamentoStatus = 'pending' | 'approved' | 'rejected'
+
+interface Orcamento {
+  id: string
+  data: string
+  status: OrcamentoStatus
+  equipamentos: string[]
+  valor: number
+  periodo: string
+}
+
 // Mock data para orçamentos
-const mockOrcamentos = [
+const mockOrcamentos: Orcamento[] = [
   {
     id: '001',
     data: '2024-01-15',
     status: 'approved',
     equipamentos: ['Escavadeira', 'Retroescavadeira'],
-    valor: 2850.00,
+    valor: 2850.0,
     periodo: '7 dias',
   },
   {
@@ -52,7 +62,7 @@ const mockOrcamentos = [
     data: '2024-01-10',
     status: 'pending',
     equipamentos: ['Betoneira', 'Martelo Pneumático'],
-    valor: 1420.00,
+    valor: 1420.0,
     periodo: '3 dias',
   },
   {
@@ -60,12 +70,20 @@ const mockOrcamentos = [
     data: '2024-01-05',
     status: 'rejected',
     equipamentos: ['Guindaste'],
-    valor: 4200.00,
+    valor: 4200.0,
     periodo: '14 dias',
   },
 ]
 
-const statusConfig = {
+const statusConfig: Record<
+  OrcamentoStatus,
+  {
+    label: string
+    color: string
+    icon: React.ComponentType<{ className?: string }>
+    dotColor: string
+  }
+> = {
   pending: {
     label: 'Pendente',
     color: 'bg-yellow-100 text-yellow-800',
@@ -87,23 +105,26 @@ const statusConfig = {
 }
 
 export default function OrcamentosPage() {
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  // TODO: Use session data for user-specific quotes
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
 
-  const filteredOrcamentos = mockOrcamentos.filter(orcamento => {
-    const matchesSearch = orcamento.equipamentos.some(eq => 
-      eq.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || orcamento.id.includes(searchTerm)
-    const matchesStatus = statusFilter === 'all' || orcamento.status === statusFilter
+  const filteredOrcamentos = mockOrcamentos.filter((orcamento) => {
+    const matchesSearch =
+      orcamento.equipamentos.some((eq) =>
+        eq.toLowerCase().includes(searchTerm.toLowerCase())
+      ) || orcamento.id.includes(searchTerm)
+    const matchesStatus =
+      statusFilter === 'all' || orcamento.status === statusFilter
     return matchesSearch && matchesStatus
   })
 
   const stats = {
     total: mockOrcamentos.length,
-    pending: mockOrcamentos.filter(o => o.status === 'pending').length,
-    approved: mockOrcamentos.filter(o => o.status === 'approved').length,
-    rejected: mockOrcamentos.filter(o => o.status === 'rejected').length,
+    pending: mockOrcamentos.filter((o) => o.status === 'pending').length,
+    approved: mockOrcamentos.filter((o) => o.status === 'approved').length,
+    rejected: mockOrcamentos.filter((o) => o.status === 'rejected').length,
   }
 
   return (
@@ -261,7 +282,10 @@ export default function OrcamentosPage() {
               <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
                 <div className="space-y-4 flex-1">
                   <div className="space-y-2">
-                    <Label htmlFor="search" className="text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="search"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Buscar Orçamento
                     </Label>
                     <div className="relative">
@@ -276,10 +300,16 @@ export default function OrcamentosPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="status" className="text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="status"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Status
                     </Label>
-                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <Select
+                      value={statusFilter}
+                      onValueChange={setStatusFilter}
+                    >
                       <SelectTrigger className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500">
                         <SelectValue placeholder="Filtrar por status" />
                       </SelectTrigger>
@@ -367,7 +397,9 @@ export default function OrcamentosPage() {
                               <div className="text-lg font-bold text-gray-900">
                                 #{orcamento.id}
                               </div>
-                              <Badge className={statusConfig[orcamento.status].color}>
+                              <Badge
+                                className={statusConfig[orcamento.status].color}
+                              >
                                 <StatusIcon className="h-3 w-3 mr-1" />
                                 {statusConfig[orcamento.status].label}
                               </Badge>
@@ -393,10 +425,14 @@ export default function OrcamentosPage() {
                           </div>
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                             <div>
-                              <p className="text-gray-600 mb-1">Data do Orçamento</p>
+                              <p className="text-gray-600 mb-1">
+                                Data do Orçamento
+                              </p>
                               <p className="font-semibold text-gray-900 flex items-center gap-1">
                                 <Calendar className="h-4 w-4" />
-                                {new Date(orcamento.data).toLocaleDateString('pt-BR')}
+                                {new Date(orcamento.data).toLocaleDateString(
+                                  'pt-BR'
+                                )}
                               </p>
                             </div>
                             <div>

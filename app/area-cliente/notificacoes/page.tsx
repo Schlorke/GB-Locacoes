@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useSession } from 'next-auth/react'
+// import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -23,7 +23,6 @@ import {
 import {
   Bell,
   Check,
-  X,
   Trash2,
   ExternalLink,
   Search,
@@ -52,7 +51,8 @@ const mockNotifications = [
   {
     id: '2',
     title: 'Equipamento Disponível',
-    message: 'A Betoneira 400L que você solicitou está disponível para retirada.',
+    message:
+      'A Betoneira 400L que você solicitou está disponível para retirada.',
     type: 'equipment' as const,
     priority: 'medium' as const,
     isRead: false,
@@ -79,10 +79,18 @@ const mockNotifications = [
   },
 ]
 
-type FilterType = 'all' | 'unread' | 'quote' | 'order' | 'payment' | 'equipment' | 'system'
+type FilterType =
+  | 'all'
+  | 'unread'
+  | 'quote'
+  | 'order'
+  | 'payment'
+  | 'equipment'
+  | 'system'
 
 export default function NotificacoesPage() {
-  const { data: session } = useSession()
+  // const { data: session } = useSession()
+  // TODO: Use session data for user-specific notifications
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState<FilterType>('all')
   const [notifications, setNotifications] = useState(mockNotifications)
@@ -133,7 +141,9 @@ export default function NotificacoesPage() {
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString)
     const now = new Date()
-    const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
+    const diffInMinutes = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60)
+    )
 
     if (diffInMinutes < 1) return 'Agora mesmo'
     if (diffInMinutes < 60) return `${diffInMinutes}m atrás`
@@ -142,33 +152,35 @@ export default function NotificacoesPage() {
   }
 
   const markAsRead = (id: string) => {
-    setNotifications(prev => prev.map(n => 
-      n.id === id ? { ...n, isRead: true } : n
-    ))
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+    )
   }
 
   const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })))
   }
 
   const removeNotification = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id))
+    setNotifications((prev) => prev.filter((n) => n.id !== id))
   }
 
-  const filteredNotifications = notifications.filter(notification => {
-    const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         notification.message.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesFilter = filterType === 'all' || 
-                         (filterType === 'unread' && !notification.isRead) ||
-                         notification.type === filterType
+  const filteredNotifications = notifications.filter((notification) => {
+    const matchesSearch =
+      notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      notification.message.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesFilter =
+      filterType === 'all' ||
+      (filterType === 'unread' && !notification.isRead) ||
+      notification.type === filterType
     return matchesSearch && matchesFilter
   })
 
   const stats = {
     total: notifications.length,
-    unread: notifications.filter(n => !n.isRead).length,
-    high: notifications.filter(n => n.priority === 'high').length,
-    medium: notifications.filter(n => n.priority === 'medium').length,
+    unread: notifications.filter((n) => !n.isRead).length,
+    high: notifications.filter((n) => n.priority === 'high').length,
+    medium: notifications.filter((n) => n.priority === 'medium').length,
   }
 
   return (
@@ -188,9 +200,7 @@ export default function NotificacoesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-3xl font-bold leading-tight">
-              Notificações
-            </h1>
+            <h1 className="text-3xl font-bold leading-tight">Notificações</h1>
             <p className="text-base md:text-lg text-orange-100 leading-relaxed max-w-2xl mx-auto">
               Mantenha-se atualizado com todas as suas notificações
             </p>
@@ -241,8 +251,8 @@ export default function NotificacoesPage() {
                     <Bell className="h-6 w-6" />
                   </div>
                 </div>
-        </div>
-      </div>
+              </div>
+            </div>
 
             {/* Card Não Lidas */}
             <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
@@ -293,7 +303,7 @@ export default function NotificacoesPage() {
                       Sistema
                     </p>
                     <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {notifications.filter(n => n.type === 'system').length}
+                      {notifications.filter((n) => n.type === 'system').length}
                     </p>
                     <p className="text-sm text-gray-500">do sistema</p>
                   </div>
@@ -326,7 +336,10 @@ export default function NotificacoesPage() {
               <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
                 <div className="space-y-4 flex-1">
                   <div className="space-y-2">
-                    <Label htmlFor="search" className="text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="search"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Buscar Notificação
                     </Label>
                     <div className="relative">
@@ -341,10 +354,18 @@ export default function NotificacoesPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="filter" className="text-sm font-medium text-gray-700">
+                    <Label
+                      htmlFor="filter"
+                      className="text-sm font-medium text-gray-700"
+                    >
                       Filtrar por Tipo
                     </Label>
-                    <Select value={filterType} onValueChange={(value: FilterType) => setFilterType(value)}>
+                    <Select
+                      value={filterType}
+                      onValueChange={(value: FilterType) =>
+                        setFilterType(value)
+                      }
+                    >
                       <SelectTrigger className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500">
                         <SelectValue placeholder="Filtrar por tipo" />
                       </SelectTrigger>
@@ -357,10 +378,10 @@ export default function NotificacoesPage() {
                         <SelectItem value="system">Sistema</SelectItem>
                       </SelectContent>
                     </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Ações Rápidas */}
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
@@ -392,12 +413,12 @@ export default function NotificacoesPage() {
                     Configurar Notificações
                   </Button>
                 </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
           </motion.div>
 
           {/* Lista de Notificações */}
-        <motion.div
+          <motion.div
             className="mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -423,84 +444,99 @@ export default function NotificacoesPage() {
                       const Icon = getNotificationIcon(notification.type)
                       return (
                         <div
-              key={notification.id}
-              className={cn(
-                            "p-6 bg-gradient-to-r rounded-xl transition-all duration-300 border",
-                !notification.isRead
-                              ? "from-blue-50 to-blue-100 border-blue-200 hover:from-blue-100 hover:to-blue-200"
-                              : "from-gray-50 to-gray-100 border-gray-200 hover:from-orange-50 hover:to-orange-100 hover:border-orange-200"
+                          key={notification.id}
+                          className={cn(
+                            'p-6 bg-gradient-to-r rounded-xl transition-all duration-300 border',
+                            !notification.isRead
+                              ? 'from-blue-50 to-blue-100 border-blue-200 hover:from-blue-100 hover:to-blue-200'
+                              : 'from-gray-50 to-gray-100 border-gray-200 hover:from-orange-50 hover:to-orange-100 hover:border-orange-200'
                           )}
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex items-start gap-4 flex-1">
                               <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                                 <Icon className="h-5 w-5" />
-                </div>
-                    <div className="flex-1">
+                              </div>
+                              <div className="flex-1">
                                 <div className="flex items-start justify-between mb-2">
-                                  <h4 className={cn(
-                                    "font-semibold text-gray-900",
-                                    !notification.isRead && "font-bold"
-                                  )}>
-                        {notification.title}
-                      </h4>
-                    <div className="flex items-center gap-2">
-                                    <Badge className={getPriorityColor(notification.priority)}>
-                        {notification.priority}
-                      </Badge>
-                                    <Badge variant="outline" className="bg-gray-100 text-gray-700">
-                        {getTypeLabel(notification.type)}
-                      </Badge>
-                      {!notification.isRead && (
+                                  <h4
+                                    className={cn(
+                                      'font-semibold text-gray-900',
+                                      !notification.isRead && 'font-bold'
+                                    )}
+                                  >
+                                    {notification.title}
+                                  </h4>
+                                  <div className="flex items-center gap-2">
+                                    <Badge
+                                      className={getPriorityColor(
+                                        notification.priority
+                                      )}
+                                    >
+                                      {notification.priority}
+                                    </Badge>
+                                    <Badge
+                                      variant="outline"
+                                      className="bg-gray-100 text-gray-700"
+                                    >
+                                      {getTypeLabel(notification.type)}
+                                    </Badge>
+                                    {!notification.isRead && (
                                       <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      )}
-                    </div>
-                  </div>
+                                    )}
+                                  </div>
+                                </div>
                                 <p className="text-sm text-gray-600 mb-3">
                                   {notification.message}
                                 </p>
                                 <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-400">
-                      {formatTimeAgo(notification.createdAt)}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      {notification.actionUrl && (
-                          <Button
+                                  <span className="text-xs text-gray-400">
+                                    {formatTimeAgo(notification.createdAt)}
+                                  </span>
+                                  <div className="flex items-center gap-2">
+                                    {notification.actionUrl && (
+                                      <Button
                                         asChild
-                            size="sm"
+                                        size="sm"
                                         variant="outline"
                                         className="bg-white hover:bg-blue-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
-                            onClick={() => markAsRead(notification.id)}
-                          >
+                                        onClick={() =>
+                                          markAsRead(notification.id)
+                                        }
+                                      >
                                         <Link href={notification.actionUrl}>
                                           <ExternalLink className="h-4 w-4 mr-1" />
                                           Ver
                                         </Link>
-                          </Button>
-                      )}
-                      {!notification.isRead && (
-                        <Button
-                          size="sm"
+                                      </Button>
+                                    )}
+                                    {!notification.isRead && (
+                                      <Button
+                                        size="sm"
                                         variant="outline"
-                          onClick={() => markAsRead(notification.id)}
+                                        onClick={() =>
+                                          markAsRead(notification.id)
+                                        }
                                         className="bg-white hover:bg-green-50 text-gray-900 hover:text-green-600 font-semibold rounded-lg transition-all duration-300"
-                        >
+                                      >
                                         <Check className="h-4 w-4 mr-1" />
                                         Ler
-                        </Button>
-                      )}
-                      <Button
-                        size="sm"
+                                      </Button>
+                                    )}
+                                    <Button
+                                      size="sm"
                                       variant="outline"
-                        onClick={() => removeNotification(notification.id)}
+                                      onClick={() =>
+                                        removeNotification(notification.id)
+                                      }
                                       className="bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold rounded-lg transition-all duration-300"
-                      >
+                                    >
                                       <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       )
@@ -523,7 +559,7 @@ export default function NotificacoesPage() {
                 )}
               </CardContent>
             </Card>
-            </motion.div>
+          </motion.div>
         </div>
       </section>
     </div>

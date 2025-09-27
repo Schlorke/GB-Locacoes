@@ -41,7 +41,7 @@ export default function Hero() {
                 <div className="absolute -bottom-2 left-0 w-full h-1 bg-yellow-300 rounded-full transform scale-x-0 animate-scale-x"></div>
               </span>
             </h1>
-            <p className="hero-subtitle text-xl md:text-2xl text-orange-100 leading-relaxed opacity-0">
+            <p className="hero-subtitle text-xl md:text-2xl leading-relaxed opacity-0">
               Há 10 anos oferecendo soluções em locação de equipamentos para
               obras e serviços em altura. Segurança, qualidade e manutenção
               constante.
