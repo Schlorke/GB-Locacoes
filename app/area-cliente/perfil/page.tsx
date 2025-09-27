@@ -22,7 +22,6 @@ import {
   Edit,
   Shield,
   AlertCircle,
-  ArrowRight,
   Lock,
   Smartphone,
 } from 'lucide-react'
@@ -76,58 +75,34 @@ export default function PerfilPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
+      {/* Hero Section com Identidade Visual Completa */}
       <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden">
         {/* Elementos animados de background */}
         <div className="absolute inset-0 overflow-hidden z-[1]">
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-300/5 rounded-full blur-3xl animate-pulse delay-500"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 lg:py-14 relative z-10">
           <motion.div
-            className="flex items-center justify-between"
+            className="text-center space-y-3"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                Meu Perfil
-              </h1>
-              <p className="text-xl text-orange-100">
-                Gerencie suas informações pessoais e configurações
-              </p>
-            </div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant={isEditing ? 'outline' : 'default'}
-                onClick={() => setIsEditing(!isEditing)}
-                className={`${
-                  isEditing
-                    ? 'bg-white text-orange-600 hover:bg-gray-50 border-2 border-white'
-                    : 'bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white'
-                } inline-flex items-center gap-2 px-6 h-12 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300`}
-              >
-                {isEditing ? (
-                  <>
-                    <Edit className="h-4 w-4" />
-                    Cancelar
-                  </>
-                ) : (
-                  <>
-                    <Edit className="h-4 w-4" />
-                    Editar Perfil
-                  </>
-                )}
-              </Button>
-            </motion.div>
+            <h1 className="text-3xl font-bold leading-tight">
+              Meu Perfil
+            </h1>
+            <p className="text-base md:text-lg text-orange-100 leading-relaxed max-w-2xl mx-auto">
+              Gerencie suas informações pessoais e configurações
+            </p>
           </motion.div>
         </div>
 
         {/* Onda SVG no final */}
         <div className="relative w-full overflow-hidden">
           <svg
-            className="relative block w-full h-12"
+            className="relative block w-full h-6"
             data-name="Layer 1"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1200 120"
@@ -135,261 +110,231 @@ export default function PerfilPage() {
           >
             <path
               d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
-              className="fill-gray-50"
+              fill="#f9fafb"
             />
           </svg>
         </div>
       </section>
 
-      {/* Content */}
-      <section className="py-16 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Profile Information */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-            >
-              <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-                <CardHeader className="relative z-10">
-                  <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                    <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white group-hover:scale-110 transition-transform">
-                      <User className="h-6 w-6" />
-                    </div>
-                    Informações Pessoais
-                  </CardTitle>
-                  <CardDescription className="text-gray-600">
-                    Suas informações básicas de cadastro
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="relative z-10 space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="name"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Nome Completo
-                      </Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="email"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        E-mail
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="phone"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Telefone
-                      </Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        placeholder="(51) 99999-9999"
-                        className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="company"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        Empresa
-                      </Label>
-                      <Input
-                        id="company"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        placeholder="Nome da sua empresa"
-                        className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="cpf"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        CPF
-                      </Label>
-                      <Input
-                        id="cpf"
-                        name="cpf"
-                        value={formData.cpf}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        placeholder="000.000.000-00"
-                        className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="cnpj"
-                        className="text-sm font-medium text-gray-700"
-                      >
-                        CNPJ
-                      </Label>
-                      <Input
-                        id="cnpj"
-                        name="cnpj"
-                        value={formData.cnpj}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                        placeholder="00.000.000/0000-00"
-                        className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                  </div>
-
-                  {isEditing && (
-                    <motion.div
-                      className="flex gap-3 pt-4"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Button
-                        onClick={handleSave}
-                        className="inline-flex items-center gap-2 px-6 h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group"
-                      >
-                        <Save className="h-4 w-4" />
-                        Salvar Alterações
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={handleCancel}
-                        className="inline-flex items-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-gray-200 hover:border-orange-300"
-                      >
-                        Cancelar
-                      </Button>
-                    </motion.div>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Account Status */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
-                <CardHeader className="relative z-10">
-                  <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                    <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white group-hover:scale-110 transition-transform">
-                      <Shield className="h-6 w-6" />
-                    </div>
-                    Status da Conta
-                  </CardTitle>
-                  <CardDescription className="text-gray-600">
-                    Verificação e status da sua conta
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="relative z-10">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
-                      <div className="flex items-center gap-3">
-                        <Mail className="h-5 w-5 text-yellow-600" />
-                        <span className="font-medium text-gray-900">
-                          E-mail Verificado
-                        </span>
-                      </div>
-                      <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
-                        <AlertCircle className="h-3 w-3 mr-1" />
-                        Pendente
-                      </Badge>
-                    </div>
-                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
-                      <div className="flex items-center gap-3">
-                        <Phone className="h-5 w-5 text-yellow-600" />
-                        <span className="font-medium text-gray-900">
-                          Telefone Verificado
-                        </span>
-                      </div>
-                      <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
-                        <AlertCircle className="h-3 w-3 mr-1" />
-                        Pendente
-                      </Badge>
-                    </div>
-                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
-                      <div className="flex items-center gap-3">
-                        <Building className="h-5 w-5 text-yellow-600" />
-                        <span className="font-medium text-gray-900">
-                          Documentos
-                        </span>
-                      </div>
-                      <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
-                        <AlertCircle className="h-3 w-3 mr-1" />
-                        Pendente
-                      </Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-
-          {/* Security Section */}
+      {/* Dashboard Principal - LAYOUT SIMPLIFICADO */}
+      <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
+        <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          {/* Card Unificado */}
           <motion.div
-            className="mt-8"
+            className="mb-8"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
+              <CardHeader className="relative z-10 pb-6 md:pb-8">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+                      <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
+                        <User className="h-5 w-5" />
+                      </div>
+                      Informações Pessoais
+                    </CardTitle>
+                    <CardDescription>
+                      Suas informações básicas de cadastro e status da conta
+                    </CardDescription>
+                  </div>
+                  <Button
+                    onClick={() => setIsEditing(!isEditing)}
+                    className="bg-white  hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                  >
+                    <Edit className="h-4 w-4 mr-2" />
+                    {isEditing ? 'Cancelar' : 'Editar'}
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="relative z-10 pt-0">
+                <div className="space-y-8">
+                  {/* Dados Pessoais */}
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                      <User className="h-5 w-5 text-orange-600" />
+                      Dados Pessoais
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                          Nome Completo
+                        </Label>
+                        <Input
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          disabled={!isEditing}
+                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                          E-mail
+                        </Label>
+                        <Input
+                          id="email"
+                          name="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          disabled={!isEditing}
+                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="phone" className="text-sm font-medium text-gray-700">
+                          Telefone
+                        </Label>
+                        <Input
+                          id="phone"
+                          name="phone"
+                          type="tel"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          disabled={!isEditing}
+                          placeholder="(51) 99999-9999"
+                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="company" className="text-sm font-medium text-gray-700">
+                          Empresa
+                        </Label>
+                        <Input
+                          id="company"
+                          name="company"
+                          value={formData.company}
+                          onChange={handleInputChange}
+                          disabled={!isEditing}
+                          placeholder="Nome da sua empresa"
+                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="cpf" className="text-sm font-medium text-gray-700">
+                          CPF
+                        </Label>
+                        <Input
+                          id="cpf"
+                          name="cpf"
+                          value={formData.cpf}
+                          onChange={handleInputChange}
+                          disabled={!isEditing}
+                          placeholder="000.000.000-00"
+                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="cnpj" className="text-sm font-medium text-gray-700">
+                          CNPJ
+                        </Label>
+                        <Input
+                          id="cnpj"
+                          name="cnpj"
+                          value={formData.cnpj}
+                          onChange={handleInputChange}
+                          disabled={!isEditing}
+                          placeholder="00.000.000/0000-00"
+                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Status da Conta */}
+                  <div className="space-y-6">
+                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                      <Shield className="h-5 w-5 text-blue-600" />
+                      Status da Conta
+                    </h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <Mail className="h-5 w-5 text-yellow-600" />
+                          <span className="font-medium text-gray-900">
+                            E-mail Verificado
+                          </span>
+                        </div>
+                        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
+                          <AlertCircle className="h-3 w-3 mr-1" />
+                          Pendente
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <Phone className="h-5 w-5 text-yellow-600" />
+                          <span className="font-medium text-gray-900">
+                            Telefone Verificado
+                          </span>
+                        </div>
+                        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
+                          <AlertCircle className="h-3 w-3 mr-1" />
+                          Pendente
+                        </Badge>
+                      </div>
+                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
+                        <div className="flex items-center gap-3">
+                          <Building className="h-5 w-5 text-yellow-600" />
+                          <span className="font-medium text-gray-900">
+                            Documentos
+                          </span>
+                        </div>
+                        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
+                          <AlertCircle className="h-3 w-3 mr-1" />
+                          Pendente
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Botão Salvar - aparece apenas quando editando */}
+                {isEditing && (
+                  <div className="flex justify-end pt-6 mt-6 border-t border-gray-200">
+                    <Button
+                      onClick={handleSave}
+                      className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl px-8"
+                    >
+                      <Save className="h-4 w-4 mr-2" />
+                      Salvar Alterações
+                    </Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Seção de Segurança */}
+          <motion.div
+            className="mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group">
+            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10">
+              <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl text-white group-hover:scale-110 transition-transform">
-                    <Lock className="h-6 w-6" />
+                  <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg text-white">
+                    <Lock className="h-5 w-5" />
                   </div>
                   Segurança
                 </CardTitle>
-                <CardDescription className="text-gray-600">
+                <CardDescription>
                   Gerencie a segurança da sua conta
                 </CardDescription>
               </CardHeader>
-              <CardContent className="relative z-10">
+              <CardContent className="relative z-10 pt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-orange-50 hover:to-orange-100 transition-all duration-300 group">
+                  <div className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-orange-50 hover:to-orange-100 transition-all duration-300 border border-gray-200 hover:border-orange-200">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white group-hover:scale-110 transition-transform">
+                        <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                           <Lock className="h-5 w-5" />
                         </div>
                         <div>
@@ -407,10 +352,10 @@ export default function PerfilPage() {
                     </div>
                   </div>
 
-                  <div className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-blue-50 hover:to-blue-100 transition-all duration-300 group">
+                  <div className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-blue-50 hover:to-blue-100 transition-all duration-300 border border-gray-200 hover:border-blue-200">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white group-hover:scale-110 transition-transform">
+                        <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
                           <Smartphone className="h-5 w-5" />
                         </div>
                         <div>
