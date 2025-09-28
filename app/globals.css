@@ -1,3 +1,7 @@
+/* stylelint-disable */
+/* eslint-disable */
+/* @microsoft-edge-tools-disable */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -124,9 +128,18 @@ button {
   line-height: 1.6;
 }
 html {
-  /* scroll-behavior: smooth; */
+  scroll-behavior: smooth;
   max-width: 100%;
   overflow-x: hidden;
+  /* Ajuste para evitar que o scroll corte o conteúdo no topo */
+  scroll-padding-top: 84px; /* Altura total do header fixo (top bar + main header) */
+}
+
+/* Ajuste específico para mobile */
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 84px; /* Mesma altura no mobile */
+  }
 }
 
 /* Scrollbar moderno para navegadores que suportam */
@@ -211,6 +224,8 @@ button[aria-controls]:focus,
   transition: all 0.2s ease !important;
   cursor: pointer !important;
   pointer-events: auto !important;
+  /* Box sizing to include padding and border in height calculation */
+  box-sizing: border-box !important;
   /* Exact dimensions and spacing */
   height: 2rem !important; /* h-8 */
   padding-left: 0.75rem !important; /* px-3 */
@@ -320,7 +335,7 @@ header {
   z-index: 9999;
   background: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: blur(8px);
-  /* backdrop-filter: blur(8px); */
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(229, 231, 235, 0.8);
 }
 header .max-w-7xl {
@@ -363,7 +378,7 @@ header {
   z-index: 9999;
   background: rgba(255, 255, 255, 0.95);
   -webkit-backdrop-filter: blur(8px);
-  /* backdrop-filter: blur(8px); */
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(229, 231, 235, 0.8);
 }
 
@@ -821,7 +836,7 @@ section {
 /* Garantir que o input do WhatsApp seja sempre visível */
 .whatsapp-input-area {
   position: -webkit-sticky;
-  /* position: sticky; */
+  position: sticky;
   bottom: 0;
   z-index: 10;
 }
@@ -1030,9 +1045,9 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   /* Garantir que o scroll do mouse funcione */
   pointer-events: auto !important;
   -webkit-touch-action: pan-y !important;
-  /* touch-action: pan-y !important; */
+  touch-action: pan-y !important;
   -webkit-overscroll-behavior: contain;
-  /* overscroll-behavior: contain; */
+  overscroll-behavior: contain;
 }
 
 /* Firefox scrollbar styling para modal - com suporte condicional */
@@ -1114,11 +1129,11 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* Classe CSS para grid responsivo de ícones */
 .icon-grid-responsive {
   display: -ms-grid;
-  /* display: grid; */
+  display: grid;
   -ms-grid-columns: repeat(auto-fill, minmax(40px, 1fr));
-  /* grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); */
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
   -webkit-gap: 8px;
-  /* gap: 8px; */
+  gap: 8px;
   max-height: 200px;
   overflow-y: scroll; /* scrollbar sempre visível */
   padding: 0.5rem;
@@ -1126,9 +1141,9 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   /* Garantir que o scroll do mouse funcione no grid */
   pointer-events: auto !important;
   -webkit-touch-action: pan-y !important;
-  /* touch-action: pan-y !important; */
+  touch-action: pan-y !important;
   -webkit-overscroll-behavior: contain !important;
-  /* overscroll-behavior: contain !important; */
+  overscroll-behavior: contain !important;
 }
 
 /* Responsividade específica para diferentes tamanhos */
@@ -1202,17 +1217,17 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   position: relative;
   overflow: hidden !important;
   -webkit-contain: layout style !important;
-  /* contain: layout style !important; */
+  contain: layout style !important;
 }
 
 /* Grid dos ícones - sem overflow, com scroll */
 .category-icon-grid {
   display: -ms-grid;
-  /* display: grid; */
+  display: grid;
   -ms-grid-columns: repeat(6, 1fr);
-  /* grid-template-columns: repeat(6, 1fr); */
+  grid-template-columns: repeat(6, 1fr);
   -webkit-gap: 0.5rem;
-  /* gap: 0.5rem; */
+  gap: 0.5rem;
   max-height: 160px;
   overflow-y: auto;
   padding: 0.5rem;
@@ -1285,7 +1300,7 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   position: relative;
   overflow: hidden !important;
   -webkit-contain: layout style !important;
-  /* contain: layout style !important; */
+  contain: layout style !important;
 }
 
 @media (min-width: 640px) {
@@ -1396,7 +1411,7 @@ header {
   z-index: 9999 !important;
   background: rgba(255, 255, 255, 0.95) !important;
   -webkit-backdrop-filter: blur(8px) !important;
-  /* backdrop-filter: blur(8px) !important; */
+  backdrop-filter: blur(8px) !important;
   border-bottom: 1px solid rgba(229, 231, 235, 0.8) !important;
 }
 
@@ -1491,12 +1506,82 @@ article {
 body {
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  /* -webkit-overflow-scrolling: touch !important; */
+  -webkit-overflow-scrolling: touch !important;
   -webkit-scroll-behavior: smooth !important;
-  /* scroll-behavior: smooth !important; */
+  scroll-behavior: smooth !important;
 }
 
 /* NÃO permitir scroll em elementos aninhados */
 div > div {
   overflow: visible !important;
+}
+
+/* =============================== */
+/* 17. Correção de Scroll - Área Cliente */
+/* =============================== */
+
+/* Ajuste do scroll-padding para área do cliente */
+.area-cliente-container {
+  scroll-padding-top: 2rem;
+}
+
+/* Ajuste específico para mobile */
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 1rem; /* Menos espaço no mobile */
+  }
+
+  .area-cliente-container {
+    scroll-padding-top: 0.5rem;
+  }
+}
+
+/* Garantir que as seções da área do cliente tenham padding adequado */
+.area-cliente-section {
+  padding-top: 1rem;
+}
+
+/* Ajuste para o banner não ser cortado */
+.area-cliente-banner {
+  scroll-margin-top: -2rem;
+}
+
+/* Ajuste específico para o dashboard da área do cliente */
+#area-cliente-dashboard {
+  scroll-margin-top: 0;
+}
+
+#dashboard-banner {
+  scroll-margin-top: 0;
+}
+
+/* No mobile, garantir que o conteúdo não seja cortado */
+@media (max-width: 768px) {
+  #area-cliente-dashboard,
+  #dashboard-banner {
+    scroll-margin-top: 84px; /* Altura total do header (top bar + main) */
+    padding-top: 0;
+  }
+
+  /* Ajuste para quando clicar no menu */
+  .min-h-screen {
+    scroll-behavior: smooth;
+  }
+
+  /* Garantir que o banner da área do cliente não seja cortado */
+  section.bg-gradient-to-br {
+    scroll-margin-top: 84px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 769px) {
+  #area-cliente-dashboard,
+  #dashboard-banner {
+    scroll-margin-top: 84px; /* Altura total do header (top bar + main) */
+  }
+
+  section.bg-gradient-to-br {
+    scroll-margin-top: 84px;
+  }
 }

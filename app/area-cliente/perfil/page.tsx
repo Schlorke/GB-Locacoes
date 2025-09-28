@@ -75,9 +75,9 @@ export default function PerfilPage() {
   // }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-[84px] sm:pt-0">
       {/* Hero Section com Identidade Visual Completa */}
-      <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden">
+      <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden w-screen -ml-4 sm:w-full sm:ml-0">
         {/* Elementos animados de background */}
         <div className="absolute inset-0 overflow-hidden z-[1]">
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
@@ -92,7 +92,7 @@ export default function PerfilPage() {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-3xl font-bold leading-tight">Meu Perfil</h1>
-            <p className="text-base md:text-lg text-orange-100 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-white leading-relaxed max-w-2xl mx-auto">
               Gerencie suas informações pessoais e configurações
             </p>
           </motion.div>
@@ -171,7 +171,7 @@ export default function PerfilPage() {
                           value={formData.name}
                           onChange={handleInputChange}
                           disabled={!isEditing}
-                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="h-12 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -188,7 +188,7 @@ export default function PerfilPage() {
                           value={formData.email}
                           onChange={handleInputChange}
                           disabled={!isEditing}
-                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="h-12 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -206,7 +206,7 @@ export default function PerfilPage() {
                           onChange={handleInputChange}
                           disabled={!isEditing}
                           placeholder="(51) 99999-9999"
-                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="h-12 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -223,7 +223,7 @@ export default function PerfilPage() {
                           onChange={handleInputChange}
                           disabled={!isEditing}
                           placeholder="Nome da sua empresa"
-                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="h-12 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -240,7 +240,7 @@ export default function PerfilPage() {
                           onChange={handleInputChange}
                           disabled={!isEditing}
                           placeholder="000.000.000-00"
-                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="h-12 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -257,7 +257,7 @@ export default function PerfilPage() {
                           onChange={handleInputChange}
                           disabled={!isEditing}
                           placeholder="00.000.000/0000-00"
-                          className="h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="h-12 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                     </div>

@@ -19,9 +19,15 @@ export default function AreaClientePage() {
   const { getItemCount, getTotalPrice } = useCartStore()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div
+      className="min-h-screen bg-gray-50 pt-[84px] sm:pt-0"
+      id="area-cliente-dashboard"
+    >
       {/* Hero Section com Identidade Visual Completa */}
-      <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden">
+      <section
+        className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden w-screen -ml-4 sm:w-full sm:ml-0"
+        id="dashboard-banner"
+      >
         {/* Elementos animados de background */}
         <div className="absolute inset-0 overflow-hidden z-[1]">
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>

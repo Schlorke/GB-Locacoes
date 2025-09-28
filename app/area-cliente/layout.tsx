@@ -149,6 +149,18 @@ export default function AreaClienteLayout({
                               ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg'
                               : 'text-gray-700 hover:bg-gray-50 hover:text-orange-600'
                           }`}
+                          onClick={(e) => {
+                            // Se for a mesma página, fazer scroll suave para o topo
+                            if (item.href === pathname) {
+                              e.preventDefault()
+                              // Simplesmente fazer scroll para o topo da página
+                              // O padding-top já compensa o header fixo
+                              window.scrollTo({
+                                top: 0,
+                                behavior: 'smooth',
+                              })
+                            }
+                          }}
                         >
                           <div className="flex items-center gap-3">
                             <item.icon
