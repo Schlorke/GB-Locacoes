@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { CartItemCreateWithoutEquipmentInputObjectSchema } from './CartItemCreateWithoutEquipmentInput.schema';
-import { CartItemUncheckedCreateWithoutEquipmentInputObjectSchema } from './CartItemUncheckedCreateWithoutEquipmentInput.schema';
-import { CartItemCreateOrConnectWithoutEquipmentInputObjectSchema } from './CartItemCreateOrConnectWithoutEquipmentInput.schema';
-import { CartItemUpsertWithWhereUniqueWithoutEquipmentInputObjectSchema } from './CartItemUpsertWithWhereUniqueWithoutEquipmentInput.schema';
-import { CartItemCreateManyEquipmentInputEnvelopeObjectSchema } from './CartItemCreateManyEquipmentInputEnvelope.schema';
-import { CartItemWhereUniqueInputObjectSchema } from './CartItemWhereUniqueInput.schema';
-import { CartItemUpdateWithWhereUniqueWithoutEquipmentInputObjectSchema } from './CartItemUpdateWithWhereUniqueWithoutEquipmentInput.schema';
-import { CartItemUpdateManyWithWhereWithoutEquipmentInputObjectSchema } from './CartItemUpdateManyWithWhereWithoutEquipmentInput.schema';
-import { CartItemScalarWhereInputObjectSchema } from './CartItemScalarWhereInput.schema'
+import { CartItemCreateWithoutEquipmentInputObjectSchema as CartItemCreateWithoutEquipmentInputObjectSchema } from './CartItemCreateWithoutEquipmentInput.schema';
+import { CartItemUncheckedCreateWithoutEquipmentInputObjectSchema as CartItemUncheckedCreateWithoutEquipmentInputObjectSchema } from './CartItemUncheckedCreateWithoutEquipmentInput.schema';
+import { CartItemCreateOrConnectWithoutEquipmentInputObjectSchema as CartItemCreateOrConnectWithoutEquipmentInputObjectSchema } from './CartItemCreateOrConnectWithoutEquipmentInput.schema';
+import { CartItemUpsertWithWhereUniqueWithoutEquipmentInputObjectSchema as CartItemUpsertWithWhereUniqueWithoutEquipmentInputObjectSchema } from './CartItemUpsertWithWhereUniqueWithoutEquipmentInput.schema';
+import { EquipmentCartItemCreateManyEquipmentInputEnvelopeObjectSchema as CartItemCreateManyEquipmentInputEnvelopeObjectSchema } from './CartItemCreateManyEquipmentInputEnvelope.schema';
+import { CartItemWhereUniqueInputObjectSchema as CartItemWhereUniqueInputObjectSchema } from './CartItemWhereUniqueInput.schema';
+import { CartItemUpdateWithWhereUniqueWithoutEquipmentInputObjectSchema as CartItemUpdateWithWhereUniqueWithoutEquipmentInputObjectSchema } from './CartItemUpdateWithWhereUniqueWithoutEquipmentInput.schema';
+import { CartItemUpdateManyWithWhereWithoutEquipmentInputObjectSchema as CartItemUpdateManyWithWhereWithoutEquipmentInputObjectSchema } from './CartItemUpdateManyWithWhereWithoutEquipmentInput.schema';
+import { CartItemScalarWhereInputObjectSchema as CartItemScalarWhereInputObjectSchema } from './CartItemScalarWhereInput.schema'
 
 const makeSchema = () => z.object({
   create: z.union([z.lazy(() => CartItemCreateWithoutEquipmentInputObjectSchema), z.lazy(() => CartItemCreateWithoutEquipmentInputObjectSchema).array(), z.lazy(() => CartItemUncheckedCreateWithoutEquipmentInputObjectSchema), z.lazy(() => CartItemUncheckedCreateWithoutEquipmentInputObjectSchema).array()]).optional(),

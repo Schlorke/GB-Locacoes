@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { EquipmentArgsObjectSchema } from './EquipmentArgs.schema';
-import { QuoteArgsObjectSchema } from './QuoteArgs.schema'
+import { EquipmentArgsObjectSchema as EquipmentArgsObjectSchema } from './EquipmentArgs.schema';
+import { QuoteArgsObjectSchema as QuoteArgsObjectSchema } from './QuoteArgs.schema'
 
 const makeSchema = () => z.object({
   id: z.boolean().optional(),

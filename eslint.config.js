@@ -1,4 +1,6 @@
+// ESLint v9 compatibility with Next.js
 import { FlatCompat } from '@eslint/eslintrc'
+import js from '@eslint/js'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -7,67 +9,47 @@ const __dirname = path.dirname(__filename)
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
 })
 
-// Use the .eslintrc.cjs configuration in flat config format
 export default [
-  // Global ignores - aplicados a TODOS os arquivos
+  // Global ignores
   {
     ignores: [
-      // Build outputs e cache
+      'lib/validations/schemas/**/*',
+      'node_modules/**',
       '.next/**',
       'out/**',
       'dist/**',
       'build/**',
       'storybook-static/**',
       '.turbo/**',
-
-      // Dependencies
-      'node_modules/**',
-
-      // Config files
-      '**/*.config.js',
-      'next-env.d.ts', // Next.js auto-generated file with triple slash references
-      '**/*.config.cjs',
-      '**/*.config.mjs',
-      '**/*.config.ts',
+      'scripts/**',
+      '*.openapi.json',
+      'public/openapi.json',
+      'tests/api/**',
+      'test-raw-prisma.mjs',
+      '.storybook/**',
+      'stories/**',
+      'types/global.d.ts',
+      'types/next-auth.d.ts',
+      'types/filters.ts',
+      'next-env.d.ts',
       'tailwind.config.cjs',
       'postcss.config.cjs',
       'next.config.mjs',
       'vitest.config.ts',
       'vitest.storybook.config.ts',
-
-      // Scripts
-      'scripts/**',
-
-      // Generated files
-      'lib/validations/**',
-      '*.openapi.json',
-      'public/openapi.json',
-
-      // Test files with flexible types
-      'tests/api/**',
-
-      // Storybook files
-      '.storybook/**',
-      'stories/**',
-
-      // Type definitions with flexible types
-      'types/global.d.ts',
-      'types/next-auth.d.ts',
-      'types/filters.ts',
+      '**/*.config.js',
+      '**/*.config.cjs',
+      '**/*.config.mjs',
+      '**/*.config.ts',
     ],
   },
-  // Aplicar as configurações do Next.js aos arquivos restantes
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
 
-  // Configuração adicional para garantir detecção do plugin Next.js
-  {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    settings: {
-      next: {
-        rootDir: './',
-      },
-    },
-  },
+  // JavaScript recommended config
+  js.configs.recommended,
+
+  // Next.js configuration with TypeScript
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
 ]

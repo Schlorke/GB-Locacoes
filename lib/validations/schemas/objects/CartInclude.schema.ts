@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { UserArgsObjectSchema } from './UserArgs.schema';
-import { CartItemFindManySchema } from '../findManyCartItem.schema';
-import { CartCountOutputTypeArgsObjectSchema } from './CartCountOutputTypeArgs.schema'
+import { UserArgsObjectSchema as UserArgsObjectSchema } from './UserArgs.schema';
+import { CartItemFindManySchema as CartItemFindManySchema } from '../findManyCartItem.schema';
+import { CartCountOutputTypeArgsObjectSchema as CartCountOutputTypeArgsObjectSchema } from './CartCountOutputTypeArgs.schema'
 
 const makeSchema = () => z.object({
   user: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional(),

@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { RoleSchema } from '../enums/Role.schema';
-import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
-import { NestedEnumRoleFilterObjectSchema } from './NestedEnumRoleFilter.schema'
+import { NestedIntFilterObjectSchema as NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
+import { NestedEnumRoleFilterObjectSchema as NestedEnumRoleFilterObjectSchema } from './NestedEnumRoleFilter.schema'
 
 const nestedenumrolewithaggregatesfilterSchema = z.object({
   equals: RoleSchema.optional(),

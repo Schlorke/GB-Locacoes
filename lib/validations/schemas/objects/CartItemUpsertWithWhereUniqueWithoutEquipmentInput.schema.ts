@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { CartItemWhereUniqueInputObjectSchema } from './CartItemWhereUniqueInput.schema';
-import { CartItemUpdateWithoutEquipmentInputObjectSchema } from './CartItemUpdateWithoutEquipmentInput.schema';
-import { CartItemUncheckedUpdateWithoutEquipmentInputObjectSchema } from './CartItemUncheckedUpdateWithoutEquipmentInput.schema';
-import { CartItemCreateWithoutEquipmentInputObjectSchema } from './CartItemCreateWithoutEquipmentInput.schema';
-import { CartItemUncheckedCreateWithoutEquipmentInputObjectSchema } from './CartItemUncheckedCreateWithoutEquipmentInput.schema'
+import { CartItemWhereUniqueInputObjectSchema as CartItemWhereUniqueInputObjectSchema } from './CartItemWhereUniqueInput.schema';
+import { CartItemUpdateWithoutEquipmentInputObjectSchema as CartItemUpdateWithoutEquipmentInputObjectSchema } from './CartItemUpdateWithoutEquipmentInput.schema';
+import { CartItemUncheckedUpdateWithoutEquipmentInputObjectSchema as CartItemUncheckedUpdateWithoutEquipmentInputObjectSchema } from './CartItemUncheckedUpdateWithoutEquipmentInput.schema';
+import { CartItemCreateWithoutEquipmentInputObjectSchema as CartItemCreateWithoutEquipmentInputObjectSchema } from './CartItemCreateWithoutEquipmentInput.schema';
+import { CartItemUncheckedCreateWithoutEquipmentInputObjectSchema as CartItemUncheckedCreateWithoutEquipmentInputObjectSchema } from './CartItemUncheckedCreateWithoutEquipmentInput.schema'
 
 const makeSchema = () => z.object({
   where: z.lazy(() => CartItemWhereUniqueInputObjectSchema),

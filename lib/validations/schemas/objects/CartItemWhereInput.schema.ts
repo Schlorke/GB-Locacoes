@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { StringFilterObjectSchema } from './StringFilter.schema';
-import { IntFilterObjectSchema } from './IntFilter.schema';
-import { DecimalFilterObjectSchema } from './DecimalFilter.schema';
-import { DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema';
-import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
-import { CartScalarRelationFilterObjectSchema } from './CartScalarRelationFilter.schema';
-import { CartWhereInputObjectSchema } from './CartWhereInput.schema';
-import { EquipmentScalarRelationFilterObjectSchema } from './EquipmentScalarRelationFilter.schema';
-import { EquipmentWhereInputObjectSchema } from './EquipmentWhereInput.schema'
+import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
+import { IntFilterObjectSchema as IntFilterObjectSchema } from './IntFilter.schema';
+import { DecimalFilterObjectSchema as DecimalFilterObjectSchema } from './DecimalFilter.schema';
+import { DecimalNullableFilterObjectSchema as DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema';
+import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
+import { CartScalarRelationFilterObjectSchema as CartScalarRelationFilterObjectSchema } from './CartScalarRelationFilter.schema';
+import { CartWhereInputObjectSchema as CartWhereInputObjectSchema } from './CartWhereInput.schema';
+import { EquipmentScalarRelationFilterObjectSchema as EquipmentScalarRelationFilterObjectSchema } from './EquipmentScalarRelationFilter.schema';
+import { EquipmentWhereInputObjectSchema as EquipmentWhereInputObjectSchema } from './EquipmentWhereInput.schema'
 
 const cartitemwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => CartItemWhereInputObjectSchema), z.lazy(() => CartItemWhereInputObjectSchema).array()]).optional(),

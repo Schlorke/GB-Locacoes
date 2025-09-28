@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { EquipmentCreateWithoutQuoteItemsInputObjectSchema } from './EquipmentCreateWithoutQuoteItemsInput.schema';
-import { EquipmentUncheckedCreateWithoutQuoteItemsInputObjectSchema } from './EquipmentUncheckedCreateWithoutQuoteItemsInput.schema';
-import { EquipmentCreateOrConnectWithoutQuoteItemsInputObjectSchema } from './EquipmentCreateOrConnectWithoutQuoteItemsInput.schema';
-import { EquipmentUpsertWithoutQuoteItemsInputObjectSchema } from './EquipmentUpsertWithoutQuoteItemsInput.schema';
-import { EquipmentWhereUniqueInputObjectSchema } from './EquipmentWhereUniqueInput.schema';
-import { EquipmentUpdateToOneWithWhereWithoutQuoteItemsInputObjectSchema } from './EquipmentUpdateToOneWithWhereWithoutQuoteItemsInput.schema';
-import { EquipmentUpdateWithoutQuoteItemsInputObjectSchema } from './EquipmentUpdateWithoutQuoteItemsInput.schema';
-import { EquipmentUncheckedUpdateWithoutQuoteItemsInputObjectSchema } from './EquipmentUncheckedUpdateWithoutQuoteItemsInput.schema'
+import { EquipmentCreateWithoutQuoteItemsInputObjectSchema as EquipmentCreateWithoutQuoteItemsInputObjectSchema } from './EquipmentCreateWithoutQuoteItemsInput.schema';
+import { EquipmentUncheckedCreateWithoutQuoteItemsInputObjectSchema as EquipmentUncheckedCreateWithoutQuoteItemsInputObjectSchema } from './EquipmentUncheckedCreateWithoutQuoteItemsInput.schema';
+import { EquipmentCreateOrConnectWithoutQuoteItemsInputObjectSchema as EquipmentCreateOrConnectWithoutQuoteItemsInputObjectSchema } from './EquipmentCreateOrConnectWithoutQuoteItemsInput.schema';
+import { EquipmentUpsertWithoutQuoteItemsInputObjectSchema as EquipmentUpsertWithoutQuoteItemsInputObjectSchema } from './EquipmentUpsertWithoutQuoteItemsInput.schema';
+import { EquipmentWhereUniqueInputObjectSchema as EquipmentWhereUniqueInputObjectSchema } from './EquipmentWhereUniqueInput.schema';
+import { EquipmentUpdateToOneWithWhereWithoutQuoteItemsInputObjectSchema as EquipmentUpdateToOneWithWhereWithoutQuoteItemsInputObjectSchema } from './EquipmentUpdateToOneWithWhereWithoutQuoteItemsInput.schema';
+import { EquipmentUpdateWithoutQuoteItemsInputObjectSchema as EquipmentUpdateWithoutQuoteItemsInputObjectSchema } from './EquipmentUpdateWithoutQuoteItemsInput.schema';
+import { EquipmentUncheckedUpdateWithoutQuoteItemsInputObjectSchema as EquipmentUncheckedUpdateWithoutQuoteItemsInputObjectSchema } from './EquipmentUncheckedUpdateWithoutQuoteItemsInput.schema'
 
 const makeSchema = () => z.object({
   create: z.union([z.lazy(() => EquipmentCreateWithoutQuoteItemsInputObjectSchema), z.lazy(() => EquipmentUncheckedCreateWithoutQuoteItemsInputObjectSchema)]).optional(),

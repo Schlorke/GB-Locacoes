@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { rentalsCreateWithoutUsersInputObjectSchema } from './rentalsCreateWithoutUsersInput.schema';
-import { rentalsUncheckedCreateWithoutUsersInputObjectSchema } from './rentalsUncheckedCreateWithoutUsersInput.schema';
-import { rentalsCreateOrConnectWithoutUsersInputObjectSchema } from './rentalsCreateOrConnectWithoutUsersInput.schema';
-import { rentalsUpsertWithWhereUniqueWithoutUsersInputObjectSchema } from './rentalsUpsertWithWhereUniqueWithoutUsersInput.schema';
-import { rentalsCreateManyUsersInputEnvelopeObjectSchema } from './rentalsCreateManyUsersInputEnvelope.schema';
-import { rentalsWhereUniqueInputObjectSchema } from './rentalsWhereUniqueInput.schema';
-import { rentalsUpdateWithWhereUniqueWithoutUsersInputObjectSchema } from './rentalsUpdateWithWhereUniqueWithoutUsersInput.schema';
-import { rentalsUpdateManyWithWhereWithoutUsersInputObjectSchema } from './rentalsUpdateManyWithWhereWithoutUsersInput.schema';
-import { rentalsScalarWhereInputObjectSchema } from './rentalsScalarWhereInput.schema'
+import { rentalsCreateWithoutUsersInputObjectSchema as rentalsCreateWithoutUsersInputObjectSchema } from './rentalsCreateWithoutUsersInput.schema';
+import { rentalsUncheckedCreateWithoutUsersInputObjectSchema as rentalsUncheckedCreateWithoutUsersInputObjectSchema } from './rentalsUncheckedCreateWithoutUsersInput.schema';
+import { rentalsCreateOrConnectWithoutUsersInputObjectSchema as rentalsCreateOrConnectWithoutUsersInputObjectSchema } from './rentalsCreateOrConnectWithoutUsersInput.schema';
+import { rentalsUpsertWithWhereUniqueWithoutUsersInputObjectSchema as rentalsUpsertWithWhereUniqueWithoutUsersInputObjectSchema } from './rentalsUpsertWithWhereUniqueWithoutUsersInput.schema';
+import { UsersrentalsCreateManyUsersInputEnvelopeObjectSchema as rentalsCreateManyUsersInputEnvelopeObjectSchema } from './rentalsCreateManyUsersInputEnvelope.schema';
+import { rentalsWhereUniqueInputObjectSchema as rentalsWhereUniqueInputObjectSchema } from './rentalsWhereUniqueInput.schema';
+import { rentalsUpdateWithWhereUniqueWithoutUsersInputObjectSchema as rentalsUpdateWithWhereUniqueWithoutUsersInputObjectSchema } from './rentalsUpdateWithWhereUniqueWithoutUsersInput.schema';
+import { rentalsUpdateManyWithWhereWithoutUsersInputObjectSchema as rentalsUpdateManyWithWhereWithoutUsersInputObjectSchema } from './rentalsUpdateManyWithWhereWithoutUsersInput.schema';
+import { rentalsScalarWhereInputObjectSchema as rentalsScalarWhereInputObjectSchema } from './rentalsScalarWhereInput.schema'
 
 const makeSchema = () => z.object({
   create: z.union([z.lazy(() => rentalsCreateWithoutUsersInputObjectSchema), z.lazy(() => rentalsCreateWithoutUsersInputObjectSchema).array(), z.lazy(() => rentalsUncheckedCreateWithoutUsersInputObjectSchema), z.lazy(() => rentalsUncheckedCreateWithoutUsersInputObjectSchema).array()]).optional(),

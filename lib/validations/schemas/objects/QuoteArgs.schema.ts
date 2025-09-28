@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { QuoteSelectObjectSchema } from './QuoteSelect.schema';
-import { QuoteIncludeObjectSchema } from './QuoteInclude.schema'
+import { QuoteSelectObjectSchema as QuoteSelectObjectSchema } from './QuoteSelect.schema';
+import { QuoteIncludeObjectSchema as QuoteIncludeObjectSchema } from './QuoteInclude.schema'
 
 const makeSchema = () => z.object({
   select: z.lazy(() => QuoteSelectObjectSchema).optional(),

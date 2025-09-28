@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 
 // prettier-ignore
@@ -10,7 +11,7 @@ export const rentalsInputSchema = z.object({
     userid: z.string(),
     createdat: z.date().optional().nullable(),
     updatedat: z.date().optional().nullable(),
-    rental_items: z.array(z.unknown()).array(),
+    rental_items: z.array(z.unknown()),
     users: z.unknown()
 }).strict();
 

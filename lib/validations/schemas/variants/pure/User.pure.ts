@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 
 import { RoleSchema } from '../../enums/Role.schema';
@@ -15,11 +16,11 @@ export const UserModelSchema = z.object({
     image: z.string().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    accounts: z.array(z.unknown()).array(),
-    quotes: z.array(z.unknown()).array(),
-    rentals: z.array(z.unknown()).array(),
-    sessions: z.array(z.unknown()).array(),
-    addresses: z.array(z.unknown()).array(),
+    accounts: z.array(z.unknown()),
+    quotes: z.array(z.unknown()),
+    rentals: z.array(z.unknown()),
+    sessions: z.array(z.unknown()),
+    addresses: z.array(z.unknown()),
     cart: z.unknown().nullable()
 }).strict();
 

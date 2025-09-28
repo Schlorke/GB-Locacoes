@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { NestedDecimalWithAggregatesFilterObjectSchema } from './NestedDecimalWithAggregatesFilter.schema';
-import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
-import { NestedDecimalFilterObjectSchema } from './NestedDecimalFilter.schema'
+import { NestedDecimalWithAggregatesFilterObjectSchema as NestedDecimalWithAggregatesFilterObjectSchema } from './NestedDecimalWithAggregatesFilter.schema';
+import { NestedIntFilterObjectSchema as NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
+import { NestedDecimalFilterObjectSchema as NestedDecimalFilterObjectSchema } from './NestedDecimalFilter.schema'
 
 const makeSchema = () => z.object({
   equals: z.number().optional(),

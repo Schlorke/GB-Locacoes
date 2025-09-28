@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { StringFilterObjectSchema } from './StringFilter.schema';
-import { IntFilterObjectSchema } from './IntFilter.schema';
-import { DecimalFilterObjectSchema } from './DecimalFilter.schema';
-import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
-import { EquipmentScalarRelationFilterObjectSchema } from './EquipmentScalarRelationFilter.schema';
-import { EquipmentWhereInputObjectSchema } from './EquipmentWhereInput.schema';
-import { QuoteScalarRelationFilterObjectSchema } from './QuoteScalarRelationFilter.schema';
-import { QuoteWhereInputObjectSchema } from './QuoteWhereInput.schema'
+import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
+import { IntFilterObjectSchema as IntFilterObjectSchema } from './IntFilter.schema';
+import { DecimalFilterObjectSchema as DecimalFilterObjectSchema } from './DecimalFilter.schema';
+import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
+import { EquipmentScalarRelationFilterObjectSchema as EquipmentScalarRelationFilterObjectSchema } from './EquipmentScalarRelationFilter.schema';
+import { EquipmentWhereInputObjectSchema as EquipmentWhereInputObjectSchema } from './EquipmentWhereInput.schema';
+import { QuoteScalarRelationFilterObjectSchema as QuoteScalarRelationFilterObjectSchema } from './QuoteScalarRelationFilter.schema';
+import { QuoteWhereInputObjectSchema as QuoteWhereInputObjectSchema } from './QuoteWhereInput.schema'
 
 const quoteitemwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => QuoteItemWhereInputObjectSchema), z.lazy(() => QuoteItemWhereInputObjectSchema).array()]).optional(),

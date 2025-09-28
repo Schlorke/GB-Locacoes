@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { CategoryCountOutputTypeSelectObjectSchema } from './CategoryCountOutputTypeSelect.schema'
+import { CategoryCountOutputTypeSelectObjectSchema as CategoryCountOutputTypeSelectObjectSchema } from './CategoryCountOutputTypeSelect.schema'
 
 const makeSchema = () => z.object({
   select: z.lazy(() => CategoryCountOutputTypeSelectObjectSchema).optional()

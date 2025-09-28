@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { QuoteItemFindManySchema } from '../findManyQuoteItem.schema';
-import { UserArgsObjectSchema } from './UserArgs.schema';
-import { QuoteCountOutputTypeArgsObjectSchema } from './QuoteCountOutputTypeArgs.schema'
+import { QuoteItemFindManySchema as QuoteItemFindManySchema } from '../findManyQuoteItem.schema';
+import { UserArgsObjectSchema as UserArgsObjectSchema } from './UserArgs.schema';
+import { QuoteCountOutputTypeArgsObjectSchema as QuoteCountOutputTypeArgsObjectSchema } from './QuoteCountOutputTypeArgs.schema'
 
 const makeSchema = () => z.object({
   id: z.boolean().optional(),

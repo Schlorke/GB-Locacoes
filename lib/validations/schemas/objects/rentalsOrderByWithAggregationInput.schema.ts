@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
-import { SortOrderInputObjectSchema } from './SortOrderInput.schema';
-import { rentalsCountOrderByAggregateInputObjectSchema } from './rentalsCountOrderByAggregateInput.schema';
-import { rentalsAvgOrderByAggregateInputObjectSchema } from './rentalsAvgOrderByAggregateInput.schema';
-import { rentalsMaxOrderByAggregateInputObjectSchema } from './rentalsMaxOrderByAggregateInput.schema';
-import { rentalsMinOrderByAggregateInputObjectSchema } from './rentalsMinOrderByAggregateInput.schema';
-import { rentalsSumOrderByAggregateInputObjectSchema } from './rentalsSumOrderByAggregateInput.schema'
+import { SortOrderInputObjectSchema as SortOrderInputObjectSchema } from './SortOrderInput.schema';
+import { rentalsCountOrderByAggregateInputObjectSchema as rentalsCountOrderByAggregateInputObjectSchema } from './rentalsCountOrderByAggregateInput.schema';
+import { rentalsAvgOrderByAggregateInputObjectSchema as rentalsAvgOrderByAggregateInputObjectSchema } from './rentalsAvgOrderByAggregateInput.schema';
+import { rentalsMaxOrderByAggregateInputObjectSchema as rentalsMaxOrderByAggregateInputObjectSchema } from './rentalsMaxOrderByAggregateInput.schema';
+import { rentalsMinOrderByAggregateInputObjectSchema as rentalsMinOrderByAggregateInputObjectSchema } from './rentalsMinOrderByAggregateInput.schema';
+import { rentalsSumOrderByAggregateInputObjectSchema as rentalsSumOrderByAggregateInputObjectSchema } from './rentalsSumOrderByAggregateInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),

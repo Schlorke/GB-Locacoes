@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { QuoteStatusSchema } from '../enums/QuoteStatus.schema';
-import { NestedEnumQuoteStatusWithAggregatesFilterObjectSchema } from './NestedEnumQuoteStatusWithAggregatesFilter.schema';
-import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
-import { NestedEnumQuoteStatusFilterObjectSchema } from './NestedEnumQuoteStatusFilter.schema'
+import { NestedEnumQuoteStatusWithAggregatesFilterObjectSchema as NestedEnumQuoteStatusWithAggregatesFilterObjectSchema } from './NestedEnumQuoteStatusWithAggregatesFilter.schema';
+import { NestedIntFilterObjectSchema as NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
+import { NestedEnumQuoteStatusFilterObjectSchema as NestedEnumQuoteStatusFilterObjectSchema } from './NestedEnumQuoteStatusFilter.schema'
 
 const makeSchema = () => z.object({
   equals: QuoteStatusSchema.optional(),

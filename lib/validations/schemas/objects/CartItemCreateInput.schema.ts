@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { CartCreateNestedOneWithoutItemsInputObjectSchema } from './CartCreateNestedOneWithoutItemsInput.schema';
-import { EquipmentCreateNestedOneWithoutCartItemsInputObjectSchema } from './EquipmentCreateNestedOneWithoutCartItemsInput.schema'
+import { CartCreateNestedOneWithoutItemsInputObjectSchema as CartCreateNestedOneWithoutItemsInputObjectSchema } from './CartCreateNestedOneWithoutItemsInput.schema';
+import { EquipmentCreateNestedOneWithoutCartItemsInputObjectSchema as EquipmentCreateNestedOneWithoutCartItemsInputObjectSchema } from './EquipmentCreateNestedOneWithoutCartItemsInput.schema'
 
 const makeSchema = () => z.object({
   id: z.string().optional(),

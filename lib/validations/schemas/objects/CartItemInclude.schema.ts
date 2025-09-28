@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { CartArgsObjectSchema } from './CartArgs.schema';
-import { EquipmentArgsObjectSchema } from './EquipmentArgs.schema'
+import { CartArgsObjectSchema as CartArgsObjectSchema } from './CartArgs.schema';
+import { EquipmentArgsObjectSchema as EquipmentArgsObjectSchema } from './EquipmentArgs.schema'
 
 const makeSchema = () => z.object({
   cart: z.union([z.boolean(), z.lazy(() => CartArgsObjectSchema)]).optional(),

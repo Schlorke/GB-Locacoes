@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { AccountSelectObjectSchema } from './AccountSelect.schema';
-import { AccountIncludeObjectSchema } from './AccountInclude.schema'
+import { AccountSelectObjectSchema as AccountSelectObjectSchema } from './AccountSelect.schema';
+import { AccountIncludeObjectSchema as AccountIncludeObjectSchema } from './AccountInclude.schema'
 
 const makeSchema = () => z.object({
   select: z.lazy(() => AccountSelectObjectSchema).optional(),

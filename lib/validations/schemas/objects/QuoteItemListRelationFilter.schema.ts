@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { QuoteItemWhereInputObjectSchema } from './QuoteItemWhereInput.schema'
+import { QuoteItemWhereInputObjectSchema as QuoteItemWhereInputObjectSchema } from './QuoteItemWhereInput.schema'
 
 const makeSchema = () => z.object({
   every: z.lazy(() => QuoteItemWhereInputObjectSchema).optional(),

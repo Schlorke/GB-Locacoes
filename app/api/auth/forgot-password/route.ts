@@ -62,11 +62,6 @@ export async function POST(request: NextRequest) {
         console.error('Erro ao enviar email:', emailError)
         // Continue mesmo se o email falhar
       }
-    } else {
-      console.log('Email de recuperação (desenvolvimento):', {
-        to: user.email,
-        resetUrl: `${process.env.NEXTAUTH_URL}/reset-password?token=${resetToken}`,
-      })
     }
 
     return NextResponse.json(

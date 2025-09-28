@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
-import { CategorySelectObjectSchema } from './objects/CategorySelect.schema';
-import { CategoryIncludeObjectSchema } from './objects/CategoryInclude.schema';
-import { CategoryCreateInputObjectSchema } from './objects/CategoryCreateInput.schema';
-import { CategoryUncheckedCreateInputObjectSchema } from './objects/CategoryUncheckedCreateInput.schema';
+import { CategorySelectObjectSchema as CategorySelectObjectSchema } from './objects/CategorySelect.schema';
+import { CategoryIncludeObjectSchema as CategoryIncludeObjectSchema } from './objects/CategoryInclude.schema';
+import { CategoryCreateInputObjectSchema as CategoryCreateInputObjectSchema } from './objects/CategoryCreateInput.schema';
+import { CategoryUncheckedCreateInputObjectSchema as CategoryUncheckedCreateInputObjectSchema } from './objects/CategoryUncheckedCreateInput.schema';
 
-export const CategoryCreateOneSchema = z.object({ select: CategorySelectObjectSchema.optional(), include: CategoryIncludeObjectSchema.optional(), data: z.union([CategoryCreateInputObjectSchema, CategoryUncheckedCreateInputObjectSchema])  })
+export const CategoryCreateOneSchema: z.ZodType<Prisma.CategoryCreateArgs> = z.object({ select: CategorySelectObjectSchema.optional(), include: CategoryIncludeObjectSchema.optional(), data: z.union([CategoryCreateInputObjectSchema, CategoryUncheckedCreateInputObjectSchema]) }).strict() as unknown as z.ZodType<Prisma.CategoryCreateArgs>;
+
+export const CategoryCreateOneZodSchema = z.object({ select: CategorySelectObjectSchema.optional(), include: CategoryIncludeObjectSchema.optional(), data: z.union([CategoryCreateInputObjectSchema, CategoryUncheckedCreateInputObjectSchema]) }).strict();

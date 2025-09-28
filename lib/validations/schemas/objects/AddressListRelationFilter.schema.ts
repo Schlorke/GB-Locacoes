@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { AddressWhereInputObjectSchema } from './AddressWhereInput.schema'
+import { AddressWhereInputObjectSchema as AddressWhereInputObjectSchema } from './AddressWhereInput.schema'
 
 const makeSchema = () => z.object({
   every: z.lazy(() => AddressWhereInputObjectSchema).optional(),

@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
-import { SortOrderInputObjectSchema } from './SortOrderInput.schema';
-import { AddressCountOrderByAggregateInputObjectSchema } from './AddressCountOrderByAggregateInput.schema';
-import { AddressMaxOrderByAggregateInputObjectSchema } from './AddressMaxOrderByAggregateInput.schema';
-import { AddressMinOrderByAggregateInputObjectSchema } from './AddressMinOrderByAggregateInput.schema'
+import { SortOrderInputObjectSchema as SortOrderInputObjectSchema } from './SortOrderInput.schema';
+import { AddressCountOrderByAggregateInputObjectSchema as AddressCountOrderByAggregateInputObjectSchema } from './AddressCountOrderByAggregateInput.schema';
+import { AddressMaxOrderByAggregateInputObjectSchema as AddressMaxOrderByAggregateInputObjectSchema } from './AddressMaxOrderByAggregateInput.schema';
+import { AddressMinOrderByAggregateInputObjectSchema as AddressMinOrderByAggregateInputObjectSchema } from './AddressMinOrderByAggregateInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),

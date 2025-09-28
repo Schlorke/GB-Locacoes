@@ -1,4 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
-import { CartItemWhereInputObjectSchema } from './objects/CartItemWhereInput.schema';
+import { CartItemWhereInputObjectSchema as CartItemWhereInputObjectSchema } from './objects/CartItemWhereInput.schema';
 
-export const CartItemDeleteManySchema = z.object({ where: CartItemWhereInputObjectSchema.optional()  })
+export const CartItemDeleteManySchema: z.ZodType<Prisma.CartItemDeleteManyArgs> = z.object({ where: CartItemWhereInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.CartItemDeleteManyArgs>;
+
+export const CartItemDeleteManyZodSchema = z.object({ where: CartItemWhereInputObjectSchema.optional() }).strict();

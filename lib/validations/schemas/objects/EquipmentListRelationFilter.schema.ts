@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { EquipmentWhereInputObjectSchema } from './EquipmentWhereInput.schema'
+import { EquipmentWhereInputObjectSchema as EquipmentWhereInputObjectSchema } from './EquipmentWhereInput.schema'
 
 const makeSchema = () => z.object({
   every: z.lazy(() => EquipmentWhereInputObjectSchema).optional(),

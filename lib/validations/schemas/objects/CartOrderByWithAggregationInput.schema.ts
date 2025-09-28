@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
-import { CartCountOrderByAggregateInputObjectSchema } from './CartCountOrderByAggregateInput.schema';
-import { CartMaxOrderByAggregateInputObjectSchema } from './CartMaxOrderByAggregateInput.schema';
-import { CartMinOrderByAggregateInputObjectSchema } from './CartMinOrderByAggregateInput.schema'
+import { CartCountOrderByAggregateInputObjectSchema as CartCountOrderByAggregateInputObjectSchema } from './CartCountOrderByAggregateInput.schema';
+import { CartMaxOrderByAggregateInputObjectSchema as CartMaxOrderByAggregateInputObjectSchema } from './CartMaxOrderByAggregateInput.schema';
+import { CartMinOrderByAggregateInputObjectSchema as CartMinOrderByAggregateInputObjectSchema } from './CartMinOrderByAggregateInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),

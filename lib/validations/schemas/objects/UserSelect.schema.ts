@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { AccountFindManySchema } from '../findManyAccount.schema';
-import { QuoteFindManySchema } from '../findManyQuote.schema';
-import { rentalsFindManySchema } from '../findManyrentals.schema';
-import { SessionFindManySchema } from '../findManySession.schema';
-import { AddressFindManySchema } from '../findManyAddress.schema';
-import { CartArgsObjectSchema } from './CartArgs.schema';
-import { UserCountOutputTypeArgsObjectSchema } from './UserCountOutputTypeArgs.schema'
+import { AccountFindManySchema as AccountFindManySchema } from '../findManyAccount.schema';
+import { QuoteFindManySchema as QuoteFindManySchema } from '../findManyQuote.schema';
+import { rentalsFindManySchema as rentalsFindManySchema } from '../findManyrentals.schema';
+import { SessionFindManySchema as SessionFindManySchema } from '../findManySession.schema';
+import { AddressFindManySchema as AddressFindManySchema } from '../findManyAddress.schema';
+import { CartArgsObjectSchema as CartArgsObjectSchema } from './CartArgs.schema';
+import { UserCountOutputTypeArgsObjectSchema as UserCountOutputTypeArgsObjectSchema } from './UserCountOutputTypeArgs.schema'
 
 const makeSchema = () => z.object({
   id: z.boolean().optional(),

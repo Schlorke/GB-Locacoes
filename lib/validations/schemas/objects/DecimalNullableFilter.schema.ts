@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { NestedDecimalNullableFilterObjectSchema } from './NestedDecimalNullableFilter.schema'
+import { NestedDecimalNullableFilterObjectSchema as NestedDecimalNullableFilterObjectSchema } from './NestedDecimalNullableFilter.schema'
 
 const makeSchema = () => z.object({
   equals: z.number().optional().nullable(),

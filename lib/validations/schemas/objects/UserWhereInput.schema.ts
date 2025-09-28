@@ -1,18 +1,19 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { StringFilterObjectSchema } from './StringFilter.schema';
-import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
-import { EnumRoleFilterObjectSchema } from './EnumRoleFilter.schema';
+import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
+import { StringNullableFilterObjectSchema as StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
+import { EnumRoleFilterObjectSchema as EnumRoleFilterObjectSchema } from './EnumRoleFilter.schema';
 import { RoleSchema } from '../enums/Role.schema';
-import { DateTimeNullableFilterObjectSchema } from './DateTimeNullableFilter.schema';
-import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
-import { AccountListRelationFilterObjectSchema } from './AccountListRelationFilter.schema';
-import { QuoteListRelationFilterObjectSchema } from './QuoteListRelationFilter.schema';
-import { RentalsListRelationFilterObjectSchema } from './RentalsListRelationFilter.schema';
-import { SessionListRelationFilterObjectSchema } from './SessionListRelationFilter.schema';
-import { AddressListRelationFilterObjectSchema } from './AddressListRelationFilter.schema';
-import { CartNullableScalarRelationFilterObjectSchema } from './CartNullableScalarRelationFilter.schema';
-import { CartWhereInputObjectSchema } from './CartWhereInput.schema'
+import { DateTimeNullableFilterObjectSchema as DateTimeNullableFilterObjectSchema } from './DateTimeNullableFilter.schema';
+import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
+import { AccountListRelationFilterObjectSchema as AccountListRelationFilterObjectSchema } from './AccountListRelationFilter.schema';
+import { QuoteListRelationFilterObjectSchema as QuoteListRelationFilterObjectSchema } from './QuoteListRelationFilter.schema';
+import { RentalsListRelationFilterObjectSchema as RentalsListRelationFilterObjectSchema } from './RentalsListRelationFilter.schema';
+import { SessionListRelationFilterObjectSchema as SessionListRelationFilterObjectSchema } from './SessionListRelationFilter.schema';
+import { AddressListRelationFilterObjectSchema as AddressListRelationFilterObjectSchema } from './AddressListRelationFilter.schema';
+import { CartNullableScalarRelationFilterObjectSchema as CartNullableScalarRelationFilterObjectSchema } from './CartNullableScalarRelationFilter.schema';
+import { CartWhereInputObjectSchema as CartWhereInputObjectSchema } from './CartWhereInput.schema'
 
 const userwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => UserWhereInputObjectSchema), z.lazy(() => UserWhereInputObjectSchema).array()]).optional(),

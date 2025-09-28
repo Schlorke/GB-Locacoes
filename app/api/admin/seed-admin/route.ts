@@ -116,10 +116,14 @@ export async function POST() {
           ? {
               name: createError.name,
               message: createError.message,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              code: (createError as any).code,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              meta: (createError as any).meta,
+              code:
+                'createError' in createError
+                  ? (createError as { code?: string }).code
+                  : undefined,
+              meta:
+                'meta' in createError
+                  ? (createError as { meta?: unknown }).meta
+                  : undefined,
             }
           : { message: 'Unknown error' }
       console.error('❌ [SEED-ADMIN] Detalhes do erro:', errorDetails)
@@ -158,8 +162,10 @@ export async function POST() {
         ? {
             name: error.name,
             message: error.message,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            code: (error as any).code || 'NO_CODE',
+            code:
+              'code' in error
+                ? (error as { code?: string }).code || 'NO_CODE'
+                : 'NO_CODE',
             stack:
               process.env.NODE_ENV === 'development' ? error.stack : undefined,
           }
@@ -236,8 +242,10 @@ export async function GET() {
         ? {
             name: error.name,
             message: error.message,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            code: (error as any).code || 'NO_CODE',
+            code:
+              'code' in error
+                ? (error as { code?: string }).code || 'NO_CODE'
+                : 'NO_CODE',
           }
         : {
             name: 'Unknown',

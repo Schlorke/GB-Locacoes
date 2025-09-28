@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { NestedBoolFilterObjectSchema } from './NestedBoolFilter.schema'
+import { NestedBoolFilterObjectSchema as NestedBoolFilterObjectSchema } from './NestedBoolFilter.schema'
 
 const makeSchema = () => z.object({
   equals: z.boolean().optional(),

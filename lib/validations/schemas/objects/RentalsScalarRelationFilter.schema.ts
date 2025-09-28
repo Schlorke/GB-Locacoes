@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { rentalsWhereInputObjectSchema } from './rentalsWhereInput.schema'
+import { rentalsWhereInputObjectSchema as rentalsWhereInputObjectSchema } from './rentalsWhereInput.schema'
 
 const makeSchema = () => z.object({
   is: z.lazy(() => rentalsWhereInputObjectSchema).optional(),

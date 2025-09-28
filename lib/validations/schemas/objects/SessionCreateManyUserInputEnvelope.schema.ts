@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { SessionCreateManyUserInputObjectSchema } from './SessionCreateManyUserInput.schema'
+import { UserSessionCreateManyUserInputObjectSchema as SessionCreateManyUserInputObjectSchema } from './SessionCreateManyUserInput.schema'
 
 const makeSchema = () => z.object({
   data: z.union([z.lazy(() => SessionCreateManyUserInputObjectSchema), z.lazy(() => SessionCreateManyUserInputObjectSchema).array()]),

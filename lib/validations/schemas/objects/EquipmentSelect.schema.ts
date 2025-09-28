@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { CategoryArgsObjectSchema } from './CategoryArgs.schema';
-import { QuoteItemFindManySchema } from '../findManyQuoteItem.schema';
-import { rental_itemsFindManySchema } from '../findManyrental_items.schema';
-import { CartItemFindManySchema } from '../findManyCartItem.schema';
-import { EquipmentCountOutputTypeArgsObjectSchema } from './EquipmentCountOutputTypeArgs.schema'
+import { CategoryArgsObjectSchema as CategoryArgsObjectSchema } from './CategoryArgs.schema';
+import { QuoteItemFindManySchema as QuoteItemFindManySchema } from '../findManyQuoteItem.schema';
+import { rental_itemsFindManySchema as rental_itemsFindManySchema } from '../findManyrental_items.schema';
+import { CartItemFindManySchema as CartItemFindManySchema } from '../findManyCartItem.schema';
+import { EquipmentCountOutputTypeArgsObjectSchema as EquipmentCountOutputTypeArgsObjectSchema } from './EquipmentCountOutputTypeArgs.schema'
 
 const makeSchema = () => z.object({
   id: z.boolean().optional(),

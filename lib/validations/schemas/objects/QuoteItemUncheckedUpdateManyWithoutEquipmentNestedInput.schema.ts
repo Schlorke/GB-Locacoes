@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { QuoteItemCreateWithoutEquipmentInputObjectSchema } from './QuoteItemCreateWithoutEquipmentInput.schema';
-import { QuoteItemUncheckedCreateWithoutEquipmentInputObjectSchema } from './QuoteItemUncheckedCreateWithoutEquipmentInput.schema';
-import { QuoteItemCreateOrConnectWithoutEquipmentInputObjectSchema } from './QuoteItemCreateOrConnectWithoutEquipmentInput.schema';
-import { QuoteItemUpsertWithWhereUniqueWithoutEquipmentInputObjectSchema } from './QuoteItemUpsertWithWhereUniqueWithoutEquipmentInput.schema';
-import { QuoteItemCreateManyEquipmentInputEnvelopeObjectSchema } from './QuoteItemCreateManyEquipmentInputEnvelope.schema';
-import { QuoteItemWhereUniqueInputObjectSchema } from './QuoteItemWhereUniqueInput.schema';
-import { QuoteItemUpdateWithWhereUniqueWithoutEquipmentInputObjectSchema } from './QuoteItemUpdateWithWhereUniqueWithoutEquipmentInput.schema';
-import { QuoteItemUpdateManyWithWhereWithoutEquipmentInputObjectSchema } from './QuoteItemUpdateManyWithWhereWithoutEquipmentInput.schema';
-import { QuoteItemScalarWhereInputObjectSchema } from './QuoteItemScalarWhereInput.schema'
+import { QuoteItemCreateWithoutEquipmentInputObjectSchema as QuoteItemCreateWithoutEquipmentInputObjectSchema } from './QuoteItemCreateWithoutEquipmentInput.schema';
+import { QuoteItemUncheckedCreateWithoutEquipmentInputObjectSchema as QuoteItemUncheckedCreateWithoutEquipmentInputObjectSchema } from './QuoteItemUncheckedCreateWithoutEquipmentInput.schema';
+import { QuoteItemCreateOrConnectWithoutEquipmentInputObjectSchema as QuoteItemCreateOrConnectWithoutEquipmentInputObjectSchema } from './QuoteItemCreateOrConnectWithoutEquipmentInput.schema';
+import { QuoteItemUpsertWithWhereUniqueWithoutEquipmentInputObjectSchema as QuoteItemUpsertWithWhereUniqueWithoutEquipmentInputObjectSchema } from './QuoteItemUpsertWithWhereUniqueWithoutEquipmentInput.schema';
+import { EquipmentQuoteItemCreateManyEquipmentInputEnvelopeObjectSchema as QuoteItemCreateManyEquipmentInputEnvelopeObjectSchema } from './QuoteItemCreateManyEquipmentInputEnvelope.schema';
+import { QuoteItemWhereUniqueInputObjectSchema as QuoteItemWhereUniqueInputObjectSchema } from './QuoteItemWhereUniqueInput.schema';
+import { QuoteItemUpdateWithWhereUniqueWithoutEquipmentInputObjectSchema as QuoteItemUpdateWithWhereUniqueWithoutEquipmentInputObjectSchema } from './QuoteItemUpdateWithWhereUniqueWithoutEquipmentInput.schema';
+import { QuoteItemUpdateManyWithWhereWithoutEquipmentInputObjectSchema as QuoteItemUpdateManyWithWhereWithoutEquipmentInputObjectSchema } from './QuoteItemUpdateManyWithWhereWithoutEquipmentInput.schema';
+import { QuoteItemScalarWhereInputObjectSchema as QuoteItemScalarWhereInputObjectSchema } from './QuoteItemScalarWhereInput.schema'
 
 const makeSchema = () => z.object({
   create: z.union([z.lazy(() => QuoteItemCreateWithoutEquipmentInputObjectSchema), z.lazy(() => QuoteItemCreateWithoutEquipmentInputObjectSchema).array(), z.lazy(() => QuoteItemUncheckedCreateWithoutEquipmentInputObjectSchema), z.lazy(() => QuoteItemUncheckedCreateWithoutEquipmentInputObjectSchema).array()]).optional(),

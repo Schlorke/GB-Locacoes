@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { StringFilterObjectSchema } from './StringFilter.schema';
-import { IntFilterObjectSchema } from './IntFilter.schema';
-import { DecimalFilterObjectSchema } from './DecimalFilter.schema';
-import { DateTimeNullableFilterObjectSchema } from './DateTimeNullableFilter.schema';
-import { EquipmentScalarRelationFilterObjectSchema } from './EquipmentScalarRelationFilter.schema';
-import { EquipmentWhereInputObjectSchema } from './EquipmentWhereInput.schema';
-import { RentalsScalarRelationFilterObjectSchema } from './RentalsScalarRelationFilter.schema';
-import { rentalsWhereInputObjectSchema } from './rentalsWhereInput.schema'
+import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
+import { IntFilterObjectSchema as IntFilterObjectSchema } from './IntFilter.schema';
+import { DecimalFilterObjectSchema as DecimalFilterObjectSchema } from './DecimalFilter.schema';
+import { DateTimeNullableFilterObjectSchema as DateTimeNullableFilterObjectSchema } from './DateTimeNullableFilter.schema';
+import { EquipmentScalarRelationFilterObjectSchema as EquipmentScalarRelationFilterObjectSchema } from './EquipmentScalarRelationFilter.schema';
+import { EquipmentWhereInputObjectSchema as EquipmentWhereInputObjectSchema } from './EquipmentWhereInput.schema';
+import { RentalsScalarRelationFilterObjectSchema as RentalsScalarRelationFilterObjectSchema } from './RentalsScalarRelationFilter.schema';
+import { rentalsWhereInputObjectSchema as rentalsWhereInputObjectSchema } from './rentalsWhereInput.schema'
 
 const rental_itemswhereinputSchema = z.object({
   AND: z.union([z.lazy(() => rental_itemsWhereInputObjectSchema), z.lazy(() => rental_itemsWhereInputObjectSchema).array()]).optional(),

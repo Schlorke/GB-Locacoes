@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { CartCreateWithoutItemsInputObjectSchema } from './CartCreateWithoutItemsInput.schema';
-import { CartUncheckedCreateWithoutItemsInputObjectSchema } from './CartUncheckedCreateWithoutItemsInput.schema';
-import { CartCreateOrConnectWithoutItemsInputObjectSchema } from './CartCreateOrConnectWithoutItemsInput.schema';
-import { CartUpsertWithoutItemsInputObjectSchema } from './CartUpsertWithoutItemsInput.schema';
-import { CartWhereUniqueInputObjectSchema } from './CartWhereUniqueInput.schema';
-import { CartUpdateToOneWithWhereWithoutItemsInputObjectSchema } from './CartUpdateToOneWithWhereWithoutItemsInput.schema';
-import { CartUpdateWithoutItemsInputObjectSchema } from './CartUpdateWithoutItemsInput.schema';
-import { CartUncheckedUpdateWithoutItemsInputObjectSchema } from './CartUncheckedUpdateWithoutItemsInput.schema'
+import { CartCreateWithoutItemsInputObjectSchema as CartCreateWithoutItemsInputObjectSchema } from './CartCreateWithoutItemsInput.schema';
+import { CartUncheckedCreateWithoutItemsInputObjectSchema as CartUncheckedCreateWithoutItemsInputObjectSchema } from './CartUncheckedCreateWithoutItemsInput.schema';
+import { CartCreateOrConnectWithoutItemsInputObjectSchema as CartCreateOrConnectWithoutItemsInputObjectSchema } from './CartCreateOrConnectWithoutItemsInput.schema';
+import { CartUpsertWithoutItemsInputObjectSchema as CartUpsertWithoutItemsInputObjectSchema } from './CartUpsertWithoutItemsInput.schema';
+import { CartWhereUniqueInputObjectSchema as CartWhereUniqueInputObjectSchema } from './CartWhereUniqueInput.schema';
+import { CartUpdateToOneWithWhereWithoutItemsInputObjectSchema as CartUpdateToOneWithWhereWithoutItemsInputObjectSchema } from './CartUpdateToOneWithWhereWithoutItemsInput.schema';
+import { CartUpdateWithoutItemsInputObjectSchema as CartUpdateWithoutItemsInputObjectSchema } from './CartUpdateWithoutItemsInput.schema';
+import { CartUncheckedUpdateWithoutItemsInputObjectSchema as CartUncheckedUpdateWithoutItemsInputObjectSchema } from './CartUncheckedUpdateWithoutItemsInput.schema'
 
 const makeSchema = () => z.object({
   create: z.union([z.lazy(() => CartCreateWithoutItemsInputObjectSchema), z.lazy(() => CartUncheckedCreateWithoutItemsInputObjectSchema)]).optional(),

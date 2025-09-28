@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
-import { CategorySelectObjectSchema } from './objects/CategorySelect.schema';
-import { CategoryUpdateManyMutationInputObjectSchema } from './objects/CategoryUpdateManyMutationInput.schema';
-import { CategoryWhereInputObjectSchema } from './objects/CategoryWhereInput.schema';
+import { CategorySelectObjectSchema as CategorySelectObjectSchema } from './objects/CategorySelect.schema';
+import { CategoryUpdateManyMutationInputObjectSchema as CategoryUpdateManyMutationInputObjectSchema } from './objects/CategoryUpdateManyMutationInput.schema';
+import { CategoryWhereInputObjectSchema as CategoryWhereInputObjectSchema } from './objects/CategoryWhereInput.schema';
 
-export const CategoryUpdateManyAndReturnSchema = z.object({ select: CategorySelectObjectSchema.optional(), data: CategoryUpdateManyMutationInputObjectSchema, where: CategoryWhereInputObjectSchema.optional()  }).strict()
+export const CategoryUpdateManyAndReturnSchema: z.ZodType<Prisma.CategoryUpdateManyAndReturnArgs> = z.object({ select: CategorySelectObjectSchema.optional(), data: CategoryUpdateManyMutationInputObjectSchema, where: CategoryWhereInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.CategoryUpdateManyAndReturnArgs>;
+
+export const CategoryUpdateManyAndReturnZodSchema = z.object({ select: CategorySelectObjectSchema.optional(), data: CategoryUpdateManyMutationInputObjectSchema, where: CategoryWhereInputObjectSchema.optional() }).strict();

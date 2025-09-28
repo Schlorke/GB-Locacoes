@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { QuoteItemCreateWithoutQuoteInputObjectSchema } from './QuoteItemCreateWithoutQuoteInput.schema';
-import { QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema } from './QuoteItemUncheckedCreateWithoutQuoteInput.schema';
-import { QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema } from './QuoteItemCreateOrConnectWithoutQuoteInput.schema';
-import { QuoteItemUpsertWithWhereUniqueWithoutQuoteInputObjectSchema } from './QuoteItemUpsertWithWhereUniqueWithoutQuoteInput.schema';
-import { QuoteItemCreateManyQuoteInputEnvelopeObjectSchema } from './QuoteItemCreateManyQuoteInputEnvelope.schema';
-import { QuoteItemWhereUniqueInputObjectSchema } from './QuoteItemWhereUniqueInput.schema';
-import { QuoteItemUpdateWithWhereUniqueWithoutQuoteInputObjectSchema } from './QuoteItemUpdateWithWhereUniqueWithoutQuoteInput.schema';
-import { QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema } from './QuoteItemUpdateManyWithWhereWithoutQuoteInput.schema';
-import { QuoteItemScalarWhereInputObjectSchema } from './QuoteItemScalarWhereInput.schema'
+import { QuoteItemCreateWithoutQuoteInputObjectSchema as QuoteItemCreateWithoutQuoteInputObjectSchema } from './QuoteItemCreateWithoutQuoteInput.schema';
+import { QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema as QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema } from './QuoteItemUncheckedCreateWithoutQuoteInput.schema';
+import { QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema as QuoteItemCreateOrConnectWithoutQuoteInputObjectSchema } from './QuoteItemCreateOrConnectWithoutQuoteInput.schema';
+import { QuoteItemUpsertWithWhereUniqueWithoutQuoteInputObjectSchema as QuoteItemUpsertWithWhereUniqueWithoutQuoteInputObjectSchema } from './QuoteItemUpsertWithWhereUniqueWithoutQuoteInput.schema';
+import { QuoteItemCreateManyQuoteInputEnvelopeObjectSchema as QuoteItemCreateManyQuoteInputEnvelopeObjectSchema } from './QuoteItemCreateManyQuoteInputEnvelope.schema';
+import { QuoteItemWhereUniqueInputObjectSchema as QuoteItemWhereUniqueInputObjectSchema } from './QuoteItemWhereUniqueInput.schema';
+import { QuoteItemUpdateWithWhereUniqueWithoutQuoteInputObjectSchema as QuoteItemUpdateWithWhereUniqueWithoutQuoteInputObjectSchema } from './QuoteItemUpdateWithWhereUniqueWithoutQuoteInput.schema';
+import { QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema as QuoteItemUpdateManyWithWhereWithoutQuoteInputObjectSchema } from './QuoteItemUpdateManyWithWhereWithoutQuoteInput.schema';
+import { QuoteItemScalarWhereInputObjectSchema as QuoteItemScalarWhereInputObjectSchema } from './QuoteItemScalarWhereInput.schema'
 
 const makeSchema = () => z.object({
   create: z.union([z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemCreateWithoutQuoteInputObjectSchema).array(), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema), z.lazy(() => QuoteItemUncheckedCreateWithoutQuoteInputObjectSchema).array()]).optional(),

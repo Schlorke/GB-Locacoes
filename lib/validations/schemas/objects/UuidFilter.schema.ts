@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { QueryModeSchema } from '../enums/QueryMode.schema';
-import { NestedUuidFilterObjectSchema } from './NestedUuidFilter.schema'
+import { NestedUuidFilterObjectSchema as NestedUuidFilterObjectSchema } from './NestedUuidFilter.schema'
 
 const makeSchema = () => z.object({
   equals: z.string().optional(),

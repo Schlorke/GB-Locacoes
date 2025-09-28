@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { QueryModeSchema } from '../enums/QueryMode.schema';
-import { NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
-import { NestedJsonFilterObjectSchema } from './NestedJsonFilter.schema'
+import { NestedIntFilterObjectSchema as NestedIntFilterObjectSchema } from './NestedIntFilter.schema';
+import { NestedJsonFilterObjectSchema as NestedJsonFilterObjectSchema } from './NestedJsonFilter.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 

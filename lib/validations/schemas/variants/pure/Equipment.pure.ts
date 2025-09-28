@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 
 // prettier-ignore
@@ -6,7 +7,7 @@ export const EquipmentModelSchema = z.object({
     name: z.string(),
     description: z.string().nullable(),
     pricePerDay: z.number(),
-    images: z.array(z.string()).array(),
+    images: z.array(z.string()),
     available: z.boolean(),
     categoryId: z.string(),
     specifications: z.unknown().nullable(),
@@ -27,9 +28,9 @@ export const EquipmentModelSchema = z.object({
     createdAt: z.date(),
     updatedAt: z.date(),
     category: z.unknown(),
-    quoteItems: z.array(z.unknown()).array(),
-    rental_items: z.array(z.unknown()).array(),
-    cartItems: z.array(z.unknown()).array()
+    quoteItems: z.array(z.unknown()),
+    rental_items: z.array(z.unknown()),
+    cartItems: z.array(z.unknown())
 }).strict();
 
 export type EquipmentModelType = z.infer<typeof EquipmentModelSchema>;

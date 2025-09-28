@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 
 // prettier-ignore
@@ -12,7 +13,7 @@ export const CategoryModelSchema = z.object({
     slug: z.string(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    equipments: z.array(z.unknown()).array()
+    equipments: z.array(z.unknown())
 }).strict();
 
 export type CategoryModelType = z.infer<typeof CategoryModelSchema>;

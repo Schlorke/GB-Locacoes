@@ -83,9 +83,6 @@ export async function PUT(
 
     const body = await request.json()
 
-    // Log completo dos dados recebidos
-    console.log('Body completo recebido:', JSON.stringify(body, null, 2))
-
     const {
       name,
       description,
@@ -140,21 +137,6 @@ export async function PUT(
         { status: 400 }
       )
     }
-
-    console.log('Dados recebidos validados:', {
-      name,
-      description,
-      pricePerDay,
-      categoryId,
-      images: images?.length || 0,
-      isAvailable,
-      maxStock,
-      dailyDiscount,
-      weeklyDiscount,
-      biweeklyDiscount,
-      monthlyDiscount,
-      popularPeriod,
-    })
 
     const { id } = await params
 
@@ -290,11 +272,6 @@ export async function PUT(
       updateData.monthlyUseDirectValue = Boolean(monthlyUseDirectValue)
     }
 
-    console.log(
-      'Dados preparados para update:',
-      JSON.stringify(updateData, null, 2)
-    )
-
     const prisma = await getPrisma()
 
     // Verificar se o equipamento existe antes de atualizar
@@ -308,8 +285,6 @@ export async function PUT(
         { status: 404 }
       )
     }
-
-    console.log('Equipamento encontrado, iniciando update...')
 
     const equipment = await prisma.equipment.update({
       where: { id },

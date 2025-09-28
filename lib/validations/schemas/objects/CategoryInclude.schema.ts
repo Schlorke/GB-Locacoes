@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { EquipmentFindManySchema } from '../findManyEquipment.schema';
-import { CategoryCountOutputTypeArgsObjectSchema } from './CategoryCountOutputTypeArgs.schema'
+import { EquipmentFindManySchema as EquipmentFindManySchema } from '../findManyEquipment.schema';
+import { CategoryCountOutputTypeArgsObjectSchema as CategoryCountOutputTypeArgsObjectSchema } from './CategoryCountOutputTypeArgs.schema'
 
 const makeSchema = () => z.object({
   equipments: z.union([z.boolean(), z.lazy(() => EquipmentFindManySchema)]).optional(),

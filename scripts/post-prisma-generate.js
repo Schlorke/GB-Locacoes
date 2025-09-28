@@ -121,6 +121,40 @@ try {
   // Criar o arquivo index.ts após o Prisma generate
   fs.writeFileSync(indexPath, validationsIndexContent, 'utf8')
 
+  // Adicionar comentários ESLint para desabilitar regras nos arquivos auto-gerados
+  const schemasDir = path.join(validationsDir, 'schemas')
+  if (fs.existsSync(schemasDir)) {
+    const addEslintDisableToFile = (filePath) => {
+      if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath, 'utf8')
+        if (!content.includes('/* eslint-disable')) {
+          const eslintDisable =
+            '/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */\n'
+          fs.writeFileSync(filePath, eslintDisable + content, 'utf8')
+        }
+      }
+    }
+
+    // Adicionar comentários ESLint em todos os arquivos .ts no diretório schemas
+    const walkDir = (dir) => {
+      const files = fs.readdirSync(dir)
+      files.forEach((file) => {
+        const filePath = path.join(dir, file)
+        const stat = fs.statSync(filePath)
+        if (stat.isDirectory()) {
+          walkDir(filePath)
+        } else if (file.endsWith('.ts')) {
+          addEslintDisableToFile(filePath)
+        }
+      })
+    }
+
+    walkDir(schemasDir)
+    console.log(
+      '[post-prisma] ✅ Added ESLint disable comments to auto-generated files'
+    )
+  }
+
   console.log('[post-prisma] ✅ Created lib/validations/index.ts')
 } catch (error) {
   console.error('[post-prisma] ❌ Error creating validations index:', error)

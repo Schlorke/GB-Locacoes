@@ -273,23 +273,11 @@ export default function EditarEquipamento() {
 
     setIsSaving(true)
     try {
-      // Log dos dados que estão sendo enviados
-      console.log(
-        'Dados sendo enviados para API:',
-        JSON.stringify(formData, null, 2)
-      )
-
       const response = await fetch(`/api/admin/equipments/${params.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
-
-      console.log('Response status:', response.status)
-      console.log(
-        'Response headers:',
-        Object.fromEntries(response.headers.entries())
-      )
 
       if (response.ok) {
         toast({

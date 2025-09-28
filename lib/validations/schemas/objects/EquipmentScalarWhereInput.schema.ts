@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { StringFilterObjectSchema } from './StringFilter.schema';
-import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
-import { DecimalFilterObjectSchema } from './DecimalFilter.schema';
-import { StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
-import { BoolFilterObjectSchema } from './BoolFilter.schema';
-import { UuidFilterObjectSchema } from './UuidFilter.schema';
-import { JsonNullableFilterObjectSchema } from './JsonNullableFilter.schema';
-import { IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
-import { DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema';
-import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema'
+import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
+import { StringNullableFilterObjectSchema as StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
+import { DecimalFilterObjectSchema as DecimalFilterObjectSchema } from './DecimalFilter.schema';
+import { StringNullableListFilterObjectSchema as StringNullableListFilterObjectSchema } from './StringNullableListFilter.schema';
+import { BoolFilterObjectSchema as BoolFilterObjectSchema } from './BoolFilter.schema';
+import { UuidFilterObjectSchema as UuidFilterObjectSchema } from './UuidFilter.schema';
+import { JsonNullableFilterObjectSchema as JsonNullableFilterObjectSchema } from './JsonNullableFilter.schema';
+import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
+import { DecimalNullableFilterObjectSchema as DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema';
+import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema'
 
 const equipmentscalarwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => EquipmentScalarWhereInputObjectSchema), z.lazy(() => EquipmentScalarWhereInputObjectSchema).array()]).optional(),

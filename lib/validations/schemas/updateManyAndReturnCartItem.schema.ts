@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
-import { CartItemSelectObjectSchema } from './objects/CartItemSelect.schema';
-import { CartItemUpdateManyMutationInputObjectSchema } from './objects/CartItemUpdateManyMutationInput.schema';
-import { CartItemWhereInputObjectSchema } from './objects/CartItemWhereInput.schema';
+import { CartItemSelectObjectSchema as CartItemSelectObjectSchema } from './objects/CartItemSelect.schema';
+import { CartItemUpdateManyMutationInputObjectSchema as CartItemUpdateManyMutationInputObjectSchema } from './objects/CartItemUpdateManyMutationInput.schema';
+import { CartItemWhereInputObjectSchema as CartItemWhereInputObjectSchema } from './objects/CartItemWhereInput.schema';
 
-export const CartItemUpdateManyAndReturnSchema = z.object({ select: CartItemSelectObjectSchema.optional(), data: CartItemUpdateManyMutationInputObjectSchema, where: CartItemWhereInputObjectSchema.optional()  }).strict()
+export const CartItemUpdateManyAndReturnSchema: z.ZodType<Prisma.CartItemUpdateManyAndReturnArgs> = z.object({ select: CartItemSelectObjectSchema.optional(), data: CartItemUpdateManyMutationInputObjectSchema, where: CartItemWhereInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.CartItemUpdateManyAndReturnArgs>;
+
+export const CartItemUpdateManyAndReturnZodSchema = z.object({ select: CartItemSelectObjectSchema.optional(), data: CartItemUpdateManyMutationInputObjectSchema, where: CartItemWhereInputObjectSchema.optional() }).strict();

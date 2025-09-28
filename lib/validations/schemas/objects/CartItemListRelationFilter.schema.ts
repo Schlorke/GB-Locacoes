@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { CartItemWhereInputObjectSchema } from './CartItemWhereInput.schema'
+import { CartItemWhereInputObjectSchema as CartItemWhereInputObjectSchema } from './CartItemWhereInput.schema'
 
 const makeSchema = () => z.object({
   every: z.lazy(() => CartItemWhereInputObjectSchema).optional(),

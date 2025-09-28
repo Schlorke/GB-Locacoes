@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { EquipmentScalarWhereInputObjectSchema } from './EquipmentScalarWhereInput.schema';
-import { EquipmentUpdateManyMutationInputObjectSchema } from './EquipmentUpdateManyMutationInput.schema';
-import { EquipmentUncheckedUpdateManyWithoutCategoryInputObjectSchema } from './EquipmentUncheckedUpdateManyWithoutCategoryInput.schema'
+import { EquipmentScalarWhereInputObjectSchema as EquipmentScalarWhereInputObjectSchema } from './EquipmentScalarWhereInput.schema';
+import { EquipmentUpdateManyMutationInputObjectSchema as EquipmentUpdateManyMutationInputObjectSchema } from './EquipmentUpdateManyMutationInput.schema';
+import { EquipmentUncheckedUpdateManyWithoutCategoryInputObjectSchema as EquipmentUncheckedUpdateManyWithoutCategoryInputObjectSchema } from './EquipmentUncheckedUpdateManyWithoutCategoryInput.schema'
 
 const makeSchema = () => z.object({
   where: z.lazy(() => EquipmentScalarWhereInputObjectSchema),

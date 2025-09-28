@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { QuoteCreateWithoutUserInputObjectSchema } from './QuoteCreateWithoutUserInput.schema';
-import { QuoteUncheckedCreateWithoutUserInputObjectSchema } from './QuoteUncheckedCreateWithoutUserInput.schema';
-import { QuoteCreateOrConnectWithoutUserInputObjectSchema } from './QuoteCreateOrConnectWithoutUserInput.schema';
-import { QuoteUpsertWithWhereUniqueWithoutUserInputObjectSchema } from './QuoteUpsertWithWhereUniqueWithoutUserInput.schema';
-import { QuoteCreateManyUserInputEnvelopeObjectSchema } from './QuoteCreateManyUserInputEnvelope.schema';
-import { QuoteWhereUniqueInputObjectSchema } from './QuoteWhereUniqueInput.schema';
-import { QuoteUpdateWithWhereUniqueWithoutUserInputObjectSchema } from './QuoteUpdateWithWhereUniqueWithoutUserInput.schema';
-import { QuoteUpdateManyWithWhereWithoutUserInputObjectSchema } from './QuoteUpdateManyWithWhereWithoutUserInput.schema';
-import { QuoteScalarWhereInputObjectSchema } from './QuoteScalarWhereInput.schema'
+import { QuoteCreateWithoutUserInputObjectSchema as QuoteCreateWithoutUserInputObjectSchema } from './QuoteCreateWithoutUserInput.schema';
+import { QuoteUncheckedCreateWithoutUserInputObjectSchema as QuoteUncheckedCreateWithoutUserInputObjectSchema } from './QuoteUncheckedCreateWithoutUserInput.schema';
+import { QuoteCreateOrConnectWithoutUserInputObjectSchema as QuoteCreateOrConnectWithoutUserInputObjectSchema } from './QuoteCreateOrConnectWithoutUserInput.schema';
+import { QuoteUpsertWithWhereUniqueWithoutUserInputObjectSchema as QuoteUpsertWithWhereUniqueWithoutUserInputObjectSchema } from './QuoteUpsertWithWhereUniqueWithoutUserInput.schema';
+import { UserQuoteCreateManyUserInputEnvelopeObjectSchema as QuoteCreateManyUserInputEnvelopeObjectSchema } from './QuoteCreateManyUserInputEnvelope.schema';
+import { QuoteWhereUniqueInputObjectSchema as QuoteWhereUniqueInputObjectSchema } from './QuoteWhereUniqueInput.schema';
+import { QuoteUpdateWithWhereUniqueWithoutUserInputObjectSchema as QuoteUpdateWithWhereUniqueWithoutUserInputObjectSchema } from './QuoteUpdateWithWhereUniqueWithoutUserInput.schema';
+import { QuoteUpdateManyWithWhereWithoutUserInputObjectSchema as QuoteUpdateManyWithWhereWithoutUserInputObjectSchema } from './QuoteUpdateManyWithWhereWithoutUserInput.schema';
+import { QuoteScalarWhereInputObjectSchema as QuoteScalarWhereInputObjectSchema } from './QuoteScalarWhereInput.schema'
 
 const makeSchema = () => z.object({
   create: z.union([z.lazy(() => QuoteCreateWithoutUserInputObjectSchema), z.lazy(() => QuoteCreateWithoutUserInputObjectSchema).array(), z.lazy(() => QuoteUncheckedCreateWithoutUserInputObjectSchema), z.lazy(() => QuoteUncheckedCreateWithoutUserInputObjectSchema).array()]).optional(),

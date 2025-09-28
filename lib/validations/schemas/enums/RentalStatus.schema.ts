@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 
 export const RentalStatusSchema = z.enum(['ACTIVE', 'COMPLETED', 'CANCELLED', 'OVERDUE', 'PENDING_RETURN'])

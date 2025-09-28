@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { AddressCreateWithoutUserInputObjectSchema } from './AddressCreateWithoutUserInput.schema';
-import { AddressUncheckedCreateWithoutUserInputObjectSchema } from './AddressUncheckedCreateWithoutUserInput.schema';
-import { AddressCreateOrConnectWithoutUserInputObjectSchema } from './AddressCreateOrConnectWithoutUserInput.schema';
-import { AddressUpsertWithWhereUniqueWithoutUserInputObjectSchema } from './AddressUpsertWithWhereUniqueWithoutUserInput.schema';
-import { AddressCreateManyUserInputEnvelopeObjectSchema } from './AddressCreateManyUserInputEnvelope.schema';
-import { AddressWhereUniqueInputObjectSchema } from './AddressWhereUniqueInput.schema';
-import { AddressUpdateWithWhereUniqueWithoutUserInputObjectSchema } from './AddressUpdateWithWhereUniqueWithoutUserInput.schema';
-import { AddressUpdateManyWithWhereWithoutUserInputObjectSchema } from './AddressUpdateManyWithWhereWithoutUserInput.schema';
-import { AddressScalarWhereInputObjectSchema } from './AddressScalarWhereInput.schema'
+import { AddressCreateWithoutUserInputObjectSchema as AddressCreateWithoutUserInputObjectSchema } from './AddressCreateWithoutUserInput.schema';
+import { AddressUncheckedCreateWithoutUserInputObjectSchema as AddressUncheckedCreateWithoutUserInputObjectSchema } from './AddressUncheckedCreateWithoutUserInput.schema';
+import { AddressCreateOrConnectWithoutUserInputObjectSchema as AddressCreateOrConnectWithoutUserInputObjectSchema } from './AddressCreateOrConnectWithoutUserInput.schema';
+import { AddressUpsertWithWhereUniqueWithoutUserInputObjectSchema as AddressUpsertWithWhereUniqueWithoutUserInputObjectSchema } from './AddressUpsertWithWhereUniqueWithoutUserInput.schema';
+import { UserAddressCreateManyUserInputEnvelopeObjectSchema as AddressCreateManyUserInputEnvelopeObjectSchema } from './AddressCreateManyUserInputEnvelope.schema';
+import { AddressWhereUniqueInputObjectSchema as AddressWhereUniqueInputObjectSchema } from './AddressWhereUniqueInput.schema';
+import { AddressUpdateWithWhereUniqueWithoutUserInputObjectSchema as AddressUpdateWithWhereUniqueWithoutUserInputObjectSchema } from './AddressUpdateWithWhereUniqueWithoutUserInput.schema';
+import { AddressUpdateManyWithWhereWithoutUserInputObjectSchema as AddressUpdateManyWithWhereWithoutUserInputObjectSchema } from './AddressUpdateManyWithWhereWithoutUserInput.schema';
+import { AddressScalarWhereInputObjectSchema as AddressScalarWhereInputObjectSchema } from './AddressScalarWhereInput.schema'
 
 const makeSchema = () => z.object({
   create: z.union([z.lazy(() => AddressCreateWithoutUserInputObjectSchema), z.lazy(() => AddressCreateWithoutUserInputObjectSchema).array(), z.lazy(() => AddressUncheckedCreateWithoutUserInputObjectSchema), z.lazy(() => AddressUncheckedCreateWithoutUserInputObjectSchema).array()]).optional(),

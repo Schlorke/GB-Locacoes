@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
-import { QuoteItemCountOrderByAggregateInputObjectSchema } from './QuoteItemCountOrderByAggregateInput.schema';
-import { QuoteItemAvgOrderByAggregateInputObjectSchema } from './QuoteItemAvgOrderByAggregateInput.schema';
-import { QuoteItemMaxOrderByAggregateInputObjectSchema } from './QuoteItemMaxOrderByAggregateInput.schema';
-import { QuoteItemMinOrderByAggregateInputObjectSchema } from './QuoteItemMinOrderByAggregateInput.schema';
-import { QuoteItemSumOrderByAggregateInputObjectSchema } from './QuoteItemSumOrderByAggregateInput.schema'
+import { QuoteItemCountOrderByAggregateInputObjectSchema as QuoteItemCountOrderByAggregateInputObjectSchema } from './QuoteItemCountOrderByAggregateInput.schema';
+import { QuoteItemAvgOrderByAggregateInputObjectSchema as QuoteItemAvgOrderByAggregateInputObjectSchema } from './QuoteItemAvgOrderByAggregateInput.schema';
+import { QuoteItemMaxOrderByAggregateInputObjectSchema as QuoteItemMaxOrderByAggregateInputObjectSchema } from './QuoteItemMaxOrderByAggregateInput.schema';
+import { QuoteItemMinOrderByAggregateInputObjectSchema as QuoteItemMinOrderByAggregateInputObjectSchema } from './QuoteItemMinOrderByAggregateInput.schema';
+import { QuoteItemSumOrderByAggregateInputObjectSchema as QuoteItemSumOrderByAggregateInputObjectSchema } from './QuoteItemSumOrderByAggregateInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),

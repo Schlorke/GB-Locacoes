@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
-import { CartIncludeObjectSchema } from './objects/CartInclude.schema';
-import { CartOrderByWithRelationInputObjectSchema } from './objects/CartOrderByWithRelationInput.schema';
-import { CartWhereInputObjectSchema } from './objects/CartWhereInput.schema';
-import { CartWhereUniqueInputObjectSchema } from './objects/CartWhereUniqueInput.schema';
-import { CartScalarFieldEnumSchema } from './enums/CartScalarFieldEnum.schema';
+import { CartIncludeObjectSchema as CartIncludeObjectSchema } from './objects/CartInclude.schema';
+import { CartOrderByWithRelationInputObjectSchema as CartOrderByWithRelationInputObjectSchema } from './objects/CartOrderByWithRelationInput.schema';
+import { CartWhereInputObjectSchema as CartWhereInputObjectSchema } from './objects/CartWhereInput.schema';
+import { CartWhereUniqueInputObjectSchema as CartWhereUniqueInputObjectSchema } from './objects/CartWhereUniqueInput.schema';
+import { CartScalarFieldEnumSchema as CartScalarFieldEnum } from './enums/CartScalarFieldEnum.schema';
 
 // Select schema needs to be in file to prevent circular imports
 //------------------------------------------------------
@@ -29,6 +30,6 @@ export const CartFindFirstSelectZodSchema = z.object({
     _count: z.boolean().optional()
   }).strict();
 
-export const CartFindFirstSchema: z.ZodType<Prisma.CartFindFirstArgs> = z.object({ select: CartFindFirstSelectSchema.optional(), include: z.lazy(() => CartIncludeObjectSchema.optional()), orderBy: z.union([CartOrderByWithRelationInputObjectSchema, CartOrderByWithRelationInputObjectSchema.array()]).optional(), where: CartWhereInputObjectSchema.optional(), cursor: CartWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([CartScalarFieldEnumSchema, CartScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.CartFindFirstArgs>;
+export const CartFindFirstSchema: z.ZodType<Prisma.CartFindFirstArgs> = z.object({ select: CartFindFirstSelectSchema.optional(), include: z.lazy(() => CartIncludeObjectSchema.optional()), orderBy: z.union([CartOrderByWithRelationInputObjectSchema, CartOrderByWithRelationInputObjectSchema.array()]).optional(), where: CartWhereInputObjectSchema.optional(), cursor: CartWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([CartScalarFieldEnum, CartScalarFieldEnum.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.CartFindFirstArgs>;
 
-export const CartFindFirstZodSchema = z.object({ select: CartFindFirstSelectSchema.optional(), include: z.lazy(() => CartIncludeObjectSchema.optional()), orderBy: z.union([CartOrderByWithRelationInputObjectSchema, CartOrderByWithRelationInputObjectSchema.array()]).optional(), where: CartWhereInputObjectSchema.optional(), cursor: CartWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([CartScalarFieldEnumSchema, CartScalarFieldEnumSchema.array()]).optional() }).strict();
+export const CartFindFirstZodSchema = z.object({ select: CartFindFirstSelectSchema.optional(), include: z.lazy(() => CartIncludeObjectSchema.optional()), orderBy: z.union([CartOrderByWithRelationInputObjectSchema, CartOrderByWithRelationInputObjectSchema.array()]).optional(), where: CartWhereInputObjectSchema.optional(), cursor: CartWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([CartScalarFieldEnum, CartScalarFieldEnum.array()]).optional() }).strict();

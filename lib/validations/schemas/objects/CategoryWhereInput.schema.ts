@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
-import { UuidFilterObjectSchema } from './UuidFilter.schema';
-import { StringFilterObjectSchema } from './StringFilter.schema';
-import { StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
-import { DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
-import { EquipmentListRelationFilterObjectSchema } from './EquipmentListRelationFilter.schema'
+import { UuidFilterObjectSchema as UuidFilterObjectSchema } from './UuidFilter.schema';
+import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
+import { StringNullableFilterObjectSchema as StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
+import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
+import { EquipmentListRelationFilterObjectSchema as EquipmentListRelationFilterObjectSchema } from './EquipmentListRelationFilter.schema'
 
 const categorywhereinputSchema = z.object({
   AND: z.union([z.lazy(() => CategoryWhereInputObjectSchema), z.lazy(() => CategoryWhereInputObjectSchema).array()]).optional(),

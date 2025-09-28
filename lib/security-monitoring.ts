@@ -68,9 +68,9 @@ const SUSPICIOUS_PATTERNS = {
     /<iframe|<embed|<object|<applet/i,
   ],
   pathTraversal: [
-    /\.\.[\/\\]/,
+    /\.\.[/\\]/,
     /(\/|\\)(etc|windows|system32|boot)/i,
-    /\.\.[\/\\]\.\.[\/\\]/,
+    /\.\.[/\\]\.\.[/\\]/,
   ],
   bruteForce: {
     maxAttempts: 10,

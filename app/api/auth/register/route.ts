@@ -84,11 +84,6 @@ export async function POST(request: NextRequest) {
         console.error('Erro ao enviar email:', emailError)
         // Continue mesmo se o email falhar
       }
-    } else {
-      console.log('Email de verificação (desenvolvimento):', {
-        to: user.email,
-        verificationUrl: `${process.env.NEXTAUTH_URL}/api/auth/verify-email?token=${verificationToken}`,
-      })
     }
 
     return NextResponse.json(

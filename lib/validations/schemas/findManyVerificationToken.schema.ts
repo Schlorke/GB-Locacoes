@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
 import { z } from 'zod';
-import { VerificationTokenOrderByWithRelationInputObjectSchema } from './objects/VerificationTokenOrderByWithRelationInput.schema';
-import { VerificationTokenWhereInputObjectSchema } from './objects/VerificationTokenWhereInput.schema';
-import { VerificationTokenWhereUniqueInputObjectSchema } from './objects/VerificationTokenWhereUniqueInput.schema';
-import { VerificationTokenScalarFieldEnumSchema } from './enums/VerificationTokenScalarFieldEnum.schema';
+import { VerificationTokenOrderByWithRelationInputObjectSchema as VerificationTokenOrderByWithRelationInputObjectSchema } from './objects/VerificationTokenOrderByWithRelationInput.schema';
+import { VerificationTokenWhereInputObjectSchema as VerificationTokenWhereInputObjectSchema } from './objects/VerificationTokenWhereInput.schema';
+import { VerificationTokenWhereUniqueInputObjectSchema as VerificationTokenWhereUniqueInputObjectSchema } from './objects/VerificationTokenWhereUniqueInput.schema';
+import { VerificationTokenScalarFieldEnumSchema as VerificationTokenScalarFieldEnum } from './enums/VerificationTokenScalarFieldEnum.schema';
 
 // Select schema needs to be in file to prevent circular imports
 //------------------------------------------------------
@@ -20,6 +21,6 @@ export const VerificationTokenFindManySelectZodSchema = z.object({
     expires: z.boolean().optional()
   }).strict();
 
-export const VerificationTokenFindManySchema: z.ZodType<Prisma.VerificationTokenFindManyArgs> = z.object({ select: VerificationTokenFindManySelectSchema.optional(),  orderBy: z.union([VerificationTokenOrderByWithRelationInputObjectSchema, VerificationTokenOrderByWithRelationInputObjectSchema.array()]).optional(), where: VerificationTokenWhereInputObjectSchema.optional(), cursor: VerificationTokenWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([VerificationTokenScalarFieldEnumSchema, VerificationTokenScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.VerificationTokenFindManyArgs>;
+export const VerificationTokenFindManySchema: z.ZodType<Prisma.VerificationTokenFindManyArgs> = z.object({ select: VerificationTokenFindManySelectSchema.optional(),  orderBy: z.union([VerificationTokenOrderByWithRelationInputObjectSchema, VerificationTokenOrderByWithRelationInputObjectSchema.array()]).optional(), where: VerificationTokenWhereInputObjectSchema.optional(), cursor: VerificationTokenWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([VerificationTokenScalarFieldEnum, VerificationTokenScalarFieldEnum.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.VerificationTokenFindManyArgs>;
 
-export const VerificationTokenFindManyZodSchema = z.object({ select: VerificationTokenFindManySelectSchema.optional(),  orderBy: z.union([VerificationTokenOrderByWithRelationInputObjectSchema, VerificationTokenOrderByWithRelationInputObjectSchema.array()]).optional(), where: VerificationTokenWhereInputObjectSchema.optional(), cursor: VerificationTokenWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([VerificationTokenScalarFieldEnumSchema, VerificationTokenScalarFieldEnumSchema.array()]).optional() }).strict();
+export const VerificationTokenFindManyZodSchema = z.object({ select: VerificationTokenFindManySelectSchema.optional(),  orderBy: z.union([VerificationTokenOrderByWithRelationInputObjectSchema, VerificationTokenOrderByWithRelationInputObjectSchema.array()]).optional(), where: VerificationTokenWhereInputObjectSchema.optional(), cursor: VerificationTokenWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([VerificationTokenScalarFieldEnum, VerificationTokenScalarFieldEnum.array()]).optional() }).strict();
