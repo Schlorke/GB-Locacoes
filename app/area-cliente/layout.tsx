@@ -35,6 +35,31 @@ export default function AreaClienteLayout({
     }
   }, [session, status, router])
 
+  // Ajustar scroll quando navegando de páginas externas
+  useEffect(() => {
+    const adjustScrollAfterLoad = sessionStorage.getItem(
+      'adjustScrollAfterLoad'
+    )
+    if (adjustScrollAfterLoad) {
+      sessionStorage.removeItem('adjustScrollAfterLoad')
+
+      // Aguardar um pouco para garantir que a página carregou completamente
+      setTimeout(() => {
+        const element = document.getElementById(adjustScrollAfterLoad)
+        if (element) {
+          const headerHeight = 84 // Altura do header fixo
+          const elementPosition = element.offsetTop
+          const offsetPosition = elementPosition - headerHeight
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth',
+          })
+        }
+      }, 100)
+    }
+  }, [])
+
   if (status === 'loading') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">

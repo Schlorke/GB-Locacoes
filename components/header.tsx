@@ -23,6 +23,21 @@ export default function Header() {
     setIsMenuOpen(false)
   }
 
+  const handleMinhaContaNavigation = () => {
+    markAllAsRead() // Marcar notificações como lidas
+    sessionStorage.setItem('internalNavigation', 'true')
+    setIsMenuOpen(false)
+
+    // Verificar se estamos navegando de uma página externa para a área do cliente
+    if (!pathname?.startsWith('/area-cliente')) {
+      // Se estamos vindo de uma página externa, usar navegação programática
+      // e ajustar o scroll após o carregamento
+      sessionStorage.setItem('adjustScrollAfterLoad', 'dashboard-banner')
+      window.location.href = '/area-cliente#dashboard-banner'
+    }
+    // Se já estamos na área do cliente, deixar o Link normal funcionar
+  }
+
   const handleEquipmentsNavigation = () => {
     // Limpar qualquer filtro e ir para equipamentos sem parâmetros
     window.location.href = '/equipamentos'
@@ -165,7 +180,10 @@ export default function Header() {
                   className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
                   asChild
                 >
-                  <Link href="/area-cliente" onClick={markAllAsRead}>
+                  <Link
+                    href="/area-cliente#dashboard-banner"
+                    onClick={markAllAsRead}
+                  >
                     <User className="h-5 w-5" />
                     <span className="sr-only">Minha conta</span>
                   </Link>
@@ -265,8 +283,8 @@ export default function Header() {
                       onClick={markAllAsRead}
                     >
                       <Link
-                        href="/area-cliente"
-                        onClick={handleInternalNavigation}
+                        href="/area-cliente#dashboard-banner"
+                        onClick={handleMinhaContaNavigation}
                       >
                         <User className="h-5 w-5 mr-2" />
                         Minha Conta

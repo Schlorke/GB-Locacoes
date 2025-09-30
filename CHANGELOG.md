@@ -6,6 +6,32 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-01-22] - Configuração Global do Spellchecker
+
+### Added ✨
+
+- **Configuração global do cSpell**: Adicionado suporte para português
+  brasileiro e inglês americano
+  - Arquivo `cspell.config.js` com configuração completa
+  - Suporte a múltiplos idiomas: `en,pt-BR`
+  - Lista extensa de palavras personalizadas do projeto
+  - Configuração de arquivos a serem ignorados (node_modules, dist, etc.)
+  - Configuração otimizada para desenvolvimento React/Next.js
+
+- **Atualização do .vscode/settings.json**: Melhorada configuração do cSpell no
+  VS Code
+  - Adicionado `cSpell.language: "en,pt-BR"`
+  - Expandida lista de palavras com termos específicos do projeto
+  - Incluídas palavras comuns da interface em português
+
+### Fixed 🐛
+
+- **Spellchecker irritante**: Resolvido problema de palavras em português sendo
+  marcadas como erro
+  - Palavras como "Nenhuma", "Tente", "Solicitar", "locações" agora reconhecidas
+  - Termos técnicos do projeto adicionados ao dicionário
+  - Configuração global aplicada a todo o workspace
+
 ## [2025-09-28] - Correções de Code Quality e ESLint
 
 ### Fixed 🐛

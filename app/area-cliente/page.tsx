@@ -28,11 +28,7 @@ export default function AreaClientePage() {
         className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden w-screen -ml-4 sm:w-full sm:ml-0"
         id="dashboard-banner"
       >
-        {/* Elementos animados de background */}
-        <div className="absolute inset-0 overflow-hidden z-[1]">
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-yellow-300/5 rounded-full blur-3xl animate-pulse delay-500"></div>
-        </div>
+        {/* Elementos animados de background removidos nesta seção da área do cliente */}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12 lg:py-14 relative z-10">
           <motion.div
@@ -48,7 +44,7 @@ export default function AreaClientePage() {
                 <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-full h-0.5 bg-yellow-300/90 rounded-full"></div>
               </span>
             </h1>
-            <p className="text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-white leading-relaxed max-w-2xl mx-auto">
               Gerencie seus orçamentos, acompanhe suas locações e tenha controle
               total sobre seus equipamentos
             </p>

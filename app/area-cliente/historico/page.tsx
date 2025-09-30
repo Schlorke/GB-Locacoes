@@ -140,10 +140,7 @@ export default function HistoricoPage() {
     <div className="min-h-screen bg-gray-50 pt-[84px] sm:pt-0">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden w-screen -ml-4 sm:w-full sm:ml-0">
-        {/* Elementos animados de background */}
-        <div className="absolute inset-0 overflow-hidden z-[1]">
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
+        {/* Elementos animados de background removidos nesta seção da área do cliente */}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
           <motion.div
@@ -152,10 +149,10 @@ export default function HistoricoPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-3xl md:text-4xl font-bold">
+            <h1 className="text-3xl font-bold leading-tight">
               Histórico de Locações
             </h1>
-            <p className="text-xl text-orange-100 max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-white leading-relaxed max-w-2xl mx-auto">
               Acompanhe todas as suas solicitações de orçamento e locações
             </p>
           </motion.div>
@@ -179,7 +176,7 @@ export default function HistoricoPage() {
       </section>
 
       {/* Content */}
-      <section className="py-16 relative">
+      <section className="-mt-20 lg:py-10 md:-mt-24 md:py-16 py-12 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Stats Cards */}
           <motion.div
