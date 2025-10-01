@@ -6,7 +6,7 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [2025-09-30] - Atualização de Dependências
+## [2025-09-30] - Atualização Completa de Dependências
 
 ### Changed 🔄
 
@@ -20,6 +20,8 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - `@types/react-dom`: 19.1.9 → 19.1.11
   - `@typescript-eslint/eslint-plugin`: 8.44.1 → 8.45.0
   - `@typescript-eslint/parser`: 8.44.1 → 8.45.0
+  - `@sveltejs/kit`: 2.43.2 → 2.43.7
+  - `@types/nodemailer`: 7.0.1 → 7.0.2
   - `chromatic`: 13.2.1 → 13.3.0
   - `eslint-plugin-storybook`: 9.1.8 → 9.1.10
   - `happy-dom`: 18.0.1 → 19.0.2
@@ -38,9 +40,10 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Compatibilidade mantida**: Todas as atualizações seguiram o guia de
   compatibilidade
   - Excluído Tailwind CSS conforme solicitado (mantido em 3.4.17)
-  - Build funcionando perfeitamente após atualizações
+  - Build funcionando perfeitamente após atualizações (8.2s)
   - Testes passando: 30/30 ✅
   - Prisma engine=binary confirmado
+  - Peer dependencies warnings resolvidos automaticamente
 
 - **Stripe API version compatibility**: Corrigida incompatibilidade da versão da
   API do Stripe
