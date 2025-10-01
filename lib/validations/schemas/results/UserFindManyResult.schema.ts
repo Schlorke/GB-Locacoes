@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import { z } from 'zod';
+import * as z from 'zod';
 export const UserFindManyResultSchema = z.object({
   data: z.array(z.object({
   id: z.string(),

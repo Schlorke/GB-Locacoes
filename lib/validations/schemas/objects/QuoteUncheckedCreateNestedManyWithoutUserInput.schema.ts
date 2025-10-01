@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import { z } from 'zod';
+import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { QuoteCreateWithoutUserInputObjectSchema as QuoteCreateWithoutUserInputObjectSchema } from './QuoteCreateWithoutUserInput.schema';
 import { QuoteUncheckedCreateWithoutUserInputObjectSchema as QuoteUncheckedCreateWithoutUserInputObjectSchema } from './QuoteUncheckedCreateWithoutUserInput.schema';
 import { QuoteCreateOrConnectWithoutUserInputObjectSchema as QuoteCreateOrConnectWithoutUserInputObjectSchema } from './QuoteCreateOrConnectWithoutUserInput.schema';
-import { UserQuoteCreateManyUserInputEnvelopeObjectSchema as QuoteCreateManyUserInputEnvelopeObjectSchema } from './QuoteCreateManyUserInputEnvelope.schema';
+import { QuoteCreateManyUserInputEnvelopeObjectSchema as QuoteCreateManyUserInputEnvelopeObjectSchema } from './QuoteCreateManyUserInputEnvelope.schema';
 import { QuoteWhereUniqueInputObjectSchema as QuoteWhereUniqueInputObjectSchema } from './QuoteWhereUniqueInput.schema'
 
 const makeSchema = () => z.object({

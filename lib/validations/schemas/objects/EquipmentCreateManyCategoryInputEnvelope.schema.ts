@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import { z } from 'zod';
+import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
-import { CategoryEquipmentCreateManyCategoryInputObjectSchema as EquipmentCreateManyCategoryInputObjectSchema } from './EquipmentCreateManyCategoryInput.schema'
+import { EquipmentCreateManyCategoryInputObjectSchema as EquipmentCreateManyCategoryInputObjectSchema } from './EquipmentCreateManyCategoryInput.schema'
 
 const makeSchema = () => z.object({
   data: z.union([z.lazy(() => EquipmentCreateManyCategoryInputObjectSchema), z.lazy(() => EquipmentCreateManyCategoryInputObjectSchema).array()]),

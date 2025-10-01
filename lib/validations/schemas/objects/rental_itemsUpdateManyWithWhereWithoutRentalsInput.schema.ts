@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import { z } from 'zod';
+import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { rental_itemsScalarWhereInputObjectSchema as rental_itemsScalarWhereInputObjectSchema } from './rental_itemsScalarWhereInput.schema';
 import { rental_itemsUpdateManyMutationInputObjectSchema as rental_itemsUpdateManyMutationInputObjectSchema } from './rental_itemsUpdateManyMutationInput.schema';

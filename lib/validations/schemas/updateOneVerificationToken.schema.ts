@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import * as z from 'zod';
 import { VerificationTokenSelectObjectSchema as VerificationTokenSelectObjectSchema } from './objects/VerificationTokenSelect.schema';
 import { VerificationTokenUpdateInputObjectSchema as VerificationTokenUpdateInputObjectSchema } from './objects/VerificationTokenUpdateInput.schema';
 import { VerificationTokenUncheckedUpdateInputObjectSchema as VerificationTokenUncheckedUpdateInputObjectSchema } from './objects/VerificationTokenUncheckedUpdateInput.schema';

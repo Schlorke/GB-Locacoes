@@ -291,7 +291,7 @@ export default function OrcamentosPage() {
                         placeholder="ID ou equipamento..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                        className="pl-10 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                   </div>
@@ -306,7 +306,7 @@ export default function OrcamentosPage() {
                       value={statusFilter}
                       onValueChange={setStatusFilter}
                     >
-                      <SelectTrigger className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500">
+                      <SelectTrigger className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500">
                         <SelectValue placeholder="Filtrar por status" />
                       </SelectTrigger>
                       <SelectContent>
@@ -334,20 +334,13 @@ export default function OrcamentosPage() {
               </CardHeader>
               <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
                 <div className="space-y-4 flex-1">
-                  <Button
-                    asChild
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                  >
+                  <Button asChild size="default" className="w-full">
                     <Link href="/orcamento">
                       <Plus className="h-4 w-4 mr-2" />
                       Novo Orçamento
                     </Link>
                   </Button>
-                  <Button
-                    asChild
-                    variant="outline"
-                    className="w-full bg-white hover:bg-gray-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                  >
+                  <Button asChild variant="outline" className="w-full">
                     <Link href="/equipamentos">
                       <TrendingUp className="h-4 w-4 mr-2" />
                       Ver Equipamentos
@@ -388,8 +381,8 @@ export default function OrcamentosPage() {
                           key={orcamento.id}
                           className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-orange-50 hover:to-orange-100 transition-all duration-300 group border border-gray-200 hover:border-orange-200"
                         >
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
+                          <div className="flex flex-wrap md:flex-nowrap items-center justify-between mb-4 gap-4">
+                            <div className="flex items-center gap-3 flex-1 min-w-0">
                               <div className="text-lg font-bold text-gray-900">
                                 #{orcamento.id}
                               </div>
@@ -400,11 +393,11 @@ export default function OrcamentosPage() {
                                 {statusConfig[orcamento.status].label}
                               </Badge>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex flex-wrap md:flex-nowrap gap-2 mt-3 md:mt-0">
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300"
+                                className="flex-1 min-w-0 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300"
                               >
                                 <Eye className="h-4 w-4 mr-1" />
                                 Ver
@@ -412,7 +405,7 @@ export default function OrcamentosPage() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="bg-white hover:bg-gray-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
+                                className="flex-1 min-w-0 bg-white hover:bg-gray-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
                               >
                                 <Download className="h-4 w-4 mr-1" />
                                 PDF
@@ -454,10 +447,7 @@ export default function OrcamentosPage() {
                     <p className="text-gray-500 text-lg mb-4">
                       Nenhum orçamento encontrado
                     </p>
-                    <Button
-                      asChild
-                      className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
+                    <Button asChild size="default">
                       <Link href="/orcamento">
                         <Plus className="h-4 w-4 mr-2" />
                         Solicitar Primeiro Orçamento

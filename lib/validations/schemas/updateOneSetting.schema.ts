@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import * as z from 'zod';
 import { SettingSelectObjectSchema as SettingSelectObjectSchema } from './objects/SettingSelect.schema';
 import { SettingUpdateInputObjectSchema as SettingUpdateInputObjectSchema } from './objects/SettingUpdateInput.schema';
 import { SettingUncheckedUpdateInputObjectSchema as SettingUncheckedUpdateInputObjectSchema } from './objects/SettingUncheckedUpdateInput.schema';

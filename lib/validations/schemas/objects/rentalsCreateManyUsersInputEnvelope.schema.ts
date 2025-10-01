@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import { z } from 'zod';
+import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
-import { UsersrentalsCreateManyUsersInputObjectSchema as rentalsCreateManyUsersInputObjectSchema } from './rentalsCreateManyUsersInput.schema'
+import { rentalsCreateManyUsersInputObjectSchema as rentalsCreateManyUsersInputObjectSchema } from './rentalsCreateManyUsersInput.schema'
 
 const makeSchema = () => z.object({
   data: z.union([z.lazy(() => rentalsCreateManyUsersInputObjectSchema), z.lazy(() => rentalsCreateManyUsersInputObjectSchema).array()]),

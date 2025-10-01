@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import * as z from 'zod';
 import { rentalsIncludeObjectSchema as rentalsIncludeObjectSchema } from './objects/rentalsInclude.schema';
 import { rentalsOrderByWithRelationInputObjectSchema as rentalsOrderByWithRelationInputObjectSchema } from './objects/rentalsOrderByWithRelationInput.schema';
 import { rentalsWhereInputObjectSchema as rentalsWhereInputObjectSchema } from './objects/rentalsWhereInput.schema';
 import { rentalsWhereUniqueInputObjectSchema as rentalsWhereUniqueInputObjectSchema } from './objects/rentalsWhereUniqueInput.schema';
-import { RentalsScalarFieldEnumSchema as RentalsScalarFieldEnum } from './enums/RentalsScalarFieldEnum.schema';
+import { RentalsScalarFieldEnumSchema } from './enums/RentalsScalarFieldEnum.schema';
 
 // Select schema needs to be in file to prevent circular imports
 //------------------------------------------------------
@@ -38,6 +38,6 @@ export const rentalsFindFirstSelectZodSchema = z.object({
     _count: z.boolean().optional()
   }).strict();
 
-export const rentalsFindFirstSchema: z.ZodType<Prisma.rentalsFindFirstArgs> = z.object({ select: rentalsFindFirstSelectSchema.optional(), include: z.lazy(() => rentalsIncludeObjectSchema.optional()), orderBy: z.union([rentalsOrderByWithRelationInputObjectSchema, rentalsOrderByWithRelationInputObjectSchema.array()]).optional(), where: rentalsWhereInputObjectSchema.optional(), cursor: rentalsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([RentalsScalarFieldEnum, RentalsScalarFieldEnum.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.rentalsFindFirstArgs>;
+export const rentalsFindFirstSchema: z.ZodType<Prisma.rentalsFindFirstArgs> = z.object({ select: rentalsFindFirstSelectSchema.optional(), include: z.lazy(() => rentalsIncludeObjectSchema.optional()), orderBy: z.union([rentalsOrderByWithRelationInputObjectSchema, rentalsOrderByWithRelationInputObjectSchema.array()]).optional(), where: rentalsWhereInputObjectSchema.optional(), cursor: rentalsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([RentalsScalarFieldEnumSchema, RentalsScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.rentalsFindFirstArgs>;
 
-export const rentalsFindFirstZodSchema = z.object({ select: rentalsFindFirstSelectSchema.optional(), include: z.lazy(() => rentalsIncludeObjectSchema.optional()), orderBy: z.union([rentalsOrderByWithRelationInputObjectSchema, rentalsOrderByWithRelationInputObjectSchema.array()]).optional(), where: rentalsWhereInputObjectSchema.optional(), cursor: rentalsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([RentalsScalarFieldEnum, RentalsScalarFieldEnum.array()]).optional() }).strict();
+export const rentalsFindFirstZodSchema = z.object({ select: rentalsFindFirstSelectSchema.optional(), include: z.lazy(() => rentalsIncludeObjectSchema.optional()), orderBy: z.union([rentalsOrderByWithRelationInputObjectSchema, rentalsOrderByWithRelationInputObjectSchema.array()]).optional(), where: rentalsWhereInputObjectSchema.optional(), cursor: rentalsWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([RentalsScalarFieldEnumSchema, RentalsScalarFieldEnumSchema.array()]).optional() }).strict();

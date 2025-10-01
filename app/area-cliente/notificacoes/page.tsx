@@ -345,7 +345,7 @@ export default function NotificacoesPage() {
                         placeholder="Título ou mensagem..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                        className="pl-10 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                   </div>
@@ -362,7 +362,7 @@ export default function NotificacoesPage() {
                         setFilterType(value)
                       }
                     >
-                      <SelectTrigger className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500">
+                      <SelectTrigger className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500">
                         <SelectValue placeholder="Filtrar por tipo" />
                       </SelectTrigger>
                       <SelectContent>
@@ -395,16 +395,14 @@ export default function NotificacoesPage() {
                   {stats.unread > 0 && (
                     <Button
                       onClick={markAllAsRead}
-                      className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                      size="default"
+                      className="w-full"
                     >
                       <Check className="h-4 w-4 mr-2" />
                       Marcar Todas como Lidas
                     </Button>
                   )}
-                  <Button
-                    variant="outline"
-                    className="w-full bg-white hover:bg-gray-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                  >
+                  <Button variant="outline" className="w-full">
                     <Filter className="h-4 w-4 mr-2" />
                     Configurar Notificações
                   </Button>
@@ -448,8 +446,8 @@ export default function NotificacoesPage() {
                               : 'from-gray-50 to-gray-100 border-gray-200 hover:from-orange-50 hover:to-orange-100 hover:border-orange-200'
                           )}
                         >
-                          <div className="flex items-start justify-between">
-                            <div className="flex items-start gap-4 flex-1">
+                          <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
+                            <div className="flex items-start gap-4 flex-1 min-w-0">
                               <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                                 <Icon className="h-5 w-5" />
                               </div>
@@ -489,13 +487,13 @@ export default function NotificacoesPage() {
                                   <span className="text-xs text-gray-400">
                                     {formatTimeAgo(notification.createdAt)}
                                   </span>
-                                  <div className="flex items-center gap-2">
+                                  <div className="flex flex-wrap md:flex-nowrap gap-2 mt-3 md:mt-0">
                                     {notification.actionUrl && (
                                       <Button
                                         asChild
                                         size="sm"
                                         variant="outline"
-                                        className="bg-white hover:bg-blue-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
+                                        className="flex-1 min-w-0 bg-white hover:bg-blue-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
                                         onClick={() =>
                                           markAsRead(notification.id)
                                         }
@@ -513,7 +511,7 @@ export default function NotificacoesPage() {
                                         onClick={() =>
                                           markAsRead(notification.id)
                                         }
-                                        className="bg-white hover:bg-green-50 text-gray-900 hover:text-green-600 font-semibold rounded-lg transition-all duration-300"
+                                        className="flex-1 min-w-0 bg-white hover:bg-green-50 text-gray-900 hover:text-green-600 font-semibold rounded-lg transition-all duration-300"
                                       >
                                         <Check className="h-4 w-4 mr-1" />
                                         Ler
@@ -525,7 +523,7 @@ export default function NotificacoesPage() {
                                       onClick={() =>
                                         removeNotification(notification.id)
                                       }
-                                      className="bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold rounded-lg transition-all duration-300"
+                                      className="flex-1 min-w-0 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold rounded-lg transition-all duration-300"
                                     >
                                       <Trash2 className="h-4 w-4" />
                                     </Button>

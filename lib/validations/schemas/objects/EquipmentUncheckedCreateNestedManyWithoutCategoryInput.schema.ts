@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import { z } from 'zod';
+import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { EquipmentCreateWithoutCategoryInputObjectSchema as EquipmentCreateWithoutCategoryInputObjectSchema } from './EquipmentCreateWithoutCategoryInput.schema';
 import { EquipmentUncheckedCreateWithoutCategoryInputObjectSchema as EquipmentUncheckedCreateWithoutCategoryInputObjectSchema } from './EquipmentUncheckedCreateWithoutCategoryInput.schema';
 import { EquipmentCreateOrConnectWithoutCategoryInputObjectSchema as EquipmentCreateOrConnectWithoutCategoryInputObjectSchema } from './EquipmentCreateOrConnectWithoutCategoryInput.schema';
-import { CategoryEquipmentCreateManyCategoryInputEnvelopeObjectSchema as EquipmentCreateManyCategoryInputEnvelopeObjectSchema } from './EquipmentCreateManyCategoryInputEnvelope.schema';
+import { EquipmentCreateManyCategoryInputEnvelopeObjectSchema as EquipmentCreateManyCategoryInputEnvelopeObjectSchema } from './EquipmentCreateManyCategoryInputEnvelope.schema';
 import { EquipmentWhereUniqueInputObjectSchema as EquipmentWhereUniqueInputObjectSchema } from './EquipmentWhereUniqueInput.schema'
 
 const makeSchema = () => z.object({

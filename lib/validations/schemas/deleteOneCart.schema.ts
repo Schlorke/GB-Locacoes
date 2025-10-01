@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import * as z from 'zod';
 import { CartSelectObjectSchema as CartSelectObjectSchema } from './objects/CartSelect.schema';
 import { CartIncludeObjectSchema as CartIncludeObjectSchema } from './objects/CartInclude.schema';
 import { CartWhereUniqueInputObjectSchema as CartWhereUniqueInputObjectSchema } from './objects/CartWhereUniqueInput.schema';

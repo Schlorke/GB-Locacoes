@@ -174,19 +174,11 @@ export default function AreaClientePage() {
                         </span>
                       </p>
                     </div>
-                    <div className="flex gap-2 w-full mt-auto">
-                      <Button
-                        size="sm"
-                        asChild
-                        className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                      >
+                    <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
+                      <Button size="default" asChild className="flex-1 min-w-0">
                         <Link href="/orcamento">Ver Carrinho</Link>
                       </Button>
-                      <Button
-                        size="sm"
-                        asChild
-                        className="flex-1 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                      >
+                      <Button size="default" asChild className="flex-1 min-w-0">
                         <Link href="/equipamentos">Adicionar Mais</Link>
                       </Button>
                     </div>
@@ -197,12 +189,8 @@ export default function AreaClientePage() {
                     <p className="text-gray-500 mb-8">
                       Seu carrinho está vazio
                     </p>
-                    <div className="flex gap-2 w-full mt-auto">
-                      <Button
-                        size="sm"
-                        asChild
-                        className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                      >
+                    <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
+                      <Button size="default" asChild className="flex-1 min-w-0">
                         <Link href="/equipamentos">Adicionar Equipamentos</Link>
                       </Button>
                     </div>
@@ -228,12 +216,8 @@ export default function AreaClientePage() {
                   <p className="text-gray-500 mb-8">
                     Nenhum orçamento encontrado
                   </p>
-                  <div className="flex gap-2 w-full mt-auto">
-                    <Button
-                      size="sm"
-                      asChild
-                      className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
+                  <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
+                    <Button size="default" asChild className="flex-1 min-w-0">
                       <Link href="/orcamento">Solicitar Orçamento</Link>
                     </Button>
                   </div>

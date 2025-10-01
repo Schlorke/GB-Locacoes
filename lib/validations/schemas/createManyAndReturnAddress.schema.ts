@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import * as z from 'zod';
 import { AddressSelectObjectSchema as AddressSelectObjectSchema } from './objects/AddressSelect.schema';
 import { AddressCreateManyInputObjectSchema as AddressCreateManyInputObjectSchema } from './objects/AddressCreateManyInput.schema';
 

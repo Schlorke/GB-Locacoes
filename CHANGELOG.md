@@ -6,6 +6,57 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-09-30] - Atualização de Dependências
+
+### Changed 🔄
+
+- **Dependências atualizadas**: Atualização segura de múltiplas dependências
+  seguindo guia de compatibilidade
+  - `@prisma/client`: 6.16.2 → 6.16.3
+  - `@storybook/nextjs`: 9.1.8 → 9.1.10
+  - `@testing-library/jest-dom`: 6.8.0 → 6.9.1
+  - `@types/node`: 24.5.2 → 24.6.1
+  - `@types/react`: 19.1.13 → 19.1.17
+  - `@types/react-dom`: 19.1.9 → 19.1.11
+  - `@typescript-eslint/eslint-plugin`: 8.44.1 → 8.45.0
+  - `@typescript-eslint/parser`: 8.44.1 → 8.45.0
+  - `chromatic`: 13.2.1 → 13.3.0
+  - `eslint-plugin-storybook`: 9.1.8 → 9.1.10
+  - `happy-dom`: 18.0.1 → 19.0.2
+  - `pino`: 9.11.0 → 9.12.0
+  - `prisma`: 6.16.2 → 6.16.3
+  - `prisma-zod-generator`: 1.22.2 → 1.25.1
+  - `resend`: 6.1.0 → 6.1.2
+  - `svelte`: 5.39.6 → 5.39.8
+  - `stripe`: 18.5.0 → 19.0.0
+  - `style-dictionary`: 5.0.4 → 5.1.0
+  - `typescript`: 5.9.2 → 5.9.3
+  - `typescript-eslint`: 8.44.1 → 8.45.0
+
+### Fixed 🐛
+
+- **Compatibilidade mantida**: Todas as atualizações seguiram o guia de
+  compatibilidade
+  - Excluído Tailwind CSS conforme solicitado (mantido em 3.4.17)
+  - Build funcionando perfeitamente após atualizações
+  - Testes passando: 30/30 ✅
+  - Prisma engine=binary confirmado
+
+- **Stripe API version compatibility**: Corrigida incompatibilidade da versão da
+  API do Stripe
+  - Atualizada API version de `2025-08-27.basil` para `2025-09-30.clover`
+  - Resolvido erro TypeScript:
+    `Type '"2025-08-27.basil"' is not assignable to type '"2025-09-30.clover"'`
+  - Compatibilidade garantida com Stripe 19.0.0
+
+### Security 🔐
+
+- **Atualizações de segurança**: Dependências atualizadas incluem correções de
+  segurança
+  - Stripe atualizado para versão 19.0.0 com melhorias de segurança
+  - TypeScript atualizado com correções de tipos
+  - Node.js types atualizados com correções de segurança
+
 ## [2025-01-22] - Configuração Global do Spellchecker
 
 ### Added ✨

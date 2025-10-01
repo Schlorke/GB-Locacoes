@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
+// import { Badge } from '@/components/ui/badge'
 import {
   User,
   Mail,
@@ -21,7 +21,9 @@ import {
   Save,
   Edit,
   Shield,
-  AlertCircle,
+  // AlertCircle,
+  CheckCircle,
+  XCircle,
   Lock,
   Smartphone,
 } from 'lucide-react'
@@ -39,6 +41,15 @@ export default function PerfilPage() {
     cnpj: '',
     company: '',
   })
+
+  // Estados de verificação (mockados por enquanto; integrar com backend quando disponível)
+  const [emailStatus] = useState<'pending' | 'verified' | 'error'>('pending')
+  const [phoneStatus] = useState<'pending' | 'verified' | 'error'>('pending')
+  const [documentsStatus] = useState<'pending' | 'verified' | 'error'>(
+    'pending'
+  )
+  const documentsErrorMessage =
+    'Documento ilegível. Por favor, tente novamente.'
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -123,9 +134,9 @@ export default function PerfilPage() {
           >
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
+              <CardHeader className="relative d:px-6 z-10 pb-6">
                 <div className="flex items-start justify-between">
-                  <div>
+                  <div className="space-y-1.5">
                     <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                       <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                         <User className="h-5 w-5" />
@@ -138,14 +149,14 @@ export default function PerfilPage() {
                   </div>
                   <Button
                     onClick={() => setIsEditing(!isEditing)}
-                    className="bg-white  hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                    className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl border"
                   >
                     <Edit className="h-4 w-4 mr-2" />
                     {isEditing ? 'Cancelar' : 'Editar'}
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0">
+              <CardContent className="relative px-4 md:px-6 z-10 pt-0">
                 <div className="space-y-8">
                   {/* Dados Pessoais */}
                   <div className="space-y-6">
@@ -259,48 +270,162 @@ export default function PerfilPage() {
                     </div>
                   </div>
 
-                  {/* Status da Conta */}
+                  {/* Status da Conta - Painel de Confiança */}
                   <div className="space-y-6">
                     <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <Shield className="h-5 w-5 text-blue-600" />
+                      <Shield
+                        className="h-5 w-5"
+                        style={{ color: '#1A2E4C' }}
+                      />
                       Status da Conta
                     </h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
-                        <div className="flex items-center gap-3">
-                          <Mail className="h-5 w-5 text-yellow-600" />
-                          <span className="font-medium text-gray-900">
+
+                    <div className="grid grid-cols-1 gap-4">
+                      {/* Cartão: E-mail */}
+                      <div
+                        className={`bg-white border rounded-xl px-6 py-4 shadow-md transition-all duration-300 hover:shadow-xl flex flex-wrap items-center gap-4 ${
+                          emailStatus === 'verified'
+                            ? 'border-l-4 border-green-600'
+                            : emailStatus === 'error'
+                              ? 'border-l-4 border-red-600'
+                              : ''
+                        }`}
+                        role="status"
+                        aria-label="Status de verificação de e-mail"
+                      >
+                        {emailStatus === 'verified' ? (
+                          <CheckCircle className="h-6 w-6 text-green-600" />
+                        ) : emailStatus === 'error' ? (
+                          <XCircle className="h-6 w-6 text-red-600" />
+                        ) : (
+                          <Mail className="h-6 w-6 text-orange-500" />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-[0.95rem] text-[#1a2e4c]">
                             E-mail Verificado
-                          </span>
+                          </p>
+                          {emailStatus === 'error' && (
+                            <p className="text-sm text-red-600 mt-0.5">
+                              Não conseguimos verificar seu e-mail. Tente
+                              novamente.
+                            </p>
+                          )}
                         </div>
-                        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
-                          <AlertCircle className="h-3 w-3 mr-1" />
-                          Pendente
-                        </Badge>
+                        {emailStatus === 'verified' ? (
+                          <span className="text-green-600 font-medium ml-auto self-center mt-3 md:mt-0">
+                            Verificado
+                          </span>
+                        ) : (
+                          <Button
+                            size="default"
+                            className="ml-auto self-center w-full md:w-28 mt-3 md:mt-0"
+                            aria-label={
+                              emailStatus === 'error'
+                                ? 'Reenviar verificação de e-mail'
+                                : 'Verificar e-mail'
+                            }
+                          >
+                            {emailStatus === 'error' ? 'Reenviar' : 'Verificar'}
+                          </Button>
+                        )}
                       </div>
-                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
-                        <div className="flex items-center gap-3">
-                          <Phone className="h-5 w-5 text-yellow-600" />
-                          <span className="font-medium text-gray-900">
+
+                      {/* Cartão: Telefone */}
+                      <div
+                        className={`bg-white border rounded-xl px-6 py-4 shadow-md transition-all duration-300 hover:shadow-xl flex flex-wrap items-center gap-4 ${
+                          phoneStatus === 'verified'
+                            ? 'border-l-4 border-green-600'
+                            : phoneStatus === 'error'
+                              ? 'border-l-4 border-red-600'
+                              : ''
+                        }`}
+                        role="status"
+                        aria-label="Status de verificação de telefone"
+                      >
+                        {phoneStatus === 'verified' ? (
+                          <CheckCircle className="h-6 w-6 text-green-600" />
+                        ) : phoneStatus === 'error' ? (
+                          <XCircle className="h-6 w-6 text-red-600" />
+                        ) : (
+                          <Phone className="h-6 w-6 text-orange-500" />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-[0.95rem] text-[#1a2e4c]">
                             Telefone Verificado
-                          </span>
+                          </p>
+                          {phoneStatus === 'error' && (
+                            <p className="text-sm text-red-600 mt-0.5">
+                              Código inválido. Tente novamente.
+                            </p>
+                          )}
                         </div>
-                        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
-                          <AlertCircle className="h-3 w-3 mr-1" />
-                          Pendente
-                        </Badge>
+                        {phoneStatus === 'verified' ? (
+                          <span className="text-green-600 font-medium ml-auto self-center mt-3 md:mt-0">
+                            Verificado
+                          </span>
+                        ) : (
+                          <Button
+                            size="default"
+                            className="ml-auto self-center w-full md:w-28 mt-3 md:mt-0"
+                            aria-label={
+                              phoneStatus === 'error'
+                                ? 'Reenviar verificação de telefone'
+                                : 'Verificar telefone'
+                            }
+                          >
+                            {phoneStatus === 'error' ? 'Reenviar' : 'Verificar'}
+                          </Button>
+                        )}
                       </div>
-                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-xl">
-                        <div className="flex items-center gap-3">
-                          <Building className="h-5 w-5 text-yellow-600" />
-                          <span className="font-medium text-gray-900">
+
+                      {/* Cartão: Documentos */}
+                      <div
+                        className={`bg-white border rounded-xl px-6 py-4 shadow-md transition-all duration-300 hover:shadow-xl flex flex-wrap items-center gap-4 ${
+                          documentsStatus === 'verified'
+                            ? 'border-l-4 border-green-600'
+                            : documentsStatus === 'error'
+                              ? 'border-l-4 border-red-600'
+                              : ''
+                        }`}
+                        role="status"
+                        aria-label="Status de envio de documentos"
+                      >
+                        {documentsStatus === 'verified' ? (
+                          <CheckCircle className="h-6 w-6 text-green-600" />
+                        ) : documentsStatus === 'error' ? (
+                          <XCircle className="h-6 w-6 text-red-600" />
+                        ) : (
+                          <Building className="h-6 w-6 text-orange-500" />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-[0.95rem] text-[#1a2e4c]">
                             Documentos
-                          </span>
+                          </p>
+                          {documentsStatus === 'error' && (
+                            <p className="text-sm text-red-600 mt-0.5">
+                              {documentsErrorMessage}
+                            </p>
+                          )}
                         </div>
-                        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
-                          <AlertCircle className="h-3 w-3 mr-1" />
-                          Pendente
-                        </Badge>
+                        {documentsStatus === 'verified' ? (
+                          <span className="text-green-600 font-medium ml-auto self-center mt-3 md:mt-0">
+                            Verificado
+                          </span>
+                        ) : (
+                          <Button
+                            size="default"
+                            className="ml-auto self-center w-full md:w-28 mt-3 md:mt-0"
+                            aria-label={
+                              documentsStatus === 'error'
+                                ? 'Reenviar documentos'
+                                : 'Enviar documentos'
+                            }
+                          >
+                            {documentsStatus === 'error'
+                              ? 'Reenviar'
+                              : 'Enviar'}
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -331,26 +456,28 @@ export default function PerfilPage() {
           >
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg text-white">
-                    <Lock className="h-5 w-5" />
-                  </div>
-                  Segurança
-                </CardTitle>
-                <CardDescription>
-                  Gerencie a segurança da sua conta
-                </CardDescription>
+              <CardHeader className="relative z-10 pb-6">
+                <div className="space-y-1.5">
+                  <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+                    <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg text-white">
+                      <Lock className="h-5 w-5" />
+                    </div>
+                    Segurança
+                  </CardTitle>
+                  <CardDescription>
+                    Gerencie a segurança da sua conta
+                  </CardDescription>
+                </div>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-orange-50 hover:to-orange-100 transition-all duration-300 border border-gray-200 hover:border-orange-200">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
+              <CardContent className="relative px-4 md:px-6 z-10 pt-0">
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="bg-white border rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
+                    <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4">
+                      <div className="flex items-start gap-4 flex-1 min-w-0">
+                        <div className="p-2 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 text-white mt-1">
                           <Lock className="h-5 w-5" />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <p className="font-semibold text-gray-900">
                             Alterar Senha
                           </p>
@@ -359,19 +486,22 @@ export default function PerfilPage() {
                           </p>
                         </div>
                       </div>
-                      <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                      <Button
+                        size="default"
+                        className="w-full sm:w-28 flex-shrink-0"
+                      >
                         Alterar
                       </Button>
                     </div>
                   </div>
 
-                  <div className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-blue-50 hover:to-blue-100 transition-all duration-300 border border-gray-200 hover:border-blue-200">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
+                  <div className="bg-white border rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
+                    <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4">
+                      <div className="flex items-start gap-4 flex-1 min-w-0">
+                        <div className="p-2 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 text-white mt-1">
                           <Smartphone className="h-5 w-5" />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <p className="font-semibold text-gray-900">
                             Sessões Ativas
                           </p>
@@ -380,7 +510,10 @@ export default function PerfilPage() {
                           </p>
                         </div>
                       </div>
-                      <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                      <Button
+                        size="default"
+                        className="w-full sm:w-28 flex-shrink-0"
+                      >
                         Gerenciar
                       </Button>
                     </div>

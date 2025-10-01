@@ -287,10 +287,11 @@ export default function EnderecosPage() {
                   <p className="text-gray-500 mb-8">
                     Adicione novos endereços de entrega
                   </p>
-                  <div className="flex gap-2 w-full mt-auto">
+                  <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
                     <Button
                       onClick={() => setIsAdding(true)}
-                      className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                      size="default"
+                      className="flex-1 min-w-0"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       Novo Endereço
@@ -335,11 +336,11 @@ export default function EnderecosPage() {
                               {primaryAddress.city}/{primaryAddress.state}
                             </p>
                           </div>
-                          <div className="flex gap-2 w-full mt-auto">
+                          <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
                             <Button
                               onClick={() => handleEdit(primaryAddress)}
                               variant="outline"
-                              className="flex-1 bg-white hover:bg-gray-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                              className="flex-1 min-w-0 bg-white hover:bg-gray-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
                             >
                               <Edit className="h-4 w-4 mr-2" />
                               Editar
@@ -402,7 +403,7 @@ export default function EnderecosPage() {
                           value={formData.street}
                           onChange={handleInputChange}
                           required
-                          className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -418,7 +419,7 @@ export default function EnderecosPage() {
                           value={formData.number}
                           onChange={handleInputChange}
                           required
-                          className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -434,7 +435,7 @@ export default function EnderecosPage() {
                           value={formData.complement}
                           onChange={handleInputChange}
                           placeholder="Apto, sala, etc."
-                          className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -450,7 +451,7 @@ export default function EnderecosPage() {
                           value={formData.neighborhood}
                           onChange={handleInputChange}
                           required
-                          className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -466,7 +467,7 @@ export default function EnderecosPage() {
                           value={formData.city}
                           onChange={handleInputChange}
                           required
-                          className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2">
@@ -484,7 +485,7 @@ export default function EnderecosPage() {
                           required
                           maxLength={2}
                           placeholder="RS"
-                          className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                       <div className="space-y-2 md:col-span-2">
@@ -501,14 +502,15 @@ export default function EnderecosPage() {
                           onChange={handleInputChange}
                           required
                           placeholder="00000-000"
-                          className="rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                          className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                         />
                       </div>
                     </div>
-                    <div className="flex gap-3 pt-4">
+                    <div className="flex flex-wrap md:flex-nowrap gap-3 pt-4">
                       <Button
                         type="submit"
-                        className="inline-flex items-center gap-2 px-6 h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                        size="default"
+                        className="flex-1 min-w-0 inline-flex items-center gap-2 px-6"
                       >
                         <Save className="h-4 w-4" />
                         {editingId ? 'Atualizar' : 'Adicionar'} Endereço
@@ -517,7 +519,7 @@ export default function EnderecosPage() {
                         type="button"
                         variant="outline"
                         onClick={handleCancel}
-                        className="inline-flex items-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-gray-200 hover:border-orange-300"
+                        className="flex-1 min-w-0 inline-flex items-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-gray-200 hover:border-orange-300"
                       >
                         <X className="h-4 w-4" />
                         Cancelar
@@ -557,8 +559,8 @@ export default function EnderecosPage() {
                         key={address.id}
                         className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-orange-50 hover:to-orange-100 transition-all duration-300 border border-gray-200 hover:border-orange-200"
                       >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
+                        <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
+                          <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-3 mb-2">
                               <MapPin className="h-5 w-5 text-gray-500" />
                               <span className="font-medium text-gray-900">
@@ -584,13 +586,13 @@ export default function EnderecosPage() {
                               CEP: {address.zipCode}
                             </p>
                           </div>
-                          <div className="flex gap-2">
+                          <div className="flex flex-wrap md:flex-nowrap gap-2 mt-3 md:mt-0">
                             {!address.isPrimary && (
                               <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleSetPrimary(address.id)}
-                                className="bg-white hover:bg-yellow-50 text-gray-900 hover:text-yellow-600 font-semibold rounded-lg transition-all duration-300"
+                                className="flex-1 min-w-0 bg-white hover:bg-yellow-50 text-gray-900 hover:text-yellow-600 font-semibold rounded-lg transition-all duration-300"
                               >
                                 <Star className="h-4 w-4 mr-1" />
                                 Principal
@@ -600,7 +602,7 @@ export default function EnderecosPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleEdit(address)}
-                              className="bg-white hover:bg-blue-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
+                              className="flex-1 min-w-0 bg-white hover:bg-blue-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
@@ -608,7 +610,7 @@ export default function EnderecosPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleDelete(address.id)}
-                              className="bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold rounded-lg transition-all duration-300"
+                              className="flex-1 min-w-0 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold rounded-lg transition-all duration-300"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -623,10 +625,7 @@ export default function EnderecosPage() {
                     <p className="text-gray-500 text-lg mb-4">
                       Nenhum endereço cadastrado
                     </p>
-                    <Button
-                      onClick={() => setIsAdding(true)}
-                      className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
+                    <Button onClick={() => setIsAdding(true)} size="default">
                       <Plus className="h-4 w-4 mr-2" />
                       Adicionar Primeiro Endereço
                     </Button>

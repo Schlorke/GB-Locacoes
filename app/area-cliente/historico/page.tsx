@@ -266,7 +266,7 @@ export default function HistoricoPage() {
                         placeholder="Buscar por equipamento..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-12 h-12 rounded-xl border-gray-200 focus:border-orange-500 focus:ring-orange-500"
+                        className="pl-12 h-12 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
                       />
                     </div>
                   </div>
@@ -317,8 +317,8 @@ export default function HistoricoPage() {
                   <Card className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group">
                     <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
                     <CardContent className="p-6 relative z-10">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
+                      <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white group-hover:scale-110 transition-transform">
                               <Package className="h-5 w-5" />
@@ -399,11 +399,11 @@ export default function HistoricoPage() {
                           </div>
                         </div>
 
-                        <div className="flex gap-3">
+                        <div className="flex flex-wrap md:flex-nowrap gap-3 mt-3 md:mt-0">
                           <Button
                             variant="outline"
                             size="sm"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-medium rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-gray-200 hover:border-orange-300"
+                            className="flex-1 min-w-0 inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-medium rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-gray-200 hover:border-orange-300"
                           >
                             <Eye className="h-4 w-4" />
                             Ver Detalhes
@@ -413,7 +413,7 @@ export default function HistoricoPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-medium rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-red-200 hover:border-red-300"
+                              className="flex-1 min-w-0 inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-medium rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-red-200 hover:border-red-300"
                             >
                               Cancelar
                             </Button>
@@ -448,7 +448,10 @@ export default function HistoricoPage() {
                       : 'Você ainda não possui histórico de locações'}
                   </p>
                   {!searchTerm && statusFilter === 'all' && (
-                    <Button className="inline-flex items-center gap-2 px-6 h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group">
+                    <Button
+                      size="default"
+                      className="inline-flex items-center gap-2 px-6 group"
+                    >
                       Solicitar Primeiro Orçamento
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </Button>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import * as z from 'zod';
 import { SettingUpdateManyMutationInputObjectSchema as SettingUpdateManyMutationInputObjectSchema } from './objects/SettingUpdateManyMutationInput.schema';
 import { SettingWhereInputObjectSchema as SettingWhereInputObjectSchema } from './objects/SettingWhereInput.schema';
 

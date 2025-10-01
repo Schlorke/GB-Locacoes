@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import * as z from 'zod';
 import { QuoteItemIncludeObjectSchema as QuoteItemIncludeObjectSchema } from './objects/QuoteItemInclude.schema';
 import { QuoteItemOrderByWithRelationInputObjectSchema as QuoteItemOrderByWithRelationInputObjectSchema } from './objects/QuoteItemOrderByWithRelationInput.schema';
 import { QuoteItemWhereInputObjectSchema as QuoteItemWhereInputObjectSchema } from './objects/QuoteItemWhereInput.schema';
 import { QuoteItemWhereUniqueInputObjectSchema as QuoteItemWhereUniqueInputObjectSchema } from './objects/QuoteItemWhereUniqueInput.schema';
-import { QuoteItemScalarFieldEnumSchema as QuoteItemScalarFieldEnum } from './enums/QuoteItemScalarFieldEnum.schema';
+import { QuoteItemScalarFieldEnumSchema } from './enums/QuoteItemScalarFieldEnum.schema';
 
 // Select schema needs to be in file to prevent circular imports
 //------------------------------------------------------
@@ -38,6 +38,6 @@ export const QuoteItemFindFirstOrThrowSelectZodSchema = z.object({
     quote: z.boolean().optional()
   }).strict();
 
-export const QuoteItemFindFirstOrThrowSchema: z.ZodType<Prisma.QuoteItemFindFirstOrThrowArgs> = z.object({ select: QuoteItemFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => QuoteItemIncludeObjectSchema.optional()), orderBy: z.union([QuoteItemOrderByWithRelationInputObjectSchema, QuoteItemOrderByWithRelationInputObjectSchema.array()]).optional(), where: QuoteItemWhereInputObjectSchema.optional(), cursor: QuoteItemWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([QuoteItemScalarFieldEnum, QuoteItemScalarFieldEnum.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.QuoteItemFindFirstOrThrowArgs>;
+export const QuoteItemFindFirstOrThrowSchema: z.ZodType<Prisma.QuoteItemFindFirstOrThrowArgs> = z.object({ select: QuoteItemFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => QuoteItemIncludeObjectSchema.optional()), orderBy: z.union([QuoteItemOrderByWithRelationInputObjectSchema, QuoteItemOrderByWithRelationInputObjectSchema.array()]).optional(), where: QuoteItemWhereInputObjectSchema.optional(), cursor: QuoteItemWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([QuoteItemScalarFieldEnumSchema, QuoteItemScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.QuoteItemFindFirstOrThrowArgs>;
 
-export const QuoteItemFindFirstOrThrowZodSchema = z.object({ select: QuoteItemFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => QuoteItemIncludeObjectSchema.optional()), orderBy: z.union([QuoteItemOrderByWithRelationInputObjectSchema, QuoteItemOrderByWithRelationInputObjectSchema.array()]).optional(), where: QuoteItemWhereInputObjectSchema.optional(), cursor: QuoteItemWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([QuoteItemScalarFieldEnum, QuoteItemScalarFieldEnum.array()]).optional() }).strict();
+export const QuoteItemFindFirstOrThrowZodSchema = z.object({ select: QuoteItemFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => QuoteItemIncludeObjectSchema.optional()), orderBy: z.union([QuoteItemOrderByWithRelationInputObjectSchema, QuoteItemOrderByWithRelationInputObjectSchema.array()]).optional(), where: QuoteItemWhereInputObjectSchema.optional(), cursor: QuoteItemWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([QuoteItemScalarFieldEnumSchema, QuoteItemScalarFieldEnumSchema.array()]).optional() }).strict();

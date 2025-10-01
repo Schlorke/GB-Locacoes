@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
-import { z } from 'zod';
+import * as z from 'zod';
 import { SessionSelectObjectSchema as SessionSelectObjectSchema } from './objects/SessionSelect.schema';
 import { SessionIncludeObjectSchema as SessionIncludeObjectSchema } from './objects/SessionInclude.schema';
 import { SessionCreateInputObjectSchema as SessionCreateInputObjectSchema } from './objects/SessionCreateInput.schema';

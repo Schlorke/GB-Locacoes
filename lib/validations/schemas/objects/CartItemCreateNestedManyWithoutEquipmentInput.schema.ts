@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import { z } from 'zod';
+import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { CartItemCreateWithoutEquipmentInputObjectSchema as CartItemCreateWithoutEquipmentInputObjectSchema } from './CartItemCreateWithoutEquipmentInput.schema';
 import { CartItemUncheckedCreateWithoutEquipmentInputObjectSchema as CartItemUncheckedCreateWithoutEquipmentInputObjectSchema } from './CartItemUncheckedCreateWithoutEquipmentInput.schema';
 import { CartItemCreateOrConnectWithoutEquipmentInputObjectSchema as CartItemCreateOrConnectWithoutEquipmentInputObjectSchema } from './CartItemCreateOrConnectWithoutEquipmentInput.schema';
-import { EquipmentCartItemCreateManyEquipmentInputEnvelopeObjectSchema as CartItemCreateManyEquipmentInputEnvelopeObjectSchema } from './CartItemCreateManyEquipmentInputEnvelope.schema';
+import { CartItemCreateManyEquipmentInputEnvelopeObjectSchema as CartItemCreateManyEquipmentInputEnvelopeObjectSchema } from './CartItemCreateManyEquipmentInputEnvelope.schema';
 import { CartItemWhereUniqueInputObjectSchema as CartItemWhereUniqueInputObjectSchema } from './CartItemWhereUniqueInput.schema'
 
 const makeSchema = () => z.object({
