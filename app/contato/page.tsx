@@ -247,7 +247,7 @@ export default function ContatoPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4 + index * 0.1 }}
-                      className="text-center p-4 bg-gradient-to-br from-orange-50 to-orange-25 rounded-lg hover:from-orange-100 hover:to-orange-50 transition-all duration-300 hover:scale-[1.02] group"
+                      className="text-center p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] group"
                     >
                       <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-3 rounded-full w-12 h-12 mx-auto mb-3 shadow-lg group-hover:scale-105 transition-transform duration-300">
                         <service.icon className="h-6 w-6 text-white" />

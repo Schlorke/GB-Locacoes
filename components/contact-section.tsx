@@ -21,8 +21,8 @@ export default function ContactSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <Card className="contact-form shadow-xl hover:shadow-2xl transition-all duration-500">
-            <CardContent className="p-8">
+          <Card className="contact-form shadow-xl hover:shadow-2xl transition-all duration-500 border-0">
+            <CardContent className="p-6 pt-8 lg:p-8">
               <h3 className="text-2xl font-semibold mb-6">
                 Solicite um Orçamento de Equipamentos
               </h3>
@@ -137,7 +137,7 @@ export default function ContactSection() {
 
           {/* Contact Information */}
           <div className="contact-info space-y-8">
-            <Card className="contact-card shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 group">
+            <Card className="contact-card shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 group border-0">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className="bg-orange-100 p-3 rounded-full group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
@@ -157,7 +157,7 @@ export default function ContactSection() {
               </CardContent>
             </Card>
 
-            <Card className="contact-card shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 group">
+            <Card className="contact-card shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 group border-0">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className="bg-orange-100 p-3 rounded-full group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
@@ -179,7 +179,7 @@ export default function ContactSection() {
               </CardContent>
             </Card>
 
-            <Card className="contact-card shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 group">
+            <Card className="contact-card shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 group border-0">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className="bg-orange-100 p-3 rounded-full group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
@@ -202,7 +202,7 @@ export default function ContactSection() {
               </CardContent>
             </Card>
 
-            <Card className="contact-card shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 group">
+            <Card className="contact-card shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-105 group border-0">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <div className="bg-orange-100 p-3 rounded-full group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
