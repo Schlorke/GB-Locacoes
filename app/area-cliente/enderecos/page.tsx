@@ -195,80 +195,13 @@ export default function EnderecosPage() {
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
       <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
         <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          {/* Stats Grid - 1 coluna em mobile, 3 colunas em desktop */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 items-stretch"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {/* Card Total Endereços */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Total
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {addresses.length}
-                    </p>
-                    <p className="text-sm text-gray-500">endereços</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white self-center">
-                    <MapPin className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card Principal */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Principal
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {addresses.filter((a) => a.isPrimary).length}
-                    </p>
-                    <p className="text-sm text-gray-500">definido</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl text-white self-center">
-                    <Star className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card Cidades */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Cidades
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {new Set(addresses.map((a) => a.city)).size}
-                    </p>
-                    <p className="text-sm text-gray-500">diferentes</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white self-center">
-                    <Building className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
 
           {/* Seções Principais - Layout Proporcional à linha superior */}
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
             {/* Adicionar Endereço */}
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
