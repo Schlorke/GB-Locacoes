@@ -215,7 +215,7 @@ export default function EnderecosPage() {
                     </p>
                     <p className="text-sm text-gray-500">endereços</p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                  <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white self-center">
                     <MapPin className="h-6 w-6" />
                   </div>
                 </div>
@@ -235,7 +235,7 @@ export default function EnderecosPage() {
                     </p>
                     <p className="text-sm text-gray-500">definido</p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                  <div className="p-3 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl text-white self-center">
                     <Star className="h-6 w-6" />
                   </div>
                 </div>
@@ -255,7 +255,7 @@ export default function EnderecosPage() {
                     </p>
                     <p className="text-sm text-gray-500">diferentes</p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white self-center">
                     <Building className="h-6 w-6" />
                   </div>
                 </div>
@@ -272,7 +272,6 @@ export default function EnderecosPage() {
           >
             {/* Adicionar Endereço */}
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
@@ -281,29 +280,28 @@ export default function EnderecosPage() {
                   Adicionar Endereço
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
+              <CardContent className="relative z-10 pt-0 flex flex-col flex-1 justify-between">
                 <div className="text-center flex flex-col flex-1 justify-center">
                   <Plus className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                   <p className="text-gray-500 mb-8">
                     Adicione novos endereços de entrega
                   </p>
-                  <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
-                    <Button
-                      onClick={() => setIsAdding(true)}
-                      size="default"
-                      className="flex-1 min-w-0"
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Novo Endereço
-                    </Button>
-                  </div>
+                </div>
+                <div className="flex flex-wrap md:flex-nowrap gap-2 w-full">
+                  <Button
+                    onClick={() => setIsAdding(true)}
+                    size="default"
+                    className="flex-1 min-w-0 rounded-lg"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Novo Endereço
+                  </Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* Endereço Principal */}
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
@@ -312,35 +310,35 @@ export default function EnderecosPage() {
                   Endereço Principal
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
+              <CardContent className="relative z-10 pt-0 flex flex-col flex-1 justify-between">
                 {addresses.find((a) => a.isPrimary) ? (
-                  <div className="flex-1">
+                  <div className="flex flex-col flex-1 justify-between">
                     {(() => {
                       const primaryAddress = addresses.find((a) => a.isPrimary)!
                       return (
-                        <div className="space-y-4">
-                          <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 mb-6">
+                        <div className="flex flex-col flex-1 justify-between">
+                          <div className="bg-gray-50 rounded-xl p-6 mb-6">
                             <div className="flex items-center gap-2 mb-2">
-                              <MapPin className="h-5 w-5 text-blue-600" />
-                              <span className="font-bold text-blue-900">
+                              <MapPin className="h-5 w-5 text-gray-600" />
+                              <span className="font-bold text-gray-900">
                                 {primaryAddress.street}, {primaryAddress.number}
                               </span>
                             </div>
                             {primaryAddress.complement && (
-                              <p className="text-sm text-blue-700 mb-1">
+                              <p className="text-sm text-gray-700 mb-1">
                                 {primaryAddress.complement}
                               </p>
                             )}
-                            <p className="text-sm text-blue-700">
+                            <p className="text-sm text-gray-700">
                               {primaryAddress.neighborhood} -{' '}
                               {primaryAddress.city}/{primaryAddress.state}
                             </p>
                           </div>
-                          <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
+                          <div className="flex flex-wrap md:flex-nowrap gap-2 w-full">
                             <Button
                               onClick={() => handleEdit(primaryAddress)}
                               variant="outline"
-                              className="flex-1 min-w-0 bg-white hover:bg-gray-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+                              className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
                             >
                               <Edit className="h-4 w-4 mr-2" />
                               Editar
@@ -351,11 +349,23 @@ export default function EnderecosPage() {
                     })()}
                   </div>
                 ) : (
-                  <div className="text-center flex flex-col flex-1 justify-center">
-                    <Home className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-500 mb-8">
-                      Nenhum endereço principal definido
-                    </p>
+                  <div className="flex flex-col flex-1 justify-between">
+                    <div className="text-center flex flex-col flex-1 justify-center">
+                      <Home className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                      <p className="text-gray-500 mb-8">
+                        Nenhum endereço principal definido
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap md:flex-nowrap gap-2 w-full">
+                      <Button
+                        onClick={() => setIsAdding(true)}
+                        size="default"
+                        className="flex-1 min-w-0 rounded-lg"
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Definir Endereço Principal
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -371,7 +381,6 @@ export default function EnderecosPage() {
               transition={{ duration: 0.6, delay: 0.6 }}
             >
               <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl border-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-50"></div>
                 <CardHeader className="relative z-10">
                   <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                     <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg text-white">
@@ -509,8 +518,9 @@ export default function EnderecosPage() {
                     <div className="flex flex-wrap md:flex-nowrap gap-3 pt-4">
                       <Button
                         type="submit"
+                        variant="outline"
                         size="default"
-                        className="flex-1 min-w-0 inline-flex items-center gap-2 px-6"
+                        className="flex-1 min-w-0 bg-slate-700 border disabled:opacity-50 disabled:pointer-events-none duration-200 focus:outline-none font-medium gap-2 h-10 hover:bg-slate-600 hover:text-white hover:scale-105 hover:shadow-lg inline-flex items-center justify-center md:mt-0 md:w-28 ml-auto mt-3 px-4 py-2 rounded-md self-center shadow-md text-sm text-white transition-all w-full whitespace-nowrap [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4"
                       >
                         <Save className="h-4 w-4" />
                         {editingId ? 'Atualizar' : 'Adicionar'} Endereço
@@ -519,7 +529,7 @@ export default function EnderecosPage() {
                         type="button"
                         variant="outline"
                         onClick={handleCancel}
-                        className="flex-1 min-w-0 inline-flex items-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-gray-200 hover:border-orange-300"
+                        className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl border border-gray-200"
                       >
                         <X className="h-4 w-4" />
                         Cancelar
@@ -553,21 +563,21 @@ export default function EnderecosPage() {
               </CardHeader>
               <CardContent className="relative z-10 pt-0">
                 {addresses.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {addresses.map((address) => (
                       <div
                         key={address.id}
-                        className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-orange-50 hover:to-orange-100 transition-all duration-300 border border-gray-200 hover:border-orange-200"
+                        className="p-6 md:p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group relative z-0"
                       >
                         <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 mb-2">
+                            <div className="flex items-center gap-3 mb-4">
                               <MapPin className="h-5 w-5 text-gray-500" />
                               <span className="font-medium text-gray-900">
                                 {address.street}, {address.number}
                               </span>
                               {address.isPrimary && (
-                                <Badge className="bg-orange-100 text-orange-800">
+                                <Badge className="bg-orange-100 text-orange-800 hover:shadow-none status-badge-hover">
                                   <Star className="h-3 w-3 mr-1" />
                                   Principal
                                 </Badge>
@@ -592,7 +602,7 @@ export default function EnderecosPage() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleSetPrimary(address.id)}
-                                className="flex-1 min-w-0 bg-white hover:bg-yellow-50 text-gray-900 hover:text-yellow-600 font-semibold rounded-lg transition-all duration-300"
+                                className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-yellow-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200"
                               >
                                 <Star className="h-4 w-4 mr-1" />
                                 Principal
@@ -602,7 +612,7 @@ export default function EnderecosPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleEdit(address)}
-                              className="flex-1 min-w-0 bg-white hover:bg-blue-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
+                              className="flex-1 min-w-0 border-0 bg-white hover:scale-none hover:bg-white text-gray-900 hover:text-orange-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
@@ -610,7 +620,7 @@ export default function EnderecosPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleDelete(address.id)}
-                              className="flex-1 min-w-0 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold rounded-lg transition-all duration-300"
+                              className="flex-1 min-w-0 border-0 bg-white hover:scale-none hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -625,7 +635,11 @@ export default function EnderecosPage() {
                     <p className="text-gray-500 text-lg mb-4">
                       Nenhum endereço cadastrado
                     </p>
-                    <Button onClick={() => setIsAdding(true)} size="default">
+                    <Button
+                      onClick={() => setIsAdding(true)}
+                      size="default"
+                      className="rounded-lg"
+                    >
                       <Plus className="h-4 w-4 mr-2" />
                       Adicionar Primeiro Endereço
                     </Button>

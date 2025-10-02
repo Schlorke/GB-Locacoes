@@ -243,7 +243,7 @@ export default function NotificacoesPage() {
                     </p>
                     <p className="text-sm text-gray-500">notificações</p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                  <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white self-center">
                     <Bell className="h-6 w-6" />
                   </div>
                 </div>
@@ -263,7 +263,7 @@ export default function NotificacoesPage() {
                     </p>
                     <p className="text-sm text-gray-500">pendentes</p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-red-500 to-red-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                  <div className="p-3 bg-gradient-to-br from-red-500 to-red-600 rounded-xl text-white self-center">
                     <AlertCircle className="h-6 w-6" />
                   </div>
                 </div>
@@ -283,7 +283,7 @@ export default function NotificacoesPage() {
                     </p>
                     <p className="text-sm text-gray-500">importantes</p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                  <div className="p-3 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl text-white self-center">
                     <Clock className="h-6 w-6" />
                   </div>
                 </div>
@@ -303,7 +303,7 @@ export default function NotificacoesPage() {
                     </p>
                     <p className="text-sm text-gray-500">do sistema</p>
                   </div>
-                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
+                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white self-center">
                     <Settings className="h-6 w-6" />
                   </div>
                 </div>

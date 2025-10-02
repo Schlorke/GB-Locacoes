@@ -77,6 +77,46 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - **Melhorado layout dos botões**: Adicionado `flex-wrap` nos botões de ação
     - Removido `md:flex-nowrap` para permitir quebra de linha em todas as telas
     - Removido import não utilizado `TrendingUp`
+  - **Aplicado design consistente nas páginas da área do cliente**: Usando
+    página orçamentos como modelo
+    - **Histórico**: Removido hover scale dos cards de estatísticas e blocos de
+      histórico
+    - **Histórico**: Substituído barra de pesquisa customizada pela SearchBar
+      component
+    - **Histórico**: Aplicado CSS para remover hover background das badges
+    - **Endereços**: Removido hover scale dos ícones dos cards de estatísticas
+    - **Endereços**: Aplicado design dos blocos com fundo branco, shadow-lg e
+      hover:shadow-xl
+    - **Endereços**: Aplicado design dos botões com hover:bg-white e shadow-md
+    - **Endereços**: Aplicado CSS para remover hover background das badges
+    - **Notificações**: Removido hover scale dos ícones dos cards de
+      estatísticas
+    - **Identidade visual**: Mantida consistência com shadow, hover shadow, sem
+      hover scale
+  - **Corrigido dropdown de histórico**: Resolvido problema de seleção de opções
+    no filtro
+    - Aplicado z-index fix nos blocos de histórico (`z-0`) para evitar
+      interferência com dropdown
+    - Removido hover scale dos ícones dos blocos de histórico
+    - Removido hover border color dos botões (não documentado no projeto)
+    - Aplicado `hover:bg-white` nos botões para consistência
+    - Removidos cards de estatísticas da primeira linha conforme solicitado
+    - Ajustado delays de animação após remoção dos cards
+    - Removido import não utilizado `TrendingUp` e corrigido ícone `History`
+  - **Corrigido botões da página endereços**: Aplicado padrão consistente nos
+    botões
+    - Removido hover border color do botão "Cancelar" no formulário
+    - Aplicado `hover:bg-white` em vez de `hover:bg-gray-50`
+    - Corrigido botão "Editar" do endereço principal
+    - Mantida consistência com padrão estabelecido no projeto
+  - **Padronizado rounded-lg em todos os botões**: Aplicado `rounded-lg`
+    consistente
+    - **Endereços**: Corrigido botões do formulário de `rounded-xl` para
+      `rounded-lg`
+    - **Histórico**: Corrigido botões "Ver Detalhes" e "Cancelar" de
+      `rounded-xl` para `rounded-lg`
+    - **Consistência**: Todos os botões agora seguem o mesmo padrão de
+      border-radius
 
 ## [2025-10-01] - Reutilização da Barra de Pesquisa na Área do Cliente
 

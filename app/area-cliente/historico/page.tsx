@@ -4,10 +4,8 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
+import { SearchBar } from '@/components/ui/search-bar'
 import {
-  History,
-  Search,
   Calendar,
   Package,
   Clock,
@@ -16,8 +14,6 @@ import {
   AlertCircle,
   Eye,
   ArrowRight,
-  Filter,
-  TrendingUp,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -178,122 +174,34 @@ export default function HistoricoPage() {
       {/* Content */}
       <section className="-mt-20 lg:py-10 md:-mt-24 md:py-16 py-12 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Stats Cards */}
+          {/* Search Bar */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+            className="mb-8 relative z-10"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-50"></div>
-              <CardContent className="p-6 relative z-10">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Total de Locações
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900">
-                      {rentals.length}
-                    </p>
-                    <p className="text-sm text-gray-500">solicitações</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white group-hover:scale-110 transition-transform">
-                    <History className="h-8 w-8" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
-              <CardContent className="p-6 relative z-10">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Valor Total
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900">
-                      R${' '}
-                      {rentals
-                        .reduce((sum, rental) => sum + rental.totalPrice, 0)
-                        .toFixed(0)}
-                    </p>
-                    <p className="text-sm text-gray-500">em locações</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white group-hover:scale-110 transition-transform">
-                    <TrendingUp className="h-8 w-8" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-              <CardContent className="p-6 relative z-10">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">
-                      Em Andamento
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900">
-                      {rentals.filter((r) => r.status === 'in_progress').length}
-                    </p>
-                    <p className="text-sm text-gray-500">ativas</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white group-hover:scale-110 transition-transform">
-                    <Package className="h-8 w-8" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Filters */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-50"></div>
-              <CardContent className="p-6 relative z-10">
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="flex-1">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                      <Input
-                        placeholder="Buscar por equipamento..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-12 h-12 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-xl">
-                      <Filter className="h-4 w-4 text-gray-600" />
-                      <span className="text-sm font-medium text-gray-700">
-                        Filtros:
-                      </span>
-                    </div>
-                    <select
-                      value={statusFilter}
-                      onChange={(e) => setStatusFilter(e.target.value)}
-                      className="px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 h-12"
-                      aria-label="Filtrar por status"
-                    >
-                      <option value="all">Todos os status</option>
-                      <option value="pending">Pendente</option>
-                      <option value="approved">Aprovado</option>
-                      <option value="in_progress">Em Andamento</option>
-                      <option value="completed">Concluído</option>
-                      <option value="cancelled">Cancelado</option>
-                    </select>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <SearchBar
+              searchPlaceholder="Buscar por equipamento..."
+              searchValue={searchTerm}
+              onSearchChange={setSearchTerm}
+              filters={[
+                {
+                  label: 'Status',
+                  value: statusFilter,
+                  onValueChange: setStatusFilter,
+                  placeholder: 'Filtrar por status',
+                  options: [
+                    { value: 'all', label: 'Todos os status' },
+                    { value: 'pending', label: 'Pendente' },
+                    { value: 'approved', label: 'Aprovado' },
+                    { value: 'in_progress', label: 'Em Andamento' },
+                    { value: 'completed', label: 'Concluído' },
+                    { value: 'cancelled', label: 'Cancelado' },
+                  ],
+                },
+              ]}
+            />
           </motion.div>
 
           {/* Rentals List */}
@@ -301,7 +209,7 @@ export default function HistoricoPage() {
             className="mt-8 space-y-6"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
           >
             {filteredRentals.map((rental, index) => {
               const statusInfo = getStatusInfo(rental.status)
@@ -314,20 +222,20 @@ export default function HistoricoPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  <Card className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group">
+                  <Card className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group z-0 border-0">
                     <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
-                    <CardContent className="p-6 relative z-10">
+                    <CardContent className="p-6 relative z-0">
                       <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white group-hover:scale-110 transition-transform">
+                            <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white">
                               <Package className="h-5 w-5" />
                             </div>
                             <h3 className="text-xl font-bold text-gray-900">
                               {rental.equipmentName}
                             </h3>
                             <Badge
-                              className={`${statusInfo.color} px-3 py-1 rounded-full font-medium`}
+                              className={`${statusInfo.color} px-3 py-1 rounded-full font-medium hover:shadow-none status-badge-hover`}
                             >
                               <StatusIcon className="h-3 w-3 mr-1" />
                               {statusInfo.label}
@@ -403,7 +311,7 @@ export default function HistoricoPage() {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="flex-1 min-w-0 inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-medium rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-gray-200 hover:border-orange-300"
+                            className="flex-1 min-w-0 inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group border border-gray-200"
                           >
                             <Eye className="h-4 w-4" />
                             Ver Detalhes
@@ -413,7 +321,7 @@ export default function HistoricoPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="flex-1 min-w-0 inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-medium rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-red-200 hover:border-red-300"
+                              className="flex-1 min-w-0 inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-white text-red-600 hover:text-red-700 font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-red-200"
                             >
                               Cancelar
                             </Button>
@@ -433,11 +341,11 @@ export default function HistoricoPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
             >
-              <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl">
+              <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl z-0 border-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
-                <CardContent className="text-center py-16 relative z-10">
-                  <div className="p-6 bg-gray-100 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-                    <History className="h-12 w-12 text-gray-400" />
+                <CardContent className="text-center py-16 relative z-0">
+                  <div className="p-6 bg-gray-100 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
+                    <Package className="h-10 w-10 text-gray-400" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-3">
                     Nenhuma locação encontrada
@@ -450,7 +358,7 @@ export default function HistoricoPage() {
                   {!searchTerm && statusFilter === 'all' && (
                     <Button
                       size="default"
-                      className="inline-flex items-center gap-2 px-6 group"
+                      className="inline-flex items-center gap-2 px-6 group rounded-lg"
                     >
                       Solicitar Primeiro Orçamento
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
