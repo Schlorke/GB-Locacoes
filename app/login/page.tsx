@@ -29,21 +29,32 @@ function LoginForm() {
   // Check if user is already authenticated
   useEffect(() => {
     const checkAuth = async () => {
-      const session = await getSession()
-      if (session) {
-        // Verificar se é admin baseado no email ou role
-        const isAdmin =
-          session.user?.email === 'admin@gblocacoes.com.br' ||
-          session.user?.role === 'ADMIN'
-        if (isAdmin) {
-          router.push('/admin/dashboard')
-        } else {
-          router.push('/area-cliente')
+      try {
+        const session = await getSession()
+        if (session?.user) {
+          // Verificar se é admin baseado no email ou role
+          const isAdmin =
+            session.user?.email === 'admin@gblocacoes.com.br' ||
+            session.user?.role === 'ADMIN'
+          
+          // Usar replace em vez de push para evitar histórico de navegação
+          if (isAdmin) {
+            router.replace('/admin/dashboard')
+          } else {
+            router.replace('/area-cliente')
+          }
         }
+      } catch (error) {
+        console.error('Erro ao verificar sessão:', error)
+        // Em caso de erro, não redirecionar
       }
     }
-    checkAuth()
-  }, [router])
+    
+    // Só verificar se não estiver carregando
+    if (!isLoading) {
+      checkAuth()
+    }
+  }, [router, isLoading])
 
   // Handle URL error parameters
   useEffect(() => {
@@ -85,12 +96,15 @@ function LoginForm() {
       } else if (result?.ok) {
         // Verificar se é admin baseado no email
         const isAdmin = email === 'admin@gblocacoes.com.br'
+        
+        // Usar replace em vez de push para evitar histórico de navegação
         if (isAdmin) {
-          router.push('/admin/dashboard')
+          router.replace('/admin/dashboard')
         } else {
-          router.push('/area-cliente')
+          router.replace('/area-cliente')
         }
-        router.refresh()
+        
+        // Não chamar router.refresh() aqui para evitar conflitos
       } else {
         setError('Ocorreu um erro desconhecido. Tente novamente.')
       }

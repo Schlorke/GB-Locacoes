@@ -30,11 +30,11 @@ export default function AreaClienteLayout({
   const [unreadNotifications, setUnreadNotifications] = useState(0)
 
   useEffect(() => {
-    if (status === 'loading') return
-    if (!session) {
-      router.push('/login')
+    // Só redirecionar se não estiver carregando e não houver sessão
+    if (status === 'unauthenticated') {
+      router.replace('/login')
     }
-  }, [session, status, router])
+  }, [status, router])
 
   // Simular notificações não lidas (em produção, isso viria de uma API)
   useEffect(() => {
@@ -110,7 +110,8 @@ export default function AreaClienteLayout({
     )
   }
 
-  if (!session) {
+  // Só renderizar se tiver sessão válida
+  if (status === 'unauthenticated' || !session) {
     return null
   }
 
