@@ -132,7 +132,7 @@ de construção civil, desenvolvida com as tecnologias mais avançadas de
 - **📊 Analytics**: Vercel Analytics, Custom Metrics
 - **🔍 SEO**: Next.js SEO otimizado
 - **📋 API Docs**: OpenAPI/Swagger custom implementation
-- **🎨 Visual Testing**: Chromatic para regression testing
+- **🎨 Visual Testing**: Storybook para documentação de componentes
 
 ### 🏗️ Arquitetura de Sistema
 
@@ -369,7 +369,7 @@ práticas de 2025.
 
 - **Design Tokens** - Sistema centralizado de tokens
 - **Storybook** - Documentação viva de componentes
-- **Chromatic** - Visual regression testing
+- **Storybook** - Documentação e testes visuais de componentes
 - **Acessibilidade** - WCAG 2.1 AA compliance
 - **Responsividade** - Mobile-first approach
 
@@ -383,7 +383,7 @@ pnpm design-system:watch-tokens    # Watch mode
 # Storybook
 pnpm storybook                     # Desenvolvimento
 pnpm build-storybook              # Build
-pnpm chromatic                    # Visual regression
+pnpm build-storybook             # Build do Storybook
 
 # Qualidade
 pnpm design-system:lint           # Lint completo
@@ -436,7 +436,7 @@ useEffect(() => {
 - **Unit Tests** - Vitest + Testing Library
 - **Integration Tests** - API Routes
 - **E2E Tests** - Playwright
-- **Visual Tests** - Chromatic (Visual Regression Testing)
+- **Visual Tests** - Storybook (Documentação e Testes Visuais)
 - **Accessibility Tests** - axe-core + Storybook a11y
 - **API Contract Tests** - OpenAPI validation
 
@@ -457,11 +457,10 @@ pnpm test:e2e:ui                # Interface Playwright
 pnpm storybook                  # Desenvolvimento
 pnpm build-storybook           # Build
 
-# Chromatic (Visual Regression Testing)
-pnpm chromatic                  # Publicar no Chromatic
-pnpm chromatic:test            # Teste sem falhar em mudanças
-pnpm chromatic:accept          # Aceitar mudanças automaticamente
-pnpm ci:chromatic              # Integração CI/CD
+# Storybook (Documentação e Testes Visuais)
+pnpm storybook                 # Desenvolvimento local
+pnpm build-storybook          # Build para produção
+pnpm test:storybook           # Testes do Storybook
 ```
 
 ### 📊 Cobertura de Testes
@@ -526,7 +525,7 @@ open coverage/lcov-report/index.html
 ### **🛠️ Ferramentas de Desenvolvimento**
 
 - **📋 API Documentation**: OpenAPI/Swagger custom em `/api-docs`
-- **🎨 Visual Testing**: Chromatic para regression testing
+- **🎨 Visual Testing**: Storybook para documentação de componentes
 - **📚 Component Library**: Storybook com acessibilidade
 - **🔍 Code Quality**: ESLint, Prettier, TypeScript strict
 - **🧪 Testing**: Vitest, Playwright, Contract testing
@@ -577,13 +576,12 @@ pnpm design-system:build-tokens    # Build tokens
 pnpm design-system:watch-tokens    # Watch tokens
 ```
 
-### 🔍 Visual Testing (Chromatic)
+### 🔍 Visual Testing (Storybook)
 
 ```bash
-pnpm chromatic             # Publicar no Chromatic
-pnpm chromatic:test        # Teste sem falhar em mudanças
-pnpm chromatic:accept      # Aceitar mudanças automaticamente
-pnpm ci:chromatic          # Integração CI/CD
+pnpm storybook             # Desenvolvimento local
+pnpm build-storybook      # Build para produção
+pnpm test:storybook       # Testes do Storybook
 ```
 
 ### 🔍 Qualidade

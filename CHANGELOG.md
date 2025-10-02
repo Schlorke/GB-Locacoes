@@ -6,6 +6,39 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-01-22] - Remoção do Chromatic e Atualizações de Dependências
+
+### Removed ❌
+
+- **Chromatic**: Removido completamente do projeto
+- **@chromatic-com/storybook**: Dependência removida
+- **Scripts relacionados ao Chromatic**: Todos removidos
+- **Configurações do Chromatic**: Token e referências removidas
+
+### Changed 🔄
+
+- **Design System**: Foco total no Storybook para documentação
+- **Documentação**: Todas as referências atualizadas para Storybook
+- **Scripts**: `design-system:publish` agora usa `build-storybook`
+- **Configurações**: Limpeza completa de referências ao Chromatic
+
+### Updated 📦
+
+- **@types/react**: 19.1.13 → 19.2.0
+- **@types/react-dom**: 19.1.11 → 19.2.0
+- **react**: 19.1.1 → 19.2.0
+- **react-dom**: 19.1.1 → 19.2.0
+- **eslint-plugin-react-hooks**: 5.2.0 → 6.1.0
+
+### Fixed 🐛
+
+- **Build do Storybook**: Funcionando perfeitamente sem Chromatic
+- **Dependências**: Projeto mais limpo e focado
+- **TypeScript**: Compatibilidade com React 19.2.0
+- **ESLint**: Plugin React Hooks atualizado
+
+---
+
 ## [2025-10-01] - Otimizações Críticas de Performance no Supabase
 
 ### Changed 🔄
@@ -105,7 +138,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - `@typescript-eslint/parser`: 8.44.1 → 8.45.0
   - `@sveltejs/kit`: 2.43.2 → 2.43.7
   - `@types/nodemailer`: 7.0.1 → 7.0.2
-  - `chromatic`: 13.2.1 → 13.3.0
   - `eslint-plugin-storybook`: 9.1.8 → 9.1.10
   - `happy-dom`: 18.0.1 → 19.0.2
   - `pino`: 9.11.0 → 9.12.0
@@ -240,7 +272,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **@sveltejs/kit**: 2.43.2 → 2.43.5
 - **@types/react**: 19.1.13 → 19.1.15
 - **@vitejs/plugin-react**: 5.0.3 → 5.0.4
-- **chromatic**: 13.2.0 → 13.2.1
 - **prisma-zod-generator**: 1.21.3 → 1.22.2
 - **tsx**: 4.20.5 → 4.20.6
 

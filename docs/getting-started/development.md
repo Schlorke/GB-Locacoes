@@ -419,7 +419,7 @@ pnpm playwright test --ui # Interface Playwright
 
 # Storybook
 pnpm storybook           # Desenvolvimento
-pnpm chromatic           # Visual regression testing
+pnpm build-storybook    # Build do Storybook
 ```
 
 ---

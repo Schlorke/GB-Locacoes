@@ -23,9 +23,7 @@ const nextConfig = {
       },
     ],
   },
-  env: {
-    CHROMATIC_PROJECT_TOKEN: 'chpt_ed7c61c0587a8b0',
-  },
+  env: {},
 }
 
 export default nextConfig

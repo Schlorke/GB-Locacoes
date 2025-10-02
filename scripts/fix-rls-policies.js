@@ -2,14 +2,14 @@
 
 /**
  * Script para Corrigir Políticas RLS Específicas
- * 
+ *
  * Este script corrige as políticas RLS que ainda não estão otimizadas,
  * substituindo ( SELECT (auth.uid())::text AS uid) por (SELECT auth.uid()::text)
  */
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 // Cores para output
 const colors = {
@@ -20,17 +20,17 @@ const colors = {
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   cyan: '\x1b[36m',
-};
+}
 
 function log(message, color = 'reset') {
-  console.log(`${colors[color]}${message}${colors.reset}`);
+  console.log(`${colors[color]}${message}${colors.reset}`)
 }
 
 async function fixRLSPolicies() {
   try {
-    log('🔧 Corrigindo Políticas RLS Específicas...', 'bright');
-    log('==========================================', 'bright');
-    
+    log('🔧 Corrigindo Políticas RLS Específicas...', 'bright')
+    log('==========================================', 'bright')
+
     // Lista de políticas que precisam ser corrigidas
     const policiesToFix = [
       // Users policies
@@ -41,7 +41,7 @@ async function fixRLSPolicies() {
           ON public.users
           FOR SELECT
           TO authenticated
-          USING (id = (SELECT auth.uid()::text));`
+          USING (id = (SELECT auth.uid()::text));`,
       },
       {
         table: 'users',
@@ -51,9 +51,9 @@ async function fixRLSPolicies() {
           FOR UPDATE
           TO authenticated
           USING (id = (SELECT auth.uid()::text))
-          WITH CHECK (id = (SELECT auth.uid()::text));`
+          WITH CHECK (id = (SELECT auth.uid()::text));`,
       },
-      
+
       // Addresses policies
       {
         table: 'addresses',
@@ -62,7 +62,7 @@ async function fixRLSPolicies() {
           ON public.addresses
           FOR SELECT
           TO authenticated
-          USING ("userId" = (SELECT auth.uid()::text));`
+          USING ("userId" = (SELECT auth.uid()::text));`,
       },
       {
         table: 'addresses',
@@ -72,7 +72,7 @@ async function fixRLSPolicies() {
           FOR UPDATE
           TO authenticated
           USING ("userId" = (SELECT auth.uid()::text))
-          WITH CHECK ("userId" = (SELECT auth.uid()::text));`
+          WITH CHECK ("userId" = (SELECT auth.uid()::text));`,
       },
       {
         table: 'addresses',
@@ -81,9 +81,9 @@ async function fixRLSPolicies() {
           ON public.addresses
           FOR DELETE
           TO authenticated
-          USING ("userId" = (SELECT auth.uid()::text));`
+          USING ("userId" = (SELECT auth.uid()::text));`,
       },
-      
+
       // Carts policies
       {
         table: 'carts',
@@ -92,7 +92,7 @@ async function fixRLSPolicies() {
           ON public.carts
           FOR SELECT
           TO authenticated
-          USING ("userId" = (SELECT auth.uid()::text));`
+          USING ("userId" = (SELECT auth.uid()::text));`,
       },
       {
         table: 'carts',
@@ -102,7 +102,7 @@ async function fixRLSPolicies() {
           FOR UPDATE
           TO authenticated
           USING ("userId" = (SELECT auth.uid()::text))
-          WITH CHECK ("userId" = (SELECT auth.uid()::text));`
+          WITH CHECK ("userId" = (SELECT auth.uid()::text));`,
       },
       {
         table: 'carts',
@@ -111,9 +111,9 @@ async function fixRLSPolicies() {
           ON public.carts
           FOR DELETE
           TO authenticated
-          USING ("userId" = (SELECT auth.uid()::text));`
+          USING ("userId" = (SELECT auth.uid()::text));`,
       },
-      
+
       // Cart items policies
       {
         table: 'cart_items',
@@ -122,7 +122,7 @@ async function fixRLSPolicies() {
           ON public.cart_items
           FOR SELECT
           TO authenticated
-          USING ("cartId" IN (SELECT carts.id FROM carts WHERE carts."userId" = (SELECT auth.uid()::text)));`
+          USING ("cartId" IN (SELECT carts.id FROM carts WHERE carts."userId" = (SELECT auth.uid()::text)));`,
       },
       {
         table: 'cart_items',
@@ -132,7 +132,7 @@ async function fixRLSPolicies() {
           FOR UPDATE
           TO authenticated
           USING ("cartId" IN (SELECT carts.id FROM carts WHERE carts."userId" = (SELECT auth.uid()::text)))
-          WITH CHECK ("cartId" IN (SELECT carts.id FROM carts WHERE carts."userId" = (SELECT auth.uid()::text)));`
+          WITH CHECK ("cartId" IN (SELECT carts.id FROM carts WHERE carts."userId" = (SELECT auth.uid()::text)));`,
       },
       {
         table: 'cart_items',
@@ -141,9 +141,9 @@ async function fixRLSPolicies() {
           ON public.cart_items
           FOR DELETE
           TO authenticated
-          USING ("cartId" IN (SELECT carts.id FROM carts WHERE carts."userId" = (SELECT auth.uid()::text)));`
+          USING ("cartId" IN (SELECT carts.id FROM carts WHERE carts."userId" = (SELECT auth.uid()::text)));`,
       },
-      
+
       // Categories policies
       {
         table: 'categories',
@@ -152,7 +152,7 @@ async function fixRLSPolicies() {
           ON public.categories
           FOR UPDATE
           TO authenticated
-          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`
+          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`,
       },
       {
         table: 'categories',
@@ -161,9 +161,9 @@ async function fixRLSPolicies() {
           ON public.categories
           FOR DELETE
           TO authenticated
-          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`
+          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`,
       },
-      
+
       // Equipments policies
       {
         table: 'equipments',
@@ -172,7 +172,7 @@ async function fixRLSPolicies() {
           ON public.equipments
           FOR UPDATE
           TO authenticated
-          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`
+          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`,
       },
       {
         table: 'equipments',
@@ -181,9 +181,9 @@ async function fixRLSPolicies() {
           ON public.equipments
           FOR DELETE
           TO authenticated
-          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`
+          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`,
       },
-      
+
       // Quotes policies
       {
         table: 'quotes',
@@ -192,7 +192,7 @@ async function fixRLSPolicies() {
           ON public.quotes
           FOR SELECT
           TO authenticated
-          USING (("userId" = (SELECT auth.uid()::text)) OR (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role")));`
+          USING (("userId" = (SELECT auth.uid()::text)) OR (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role")));`,
       },
       {
         table: 'quotes',
@@ -201,7 +201,7 @@ async function fixRLSPolicies() {
           ON public.quotes
           FOR UPDATE
           TO authenticated
-          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`
+          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`,
       },
       {
         table: 'quotes',
@@ -210,9 +210,9 @@ async function fixRLSPolicies() {
           ON public.quotes
           FOR DELETE
           TO authenticated
-          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`
+          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`,
       },
-      
+
       // Quote items policies
       {
         table: 'quote_items',
@@ -221,9 +221,9 @@ async function fixRLSPolicies() {
           ON public.quote_items
           FOR SELECT
           TO authenticated
-          USING (("quoteId" IN (SELECT quotes.id FROM quotes WHERE quotes."userId" = (SELECT auth.uid()::text))) OR (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role")));`
+          USING (("quoteId" IN (SELECT quotes.id FROM quotes WHERE quotes."userId" = (SELECT auth.uid()::text))) OR (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role")));`,
       },
-      
+
       // Rentals policies
       {
         table: 'rentals',
@@ -232,9 +232,9 @@ async function fixRLSPolicies() {
           ON public.rentals
           FOR SELECT
           TO authenticated
-          USING ((userid = (SELECT auth.uid()::text)) OR (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role")));`
+          USING ((userid = (SELECT auth.uid()::text)) OR (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role")));`,
       },
-      
+
       // Settings policies
       {
         table: 'settings',
@@ -243,56 +243,71 @@ async function fixRLSPolicies() {
           ON public.settings
           FOR ALL
           TO authenticated
-          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`
-      }
-    ];
-    
-    log(`📝 Encontradas ${policiesToFix.length} políticas para corrigir`, 'cyan');
-    
-    let successCount = 0;
-    let errorCount = 0;
-    
-    log('\n🔄 Corrigindo políticas...', 'yellow');
-    
+          USING (EXISTS (SELECT 1 FROM users WHERE users.id = (SELECT auth.uid()::text) AND users.role = 'ADMIN'::"Role"));`,
+      },
+    ]
+
+    log(
+      `📝 Encontradas ${policiesToFix.length} políticas para corrigir`,
+      'cyan'
+    )
+
+    let successCount = 0
+    let errorCount = 0
+
+    log('\n🔄 Corrigindo políticas...', 'yellow')
+
     for (let i = 0; i < policiesToFix.length; i++) {
-      const policy = policiesToFix[i];
-      
+      const policy = policiesToFix[i]
+
       try {
         // Primeiro, dropar a política existente
-        await prisma.$executeRawUnsafe(`DROP POLICY IF EXISTS "${policy.policy}" ON public.${policy.table};`);
-        
+        await prisma.$executeRawUnsafe(
+          `DROP POLICY IF EXISTS "${policy.policy}" ON public.${policy.table};`
+        )
+
         // Criar a nova política otimizada
-        await prisma.$executeRawUnsafe(policy.newPolicy);
-        
-        successCount++;
-        log(`✅ Política ${i + 1}/${policiesToFix.length}: ${policy.table}.${policy.policy}`, 'green');
-        
+        await prisma.$executeRawUnsafe(policy.newPolicy)
+
+        successCount++
+        log(
+          `✅ Política ${i + 1}/${policiesToFix.length}: ${policy.table}.${policy.policy}`,
+          'green'
+        )
       } catch (error) {
-        errorCount++;
-        log(`❌ Erro na política ${i + 1}: ${policy.table}.${policy.policy} - ${error.message}`, 'red');
+        errorCount++
+        log(
+          `❌ Erro na política ${i + 1}: ${policy.table}.${policy.policy} - ${error.message}`,
+          'red'
+        )
       }
     }
-    
-    log('\n📊 RESULTADO DA CORREÇÃO:', 'bright');
-    log('============================', 'bright');
-    log(`✅ Políticas corrigidas com sucesso: ${successCount}`, 'green');
-    log(`❌ Políticas com erro: ${errorCount}`, errorCount > 0 ? 'red' : 'green');
-    
+
+    log('\n📊 RESULTADO DA CORREÇÃO:', 'bright')
+    log('============================', 'bright')
+    log(`✅ Políticas corrigidas com sucesso: ${successCount}`, 'green')
+    log(
+      `❌ Políticas com erro: ${errorCount}`,
+      errorCount > 0 ? 'red' : 'green'
+    )
+
     if (errorCount === 0) {
-      log('\n🎉 Todas as políticas foram corrigidas com SUCESSO!', 'green');
-      log('💡 Execute pnpm run check:supabase para verificar os resultados', 'cyan');
+      log('\n🎉 Todas as políticas foram corrigidas com SUCESSO!', 'green')
+      log(
+        '💡 Execute pnpm run check:supabase para verificar os resultados',
+        'cyan'
+      )
     } else {
-      log('\n⚠️  Algumas políticas tiveram erro', 'yellow');
-      log('💡 Verifique os logs acima para detalhes', 'cyan');
+      log('\n⚠️  Algumas políticas tiveram erro', 'yellow')
+      log('💡 Verifique os logs acima para detalhes', 'cyan')
     }
-    
   } catch (error) {
-    log('❌ Erro durante correção das políticas:', 'red');
-    console.error(error);
+    log('❌ Erro durante correção das políticas:', 'red')
+    console.error(error)
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect()
   }
 }
 
 // Executar correção
-fixRLSPolicies();
+fixRLSPolicies()

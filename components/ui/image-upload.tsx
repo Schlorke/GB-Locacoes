@@ -44,7 +44,7 @@ const StorybookImage = ({
   // Se estivermos no Storybook, usar img normal
   if (
     typeof window !== 'undefined' &&
-    window.location.hostname.includes('chromatic')
+    window.location.hostname.includes('localhost')
   ) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={src as string} alt={alt} {...props} />

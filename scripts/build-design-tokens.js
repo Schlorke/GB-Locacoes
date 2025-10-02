@@ -18,7 +18,7 @@ try {
   }
 
   // Run Style Dictionary
-  execSync('npx style-dictionary build --config style-dictionary.config.cjs', {
+  execSync('npx style-dictionary build --config style-dictionary.config.js', {
     stdio: 'inherit',
     cwd: path.join(__dirname, '..'),
   })

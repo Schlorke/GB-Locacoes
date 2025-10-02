@@ -16,7 +16,7 @@ front-end escalável e consistente.
 | -------------------- | --------------- | ------------------------------------ |
 | **Storybook**        | ✅ Configurado  | Documentação viva de componentes     |
 | **Style Dictionary** | ✅ Implementado | Gestão centralizada de design tokens |
-| **Chromatic**        | ✅ Configurado  | Visual regression testing            |
+| **Storybook**        | ✅ Configurado  | Documentação e testes visuais        |
 | **Stylelint**        | ✅ Configurado  | Linting de estilos                   |
 | **CI/CD**            | ✅ Configurado  | Automação de testes visuais          |
 
@@ -90,38 +90,41 @@ pnpm design-system:storybook
 # Build para produção
 pnpm design-system:build
 
-# Publicar no Chromatic
+# Build do Storybook
 pnpm design-system:publish
 ```
 
 ---
 
-## 🔍 Chromatic (Visual Regression Testing)
+## 🔍 Storybook (Documentação e Testes Visuais)
 
-### **Configuração CI/CD**
+### **Configuração Atual**
 
-O Chromatic está configurado para rodar automaticamente em:
+O Storybook está configurado para:
 
-- ✅ **Pull Requests** - Testa mudanças visuais
-- ✅ **Push para main** - Atualiza baseline
-- ✅ **Push para develop** - Testa branch de desenvolvimento
+- ✅ **Desenvolvimento Local** - `http://localhost:6006`
+- ✅ **Build Estático** - Gera documentação para deploy
+- ✅ **Testes Visuais** - Integração com Vitest
+- ✅ **Acessibilidade** - Addon a11y configurado
 
-### **Workflow GitHub Actions**
+### **Comandos Disponíveis**
 
-```yaml
-# .github/workflows/chromatic.yml
-- name: Publish to Chromatic
-  uses: chromaui/action@latest
-  with:
-    projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-    storybookBuildDir: storybook-static
+```bash
+# Desenvolvimento local
+pnpm storybook
+
+# Build para produção
+pnpm build-storybook
+
+# Testes do Storybook
+pnpm test:storybook
 ```
 
 ### **Setup Necessário**
 
-1. Criar conta no [Chromatic](https://www.chromatic.com/)
-2. Adicionar `CHROMATIC_PROJECT_TOKEN` nos secrets do GitHub
-3. Executar `pnpm design-system:publish` para primeira publicação
+1. **Desenvolvimento**: `pnpm storybook` para desenvolvimento local
+2. **Build**: `pnpm build-storybook` para gerar documentação estática
+3. **Testes**: `pnpm test:storybook` para executar testes visuais
 
 ---
 
@@ -159,7 +162,7 @@ pnpm design-system:watch-tokens    # Watch mode
 # Storybook
 pnpm design-system:storybook       # Desenvolvimento
 pnpm design-system:build           # Build
-pnpm design-system:publish         # Publicar Chromatic
+pnpm design-system:publish         # Build do Storybook
 
 # Qualidade
 pnpm design-system:lint            # Lint completo
@@ -199,7 +202,7 @@ pnpm design-system:storybook
 
 ```bash
 # 1. Push para branch
-# 2. Chromatic roda automaticamente
+# 2. Storybook build roda automaticamente
 # 3. Revisar mudanças visuais
 # 4. Aprovar ou rejeitar
 ```
@@ -219,7 +222,7 @@ pnpm design-system:storybook
 ### **Testes Automatizados**
 
 - ✅ **Acessibilidade** - addon-a11y
-- ✅ **Visual Regression** - Chromatic
+- ✅ **Visual Regression** - Storybook
 - ✅ **Linting** - ESLint + Stylelint
 - ✅ **TypeScript** - Type checking
 
@@ -249,7 +252,7 @@ O Design System está estruturado para que **IAs possam entender**:
 
 ### **Curto Prazo (1-2 semanas)**
 
-1. **Configurar Chromatic** - Adicionar token e primeira publicação
+1. **Configurar Storybook** - Executar build e deploy estático
 2. **Revisar Stories** - Customizar exemplos específicos
 3. **Adicionar Interações** - Usar addon-interactions
 4. **Testes de Responsividade** - Verificar breakpoints
@@ -280,7 +283,7 @@ O Design System está estruturado para que **IAs possam entender**:
 
 ### **Ferramentas**
 
-- [Chromatic](https://www.chromatic.com/) - Visual regression testing
+- [Storybook](https://storybook.js.org/) - Documentação e testes visuais
 - [Style Dictionary](https://amzn.github.io/style-dictionary/) - Design tokens
 - [Storybook](https://storybook.js.org/) - Component documentation
 - [Zeroheight](https://zeroheight.com/) - Design system documentation

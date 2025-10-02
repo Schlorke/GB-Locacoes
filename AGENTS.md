@@ -390,7 +390,7 @@ export default function NovaPaginaAdmin() {
 - **Unit Tests**: Vitest + Testing Library
 - **Integration Tests**: API Routes
 - **E2E Tests**: Playwright
-- **Visual Tests**: Storybook + Chromatic
+- **Visual Tests**: Storybook
 - **Accessibility Tests**: axe-core
 
 ### **🚀 Comandos Principais**

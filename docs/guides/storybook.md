@@ -5,14 +5,13 @@ Documentação completa dos componentes do projeto GB-Locações usando Storyboo
 ## 🎯 **Status Atual**
 
 - **Storybook**: ✅ Funcionando localmente
-- **Chromatic**: ✅ Configurado para visual regression testing
+- **Storybook**: ✅ Configurado para documentação e testes visuais
 - **Build**: ✅ Funcionando
 - **Testes**: ✅ Integração com Vitest
 
 ## 🔗 **Links Importantes**
 
-- **Chromatic Dashboard**:
-  [Visual regression testing](https://www.chromatic.com/)
+- **Storybook Build**: [Documentação de componentes](http://localhost:6006)
 - **Storybook Local**: `http://localhost:6006`
 - **Design System**:
   [`docs/features/design-system.md`](../features/design-system.md)
@@ -244,48 +243,44 @@ pnpm storybook
 2. Verificar configuração do Tailwind
 3. Verificar se o ThemeProvider está configurado
 
-## 🔍 **Chromatic - Visual Regression Testing**
+## 🔍 **Storybook - Documentação e Testes Visuais**
 
 ### **Configuração Atual**
 
 - **Status**: ✅ Configurado e funcionando
-- **Token**: Configurado no package.json
-- **CI/CD**: Integrado com GitHub Actions
-- **Dashboard**: [Chromatic.com](https://www.chromatic.com/)
+- **Porta**: 6006 (desenvolvimento local)
+- **Build**: Gera documentação estática
+- **Testes**: Integração com Vitest
 
 ### **Scripts Disponíveis**
 
 ```bash
-# Publicar no Chromatic
-pnpm chromatic
+# Desenvolvimento local
+pnpm storybook
 
-# Teste sem falhar em mudanças
-pnpm chromatic:test
+# Build para produção
+pnpm build-storybook
 
-# Aceitar mudanças automaticamente
-pnpm chromatic:accept
-
-# Integração CI/CD
-pnpm ci:chromatic
+# Testes do Storybook
+pnpm test:storybook
 ```
 
-### **Workflow de Visual Testing**
+### **Workflow de Desenvolvimento**
 
 1. **Desenvolvimento**: `pnpm storybook` para desenvolvimento local
-2. **Commit**: Push para branch (PR ou main)
-3. **Chromatic**: Executa automaticamente via GitHub Actions
-4. **Review**: Visualiza mudanças no dashboard Chromatic
-5. **Aprovação**: Aceita ou rejeita mudanças visuais
+2. **Documentação**: Adicionar stories para novos componentes
+3. **Testes**: Executar testes visuais e de acessibilidade
+4. **Build**: Gerar documentação estática para deploy
 
-### **Configuração CI/CD**
+### **Configuração de Testes**
 
-```yaml
-# .github/workflows/chromatic.yml
-- name: Publish to Chromatic
-  uses: chromaui/action@latest
-  with:
-    projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-    storybookBuildDir: storybook-static
+```javascript
+// .storybook/test-runner.ts
+import { test, expect } from "@storybook/test-runner"
+
+test("visual regression", async ({ page }) => {
+  // Testes visuais automáticos
+})
 ```
 
 ### **Benefícios**
@@ -301,9 +296,9 @@ pnpm ci:chromatic
 - [Guia de Acessibilidade](https://storybook.js.org/docs/essentials/accessibility/)
 - [Testes Automatizados](https://storybook.js.org/docs/writing-tests/test-runner/)
 - [Design System](https://storybook.js.org/docs/essentials/design-systems/)
-- [Chromatic Documentation](https://www.chromatic.com/docs/)
+- [Storybook Documentation](https://storybook.js.org/docs/)
 
 ---
 
 **Última atualização**: 15/01/2025 **Versão do Storybook**: 9.1.1  
-**Status**: ✅ Funcionando | **Chromatic**: ✅ Configurado
+**Status**: ✅ Funcionando | **Storybook**: ✅ Configurado

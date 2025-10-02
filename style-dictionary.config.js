@@ -1,10 +1,10 @@
 /* eslint-env node */
 /* eslint-disable no-undef */
-module.exports = {
+export default {
   source: ['design-tokens/**/*.json'],
   platforms: {
     css: {
-      transforms: ['attribute/cti', 'name/cti/kebab', 'size/px', 'color/css'],
+      transforms: ['attribute/cti', 'name/kebab', 'size/px', 'color/css'],
       buildPath: 'design-tokens/output/',
       files: [
         {
@@ -18,7 +18,7 @@ module.exports = {
       ],
     },
     scss: {
-      transforms: ['attribute/cti', 'name/cti/kebab', 'size/px', 'color/css'],
+      transforms: ['attribute/cti', 'name/kebab', 'size/px', 'color/css'],
       buildPath: 'design-tokens/output/',
       files: [
         {
@@ -32,7 +32,7 @@ module.exports = {
       ],
     },
     json: {
-      transforms: ['attribute/cti', 'name/cti/kebab', 'size/px', 'color/css'],
+      transforms: ['attribute/cti', 'name/kebab', 'size/px', 'color/css'],
       buildPath: 'design-tokens/output/',
       files: [
         {
@@ -46,7 +46,7 @@ module.exports = {
       ],
     },
     js: {
-      transforms: ['attribute/cti', 'name/cti/kebab', 'size/px', 'color/css'],
+      transforms: ['attribute/cti', 'name/kebab', 'size/px', 'color/css'],
       buildPath: 'design-tokens/output/',
       files: [
         {
