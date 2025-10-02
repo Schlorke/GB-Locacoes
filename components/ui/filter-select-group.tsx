@@ -16,7 +16,6 @@ export function FilterSelectGroup({
   filters,
   className,
   selectClassName,
-  activeClassName = 'border-orange-300 bg-orange-50',
   gap = 'md',
 }: FilterSelectGroupProps) {
   const gapClasses = {
@@ -39,11 +38,7 @@ export function FilterSelectGroup({
           value={filter.value}
           onValueChange={filter.onValueChange}
           placeholder={filter.placeholder || filter.label}
-          className={cn(
-            'w-full md:w-[200px] h-10',
-            filter.value && filter.value !== 'all' && activeClassName,
-            selectClassName
-          )}
+          className={cn('w-full md:w-[200px] h-10', selectClassName)}
         >
           {filter.options.map((option) => (
             <CustomSelectItem key={option.value} value={option.value}>

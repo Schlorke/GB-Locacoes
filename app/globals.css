@@ -1386,6 +1386,13 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
     0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
 }
 
+/* Estilo laranja para combobox com categoria selecionada */
+.admin-filter-element.selected {
+  border-color: rgb(251 146 60) !important; /* border-orange-300 */
+  background-color: rgb(255 247 237) !important; /* bg-orange-50 */
+  color: rgb(234 88 12) !important; /* text-orange-600 */
+}
+
 .admin-filter-element:focus {
   border-color: rgb(59 130 246) !important; /* border-blue-500 */
   outline-offset: 0 !important;

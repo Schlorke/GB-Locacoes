@@ -131,16 +131,28 @@ export function CustomSelect({
           onClick={handleToggle}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 border-gray-200 focus:outline-none focus:ring-0 transition-all duration-200 admin-filter-element"
+          className={cn(
+            'flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 border-gray-200 focus:outline-none focus:ring-0 transition-all duration-200 admin-filter-element',
+            // Aplicar classe CSS para estilo laranja quando categoria está selecionada
+            value && value !== 'all' && 'selected'
+          )}
         >
           <span
-            className={cn(value ? 'text-foreground' : 'text-muted-foreground')}
+            className={cn(
+              value && value !== 'all'
+                ? 'font-medium'
+                : value
+                  ? 'text-foreground'
+                  : 'text-muted-foreground'
+            )}
           >
             {displayText}
           </span>
           <ChevronDown
             className={cn(
-              'h-4 w-4 opacity-50 transition-transform duration-200',
+              'h-4 w-4 transition-transform duration-200',
+              // Aplicar cor laranja quando categoria selecionada (igual ao hover)
+              value && value !== 'all' ? 'opacity-100' : 'opacity-50',
               isOpen && 'rotate-180'
             )}
           />

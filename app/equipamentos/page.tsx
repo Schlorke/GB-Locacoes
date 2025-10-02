@@ -507,13 +507,13 @@ export default function EquipmentsPage() {
                 <div className="bg-orange-100 rounded-full p-4 mb-4">
                   <Package className="w-8 h-8 text-orange-400" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Nenhum equipamento encontrado
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  Nenhum equipamento disponível
                 </h3>
-                <p className="text-gray-500 text-center">
+                <p className="text-[17px] text-gray-600 text-center max-w-md leading-relaxed">
                   {equipments.length === 0
-                    ? 'Nosso catálogo está sendo atualizado. Volte em breve!'
-                    : 'Tente ajustar os filtros para encontrar outros equipamentos.'}
+                    ? 'Estamos atualizando nosso catálogo com novos equipamentos. Em breve teremos mais opções para você!'
+                    : 'Que tal tentar uma categoria diferente ou ajustar os filtros de busca?'}
                 </p>
               </CardContent>
             </Card>

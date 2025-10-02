@@ -294,8 +294,8 @@ export default function FeaturedMaterials() {
           </div>
         )}
 
-        <div className="text-center mt-12">
-          <Button asChild size="lg" data-scroll-reveal>
+        <div data-scroll-reveal className="text-center mt-12">
+          <Button asChild size="lg">
             <Link href="/equipamentos">Ver Todos os Equipamentos</Link>
           </Button>
         </div>

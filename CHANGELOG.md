@@ -6,14 +6,53 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [2025-10-02] - Atualização de Dependências
+## [2025-10-02] - Melhoria Visual dos Comboboxes de Filtro
+
+### Added ✨
+
+- **Indicação Visual de Categoria Selecionada**: Implementado sistema de
+  destaque visual para comboboxes quando uma categoria está selecionada
+  - Fundo laranja claro (`bg-orange-50`) quando categoria ativa
+  - Texto laranja escuro (`text-orange-700`) com peso de fonte médio
+  - Borda laranja (`border-orange-300`) para melhor contraste
+  - Ícone chevron laranja (`text-orange-600`) para consistência visual
 
 ### Changed 🔄
 
+- **CustomSelect Component**: Melhorada lógica de estilização condicional
+  - Aplicação automática de estilos laranja quando `value !== 'all'`
+  - Transições suaves para mudanças de estado
+  - Melhor feedback visual para usuários
+- **FilterSelectGroup**: Simplificada lógica de estilos ativos
+  - Removida dependência de `activeClassName` externo
+  - Estilos agora aplicados diretamente no componente base
 - **Pino**: Atualizado de `9.12.0` para `9.13.0`
   - Mantém compatibilidade total com sistema de logging existente
   - Melhorias de performance e correções de bugs menores
   - TypeScript check passou sem erros
+
+### Fixed 🐛
+
+- **UX de Filtros**: Resolvido problema de falta de indicação visual clara
+  quando filtros estão ativos
+- **Consistência Visual**: Melhorado alinhamento com design system laranja do
+  projeto
+- **Estilo Laranja Combobox**: Corrigido para usar exatamente as mesmas classes
+  do hover (`bg-orange-50 text-orange-600`) quando categoria está selecionada
+- **CSS Global Override**: Adicionada classe `.admin-filter-element.selected` no
+  CSS global para sobrescrever estilos com `!important`
+- **ESLint Warning**: Removida variável `activeClassName` não utilizada do
+  `FilterSelectGroup`
+
+### Changed 🔄
+
+- **Mensagem de Estado Vazio**: Melhorada hierarquia visual e texto da mensagem
+  "nenhum equipamento encontrado"
+  - Título: "Nenhum equipamento disponível" (`text-2xl font-bold` - maior e mais
+    impactante)
+  - Subtítulo: Texto mais amigável e orientativo (`text-base` - tamanho
+    intermediário legível)
+  - Hierarquia visual corrigida: título maior que subtítulo
 
 ## [2025-10-02] - Badges sem Hover na Área do Cliente
 
