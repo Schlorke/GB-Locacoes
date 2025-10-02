@@ -1327,6 +1327,11 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 .admin-filter-card {
   position: relative;
   z-index: 1;
+  border: none !important;
+  outline: none !important;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
 }
 
 .admin-filter-element {
@@ -1344,6 +1349,36 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05),
     0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Correção específica para problemas de borda no SearchBar */
+.admin-filter-card {
+  isolation: isolate;
+  contain: layout;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Hover shadow para FilterResetButton - específico e sem interferência */
+.filter-reset-button {
+  border-color: rgb(229 231 235) !important; /* border-gray-200 */
+  transition: all 0.2s ease-in-out !important;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+.filter-reset-button:hover {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.filter-reset-button:focus {
+  outline: none !important;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Botões padrão admin com hover shadow */
@@ -1584,4 +1619,22 @@ div > div {
   section.bg-gradient-to-br {
     scroll-margin-top: 84px;
   }
+}
+
+/* Status badges - manter cores originais no hover */
+.status-badge-hover:hover {
+  background-color: inherit !important;
+}
+
+/* Específico para cada tipo de badge */
+.bg-yellow-100.status-badge-hover:hover {
+  background-color: rgb(254 249 195) !important; /* bg-yellow-100 */
+}
+
+.bg-green-100.status-badge-hover:hover {
+  background-color: rgb(220 252 231) !important; /* bg-green-100 */
+}
+
+.bg-red-100.status-badge-hover:hover {
+  background-color: rgb(254 226 226) !important; /* bg-red-100 */
 }

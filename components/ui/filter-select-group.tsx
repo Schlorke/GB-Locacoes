@@ -28,7 +28,7 @@ export function FilterSelectGroup({
   return (
     <div
       className={cn(
-        'flex items-center flex-wrap flex-1 filter-container',
+        'flex items-center flex-wrap flex-1',
         gapClasses[gap],
         className
       )}

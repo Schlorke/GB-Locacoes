@@ -6,6 +6,147 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-01-22] - Correção de Shadow no Botão de Reset do Filtro Admin
+
+### Fixed 🐛
+
+- **FilterResetButton**: Corrigido problema de shadow e hover shadow sendo
+  impedidos pela classe `admin-filter-element`
+  - Removida classe `admin-filter-element` conflitante do botão de reset
+  - Implementadas regras CSS específicas para `.filter-reset-button` com shadow
+    e hover shadow próprios
+  - Garantido que o botão tenha efeitos visuais independentes dos outros
+    elementos de filtro
+  - Mantida consistência visual com outros elementos admin sem interferência de
+    classes
+  - **Simplificado comportamento**: Removido hover scale e focus ring para
+    interface mais limpa
+  - **Corrigido variant reset**: Removido `hover:scale-105` da variante reset do
+    componente Button
+  - **Corrigido warning ESLint**: Removida variável `stats` não utilizada em
+    `app/area-cliente/orcamentos/page.tsx`
+  - **Corrigido dropdown de filtros**: Resolvido problema de seleção de opções
+    "Aprovado" e "Rejeitado" no filtro de status dos orçamentos
+    - Aumentado z-index do dropdown para `z-[99999]` para ficar acima de outros
+      elementos
+    - Melhorado evento de click outside com delay de 100ms para evitar
+      fechamento prematuro
+    - Mudado de `mousedown` para `click` para ser menos agressivo
+    - Ajustado z-index do Card "Ações Rápidas" para `z-0` e SearchBar para
+      `z-10`
+    - **Corrigido conflito de z-index**: Ajustado z-index do Card "Lista de
+      Orçamentos" para `z-0` para evitar interferência com dropdown de filtros
+  - **Removida seção Ações Rápidas**: Eliminado bloco "Ações Rápidas" da página
+    de orçamentos
+    - Simplificado layout da página removendo botões "Novo Orçamento" e "Ver
+      Equipamentos"
+    - Ajustado delay de animação da "Lista de Orçamentos" de 0.6s para 0.5s
+    - Mantido botão "Solicitar Primeiro Orçamento" quando não há orçamentos
+  - **Melhorado design dos blocos de orçamento**: Aplicada identidade visual do
+    projeto
+    - Substituído gradiente por fundo branco limpo com shadow-lg e
+      hover:shadow-xl
+    - Aumentado padding interno de p-6 para p-8 para melhor respiração visual
+    - Melhorado espaçamento entre blocos de space-y-4 para space-y-6
+    - Aumentado espaçamento interno entre seções de mb-4 para mb-6
+    - Melhorado espaçamento entre campos de informação de gap-4 para gap-6
+    - Aplicado shadow-md e hover:shadow-lg nos botões "Ver" e "PDF"
+    - Adicionado hover:bg-orange-50 e hover:bg-blue-50 nos botões com cores
+      temáticas
+    - Melhorado espaçamento dos labels de mb-1 para mb-2 com font-medium
+    - Removido hover scale, mantendo apenas shadows para consistência visual
+  - **Melhorada tipografia dos blocos de orçamento**: Aplicada expertise em
+    UI/UX
+    - **ID do orçamento**: Aumentado para `text-xl font-bold` com
+      `tracking-tight`
+    - **Labels**: Transformados em
+      `text-xs font-semibold uppercase tracking-wide` para melhor hierarquia
+    - **Valores**: Melhorado contraste com `text-base font-semibold` e
+      `leading-relaxed`
+    - **Valor Total**: Destacado com `text-xl font-bold` para maior impacto
+      visual
+    - **Ícones**: Aplicado `text-gray-400` para melhor contraste e hierarquia
+    - **Botões**: Adicionado `text-sm` para consistência tipográfica
+    - **Espaçamento**: Aumentado gap entre campos de `gap-6` para `gap-8`
+    - **Line height**: Aplicado `leading-relaxed` e `leading-tight` para melhor
+      legibilidade
+  - **Corrigido hover das badges**: Removido hover background das badges de
+    status
+    - Adicionado `hover:bg-transparent hover:shadow-none` para evitar efeitos
+      indesejados
+  - **Melhorado layout dos botões**: Adicionado `flex-wrap` nos botões de ação
+    - Removido `md:flex-nowrap` para permitir quebra de linha em todas as telas
+    - Removido import não utilizado `TrendingUp`
+
+## [2025-10-01] - Reutilização da Barra de Pesquisa na Área do Cliente
+
+### Added ✨
+
+- **SearchBar Component**: Novo componente reutilizável baseado no
+  AdminFilterCard
+  - Suporte a múltiplas variantes: `default`, `compact`, `inline`
+  - Integração completa com sistema de filtros existente
+  - Design responsivo e acessível
+  - Botão de reset automático com indicador visual
+
+### Changed 🔄
+
+- **Página de Orçamentos**: Substituído bloco "Filtros e Busca" pela SearchBar
+  - Layout otimizado com barra de pesquisa em linha no topo
+  - Melhor experiência de usuário com interface mais limpa
+  - Mantida funcionalidade de busca por ID e equipamento
+  - Filtro de status integrado na barra de pesquisa
+
+### Fixed 🐛
+
+- **SearchBar Component**: Corrigido para ficar idêntico à barra de pesquisa da
+  página equipamentos
+  - Substituído Select padrão por CustomSelect (mesmo componente do
+    AdminFilterCard)
+  - Implementado FilterSelectGroup para renderização correta dos filtros
+  - Usado Card e CardContent para container idêntico ao original
+  - Aplicados exatamente os mesmos estilos: gradientes, sombras, bordas e
+    espaçamentos
+  - Adicionado ícone de filtro (FilterIndicator) com comportamento visual
+    correto
+  - Implementado botão de reset (FilterResetButton) com animação e estilo exato
+  - Removidas variantes desnecessárias para manter simplicidade e consistência
+  - **Corrigidos problemas de borda**: Eliminados artefatos visuais nas bordas
+    do componente
+  - **Corrigido dropdown cortado**: Ajustado `overflow-visible` para permitir
+    exibição completa da combobox
+  - **Corrigido erro de build**: Resolvido problema de JSX com tags de
+    fechamento incorretas
+  - **Adicionado hover shadow**: Implementado `hover:shadow-2xl` para
+    consistência com outros elementos da página
+  - **Padronizadas sombras dos elementos**: Aplicada classe
+    `admin-filter-element` para sombras consistentes entre input, combo box e
+    botão reset
+  - **Corrigido CustomSelect**: Aplicada classe `admin-filter-element` para
+    sombra e hover shadow idênticos ao input
+  - **Corrigido FilterResetButton**: Aplicada classe `admin-filter-element` para
+    sombra e hover shadow idênticos ao input
+  - **Removido focus do botão**: Eliminado comportamento de focus no botão reset
+    conforme solicitado
+  - **Corrigida sombra extra**: Removida classe `filter-container` que aplicava
+    sombra conflitante no FilterSelectGroup
+  - **Corrigido variant reset**: Removidas sombras conflitantes (`shadow-md`,
+    `hover:shadow-lg`) do variant reset do Button
+  - **Corrigido FilterResetButton**: Removida classe `admin-filter-element`
+    conflitante, aplicada sombra via style inline e hover shadow via CSS
+  - **Aplicada transição**: Adicionada `transition-all duration-200` para
+    consistência com o input
+
+### Improved 🎨
+
+- **Layout Responsivo**: Barra de pesquisa adapta-se perfeitamente a diferentes
+  telas
+- **Consistência Visual**: Mantém identidade visual do projeto
+- **Performance**: Componente otimizado para reutilização
+- **Acessibilidade**: Suporte completo a navegação por teclado
+
+---
+
 ## [2025-01-22] - Remoção do Chromatic e Atualizações de Dependências
 
 ### Removed ❌

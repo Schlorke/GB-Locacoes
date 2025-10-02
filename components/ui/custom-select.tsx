@@ -50,7 +50,10 @@ export function CustomSelect({
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node
       if (selectRef.current && !selectRef.current.contains(target)) {
-        setIsOpen(false)
+        // Pequeno delay para evitar fechamento prematuro
+        setTimeout(() => {
+          setIsOpen(false)
+        }, 100)
       }
     }
 
@@ -67,13 +70,14 @@ export function CustomSelect({
 
     if (isOpen) {
       updatePosition()
-      document.addEventListener('mousedown', handleClickOutside)
+      // Usar click em vez de mousedown para ser menos agressivo
+      document.addEventListener('click', handleClickOutside)
       window.addEventListener('scroll', updatePosition, true)
       window.addEventListener('resize', updatePosition)
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('click', handleClickOutside)
       window.removeEventListener('scroll', updatePosition, true)
       window.removeEventListener('resize', updatePosition)
     }
@@ -127,7 +131,7 @@ export function CustomSelect({
           onClick={handleToggle}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 border-gray-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 admin-filter-element"
+          className="flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 border-gray-200 focus:outline-none focus:ring-0 transition-all duration-200 admin-filter-element"
         >
           <span
             className={cn(value ? 'text-foreground' : 'text-muted-foreground')}
@@ -146,7 +150,7 @@ export function CustomSelect({
         {isOpen && (
           <div
             id="dropdown-content"
-            className="absolute z-[var(--z-dropdown)] mt-1 w-full rounded-md border bg-white shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 overflow-hidden"
+            className="absolute z-[99999] mt-1 w-full rounded-md border bg-white shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 overflow-hidden"
             style={{
               maxHeight: '300px',
             }}

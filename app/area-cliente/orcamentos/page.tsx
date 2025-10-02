@@ -11,24 +11,14 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { SearchBar } from '@/components/ui/search-bar'
 import {
   FileText,
   Calendar,
   Clock,
-  Search,
   Eye,
   Download,
   Plus,
-  TrendingUp,
   CheckCircle,
   XCircle,
 } from 'lucide-react'
@@ -120,13 +110,6 @@ export default function OrcamentosPage() {
     return matchesSearch && matchesStatus
   })
 
-  const stats = {
-    total: mockOrcamentos.length,
-    pending: mockOrcamentos.filter((o) => o.status === 'pending').length,
-    approved: mockOrcamentos.filter((o) => o.status === 'approved').length,
-    rejected: mockOrcamentos.filter((o) => o.status === 'rejected').length,
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 pt-[84px] sm:pt-0">
       {/* Hero Section com Identidade Visual Completa */}
@@ -169,186 +152,32 @@ export default function OrcamentosPage() {
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
       <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
         <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          {/* Stats Grid - 1 coluna em mobile, 4 colunas em desktop */}
+          {/* Barra de Pesquisa - NOVA IMPLEMENTAÇÃO */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 items-stretch"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {/* Card Total */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Total
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {stats.total}
-                    </p>
-                    <p className="text-sm text-gray-500">orçamentos</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
-                    <FileText className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card Pendentes */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Pendentes
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {stats.pending}
-                    </p>
-                    <p className="text-sm text-gray-500">aguardando</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
-                    <Clock className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card Aprovados */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Aprovados
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {stats.approved}
-                    </p>
-                    <p className="text-sm text-gray-500">confirmados</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
-                    <CheckCircle className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card Rejeitados */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Rejeitados
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {stats.rejected}
-                    </p>
-                    <p className="text-sm text-gray-500">recusados</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-red-500 to-red-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
-                    <XCircle className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Seções Principais - Layout Proporcional à linha superior */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+            className="mb-8 relative z-10"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            {/* Filtros e Busca */}
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
-                    <Search className="h-5 w-5" />
-                  </div>
-                  Filtros e Busca
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
-                <div className="space-y-4 flex-1">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="search"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Buscar Orçamento
-                    </Label>
-                    <div className="relative">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="search"
-                        placeholder="ID ou equipamento..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="status"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Status
-                    </Label>
-                    <Select
-                      value={statusFilter}
-                      onValueChange={setStatusFilter}
-                    >
-                      <SelectTrigger className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500">
-                        <SelectValue placeholder="Filtrar por status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">Todos</SelectItem>
-                        <SelectItem value="pending">Pendente</SelectItem>
-                        <SelectItem value="approved">Aprovado</SelectItem>
-                        <SelectItem value="rejected">Rejeitado</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Ações Rápidas */}
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
-                    <Plus className="h-5 w-5" />
-                  </div>
-                  Ações Rápidas
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
-                <div className="space-y-4 flex-1">
-                  <Button asChild size="default" className="w-full">
-                    <Link href="/orcamento">
-                      <Plus className="h-4 w-4 mr-2" />
-                      Novo Orçamento
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href="/equipamentos">
-                      <TrendingUp className="h-4 w-4 mr-2" />
-                      Ver Equipamentos
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <SearchBar
+              searchPlaceholder="ID ou equipamento..."
+              searchValue={searchTerm}
+              onSearchChange={setSearchTerm}
+              filters={[
+                {
+                  label: 'Status',
+                  value: statusFilter,
+                  onValueChange: setStatusFilter,
+                  placeholder: 'Filtrar por status',
+                  options: [
+                    { value: 'all', label: 'Todos' },
+                    { value: 'pending', label: 'Pendente' },
+                    { value: 'approved', label: 'Aprovado' },
+                    { value: 'rejected', label: 'Rejeitado' },
+                  ],
+                },
+              ]}
+            />
           </motion.div>
 
           {/* Lista de Orçamentos */}
@@ -356,9 +185,9 @@ export default function OrcamentosPage() {
             className="mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
           >
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
+            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 z-0">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
@@ -371,33 +200,33 @@ export default function OrcamentosPage() {
                   {filteredOrcamentos.length} orçamento(s) encontrado(s)
                 </CardDescription>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0">
+              <CardContent className="p-4 md:p-6 lg:p-8 relative !pt-0 z-0">
                 {filteredOrcamentos.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {filteredOrcamentos.map((orcamento) => {
                       const StatusIcon = statusConfig[orcamento.status].icon
                       return (
                         <div
                           key={orcamento.id}
-                          className="p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:from-orange-50 hover:to-orange-100 transition-all duration-300 group border border-gray-200 hover:border-orange-200"
+                          className="p-6 md:p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group relative z-0"
                         >
-                          <div className="flex flex-wrap md:flex-nowrap items-center justify-between mb-4 gap-4">
+                          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-6 gap-4">
                             <div className="flex items-center gap-3 flex-1 min-w-0">
-                              <div className="text-lg font-bold text-gray-900">
+                              <div className="text-xl font-bold text-gray-900 tracking-tight">
                                 #{orcamento.id}
                               </div>
                               <Badge
-                                className={statusConfig[orcamento.status].color}
+                                className={`${statusConfig[orcamento.status].color} hover:shadow-none status-badge-hover`}
                               >
                                 <StatusIcon className="h-3 w-3 mr-1" />
                                 {statusConfig[orcamento.status].label}
                               </Badge>
                             </div>
-                            <div className="flex flex-wrap md:flex-nowrap gap-2 mt-3 md:mt-0">
+                            <div className="flex flex-wrap gap-2 w-full md:w-auto md:mt-0">
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="flex-1 min-w-0 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300"
+                                className="flex-1 md:flex-none min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200"
                               >
                                 <Eye className="h-4 w-4 mr-1" />
                                 Ver
@@ -405,34 +234,47 @@ export default function OrcamentosPage() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="flex-1 min-w-0 bg-white hover:bg-gray-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
+                                className="flex-1 md:flex-none min-w-0 bg-white hover:bg-white text-gray-900 hover:text-blue-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200"
                               >
                                 <Download className="h-4 w-4 mr-1" />
                                 PDF
                               </Button>
                             </div>
                           </div>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                            <div>
-                              <p className="text-gray-600 mb-1">
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
+                            <div className="space-y-2">
+                              <p className="text-gray-500 text-xs font-semibold uppercase tracking-wide">
                                 Data do Orçamento
                               </p>
-                              <p className="font-semibold text-gray-900 flex items-center gap-1">
-                                <Calendar className="h-4 w-4" />
+                              <p
+                                className="text-sm font-medium text-gray-900 flex items-center gap-2 leading-relaxed"
+                                style={{ fontSize: '0.9rem' }}
+                              >
+                                <Calendar className="h-4 w-4 text-gray-400" />
                                 {new Date(orcamento.data).toLocaleDateString(
                                   'pt-BR'
                                 )}
                               </p>
                             </div>
-                            <div>
-                              <p className="text-gray-600 mb-1">Equipamentos</p>
-                              <p className="font-semibold text-gray-900">
+                            <div className="space-y-2">
+                              <p className="text-gray-500 text-xs font-semibold uppercase tracking-wide">
+                                Equipamentos
+                              </p>
+                              <p
+                                className="text-sm font-medium text-gray-900 leading-relaxed break-words"
+                                style={{ fontSize: '0.9rem' }}
+                              >
                                 {orcamento.equipamentos.join(', ')}
                               </p>
                             </div>
-                            <div>
-                              <p className="text-gray-600 mb-1">Valor Total</p>
-                              <p className="font-semibold text-green-600 text-lg">
+                            <div className="space-y-2">
+                              <p className="text-gray-500 text-xs font-semibold uppercase tracking-wide">
+                                Valor Total
+                              </p>
+                              <p
+                                className="text-sm font-bold text-green-600 leading-relaxed"
+                                style={{ fontSize: '0.9rem' }}
+                              >
                                 R$ {orcamento.valor.toFixed(2)}
                               </p>
                             </div>
