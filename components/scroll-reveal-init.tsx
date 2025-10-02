@@ -107,7 +107,7 @@ export default function ScrollRevealInit() {
       const initializeElement = (element: HTMLElement) => {
         // CORREÇÃO: Garantir que elementos sejam inicializados como invisíveis
         // desde o primeiro momento para evitar flash inicial
-        
+
         if (
           element.classList.contains('animate-on-scroll') ||
           element.classList.contains('animate-on-scroll-delayed') ||
@@ -343,7 +343,7 @@ export default function ScrollRevealInit() {
          * - IntersectionObserver detecta viewport
          * - MutationObserver detecta novos elementos
          */
-        
+
         // CORREÇÃO CRÍTICA: Inicializar elementos como invisíveis IMEDIATAMENTE
         // para evitar flash inicial
         initializeElementsForAnimation()

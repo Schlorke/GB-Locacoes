@@ -36,7 +36,7 @@ function LoginForm() {
           const isAdmin =
             session.user?.email === 'admin@gblocacoes.com.br' ||
             session.user?.role === 'ADMIN'
-          
+
           // Usar replace em vez de push para evitar histórico de navegação
           if (isAdmin) {
             router.replace('/admin/dashboard')
@@ -49,7 +49,7 @@ function LoginForm() {
         // Em caso de erro, não redirecionar
       }
     }
-    
+
     // Só verificar se não estiver carregando
     if (!isLoading) {
       checkAuth()
@@ -96,14 +96,14 @@ function LoginForm() {
       } else if (result?.ok) {
         // Verificar se é admin baseado no email
         const isAdmin = email === 'admin@gblocacoes.com.br'
-        
+
         // Usar replace em vez de push para evitar histórico de navegação
         if (isAdmin) {
           router.replace('/admin/dashboard')
         } else {
           router.replace('/area-cliente')
         }
-        
+
         // Não chamar router.refresh() aqui para evitar conflitos
       } else {
         setError('Ocorreu um erro desconhecido. Tente novamente.')

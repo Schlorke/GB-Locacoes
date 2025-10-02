@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Award,
@@ -98,12 +99,28 @@ const timeline = [
 ]
 
 export default function SobrePage() {
+  const [isReady, setIsReady] = useState(false)
+
+  useEffect(() => {
+    // Pequeno delay para garantir que tudo esteja carregado
+    const timer = setTimeout(() => {
+      setIsReady(true)
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
-    <div className="sobre-page min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div
+      className={`sobre-page min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 transition-opacity duration-300 ${!isReady ? 'opacity-0' : 'opacity-100'}`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header com gradiente - seguindo padrão das outras páginas */}
         <div className="mb-8">
-          <div className="sobre-header-block relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl" style={{ opacity: 0 }}>
+          <div
+            className="sobre-header-block relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl"
+            style={{ opacity: 0 }}
+          >
             {/* Clean depth layers */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
@@ -293,7 +310,10 @@ export default function SobrePage() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <Card className="cta-section relative overflow-hidden border-0 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 shadow-xl" style={{ opacity: 0, transform: 'translateY(60px)' }}>
+          <Card
+            className="cta-section relative overflow-hidden border-0 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 shadow-xl"
+            style={{ opacity: 0, transform: 'translateY(60px)' }}
+          >
             {/* Background pattern */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>

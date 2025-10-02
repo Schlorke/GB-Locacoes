@@ -6,6 +6,15 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-02] - Atualização de Dependências
+
+### Changed 🔄
+
+- **Pino**: Atualizado de `9.12.0` para `9.13.0`
+  - Mantém compatibilidade total com sistema de logging existente
+  - Melhorias de performance e correções de bugs menores
+  - TypeScript check passou sem erros
+
 ## [2025-10-02] - Badges sem Hover na Área do Cliente
 
 ### Added ✨

@@ -505,6 +505,14 @@ body:has(.sobre-page) {
   overflow-x: hidden !important;
 }
 
+/* CORREÇÃO: Prevenir FOUC (Flash of Unstyled Content) no refresh da página Sobre */
+.sobre-page:not(.opacity-100) .material-card,
+.sobre-page:not(.opacity-100) .benefit-card,
+.sobre-page:not(.opacity-100) .cta-section,
+.sobre-page:not(.opacity-100) .sobre-header-block {
+  visibility: hidden !important;
+}
+
 /* Prevenir que elementos com transform causem overflow horizontal */
 .sobre-page .material-card,
 .sobre-page .benefit-card,
@@ -1563,7 +1571,8 @@ article {
 
 /* NÃO permitir scroll em elementos específicos */
 .material-card,
-.benefit-card {
+.benefit-card,
+.cta-section {
   overflow: hidden !important;
   position: relative !important;
 }
@@ -1573,7 +1582,6 @@ article {
   overflow: visible !important;
 }
 
-.cta-section,
 .hero-title,
 .hero-image,
 .section-title,
