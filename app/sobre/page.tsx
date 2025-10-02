@@ -99,11 +99,11 @@ const timeline = [
 
 export default function SobrePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="sobre-page min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header com gradiente - seguindo padrão das outras páginas */}
         <div className="mb-8">
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+          <div className="sobre-header-block relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl" style={{ opacity: 0 }}>
             {/* Clean depth layers */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
@@ -135,11 +135,12 @@ export default function SobrePage() {
               return (
                 <Card
                   key={stat.label}
-                  className="material-card relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group"
+                  className="material-card relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group rounded-2xl"
+                  style={{ opacity: 0, transform: 'translateY(60px)' }}
                 >
                   {/* Background gradient */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-5 group-hover:opacity-10 transition-opacity`}
+                    className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-5 group-hover:opacity-10 transition-opacity rounded-2xl`}
                   ></div>
 
                   <CardContent className="p-6 text-center relative z-10">
@@ -226,7 +227,8 @@ export default function SobrePage() {
               return (
                 <Card
                   key={value.title}
-                  className="benefit-card relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group h-full"
+                  className="benefit-card relative overflow-hidden border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group h-full rounded-2xl"
+                  style={{ opacity: 0, transform: 'translateY(60px)' }}
                 >
                   <CardContent className="p-6 text-center">
                     <div
@@ -267,6 +269,7 @@ export default function SobrePage() {
                 <div
                   key={item.year}
                   className="material-card relative flex items-start"
+                  style={{ opacity: 0, transform: 'translateY(60px)' }}
                 >
                   {/* Timeline dot */}
                   <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg mr-6 relative z-10">
@@ -290,7 +293,7 @@ export default function SobrePage() {
 
         {/* CTA Section */}
         <div className="text-center">
-          <Card className="cta-section relative overflow-hidden border-0 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 shadow-xl">
+          <Card className="cta-section relative overflow-hidden border-0 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 shadow-xl" style={{ opacity: 0, transform: 'translateY(60px)' }}>
             {/* Background pattern */}
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>

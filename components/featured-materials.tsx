@@ -178,14 +178,14 @@ export default function FeaturedMaterials() {
             {equipments.map((equipment: Equipment) => (
               <Card
                 key={equipment.id}
-                className={`material-card relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02] flex flex-col group opacity-0`}
+                className={`material-card relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02] flex flex-col group opacity-0 rounded-2xl`}
                 style={{
                   transform: 'translateY(60px)',
                 }}
               >
                 {/* Clean depth layers for equipment card */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40 rounded-2xl"></div>
 
                 <div className="relative h-48 bg-gray-100 z-10 flex items-center justify-center">
                   <Image

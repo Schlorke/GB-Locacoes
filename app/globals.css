@@ -479,6 +479,41 @@ section {
   }
 }
 
+/* Animação de fade in para o header da página Sobre */
+@keyframes fadeInHeader {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Aplicar animação ao bloco header da página Sobre */
+.sobre-header-block {
+  animation: fadeInHeader 1s ease-out forwards;
+  /* Remover opacity aqui pois a animação já cuida disso */
+}
+
+/* CORREÇÃO: Remover regras muito agressivas que estavam impedindo elementos de aparecer */
+/* O sistema de scroll reveal já cuida da inicialização dos elementos */
+
+/* CORREÇÃO: Prevenir scroll horizontal apenas no body durante animações */
+body:has(.sobre-page) {
+  overflow-x: hidden !important;
+}
+
+/* Prevenir que elementos com transform causem overflow horizontal */
+.sobre-page .material-card,
+.sobre-page .benefit-card,
+.sobre-page .cta-section,
+.sobre-page .sobre-header-block {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
 @keyframes scaleIn {
   0% {
     transform: scale(0.95);
@@ -936,6 +971,7 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 .category-card,
 .material-card {
   transition: all 0.3s ease !important;
+  overflow: hidden !important;
 }
 
 .contact-form:hover {
@@ -1527,7 +1563,16 @@ article {
 
 /* NÃO permitir scroll em elementos específicos */
 .material-card,
-.benefit-card,
+.benefit-card {
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+/* EXCEÇÃO: Timeline cards precisam de overflow visible para sombras */
+.material-card.relative.flex.items-start {
+  overflow: visible !important;
+}
+
 .cta-section,
 .hero-title,
 .hero-image,

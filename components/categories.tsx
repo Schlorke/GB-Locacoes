@@ -176,13 +176,13 @@ export default function Categories() {
             return (
               <Card
                 key={category.title}
-                className="benefit-card category-card relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-500 hover:scale-105 group opacity-0 flex flex-col h-full"
+                className="benefit-card category-card relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-500 hover:scale-105 group opacity-0 flex flex-col h-full rounded-2xl"
               >
                 {/* Clean depth layers matching equipments page */}
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30 rounded-2xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40 rounded-2xl"></div>
                 <div
-                  className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+                  className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-2xl`}
                 ></div>
 
                 <CardContent className="p-6 text-center relative z-10 flex flex-col flex-1">

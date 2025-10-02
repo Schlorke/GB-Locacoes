@@ -105,12 +105,19 @@ export default function ScrollRevealInit() {
         '[data-scroll-reveal]'
 
       const initializeElement = (element: HTMLElement) => {
+        // CORREÇÃO: Garantir que elementos sejam inicializados como invisíveis
+        // desde o primeiro momento para evitar flash inicial
+        
         if (
           element.classList.contains('animate-on-scroll') ||
           element.classList.contains('animate-on-scroll-delayed') ||
           element.classList.contains('category-card-animate')
         ) {
           element.classList.remove('animate-in')
+          // Garantir que elementos CSS-only também sejam invisíveis inicialmente
+          element.style.opacity = '0'
+          element.style.transform = 'translateY(60px)'
+          element.style.transition = 'none'
         } else if (
           element.classList.contains('section-title') ||
           element.classList.contains('section-subtitle')
@@ -127,6 +134,7 @@ export default function ScrollRevealInit() {
           element.style.willChange = 'opacity, transform'
           element.style.backfaceVisibility = 'hidden'
         } else {
+          // CORREÇÃO: Garantir que TODOS os elementos sejam invisíveis inicialmente
           element.style.opacity = '0'
           element.style.transform = 'translateY(60px)'
           element.style.transition = 'none'
@@ -331,15 +339,17 @@ export default function ScrollRevealInit() {
          *
          * Executa animações completas para impressionar o usuário.
          * Configuração:
-         * - Elementos inicializados como invisíveis
+         * - Elementos inicializados como invisíveis IMEDIATAMENTE
          * - IntersectionObserver detecta viewport
          * - MutationObserver detecta novos elementos
          */
-        // Aguardar a hidratação antes de manipular o DOM
+        
+        // CORREÇÃO CRÍTICA: Inicializar elementos como invisíveis IMEDIATAMENTE
+        // para evitar flash inicial
+        initializeElementsForAnimation()
 
+        // Aguardar a hidratação antes de configurar observers
         setTimeout(() => {
-          initializeElementsForAnimation()
-
           requestAnimationFrame(() => {
             observer = setupObserver()
             mutation = new MutationObserver((records) => {
@@ -372,7 +382,7 @@ export default function ScrollRevealInit() {
               })
             }, observerDelay)
           })
-        }, 100) // Delay maior para garantir DOM completo
+        }, 50) // Delay reduzido para melhor performance
       } else {
         /**
          * ⚡ MODO NAVEGAÇÃO INTERNA
