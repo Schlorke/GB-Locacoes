@@ -10,26 +10,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import {
   Bell,
   Check,
-  Trash2,
   ExternalLink,
-  Search,
-  Filter,
   Settings,
   CheckCircle,
-  Clock,
   AlertCircle,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
@@ -79,20 +66,9 @@ const mockNotifications = [
   },
 ]
 
-type FilterType =
-  | 'all'
-  | 'unread'
-  | 'quote'
-  | 'order'
-  | 'payment'
-  | 'equipment'
-  | 'system'
-
 export default function NotificacoesPage() {
   // const { data: session } = useSession()
   // TODO: Use session data for user-specific notifications
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filterType, setFilterType] = useState<FilterType>('all')
   const [notifications, setNotifications] = useState(mockNotifications)
 
   const getNotificationIcon = (type: string) => {
@@ -157,31 +133,7 @@ export default function NotificacoesPage() {
     )
   }
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })))
-  }
-
-  const removeNotification = (id: string) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id))
-  }
-
-  const filteredNotifications = notifications.filter((notification) => {
-    const matchesSearch =
-      notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      notification.message.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesFilter =
-      filterType === 'all' ||
-      (filterType === 'unread' && !notification.isRead) ||
-      notification.type === filterType
-    return matchesSearch && matchesFilter
-  })
-
-  const stats = {
-    total: notifications.length,
-    unread: notifications.filter((n) => !n.isRead).length,
-    high: notifications.filter((n) => n.priority === 'high').length,
-    medium: notifications.filter((n) => n.priority === 'medium').length,
-  }
+  const filteredNotifications = notifications
 
   return (
     <div className="min-h-screen bg-gray-50 pt-[84px] sm:pt-0">
@@ -223,202 +175,14 @@ export default function NotificacoesPage() {
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
       <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
         <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          {/* Stats Grid - 1 coluna em mobile, 4 colunas em desktop */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 items-stretch"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {/* Card Total */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Total
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {stats.total}
-                    </p>
-                    <p className="text-sm text-gray-500">notificações</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white self-center">
-                    <Bell className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card Não Lidas */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Não Lidas
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {stats.unread}
-                    </p>
-                    <p className="text-sm text-gray-500">pendentes</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-red-500 to-red-600 rounded-xl text-white self-center">
-                    <AlertCircle className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card Alta Prioridade */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Prioritárias
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {stats.high}
-                    </p>
-                    <p className="text-sm text-gray-500">importantes</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl text-white self-center">
-                    <Clock className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Card Configurações */}
-            <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between h-full">
-                  <div className="flex flex-col justify-center h-full">
-                    <p className="text-sm font-medium text-gray-600 mb-1">
-                      Sistema
-                    </p>
-                    <p className="text-3xl font-bold text-gray-900 mb-1">
-                      {notifications.filter((n) => n.type === 'system').length}
-                    </p>
-                    <p className="text-sm text-gray-500">do sistema</p>
-                  </div>
-                  <div className="p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl text-white self-center">
-                    <Settings className="h-6 w-6" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Seções Principais - Layout Proporcional à linha superior */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            {/* Filtros e Busca */}
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
-                    <Search className="h-5 w-5" />
-                  </div>
-                  Filtros e Busca
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
-                <div className="space-y-4 flex-1">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="search"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Buscar Notificação
-                    </Label>
-                    <div className="relative">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="search"
-                        placeholder="Título ou mensagem..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="filter"
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Filtrar por Tipo
-                    </Label>
-                    <Select
-                      value={filterType}
-                      onValueChange={(value: FilterType) =>
-                        setFilterType(value)
-                      }
-                    >
-                      <SelectTrigger className="rounded-md border-gray-200 focus:border-orange-500 focus:ring-orange-500">
-                        <SelectValue placeholder="Filtrar por tipo" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">Todas</SelectItem>
-                        <SelectItem value="unread">Não lidas</SelectItem>
-                        <SelectItem value="quote">Orçamentos</SelectItem>
-                        <SelectItem value="equipment">Equipamentos</SelectItem>
-                        <SelectItem value="payment">Pagamentos</SelectItem>
-                        <SelectItem value="system">Sistema</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Ações Rápidas */}
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
-                    <Settings className="h-5 w-5" />
-                  </div>
-                  Ações Rápidas
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
-                <div className="space-y-4 flex-1">
-                  {stats.unread > 0 && (
-                    <Button
-                      onClick={markAllAsRead}
-                      size="default"
-                      className="w-full"
-                    >
-                      <Check className="h-4 w-4 mr-2" />
-                      Marcar Todas como Lidas
-                    </Button>
-                  )}
-                  <Button variant="outline" className="w-full">
-                    <Filter className="h-4 w-4 mr-2" />
-                    Configurar Notificações
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
           {/* Lista de Notificações */}
           <motion.div
             className="mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
+            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 z-0">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
@@ -431,20 +195,15 @@ export default function NotificacoesPage() {
                   {filteredNotifications.length} notificação(ões) encontrada(s)
                 </CardDescription>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0">
+              <CardContent className="relative z-0 pt-0">
                 {filteredNotifications.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {filteredNotifications.map((notification) => {
                       const Icon = getNotificationIcon(notification.type)
                       return (
                         <div
                           key={notification.id}
-                          className={cn(
-                            'p-6 bg-gradient-to-r rounded-xl transition-all duration-300 border',
-                            !notification.isRead
-                              ? 'from-blue-50 to-blue-100 border-blue-200 hover:from-blue-100 hover:to-blue-200'
-                              : 'from-gray-50 to-gray-100 border-gray-200 hover:from-orange-50 hover:to-orange-100 hover:border-orange-200'
-                          )}
+                          className="p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group relative z-0"
                         >
                           <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
                             <div className="flex items-start gap-4 flex-1 min-w-0">
@@ -463,15 +222,16 @@ export default function NotificacoesPage() {
                                   </h4>
                                   <div className="flex items-center gap-2">
                                     <Badge
-                                      className={getPriorityColor(
-                                        notification.priority
+                                      className={cn(
+                                        getPriorityColor(notification.priority),
+                                        'hover:shadow-none status-badge-hover'
                                       )}
                                     >
                                       {notification.priority}
                                     </Badge>
                                     <Badge
                                       variant="outline"
-                                      className="bg-gray-100 text-gray-700"
+                                      className="bg-gray-100 text-gray-700 hover:shadow-none status-badge-hover"
                                     >
                                       {getTypeLabel(notification.type)}
                                     </Badge>
@@ -487,13 +247,12 @@ export default function NotificacoesPage() {
                                   <span className="text-xs text-gray-400">
                                     {formatTimeAgo(notification.createdAt)}
                                   </span>
-                                  <div className="flex flex-wrap md:flex-nowrap gap-2 mt-3 md:mt-0">
+                                  <div className="flex flex-wrap gap-2 mt-3 md:mt-0">
                                     {notification.actionUrl && (
                                       <Button
                                         asChild
                                         size="sm"
-                                        variant="outline"
-                                        className="flex-1 min-w-0 bg-white hover:bg-blue-50 text-gray-900 hover:text-blue-600 font-semibold rounded-lg transition-all duration-300"
+                                        className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
                                         onClick={() =>
                                           markAsRead(notification.id)
                                         }
@@ -507,26 +266,15 @@ export default function NotificacoesPage() {
                                     {!notification.isRead && (
                                       <Button
                                         size="sm"
-                                        variant="outline"
                                         onClick={() =>
                                           markAsRead(notification.id)
                                         }
-                                        className="flex-1 min-w-0 bg-white hover:bg-green-50 text-gray-900 hover:text-green-600 font-semibold rounded-lg transition-all duration-300"
+                                        className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
                                       >
                                         <Check className="h-4 w-4 mr-1" />
-                                        Ler
+                                        Lido
                                       </Button>
                                     )}
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() =>
-                                        removeNotification(notification.id)
-                                      }
-                                      className="flex-1 min-w-0 bg-white hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold rounded-lg transition-all duration-300"
-                                    >
-                                      <Trash2 className="h-4 w-4" />
-                                    </Button>
                                   </div>
                                 </div>
                               </div>
@@ -537,17 +285,15 @@ export default function NotificacoesPage() {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-16">
-                    <Bell className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-500 text-lg mb-4">
-                      {searchTerm || filterType !== 'all'
-                        ? 'Nenhuma notificação encontrada'
-                        : 'Nenhuma notificação'}
-                    </p>
-                    <p className="text-gray-400">
-                      {searchTerm || filterType !== 'all'
-                        ? 'Tente ajustar os filtros de busca'
-                        : 'Você está em dia! Novas notificações aparecerão aqui.'}
+                  <div className="text-center py-20">
+                    <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                      <Bell className="h-16 w-16 text-gray-300" />
+                    </div>
+                    <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                      Nenhuma notificação
+                    </h3>
+                    <p className="text-xl md:text-2xl text-gray-500 mb-8 leading-relaxed">
+                      Você está em dia! Novas notificações aparecerão aqui.
                     </p>
                   </div>
                 )}

@@ -6,7 +6,23 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [2025-01-22] - Correção de Shadow no Botão de Reset do Filtro Admin
+## [2025-01-22] - Badge de Notificação WhatsApp-Style + Correções de UI
+
+### Added ✨
+
+- **Badge de Notificação WhatsApp-Style**: Implementado sistema de notificação
+  visual no menu lateral
+  - Bolinha vermelha pulsante (`animate-pulse`) ao lado do ícone de notificação
+  - Contador numérico de notificações não lidas (estilo WhatsApp)
+  - Badge adaptativo: vermelho quando inativo, branco translúcido quando ativo
+  - Posicionamento absoluto com `border-2 border-white` para destaque
+  - Estado `unreadNotifications` para controle dinâmico das notificações
+  - Simulação de 2 notificações não lidas para demonstração
+
+### Fixed 🐛
+
+- **FilterResetButton**: Corrigido problema de shadow e hover shadow sendo
+  impedidos pela classe `admin-filter-element`
 
 ### Fixed 🐛
 

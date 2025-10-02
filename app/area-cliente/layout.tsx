@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter, usePathname } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -27,6 +27,7 @@ export default function AreaClienteLayout({
   const { data: session, status } = useSession()
   const router = useRouter()
   const pathname = usePathname()
+  const [unreadNotifications, setUnreadNotifications] = useState(0)
 
   useEffect(() => {
     if (status === 'loading') return
@@ -34,6 +35,12 @@ export default function AreaClienteLayout({
       router.push('/login')
     }
   }, [session, status, router])
+
+  // Simular notificações não lidas (em produção, isso viria de uma API)
+  useEffect(() => {
+    // Simular algumas notificações não lidas
+    setUnreadNotifications(2)
+  }, [])
 
   // Ajustar scroll quando navegando de páginas externas
   useEffect(() => {
@@ -89,6 +96,12 @@ export default function AreaClienteLayout({
       isActive: pathname === '/area-cliente',
     },
     {
+      href: '/area-cliente/notificacoes',
+      icon: Bell,
+      label: 'Notificações',
+      isActive: pathname === '/area-cliente/notificacoes',
+    },
+    {
       href: '/area-cliente/perfil',
       icon: User,
       label: 'Meu Perfil',
@@ -111,12 +124,6 @@ export default function AreaClienteLayout({
       icon: Settings,
       label: 'Endereços',
       isActive: pathname === '/area-cliente/enderecos',
-    },
-    {
-      href: '/area-cliente/notificacoes',
-      icon: Bell,
-      label: 'Notificações',
-      isActive: pathname === '/area-cliente/notificacoes',
     },
     {
       href: '/contato',
@@ -188,13 +195,20 @@ export default function AreaClienteLayout({
                           }}
                         >
                           <div className="flex items-center gap-3">
-                            <item.icon
-                              className={`h-5 w-5 transition-colors duration-200 ${
-                                item.isActive
-                                  ? 'text-white'
-                                  : 'text-gray-500 group-hover:text-orange-600'
-                              }`}
-                            />
+                            <div className="relative">
+                              <item.icon
+                                className={`h-5 w-5 transition-colors duration-200 ${
+                                  item.isActive
+                                    ? 'text-white'
+                                    : 'text-gray-500 group-hover:text-orange-600'
+                                }`}
+                              />
+                              {/* Badge de notificação não lida */}
+                              {item.href === '/area-cliente/notificacoes' &&
+                                unreadNotifications > 0 && (
+                                  <div className="absolute -top-[0.29rem] right-[0rem] w-3 h-3 bg-red-500 rounded-full border-2 border-white animate-pulse"></div>
+                                )}
+                            </div>
                             <span>{item.label}</span>
                           </div>
                           <ChevronRight

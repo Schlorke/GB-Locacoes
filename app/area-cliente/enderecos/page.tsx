@@ -13,17 +13,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import {
-  MapPin,
-  Plus,
-  Edit,
-  Trash2,
-  Star,
-  Home,
-  Building,
-  Save,
-  X,
-} from 'lucide-react'
+import { MapPin, Plus, Edit, Trash2, Star, Home, Save, X } from 'lucide-react'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
 
@@ -195,7 +185,6 @@ export default function EnderecosPage() {
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
       <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
         <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
-
           {/* Seções Principais - Layout Proporcional à linha superior */}
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
