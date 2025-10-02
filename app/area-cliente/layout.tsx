@@ -42,6 +42,32 @@ export default function AreaClienteLayout({
     setUnreadNotifications(2)
   }, [])
 
+  // Escutar mudanças nas notificações via evento customizado
+  useEffect(() => {
+    const handleNotificationUpdate = (e: CustomEvent) => {
+      setUnreadNotifications(e.detail.unreadCount)
+    }
+
+    // Escutar evento customizado para atualização imediata
+    window.addEventListener(
+      'notificationUpdate',
+      handleNotificationUpdate as EventListener
+    )
+
+    // Verificar valor inicial
+    const unreadCount = localStorage.getItem('gb-locacoes-unread-count')
+    if (unreadCount) {
+      setUnreadNotifications(parseInt(unreadCount))
+    }
+
+    return () => {
+      window.removeEventListener(
+        'notificationUpdate',
+        handleNotificationUpdate as EventListener
+      )
+    }
+  }, [])
+
   // Ajustar scroll quando navegando de páginas externas
   useEffect(() => {
     const adjustScrollAfterLoad = sessionStorage.getItem(

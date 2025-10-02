@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { ClientAreaBadge } from '@/components/ui/client-area-badge'
 import { SearchBar } from '@/components/ui/search-bar'
 import {
   FileText,
@@ -215,12 +215,12 @@ export default function OrcamentosPage() {
                               <div className="text-xl font-bold text-gray-900 tracking-tight">
                                 #{orcamento.id}
                               </div>
-                              <Badge
-                                className={`${statusConfig[orcamento.status].color} hover:shadow-none status-badge-hover`}
+                              <ClientAreaBadge
+                                className={`${statusConfig[orcamento.status].color}`}
                               >
                                 <StatusIcon className="h-3 w-3 mr-1" />
                                 {statusConfig[orcamento.status].label}
-                              </Badge>
+                              </ClientAreaBadge>
                             </div>
                             <div className="flex flex-wrap gap-2 w-full md:w-auto md:mt-0">
                               <Button

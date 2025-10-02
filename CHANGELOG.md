@@ -6,6 +6,38 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-02] - Badges sem Hover na Área do Cliente
+
+### Added ✨
+
+- **Sistema de Badges sem Hover**: Implementado sistema para remover efeitos de
+  hover dos badges especificamente na área do cliente
+  - Novas variantes de badge: `no-hover-default`, `no-hover-secondary`,
+    `no-hover-destructive`, `no-hover-outline`
+  - Hook `useClientAreaBadge`: Detecta automaticamente se está na área do
+    cliente
+  - Componente `ClientAreaBadge`: Wrapper que aplica variantes sem hover
+    automaticamente
+  - Mapeamento automático de variantes originais para variantes sem hover
+
+### Changed 🔄
+
+- **Componente Badge**: Adicionadas novas variantes sem efeitos de hover
+- **Páginas da Área do Cliente**: Substituído `Badge` por `ClientAreaBadge` em:
+  - `/area-cliente/orcamentos`: Badges de status de orçamento
+  - `/area-cliente/notificacoes`: Badges de prioridade e tipo
+  - `/area-cliente/historico`: Badges de status de locação
+  - `/area-cliente/enderecos`: Badge de endereço principal
+- **Removidas classes CSS**: Eliminadas classes `hover:shadow-none` e
+  `status-badge-hover` que não funcionavam corretamente
+
+### Fixed 🐛
+
+- **Hover Effects**: Resolvido problema de badges com hover background na área
+  do cliente
+- **Consistência Visual**: Mantida identidade visual sem efeitos de hover
+  indesejados
+
 ## [2025-01-22] - Badge de Notificação WhatsApp-Style + Correções de UI
 
 ### Added ✨

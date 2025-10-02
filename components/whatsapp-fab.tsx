@@ -86,15 +86,45 @@ export default function WhatsAppFAB() {
   }
 
   const handleQuickMessage = (quickMessage: string) => {
-    const whatsappMessage = encodeURIComponent(
-      `Olá! Vim do site da GB Locações e gostaria de ${quickMessage}`
-    )
-    window.open(
-      `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
-      '_blank'
-    )
-    setIsOpen(false)
-    setShowQuickMessages(true) // Reset for next time
+    // Add user message to chat (simulating what user selected)
+    const userMessage: ChatMessage = {
+      id: messages.length + 1,
+      text: quickMessage,
+      sender: 'user' as MessageSender,
+      timestamp: new Date(),
+    }
+
+    setMessages([...messages, userMessage])
+    setShowQuickMessages(false) // Hide quick messages after user selects one
+
+    // Simulate bot response
+    setTimeout(() => {
+      const botResponse: ChatMessage = {
+        id: messages.length + 2,
+        text: 'Perfeito! Vou te redirecionar para o WhatsApp onde nossos especialistas podem te atender melhor. 📱',
+        sender: 'bot' as MessageSender,
+        timestamp: new Date(),
+      }
+      setMessages((prev) => [...prev, botResponse])
+
+      // Se o chat não estiver aberto, incrementar contador de não lidas
+      if (!isOpen) {
+        setUnreadCount((prev) => prev + 1)
+      }
+
+      // Redirect to WhatsApp after bot response
+      setTimeout(() => {
+        const whatsappMessage = encodeURIComponent(
+          `Olá! Vim do site da GB Locações e gostaria de ${quickMessage}`
+        )
+        window.open(
+          `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
+          '_blank'
+        )
+        setIsOpen(false)
+        setShowQuickMessages(true) // Reset for next time
+      }, 1500)
+    }, 1000)
   }
 
   const quickMessages = [

@@ -6,7 +6,7 @@ import { NotificationBadgeWrapper } from '@/components/ui/notification-badge'
 import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useCartNotifications } from '@/hooks/use-cart-notifications'
 import { useNotifications } from '@/hooks/use-notifications'
 import { useSession } from 'next-auth/react'
@@ -16,7 +16,34 @@ export default function Header() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const { itemCount } = useCartNotifications()
-  const { stats, markAllAsRead } = useNotifications()
+  const { markAllAsRead } = useNotifications()
+  const [notificationCount, setNotificationCount] = useState(0)
+
+  // Escutar mudanças nas notificações via evento customizado
+  useEffect(() => {
+    const handleNotificationUpdate = (e: CustomEvent) => {
+      setNotificationCount(e.detail.unreadCount)
+    }
+
+    // Escutar evento customizado para atualização imediata
+    window.addEventListener(
+      'notificationUpdate',
+      handleNotificationUpdate as EventListener
+    )
+
+    // Verificar valor inicial
+    const unreadCount = localStorage.getItem('gb-locacoes-unread-count')
+    if (unreadCount) {
+      setNotificationCount(parseInt(unreadCount))
+    }
+
+    return () => {
+      window.removeEventListener(
+        'notificationUpdate',
+        handleNotificationUpdate as EventListener
+      )
+    }
+  }, [])
 
   const handleInternalNavigation = () => {
     sessionStorage.setItem('internalNavigation', 'true')
@@ -173,7 +200,7 @@ export default function Header() {
 
             {/* Usuário com notificação */}
             {session ? (
-              <NotificationBadgeWrapper count={stats.unread} size="sm">
+              <NotificationBadgeWrapper count={notificationCount} size="sm">
                 <Button
                   variant="ghost"
                   size="sm"
@@ -272,7 +299,7 @@ export default function Header() {
               {session ? (
                 <div className="space-y-2">
                   <NotificationBadgeWrapper
-                    count={stats.unread}
+                    count={notificationCount}
                     size="md"
                     className="w-full"
                   >

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 // import { useSession } from 'next-auth/react'
+import { useNotifications } from '@/hooks/use-notifications'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -10,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { ClientAreaBadge } from '@/components/ui/client-area-badge'
 import {
   Bell,
   Check,
@@ -66,10 +67,139 @@ const mockNotifications = [
   },
 ]
 
+interface Notification {
+  id: string
+  title: string
+  message: string
+  type: 'budget' | 'equipment' | 'system' | 'quote' | 'payment'
+  priority: 'high' | 'medium' | 'low'
+  isRead: boolean
+  actionUrl?: string
+  createdAt: string
+}
+
+interface NotificationCardProps {
+  notification: Notification
+  onMarkAsRead: (id: string) => void
+  getNotificationIcon: (
+    type: string
+  ) => React.ComponentType<{ className?: string }>
+  getPriorityColor: (priority: string) => string
+  getTypeLabel: (type: string) => string
+  formatTimeAgo: (date: string) => string
+}
+
+// Componente de notificação individual com animação controlada
+function NotificationCard({
+  notification,
+  onMarkAsRead,
+  getNotificationIcon,
+  getPriorityColor,
+  getTypeLabel,
+  formatTimeAgo,
+}: NotificationCardProps) {
+  const [showOrange, setShowOrange] = useState(!notification.isRead)
+
+  const handleMarkAsRead = () => {
+    if (!notification.isRead) {
+      setShowOrange(false)
+      onMarkAsRead(notification.id)
+    }
+  }
+
+  const Icon = getNotificationIcon(notification.type)
+
+  return (
+    <div className="p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 group relative z-0 bg-white">
+      {/* Background laranja com transição de opacidade */}
+      <div
+        className={cn(
+          'absolute inset-0 rounded-xl transition-opacity duration-1000 ease-in-out bg-gradient-to-br from-orange-50 via-orange-100/50 to-orange-50 ',
+          showOrange ? 'opacity-100' : 'opacity-0'
+        )}
+      />
+      {/* Conteúdo da notificação */}
+      <div className="relative z-10">
+        <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
+          <div className="flex items-start gap-4 flex-1 min-w-0">
+            <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
+              <Icon className="h-5 w-5" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-start justify-between mb-2">
+                <h4 className="font-semibold text-gray-900">
+                  {notification.title}
+                </h4>
+                <div className="flex items-center gap-2">
+                  <ClientAreaBadge
+                    className={cn(getPriorityColor(notification.priority))}
+                  >
+                    {notification.priority}
+                  </ClientAreaBadge>
+                  <ClientAreaBadge
+                    variant="outline"
+                    className="bg-gray-100 text-gray-700"
+                  >
+                    {getTypeLabel(notification.type)}
+                  </ClientAreaBadge>
+                  {!notification.isRead && (
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  )}
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mb-3">
+                {notification.message}
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-400">
+                  {formatTimeAgo(notification.createdAt)}
+                </span>
+                <div className="flex flex-wrap gap-2 mt-3 md:mt-0">
+                  {notification.actionUrl && (
+                    <Button
+                      asChild
+                      size="sm"
+                      className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
+                      onClick={() => onMarkAsRead(notification.id)}
+                    >
+                      <Link href={notification.actionUrl}>
+                        <ExternalLink className="h-4 w-4 mr-1" />
+                        Ver
+                      </Link>
+                    </Button>
+                  )}
+                  {!notification.isRead && (
+                    <Button
+                      size="sm"
+                      onClick={handleMarkAsRead}
+                      className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
+                    >
+                      <Check className="h-4 w-4 mr-1" />
+                      Lido
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function NotificacoesPage() {
   // const { data: session } = useSession()
   // TODO: Use session data for user-specific notifications
-  const [notifications, setNotifications] = useState(mockNotifications)
+  const { markAsRead: markNotificationAsRead } = useNotifications()
+  const [localNotifications, setLocalNotifications] =
+    useState(mockNotifications)
+
+  // Inicializar contador de notificações não lidas
+  useEffect(() => {
+    const unreadCount = localNotifications.filter((n) => !n.isRead).length
+    localStorage.setItem('gb-locacoes-unread-count', unreadCount.toString())
+  }, [localNotifications])
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -128,12 +258,33 @@ export default function NotificacoesPage() {
   }
 
   const markAsRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
-    )
+    // Marcar no hook global (para sincronizar com header e layout)
+    markNotificationAsRead(id)
+
+    // Marcar no estado local também
+    setLocalNotifications((prev) => {
+      const updated = prev.map((n) =>
+        n.id === id ? { ...n, isRead: true } : n
+      )
+
+      // Atualizar contador de não lidas no localStorage
+      const unreadCount = updated.filter((n) => !n.isRead).length
+      localStorage.setItem('gb-locacoes-unread-count', unreadCount.toString())
+
+      return updated
+    })
   }
 
-  const filteredNotifications = notifications
+  // Disparar evento quando o contador muda
+  useEffect(() => {
+    const unreadCount = localNotifications.filter((n) => !n.isRead).length
+    const event = new CustomEvent('notificationUpdate', {
+      detail: { unreadCount },
+    })
+    window.dispatchEvent(event)
+  }, [localNotifications])
+
+  const filteredNotifications = localNotifications
 
   return (
     <div className="min-h-screen bg-gray-50 pt-[84px] sm:pt-0">
@@ -186,7 +337,7 @@ export default function NotificacoesPage() {
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-gray-500 to-gray-600 rounded-lg text-white">
+                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                     <Bell className="h-5 w-5" />
                   </div>
                   Lista de Notificações
@@ -198,91 +349,17 @@ export default function NotificacoesPage() {
               <CardContent className="relative z-0 pt-0">
                 {filteredNotifications.length > 0 ? (
                   <div className="space-y-6">
-                    {filteredNotifications.map((notification) => {
-                      const Icon = getNotificationIcon(notification.type)
-                      return (
-                        <div
-                          key={notification.id}
-                          className="p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group relative z-0"
-                        >
-                          <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
-                            <div className="flex items-start gap-4 flex-1 min-w-0">
-                              <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
-                                <Icon className="h-5 w-5" />
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex items-start justify-between mb-2">
-                                  <h4
-                                    className={cn(
-                                      'font-semibold text-gray-900',
-                                      !notification.isRead && 'font-bold'
-                                    )}
-                                  >
-                                    {notification.title}
-                                  </h4>
-                                  <div className="flex items-center gap-2">
-                                    <Badge
-                                      className={cn(
-                                        getPriorityColor(notification.priority),
-                                        'hover:shadow-none status-badge-hover'
-                                      )}
-                                    >
-                                      {notification.priority}
-                                    </Badge>
-                                    <Badge
-                                      variant="outline"
-                                      className="bg-gray-100 text-gray-700 hover:shadow-none status-badge-hover"
-                                    >
-                                      {getTypeLabel(notification.type)}
-                                    </Badge>
-                                    {!notification.isRead && (
-                                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                                    )}
-                                  </div>
-                                </div>
-                                <p className="text-sm text-gray-600 mb-3">
-                                  {notification.message}
-                                </p>
-                                <div className="flex items-center justify-between">
-                                  <span className="text-xs text-gray-400">
-                                    {formatTimeAgo(notification.createdAt)}
-                                  </span>
-                                  <div className="flex flex-wrap gap-2 mt-3 md:mt-0">
-                                    {notification.actionUrl && (
-                                      <Button
-                                        asChild
-                                        size="sm"
-                                        className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
-                                        onClick={() =>
-                                          markAsRead(notification.id)
-                                        }
-                                      >
-                                        <Link href={notification.actionUrl}>
-                                          <ExternalLink className="h-4 w-4 mr-1" />
-                                          Ver
-                                        </Link>
-                                      </Button>
-                                    )}
-                                    {!notification.isRead && (
-                                      <Button
-                                        size="sm"
-                                        onClick={() =>
-                                          markAsRead(notification.id)
-                                        }
-                                        className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
-                                      >
-                                        <Check className="h-4 w-4 mr-1" />
-                                        Lido
-                                      </Button>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    })}
+                    {filteredNotifications.map((notification) => (
+                      <NotificationCard
+                        key={notification.id}
+                        notification={notification}
+                        onMarkAsRead={markAsRead}
+                        getNotificationIcon={getNotificationIcon}
+                        getPriorityColor={getPriorityColor}
+                        getTypeLabel={getTypeLabel}
+                        formatTimeAgo={formatTimeAgo}
+                      />
+                    ))}
                   </div>
                 ) : (
                   <div className="text-center py-20">

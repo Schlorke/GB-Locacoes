@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { ClientAreaBadge } from '@/components/ui/client-area-badge'
 import { SearchBar } from '@/components/ui/search-bar'
 import {
   Calendar,
@@ -234,12 +234,12 @@ export default function HistoricoPage() {
                             <h3 className="text-xl font-bold text-gray-900">
                               {rental.equipmentName}
                             </h3>
-                            <Badge
-                              className={`${statusInfo.color} px-3 py-1 rounded-full font-medium hover:shadow-none status-badge-hover`}
+                            <ClientAreaBadge
+                              className={`${statusInfo.color} px-3 py-1 rounded-full font-medium`}
                             >
                               <StatusIcon className="h-3 w-3 mr-1" />
                               {statusInfo.label}
-                            </Badge>
+                            </ClientAreaBadge>
                           </div>
 
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
