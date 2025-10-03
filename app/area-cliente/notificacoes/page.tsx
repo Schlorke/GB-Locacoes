@@ -149,13 +149,13 @@ function NotificationCard({
           </div>
 
           {/* Mensagem */}
-          <p className="text-[16px] text-gray-600 leading-relaxed mb-4">
+          <p className="text-sm md:text-base text-gray-600 leading-relaxed mb-4">
             {notification.message}
           </p>
 
           {/* Footer com timestamp e botões */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
-            <span className="text-sm text-gray-400">
+            <span className="text-sm text-gray-400 ">
               {formatTimeAgo(notification.createdAt)}
             </span>
             <div className="flex flex-wrap gap-2 justify-center sm:justify-end">

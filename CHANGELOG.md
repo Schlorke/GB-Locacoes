@@ -6,6 +6,90 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-03] - Melhorias na Área do Cliente e Atualizações de Dependências
+
+### Fixed 🐛
+
+- **Tipografia das Notificações**: Ajustado tamanho da fonte da descrição das
+  notificações para melhor legibilidade
+  - Mobile: `text-sm` (14px) - fonte menor para telas pequenas
+  - Desktop: `text-base` (16px) - fonte padrão para melhor leitura
+  - Mantida classe `leading-relaxed` para espaçamento entre linhas adequado
+  - Melhorada experiência de leitura em todos os dispositivos
+
+### Changed 🔄
+
+- **Dependências Atualizadas**: Atualizadas dependências para versões mais
+  recentes
+  - **@sveltejs/kit**: `2.43.7` → `2.43.8` (correções de bugs e melhorias)
+  - **pino**: `9.13.0` → `10.0.0` (versão major com melhorias de performance)
+  - **stylelint**: `16.24.0` → `16.25.0` (correções de bugs e novas regras)
+  - **Tailwind CSS**: Mantido em `3.4.17` conforme solicitado pelo usuário
+  - Todas as atualizações testadas e verificadas sem breaking changes
+
+## [2025-10-03] - Ajuste de Proporções e Alinhamento dos Cards na Área do Cliente
+
+### Fixed 🐛
+
+- **Centralização Desktop**: Implementada centralização perfeita do conteúdo
+  interno dos cards no modo desktop
+  - Adicionado `items-center` para centralização horizontal robusta
+  - Mantido `justify-center` para centralização vertical
+  - Aplicado `text-center` para alinhamento de texto consistente
+
+- **Alinhamento de Cards**: Corrigido alinhamento inadequado dos elementos
+  centrais nos cards da área do cliente
+  - Removidas margens fixas (`mt-[0.78rem] mb-[0.5rem]`) que causavam
+    desalinhamento
+  - Implementado sistema de espaçamento responsivo com `space-y-3 md:space-y-4`
+  - Melhorado alinhamento vertical dos ícones e textos nos estados vazios
+
+- **Espaçamento Responsivo**: Padronizado espaçamentos seguindo o sistema
+  mobile-first do projeto
+  - Container principal: `px-4 sm:px-6 lg:px-8` (seguindo padrão estabelecido)
+  - Gaps em grids: `gap-6 md:gap-8` para melhor proporção em diferentes telas
+  - Margens entre seções: `mb-8 md:mb-12` para espaçamento vertical consistente
+
+- **Tipografia Responsiva**: Corrigida hierarquia de textos nos cards
+  - Textos de estado vazio: `text-base md:text-lg font-medium` (proporção
+    equilibrada)
+  - Removidas classes customizadas (`text-[18px] font-2x1`) que não seguiam o
+    design system
+  - Melhorada legibilidade em diferentes tamanhos de tela
+
+- **Layout de Cards**: Melhorada estrutura dos cards de estado vazio
+  - Implementado `space-y-4 md:space-y-6` para espaçamento vertical equilibrado
+  - Reorganizada estrutura com divs agrupadas para melhor organização
+  - Melhorado alinhamento dos botões de ação
+
+### Changed 🔄
+
+- **Ícones Proporcionais**: Ajustado sistema de tamanhos para proporção mais
+  equilibrada
+  - Mobile: `h-12 w-12` (48px)
+  - Tablet: `md:h-14 md:w-14` (56px)
+  - Desktop: Mantido `md:h-14 md:w-14` para evitar excesso de tamanho
+  - Proporção visual mais harmoniosa em todos os tamanhos de tela
+
+- **Botões Compactos**: Melhorada proporção dos botões de ação
+  - Alterado para `size="sm"` para botões mais compactos
+  - Mantido `max-w-xs` para largura controlada
+  - Centralização perfeita tanto horizontal quanto vertical
+  - Proporção mais equilibrada com o conteúdo dos cards
+
+- **Seção Dashboard**: Ajustado espaçamento vertical da seção principal
+  - Mobile: `py-12` (48px)
+  - Tablet: `md:py-16` (64px)
+  - Desktop: `lg:py-20` (80px)
+  - Seguindo padrão estabelecido no projeto
+
+- **Cards de Estado Vazio**: Reestruturados para melhor organização visual
+  - Agrupamento lógico de elementos (ícone + texto)
+  - Espaçamento consistente entre grupos
+  - Melhor hierarquia visual
+  - Centralização robusta em todos os breakpoints
+  - Proporções equilibradas para evitar visual "muito grande"
+
 ## [2025-10-02] - Melhoria Visual dos Comboboxes de Filtro
 
 ### Added ✨
