@@ -86,7 +86,6 @@ interface NotificationCardProps {
   getNotificationIcon: (
     type: string
   ) => React.ComponentType<{ className?: string }>
-  getPriorityColor: (priority: string) => string
   getTypeLabel: (type: string) => string
   formatTimeAgo: (date: string) => string
 }
@@ -97,7 +96,6 @@ function NotificationCard({
   onMarkAsRead,
   onDelete,
   getNotificationIcon,
-  getPriorityColor,
   getTypeLabel,
   formatTimeAgo,
 }: NotificationCardProps) {
@@ -114,6 +112,11 @@ function NotificationCard({
 
   return (
     <div className="p-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 group relative z-0 bg-white">
+      {/* Bolinha de notificação não lida - Posicionada no canto superior direito */}
+      {!notification.isRead && (
+        <div className="absolute top-[0.8rem] right-4 w-2 h-2 bg-blue-500 rounded-full z-20"></div>
+      )}
+
       {/* Background laranja com transição de opacidade */}
       <div
         className={cn(
@@ -122,10 +125,10 @@ function NotificationCard({
         )}
       />
       {/* Conteúdo da notificação */}
-      <div className="relative p-4 py-4 z-10">
+      <div className="relative px-2 py-4 md:px-4 z-10">
         <div className="flex flex-col ">
           {/* Header com ícone e título */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white flex-shrink-0">
               <Icon className="h-5 w-5" />
             </div>
@@ -134,28 +137,13 @@ function NotificationCard({
                 <h4 className="font-semibold text-gray-900 text-base leading-none">
                   {notification.title}
                 </h4>
-                {/* Tags na mesma linha do título */}
-                <div className="flex flex-col items-end gap-2 ml-2">
-                  {!notification.isRead && (
-                    <div className="absolute w-2 h-2 bg-blue-500 rounded-full -mt-[1.4rem] -mr-[0.7rem] "></div>
-                  )}
-                  <div className="flex flex-wrap items-center justify-end gap-2">
-                    <ClientAreaBadge
-                      className={cn(
-                        getPriorityColor(notification.priority),
-                        'text-xs'
-                      )}
-                    >
-                      {notification.priority}
-                    </ClientAreaBadge>
-                    <ClientAreaBadge
-                      variant="outline"
-                      className="bg-gray-100 text-gray-700 text-xs"
-                    >
-                      {getTypeLabel(notification.type)}
-                    </ClientAreaBadge>
-                  </div>
-                </div>
+                {/* Badge de tipo */}
+                <ClientAreaBadge
+                  variant="outline"
+                  className="bg-gray-100 text-gray-700 text-xs"
+                >
+                  {getTypeLabel(notification.type)}
+                </ClientAreaBadge>
               </div>
             </div>
           </div>
@@ -234,19 +222,6 @@ export default function NotificacoesPage() {
         return AlertCircle
       default:
         return Bell
-    }
-  }
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'bg-red-100 text-red-800'
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800'
-      case 'low':
-        return 'bg-blue-100 text-blue-800'
-      default:
-        return 'bg-gray-100 text-gray-800'
     }
   }
 
@@ -369,7 +344,7 @@ export default function NotificacoesPage() {
           >
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 z-0">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
+              <CardHeader className="relative z-10 p-6">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
                     <Bell className="h-5 w-5" />
@@ -380,7 +355,7 @@ export default function NotificacoesPage() {
                   {filteredNotifications.length} notificação(ões) encontrada(s)
                 </CardDescription>
               </CardHeader>
-              <CardContent className="relative z-0 p-4 md:px-6 lg:px-8 pt-0">
+              <CardContent className="relative p-6 pb-8 pt-0 md:px-6 lg:px-8 md:pb-6 lg:pb-8 z-0">
                 {filteredNotifications.length > 0 ? (
                   <div className="space-y-6">
                     {filteredNotifications.map((notification) => (
@@ -390,7 +365,6 @@ export default function NotificacoesPage() {
                         onMarkAsRead={markAsRead}
                         onDelete={deleteNotification}
                         getNotificationIcon={getNotificationIcon}
-                        getPriorityColor={getPriorityColor}
                         getTypeLabel={getTypeLabel}
                         formatTimeAgo={formatTimeAgo}
                       />

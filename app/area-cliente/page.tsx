@@ -9,7 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { FileText, Clock, ShoppingCart, TrendingUp } from 'lucide-react'
+import {
+  FileText,
+  Clock,
+  ShoppingCart,
+  TrendingUp,
+  Plus,
+  FileTextIcon,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useCartStore } from '@/stores/useCartStore'
 import { motion } from 'framer-motion'
@@ -153,8 +160,7 @@ export default function AreaClientePage() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             {/* Meu Carrinho - Layout com Botões no Fundo */}
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
+            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full border-0">
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
@@ -166,32 +172,51 @@ export default function AreaClientePage() {
               <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
                 {getItemCount() > 0 ? (
                   <div className="flex flex-col flex-1">
-                    <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-xl p-6 mb-6">
-                      <p className="text-base text-gray-600">
-                        Total estimado:{' '}
-                        <span className="font-bold text-2xl text-orange-600">
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 mb-6 shadow-md hover:shadow-lg transition-shadow duration-300">
+                      <div className="text-center">
+                        <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
+                          Total estimado
+                        </p>
+                        <p className="text-3xl md:text-3xl font-bold text-orange-600 leading-none">
                           R$ {getTotalPrice().toFixed(2)}
-                        </span>
-                      </p>
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
+                    <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-2 ">
                       <Button size="default" asChild className="flex-1 min-w-0">
-                        <Link href="/orcamento">Ver Carrinho</Link>
+                        <Link href="/orcamento">
+                          <ShoppingCart className="h-4 w-4" />
+                          Ver Carrinho
+                        </Link>
                       </Button>
-                      <Button size="default" asChild className="flex-1 min-w-0">
-                        <Link href="/equipamentos">Adicionar Mais</Link>
+                      <Button
+                        size="default"
+                        asChild
+                        className="flex-1 min-w-0 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200"
+                      >
+                        <Link href="/equipamentos">
+                          <Plus className="h-4 w-4" />
+                          Adicionar Mais
+                        </Link>
                       </Button>
                     </div>
                   </div>
                 ) : (
                   <div className="text-center flex flex-col flex-1 justify-center">
-                    <ShoppingCart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-500 mb-8">
+                    <ShoppingCart className="h-16 w-16 text-gray-300 mx-auto mt-[0.78rem] mb-[0.5rem]" />
+                    <p className="text-[18px] font-2x1 text-gray-500">
                       Seu carrinho está vazio
                     </p>
-                    <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
-                      <Button size="default" asChild className="flex-1 min-w-0">
-                        <Link href="/equipamentos">Adicionar Equipamentos</Link>
+                    <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-8">
+                      <Button
+                        size="default"
+                        asChild
+                        className="flex-1 min-w-0 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200"
+                      >
+                        <Link href="/equipamentos">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Adicionar Equipamentos
+                        </Link>
                       </Button>
                     </div>
                   </div>
@@ -212,13 +237,16 @@ export default function AreaClientePage() {
               </CardHeader>
               <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
                 <div className="text-center flex flex-col flex-1 justify-center">
-                  <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 mb-8">
+                  <FileText className="h-16 w-16 text-gray-300 mx-auto mt-[0.78rem] mb-[0.5rem]" />
+                  <p className="text-[18px] font-2x1 text-gray-500">
                     Nenhum orçamento encontrado
                   </p>
                   <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-auto">
                     <Button size="default" asChild className="flex-1 min-w-0">
-                      <Link href="/orcamento">Solicitar Orçamento</Link>
+                      <Link href="/orcamento">
+                        <FileTextIcon className="h-4 w-4" />
+                        Solicitar Orçamento
+                      </Link>
                     </Button>
                   </div>
                 </div>
@@ -247,9 +275,9 @@ export default function AreaClientePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative z-10 pt-0">
-                <div className="text-center py-16">
-                  <Clock className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 text-lg">
+                <div className="text-center flex flex-col flex-1 justify-center py-16">
+                  <Clock className="h-16 w-16 text-gray-300 mx-auto mt-[0.78rem] mb-[0.5rem]" />
+                  <p className="text-[18px] font-2x1 text-gray-500">
                     Nenhuma atividade recente
                   </p>
                 </div>
