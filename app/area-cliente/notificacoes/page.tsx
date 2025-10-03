@@ -19,6 +19,7 @@ import {
   Settings,
   CheckCircle,
   AlertCircle,
+  Trash2,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
@@ -81,6 +82,7 @@ interface Notification {
 interface NotificationCardProps {
   notification: Notification
   onMarkAsRead: (id: string) => void
+  onDelete: (id: string) => void
   getNotificationIcon: (
     type: string
   ) => React.ComponentType<{ className?: string }>
@@ -93,6 +95,7 @@ interface NotificationCardProps {
 function NotificationCard({
   notification,
   onMarkAsRead,
+  onDelete,
   getNotificationIcon,
   getPriorityColor,
   getTypeLabel,
@@ -110,7 +113,7 @@ function NotificationCard({
   const Icon = getNotificationIcon(notification.type)
 
   return (
-    <div className="p-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 group relative z-0 bg-white">
+    <div className="p-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 group relative z-0 bg-white">
       {/* Background laranja com transição de opacidade */}
       <div
         className={cn(
@@ -119,67 +122,85 @@ function NotificationCard({
         )}
       />
       {/* Conteúdo da notificação */}
-      <div className="relative z-10">
-        <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
-          <div className="flex items-start gap-4 flex-1 min-w-0">
-            <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
+      <div className="relative p-4 py-4 z-10">
+        <div className="flex flex-col ">
+          {/* Header com ícone e título */}
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white flex-shrink-0">
               <Icon className="h-5 w-5" />
             </div>
-            <div className="flex-1">
-              <div className="flex items-start justify-between mb-2">
-                <h4 className="font-semibold text-gray-900">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h4 className="font-semibold text-gray-900 text-base leading-none">
                   {notification.title}
                 </h4>
-                <div className="flex items-center gap-2">
-                  <ClientAreaBadge
-                    className={cn(getPriorityColor(notification.priority))}
-                  >
-                    {notification.priority}
-                  </ClientAreaBadge>
-                  <ClientAreaBadge
-                    variant="outline"
-                    className="bg-gray-100 text-gray-700"
-                  >
-                    {getTypeLabel(notification.type)}
-                  </ClientAreaBadge>
+                {/* Tags na mesma linha do título */}
+                <div className="flex flex-col items-end gap-2 ml-2">
                   {!notification.isRead && (
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <div className="absolute w-2 h-2 bg-blue-500 rounded-full -mt-[1.4rem] -mr-[0.7rem] "></div>
                   )}
+                  <div className="flex flex-wrap items-center justify-end gap-2">
+                    <ClientAreaBadge
+                      className={cn(
+                        getPriorityColor(notification.priority),
+                        'text-xs'
+                      )}
+                    >
+                      {notification.priority}
+                    </ClientAreaBadge>
+                    <ClientAreaBadge
+                      variant="outline"
+                      className="bg-gray-100 text-gray-700 text-xs"
+                    >
+                      {getTypeLabel(notification.type)}
+                    </ClientAreaBadge>
+                  </div>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 mb-3">
-                {notification.message}
-              </p>
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-400">
-                  {formatTimeAgo(notification.createdAt)}
-                </span>
-                <div className="flex flex-wrap gap-2 mt-3 md:mt-0">
-                  {notification.actionUrl && (
-                    <Button
-                      asChild
-                      size="sm"
-                      className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
-                      onClick={() => onMarkAsRead(notification.id)}
-                    >
-                      <Link href={notification.actionUrl}>
-                        <ExternalLink className="h-4 w-4 mr-1" />
-                        Ver
-                      </Link>
-                    </Button>
-                  )}
-                  {!notification.isRead && (
-                    <Button
-                      size="sm"
-                      onClick={handleMarkAsRead}
-                      className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
-                    >
-                      <Check className="h-4 w-4 mr-1" />
-                      Lido
-                    </Button>
-                  )}
-                </div>
-              </div>
+            </div>
+          </div>
+
+          {/* Mensagem */}
+          <p className="text-[16px] text-gray-600 leading-relaxed mb-4">
+            {notification.message}
+          </p>
+
+          {/* Footer com timestamp e botões */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+            <span className="text-sm text-gray-400">
+              {formatTimeAgo(notification.createdAt)}
+            </span>
+            <div className="flex flex-wrap gap-2 justify-center sm:justify-end">
+              {notification.actionUrl && (
+                <Button
+                  asChild
+                  size="sm"
+                  className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-0 hover:scale-100 min-w-[80px]"
+                  onClick={() => onMarkAsRead(notification.id)}
+                >
+                  <Link href={notification.actionUrl}>
+                    <ExternalLink className="h-4 w-4 mr-1" />
+                    Ver
+                  </Link>
+                </Button>
+              )}
+              {!notification.isRead && (
+                <Button
+                  size="sm"
+                  onClick={handleMarkAsRead}
+                  className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-0 hover:scale-100 min-w-[80px]"
+                >
+                  <Check className="h-4 w-4 mr-1" />
+                  Lido
+                </Button>
+              )}
+              <Button
+                size="sm"
+                onClick={() => onDelete(notification.id)}
+                className="bg-white hover:bg-red-50 hover:text-red-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg w-10 h-10 p-0 text-red-600 border-0 hover:scale-100 flex items-center justify-center"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
@@ -275,6 +296,19 @@ export default function NotificacoesPage() {
     })
   }
 
+  const deleteNotification = (id: string) => {
+    // Remover do estado local
+    setLocalNotifications((prev) => {
+      const updated = prev.filter((n) => n.id !== id)
+
+      // Atualizar contador de não lidas no localStorage
+      const unreadCount = updated.filter((n) => !n.isRead).length
+      localStorage.setItem('gb-locacoes-unread-count', unreadCount.toString())
+
+      return updated
+    })
+  }
+
   // Disparar evento quando o contador muda
   useEffect(() => {
     const unreadCount = localNotifications.filter((n) => !n.isRead).length
@@ -346,7 +380,7 @@ export default function NotificacoesPage() {
                   {filteredNotifications.length} notificação(ões) encontrada(s)
                 </CardDescription>
               </CardHeader>
-              <CardContent className="relative z-0 pt-0">
+              <CardContent className="relative z-0 p-4 md:px-6 lg:px-8 pt-0">
                 {filteredNotifications.length > 0 ? (
                   <div className="space-y-6">
                     {filteredNotifications.map((notification) => (
@@ -354,6 +388,7 @@ export default function NotificacoesPage() {
                         key={notification.id}
                         notification={notification}
                         onMarkAsRead={markAsRead}
+                        onDelete={deleteNotification}
                         getNotificationIcon={getNotificationIcon}
                         getPriorityColor={getPriorityColor}
                         getTypeLabel={getTypeLabel}

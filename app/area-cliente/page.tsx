@@ -237,7 +237,7 @@ export default function AreaClientePage() {
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-gray-500 to-gray-600 rounded-lg text-white">
+                  <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg text-white">
                     <Clock className="h-5 w-5" />
                   </div>
                   Atividade Recente
