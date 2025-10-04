@@ -13,5 +13,4 @@ module.exports = {
     ],
     '@typescript-eslint/no-explicit-any': 'warn',
   },
-  // ignorePatterns removido - usando ignores no eslint.config.js
 }

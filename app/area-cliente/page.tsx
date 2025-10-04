@@ -76,8 +76,8 @@ export default function AreaClientePage() {
       </section>
 
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
-      <section className="py-12 md:py-16 lg:py-20 relative -mt-20 md:-mt-24">
-        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
+        <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
           {/* Stats Grid - 1 coluna em mobile, 3 colunas em desktop */}
           <motion.div
             className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 items-stretch"
@@ -171,52 +171,64 @@ export default function AreaClientePage() {
               </CardHeader>
               <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
                 {getItemCount() > 0 ? (
-                  <div className="flex flex-col flex-1">
-                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 mb-6 shadow-md hover:shadow-lg transition-shadow duration-300">
-                      <div className="text-center">
-                        <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
-                          Total estimado
-                        </p>
-                        <p className="text-3xl md:text-3xl font-bold text-orange-600 leading-none">
-                          R$ {getTotalPrice().toFixed(2)}
-                        </p>
+                  <div className="flex flex-col flex-1 min-h-0">
+                    {/* Área central com total estimado */}
+                    <div className="flex flex-col flex-1 justify-center pt-0 text-center py-8">
+                      <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <div className="text-center">
+                          <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
+                            Total estimado
+                          </p>
+                          <p className="text-3xl md:text-3xl font-bold text-orange-600 leading-none">
+                            R$ {getTotalPrice().toFixed(2)}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex flex-wrap md:flex-nowrap gap-2 w-full mt-2 ">
-                      <Button size="default" asChild className="flex-1 min-w-0">
+                    {/* Botões fixos na parte inferior */}
+                    <div className="flex flex-col sm:flex-row justify-center gap-2 ">
+                      <Button
+                        size="default"
+                        asChild
+                        className="w-full sm:flex-1 h-10"
+                      >
                         <Link href="/orcamento">
-                          <ShoppingCart className="h-4 w-4" />
+                          <ShoppingCart className="h-4 w-4 " />
                           Ver Carrinho
                         </Link>
                       </Button>
                       <Button
                         size="default"
                         asChild
-                        className="flex-1 min-w-0 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200"
+                        className="w-full sm:flex-1 h-10 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200"
                       >
                         <Link href="/equipamentos">
-                          <Plus className="h-4 w-4" />
+                          <Plus className="h-4 w-4 " />
                           Adicionar Mais
                         </Link>
                       </Button>
                     </div>
                   </div>
                 ) : (
-                  <div className="flex flex-col flex-1 justify-center items-center text-center space-y-4 md:space-y-6">
-                    <div className="space-y-3 md:space-y-4">
-                      <ShoppingCart className="h-12 w-12 md:h-14 md:w-14 text-gray-300 mx-auto" />
-                      <p className="text-base md:text-lg font-medium text-gray-500">
-                        Seu carrinho está vazio
-                      </p>
+                  <div className="flex flex-col flex-1 min-h-0">
+                    {/* Área central com ícone e texto */}
+                    <div className="flex flex-col flex-1 justify-center items-center text-center px-4 py-8">
+                      <div className="space-y-4">
+                        <ShoppingCart className="h-12 w-12 md:h-14 md:w-14 text-gray-300 mx-auto" />
+                        <p className="text-base md:text-lg font-medium text-gray-500">
+                          Seu carrinho está vazio
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex flex-wrap md:flex-nowrap gap-2 w-full max-w-xs">
+                    {/* Botão fixo na parte inferior */}
+                    <div className="flex justify-center px-4">
                       <Button
-                        size="sm"
+                        size="default"
                         asChild
-                        className="flex-1 min-w-0 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200"
+                        className="w-full max-w-xs h-10 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200"
                       >
                         <Link href="/equipamentos">
-                          <Plus className="h-4 w-4 mr-2" />
+                          <Plus className="h-4 w-4" />
                           Adicionar Equipamentos
                         </Link>
                       </Button>
@@ -238,17 +250,21 @@ export default function AreaClientePage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
-                <div className="flex flex-col flex-1 justify-center items-center text-center space-y-4 md:space-y-6">
-                  <div className="space-y-3 md:space-y-4">
-                    <FileText className="h-12 w-12 md:h-14 md:w-14 text-gray-300 mx-auto" />
-                    <p className="text-base md:text-lg font-medium text-gray-500">
-                      Nenhum orçamento encontrado
-                    </p>
+                <div className="flex flex-col flex-1 min-h-0">
+                  {/* Área central com ícone e texto */}
+                  <div className="flex flex-col flex-1 justify-center items-center text-center px-4 py-8">
+                    <div className="space-y-4">
+                      <FileText className="h-12 w-12 md:h-14 md:w-14 text-gray-300 mx-auto" />
+                      <p className="text-base md:text-lg font-medium text-gray-500">
+                        Nenhum orçamento encontrado
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex flex-wrap md:flex-nowrap gap-2 w-full max-w-xs">
-                    <Button size="sm" asChild className="flex-1 min-w-0">
+                  {/* Botão fixo na parte inferior */}
+                  <div className="flex justify-center ">
+                    <Button size="default" asChild className="w-full h-10">
                       <Link href="/orcamento">
-                        <FileTextIcon className="h-4 w-4" />
+                        <FileTextIcon className="h-4 w-4 " />
                         Solicitar Orçamento
                       </Link>
                     </Button>
@@ -279,13 +295,11 @@ export default function AreaClientePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative z-10 pt-0">
-                <div className="flex flex-col flex-1 justify-center items-center text-center py-8 md:py-12">
-                  <div className="space-y-3 md:space-y-4">
-                    <Clock className="h-12 w-12 md:h-14 md:w-14 text-gray-300 mx-auto" />
-                    <p className="text-base md:text-lg font-medium text-gray-500">
-                      Nenhuma atividade recente
-                    </p>
-                  </div>
+                <div className="text-center flex flex-col flex-1 justify-center py-16">
+                  <Clock className="h-16 w-16 text-gray-300 mx-auto mt-[0.78rem] mb-[0.5rem]" />
+                  <p className="text-[18px] font-2x1 text-gray-500">
+                    Nenhuma atividade recente
+                  </p>
                 </div>
               </CardContent>
             </Card>

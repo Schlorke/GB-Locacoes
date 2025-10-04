@@ -6,6 +6,65 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-03] - Atualização de Dependências
+
+### Updated 🔄
+
+- **@eslint/js**: Atualizado para versão 9.37.0
+- **eslint**: Atualizado para versão 9.37.0
+- **stripe**: Atualizado para versão 19.1.0
+- **eslint-plugin-react-hooks**: Tentativa de atualização para 6.1.1 (revertido
+  para 6.1.0 devido a incompatibilidade)
+- **Tailwind CSS**: Mantido na versão 3.4.17 conforme preferência do usuário
+
+### Notes 📝
+
+- Atualizações aplicadas com sucesso mantendo compatibilidade
+- Servidor de desenvolvimento funcionando normalmente
+- Build apresenta erro de permissão no Windows com Prisma (problema conhecido do
+  PNPM)
+- **eslint-plugin-react-hooks 6.1.1**: Atualização IMPOSSÍVEL no momento
+- **Problema confirmado**: Issue #31158 no repositório oficial do React (GitHub)
+- **Causa**: Incompatibilidade conhecida entre eslint-plugin-react-hooks 6.1.1 e
+  ESLint 9.x
+- **Erro**: "Converting circular structure to JSON" no eslint-config-next
+- **Status oficial**: Sem solução disponível pelo time do React até janeiro 2025
+- **Tentativas realizadas**:
+  - ✅ fixupPluginRules com @eslint/compat
+  - ✅ Configuração manual sem eslint-config-next
+  - ✅ Remoção de conflitos entre formatos antigo/novo
+  - ✅ Pesquisa extensiva na internet e documentação oficial
+- **Conclusão**: Mantida versão 6.1.0 até lançamento de patch oficial
+- **Recomendação**: Monitorar https://github.com/facebook/react/issues/31158
+  para updates
+
+## [2025-10-03] - Otimização de Layout e Centralização de Elementos na Área do Cliente
+
+### Improved ✨
+
+- **Centralização Perfeita de Ícones**: Implementada centralização verdadeira
+  dos ícones nos cards da área do cliente
+  - Ícones com tamanho responsivo `h-12 w-12 md:h-14 md:w-14` para melhor
+    proporção
+  - Área central dedicada com `flex-1 justify-center items-center` para
+    centralização perfeita
+  - Espaçamento otimizado com `px-4 py-8` para melhor proporção visual
+  - Aplicado nos cards "Meu Carrinho" e "Meus Orçamentos"
+
+- **Posicionamento Fixo de Botões**: Garantido que os botões sempre fiquem na
+  parte inferior dos cards
+  - Estrutura flexbox otimizada com `min-h-0` para controle preciso de altura
+  - Botões posicionados com `flex justify-center px-4 pb-4` na parte inferior
+  - Largura máxima `max-w-xs` para melhor proporção em diferentes telas
+  - Espaçamento consistente entre ícone/texto e botão
+
+- **Melhorias de UX**: Aplicadas melhores práticas de design para experiência do
+  usuário
+  - Hierarquia visual clara com ícones maiores e mais proeminentes
+  - Espaçamento responsivo que se adapta a diferentes tamanhos de tela
+  - Alinhamento consistente seguindo o design system do projeto
+  - Feedback visual melhorado com hover states mantidos
+
 ## [2025-10-03] - Melhorias na Área do Cliente e Atualizações de Dependências
 
 ### Fixed 🐛
