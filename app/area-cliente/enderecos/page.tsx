@@ -184,20 +184,20 @@ export default function EnderecosPage() {
 
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
       <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
-        <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           {/* Seções Principais - Layout Proporcional à linha superior */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             {/* Adicionar Endereço */}
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+              <CardHeader className="relative z-10 pb-4 md:pb-6 lg:pb-8">
+                <CardTitle className="flex items-center gap-3 text-lg md:text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
-                    <Plus className="h-5 w-5" />
+                    <Plus className="h-4 w-4 md:h-5 md:w-5" />
                   </div>
                   Adicionar Endereço
                 </CardTitle>
@@ -224,10 +224,10 @@ export default function EnderecosPage() {
 
             {/* Endereço Principal */}
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+              <CardHeader className="relative z-10 pb-4 md:pb-6 lg:pb-8">
+                <CardTitle className="flex items-center gap-3 text-lg md:text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
-                    <Home className="h-5 w-5" />
+                    <Home className="h-4 w-4 md:h-5 md:w-5" />
                   </div>
                   Endereço Principal
                 </CardTitle>
@@ -304,17 +304,17 @@ export default function EnderecosPage() {
             >
               <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl border-0">
                 <CardHeader className="relative z-10">
-                  <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+                  <CardTitle className="flex items-center gap-3 text-lg md:text-xl font-bold text-gray-900">
                     <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg text-white">
                       {editingId ? (
-                        <Edit className="h-5 w-5" />
+                        <Edit className="h-4 w-4 md:h-5 md:w-5" />
                       ) : (
-                        <Plus className="h-5 w-5" />
+                        <Plus className="h-4 w-4 md:h-5 md:w-5" />
                       )}
                     </div>
                     {editingId ? 'Editar Endereço' : 'Adicionar Novo Endereço'}
                   </CardTitle>
-                  <CardDescription>
+                  <CardDescription className="text-sm md:text-base">
                     Preencha os dados do endereço de entrega
                   </CardDescription>
                 </CardHeader>
@@ -437,12 +437,12 @@ export default function EnderecosPage() {
                         />
                       </div>
                     </div>
-                    <div className="flex flex-wrap md:flex-nowrap gap-3 pt-4">
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4">
                       <Button
                         type="submit"
                         variant="outline"
                         size="default"
-                        className="flex-1 min-w-0 bg-slate-700 border disabled:opacity-50 disabled:pointer-events-none duration-200 focus:outline-none font-medium gap-2 h-10 hover:bg-slate-600 hover:text-white hover:scale-105 hover:shadow-lg inline-flex items-center justify-center md:mt-0 md:w-28 ml-auto mt-3 px-4 py-2 rounded-md self-center shadow-md text-sm text-white transition-all w-full whitespace-nowrap [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4"
+                        className="w-full sm:w-auto sm:flex-1 min-w-0 bg-slate-700 border disabled:opacity-50 disabled:pointer-events-none duration-200 focus:outline-none font-medium gap-2 h-10 hover:bg-slate-600 hover:text-white hover:scale-105 hover:shadow-lg inline-flex items-center justify-center px-4 py-2 rounded-md shadow-md text-sm text-white transition-all whitespace-nowrap [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:size-4"
                       >
                         <Save className="h-4 w-4" />
                         {editingId ? 'Atualizar' : 'Adicionar'} Endereço
@@ -451,7 +451,7 @@ export default function EnderecosPage() {
                         type="button"
                         variant="outline"
                         onClick={handleCancel}
-                        className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl border border-gray-200"
+                        className="w-full sm:w-auto sm:flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl border border-gray-200"
                       >
                         <X className="h-4 w-4" />
                         Cancelar
@@ -472,14 +472,14 @@ export default function EnderecosPage() {
           >
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative z-10 pb-6 md:pb-8">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+              <CardHeader className="relative z-10 pb-4 md:pb-6 lg:pb-8">
+                <CardTitle className="flex items-center gap-3 text-lg md:text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-gray-500 to-gray-600 rounded-lg text-white">
-                    <MapPin className="h-5 w-5" />
+                    <MapPin className="h-4 w-4 md:h-5 md:w-5" />
                   </div>
                   Todos os Endereços
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-sm md:text-base">
                   {addresses.length} endereço(s) cadastrado(s)
                 </CardDescription>
               </CardHeader>
@@ -489,42 +489,50 @@ export default function EnderecosPage() {
                     {addresses.map((address) => (
                       <div
                         key={address.id}
-                        className="p-6 md:p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group relative z-0"
+                        className="p-4 md:p-6 lg:p-8 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group relative z-0"
                       >
-                        <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 mb-4">
-                              <MapPin className="h-5 w-5 text-gray-500" />
-                              <span className="font-medium text-gray-900">
-                                {address.street}, {address.number}
-                              </span>
+                            {/* Header com ícone, endereço e badge */}
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+                              <div className="flex items-center gap-3">
+                                <MapPin className="h-4 w-4 md:h-5 md:w-5 text-gray-500 flex-shrink-0" />
+                                <span className="font-medium text-gray-900 text-sm md:text-base">
+                                  {address.street}, {address.number}
+                                </span>
+                              </div>
                               {address.isPrimary && (
-                                <ClientAreaBadge className="bg-orange-100 text-orange-800">
+                                <ClientAreaBadge className="bg-orange-100 text-orange-800 self-start sm:self-center flex-shrink-0">
                                   <Star className="h-3 w-3 mr-1" />
                                   Principal
                                 </ClientAreaBadge>
                               )}
                             </div>
-                            {address.complement && (
-                              <p className="text-sm text-gray-600 mb-1 ml-8">
-                                {address.complement}
+                            {/* Detalhes do endereço */}
+                            <div className="space-y-1 ml-7 md:ml-8">
+                              {address.complement && (
+                                <p className="text-xs md:text-sm text-gray-600">
+                                  {address.complement}
+                                </p>
+                              )}
+                              <p className="text-xs md:text-sm text-gray-600">
+                                {address.neighborhood} - {address.city}/
+                                {address.state}
                               </p>
-                            )}
-                            <p className="text-sm text-gray-600 ml-8">
-                              {address.neighborhood} - {address.city}/
-                              {address.state}
-                            </p>
-                            <p className="text-sm text-gray-600 ml-8">
-                              CEP: {address.zipCode}
-                            </p>
+                              <p className="text-xs md:text-sm text-gray-600">
+                                CEP: {address.zipCode}
+                              </p>
+                            </div>
                           </div>
-                          <div className="flex flex-wrap md:flex-nowrap gap-2 mt-3 md:mt-0">
+
+                          {/* Botões de ação responsivos */}
+                          <div className="flex flex-col sm:flex-row gap-2 mt-4 lg:mt-0 lg:ml-4">
                             {!address.isPrimary && (
                               <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => handleSetPrimary(address.id)}
-                                className="flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-yellow-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200"
+                                className="w-full sm:w-auto sm:flex-1 min-w-0 bg-white hover:bg-white text-gray-900 hover:text-yellow-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200"
                               >
                                 <Star className="h-4 w-4 mr-1" />
                                 Principal
@@ -534,17 +542,19 @@ export default function EnderecosPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => handleEdit(address)}
-                              className="flex-1 min-w-0 border-0 bg-white hover:scale-none hover:bg-white text-gray-900 hover:text-orange-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
+                              className="w-full sm:w-auto sm:flex-1 min-w-0 border-0 bg-white hover:scale-none hover:bg-white text-gray-900 hover:text-orange-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
                             >
-                              <Edit className="h-4 w-4" />
+                              <Edit className="h-4 w-4 mr-1 sm:mr-0" />
+                              <span className="sm:hidden">Editar</span>
                             </Button>
                             <Button
                               variant="outline"
                               size="sm"
                               onClick={() => handleDelete(address.id)}
-                              className="flex-1 min-w-0 border-0 bg-white hover:scale-none hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
+                              className="w-full sm:w-auto sm:flex-1 min-w-0 border-0 bg-white hover:scale-none hover:bg-red-50 text-red-600 hover:text-red-700 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 className="h-4 w-4 mr-1 sm:mr-0" />
+                              <span className="sm:hidden">Excluir</span>
                             </Button>
                           </div>
                         </div>

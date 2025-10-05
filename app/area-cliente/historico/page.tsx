@@ -353,10 +353,10 @@ export default function HistoricoPage() {
                   <div className="p-6 bg-gray-100 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center">
                     <Package className="h-10 w-10 text-gray-400" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  <h3 className="text-lg sm:text-2xl font-bold text-gray-900 mb-3">
                     Nenhuma locação encontrada
                   </h3>
-                  <p className="text-gray-600 mb-6 text-lg">
+                  <p className="text-gray-600 mb-6 text-sm sm:text-lg">
                     {searchTerm || statusFilter !== 'all'
                       ? 'Tente ajustar os filtros de busca'
                       : 'Você ainda não possui histórico de locações'}
