@@ -6,11 +6,19 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [2025-10-05] - Atualização de Dependências Seguras
+## [2025-10-05] - Correção de Lockfile e Atualização de Dependências
+
+### Fixed 🐛
+
+- **ERR_PNPM_OUTDATED_LOCKFILE**: Corrigida inconsistência nodemailer entre
+  dependencies (7.0.7) e pnpm overrides (7.0.6)
+- **Produção**: Resolvido erro de frozen-lockfile em ambiente de produção
+- **Sincronização**: pnpm-lock.yaml atualizado para alinhamento completo com
+  package.json
 
 ### Updated 🔄
 
-- **nodemailer**: Atualizado para versão 7.0.7
+- **nodemailer**: Alinhado para versão 7.0.6 (consistente com pnpm overrides)
 - **prisma-zod-generator**: Atualizado para versão 1.27.3 (dev dependency)
 - **@storybook/react**: Atualizado para versão 9.1.10 (dev dependency)
 - **@sveltejs/kit**: Atualizado para versão 2.44.0
