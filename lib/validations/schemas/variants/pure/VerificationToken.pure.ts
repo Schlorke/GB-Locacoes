@@ -8,4 +8,4 @@ export const VerificationTokenModelSchema = z.object({
     expires: z.date()
 }).strict();
 
-export type VerificationTokenModelType = z.infer<typeof VerificationTokenModelSchema>;
+export type VerificationTokenPureType = z.infer<typeof VerificationTokenModelSchema>;

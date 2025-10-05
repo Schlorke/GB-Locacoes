@@ -18,4 +18,4 @@ export const AddressModelSchema = z.object({
     updatedAt: z.date()
 }).strict();
 
-export type AddressModelType = z.infer<typeof AddressModelSchema>;
+export type AddressPureType = z.infer<typeof AddressModelSchema>;

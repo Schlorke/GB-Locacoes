@@ -6,6 +6,27 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-05] - Atualização de Dependências Seguras
+
+### Updated 🔄
+
+- **nodemailer**: Atualizado para versão 7.0.7
+- **prisma-zod-generator**: Atualizado para versão 1.27.3 (dev dependency)
+- **@storybook/react**: Atualizado para versão 9.1.10 (dev dependency)
+- **@sveltejs/kit**: Atualizado para versão 2.44.0
+
+### Skipped ⏭️
+
+- **Tailwind CSS**: Mantido na versão 3.4.17 conforme diretrizes de
+  compatibilidade
+
+### Notes 📝
+
+- Atualizações aplicadas seguindo diretrizes de compatibilidade do projeto
+- Build testado com sucesso após atualizações
+- Todas as dependências críticas mantidas em versões estáveis
+- Sistema de build funcionando normalmente (8.1s compile time)
+
 ## [2025-10-03] - Atualização de Dependências
 
 ### Updated 🔄

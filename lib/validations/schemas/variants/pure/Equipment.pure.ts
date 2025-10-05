@@ -33,4 +33,4 @@ export const EquipmentModelSchema = z.object({
     cartItems: z.array(z.unknown())
 }).strict();
 
-export type EquipmentModelType = z.infer<typeof EquipmentModelSchema>;
+export type EquipmentPureType = z.infer<typeof EquipmentModelSchema>;

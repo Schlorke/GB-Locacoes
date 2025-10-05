@@ -15,4 +15,4 @@ export const rentalsModelSchema = z.object({
     users: z.unknown()
 }).strict();
 
-export type rentalsModelType = z.infer<typeof rentalsModelSchema>;
+export type rentalsPureType = z.infer<typeof rentalsModelSchema>;

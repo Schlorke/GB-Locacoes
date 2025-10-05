@@ -176,7 +176,7 @@ function CadastroForm() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 md:-mt-[96px]">
       <div className="flex min-h-screen items-center justify-center  px-4 pb-8 md:px-6 md:pt-24 md:pb-8 lg:mt-3 xl:px-4 xl:py-20">
         {/* Container do cadastro centralizado */}
-        <div className="w-full pt-5 max-w-2xl relative z-10">
+        <div className="w-full pt-5 max-w-xl relative z-10">
           <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in">
             <div className="overflow-y-auto rounded-2xl max-h-auto">
               <CardHeader className="text-center space-y-4 py-3 pt-8 px-4 md:px-8 md:py-8 md:space-y-3 xl:px-6 animate-fade-in-up">
@@ -201,7 +201,7 @@ function CadastroForm() {
               <CardContent className="px-4 pb-8 space-y-6 md:px-8 md:pb-4 md:space-y-4 xl:px-6">
                 <form
                   onSubmit={handleSubmit}
-                  className="space-y-4 w-full max-w-none mx-auto"
+                  className="space-y-4 w-full max-w-lg mx-auto"
                 >
                   {error && (
                     <Alert

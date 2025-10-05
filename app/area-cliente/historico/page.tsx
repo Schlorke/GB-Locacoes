@@ -173,7 +173,7 @@ export default function HistoricoPage() {
 
       {/* Content */}
       <section className="-mt-20 lg:py-10 md:-mt-24 md:py-16 py-12 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           {/* Search Bar */}
           <motion.div
             className="mb-8 relative z-10"
@@ -224,41 +224,45 @@ export default function HistoricoPage() {
                 >
                   <Card className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 group z-0 border-0">
                     <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
-                    <CardContent className="p-6 relative z-0">
-                      <div className="flex flex-wrap md:flex-nowrap items-start justify-between gap-4">
+                    <CardContent className="p-6 sm:p-6 relative z-0">
+                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white">
-                              <Package className="h-5 w-5" />
+                          {/* Header com ícone, título e badge */}
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white flex-shrink-0">
+                                <Package className="h-5 w-5" />
+                              </div>
+                              <h3 className="text-lg sm:text-xl font-bold text-gray-900 flex-1 min-w-0">
+                                {rental.equipmentName}
+                              </h3>
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900">
-                              {rental.equipmentName}
-                            </h3>
                             <ClientAreaBadge
-                              className={`${statusInfo.color} px-3 py-1 rounded-full font-medium`}
+                              className={`${statusInfo.color} px-3 py-1 rounded-full font-medium self-start sm:self-center flex-shrink-0`}
                             >
                               <StatusIcon className="h-3 w-3 mr-1" />
                               {statusInfo.label}
                             </ClientAreaBadge>
                           </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
+                          {/* Grid de informações responsivo */}
+                          <div className="grid grid-cols- md:grid-cols-4 lg:grid-cols-3 gap-3 sm:gap-3 text-sm text-gray-600 mb-4">
                             <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                              <div className="w-2 h-2 bg-orange-500 rounded-full flex-shrink-0"></div>
                               <span className="font-medium">Quantidade:</span>
                               <span className="font-bold text-gray-900">
                                 {rental.quantity}
                               </span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                              <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
                               <span className="font-medium">Período:</span>
                               <span className="font-bold text-gray-900">
                                 {rental.days} dias
                               </span>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <div className="flex items-center gap-2 sm:col-span-2 lg:col-span-1">
+                              <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
                               <span className="font-medium">Valor Total:</span>
                               <span className="font-bold text-gray-900">
                                 R$ {rental.totalPrice.toFixed(2)}
@@ -272,11 +276,12 @@ export default function HistoricoPage() {
                             </p>
                           )}
 
-                          <div className="flex items-center gap-6 text-xs text-gray-500">
+                          {/* Seção de datas responsiva */}
+                          <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs text-gray-500">
                             <div className="flex items-center gap-2">
-                              <Calendar className="h-4 w-4" />
+                              <Calendar className="h-4 w-4 flex-shrink-0" />
                               <span className="font-medium">Criado em:</span>
-                              <span>
+                              <span className="font-medium text-gray-700">
                                 {new Date(rental.createdAt).toLocaleDateString(
                                   'pt-BR'
                                 )}
@@ -284,9 +289,9 @@ export default function HistoricoPage() {
                             </div>
                             {rental.startDate && (
                               <div className="flex items-center gap-2">
-                                <Clock className="h-4 w-4" />
+                                <Clock className="h-4 w-4 flex-shrink-0" />
                                 <span className="font-medium">Início:</span>
-                                <span>
+                                <span className="font-medium text-gray-700">
                                   {new Date(
                                     rental.startDate
                                   ).toLocaleDateString('pt-BR')}
@@ -295,9 +300,9 @@ export default function HistoricoPage() {
                             )}
                             {rental.endDate && (
                               <div className="flex items-center gap-2">
-                                <Clock className="h-4 w-4" />
+                                <Clock className="h-4 w-4 flex-shrink-0" />
                                 <span className="font-medium">Fim:</span>
-                                <span>
+                                <span className="font-medium text-gray-700">
                                   {new Date(rental.endDate).toLocaleDateString(
                                     'pt-BR'
                                   )}
@@ -307,11 +312,12 @@ export default function HistoricoPage() {
                           </div>
                         </div>
 
-                        <div className="flex flex-wrap md:flex-nowrap gap-3 mt-3 md:mt-0">
+                        {/* Botões de ação responsivos */}
+                        <div className="flex flex-col sm:flex-row gap-3 mt-4 lg:mt-0 lg:ml-4">
                           <Button
                             variant="outline"
                             size="sm"
-                            className="flex-1 min-w-0 inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group border border-gray-200"
+                            className="w-full sm:w-auto sm:flex-1 min-w-0 inline-flex items-center justify-center gap-2 px-4 py-2 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group border border-gray-200"
                           >
                             <Eye className="h-4 w-4" />
                             Ver Detalhes
@@ -321,7 +327,7 @@ export default function HistoricoPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="flex-1 min-w-0 inline-flex items-center gap-2 px-4 py-2 bg-white hover:bg-white text-red-600 hover:text-red-700 font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-red-200"
+                              className="w-full sm:w-auto sm:flex-1 min-w-0 inline-flex items-center justify-center gap-2 px-4 py-2 bg-white hover:bg-white text-red-600 hover:text-red-700 font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-red-200"
                             >
                               Cancelar
                             </Button>

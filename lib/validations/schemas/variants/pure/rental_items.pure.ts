@@ -16,4 +16,4 @@ export const rental_itemsModelSchema = z.object({
     rentals: z.unknown()
 }).strict();
 
-export type rental_itemsModelType = z.infer<typeof rental_itemsModelSchema>;
+export type rental_itemsPureType = z.infer<typeof rental_itemsModelSchema>;

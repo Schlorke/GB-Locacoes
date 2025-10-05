@@ -469,7 +469,7 @@ export default function PerfilPage() {
                   </CardDescription>
                 </div>
               </CardHeader>
-              <CardContent className="relative px-4 md:px-6 z-10 pt-0">
+              <CardContent className="relative px-6 md:px-6 z-10 pt-0">
                 <div className="grid grid-cols-1 gap-4">
                   <div className="bg-white border rounded-xl shadow-md hover:shadow-xl transition-all duration-300">
                     <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-4">

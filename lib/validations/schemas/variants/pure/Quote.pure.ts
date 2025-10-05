@@ -19,4 +19,4 @@ export const QuoteModelSchema = z.object({
     user: z.unknown().nullable()
 }).strict();
 
-export type QuoteModelType = z.infer<typeof QuoteModelSchema>;
+export type QuotePureType = z.infer<typeof QuoteModelSchema>;

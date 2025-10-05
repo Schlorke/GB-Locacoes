@@ -16,4 +16,4 @@ export const QuoteItemModelSchema = z.object({
     quote: z.unknown()
 }).strict();
 
-export type QuoteItemModelType = z.infer<typeof QuoteItemModelSchema>;
+export type QuoteItemPureType = z.infer<typeof QuoteItemModelSchema>;

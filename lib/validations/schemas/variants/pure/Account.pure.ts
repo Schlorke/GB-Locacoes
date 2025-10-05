@@ -18,4 +18,4 @@ export const AccountModelSchema = z.object({
     user: z.unknown()
 }).strict();
 
-export type AccountModelType = z.infer<typeof AccountModelSchema>;
+export type AccountPureType = z.infer<typeof AccountModelSchema>;

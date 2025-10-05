@@ -15,4 +15,4 @@ export const CartItemModelSchema = z.object({
     createdAt: z.date()
 }).strict();
 
-export type CartItemModelType = z.infer<typeof CartItemModelSchema>;
+export type CartItemPureType = z.infer<typeof CartItemModelSchema>;

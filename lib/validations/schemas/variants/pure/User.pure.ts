@@ -24,4 +24,4 @@ export const UserModelSchema = z.object({
     cart: z.unknown().nullable()
 }).strict();
 
-export type UserModelType = z.infer<typeof UserModelSchema>;
+export type UserPureType = z.infer<typeof UserModelSchema>;

@@ -34,4 +34,4 @@ export const SettingModelSchema = z.object({
     updatedAt: z.date()
 }).strict();
 
-export type SettingModelType = z.infer<typeof SettingModelSchema>;
+export type SettingPureType = z.infer<typeof SettingModelSchema>;

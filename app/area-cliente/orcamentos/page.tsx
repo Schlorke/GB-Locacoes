@@ -200,7 +200,7 @@ export default function OrcamentosPage() {
                   {filteredOrcamentos.length} orçamento(s) encontrado(s)
                 </CardDescription>
               </CardHeader>
-              <CardContent className="p-4 md:p-6 lg:p-8 relative !pt-0 z-0">
+              <CardContent className="p-4 pb-8 md:p-6 lg:p-8 relative !pt-0 z-0">
                 {filteredOrcamentos.length > 0 ? (
                   <div className="space-y-6">
                     {filteredOrcamentos.map((orcamento) => {
