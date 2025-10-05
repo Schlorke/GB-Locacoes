@@ -81,13 +81,13 @@ interface Notification {
 
 interface NotificationCardProps {
   notification: Notification
-  onMarkAsRead: (id: string) => void
-  onDelete: (id: string) => void
+  onMarkAsRead: (_id: string) => void
+  onDelete: (_id: string) => void
   getNotificationIcon: (
-    type: string
+    _type: string
   ) => React.ComponentType<{ className?: string }>
-  getTypeLabel: (type: string) => string
-  formatTimeAgo: (date: string) => string
+  getTypeLabel: (_type: string) => string
+  formatTimeAgo: (_date: string) => string
 }
 
 // Componente de notificação individual com animação controlada
@@ -149,7 +149,7 @@ function NotificationCard({
           </div>
 
           {/* Mensagem */}
-          <p className="text-sm md:text-base text-gray-600 leading-relaxed mb-4">
+          <p className="text-sm md:text-[1rem] text-gray-600 leading-relaxed mb-4">
             {notification.message}
           </p>
 

@@ -186,7 +186,7 @@ export function useNotifications() {
 // Funções utilitárias para criar notificações específicas
 export const createNotificationHelpers = (
   addNotification: (
-    notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>
+    _notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>
   ) => string
 ) => ({
   // Notificação de novo orçamento

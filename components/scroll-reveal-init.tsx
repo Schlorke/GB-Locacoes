@@ -579,7 +579,7 @@ export default function ScrollRevealInit() {
       if ('requestIdleCallback' in window) {
         ;(
           window as Window & {
-            requestIdleCallback: (callback: () => void) => void
+            requestIdleCallback: (_callback: () => void) => void
           }
         ).requestIdleCallback(start)
       } else {

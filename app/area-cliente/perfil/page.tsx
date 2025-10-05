@@ -134,7 +134,7 @@ export default function PerfilPage() {
           >
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
               <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
-              <CardHeader className="relative d:px-6 z-10 pb-6">
+              <CardHeader className="relative md:px-6 z-10 pb-6">
                 <div className="flex items-start justify-between">
                   <div className="space-y-1.5">
                     <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
@@ -156,7 +156,7 @@ export default function PerfilPage() {
                   </Button>
                 </div>
               </CardHeader>
-              <CardContent className="relative px-4 md:px-6 z-10 pt-0">
+              <CardContent className="relative md:px-6 z-10 pt-0">
                 <div className="space-y-8">
                   {/* Dados Pessoais */}
                   <div className="space-y-6">

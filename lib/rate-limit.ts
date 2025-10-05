@@ -12,7 +12,7 @@ const store: RateLimitStore = {}
 interface RateLimitOptions {
   windowMs: number // Time window in milliseconds
   maxRequests: number // Maximum requests per window
-  keyGenerator?: (request: NextRequest) => string
+  keyGenerator?: (_request: NextRequest) => string
 }
 
 interface RateLimitResult {
@@ -140,7 +140,7 @@ function cleanupExpiredEntries(now: number) {
  */
 export function checkRateLimit(
   request: NextRequest,
-  limiter: (req: NextRequest) => RateLimitResult
+  limiter: (_req: NextRequest) => RateLimitResult
 ): { allowed: boolean; response?: Response; headers: Record<string, string> } {
   const result = limiter(request)
 

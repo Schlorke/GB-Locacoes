@@ -13,7 +13,7 @@ import { useState } from 'react'
 
 interface HeroCarouselManagerProps {
   items: HeroCarouselItem[]
-  onChange: (items: HeroCarouselItem[]) => void
+  onChange: (_items: HeroCarouselItem[]) => void
 }
 
 export function HeroCarouselManager({

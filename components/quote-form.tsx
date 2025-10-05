@@ -62,7 +62,7 @@ interface QuoteFormProps {
     name: string
   }
   variant?: 'modal' | 'page' | 'inline'
-  onSuccess?: (data: QuoteFormData) => void
+  onSuccess?: (_data: QuoteFormData) => void
   onCancel?: () => void
 }
 

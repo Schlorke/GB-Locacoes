@@ -46,7 +46,6 @@ const StorybookImage = ({
     typeof window !== 'undefined' &&
     window.location.hostname.includes('localhost')
   ) {
-    // eslint-disable-next-line @next/next/no-img-element
     return <img src={src as string} alt={alt} {...props} />
   }
   // Caso contrário, usar Next.js Image
@@ -58,11 +57,11 @@ interface ImageUploadProps {
   onImagesChange: (_images: string[]) => void
   maxImages?: number
   currentImageIndex?: number
-  onImageIndexChange?: (index: number) => void
+  onImageIndexChange?: (_index: number) => void
   onImageZoom?: () => void
   nextImage?: () => void
   prevImage?: () => void
-  goToImage?: (index: number) => void
+  goToImage?: (_index: number) => void
 }
 
 interface SortableImageProps {
@@ -72,8 +71,8 @@ interface SortableImageProps {
   onRemove: () => void
   isPrincipal: boolean
   isDragActive: boolean
-  goToImage?: (index: number) => void
-  onImageIndexChange?: (index: number) => void
+  goToImage?: (_index: number) => void
+  onImageIndexChange?: (_index: number) => void
   currentImageIndex?: number
 }
 

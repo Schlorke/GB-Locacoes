@@ -28,10 +28,10 @@ export interface CartItem {
 
 interface CartState {
   items: CartItem[]
-  addItem: (item: CartItem) => void
-  removeItem: (equipmentId: string) => void
-  updateItemQuantity: (equipmentId: string, quantity: number) => void
-  updateItemDays: (equipmentId: string, days: number) => void
+  addItem: (_item: CartItem) => void
+  removeItem: (_equipmentId: string) => void
+  updateItemQuantity: (_equipmentId: string, _quantity: number) => void
+  updateItemDays: (_equipmentId: string, _days: number) => void
   clearCart: () => void
   getItemCount: () => number
   getTotalPrice: () => number

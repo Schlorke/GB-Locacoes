@@ -169,7 +169,7 @@ export default function AreaClientePage() {
                   Meu Carrinho
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
+              <CardContent className="relative z-10 pb-8 pt-0 flex flex-col flex-1">
                 {getItemCount() > 0 ? (
                   <div className="flex flex-col flex-1 min-h-0">
                     {/* Área central com total estimado */}
@@ -249,7 +249,7 @@ export default function AreaClientePage() {
                   Meus Orçamentos
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0 flex flex-col flex-1">
+              <CardContent className="relative pb-8 z-10 pt-0 flex flex-col flex-1">
                 <div className="flex flex-col flex-1 min-h-0">
                   {/* Área central com ícone e texto */}
                   <div className="flex flex-col flex-1 justify-center items-center text-center px-4 py-8">
@@ -294,7 +294,7 @@ export default function AreaClientePage() {
                   Suas últimas ações na plataforma
                 </CardDescription>
               </CardHeader>
-              <CardContent className="relative z-10 pt-0">
+              <CardContent className="relative pb-8 z-10 pt-0">
                 <div className="text-center flex flex-col flex-1 justify-center py-16">
                   <Clock className="h-16 w-16 text-gray-300 mx-auto mt-[0.78rem] mb-[0.5rem]" />
                   <p className="text-[18px] font-2x1 text-gray-500">

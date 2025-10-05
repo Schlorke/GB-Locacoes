@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 
 interface CustomSelectProps {
   value?: string
-  onValueChange?: (value: string) => void
+  onValueChange?: (_value: string) => void
   placeholder?: string
   className?: string
   required?: boolean
@@ -21,9 +21,9 @@ interface CustomSelectItemProps {
 
 const CustomSelectContext = React.createContext<{
   value?: string
-  onValueChange?: (value: string) => void
+  onValueChange?: (_value: string) => void
   isOpen: boolean
-  setIsOpen: (open: boolean) => void
+  setIsOpen: (_open: boolean) => void
 }>({
   isOpen: false,
   setIsOpen: () => {},

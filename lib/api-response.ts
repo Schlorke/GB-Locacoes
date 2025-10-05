@@ -136,7 +136,7 @@ function getErrorTypeByStatus(status: number): string {
  * Wrapper para rotas API que trata erros automaticamente
  */
 export function withErrorHandling<T extends unknown[]>(
-  handler: (...args: T) => Promise<NextResponse | Response>
+  handler: (..._args: T) => Promise<NextResponse | Response>
 ) {
   return async (...args: T): Promise<NextResponse> => {
     try {

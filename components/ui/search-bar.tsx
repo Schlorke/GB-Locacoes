@@ -12,12 +12,12 @@ import React, { useEffect, useState } from 'react'
 interface SearchBarProps {
   searchPlaceholder?: string
   searchValue?: string
-  onSearchChange?: (value: string) => void
+  onSearchChange?: (_value: string) => void
   filters?: {
     label: string
     value: string
     options: FilterOption[]
-    onValueChange: (value: string) => void
+    onValueChange: (_value: string) => void
     placeholder?: string
   }[]
   showResetButton?: boolean

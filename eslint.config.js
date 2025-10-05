@@ -1,16 +1,10 @@
-// ESLint v9 compatibility with Next.js
-import { FlatCompat } from '@eslint/eslintrc'
+// ESLint v9 flat config for Next.js project
 import js from '@eslint/js'
-import path from 'path'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-})
+import typescript from '@typescript-eslint/eslint-plugin'
+import typescriptParser from '@typescript-eslint/parser'
+import react from 'eslint-plugin-react'
+import reactHooks from 'eslint-plugin-react-hooks'
+import globals from 'globals'
 
 export default [
   // Global ignores
@@ -50,6 +44,103 @@ export default [
   // JavaScript recommended config
   js.configs.recommended,
 
-  // Next.js configuration with TypeScript
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  // TypeScript files
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2021,
+        // Next.js specific globals
+        React: 'readonly',
+        JSX: 'readonly',
+        // Additional TypeScript globals
+        EventListener: 'readonly',
+        NodeJS: 'readonly',
+        RequestInit: 'readonly',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': typescript,
+      react: react,
+      'react-hooks': reactHooks,
+    },
+    rules: {
+      // TypeScript rules
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+      '@typescript-eslint/no-explicit-any': 'warn',
+
+      // React rules
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+
+      // General rules
+      'no-console': 'off', // Permitir console.log para desenvolvimento
+      'no-debugger': 'error',
+      'no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
+
+  // JavaScript files
+  {
+    files: ['**/*.js', '**/*.jsx'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2021,
+        // Next.js specific globals
+        React: 'readonly',
+        JSX: 'readonly',
+        // Additional TypeScript globals
+        EventListener: 'readonly',
+        NodeJS: 'readonly',
+        RequestInit: 'readonly',
+      },
+    },
+    rules: {
+      'no-console': 'off', // Permitir console.log para desenvolvimento
+      'no-debugger': 'error',
+      'no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+        },
+      ],
+    },
+  },
 ]

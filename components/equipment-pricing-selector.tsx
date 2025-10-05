@@ -19,7 +19,7 @@ interface PricingOption {
 
 interface EquipmentPricingSelectorProps {
   pricePerDay: number
-  onPeriodChange?: (option: PricingOption, totalPrice: number) => void
+  onPeriodChange?: (_option: PricingOption, _totalPrice: number) => void
   className?: string
   // Admin-configured rental periods
   dailyDiscount?: number

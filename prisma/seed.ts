@@ -1,12 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
-// Se UserRole não existir, defina manualmente:
-enum UserRole {
-  ADMIN = 'ADMIN',
-  CLIENT = 'CLIENT',
-}
-
 const prisma = new PrismaClient()
 
 async function main() {
@@ -30,7 +24,7 @@ async function main() {
         name: 'Admin User',
         email: adminEmail,
         password: hashedPassword,
-        role: UserRole.ADMIN,
+        role: 'ADMIN',
         emailVerified: new Date(), // Pre-verify the admin email
       },
     })

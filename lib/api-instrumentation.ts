@@ -13,8 +13,8 @@ import { recordApiMetric, type ApiMetrics } from './metrics'
  */
 export function withApiInstrumentation<T extends unknown[]>(
   handler: (
-    request: NextRequest,
-    ...args: T
+    _request: NextRequest,
+    ..._args: T
   ) => Promise<NextResponse | Response>,
   options: {
     endpoint?: string

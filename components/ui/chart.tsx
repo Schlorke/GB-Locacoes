@@ -115,14 +115,14 @@ interface ChartTooltipContentProps extends React.ComponentProps<'div'> {
   payload?: TooltipPayload<ValueType, NameType>[]
   label?: NameType
   labelFormatter?: (
-    label: NameType,
-    payload: TooltipPayload<ValueType, NameType>[]
+    _label: NameType,
+    _payload: TooltipPayload<ValueType, NameType>[]
   ) => React.ReactNode
   labelClassName?: string
   formatter?: (
-    value: ValueType,
-    name: NameType,
-    payload: TooltipPayload<ValueType, NameType>
+    _value: ValueType,
+    _name: NameType,
+    _payload: TooltipPayload<ValueType, NameType>
   ) => React.ReactNode
   hideLabel?: boolean
   hideIndicator?: boolean

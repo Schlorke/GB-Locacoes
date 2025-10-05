@@ -14,7 +14,7 @@ import { cn } from '@/lib/utils'
 interface SmartPaginationProps {
   currentPage: number
   totalPages: number
-  onPageChange: (page: number) => void
+  onPageChange: (_page: number) => void
   className?: string
   showPageNumbers?: number
 }

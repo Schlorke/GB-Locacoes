@@ -195,7 +195,7 @@ export function finishTrace(
  */
 export function withTracing<T extends unknown[], R>(
   name: string,
-  fn: (...args: T) => Promise<R> | R,
+  fn: (..._args: T) => Promise<R> | R,
   attributes: Record<string, string | number | boolean> = {}
 ) {
   return async function tracedFunction(...args: T): Promise<R> {
@@ -220,7 +220,7 @@ export function withTracing<T extends unknown[], R>(
 export function withSpan<T extends unknown[], R>(
   traceId: string,
   spanName: string,
-  fn: (...args: T) => Promise<R> | R,
+  fn: (..._args: T) => Promise<R> | R,
   attributes: Record<string, string | number | boolean> = {}
 ) {
   return async function tracedSpan(...args: T): Promise<R> {

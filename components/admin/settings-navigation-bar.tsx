@@ -6,7 +6,7 @@ import { Building, Globe, Images, Search, Settings, Share2 } from 'lucide-react'
 import React, { useState } from 'react'
 
 interface SettingsNavigationBarProps {
-  onSectionSelect: (section: string) => void
+  onSectionSelect: (_section: string) => void
   activeSection?: string
   className?: string
 }

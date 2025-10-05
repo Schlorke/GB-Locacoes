@@ -321,7 +321,7 @@ interface RequestLike {
 
 interface ResponseLike {
   statusCode?: number
-  send?: (body: unknown) => void
+  send?: (_body: unknown) => void
 }
 
 /**
@@ -334,7 +334,7 @@ export function createMetricsMiddleware() {
     next: () => void
   ) {
     const startTime = Date.now()
-    const originalSend = res.send as ((body: unknown) => void) | undefined
+    const originalSend = res.send as ((_body: unknown) => void) | undefined
 
     if (res.send) {
       res.send = function (body: unknown) {
