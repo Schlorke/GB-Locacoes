@@ -1,7 +1,6 @@
 'use client'
 
 import { Input } from '@/components/ui/input'
-import { FilterIndicator } from '@/components/ui/filter-indicator'
 import { FilterResetButton } from '@/components/ui/filter-reset-button'
 import { FilterSelectGroup } from '@/components/ui/filter-select-group'
 import { cn } from '@/lib/utils'
@@ -34,7 +33,7 @@ export function SearchBar({
   onReset,
   className,
 }: SearchBarProps) {
-  const [isFiltered, setIsFiltered] = useState(false)
+  const [_isFiltered, _setIsFiltered] = useState(false)
 
   // Check if any filter is active (not "all" or empty)
   useEffect(() => {
@@ -43,7 +42,7 @@ export function SearchBar({
         (filter) =>
           filter.value && filter.value !== 'all' && filter.value !== ''
       ) || Boolean(searchValue && searchValue.trim() !== '')
-    setIsFiltered(hasActiveFilters)
+    _setIsFiltered(hasActiveFilters)
   }, [filters, searchValue])
 
   const handleReset = () => {
@@ -90,20 +89,15 @@ export function SearchBar({
                   placeholder={searchPlaceholder}
                   value={searchValue}
                   onChange={(e) => onSearchChange(e.target.value)}
-                  className="pl-10 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 transition-all duration-200 admin-filter-element"
+                  className="pl-9 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 transition-all duration-200 admin-filter-element"
                 />
               </div>
             )}
 
             {/* Filters Row */}
-            <div className="flex items-center gap-2 sm:gap-4 w-full md:w-auto">
-              {/* Filter Icon */}
-              {filters.length > 0 && (
-                <FilterIndicator isFiltered={isFiltered} />
-              )}
-
+            <div className="w-full md:w-auto">
               {/* Filter Selects */}
-              <FilterSelectGroup filters={filters} gap="md" />
+              <FilterSelectGroup filters={filters} gap="sm" />
             </div>
           </div>
 

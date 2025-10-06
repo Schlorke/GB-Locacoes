@@ -6,6 +6,124 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-05] - Redesign da Barra de Pesquisa e Melhorias de Layout
+
+### Added ✨
+
+- **Ícone de Filtro Integrado**: Ícone de filtro agora integrado dentro de cada
+  combobox
+- **Feedback Visual**: Ícone de filtro "acende" em laranja quando filtro está
+  ativo
+- **Espaçamento Consistente**: Gap uniforme de 12px entre todos os elementos da
+  barra de pesquisa
+
+### Changed 🔄
+
+- **Layout da Barra de Pesquisa**: Removido ícone de filtro separado para design
+  mais limpo
+- **Distribuição de Conteúdo**: Melhor distribuição do conteúdo dentro das
+  comboboxes
+- **Espaçamento Uniforme**: Gap consistente entre input, comboboxes e botões
+- **Posicionamento de Ícones**: Ícone de filtro posicionado igual à lupa
+  (left-3)
+
+### Fixed 🐛
+
+- **Espaçamento Desigual**: Corrigido espaçamento inconsistente entre elementos
+- **"Baita Vão" nas Comboboxes**: Corrigido espaço excessivo entre texto e
+  chevron
+- **Layout Mobile**: Melhor responsividade da barra de pesquisa
+- **Distribuição de Conteúdo**: Texto das comboboxes agora usa flex-1 para
+  ocupar espaço disponível
+- **Truncamento de Texto**: Comboboxes agora se ajustam ao tamanho do conteúdo
+- **Tamanho das Comboboxes**: Largura automática com min/max para exibir texto
+  completo
+- **Espaçamento Ícone-Texto**: Reduzido espaço desnecessário entre ícone de
+  filtro e texto
+- **Alinhamento das Setas**: Setas de dropdown agora têm distância consistente
+  do texto
+
+### Technical Details 🔧
+
+- **CustomSelect**: Span com `mr-2` e chevron com `flex-shrink-0` para
+  alinhamento consistente
+- **FilterSelectGroup**: Largura automática `md:w-auto` com
+  `min-w-[180px] max-w-[220px]`
+- **AdminFilterCard**: Layout simplificado com espaçamento consistente
+- **Ícone de Filtro**: Posicionamento `absolute left-3 top-1/2` igual à lupa
+- **Responsividade**: Comboboxes se ajustam ao conteúdo sem truncamento
+
+---
+
+## [2025-10-05] - Atualizações de Dependências Seguras
+
+### Updated 📦
+
+- **nodemailer**: Atualizado de 7.0.6 para 7.0.7 (patch update)
+- **svelte**: Atualizado de 5.39.8 para 5.39.9 (patch update)
+- **Build Status**: ✅ Todas as atualizações testadas e funcionando
+- **Compatibilidade**: Seguindo protocolo de dependências documentado
+
+### Security 🔐
+
+- **Patch Updates**: Aplicadas correções de segurança nas dependências
+- **Build Verification**: Teste de build bem-sucedido após atualizações
+- **Lockfile**: Atualizado pnpm-lock.yaml com novas versões
+
+### Technical Details 🔧
+
+- **Tailwind CSS**: Mantido em 3.4.17 (versão 4.x bloqueada conforme
+  documentação)
+- **Prisma**: Mantido estável (versão atual funcionando perfeitamente)
+- **Protocolo Seguido**: Consultada documentação de compatibilidade antes das
+  atualizações
+
+---
+
+## [2025-10-05] - Otimização Mobile do Painel Administrativo
+
+### Added ✨
+
+- **Header Contextual Mobile**: Título dinâmico da página no header mobile do
+  admin
+- **Navegação Inteligente**: Detecção automática da seção atual (Dashboard,
+  Equipamentos, etc.)
+- **Espaçamento Mobile**: Padding superior automático para compensar header fixo
+  em mobile
+
+### Changed 🔄
+
+- **Layout Mobile Dashboard**: Cards principais agora em grid 2x2 em mobile
+  (antes 1 coluna)
+- **Tipografia Responsiva**: Hierarquia visual otimizada para telas pequenas
+- **Ícones Adaptativos**: Tamanho reduzido dos ícones em mobile para melhor
+  proporção
+- **Cards de Status**: Padding e espaçamento otimizados para mobile
+
+### Fixed 🐛
+
+- **Header Mobile Branco**: Corrigido problema de cores do header mobile (CSS
+  global sobrescrevia com branco)
+- **Conflito CSS Global**: Adicionada regra específica para header admin mobile
+  com `rgb(51, 65, 85)`
+- **Sobreposição de Conteúdo**: Adicionado espaçamento superior em todas as
+  páginas admin para mobile
+- **Rolagem Excessiva**: Reduzida rolagem vertical no dashboard mobile
+- **Legibilidade Mobile**: Melhor contraste e tamanhos de fonte para
+  dispositivos móveis
+- **Aproveitamento de Espaço**: Layout mais compacto e eficiente em telas
+  pequenas
+
+### Technical Details 🔧
+
+- **Páginas Ajustadas**: Dashboard, Equipamentos, Categorias, Orçamentos,
+  Analytics, Settings, Novo Equipamento, Editar Equipamento
+- **Classes CSS**: `pt-20 md:pt-0` aplicado em todas as páginas admin para
+  mobile
+- **Header Fixo**: Cores forçadas com
+  `style={{ backgroundColor: 'rgb(15, 23, 42)' }}`
+- **Preservação Desktop**: Layout desktop mantido 100% inalterado
+
 ## [2025-10-05] - Correção de Lockfile e Atualização de Dependências
 
 ### Fixed 🐛

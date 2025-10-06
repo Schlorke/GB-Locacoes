@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { Check, ChevronDown } from 'lucide-react'
+import { Check, ChevronDown, Funnel } from 'lucide-react'
 import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
@@ -132,13 +132,20 @@ export function CustomSelect({
           onFocus={handleFocus}
           onBlur={handleBlur}
           className={cn(
-            'flex h-10 w-full items-center justify-between rounded-md border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 border-gray-200 focus:outline-none focus:ring-0 transition-all duration-200 admin-filter-element',
+            'flex h-10 w-full items-center justify-between rounded-md border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:outline-none focus:ring-0 transition-all duration-200 admin-filter-element',
             // Aplicar classe CSS para estilo laranja quando categoria está selecionada
             value && value !== 'all' && 'selected'
           )}
         >
+          <Funnel
+            className={cn(
+              'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 transition-colors duration-300',
+              value && value !== 'all' ? 'text-orange-500' : 'text-gray-400'
+            )}
+          />
           <span
             className={cn(
+              'flex-1 text-left whitespace-nowrap overflow-hidden mr-2',
               value && value !== 'all'
                 ? 'font-medium'
                 : value
@@ -150,7 +157,7 @@ export function CustomSelect({
           </span>
           <ChevronDown
             className={cn(
-              'h-4 w-4 transition-transform duration-200',
+              'h-4 w-4 flex-shrink-0 transition-transform duration-200',
               // Aplicar cor laranja quando categoria selecionada (igual ao hover)
               value && value !== 'all' ? 'opacity-100' : 'opacity-50',
               isOpen && 'rotate-180'

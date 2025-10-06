@@ -382,6 +382,14 @@ header {
   border-bottom: 1px solid rgba(229, 231, 235, 0.8);
 }
 
+/* Header específico para admin mobile - sobrescreve o estilo global */
+header.admin-mobile-header {
+  background: rgb(51, 65, 85) !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom: none !important;
+}
+
 /* Garantir que o conteúdo do header não ultrapasse a área visível */
 header .max-w-7xl {
   margin-right: auto;
@@ -954,6 +962,18 @@ body:has(.sobre-page) {
 
 body.admin-body-layout {
   padding-top: 0 !important;
+}
+
+/* Força a sidebar admin a ter as mesmas cores do MobileSidebar */
+aside.admin-sidebar-dark {
+  background: linear-gradient(
+    145deg,
+    rgba(30, 41, 59, 0.98),
+    rgba(20, 31, 45, 0.95)
+  ) !important;
+  background-color: rgba(30, 41, 59, 0.98) !important;
+  position: relative !important;
+  z-index: 9999 !important;
 }
 
 /* Correção específica para transição de sombra do formulário de contato */

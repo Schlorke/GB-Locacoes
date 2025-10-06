@@ -308,7 +308,9 @@ export default function NotificacoesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-2xl md:text-3xl font-bold leading-tight">Notificações</h1>
+            <h1 className="text-2xl md:text-3xl font-bold leading-tight">
+              Notificações
+            </h1>
             <p className="text-sm md:text-base text-white leading-relaxed max-w-2xl mx-auto">
               Mantenha-se atualizado com todas as suas notificações
             </p>

@@ -182,27 +182,24 @@ const quickActionButtons = [
     subtitle: 'Cadastrar novo equipamento no sistema',
     href: '/admin/equipamentos/novo',
     icon: Plus,
-    hoverColors: 'hover:bg-blue-50 hover:border-blue-300',
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
+    iconBg: 'bg-orange-100',
+    iconColor: 'text-orange-600',
   },
   {
     title: 'Gerenciar Categorias',
     subtitle: 'Organizar equipamentos por categoria',
     href: '/admin/categorias',
     icon: BarChart3,
-    hoverColors: 'hover:bg-green-50 hover:border-green-300',
-    iconBg: 'bg-green-100',
-    iconColor: 'text-green-600',
+    iconBg: 'bg-orange-100',
+    iconColor: 'text-orange-600',
   },
   {
     title: 'Ver Orçamentos',
     subtitle: 'Gerenciar solicitações de orçamento',
     href: '/admin/orcamentos',
     icon: FileText,
-    hoverColors: 'hover:bg-purple-50 hover:border-purple-300',
-    iconBg: 'bg-purple-100',
-    iconColor: 'text-purple-600',
+    iconBg: 'bg-orange-100',
+    iconColor: 'text-orange-600',
   },
 ]
 
@@ -312,7 +309,7 @@ export default function AdminDashboard() {
           transition={{ delay: 0.1 }}
           className="mb-8"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {mainStatsCards.map((card, index) => {
               const IconComponent = card.icon
               return (
@@ -340,21 +337,23 @@ export default function AdminDashboard() {
                       <div className="flex items-center justify-between">
                         <div className="min-w-0 flex-1">
                           <p
-                            className={`${card.textColors} text-sm truncate mb-1`}
+                            className={`${card.textColors} text-xs sm:text-sm truncate mb-1`}
                           >
                             {card.title}
                           </p>
-                          <p className="text-3xl font-bold mb-1">
+                          <p className="text-2xl sm:text-3xl lg:text-4xl font-bold my-1">
                             {typeof card.value(stats) === 'string'
                               ? card.value(stats)
                               : card.value(stats)}
                           </p>
-                          <p className={`${card.subtitleColors} text-sm`}>
+                          <p
+                            className={`${card.subtitleColors} text-xs sm:text-sm font-medium`}
+                          >
                             {card.subtitle(stats)}
                           </p>
                         </div>
-                        <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
-                          <IconComponent className="h-8 w-8 text-white" />
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
+                          <IconComponent className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                         </div>
                       </div>
                     </CardContent>
@@ -391,14 +390,14 @@ export default function AdminDashboard() {
                     <div
                       className={`absolute left-0 top-0 bottom-0 w-1 ${card.borderColor}`}
                     ></div>
-                    <CardContent className="p-6">
+                    <CardContent className="p-4 sm:p-6">
                       <div className="flex items-center justify-between">
                         <div className="min-w-0 flex-1">
                           <p className="text-sm text-gray-600 mb-2">
                             {card.title}
                           </p>
                           <p
-                            className={`text-2xl font-bold ${card.valueColor}`}
+                            className={`text-xl sm:text-2xl font-bold ${card.valueColor}`}
                           >
                             {card.value(stats)}
                           </p>
@@ -430,7 +429,7 @@ export default function AdminDashboard() {
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <CardHeader className="relative z-10">
               <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
                   <TrendingUp className="h-5 w-5 text-white" />
                 </div>
                 Ações Rápidas
@@ -455,24 +454,24 @@ export default function AdminDashboard() {
                       <Button
                         asChild
                         variant="outline"
-                        className={`h-auto p-6 w-full bg-transparent ${button.hoverColors} transition-all duration-300 shadow-sm hover:shadow-md border-2 hover:scale-[1.02]`}
+                        className="h-40 p-6 w-full bg-white hover:bg-white hover:border-gray-300 transition-all duration-300 shadow-lg hover:shadow-xl border-0 hover:scale-[1.02] group"
                       >
                         <Link
                           href={button.href}
-                          className="flex flex-col items-center gap-3"
+                          className="flex flex-col items-center justify-center gap-3 h-full"
                         >
                           <div
-                            className={`w-16 h-16 ${button.iconBg} rounded-full flex items-center justify-center`}
+                            className={`w-12 h-12 ${button.iconBg} rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
                           >
                             <IconComponent
-                              className={`h-8 w-8 ${button.iconColor}`}
+                              className={`h-6 w-6 ${button.iconColor}`}
                             />
                           </div>
                           <div className="text-center">
-                            <span className="font-semibold text-lg text-gray-900 block mb-1">
+                            <span className="font-semibold text-lg text-gray-900 group-hover:text-orange-500 block mb-1 break-words transition-colors duration-300">
                               {button.title}
                             </span>
-                            <span className="text-sm text-gray-600">
+                            <span className="text-sm text-gray-600 group-hover:text-orange-400 break-words transition-colors duration-300">
                               {button.subtitle}
                             </span>
                           </div>
@@ -496,24 +495,26 @@ export default function AdminDashboard() {
           <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
             <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
             <CardHeader className="relative z-10">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="flex flex-col gap-4">
                 <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3">
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
                     <FileText className="h-5 w-5 text-white" />
                   </div>
                   Orçamentos Recentes
                 </CardTitle>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className="h-11 px-6 bg-transparent hover:bg-purple-50 hover:border-purple-300 transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md"
-                >
-                  <Link href="/admin/orcamentos">
-                    <Eye className="h-4 w-4 mr-2" />
-                    Ver Todos
-                  </Link>
-                </Button>
+                <div className="flex justify-center sm:justify-end">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="bg-white border-gray-200 hover:bg-white hover:border-gray-300 hover:text-orange-500"
+                  >
+                    <Link href="/admin/orcamentos">
+                      <Eye className="h-4 w-4 mr-2" />
+                      Ver Todos
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="relative z-10">
@@ -531,10 +532,10 @@ export default function AdminDashboard() {
                   <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <FileText className="h-10 w-10 text-gray-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
                     Nenhum orçamento recente
                   </h3>
-                  <p className="text-gray-500">
+                  <p className="text-sm md:text-base text-gray-500">
                     Os orçamentos solicitados aparecerão aqui
                   </p>
                 </motion.div>

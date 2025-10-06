@@ -47,39 +47,43 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
     <>
       <div
         className={cn(
-          'p-3 sm:p-4 border-b border-slate-700 flex items-center',
-          isSidebarCollapsed ? 'justify-center' : 'justify-between'
+          'border-b border-white/10 transition-all duration-300',
+          isSidebarCollapsed ? 'p-4' : 'p-3 sm:p-4'
         )}
       >
-        {!isSidebarCollapsed && (
-          <Link href="/" className="flex items-center gap-2 min-w-0">
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white rounded-xl font-bold text-base shadow-lg shadow-black/20 transition-all duration-200 hover:scale-105 flex-shrink-0 relative flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 rounded-xl pointer-events-none"></div>
+        <Link
+          href="/"
+          className={cn(
+            'flex items-center transition-all duration-300',
+            isSidebarCollapsed ? 'justify-center w-full' : 'gap-2'
+          )}
+        >
+          {isSidebarCollapsed ? (
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white rounded-lg font-bold text-lg shadow-lg shadow-black/20 transition-all duration-300 hover:scale-105 flex items-center justify-center relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 rounded-lg pointer-events-none"></div>
               <span className="relative z-10">GB</span>
             </div>
-            <div className="flex flex-col min-w-0">
-              <h2 className="text-base sm:text-lg font-bold text-white truncate mt-0.5">
-                GB Locações
-              </h2>
-              <p className="text-xs text-slate-400 truncate">Admin Panel</p>
-            </div>
-          </Link>
-        )}
-        {isSidebarCollapsed && (
-          <Link
-            href="/"
-            className="flex items-center justify-center w-full py-2"
-          >
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white rounded-xl font-bold text-base shadow-lg shadow-black/20 transition-all duration-200 hover:scale-105 relative flex items-center justify-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 rounded-xl pointer-events-none"></div>
-              <span className="relative z-10">GB</span>
-            </div>
-          </Link>
-        )}
+          ) : (
+            <>
+              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white rounded-lg font-bold text-lg shadow-lg shadow-black/20 transition-all duration-300 hover:scale-105 flex-shrink-0 relative flex items-center justify-center">
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 rounded-lg pointer-events-none"></div>
+                <span className="relative z-10">GB</span>
+              </div>
+              <div className="overflow-hidden transition-all duration-300 ease-in-out flex flex-col min-w-0">
+                <h2 className="text-base sm:text-lg font-bold text-white whitespace-nowrap mt-0.5">
+                  GB Locações
+                </h2>
+                <p className="text-xs text-slate-400 whitespace-nowrap">
+                  Admin Panel
+                </p>
+              </div>
+            </>
+          )}
+        </Link>
       </div>
 
-      <nav className="flex-1 p-2 sm:p-3 overflow-y-auto">
-        <ul className="space-y-1">
+      <nav className="flex-1 p-4 overflow-y-auto">
+        <ul className="space-y-2.5">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname?.startsWith(item.href) || false
@@ -90,24 +94,82 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
                   href={item.href}
                   title={item.label}
                   className={cn(
-                    'flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-md transition-all duration-200 ease-in-out group text-sm sm:text-base',
-                    'text-slate-300 hover:bg-slate-800 hover:text-white',
-                    isActive &&
-                      'bg-primary text-primary-foreground shadow-md hover:bg-primary/90',
-                    isSidebarCollapsed && 'justify-center'
+                    'flex items-center px-4 py-3 rounded-lg transition-all duration-300 ease-in-out group text-[15px] relative overflow-hidden',
+                    'hover:scale-[1.02] active:scale-[0.98]',
+                    isActive ? 'text-white' : 'text-slate-300 hover:text-white',
+                    isSidebarCollapsed
+                      ? 'justify-center gap-0'
+                      : 'justify-start gap-3'
                   )}
+                  style={
+                    isActive
+                      ? {
+                          background:
+                            'linear-gradient(145deg, rgba(251, 146, 60, 0.9), rgba(234, 88, 12, 0.8))',
+                          backdropFilter: 'blur(8px)',
+                          border: '1px solid rgba(255, 255, 255, 0.2)',
+                          boxShadow: `
+                      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+                      inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+                      0 4px 12px rgba(251, 146, 60, 0.3)
+                    `,
+                        }
+                      : {
+                          background:
+                            'linear-gradient(145deg, rgba(71, 85, 105, 0.3), rgba(51, 65, 85, 0.2))',
+                          backdropFilter: 'blur(4px)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)',
+                          boxShadow: `
+                      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                      inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+                      0 2px 8px rgba(0, 0, 0, 0.2)
+                    `,
+                        }
+                  }
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background =
+                        'linear-gradient(145deg, rgba(71, 85, 105, 0.5), rgba(51, 65, 85, 0.4))'
+                      e.currentTarget.style.boxShadow = `
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                        inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+                        0 4px 12px rgba(0, 0, 0, 0.3)
+                      `
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background =
+                        'linear-gradient(145deg, rgba(71, 85, 105, 0.3), rgba(51, 65, 85, 0.2))'
+                      e.currentTarget.style.boxShadow = `
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                        inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+                        0 2px 8px rgba(0, 0, 0, 0.2)
+                      `
+                    }
+                  }}
                 >
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent rounded-lg pointer-events-none" />
                   <Icon
                     className={cn(
-                      'h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0',
+                      'h-4 w-4 flex-shrink-0 relative z-10 drop-shadow-sm',
                       isActive
                         ? 'text-white'
                         : 'text-slate-400 group-hover:text-white'
                     )}
                   />
-                  {!isSidebarCollapsed && (
-                    <span className="font-medium truncate">{item.label}</span>
-                  )}
+                  <div
+                    className={cn(
+                      'overflow-hidden transition-all duration-300 ease-in-out',
+                      isSidebarCollapsed
+                        ? 'w-0 opacity-0'
+                        : 'w-auto opacity-100'
+                    )}
+                  >
+                    <span className="font-medium whitespace-nowrap relative z-10">
+                      {item.label}
+                    </span>
+                  </div>
                 </Link>
               </li>
             )
@@ -117,44 +179,97 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
 
       <div
         className={cn(
-          'border-t border-slate-700 mt-auto',
+          'border-t border-white/10 mt-auto',
           isSidebarCollapsed ? 'px-3 py-3' : 'p-3 sm:p-4'
         )}
       >
         <div
           className={cn(
-            'flex items-center gap-2 sm:gap-1.52 min-w-0 mb-3 w-full',
-            isSidebarCollapsed ? 'justify-center' : 'justify-start'
+            'flex items-center min-w-0 mb-3 w-full p-3 rounded-lg relative overflow-hidden group',
+            isSidebarCollapsed ? 'justify-center gap-0' : 'justify-start gap-3'
           )}
+          style={{
+            background:
+              'linear-gradient(145deg, rgba(71, 85, 105, 0.3), rgba(51, 65, 85, 0.2))',
+            backdropFilter: 'blur(4px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: `
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+              0 2px 8px rgba(0, 0, 0, 0.2)
+            `,
+          }}
         >
-          <UserCircle
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent rounded-lg pointer-events-none" />
+          <UserCircle className="h-8 w-8 text-slate-300 flex-shrink-0 relative z-10 drop-shadow-sm" />
+          <div
             className={cn(
-              'h-10 w-10 text-slate-400 flex-shrink-0',
-              isSidebarCollapsed && '-ml-[2px]'
+              'overflow-hidden transition-all duration-300 ease-in-out flex flex-col min-w-0 relative z-10',
+              isSidebarCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
             )}
-          />
-          {!isSidebarCollapsed && (
-            <div className="flex flex-col min-w-0">
-              <p className="text-sm sm:text-base font-medium text-slate-200 truncate">
-                {session?.user?.name || 'Administrador'}
-              </p>
-              <p className="text-xs text-slate-400 truncate">
-                {session?.user?.role || 'ADMIN'}
-              </p>
-            </div>
-          )}
+          >
+            <p className="text-sm font-medium text-white whitespace-nowrap">
+              {session?.user?.name || 'Administrador'}
+            </p>
+            <p className="text-xs text-slate-300 whitespace-nowrap">
+              {session?.user?.role || 'ADMIN'}
+            </p>
+          </div>
         </div>
         <Button
           variant="ghost"
           onClick={() => signOut({ callbackUrl: '/admin/login' })}
           className={cn(
-            'flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-md text-slate-300 hover:bg-red-600/20 hover:text-red-400 transition-colors w-full group text-sm sm:text-base',
-            isSidebarCollapsed ? 'justify-center px-2' : 'justify-start'
+            'flex items-center px-4 py-3 rounded-lg transition-all duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] w-full group text-[15px] relative overflow-hidden',
+            'text-white hover:text-white',
+            isSidebarCollapsed ? 'justify-center gap-0' : 'justify-start gap-3'
           )}
+          style={{
+            background:
+              'linear-gradient(145deg, rgba(71, 85, 105, 0.3), rgba(51, 65, 85, 0.2))',
+            backdropFilter: 'blur(4px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: `
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+              0 2px 8px rgba(0, 0, 0, 0.2)
+            `,
+            color: 'white !important',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background =
+              'linear-gradient(145deg, rgba(71, 85, 105, 0.5), rgba(51, 65, 85, 0.4))'
+            e.currentTarget.style.boxShadow = `
+              inset 0 1px 0 rgba(255, 255, 255, 0.2),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.1),
+              0 4px 12px rgba(0, 0, 0, 0.3)
+            `
+            e.currentTarget.style.color = 'white !important'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background =
+              'linear-gradient(145deg, rgba(71, 85, 105, 0.3), rgba(51, 65, 85, 0.2))'
+            e.currentTarget.style.boxShadow = `
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+              0 2px 8px rgba(0, 0, 0, 0.2)
+            `
+            e.currentTarget.style.color = 'white !important'
+          }}
           title="Sair"
         >
-          <LogOut className="h-5 w-5 sm:h-5 sm:w-5 text-slate-400 group-hover:text-red-400" />
-          {!isSidebarCollapsed && <span className="font-medium">Sair</span>}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent rounded-lg pointer-events-none" />
+          <LogOut className="h-4 w-4 relative z-10 drop-shadow-sm" />
+          <div
+            className={cn(
+              'overflow-hidden transition-all duration-300 ease-in-out',
+              isSidebarCollapsed ? 'w-0 opacity-0' : 'w-auto opacity-100'
+            )}
+          >
+            <span className="font-medium whitespace-nowrap relative z-10">
+              Sair
+            </span>
+          </div>
         </Button>
       </div>
     </>
@@ -165,22 +280,69 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
       {/* Desktop Sidebar */}
       <aside
         className={cn(
-          'hidden md:flex md:flex-col bg-slate-900 text-white transition-all duration-300 ease-in-out relative',
-          isSidebarCollapsed ? 'w-16 lg:w-20' : 'w-56 lg:w-64'
+          'hidden md:flex md:flex-col text-white transition-all duration-300 ease-in-out relative admin-sidebar-dark z-[9999]',
+          isSidebarCollapsed ? 'w-20' : 'w-56 lg:w-64'
         )}
+        style={{
+          background:
+            'linear-gradient(145deg, rgba(30, 41, 59, 0.98), rgba(20, 31, 45, 0.95))',
+          backgroundColor: 'rgba(30, 41, 59, 0.98)',
+          backdropFilter: 'blur(20px)',
+          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+          boxShadow: `
+              -4px 0 20px rgba(0, 0, 0, 0.4),
+              -2px 0 8px rgba(0, 0, 0, 0.3),
+              inset 1px 0 0 rgba(255, 255, 255, 0.08)
+            `,
+          position: 'relative',
+          zIndex: 9999,
+        }}
       >
         <SidebarContent />
         <Button
           variant="ghost"
           size="icon"
           onClick={toggleSidebarCollapse}
-          className="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-600 hover:from-slate-700 hover:via-slate-600 hover:to-slate-500 text-white hover:text-accent-foreground rounded-full h-10 w-10 border-2 border-slate-500/30 shadow-xl transition-all duration-300 hover:scale-110 hover:shadow-2xl backdrop-blur-sm hover:border-slate-400/50 z-[9999]"
+          className="absolute top-1/2 -right-5 transform -translate-y-1/2 text-white hover:text-white rounded-full h-10 w-10 shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 z-[99999] overflow-hidden group"
+          style={{
+            background:
+              'linear-gradient(145deg, rgba(51, 65, 85, 0.9), rgba(30, 41, 59, 0.8))',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            boxShadow: `
+              inset 0 1px 0 rgba(255, 255, 255, 0.2),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+              0 4px 12px rgba(0, 0, 0, 0.4),
+              0 2px 4px rgba(0, 0, 0, 0.2)
+            `,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background =
+              'linear-gradient(145deg, rgba(71, 85, 105, 0.95), rgba(51, 65, 85, 0.9))'
+            e.currentTarget.style.boxShadow = `
+              inset 0 1px 0 rgba(255, 255, 255, 0.3),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+              0 6px 16px rgba(0, 0, 0, 0.5),
+              0 3px 6px rgba(0, 0, 0, 0.3)
+            `
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background =
+              'linear-gradient(145deg, rgba(51, 65, 85, 0.9), rgba(30, 41, 59, 0.8))'
+            e.currentTarget.style.boxShadow = `
+              inset 0 1px 0 rgba(255, 255, 255, 0.2),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+              0 4px 12px rgba(0, 0, 0, 0.4),
+              0 2px 4px rgba(0, 0, 0, 0.2)
+            `
+          }}
           title={isSidebarCollapsed ? 'Expandir sidebar' : 'Recolher sidebar'}
         >
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-full pointer-events-none" />
           {isSidebarCollapsed ? (
-            <ChevronsRight className="h-4 w-4" />
+            <ChevronsRight className="h-4 w-4 relative z-10 drop-shadow-sm" />
           ) : (
-            <ChevronsLeft className="h-4 w-4" />
+            <ChevronsLeft className="h-4 w-4 relative z-10 drop-shadow-sm" />
           )}
         </Button>
       </aside>

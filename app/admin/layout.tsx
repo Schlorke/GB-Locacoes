@@ -67,12 +67,12 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
       <AdminSidebar />
 
       {/* Layout Principal */}
-      <div className="flex flex-col flex-1 overflow-hidden min-w-0">
+      <div className="flex flex-col flex-1 overflow-hidden min-w-0 relative z-10">
         {/* Header Mobile */}
         <AdminMobileHeader />
 
         {/* Conteúdo Principal */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw]">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw] pt-16 md:pt-0">
           {children}
         </main>
       </div>

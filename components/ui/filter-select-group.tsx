@@ -16,19 +16,12 @@ export function FilterSelectGroup({
   filters,
   className,
   selectClassName,
-  gap = 'md',
+  gap: _gap = 'md',
 }: FilterSelectGroupProps) {
-  const gapClasses = {
-    sm: 'gap-2',
-    md: 'gap-3',
-    lg: 'gap-4',
-  }
-
   return (
     <div
       className={cn(
-        'flex items-center flex-wrap flex-1',
-        gapClasses[gap],
+        'flex flex-col md:flex-row md:items-center gap-3',
         className
       )}
     >
@@ -38,7 +31,10 @@ export function FilterSelectGroup({
           value={filter.value}
           onValueChange={filter.onValueChange}
           placeholder={filter.placeholder || filter.label}
-          className={cn('w-full md:w-[200px] h-10', selectClassName)}
+          className={cn(
+            'w-full md:w-auto lg:max-w-[220px] h-10 md:min-w-[180px]',
+            selectClassName
+          )}
         >
           {filter.options.map((option) => (
             <CustomSelectItem key={option.value} value={option.value}>

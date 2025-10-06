@@ -292,620 +292,627 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header com animação */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex items-center justify-between"
-      >
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
-            <BarChart3 className="h-8 w-8 text-orange-600" />
-            Analytics da API
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Monitoramento em tempo real da performance e uso da API
-          </p>
-          {lastUpdated && (
-            <div className="flex items-center gap-4 mt-3">
-              <Badge variant="outline" className="text-xs">
-                <Clock className="h-3 w-3 mr-1" />
-                Última atualização: {lastUpdated.toLocaleTimeString()}
-              </Badge>
-              <Badge
-                variant={autoRefresh ? 'default' : 'secondary'}
-                className={cn(
-                  'text-xs cursor-pointer',
-                  autoRefresh && 'bg-green-100 text-green-800 border-green-300'
-                )}
-                onClick={() => setAutoRefresh(!autoRefresh)}
-              >
-                <Zap className="h-3 w-3 mr-1" />
-                Auto-refresh {autoRefresh ? 'ON' : 'OFF'}
-              </Badge>
-            </div>
-          )}
-        </div>
-        <div className="flex items-center gap-3">
-          <Button
-            onClick={fetchAnalytics}
-            disabled={loading}
-            variant="outline"
-            className="border-orange-200 hover:border-orange-300 hover:bg-orange-50"
-          >
-            <RefreshCw
-              className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`}
-            />
-            Atualizar
-          </Button>
-        </div>
-      </motion.div>
-
-      {/* Filtros */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-      >
-        <AdminFilterCard
-          filters={[
-            {
-              label: 'Período',
-              value: selectedPeriod,
-              onValueChange: setSelectedPeriod,
-              placeholder: 'Selecionar período',
-              options: [
-                { label: 'Últimas 24 horas', value: '1d' },
-                { label: 'Últimos 7 dias', value: '7d' },
-                { label: 'Últimos 30 dias', value: '30d' },
-              ],
-            },
-          ]}
-          actionButtons={
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowDetails(showDetails ? null : 'overview')}
-                className="border-blue-200 hover:border-blue-300 hover:bg-blue-50"
-              >
-                <Eye className="h-4 w-4 mr-1" />
-                {showDetails ? 'Ocultar' : 'Detalhes'}
-              </Button>
-            </div>
-          }
-        />
-      </motion.div>
-
-      {/* Anomalias com animação */}
-      <AnimatePresence>
-        {analytics.anomalies.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Alert
-              variant="destructive"
-              className="border-red-200 bg-red-50/50 backdrop-blur"
-            >
-              <AlertTriangle className="h-4 w-4" />
-              <AlertDescription>
-                <div className="font-semibold mb-3 flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  {analytics.anomalies.length} anomalia(s) detectada(s) na API
-                </div>
-                <div className="space-y-2">
-                  {analytics.anomalies.slice(0, 3).map((anomaly, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.1 }}
-                      className="flex items-center gap-3 p-3 bg-white/60 rounded-lg border border-red-100"
-                    >
-                      <Badge
-                        variant={
-                          getSeverityColor(anomaly.severity) as
-                            | 'default'
-                            | 'destructive'
-                            | 'outline'
-                            | 'secondary'
-                        }
-                        className="text-xs font-medium"
-                      >
-                        {anomaly.severity.toUpperCase()}
-                      </Badge>
-                      <div className="flex-1">
-                        <span className="font-medium text-sm">
-                          {anomaly.endpoint}
-                        </span>
-                        <p className="text-xs text-muted-foreground">
-                          {anomaly.message}
-                        </p>
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {new Date(anomaly.timestamp).toLocaleTimeString()}
-                      </div>
-                    </motion.div>
-                  ))}
-                  {analytics.anomalies.length > 3 && (
-                    <div className="text-center">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setShowDetails('anomalies')}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                      >
-                        Ver todas as {analytics.anomalies.length} anomalias
-                      </Button>
-                    </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="space-y-6 p-3 sm:p-4 lg:p-6 xl:p-8 max-w-7xl mx-auto">
+        {/* Header com animação */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center justify-between"
+        >
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight flex items-center gap-3">
+              <BarChart3 className="h-8 w-8 text-orange-600" />
+              Analytics da API
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Monitoramento em tempo real da performance e uso da API
+            </p>
+            {lastUpdated && (
+              <div className="flex items-center gap-4 mt-3">
+                <Badge variant="outline" className="text-xs">
+                  <Clock className="h-3 w-3 mr-1" />
+                  Última atualização: {lastUpdated.toLocaleTimeString()}
+                </Badge>
+                <Badge
+                  variant={autoRefresh ? 'default' : 'secondary'}
+                  className={cn(
+                    'text-xs cursor-pointer',
+                    autoRefresh &&
+                      'bg-green-100 text-green-800 border-green-300'
                   )}
-                </div>
-              </AlertDescription>
-            </Alert>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Métricas Principais com animações */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
-      >
-        {[
-          {
-            title: 'Total de Requests',
-            value: formatNumber(analytics.overview.totalRequests),
-            description: `${analytics.overview.uniqueEndpoints} endpoints únicos`,
-            icon: Activity,
-            color: 'text-blue-600',
-            bgColor: 'bg-blue-50',
-            borderColor: 'border-blue-200',
-          },
-          {
-            title: 'Tempo de Resposta',
-            value: `${analytics.overview.avgResponseTime}ms`,
-            description: 'Tempo médio de resposta',
-            icon: Clock,
-            color: getResponseTimeColor(analytics.overview.avgResponseTime),
-            bgColor:
-              analytics.overview.avgResponseTime > 2000
-                ? 'bg-red-50'
-                : analytics.overview.avgResponseTime > 1000
-                  ? 'bg-yellow-50'
-                  : 'bg-green-50',
-            borderColor:
-              analytics.overview.avgResponseTime > 2000
-                ? 'border-red-200'
-                : analytics.overview.avgResponseTime > 1000
-                  ? 'border-yellow-200'
-                  : 'border-green-200',
-          },
-          {
-            title: 'Taxa de Erro',
-            value: formatPercent(analytics.overview.errorRate),
-            description: 'Taxa de erro geral',
-            icon:
-              analytics.overview.errorRate > 0.05 ? TrendingUp : TrendingDown,
-            color: getErrorRateColor(analytics.overview.errorRate),
-            bgColor:
-              analytics.overview.errorRate > 0.1
-                ? 'bg-red-50'
-                : analytics.overview.errorRate > 0.05
-                  ? 'bg-yellow-50'
-                  : 'bg-green-50',
-            borderColor:
-              analytics.overview.errorRate > 0.1
-                ? 'border-red-200'
-                : analytics.overview.errorRate > 0.05
-                  ? 'border-yellow-200'
-                  : 'border-green-200',
-          },
-          {
-            title: 'Usuários Ativos',
-            value: formatNumber(
-              analytics.userActivity.authenticated +
-                analytics.userActivity.anonymous
-            ),
-            description: `${analytics.userActivity.authenticated} autenticados, ${analytics.userActivity.adminRequests} admin`,
-            icon: Users,
-            color: 'text-purple-600',
-            bgColor: 'bg-purple-50',
-            borderColor: 'border-purple-200',
-          },
-        ].map((metric, index) => (
-          <motion.div
-            key={metric.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-            whileHover={{ y: -2, transition: { duration: 0.2 } }}
-          >
-            <Card
-              className={cn(
-                'relative overflow-hidden transition-all duration-200 hover:shadow-lg cursor-pointer',
-                metric.borderColor,
-                metric.bgColor
-              )}
+                  onClick={() => setAutoRefresh(!autoRefresh)}
+                >
+                  <Zap className="h-3 w-3 mr-1" />
+                  Auto-refresh {autoRefresh ? 'ON' : 'OFF'}
+                </Badge>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={fetchAnalytics}
+              disabled={loading}
+              variant="outline"
+              className="border-orange-200 hover:border-orange-300 hover:bg-orange-50"
             >
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-700">
-                  {metric.title}
-                </CardTitle>
-                <div className={cn('p-2 rounded-full', metric.bgColor)}>
-                  <metric.icon className={cn('h-4 w-4', metric.color)} />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className={cn('text-2xl font-bold', metric.color)}>
-                  {metric.value}
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {metric.description}
-                </p>
-              </CardContent>
-              {/* Accent border */}
-              <div
+              <RefreshCw
+                className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`}
+              />
+              Atualizar
+            </Button>
+          </div>
+        </motion.div>
+
+        {/* Filtros */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <AdminFilterCard
+            filters={[
+              {
+                label: 'Período',
+                value: selectedPeriod,
+                onValueChange: setSelectedPeriod,
+                placeholder: 'Selecionar período',
+                options: [
+                  { label: 'Últimas 24 horas', value: '1d' },
+                  { label: 'Últimos 7 dias', value: '7d' },
+                  { label: 'Últimos 30 dias', value: '30d' },
+                ],
+              },
+            ]}
+            actionButtons={
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setShowDetails(showDetails ? null : 'overview')
+                  }
+                  className="border-blue-200 hover:border-blue-300 hover:bg-blue-50"
+                >
+                  <Eye className="h-4 w-4 mr-1" />
+                  {showDetails ? 'Ocultar' : 'Detalhes'}
+                </Button>
+              </div>
+            }
+          />
+        </motion.div>
+
+        {/* Anomalias com animação */}
+        <AnimatePresence>
+          {analytics.anomalies.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Alert
+                variant="destructive"
+                className="border-red-200 bg-red-50/50 backdrop-blur"
+              >
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription>
+                  <div className="font-semibold mb-3 flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    {analytics.anomalies.length} anomalia(s) detectada(s) na API
+                  </div>
+                  <div className="space-y-2">
+                    {analytics.anomalies.slice(0, 3).map((anomaly, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="flex items-center gap-3 p-3 bg-white/60 rounded-lg border border-red-100"
+                      >
+                        <Badge
+                          variant={
+                            getSeverityColor(anomaly.severity) as
+                              | 'default'
+                              | 'destructive'
+                              | 'outline'
+                              | 'secondary'
+                          }
+                          className="text-xs font-medium"
+                        >
+                          {anomaly.severity.toUpperCase()}
+                        </Badge>
+                        <div className="flex-1">
+                          <span className="font-medium text-sm">
+                            {anomaly.endpoint}
+                          </span>
+                          <p className="text-xs text-muted-foreground">
+                            {anomaly.message}
+                          </p>
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {new Date(anomaly.timestamp).toLocaleTimeString()}
+                        </div>
+                      </motion.div>
+                    ))}
+                    {analytics.anomalies.length > 3 && (
+                      <div className="text-center">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowDetails('anomalies')}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                        >
+                          Ver todas as {analytics.anomalies.length} anomalias
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </AlertDescription>
+              </Alert>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Métricas Principais com animações */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+        >
+          {[
+            {
+              title: 'Total de Requests',
+              value: formatNumber(analytics.overview.totalRequests),
+              description: `${analytics.overview.uniqueEndpoints} endpoints únicos`,
+              icon: Activity,
+              color: 'text-blue-600',
+              bgColor: 'bg-blue-50',
+              borderColor: 'border-blue-200',
+            },
+            {
+              title: 'Tempo de Resposta',
+              value: `${analytics.overview.avgResponseTime}ms`,
+              description: 'Tempo médio de resposta',
+              icon: Clock,
+              color: getResponseTimeColor(analytics.overview.avgResponseTime),
+              bgColor:
+                analytics.overview.avgResponseTime > 2000
+                  ? 'bg-red-50'
+                  : analytics.overview.avgResponseTime > 1000
+                    ? 'bg-yellow-50'
+                    : 'bg-green-50',
+              borderColor:
+                analytics.overview.avgResponseTime > 2000
+                  ? 'border-red-200'
+                  : analytics.overview.avgResponseTime > 1000
+                    ? 'border-yellow-200'
+                    : 'border-green-200',
+            },
+            {
+              title: 'Taxa de Erro',
+              value: formatPercent(analytics.overview.errorRate),
+              description: 'Taxa de erro geral',
+              icon:
+                analytics.overview.errorRate > 0.05 ? TrendingUp : TrendingDown,
+              color: getErrorRateColor(analytics.overview.errorRate),
+              bgColor:
+                analytics.overview.errorRate > 0.1
+                  ? 'bg-red-50'
+                  : analytics.overview.errorRate > 0.05
+                    ? 'bg-yellow-50'
+                    : 'bg-green-50',
+              borderColor:
+                analytics.overview.errorRate > 0.1
+                  ? 'border-red-200'
+                  : analytics.overview.errorRate > 0.05
+                    ? 'border-yellow-200'
+                    : 'border-green-200',
+            },
+            {
+              title: 'Usuários Ativos',
+              value: formatNumber(
+                analytics.userActivity.authenticated +
+                  analytics.userActivity.anonymous
+              ),
+              description: `${analytics.userActivity.authenticated} autenticados, ${analytics.userActivity.adminRequests} admin`,
+              icon: Users,
+              color: 'text-purple-600',
+              bgColor: 'bg-purple-50',
+              borderColor: 'border-purple-200',
+            },
+          ].map((metric, index) => (
+            <motion.div
+              key={metric.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              whileHover={{ y: -2, transition: { duration: 0.2 } }}
+            >
+              <Card
                 className={cn(
-                  'absolute bottom-0 left-0 right-0 h-1',
+                  'relative overflow-hidden transition-all duration-200 hover:shadow-lg cursor-pointer',
+                  metric.borderColor,
                   metric.bgColor
                 )}
-              />
-            </Card>
-          </motion.div>
-        ))}
-      </motion.div>
+              >
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-700">
+                    {metric.title}
+                  </CardTitle>
+                  <div className={cn('p-2 rounded-full', metric.bgColor)}>
+                    <metric.icon className={cn('h-4 w-4', metric.color)} />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className={cn('text-2xl font-bold', metric.color)}>
+                    {metric.value}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {metric.description}
+                  </p>
+                </CardContent>
+                {/* Accent border */}
+                <div
+                  className={cn(
+                    'absolute bottom-0 left-0 right-0 h-1',
+                    metric.bgColor
+                  )}
+                />
+              </Card>
+            </motion.div>
+          ))}
+        </motion.div>
 
-      {/* Seção de Dados Detalhados */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="grid gap-6 md:grid-cols-2"
-      >
-        {/* Top Endpoints */}
-        <Card className="border-border/40">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Server className="h-5 w-5 text-orange-600" />
-                  Endpoints Mais Utilizados
-                </CardTitle>
-                <CardDescription className="mt-1">
-                  Rankings por número de requisições (
-                  {selectedPeriod === '1d'
-                    ? 'últimas 24h'
-                    : selectedPeriod === '7d'
-                      ? 'últimos 7 dias'
-                      : 'últimos 30 dias'}
-                  )
-                </CardDescription>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() =>
-                  setShowDetails(
-                    showDetails === 'endpoints' ? null : 'endpoints'
-                  )
-                }
-                className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {analytics.topEndpoints
-                .slice(
-                  0,
-                  showDetails === 'endpoints'
-                    ? analytics.topEndpoints.length
-                    : 8
-                )
-                .map((endpoint, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="group p-3 rounded-lg border border-gray-100 hover:border-orange-200 hover:bg-orange-50/50 transition-all duration-200"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="outline" className="text-xs">
-                            #{i + 1}
-                          </Badge>
-                          <Badge
-                            variant={
-                              endpoint.endpoint.includes('/admin')
-                                ? 'destructive'
-                                : 'secondary'
-                            }
-                            className="text-xs"
-                          >
-                            {endpoint.endpoint.includes('/admin')
-                              ? 'ADMIN'
-                              : 'PUBLIC'}
-                          </Badge>
-                        </div>
-                        <p className="font-mono text-sm font-medium truncate group-hover:text-orange-700 transition-colors">
-                          {endpoint.endpoint}
-                        </p>
-                        <div className="flex items-center gap-4 mt-2 text-xs">
-                          <span className="flex items-center gap-1">
-                            <Hash className="h-3 w-3 text-blue-500" />
-                            <span className="font-medium">
-                              {formatNumber(endpoint.requests)}
-                            </span>
-                            <span className="text-muted-foreground">
-                              requests
-                            </span>
-                          </span>
-                          <span
-                            className={cn(
-                              'flex items-center gap-1',
-                              getResponseTimeColor(endpoint.avgTime)
-                            )}
-                          >
-                            <Clock className="h-3 w-3" />
-                            <span className="font-medium">
-                              {endpoint.avgTime}ms
-                            </span>
-                          </span>
-                          <span
-                            className={cn(
-                              'flex items-center gap-1',
-                              getErrorRateColor(endpoint.errorRate)
-                            )}
-                          >
-                            <AlertTriangle className="h-3 w-3" />
-                            <span className="font-medium">
-                              {formatPercent(endpoint.errorRate)}
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Erros Recentes */}
-        <Card className="border-border/40">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <AlertTriangle className="h-5 w-5 text-red-600" />
-                  Erros Recentes
-                </CardTitle>
-                <CardDescription className="mt-1">
-                  Últimos erros reportados pela API
-                </CardDescription>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() =>
-                  setShowDetails(showDetails === 'errors' ? null : 'errors')
-                }
-                className="text-red-600 hover:text-red-700 hover:bg-red-50"
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            {analytics.recentErrors.length === 0 ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="text-center py-8 px-4"
-              >
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
-                  <Shield className="h-8 w-8 text-green-600" />
+        {/* Seção de Dados Detalhados */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="grid gap-6 md:grid-cols-2"
+        >
+          {/* Top Endpoints */}
+          <Card className="border-border/40">
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Server className="h-5 w-5 text-orange-600" />
+                    Endpoints Mais Utilizados
+                  </CardTitle>
+                  <CardDescription className="mt-1">
+                    Rankings por número de requisições (
+                    {selectedPeriod === '1d'
+                      ? 'últimas 24h'
+                      : selectedPeriod === '7d'
+                        ? 'últimos 7 dias'
+                        : 'últimos 30 dias'}
+                    )
+                  </CardDescription>
                 </div>
-                <p className="text-sm font-medium text-green-700 mb-1">
-                  🎉 Excelente! Nenhum erro recente
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  A API está funcionando perfeitamente
-                </p>
-              </motion.div>
-            ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    setShowDetails(
+                      showDetails === 'endpoints' ? null : 'endpoints'
+                    )
+                  }
+                  className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
               <div className="space-y-3">
-                {analytics.recentErrors
+                {analytics.topEndpoints
                   .slice(
                     0,
-                    showDetails === 'errors' ? analytics.recentErrors.length : 6
+                    showDetails === 'endpoints'
+                      ? analytics.topEndpoints.length
+                      : 8
                   )
-                  .map((error, i) => (
+                  .map((endpoint, i) => (
                     <motion.div
                       key={i}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.05 }}
-                      className="p-3 rounded-lg border border-red-100 bg-red-50/50 hover:bg-red-50 transition-colors"
+                      className="group p-3 rounded-lg border border-gray-100 hover:border-orange-200 hover:bg-orange-50/50 transition-all duration-200"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-mono text-sm font-medium text-red-700">
-                          {error.endpoint}
-                        </span>
-                        <Badge variant="destructive" className="text-xs">
-                          {error.count}x
-                        </Badge>
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="outline" className="text-xs">
+                              #{i + 1}
+                            </Badge>
+                            <Badge
+                              variant={
+                                endpoint.endpoint.includes('/admin')
+                                  ? 'destructive'
+                                  : 'secondary'
+                              }
+                              className="text-xs"
+                            >
+                              {endpoint.endpoint.includes('/admin')
+                                ? 'ADMIN'
+                                : 'PUBLIC'}
+                            </Badge>
+                          </div>
+                          <p className="font-mono text-sm font-medium truncate group-hover:text-orange-700 transition-colors">
+                            {endpoint.endpoint}
+                          </p>
+                          <div className="flex items-center gap-4 mt-2 text-xs">
+                            <span className="flex items-center gap-1">
+                              <Hash className="h-3 w-3 text-blue-500" />
+                              <span className="font-medium">
+                                {formatNumber(endpoint.requests)}
+                              </span>
+                              <span className="text-muted-foreground">
+                                requests
+                              </span>
+                            </span>
+                            <span
+                              className={cn(
+                                'flex items-center gap-1',
+                                getResponseTimeColor(endpoint.avgTime)
+                              )}
+                            >
+                              <Clock className="h-3 w-3" />
+                              <span className="font-medium">
+                                {endpoint.avgTime}ms
+                              </span>
+                            </span>
+                            <span
+                              className={cn(
+                                'flex items-center gap-1',
+                                getErrorRateColor(endpoint.errorRate)
+                              )}
+                            >
+                              <AlertTriangle className="h-3 w-3" />
+                              <span className="font-medium">
+                                {formatPercent(endpoint.errorRate)}
+                              </span>
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-xs text-red-600 mb-2 font-medium">
-                        {error.error}
-                      </p>
-                      <p className="text-xs text-muted-foreground flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {new Date(error.timestamp).toLocaleString()}
-                      </p>
                     </motion.div>
                   ))}
               </div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
+            </CardContent>
+          </Card>
 
-      {/* Atividade por Horário */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
-      >
-        <Card className="border-border/40">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <Globe className="h-5 w-5 text-green-600" />
-                  Atividade por Horário
-                </CardTitle>
-                <CardDescription className="mt-1">
-                  Distribuição de requests ao longo do dia (
-                  {selectedPeriod === '1d'
-                    ? 'últimas 24h'
-                    : selectedPeriod === '7d'
-                      ? 'últimos 7 dias'
-                      : 'últimos 30 dias'}
-                  )
-                </CardDescription>
+          {/* Erros Recentes */}
+          <Card className="border-border/40">
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                    Erros Recentes
+                  </CardTitle>
+                  <CardDescription className="mt-1">
+                    Últimos erros reportados pela API
+                  </CardDescription>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    setShowDetails(showDetails === 'errors' ? null : 'errors')
+                  }
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                >
+                  <Eye className="h-4 w-4" />
+                </Button>
               </div>
-              <div className="flex items-center gap-2">
-                <Badge variant="outline" className="text-xs">
-                  <Activity className="h-3 w-3 mr-1" />
-                  {analytics.overview.totalRequests} total
-                </Badge>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {/* Legenda */}
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <span>Menos ativo</span>
-                <span>Mais ativo</span>
-              </div>
-
-              {/* Gráfico de barras */}
-              <div className="grid grid-cols-12 gap-1 text-xs">
-                {Array.from({ length: 24 }, (_, hour) => {
-                  const hourStr = hour.toString().padStart(2, '0')
-                  const count = analytics.timeStats.hour[hourStr] || 0
-                  const maxCount = Math.max(
-                    ...Object.values(analytics.timeStats.hour)
-                  )
-                  const height = maxCount > 0 ? (count / maxCount) * 100 : 0
-
-                  // Determinar cor baseada na intensidade
-                  const intensity = maxCount > 0 ? count / maxCount : 0
-                  const barColor =
-                    intensity > 0.8
-                      ? 'bg-orange-500'
-                      : intensity > 0.6
-                        ? 'bg-orange-400'
-                        : intensity > 0.4
-                          ? 'bg-orange-300'
-                          : intensity > 0.2
-                            ? 'bg-orange-200'
-                            : 'bg-gray-200'
-
-                  return (
-                    <motion.div
-                      key={hour}
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      transition={{ delay: hour * 0.02 }}
-                      className="flex flex-col items-center group cursor-pointer"
-                    >
-                      <div className="relative w-full h-24 flex items-end">
-                        <motion.div
-                          initial={{ height: 0 }}
-                          animate={{ height: `${Math.max(height, 2)}%` }}
-                          transition={{
-                            delay: hour * 0.02 + 0.2,
-                            duration: 0.5,
-                          }}
-                          className={cn(
-                            'w-full rounded-t-sm transition-all duration-200 group-hover:opacity-80',
-                            barColor
-                          )}
-                          title={`${hourStr}:00 - ${formatNumber(count)} requests`}
-                        />
-                      </div>
-                      <span
-                        className={cn(
-                          'text-xs text-muted-foreground mt-2 transition-colors',
-                          'group-hover:text-orange-600 group-hover:font-medium'
-                        )}
+            </CardHeader>
+            <CardContent>
+              {analytics.recentErrors.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="text-center py-8 px-4"
+                >
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+                    <Shield className="h-8 w-8 text-green-600" />
+                  </div>
+                  <p className="text-sm font-medium text-green-700 mb-1">
+                    🎉 Excelente! Nenhum erro recente
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    A API está funcionando perfeitamente
+                  </p>
+                </motion.div>
+              ) : (
+                <div className="space-y-3">
+                  {analytics.recentErrors
+                    .slice(
+                      0,
+                      showDetails === 'errors'
+                        ? analytics.recentErrors.length
+                        : 6
+                    )
+                    .map((error, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="p-3 rounded-lg border border-red-100 bg-red-50/50 hover:bg-red-50 transition-colors"
                       >
-                        {hour % 2 === 0 ? hourStr : ''}
-                      </span>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="font-mono text-sm font-medium text-red-700">
+                            {error.endpoint}
+                          </span>
+                          <Badge variant="destructive" className="text-xs">
+                            {error.count}x
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-red-600 mb-2 font-medium">
+                          {error.error}
+                        </p>
+                        <p className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          {new Date(error.timestamp).toLocaleString()}
+                        </p>
+                      </motion.div>
+                    ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
 
-                      {/* Tooltip on hover */}
-                      <div className="invisible group-hover:visible absolute z-10 bg-gray-900 text-white text-xs rounded px-2 py-1 mt-8 whitespace-nowrap">
-                        {hourStr}:00 - {formatNumber(count)} requests
-                      </div>
-                    </motion.div>
-                  )
-                })}
+        {/* Atividade por Horário */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <Card className="border-border/40">
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Globe className="h-5 w-5 text-green-600" />
+                    Atividade por Horário
+                  </CardTitle>
+                  <CardDescription className="mt-1">
+                    Distribuição de requests ao longo do dia (
+                    {selectedPeriod === '1d'
+                      ? 'últimas 24h'
+                      : selectedPeriod === '7d'
+                        ? 'últimos 7 dias'
+                        : 'últimos 30 dias'}
+                    )
+                  </CardDescription>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className="text-xs">
+                    <Activity className="h-3 w-3 mr-1" />
+                    {analytics.overview.totalRequests} total
+                  </Badge>
+                </div>
               </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Legenda */}
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>Menos ativo</span>
+                  <span>Mais ativo</span>
+                </div>
 
-              {/* Estatísticas resumidas */}
-              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
-                <div className="text-center">
-                  <div className="text-lg font-bold text-green-600">
-                    {Math.max(...Object.values(analytics.timeStats.hour))}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    Pico máximo
-                  </div>
+                {/* Gráfico de barras */}
+                <div className="grid grid-cols-12 gap-1 text-xs">
+                  {Array.from({ length: 24 }, (_, hour) => {
+                    const hourStr = hour.toString().padStart(2, '0')
+                    const count = analytics.timeStats.hour[hourStr] || 0
+                    const maxCount = Math.max(
+                      ...Object.values(analytics.timeStats.hour)
+                    )
+                    const height = maxCount > 0 ? (count / maxCount) * 100 : 0
+
+                    // Determinar cor baseada na intensidade
+                    const intensity = maxCount > 0 ? count / maxCount : 0
+                    const barColor =
+                      intensity > 0.8
+                        ? 'bg-orange-500'
+                        : intensity > 0.6
+                          ? 'bg-orange-400'
+                          : intensity > 0.4
+                            ? 'bg-orange-300'
+                            : intensity > 0.2
+                              ? 'bg-orange-200'
+                              : 'bg-gray-200'
+
+                    return (
+                      <motion.div
+                        key={hour}
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        transition={{ delay: hour * 0.02 }}
+                        className="flex flex-col items-center group cursor-pointer"
+                      >
+                        <div className="relative w-full h-24 flex items-end">
+                          <motion.div
+                            initial={{ height: 0 }}
+                            animate={{ height: `${Math.max(height, 2)}%` }}
+                            transition={{
+                              delay: hour * 0.02 + 0.2,
+                              duration: 0.5,
+                            }}
+                            className={cn(
+                              'w-full rounded-t-sm transition-all duration-200 group-hover:opacity-80',
+                              barColor
+                            )}
+                            title={`${hourStr}:00 - ${formatNumber(count)} requests`}
+                          />
+                        </div>
+                        <span
+                          className={cn(
+                            'text-xs text-muted-foreground mt-2 transition-colors',
+                            'group-hover:text-orange-600 group-hover:font-medium'
+                          )}
+                        >
+                          {hour % 2 === 0 ? hourStr : ''}
+                        </span>
+
+                        {/* Tooltip on hover */}
+                        <div className="invisible group-hover:visible absolute z-10 bg-gray-900 text-white text-xs rounded px-2 py-1 mt-8 whitespace-nowrap">
+                          {hourStr}:00 - {formatNumber(count)} requests
+                        </div>
+                      </motion.div>
+                    )
+                  })}
                 </div>
-                <div className="text-center">
-                  <div className="text-lg font-bold text-blue-600">
-                    {Math.round(
-                      Object.values(analytics.timeStats.hour).reduce(
-                        (a, b) => a + b,
-                        0
-                      ) / 24
-                    )}
+
+                {/* Estatísticas resumidas */}
+                <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-green-600">
+                      {Math.max(...Object.values(analytics.timeStats.hour))}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Pico máximo
+                    </div>
                   </div>
-                  <div className="text-xs text-muted-foreground">
-                    Média/hora
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-blue-600">
+                      {Math.round(
+                        Object.values(analytics.timeStats.hour).reduce(
+                          (a, b) => a + b,
+                          0
+                        ) / 24
+                      )}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Média/hora
+                    </div>
                   </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-lg font-bold text-purple-600">
-                    {
-                      Object.values(analytics.timeStats.hour).filter(
-                        (count) => count > 0
-                      ).length
-                    }
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    Horas ativas
+                  <div className="text-center">
+                    <div className="text-lg font-bold text-purple-600">
+                      {
+                        Object.values(analytics.timeStats.hour).filter(
+                          (count) => count > 0
+                        ).length
+                      }
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Horas ativas
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
     </div>
   )
 }
