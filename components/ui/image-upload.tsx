@@ -46,7 +46,9 @@ const StorybookImage = ({
     typeof window !== 'undefined' &&
     window.location.hostname.includes('localhost')
   ) {
-    return <img src={src as string} alt={alt} {...props} />
+    // Filtrar props específicas do Next.js Image que não são válidas para img HTML
+    const { fill, priority, quality, placeholder, blurDataURL, loader, unoptimized, ...imgProps } = props as any
+    return <img src={src as string} alt={alt} {...imgProps} />
   }
   // Caso contrário, usar Next.js Image
   return <Image src={src} alt={alt} {...props} />
