@@ -308,8 +308,8 @@ export default function NotificacoesPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <h1 className="text-3xl font-bold leading-tight">Notificações</h1>
-            <p className="text-base md:text-lg text-white leading-relaxed max-w-2xl mx-auto">
+            <h1 className="text-2xl md:text-3xl font-bold leading-tight">Notificações</h1>
+            <p className="text-sm md:text-base text-white leading-relaxed max-w-2xl mx-auto">
               Mantenha-se atualizado com todas as suas notificações
             </p>
           </motion.div>
@@ -371,14 +371,14 @@ export default function NotificacoesPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-20">
-                    <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-8">
-                      <Bell className="h-16 w-16 text-gray-300" />
+                  <div className="text-center py-12">
+                    <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Bell className="h-12 w-12 text-gray-300" />
                     </div>
-                    <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                    <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
                       Nenhuma notificação
                     </h3>
-                    <p className="text-xl md:text-2xl text-gray-500 mb-8 leading-relaxed">
+                    <p className="text-base md:text-lg text-gray-500 mb-8 leading-relaxed">
                       Você está em dia! Novas notificações aparecerão aqui.
                     </p>
                   </div>
