@@ -16,7 +16,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -543,34 +542,36 @@ export function ModernCategoryModal({
     <React.Fragment>
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent
+          /* Sem data-atributos especiais; estilos serão definidos exclusivamente aqui */
           closeButtonClassName="hover:bg-white [&>svg]:w-4 [&>svg]:h-4"
-          className="w-full max-w-lg h-[100svh] max-h-[100svh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-visible data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
-          style={{
-            paddingTop: 'env(safe-area-inset-top)',
-            paddingBottom: 'env(safe-area-inset-bottom)',
-            height:
-              'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
-            maxHeight:
-              'calc(100svh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
-          }}
+          className="fixed w-full max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg flex flex-col left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 m-0 z-50 max-h-[90vh] md:max-h-[85vh] overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 xs:max-w-[95vw] xs:max-h-[calc(100vh-5rem)] xs:top-[calc(2.5rem+8px)] xs:translate-y-0"
         >
-          <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
-            <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
+          <DialogHeader className="p-6 xs:p-4 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
+            <DialogTitle className="text-xl xs:text-lg font-semibold text-gray-800 flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
                 <Tag className="w-4 h-4" />
               </div>
               {title}
             </DialogTitle>
           </DialogHeader>
-          <ScrollArea className="flex-1 min-h-0 max-h-full w-full overflow-y-auto">
-            <div className="p-6 space-y-6 xs:p-1 xs:space-y-3 w-full max-w-full">
+          <div 
+            className="category-modal-scroll w-full flex-1 min-h-0"
+            style={{
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            <div className="p-6 space-y-6 xs:p-3 xs:space-y-3 w-full max-w-full pb-2">
               {/* Preview da Categoria */}
-              <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-2 xs:rounded-md">
-                <div className="flex items-center justify-between mb-4 w-full">
-                  <h3 className="text-sm font-semibold text-slate-700">
-                    Preview da Categoria
-                  </h3>
-                  <div className="flex items-center gap-2">
+              <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-4 xs:rounded-md">
+                {/* Título - sempre em cima no mobile */}
+                <h3 className="text-sm font-semibold text-slate-700 mb-4 xs:text-xs xs:text-center xs:mb-3">
+                  Preview da Categoria
+                </h3>
+                
+                {/* Container dos botões - desktop: direita, mobile: centralizado */}
+                <div className="flex items-center justify-end gap-2 flex-wrap mb-4 xs:flex-col xs:gap-2.5 xs:justify-center xs:items-center xs:mb-3">
                     <Popover
                       modal
                       open={isDesignOpen}
@@ -580,17 +581,16 @@ export function ModernCategoryModal({
                         <Button
                           variant="outline"
                           size="sm"
-                          className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group"
+                          className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
                         >
-                          <Edit className="w-4 h-4 group-hover:text-orange-600 transition-colors duration-200" />
+                          <Edit className="w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200" />
                           <span className="group-hover:text-orange-600 transition-colors duration-200">
                             Editar
                           </span>
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="popover-content fixed left-1/2 top-1/2 w-[380px] max-w-[calc(100vw-1rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] overflow-y-auto -translate-x-1/2 -translate-y-1/2"
-                        style={{ maxHeight: '90vh' }}
+                        className="popover-content fixed left-1/2 top-1/2 w-[380px] max-w-[calc(100vw-1rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] -translate-x-1/2 -translate-y-1/2 h-auto max-h-fit overflow-visible"
                         align="center"
                         side="bottom"
                         sideOffset={8}
@@ -600,7 +600,7 @@ export function ModernCategoryModal({
                         onOpenAutoFocus={(e) => e.preventDefault()}
                         onCloseAutoFocus={(e) => e.preventDefault()}
                       >
-                        <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 modal-preview-scroll">
+                        <div className="flex-1 min-h-0 p-4 space-y-4">
                           {/* Header */}
                           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                             <div className="flex items-center gap-2">
@@ -783,12 +783,12 @@ export function ModernCategoryModal({
                       variant="outline"
                       size="sm"
                       onClick={resetToDefaults}
-                      className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group"
+                      className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
                       title="Resetar configurações"
                     >
                       <RotateCcw
                         className={cn(
-                          'w-4 h-4 group-hover:text-orange-600 transition-colors duration-200',
+                          'w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200',
                           resetAnimation && 'animate-reset'
                         )}
                       />
@@ -796,16 +796,17 @@ export function ModernCategoryModal({
                         Resetar
                       </span>
                     </Button>
-                  </div>
                 </div>
-                <div className="flex justify-center mb-4 w-full">
+                
+                {/* Badge */}
+                <div className="flex justify-center items-center w-full mb-4 xs:mb-3">
                   <Badge
                     variant="outline"
                     className={cn(
                       'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
                       'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
                       'hover:scale-[1.07]',
-                      'xs:text-[10px] xs:px-1 xs:py-1 xs:rounded-md'
+                      'xs:text-xs xs:px-4 xs:py-2 xs:rounded-lg xs:gap-1.5'
                     )}
                     style={{
                       backgroundColor: formData.backgroundColor,
@@ -823,18 +824,18 @@ export function ModernCategoryModal({
                   </Badge>
                 </div>
                 {formData.description && (
-                  <div className="text-center">
-                    <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
+                  <div className="text-center w-full flex justify-center items-center">
+                    <p className="text-xs text-slate-500 italic max-w-xs leading-relaxed whitespace-pre-wrap break-words">
                       {formData.description}
                     </p>
                   </div>
                 )}
               </div>
               {/* Nome */}
-              <div className="space-y-3 w-full max-w-full">
+              <div className="space-y-2 xs:space-y-1.5 w-full max-w-full">
                 <Label
                   htmlFor="name"
-                  className="text-sm font-semibold text-slate-700"
+                  className="text-sm xs:text-xs font-semibold text-slate-700"
                 >
                   Nome da Categoria *
                 </Label>
@@ -846,7 +847,7 @@ export function ModernCategoryModal({
                   }
                   placeholder="Ex: Ferramentas de Construção"
                   className={cn(
-                    'h-11 text-sm border-gray-200 focus:border-blue-500 rounded-lg xs:h-9 xs:text-xs w-full max-w-full',
+                    'h-11 text-sm border-gray-200 focus:border-blue-500 rounded-lg xs:h-10 xs:text-xs w-full max-w-full',
                     errors.name && 'border-red-500 focus:border-red-500'
                   )}
                 />
@@ -872,12 +873,16 @@ export function ModernCategoryModal({
                   id="description"
                   value={formData.description}
                   onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
+                    setFormData({
+                      ...formData,
+                      description: e.target.value.slice(0, 200),
+                    })
                   }
                   placeholder="Descreva brevemente esta categoria..."
-                  rows={3}
+                  rows={4}
+                  maxLength={200}
                   className={cn(
-                    'text-sm border-gray-200 focus:border-blue-500 resize-none rounded-lg xs:text-xs xs:h-16 w-full max-w-full',
+                    'text-sm border-gray-200 focus:border-blue-500 resize-none rounded-lg xs:text-xs xs:min-h-[80px] w-full max-w-full',
                     errors.description && 'border-red-500 focus:border-red-500'
                   )}
                 />
@@ -912,15 +917,15 @@ export function ModernCategoryModal({
                 </AnimatePresence>
               </React.Fragment>
             </div>
-          </ScrollArea>
-          <DialogFooter className="p-6 border-t bg-gray-50 rounded-b-lg xs:p-1 xs:rounded-b-md w-full max-w-full flex-shrink-0">
+          </div>
+          <DialogFooter className="p-6 xs:p-3 border-t bg-gray-50 rounded-b-lg xs:rounded-b-md w-full max-w-full flex-shrink-0">
             <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
               <Button
                 type="button"
                 variant="outline"
                 onClick={onClose}
                 disabled={isSubmitting}
-                className="flex-1 h-11 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-sm"
+                className="flex-1 h-11 xs:h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-sm xs:text-sm"
               >
                 <X className="w-4 h-4 mr-2" />
                 Cancelar
@@ -929,7 +934,7 @@ export function ModernCategoryModal({
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting || !formData.name.trim()}
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4 flex-1"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm xs:text-xs font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-11 xs:h-10 px-4 flex-1"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

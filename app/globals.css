@@ -1075,7 +1075,7 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 }
 
 /* Garantir centralização perfeita de modais - EXCLUINDO popovers */
-[role='dialog']:not([data-radix-popover-content]) {
+[role='dialog']:not([data-radix-popover-content]):not([data-popover-dialog]) {
   position: fixed !important;
   left: 50% !important;
   top: 50% !important;
@@ -1091,15 +1091,67 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Responsividade para telas pequenas - EXCLUINDO popovers */
 @media (max-width: 640px) {
-  [role='dialog']:not([data-radix-popover-content]) {
+  [role='dialog']:not([data-radix-popover-content]):not([data-popover-dialog]) {
     max-width: 95vw !important;
     height: 100% !important;
     max-height: 95vh !important;
   }
 }
 
+/* Dialog usado como Popover (mobile): centralizado, altura pelo conteúdo */
+[role='dialog'][data-popover-dialog] {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-height: max-content !important;
+  height: auto !important;
+  max-width: calc(100vw - 1rem) !important;
+}
+
+/* Nenhum estilo específico para a modal de categoria aqui. Controle exclusivo no componente. */
+
 /* =============================== */
 /* 13. Modal de Categoria          */
+/* =============================== */
+
+/* Scroll suave e responsivo para conteúdo da modal */
+.category-modal-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar customizada para desktop */
+.category-modal-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.category-modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.category-modal-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.category-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Firefox */
+@supports (scrollbar-width: thin) {
+  .category-modal-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+}
+
+/* =============================== */
+/* 13.1. Classes Utilitárias        */
 /* =============================== */
 /* Classes utilitárias para modal de categoria */
 .modal-preview-scroll {
@@ -1250,8 +1302,8 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 /* Popover específico - sem interferência */
 [data-radix-popover-content] {
-  max-height: 80vh !important;
-  overflow-y: auto !important;
+  max-height: max-content !important; /* altura máxima ditada pelo conteúdo */
+  overflow: visible !important; /* evita scroll desnecessário no popover */
 }
 
 /* =============================== */
