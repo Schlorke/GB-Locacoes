@@ -540,16 +540,16 @@ export function ModernCategoryModal({
   }
   return (
     <React.Fragment>
-      <Dialog open={isOpen} onOpenChange={onClose}>
+      <Dialog open={isOpen} onOpenChange={onClose} >
         <DialogContent
           closeButtonClassName="hover:bg-white [&>svg]:w-4 [&>svg]:h-4"
-          className="w-full max-w-lg max-h-[80vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
+          className="w-[calc(100vw-0.8rem)] h-[calc(100vw-rem)] max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[54%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%]"
           style={{
             height: '80vh',
             maxHeight: '80vh',
           }}
         >
-          <DialogHeader className="p-6 xs:p-4 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
+          <DialogHeader className="p-6 xs:p-4 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-2xl flex-shrink-0">
             <DialogTitle className="text-xl xs:text-lg font-semibold text-gray-800 flex items-center gap-3">
               <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
                 <Tag className="w-4 h-4" />
@@ -919,7 +919,7 @@ export function ModernCategoryModal({
               </React.Fragment>
             </div>
           </div>
-          <DialogFooter className="p-6 xs:p-3 border-t bg-gray-50 rounded-b-lg xs:rounded-b-md w-full max-w-full flex-shrink-0">
+          <DialogFooter className="p-6 xs:p-3 border-t bg-gray-50 rounded-b-2xl w-full max-w-full flex-shrink-0">
             <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
               <Button
                 type="button"
