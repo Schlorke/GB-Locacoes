@@ -521,7 +521,7 @@ export default function AdminCategoriesPage() {
             closeButtonClassName="hover:bg-white"
             className="w-full max-w-lg max-h-[80vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
             style={{
-              height: '80vh',
+              height: '60vh',
               maxHeight: '80vh',
             }}
           >
