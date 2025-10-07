@@ -34,7 +34,11 @@ const Popover = ({ children, ...props }: PopoverRootProps) => {
   if (isMobile) {
     return (
       <PopoverContext.Provider value={{ isMobile }}>
-        <Dialog open={props.open} defaultOpen={props.defaultOpen} onOpenChange={props.onOpenChange}>
+        <Dialog
+          open={props.open}
+          defaultOpen={props.defaultOpen}
+          onOpenChange={props.onOpenChange}
+        >
           {children}
         </Dialog>
       </PopoverContext.Provider>
@@ -56,7 +60,11 @@ const PopoverTrigger = React.forwardRef<
 
   if (isMobile) {
     return (
-      <UIDialogTrigger asChild {...props} ref={ref as unknown as React.Ref<HTMLButtonElement>}>
+      <UIDialogTrigger
+        asChild
+        {...props}
+        ref={ref as unknown as React.Ref<HTMLButtonElement>}
+      >
         {children}
       </UIDialogTrigger>
     )

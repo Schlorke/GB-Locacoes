@@ -554,7 +554,7 @@ export function ModernCategoryModal({
               {title}
             </DialogTitle>
           </DialogHeader>
-          <div 
+          <div
             className="category-modal-scroll w-full flex-1 min-h-0"
             style={{
               overflowY: 'auto',
@@ -569,235 +569,235 @@ export function ModernCategoryModal({
                 <h3 className="text-sm font-semibold text-slate-700 mb-4 xs:text-xs xs:text-center xs:mb-3">
                   Preview da Categoria
                 </h3>
-                
+
                 {/* Container dos botões - desktop: direita, mobile: centralizado */}
                 <div className="flex items-center justify-end gap-2 flex-wrap mb-4 xs:flex-col xs:gap-2.5 xs:justify-center xs:items-center xs:mb-3">
-                    <Popover
-                      modal
-                      open={isDesignOpen}
-                      onOpenChange={setIsDesignOpen}
-                    >
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
-                        >
-                          <Edit className="w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200" />
-                          <span className="group-hover:text-orange-600 transition-colors duration-200">
-                            Editar
-                          </span>
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="popover-content fixed left-1/2 top-1/2 w-[380px] max-w-[calc(100vw-1rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] -translate-x-1/2 -translate-y-1/2 h-auto max-h-fit overflow-visible"
-                        align="center"
-                        side="bottom"
-                        sideOffset={8}
-                        avoidCollisions={false}
-                        collisionPadding={0}
-                        sticky="always"
-                        onOpenAutoFocus={(e) => e.preventDefault()}
-                        onCloseAutoFocus={(e) => e.preventDefault()}
+                  <Popover
+                    modal
+                    open={isDesignOpen}
+                    onOpenChange={setIsDesignOpen}
+                  >
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
                       >
-                        <div className="flex-1 min-h-0 p-4 space-y-4">
-                          {/* Header */}
-                          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                            <div className="flex items-center gap-2">
-                              <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                                <Palette className="w-3.5 h-3.5 text-white" />
-                              </div>
-                              <h4 className="font-semibold text-base text-slate-800">
-                                Personalizar Design
-                              </h4>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={resetVisualSettings}
-                                className="text-slate-400 hover:text-orange-600 h-7 w-7 p-0 rounded-lg transition-colors"
-                                title="Resetar configurações visuais"
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                }}
-                              >
-                                <RotateCcw
-                                  className={cn(
-                                    'w-4 h-4',
-                                    resetVisualAnimation && 'animate-reset'
-                                  )}
-                                />
-                              </Button>
-                              <button
-                                type="button"
-                                onClick={() => setIsDesignOpen(false)}
-                                className="text-slate-400 hover:text-orange-600 h-7 w-7 p-0 rounded-lg transition-colors inline-flex items-center justify-center"
-                                title="Fechar"
-                              >
-                                <X className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </div>
-                          {/* Search Filter */}
-                          <div className="relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
-                            <Input
-                              placeholder="Buscar ícone..."
-                              value={iconFilter}
-                              onChange={(e) => setIconFilter(e.target.value)}
-                              className="pl-10 border-gray-200 focus:border-blue-500 h-9 text-sm placeholder:text-slate-400 rounded-lg"
-                            />
-                          </div>
-                          {/* Icons Grid */}
-                          <div className="space-y-3">
-                            <div className="flex items-center justify-between">
-                              <h5 className="text-sm font-medium text-slate-700">
-                                Ícone
-                              </h5>
-                            </div>
-                            <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                              <div className="relative pb-0 category-icon-grid-container">
-                                <div className="icon-grid-responsive icon-grid-scroll category-icon-grid">
-                                  {ICON_OPTIONS.filter((iconName) =>
-                                    iconName
-                                      .toLowerCase()
-                                      .includes(iconFilter.toLowerCase())
-                                  )
-                                    .slice(0, 48)
-                                    .map((iconName) => {
-                                      const isSelected =
-                                        formData.icon === iconName
-                                      return (
-                                        <button
-                                          key={iconName}
-                                          type="button"
-                                          onClick={() =>
-                                            setFormData({
-                                              ...formData,
-                                              icon: iconName as keyof typeof LucideIcons,
-                                            })
-                                          }
-                                          className={cn(
-                                            'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden icon-selector-button',
-                                            isSelected
-                                              ? 'border-blue-400 shadow-2xl shadow-black/50 scale-105'
-                                              : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
-                                          )}
-                                          title={iconName}
-                                          data-bg={formData.backgroundColor}
-                                          data-icon-color={formData.iconColor}
-                                          style={{
-                                            backgroundColor:
-                                              formData.backgroundColor,
-                                          }}
-                                        >
-                                          {renderIcon(
-                                            iconName as keyof typeof LucideIcons,
-                                            16,
-                                            formData.iconColor
-                                          )}
-                                        </button>
-                                      )
-                                    })}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          {/* Color Sections */}
-                          <div className="space-y-3">
-                            <h5 className="text-sm font-medium text-slate-700">
-                              Cores
-                            </h5>
-                            <div className="flex gap-4 justify-center">
-                              {/* Icon Color */}
-                              <div className="flex flex-col items-center gap-2">
-                                <input
-                                  type="color"
-                                  value={formData.iconColor}
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      iconColor: e.target.value,
-                                    })
-                                  }
-                                  className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
-                                  title="Selecionar cor do ícone"
-                                />
-                                <span className="font-medium text-slate-700 text-xs text-center">
-                                  Cor do Ícone
-                                </span>
-                              </div>
-                              {/* Background Color */}
-                              <div className="flex flex-col items-center gap-2">
-                                <input
-                                  type="color"
-                                  value={formData.backgroundColor}
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      backgroundColor: e.target.value,
-                                    })
-                                  }
-                                  className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
-                                  title="Selecionar cor de fundo"
-                                />
-                                <span className="font-medium text-slate-700 text-xs text-center">
-                                  Cor de Fundo
-                                </span>
-                              </div>
-                              {/* Font Color */}
-                              <div className="flex flex-col items-center gap-2">
-                                <input
-                                  type="color"
-                                  value={formData.fontColor}
-                                  onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
-                                      fontColor: e.target.value,
-                                    })
-                                  }
-                                  className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
-                                  title="Selecionar cor da fonte"
-                                />
-                                <span className="font-medium text-slate-700 text-xs text-center">
-                                  Cor da Fonte
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          {/* Save Button */}
-                          <Button
-                            onClick={() => setIsDesignOpen(false)}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
-                          >
-                            <Save className="w-4 h-4 mr-2" />
-                            Salvar
-                          </Button>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={resetToDefaults}
-                      className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
-                      title="Resetar configurações"
+                        <Edit className="w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200" />
+                        <span className="group-hover:text-orange-600 transition-colors duration-200">
+                          Editar
+                        </span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="popover-content fixed left-1/2 top-1/2 w-[380px] max-w-[calc(100vw-1rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] -translate-x-1/2 -translate-y-1/2 h-auto max-h-fit overflow-visible"
+                      align="center"
+                      side="bottom"
+                      sideOffset={8}
+                      avoidCollisions={false}
+                      collisionPadding={0}
+                      sticky="always"
+                      onOpenAutoFocus={(e) => e.preventDefault()}
+                      onCloseAutoFocus={(e) => e.preventDefault()}
                     >
-                      <RotateCcw
-                        className={cn(
-                          'w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200',
-                          resetAnimation && 'animate-reset'
-                        )}
-                      />
-                      <span className="group-hover:text-orange-600 transition-colors duration-200">
-                        Resetar
-                      </span>
-                    </Button>
+                      <div className="flex-1 min-h-0 p-4 space-y-4">
+                        {/* Header */}
+                        <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                              <Palette className="w-3.5 h-3.5 text-white" />
+                            </div>
+                            <h4 className="font-semibold text-base text-slate-800">
+                              Personalizar Design
+                            </h4>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={resetVisualSettings}
+                              className="text-slate-400 hover:text-orange-600 h-7 w-7 p-0 rounded-lg transition-colors"
+                              title="Resetar configurações visuais"
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                            >
+                              <RotateCcw
+                                className={cn(
+                                  'w-4 h-4',
+                                  resetVisualAnimation && 'animate-reset'
+                                )}
+                              />
+                            </Button>
+                            <button
+                              type="button"
+                              onClick={() => setIsDesignOpen(false)}
+                              className="text-slate-400 hover:text-orange-600 h-7 w-7 p-0 rounded-lg transition-colors inline-flex items-center justify-center"
+                              title="Fechar"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                        {/* Search Filter */}
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                          <Input
+                            placeholder="Buscar ícone..."
+                            value={iconFilter}
+                            onChange={(e) => setIconFilter(e.target.value)}
+                            className="pl-10 border-gray-200 focus:border-blue-500 h-9 text-sm placeholder:text-slate-400 rounded-lg"
+                          />
+                        </div>
+                        {/* Icons Grid */}
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <h5 className="text-sm font-medium text-slate-700">
+                              Ícone
+                            </h5>
+                          </div>
+                          <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
+                            <div className="relative pb-0 category-icon-grid-container">
+                              <div className="icon-grid-responsive icon-grid-scroll category-icon-grid">
+                                {ICON_OPTIONS.filter((iconName) =>
+                                  iconName
+                                    .toLowerCase()
+                                    .includes(iconFilter.toLowerCase())
+                                )
+                                  .slice(0, 48)
+                                  .map((iconName) => {
+                                    const isSelected =
+                                      formData.icon === iconName
+                                    return (
+                                      <button
+                                        key={iconName}
+                                        type="button"
+                                        onClick={() =>
+                                          setFormData({
+                                            ...formData,
+                                            icon: iconName as keyof typeof LucideIcons,
+                                          })
+                                        }
+                                        className={cn(
+                                          'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden icon-selector-button',
+                                          isSelected
+                                            ? 'border-blue-400 shadow-2xl shadow-black/50 scale-105'
+                                            : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
+                                        )}
+                                        title={iconName}
+                                        data-bg={formData.backgroundColor}
+                                        data-icon-color={formData.iconColor}
+                                        style={{
+                                          backgroundColor:
+                                            formData.backgroundColor,
+                                        }}
+                                      >
+                                        {renderIcon(
+                                          iconName as keyof typeof LucideIcons,
+                                          16,
+                                          formData.iconColor
+                                        )}
+                                      </button>
+                                    )
+                                  })}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* Color Sections */}
+                        <div className="space-y-3">
+                          <h5 className="text-sm font-medium text-slate-700">
+                            Cores
+                          </h5>
+                          <div className="flex gap-4 justify-center">
+                            {/* Icon Color */}
+                            <div className="flex flex-col items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.iconColor}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    iconColor: e.target.value,
+                                  })
+                                }
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                title="Selecionar cor do ícone"
+                              />
+                              <span className="font-medium text-slate-700 text-xs text-center">
+                                Cor do Ícone
+                              </span>
+                            </div>
+                            {/* Background Color */}
+                            <div className="flex flex-col items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.backgroundColor}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    backgroundColor: e.target.value,
+                                  })
+                                }
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                title="Selecionar cor de fundo"
+                              />
+                              <span className="font-medium text-slate-700 text-xs text-center">
+                                Cor de Fundo
+                              </span>
+                            </div>
+                            {/* Font Color */}
+                            <div className="flex flex-col items-center gap-2">
+                              <input
+                                type="color"
+                                value={formData.fontColor}
+                                onChange={(e) =>
+                                  setFormData({
+                                    ...formData,
+                                    fontColor: e.target.value,
+                                  })
+                                }
+                                className="w-10 h-10 rounded-lg border-2 border-slate-300 cursor-pointer shadow-sm"
+                                title="Selecionar cor da fonte"
+                              />
+                              <span className="font-medium text-slate-700 text-xs text-center">
+                                Cor da Fonte
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        {/* Save Button */}
+                        <Button
+                          onClick={() => setIsDesignOpen(false)}
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-200"
+                        >
+                          <Save className="w-4 h-4 mr-2" />
+                          Salvar
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={resetToDefaults}
+                    className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
+                    title="Resetar configurações"
+                  >
+                    <RotateCcw
+                      className={cn(
+                        'w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200',
+                        resetAnimation && 'animate-reset'
+                      )}
+                    />
+                    <span className="group-hover:text-orange-600 transition-colors duration-200">
+                      Resetar
+                    </span>
+                  </Button>
                 </div>
-                
+
                 {/* Badge */}
                 <div className="flex justify-center items-center w-full mb-4 xs:mb-3">
                   <Badge

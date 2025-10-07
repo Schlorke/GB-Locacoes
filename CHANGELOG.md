@@ -6,6 +6,24 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-06] - Atualização de Dependências
+
+### Changed 🔄
+
+- **@types/react**: Atualizado de 19.2.0 para 19.2.1
+- **@sveltejs/kit**: Atualizado de 2.44.0 para 2.45.0
+- **@typescript-eslint/eslint-plugin**: Atualizado de 8.45.0 para 8.46.0
+- **@typescript-eslint/parser**: Atualizado de 8.45.0 para 8.46.0
+- **lucide-react**: Atualizado de 0.544.0 para 0.545.0
+
+### Technical Details 🔧
+
+- **Build Status**: ✅ Build executado com sucesso após atualizações
+- **Compatibilidade**: Todas as atualizações mantêm compatibilidade com o
+  projeto
+- **Tailwind CSS**: Mantido na versão 3.4.17 conforme preferência do usuário
+- **Testes**: Build de produção validado com sucesso
+
 ## [2025-10-05] - Redesign da Barra de Pesquisa e Melhorias de Layout
 
 ### Added ✨

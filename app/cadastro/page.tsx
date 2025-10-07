@@ -1,8 +1,6 @@
 'use client'
 
-import { useState, type FormEvent, Suspense } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -13,9 +11,11 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertTriangle, Eye, EyeOff } from 'lucide-react'
 import { signIn } from 'next-auth/react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { Suspense, useState, type FormEvent } from 'react'
 
 function CadastroForm() {
   const router = useRouter()
