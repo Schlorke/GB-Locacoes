@@ -650,7 +650,7 @@ export default function AdminCategoriesPage() {
                 <Button
                   variant="outline"
                   onClick={() => setSelectedCategory(null)}
-                  className="flex-1 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-sm hover:scale-105 hover:shadow-sm transition-all duration-300"
+                  className="flex-1 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300"
                 >
                   <X className="w-4 h-4 mr-2" />
                   Fechar
@@ -662,7 +662,7 @@ export default function AdminCategoriesPage() {
                       openEditCategoryModal(selectedCategory)
                     }
                   }}
-                  className="flex-1 h-10 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300"
+                  className="flex-1 h-10 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   <Edit className="w-4 h-4 mr-2" />
                   Editar Categoria

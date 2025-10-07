@@ -937,6 +937,11 @@ body:has(.sobre-page) {
   border-radius: 3px !important;
 }
 
+/* Category modal action buttons - force white background regardless of variant */
+.category-modal-button-forced {
+  background-color: #ffffff !important;
+}
+
 .whatsapp-chat-scroll::-webkit-scrollbar-thumb {
   background: #25d366 !important;
   border-radius: 3px !important;

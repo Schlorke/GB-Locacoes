@@ -578,10 +578,10 @@ export function ModernCategoryModal({
                       onOpenChange={setIsDesignOpen}
                     >
                       <PopoverTrigger asChild>
-                        <Button
+                      <Button
                           variant="outline"
                           size="sm"
-                          className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
+                        className=" category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
                         >
                           <Edit className="w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200" />
                           <span className="group-hover:text-orange-600 transition-colors duration-200">
@@ -783,7 +783,7 @@ export function ModernCategoryModal({
                       variant="outline"
                       size="sm"
                       onClick={resetToDefaults}
-                      className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group"
+                      className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group bg-white"
                       title="Resetar configurações"
                     >
                       <RotateCcw
@@ -926,7 +926,7 @@ export function ModernCategoryModal({
                 variant="outline"
                 onClick={onClose}
                 disabled={isSubmitting}
-                className="flex-1 h-11 xs:h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-sm xs:text-sm"
+                className="flex-1 h-11 xs:h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md xs:text-sm"
               >
                 <X className="w-4 h-4 mr-2" />
                 Cancelar
@@ -935,7 +935,7 @@ export function ModernCategoryModal({
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting || !formData.name.trim()}
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm xs:text-xs font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-11 xs:h-10 px-4 flex-1"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm xs:text-xs font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300 h-11 xs:h-10 px-4 flex-1"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
