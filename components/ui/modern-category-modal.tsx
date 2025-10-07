@@ -544,10 +544,10 @@ export function ModernCategoryModal({
   }
   return (
     <React.Fragment>
-      <Dialog open={isOpen} onOpenChange={onClose} >
+      <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent
           closeButtonClassName="hover:bg-white [&>svg]:w-4 [&>svg]:h-4"
-          className="w-[calc(100vw-0.8rem)] max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[54%] md:!top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] h-[80vh] max-h-[80vh] md:h-[65vh] md:max-h-[65vh]"
+          className="w-[calc(100vw-0.8rem)] max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[54%] md:!top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] h-[80vh] max-h-[80vh] md:h-[71vh] md:max-h-[71vh]"
         >
           <DialogHeader className="p-6 xs:p-4 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-2xl flex-shrink-0">
             <DialogTitle className="text-xl xs:text-lg font-semibold text-gray-800 flex items-center gap-3">
@@ -557,9 +557,7 @@ export function ModernCategoryModal({
               {title}
             </DialogTitle>
           </DialogHeader>
-          <div
-            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll max-h-[calc(80vh-120px)] md:max-h-[calc(65vh-120px)]"
-          >
+          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll max-h-[calc(80vh-120px)] md:max-h-[calc(65vh-120px)]">
             <div className="p-6 space-y-6 xs:p-3 xs:space-y-3 w-full max-w-full pb-2">
               {/* Preview da Categoria */}
               <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-4 xs:rounded-md">
@@ -577,10 +575,10 @@ export function ModernCategoryModal({
                       onOpenChange={setIsDesignOpen}
                     >
                       <PopoverTrigger asChild>
-                      <Button
+                        <Button
                           variant="outline"
                           size="sm"
-                        className=" category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
+                          className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
                         >
                           <Edit className="w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200" />
                           <span className="group-hover:text-orange-600 transition-colors duration-200">
@@ -589,7 +587,14 @@ export function ModernCategoryModal({
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="popover-content fixed left-1/2 top-1/2 w-[380px] max-w-[calc(100vw-1rem)] p-0 shadow-2xl border rounded-lg bg-white z-[99999] -translate-x-1/2 -translate-y-1/2 h-auto max-h-fit overflow-visible"
+                        className="popover-content w-[380px] max-w-[calc(100vw-1rem)] p-0 shadow-2xl border rounded-2xl bg-white h-auto max-h-fit overflow-visible"
+                        style={{
+                          position: 'fixed',
+                          left: '50%',
+                          top: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          zIndex: 99999,
+                        }}
                         align="center"
                         side="bottom"
                         sideOffset={8}
@@ -599,7 +604,7 @@ export function ModernCategoryModal({
                         onOpenAutoFocus={(e) => e.preventDefault()}
                         onCloseAutoFocus={(e) => e.preventDefault()}
                       >
-                        <div className="flex-1 min-h-0 p-4 space-y-4">
+                        <div className="p-4 space-y-4 max-h-[70vh] overflow-y-auto">
                           {/* Header */}
                           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                             <div className="flex items-center gap-2">
@@ -658,8 +663,8 @@ export function ModernCategoryModal({
                               </h5>
                             </div>
                             <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                              <div className="relative pb-0 category-icon-grid-container">
-                                <div className="icon-grid-responsive icon-grid-scroll category-icon-grid">
+                              <div className="relative pb-0 category-icon-grid-container max-h-[240px] overflow-y-auto">
+                                <div className="icon-grid-responsive icon-grid-scroll category-icon-grid grid grid-cols-6 gap-2">
                                   {ICON_OPTIONS.filter((iconName) =>
                                     iconName
                                       .toLowerCase()
@@ -988,7 +993,10 @@ interface ViewCategoryModalProps {
 }
 
 // Função auxiliar para renderizar ícones (copiada da página para manter consistência)
-function renderCategoryIcon(iconName?: keyof typeof LucideIcons, color?: string) {
+function renderCategoryIcon(
+  iconName?: keyof typeof LucideIcons,
+  color?: string
+) {
   if (!iconName || !LucideIcons[iconName])
     return <Tag className="h-4 w-4 text-gray-400" />
 

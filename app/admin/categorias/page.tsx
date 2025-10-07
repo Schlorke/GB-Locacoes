@@ -14,15 +14,7 @@ import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
-import {
-  Edit,
-  Eye,
-  Package,
-  Plus,
-  Search,
-  Tag,
-  Trash2,
-} from 'lucide-react'
+import { Edit, Eye, Package, Plus, Search, Tag, Trash2 } from 'lucide-react'
 import React, { useCallback, useEffect, useState } from 'react'
 
 interface Category {
