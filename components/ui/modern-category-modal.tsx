@@ -23,6 +23,10 @@ import * as LucideIcons from 'lucide-react'
 import {
   AlertTriangle,
   Edit,
+  Eye,
+  FileText,
+  Hash,
+  Package,
   Palette,
   RotateCcw,
   Save,
@@ -543,11 +547,7 @@ export function ModernCategoryModal({
       <Dialog open={isOpen} onOpenChange={onClose} >
         <DialogContent
           closeButtonClassName="hover:bg-white [&>svg]:w-4 [&>svg]:h-4"
-          className="w-[calc(100vw-0.8rem)] h-[calc(100vw-rem)] max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[54%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%]"
-          style={{
-            height: '80vh',
-            maxHeight: '80vh',
-          }}
+          className="w-[calc(100vw-0.8rem)] max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[54%] md:!top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] h-[80vh] max-h-[80vh] md:h-[65vh] md:max-h-[65vh]"
         >
           <DialogHeader className="p-6 xs:p-4 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-2xl flex-shrink-0">
             <DialogTitle className="text-xl xs:text-lg font-semibold text-gray-800 flex items-center gap-3">
@@ -558,8 +558,7 @@ export function ModernCategoryModal({
             </DialogTitle>
           </DialogHeader>
           <div
-            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll"
-            style={{ maxHeight: 'calc(80vh - 120px)' }}
+            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll max-h-[calc(80vh-120px)] md:max-h-[calc(65vh-120px)]"
           >
             <div className="p-6 space-y-6 xs:p-3 xs:space-y-3 w-full max-w-full pb-2">
               {/* Preview da Categoria */}
@@ -959,5 +958,237 @@ export function ModernCategoryModal({
         </DialogContent>
       </Dialog>
     </React.Fragment>
+  )
+}
+
+// ===============================================
+// MODAL DE VISUALIZAÇÃO DE CATEGORIA
+// ===============================================
+
+interface Category {
+  id: string
+  name: string
+  description?: string
+  icon?: keyof typeof LucideIcons
+  iconColor?: string
+  backgroundColor?: string
+  fontColor?: string
+  createdAt: string
+  _count?: {
+    equipments: number
+  }
+  bgColor?: string
+}
+
+interface ViewCategoryModalProps {
+  category: Category | null
+  isOpen: boolean
+  onClose: () => void
+  onEdit: (_category: Category) => void
+}
+
+// Função auxiliar para renderizar ícones (copiada da página para manter consistência)
+function renderCategoryIcon(iconName?: keyof typeof LucideIcons, color?: string) {
+  if (!iconName || !LucideIcons[iconName])
+    return <Tag className="h-4 w-4 text-gray-400" />
+
+  const IconComponent = LucideIcons[iconName] as React.ComponentType<{
+    size?: number
+    color?: string
+    className?: string
+  }>
+  return (
+    <IconComponent
+      size={16}
+      color={color || '#3b82f6'}
+      className="flex-shrink-0"
+    />
+  )
+}
+
+// Função auxiliar para criar badge de categoria (copiada da página para manter consistência)
+function getCategoryBadgePreview(category: Category) {
+  return (
+    <Badge
+      variant="outline"
+      className={cn(
+        'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
+        'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
+        'hover:scale-[1.07]',
+        'xs:text-[10px] xs:px-1 xs:py-1 xs:rounded-md'
+      )}
+      style={{
+        backgroundColor:
+          category.backgroundColor || category.bgColor || '#e0e7ff',
+        color: category.fontColor || '#1e40af',
+      }}
+    >
+      {category.icon ? (
+        <span className="flex-shrink-0">
+          {renderCategoryIcon(category.icon, category.iconColor)}
+        </span>
+      ) : null}
+      <span className="truncate font-semibold text-sm min-w-0">
+        {category.name}
+      </span>
+    </Badge>
+  )
+}
+
+export function ViewCategoryModal({
+  category,
+  isOpen,
+  onClose,
+  onEdit,
+}: ViewCategoryModalProps) {
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent
+        closeButtonClassName="hover:bg-white"
+        className="w-full max-w-lg max-h-[80vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0 xs:px-3"
+        style={{
+          height: '60vh',
+          maxHeight: '80vh',
+        }}
+      >
+        <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-2xl flex-shrink-0">
+          <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
+              <Eye className="w-4 h-4" />
+            </div>
+            Visualizar Categoria
+          </DialogTitle>
+        </DialogHeader>
+
+        <div
+          className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll"
+          style={{ maxHeight: 'calc(80vh - 120px)' }}
+        >
+          <div className="p-6 space-y-6 xs:p-4 xs:space-y-4 w-full max-w-full">
+            {category && (
+              <>
+                {/* Preview da Categoria */}
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-3 xs:rounded-md">
+                  <div className="flex items-center justify-between mb-4 w-full">
+                    <h3 className="text-sm font-semibold text-slate-700">
+                      Preview da Categoria
+                    </h3>
+                  </div>
+                  <div className="flex justify-center mb-4 w-full">
+                    {getCategoryBadgePreview(category)}
+                  </div>
+                  <div className="text-center">
+                    <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
+                      {category.description || 'Sem descrição'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Informações Detalhadas */}
+                <div className="space-y-4 w-full max-w-full">
+                  <div
+                    className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm relative"
+                    style={{
+                      borderLeft: `4px solid ${category.bgColor || '#3b82f6'}`,
+                    }}
+                  >
+                    <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                      <Package className="w-4 h-4" />
+                      Informações da Categoria
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4 max-w-full">
+                      {/* Coluna Esquerda */}
+                      <div className="space-y-4 min-w-0 max-w-full">
+                        <div className="flex items-center gap-3">
+                          <Tag className="w-4 h-4 text-gray-400" />
+                          <div>
+                            <div className="text-xs text-gray-500">Nome</div>
+                            <div className="font-medium text-sm">
+                              {category.name}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-start gap-3">
+                          <FileText className="w-4 h-4 text-gray-400 mt-1 flex-shrink-0" />
+                          <div className="flex-1 min-w-0 max-w-full">
+                            <div className="text-xs text-gray-500">
+                              Descrição
+                            </div>
+                            <div
+                              className="font-medium text-sm break-words hyphens-auto leading-relaxed"
+                              title={category.description || 'Sem descrição'}
+                              style={{
+                                wordBreak: 'break-word',
+                                overflowWrap: 'break-word',
+                                hyphens: 'auto',
+                              }}
+                            >
+                              {category.description || 'Sem descrição'}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Coluna Direita */}
+                      <div className="space-y-4 min-w-0 max-w-full">
+                        <div className="flex items-center gap-3">
+                          <Package className="w-4 h-4 text-gray-400" />
+                          <div>
+                            <div className="text-xs text-gray-500">
+                              Equipamentos
+                            </div>
+                            <div className="font-medium text-sm">
+                              {category._count?.equipments || 0} equipamentos
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <Hash className="w-4 h-4 text-gray-400" />
+                          <div>
+                            <div className="text-xs text-gray-500">
+                              ID da Categoria
+                            </div>
+                            <div className="font-medium font-mono text-xs text-slate-600">
+                              {category.id}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 p-6 border-t bg-gray-50 rounded-b-2xl xs:p-4 xs:rounded-b-md w-full max-w-full flex-shrink-0">
+          <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="flex-1 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300"
+            >
+              <X className="w-4 h-4 mr-2" />
+              Fechar
+            </Button>
+            <Button
+              onClick={() => {
+                if (category) {
+                  onClose()
+                  onEdit(category)
+                }
+              }}
+              className="flex-1 h-10 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300"
+            >
+              <Edit className="w-4 h-4 mr-2" />
+              Editar Categoria
+            </Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
