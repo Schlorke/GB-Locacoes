@@ -37,13 +37,7 @@ const DialogContent = React.forwardRef<
   DialogContentProps
 >(
   (
-    {
-      className,
-      children,
-      closeButtonClassName,
-      closeButtonVariant = 'ghost',
-      ...props
-    },
+    { children, closeButtonClassName, closeButtonVariant = 'ghost', ...props },
     ref
   ) => {
     const closeClasses = cn(
@@ -57,8 +51,7 @@ const DialogContent = React.forwardRef<
           data-dialog-content
           ref={ref}
           className={cn(
-            'fixed left-[50%] top-[50%] z-50 w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg',
-            className
+            'fixed flex flex-col gap-0 p-0 w-full max-w-md h-[90dvh] md:h-[85dvh] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 m-0 bg-white border-0 rounded-lg shadow-2xl overflow-hidden data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95'
           )}
           {...props}
         >

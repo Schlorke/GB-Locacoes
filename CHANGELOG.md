@@ -6,6 +6,28 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-07] - Atualização de Dependências (Patch Updates)
+
+### Changed 🔄
+
+- **@types/react (dev)**: Atualizado de 19.2.1 para 19.2.2
+- **@types/react-dom (dev)**: Atualizado de 19.2.0 para 19.2.1
+- **nodemailer**: Atualizado de 7.0.7 para 7.0.9
+
+### Technical Details 🔧
+
+- **Build Status**: ✅ Atualizações de patch aplicadas com sucesso
+- **Compatibilidade**: Todas as atualizações mantêm compatibilidade total
+- **Tailwind CSS**: 🔒 Mantido na versão 3.4.17 (versão preferida do projeto)
+- **Tipo de Update**: Apenas patches menores (bug fixes e melhorias)
+
+### Note 📝
+
+- **Tailwind CSS NÃO foi atualizado** de 3.4.17 para 4.1.14 conforme política do
+  projeto
+- Conforme documentado em `AGENTS.md` e regras do projeto, a versão atual do
+  Tailwind deve ser mantida
+
 ## [2025-10-06] - Atualização de Dependências
 
 ### Changed 🔄

@@ -542,9 +542,12 @@ export function ModernCategoryModal({
     <React.Fragment>
       <Dialog open={isOpen} onOpenChange={onClose}>
         <DialogContent
-          /* Sem data-atributos especiais; estilos serão definidos exclusivamente aqui */
           closeButtonClassName="hover:bg-white [&>svg]:w-4 [&>svg]:h-4"
-          className="fixed w-full max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg flex flex-col left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 m-0 z-50 max-h-[90vh] md:max-h-[85vh] overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 xs:max-w-[95vw] xs:max-h-[calc(100vh-5rem)] xs:top-[calc(2.5rem+8px)] xs:translate-y-0"
+          className="w-full max-w-lg max-h-[80vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
+          style={{
+            height: '80vh',
+            maxHeight: '80vh',
+          }}
         >
           <DialogHeader className="p-6 xs:p-4 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
             <DialogTitle className="text-xl xs:text-lg font-semibold text-gray-800 flex items-center gap-3">
@@ -555,12 +558,8 @@ export function ModernCategoryModal({
             </DialogTitle>
           </DialogHeader>
           <div
-            className="category-modal-scroll w-full flex-1 min-h-0"
-            style={{
-              overflowY: 'auto',
-              overflowX: 'hidden',
-              WebkitOverflowScrolling: 'touch',
-            }}
+            className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll"
+            style={{ maxHeight: 'calc(80vh - 120px)' }}
           >
             <div className="p-6 space-y-6 xs:p-3 xs:space-y-3 w-full max-w-full pb-2">
               {/* Preview da Categoria */}

@@ -10,12 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { ClientAreaBadge } from '@/components/ui/client-area-badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ClientAreaBadge } from '@/components/ui/client-area-badge'
-import { MapPin, Plus, Edit, Trash2, Star, Home, Save, X } from 'lucide-react'
-import { toast } from 'sonner'
 import { motion } from 'framer-motion'
+import { Edit, Home, MapPin, Plus, Save, Star, Trash2, X } from 'lucide-react'
+import { toast } from 'sonner'
 
 interface Address {
   id: string

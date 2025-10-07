@@ -301,10 +301,6 @@ textarea[class*='bg-background']:focus {
 /* =============================== */
 /* 2.1. Correções Radix UI Select  */
 /* =============================== */
-[data-radix-popper-content-wrapper] {
-  z-index: var(--z-popover) !important;
-}
-
 [data-radix-select-content] {
   position: absolute !important;
   z-index: var(--z-dropdown) !important;
@@ -1011,38 +1007,12 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 }
 
 /* =============================== */
-/* 12. Modal, Popover, e Layouts   */
+/* 12. Scrollbar Utilitários       */
 /* =============================== */
-
-/* Scroll customizado para modais administrativos */
-.modal-scroll-area {
-  /* scrollbar-width: thin; */
-  /* scrollbar-color: #cbd5e1 #f1f5f9; */
-}
-
-.modal-scroll-area::-webkit-scrollbar {
-  width: 8px;
-}
-
-.modal-scroll-area::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 4px;
-}
-
-.modal-scroll-area::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-
-.modal-scroll-area::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
 
 /* Scroll forçado para modais - sempre visível */
 .force-scroll {
   overflow-y: scroll !important;
-  /* scrollbar-width: thin !important; */
-  /* scrollbar-color: #cbd5e1 #f8fafc !important; */
 }
 
 .force-scroll::-webkit-scrollbar {
@@ -1063,133 +1033,6 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 
 .force-scroll::-webkit-scrollbar-thumb:hover {
   background: #94a3b8 !important;
-}
-
-/* Modal e Popover - Centralização perfeita */
-[data-radix-popper-content-wrapper] {
-  position: fixed !important;
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  z-index: 99999 !important;
-}
-
-/* Garantir centralização perfeita de modais - EXCLUINDO popovers */
-[role='dialog']:not([data-radix-popover-content]):not([data-popover-dialog]) {
-  position: fixed !important;
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  max-height: 90vh !important;
-  max-width: min(90vw, 512px) !important;
-  height: auto !important;
-  margin: 0 !important;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Responsividade para telas pequenas - EXCLUINDO popovers */
-@media (max-width: 640px) {
-  [role='dialog']:not([data-radix-popover-content]):not([data-popover-dialog]) {
-    max-width: 95vw !important;
-    height: 100% !important;
-    max-height: 95vh !important;
-  }
-}
-
-/* Dialog usado como Popover (mobile): centralizado, altura pelo conteúdo */
-[role='dialog'][data-popover-dialog] {
-  position: fixed !important;
-  left: 50% !important;
-  top: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  max-height: max-content !important;
-  height: auto !important;
-  max-width: calc(100vw - 1rem) !important;
-}
-
-/* Nenhum estilo específico para a modal de categoria aqui. Controle exclusivo no componente. */
-
-/* =============================== */
-/* 13. Modal de Categoria          */
-/* =============================== */
-
-/* Scroll suave e responsivo para conteúdo da modal */
-.category-modal-scroll {
-  overflow-y: auto;
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  scroll-behavior: smooth;
-}
-
-/* Scrollbar customizada para desktop */
-.category-modal-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.category-modal-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.category-modal-scroll::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
-.category-modal-scroll::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-/* Firefox */
-@supports (scrollbar-width: thin) {
-  .category-modal-scroll {
-    scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 transparent;
-  }
-}
-
-/* =============================== */
-/* 13.1. Classes Utilitárias        */
-/* =============================== */
-/* Classes utilitárias para modal de categoria */
-.modal-preview-scroll {
-  /* Fallback para navegadores que não suportam scrollbar-width */
-  overflow-y: auto;
-
-  /* Garantir que o scroll do mouse funcione */
-  pointer-events: auto !important;
-  -webkit-touch-action: pan-y !important;
-  touch-action: pan-y !important;
-  -webkit-overscroll-behavior: contain;
-  overscroll-behavior: contain;
-}
-
-/* Firefox scrollbar styling para modal - com suporte condicional */
-@supports (scrollbar-width: thin) {
-  .modal-preview-scroll {
-    /* scrollbar-width: thin; */
-    /* scrollbar-color: #cbd5e1 transparent; */
-  }
-}
-
-.modal-preview-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.modal-preview-scroll::-webkit-scrollbar-track {
-  background: #f8fafc;
-  border-radius: 3px;
-}
-
-.modal-preview-scroll::-webkit-scrollbar-thumb {
-  background: #e2e8f0;
-  border-radius: 3px;
-}
-
-.modal-preview-scroll::-webkit-scrollbar-thumb:hover {
-  background: #cbd5e1;
 }
 
 .icon-grid-scroll::-webkit-scrollbar {
@@ -1300,12 +1143,6 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   transform: scale(1.1);
 }
 
-/* Popover específico - sem interferência */
-[data-radix-popover-content] {
-  max-height: max-content !important; /* altura máxima ditada pelo conteúdo */
-  overflow: visible !important; /* evita scroll desnecessário no popover */
-}
-
 /* =============================== */
 /* 14. Badges e Ícones Dinâmicos   */
 /* =============================== */
@@ -1391,47 +1228,10 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   }
 }
 
-/* Container específico para o popover */
-.popover-content .category-icon-grid {
-  -ms-grid-columns: repeat(6, 1fr) !important;
-  grid-template-columns: repeat(6, 1fr) !important;
-  max-width: 100% !important;
-  overflow-x: hidden !important;
-  background: #f8fafc !important;
-  border-radius: 0.5rem !important;
-}
-
-/* Garantir que os botões dos ícones não transbordem */
-.category-icon-grid button {
-  width: 100% !important;
-  max-width: 40px !important;
-  height: 40px !important;
-  flex-shrink: 0 !important;
-  overflow: hidden !important;
-}
-
-/* Container do grid deve ter contenção */
-.category-icon-grid-container {
-  padding-bottom: 0 !important;
-  position: relative;
-  overflow: hidden !important;
-  -webkit-contain: layout style !important;
-  contain: layout style !important;
-}
-
 @media (min-width: 640px) {
   :root {
     --header-height: 4.5rem;
   }
-}
-
-/* Forçar scroll funcional dentro do Popover (ShadCN UI) */
-/* (Reutiliza as mesmas regras definidas acima) */
-
-*:focus,
-*:focus-visible,
-*:focus-within {
-  outline: none !important;
 }
 
 /* =============================== */
