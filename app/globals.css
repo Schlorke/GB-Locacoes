@@ -942,6 +942,25 @@ body:has(.sobre-page) {
   background-color: #ffffff !important;
 }
 
+/* Remove focus-visible ring/outline from inputs and comboboxes */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible,
+[role="combobox"]:focus,
+[role="combobox"]:focus-visible,
+button[role="combobox"]:focus,
+button[role="combobox"]:focus-visible,
+[aria-haspopup="listbox"]:focus,
+[aria-haspopup="listbox"]:focus-visible,
+.admin-filter-element:focus,
+.admin-filter-element:focus-visible {
+  outline: none !important;
+  box-shadow: none !important; /* neutraliza Tailwind ring */
+}
+
 .whatsapp-chat-scroll::-webkit-scrollbar-thumb {
   background: #25d366 !important;
   border-radius: 3px !important;
