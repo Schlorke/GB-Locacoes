@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Loader2 } from 'lucide-react'
-import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
+import { Loader2 } from 'lucide-react'
+import { useState } from 'react'
 
 interface CTAButtonProps {
   children: React.ReactNode
@@ -86,7 +86,6 @@ export default function CTAButton({
   const buttonClasses = cn(
     'relative overflow-hidden font-medium transition-all duration-300',
     'transform hover:scale-105 active:scale-95',
-    'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2',
     variants[variant],
     sizes[size],
     fullWidth && 'w-full',

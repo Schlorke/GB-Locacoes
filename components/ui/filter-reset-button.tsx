@@ -58,7 +58,7 @@ export function FilterResetButton({
       onClick={handleClick}
       disabled={disabled}
       className={cn(
-        'filter-reset-button flex items-center justify-center p-0 group focus:outline-none',
+        'filter-reset-button flex items-center justify-center p-0 group',
         sizeClasses[size],
         className
       )}

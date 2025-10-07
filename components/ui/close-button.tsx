@@ -55,7 +55,6 @@ export const CloseButton = React.forwardRef<
       className={cn(
         'inline-flex items-center justify-center rounded-lg transition-all',
         'disabled:pointer-events-none disabled:opacity-50',
-        'focus:outline-none',
         sizeClasses[size],
         variantClasses[variant],
         className
