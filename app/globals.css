@@ -15,8 +15,6 @@
   --foreground: 222.2 84% 4.9%;
   --card: 0 0% 100%;
   --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
   --primary: 222.2 47.4% 11.2%;
   --primary-foreground: 210 40% 98%;
   --secondary: 210 40% 96%;
@@ -45,6 +43,8 @@
   --sidebar-accent-foreground: 240 5.9% 10%;
   --sidebar-border: 220 13% 91%;
   --sidebar-ring: 217.2 91.2% 59.8%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
   --z-dropdown: 9999;
   --z-modal: 10000;
   --z-popover: 10001;
@@ -55,8 +55,6 @@
   --foreground: 210 40% 98%;
   --card: 222.2 84% 4.9%;
   --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
   --primary: 210 40% 98%;
   --primary-foreground: 222.2 47.4% 11.2%;
   --secondary: 217.2 32.6% 17.5%;
@@ -83,6 +81,8 @@
   --sidebar-accent-foreground: 240 4.8% 95.9%;
   --sidebar-border: 240 3.7% 15.9%;
   --sidebar-ring: 217.2 91.2% 59.8%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
 }
 * {
   border-color: hsl(var(--border));
@@ -95,6 +95,20 @@ body {
   margin: 0;
   overflow-x: hidden;
 }
+
+/* Radix UI Portal (usado por Popover, Dialog, etc) */
+[data-radix-portal] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-popover);
+  pointer-events: none;
+}
+
+[data-radix-portal] > * {
+  pointer-events: auto;
+}
+
 h1 {
   font-size: clamp(2.5rem, 5vw, 3.5rem);
   line-height: 1.2;
@@ -208,64 +222,6 @@ button[aria-controls]:focus,
     0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* NUCLEAR OPTION: Force identical styles for category modal buttons */
-.category-modal-button-forced {
-  /* Reset all inherited styles */
-  all: unset !important;
-  /* Force consistent base styles */
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 0.5rem !important; /* 8px gap */
-  white-space: nowrap !important;
-  border-radius: 0.5rem !important; /* rounded-lg */
-  font-size: 0.75rem !important; /* text-xs */
-  font-weight: 500 !important;
-  transition: all 0.2s ease !important;
-  cursor: pointer !important;
-  pointer-events: auto !important;
-  /* Box sizing to include padding and border in height calculation */
-  box-sizing: border-box !important;
-  /* Exact dimensions and spacing */
-  height: 2rem !important; /* h-8 */
-  padding-left: 0.75rem !important; /* px-3 */
-  padding-right: 0.75rem !important; /* px-3 */
-  /* Consistent styling */
-  border: 1px solid rgb(203 213 225) !important; /* border-slate-300 */
-  background-color: transparent !important;
-  color: rgb(15 23 42) !important; /* text-slate-900 */
-  box-shadow:
-    0 1px 2px 0 rgba(0, 0, 0, 0.05),
-    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Focus states - remove all focus styles */
-.category-modal-button-forced:focus,
-.category-modal-button-forced:focus-visible,
-.category-modal-button-forced[aria-controls]:focus,
-.category-modal-button-forced[aria-controls]:focus-visible {
-  outline: none !important;
-  box-shadow:
-    0 1px 2px 0 rgba(0, 0, 0, 0.05),
-    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Hover states - identical for both buttons */
-.category-modal-button-forced:hover {
-  background-color: white !important;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  border-color: rgb(203 213 225) !important;
-}
-
-/* Icon selector buttons - black focus ring */
-.icon-selector-button:focus,
-.icon-selector-button:focus-visible {
-  outline: 1px solid black !important;
-  outline-offset: 1px !important;
-}
-
 /* =============================== */
 /* 2.0. Regras específicas para ShadCN UI Textarea */
 /* =============================== */
@@ -304,19 +260,6 @@ textarea[class*='bg-background']:focus {
 [data-radix-select-content] {
   position: absolute !important;
   z-index: var(--z-dropdown) !important;
-}
-
-/* Garantir que o Portal do Radix funcione corretamente */
-[data-radix-portal] {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  z-index: var(--z-popover) !important;
-  pointer-events: none !important;
-}
-
-[data-radix-portal] > * {
-  pointer-events: auto !important;
 }
 
 /* =============================== */
@@ -937,11 +880,6 @@ body:has(.sobre-page) {
   border-radius: 3px !important;
 }
 
-/* Category modal action buttons - force white background regardless of variant */
-.category-modal-button-forced {
-  background-color: #ffffff !important;
-}
-
 /* Remove focus-visible ring/outline from inputs and comboboxes */
 input:focus,
 input:focus-visible,
@@ -1034,49 +972,6 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 /* 12. Scrollbar Utilitários       */
 /* =============================== */
 
-/* Scroll forçado para modais - sempre visível */
-.force-scroll {
-  overflow-y: scroll !important;
-}
-
-.force-scroll::-webkit-scrollbar {
-  width: 8px !important;
-  background: #f8fafc !important;
-}
-
-.force-scroll::-webkit-scrollbar-track {
-  background: #f8fafc !important;
-  border-radius: 4px !important;
-}
-
-.force-scroll::-webkit-scrollbar-thumb {
-  background: #cbd5e1 !important;
-  border-radius: 4px !important;
-  border: 1px solid #f8fafc !important;
-}
-
-.force-scroll::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8 !important;
-}
-
-.icon-grid-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.icon-grid-scroll::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 3px;
-}
-
-.icon-grid-scroll::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
-}
-
-.icon-grid-scroll::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
 /* Scrollbar para dropdown de filtros */
 .filter-dropdown-scroll::-webkit-scrollbar {
   width: 6px;
@@ -1109,148 +1004,13 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   }
 }
 
-/* Classe CSS para grid responsivo de ícones */
-.icon-grid-responsive {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: repeat(auto-fill, minmax(40px, 1fr));
-  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-  -webkit-gap: 8px;
-  gap: 8px;
-  max-height: 200px;
-  overflow-y: scroll; /* scrollbar sempre visível */
-  padding: 0.5rem;
-
-  /* Garantir que o scroll do mouse funcione no grid */
-  pointer-events: auto !important;
-  -webkit-touch-action: pan-y !important;
-  touch-action: pan-y !important;
-  -webkit-overscroll-behavior: contain !important;
-  overscroll-behavior: contain !important;
-}
-
-/* Responsividade específica para diferentes tamanhos */
-@media (max-width: 320px) {
-  .icon-grid-responsive {
-    -ms-grid-columns: repeat(auto-fit, minmax(35px, 1fr));
-    grid-template-columns: repeat(auto-fit, minmax(35px, 1fr));
-    -webkit-gap: 0.375rem;
-    gap: 0.375rem;
-  }
-}
-
-@media (min-width: 321px) and (max-width: 480px) {
-  .icon-grid-responsive {
-    -ms-grid-columns: repeat(auto-fit, minmax(40px, 1fr));
-    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-    max-width: 100%;
-  }
-}
-
-@media (min-width: 481px) {
-  .icon-grid-responsive {
-    -ms-grid-columns: repeat(auto-fit, minmax(40px, 1fr));
-    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
-    max-width: 100%;
-  }
-}
-
-.preview-icon {
-  color: var(--icon-color, #64748b);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease-in-out;
-}
-
-.preview-icon:hover {
-  transform: scale(1.1);
-}
-
 /* =============================== */
 /* 14. Badges e Ícones Dinâmicos   */
 /* =============================== */
-/* Category badge dynamic styling */
-.category-badge {
-  background-color: var(--badge-bg, #3b82f6) !important;
-  color: var(--badge-color, #ffffff) !important;
-  box-shadow: var(
-    --badge-shadow,
-    0 4px 20px rgba(59, 130, 246, 0.15),
-    0 2px 10px rgba(59, 130, 246, 0.1)
-  ) !important;
-}
-
-.category-icon {
-  color: var(--icon-color, #ffffff) !important;
-}
 
 /* =============================== */
 /* 15. Grid de Ícones de Categoria */
 /* =============================== */
-/* Grid de ícones da categoria - scroll funcional */
-.category-icon-grid-container {
-  padding-bottom: 0 !important;
-  position: relative;
-  overflow: hidden !important;
-  -webkit-contain: layout style !important;
-  contain: layout style !important;
-}
-
-/* Grid dos ícones - sem overflow, com scroll */
-.category-icon-grid {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: repeat(6, 1fr);
-  grid-template-columns: repeat(6, 1fr);
-  -webkit-gap: 0.5rem;
-  gap: 0.5rem;
-  max-height: 160px;
-  overflow-y: auto;
-  padding: 0.5rem;
-  width: 100%;
-  box-sizing: border-box;
-  background: transparent;
-}
-
-/* Aplicar scroll padrão (cinza) no grid de ícones do popover */
-@supports (scrollbar-width: thin) {
-  .category-icon-grid {
-    /* scrollbar-width: thin; */
-    /* scrollbar-color: #64748b #f1f5f9; */
-  }
-}
-
-.category-icon-grid::-webkit-scrollbar {
-  width: 6px;
-}
-
-.category-icon-grid::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 3px;
-}
-
-.category-icon-grid::-webkit-scrollbar-thumb {
-  background: #64748b;
-  border-radius: 3px;
-  opacity: 0.7;
-}
-
-.category-icon-grid::-webkit-scrollbar-thumb:hover {
-  background: #475569;
-  opacity: 1;
-}
-
-/* Responsividade para telas menores */
-@media (max-width: 480px) {
-  .category-icon-grid {
-    -ms-grid-columns: repeat(4, 1fr);
-    grid-template-columns: repeat(4, 1fr);
-    -webkit-gap: 0.25rem;
-    gap: 0.25rem;
-    max-height: 120px;
-  }
-}
 
 @media (min-width: 640px) {
   :root {
@@ -1339,20 +1099,6 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; /* hover:shadow-lg */
   transform: translateY(-1px) !important;
-}
-
-/* Animação de reset */
-@keyframes reset-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(-360deg);
-  }
-}
-
-.animate-reset {
-  animation: reset-spin 0.6s ease-in-out;
 }
 
 /* Estilos para selects ativos com filtro */

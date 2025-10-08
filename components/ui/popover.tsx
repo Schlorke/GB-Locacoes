@@ -1,16 +1,22 @@
 'use client'
 
-import * as React from 'react'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
+import * as React from 'react'
 
-import { cn } from '@/lib/utils'
-import { useIsMobile } from '@/hooks/use-mobile'
 import {
   Dialog,
-  DialogContent as UIDialogContent,
   DialogTitle,
+  DialogContent as UIDialogContent,
   DialogTrigger as UIDialogTrigger,
 } from '@/components/ui/dialog'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { cn } from '@/lib/utils'
+
+/**
+ * COMPONENTE BASE POPOVER - SHADCN UI
+ * Componente base para todos os popovers do projeto.
+ * Inclui suporte automático para mobile (Dialog) e desktop (Popover).
+ */
 
 type PopoverRootProps = React.ComponentPropsWithoutRef<
   typeof PopoverPrimitive.Root
@@ -125,4 +131,4 @@ const PopoverContent = React.forwardRef<
 )
 PopoverContent.displayName = PopoverPrimitive.Content.displayName
 
-export { Popover, PopoverTrigger, PopoverContent }
+export { Popover, PopoverContent, PopoverTrigger }

@@ -1,21 +1,20 @@
 'use client'
 
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
 import {
   ModernCategoryModal,
-  ViewCategoryModal,
   type CategoryData,
-} from '@/components/ui/modern-category-modal'
+} from '@/components/ui/category-modal'
+import { Input } from '@/components/ui/input'
+import { ViewCategoryModal } from '@/components/ui/view-category-modal'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useToast } from '@/hooks/use-toast'
-import { cn } from '@/lib/utils'
+import { getCategoryBadgePreview } from '@/lib/utils/category-helpers'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
 import { Edit, Eye, Package, Plus, Search, Tag, Trash2 } from 'lucide-react'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface Category {
   id: string
@@ -221,52 +220,6 @@ export default function AdminCategoriesPage() {
     }
   }
 
-  const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
-    if (!iconName || !LucideIcons[iconName])
-      return <Tag className="h-4 w-4 text-gray-400" />
-
-    const IconComponent = LucideIcons[iconName] as React.ComponentType<{
-      size?: number
-      color?: string
-      className?: string
-    }>
-    return (
-      <IconComponent
-        size={16}
-        color={color || '#3b82f6'}
-        className="flex-shrink-0"
-      />
-    )
-  }
-
-  const getCategoryBadge = (category: Category) => {
-    return (
-      <Badge
-        variant="outline"
-        className={cn(
-          'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
-          'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
-          'hover:scale-[1.07]',
-          'xs:text-[10px] xs:px-1 xs:py-1 xs:rounded-md'
-        )}
-        style={{
-          backgroundColor:
-            category.backgroundColor || category.bgColor || '#e0e7ff',
-          color: category.fontColor || '#1e40af',
-        }}
-      >
-        {category.icon ? (
-          <span className="flex-shrink-0">
-            {renderIcon(category.icon, category.iconColor)}
-          </span>
-        ) : null}
-        <span className="truncate font-semibold text-sm min-w-0">
-          {category.name}
-        </span>
-      </Badge>
-    )
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
@@ -411,8 +364,8 @@ export default function AdminCategoriesPage() {
 
                       <CardHeader className="relative z-10 pb-3 flex-shrink-0">
                         <div className="flex flex-col">
-                          <div className="w-full flex justify-center mb-4">
-                            {getCategoryBadge(category)}
+                          <div className="w-full flex justify-center pb-4 pt-0">
+                            {getCategoryBadgePreview(category, 'md', true)}
                           </div>
                           <div className="text-left w-full">
                             <h3 className="font-semibold text-lg text-gray-900 truncate">

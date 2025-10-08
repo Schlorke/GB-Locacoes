@@ -1,5 +1,19 @@
 'use client'
 
+import { AnimatePresence, motion } from 'framer-motion'
+import * as LucideIcons from 'lucide-react'
+import {
+  AlertTriangle,
+  Edit,
+  Palette,
+  RotateCcw,
+  Save,
+  Search,
+  Tag,
+  X,
+} from 'lucide-react'
+import React, { useState } from 'react'
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,23 +32,19 @@ import {
 } from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
-import { AnimatePresence, motion } from 'framer-motion'
-import * as LucideIcons from 'lucide-react'
+
+import { AVAILABLE_CATEGORY_ICONS } from '@/lib/constants/lucide-icons'
 import {
-  AlertTriangle,
-  Edit,
-  Eye,
-  FileText,
-  Hash,
-  Package,
-  Palette,
-  RotateCcw,
-  Save,
-  Search,
-  Tag,
-  X,
-} from 'lucide-react'
-import React, { useState } from 'react'
+  DEFAULT_CATEGORY_SETTINGS,
+  filterIconsBySearch,
+  renderLucideIcon,
+} from '@/lib/utils/category-helpers'
+
+/**
+ * MODAL DE CATEGORIA MODERNO
+ * Componente para criação/edição de categorias com personalização visual.
+ * Inclui seletor de ícones, cores e preview em tempo real.
+ */
 
 export interface CategoryData {
   id?: string
@@ -58,368 +68,6 @@ interface ModernCategoryModalProps {
   initialData?: CategoryData
   title?: string
   saveButtonText?: string
-}
-
-const ICON_OPTIONS: (keyof typeof LucideIcons)[] = [
-  'Package',
-  'Wrench',
-  'Hammer',
-  'Building',
-  'Truck',
-  'Settings',
-  'Box',
-  'Warehouse',
-  'Cog',
-  'Home',
-  'Factory',
-  'Car',
-  'Users',
-  'User',
-  'Calendar',
-  'Clock',
-  'MapPin',
-  'Phone',
-  'Mail',
-  'Globe',
-  'Shield',
-  'Star',
-  'Heart',
-  'ThumbsUp',
-  'CheckCircle',
-  'AlertCircle',
-  'Info',
-  'HelpCircle',
-  'Search',
-  'Filter',
-  'Plus',
-  'Minus',
-  'X',
-  'Check',
-  'ChevronDown',
-  'ChevronUp',
-  'ChevronLeft',
-  'ChevronRight',
-  'ArrowUp',
-  'ArrowDown',
-  'ArrowLeft',
-  'ArrowRight',
-  'Upload',
-  'Download',
-  'RefreshCw',
-  'RotateCcw',
-  'Copy',
-  'Save',
-  'FileText',
-  'File',
-  'Folder',
-  'FolderOpen',
-  'Image',
-  'Camera',
-  'Video',
-  'Music',
-  'Headphones',
-  'Mic',
-  'Speaker',
-  'Volume1',
-  'Volume2',
-  'VolumeX',
-  'Play',
-  'Pause',
-  'Square',
-  'SkipBack',
-  'SkipForward',
-  'Repeat',
-  'Shuffle',
-  'Wifi',
-  'WifiOff',
-  'Bluetooth',
-  'Battery',
-  'BatteryLow',
-  'Power',
-  'PowerOff',
-  'Zap',
-  'Sun',
-  'Moon',
-  'Cloud',
-  'CloudRain',
-  'CloudSnow',
-  'Umbrella',
-  'Wind',
-  'Eye',
-  'EyeOff',
-  'Lock',
-  'Unlock',
-  'Key',
-  'CreditCard',
-  'DollarSign',
-  'PoundSterling',
-  'Euro',
-  'Bitcoin',
-  'TrendingUp',
-  'TrendingDown',
-  'BarChart',
-  'PieChart',
-  'Activity',
-  'Target',
-  'Flag',
-  'Award',
-  'Gift',
-  'ShoppingBag',
-  'ShoppingCart',
-  'Tag',
-  'Bookmark',
-  'Paperclip',
-  'Link',
-  'Unlink',
-  'ExternalLink',
-  'Share',
-  'Share2',
-  'MessageCircle',
-  'MessageSquare',
-  'Send',
-  'Inbox',
-  'Bell',
-  'BellOff',
-  'Smartphone',
-  'Tablet',
-  'Laptop',
-  'Monitor',
-  'Tv',
-  'Watch',
-  'Printer',
-  'HardDrive',
-  'Cpu',
-  'Database',
-  'Server',
-  'Usb',
-  'MousePointer',
-  'Mouse',
-  'Keyboard',
-  'Gamepad',
-  'Radio',
-  'Film',
-  'Disc',
-  'Album',
-  'FastForward',
-  'Rewind',
-  'MicOff',
-  'PhoneCall',
-  'PhoneOff',
-  'PhoneIncoming',
-  'PhoneOutgoing',
-  'Voicemail',
-  'Archive',
-  'Trash',
-  'Trash2',
-  'Edit',
-  'Edit2',
-  'Edit3',
-  'PenTool',
-  'Type',
-  'Bold',
-  'Italic',
-  'Underline',
-  'Strikethrough',
-  'AlignLeft',
-  'AlignCenter',
-  'AlignRight',
-  'AlignJustify',
-  'List',
-  'Indent',
-  'Outdent',
-  'Quote',
-  'Code',
-  'Terminal',
-  'FileCode',
-  'Bug',
-  'Hash',
-  'AtSign',
-  'Percent',
-  'Slash',
-  'Asterisk',
-  'Equal',
-  'Divide',
-  'Calculator',
-  'Sigma',
-  'Pi',
-  'Infinity',
-  'BarChart2',
-  'BarChart3',
-  'LineChart',
-  'Activity',
-  'Thermometer',
-  'Gauge',
-  'Timer',
-  'AlarmClock',
-  'CalendarDays',
-  'CalendarCheck',
-  'CalendarX',
-  'CalendarPlus',
-  'CalendarMinus',
-  'Sunrise',
-  'Sunset',
-  'Stars',
-  'Sparkles',
-  'Flame',
-  'Snowflake',
-  'Droplet',
-  'CloudLightning',
-  'Tornado',
-  'Rainbow',
-  'Map',
-  'Navigation',
-  'Compass',
-  'Route',
-  'Bus',
-  'Bike',
-  'Plane',
-  'Ship',
-  'Train',
-  'Fuel',
-  'ParkingCircle',
-  'Building2',
-  'Store',
-  'Crosshair',
-  'Focus',
-  'SearchCheck',
-  'SearchX',
-  'ScanLine',
-  'QrCode',
-  'Glasses',
-  'Telescope',
-  'Microscope',
-  'Binoculars',
-  'Clapperboard',
-  'Images',
-  'FileImage',
-  'Palette',
-  'Brush',
-  'Paintbrush',
-  'Pen',
-  'Pencil',
-  'Eraser',
-  'Ruler',
-  'Triangle',
-  'Circle',
-  'Hexagon',
-  'Pentagon',
-  'Octagon',
-  'Diamond',
-  'Move',
-  'Hand',
-  'Grab',
-  'Pointer',
-  'Touchpad',
-  'Fingerprint',
-  'Scan',
-  'ShieldCheck',
-  'ShieldX',
-  'ShieldAlert',
-  'KeyRound',
-  'UserCheck',
-  'UserX',
-  'UserPlus',
-  'UserMinus',
-  'UsersRound',
-  'UserCog',
-  'Contact',
-  'IdCard',
-  'Wallet',
-  'Coins',
-  'Banknote',
-  'Receipt',
-  'PiggyBank',
-  'Shrink',
-  'Expand',
-  'Minimize',
-  'Maximize',
-  'ZoomIn',
-  'ZoomOut',
-  'Fullscreen',
-  'Minimize2',
-  'Maximize2',
-  'MoreHorizontal',
-  'MoreVertical',
-  'Menu',
-  'Grid',
-  'Columns',
-  'Rows',
-  'Layout',
-  'LayoutGrid',
-  'LayoutList',
-  'Sidebar',
-  'PanelLeft',
-  'PanelRight',
-  'PanelTop',
-  'PanelBottom',
-  'Split',
-  'Combine',
-  'Merge',
-  'GitBranch',
-  'GitCommit',
-  'GitMerge',
-  'GitFork',
-  'GitPullRequest',
-  'TestTube',
-  'FlaskConical',
-  'Beaker',
-  'Atom',
-  'Dna',
-  'Rocket',
-  'Satellite',
-  'Earth',
-  'Orbit',
-  'Hourglass',
-  'BellRing',
-  'BookmarkPlus',
-  'BookmarkMinus',
-  'BookmarkCheck',
-  'BookmarkX',
-  'Book',
-  'BookOpen',
-  'Library',
-  'GraduationCap',
-  'School',
-  'University',
-  'Award',
-  'Trophy',
-  'Medal',
-  'Crown',
-  'Cake',
-  'Wine',
-  'Coffee',
-  'Beer',
-  'Martini',
-  'Pizza',
-  'Apple',
-  'Banana',
-  'Cherry',
-  'Grape',
-  'Carrot',
-  'Wheat',
-  'Leaf',
-  'TreePine',
-  'Flower',
-  'Sprout',
-  'Clover',
-  'Shell',
-  'Fish',
-  'Bird',
-  'Cat',
-  'Dog',
-  'Rabbit',
-  'Squirrel',
-  'Turtle',
-  'Snail',
-  'Cat',
-]
-
-// Configurações padrão para categoria
-const DEFAULT_CATEGORY_SETTINGS = {
-  backgroundColor: '#3b82f6', // Azul padrão
-  fontColor: '#ffffff',
-  iconColor: '#ffffff',
-  icon: undefined as keyof typeof LucideIcons | undefined,
 }
 
 export function ModernCategoryModal({
@@ -532,16 +180,6 @@ export function ModernCategoryModal({
     setIsSubmitting(false)
   }
 
-  // Utilitário para renderizar ícones Lucide dinamicamente
-  function renderIcon(
-    icon: keyof typeof LucideIcons,
-    size = 20,
-    color?: string
-  ) {
-    if (!icon) return null
-    const LucideIcon = LucideIcons[icon] as React.ElementType
-    return LucideIcon ? <LucideIcon size={size} color={color} /> : null
-  }
   return (
     <React.Fragment>
       <Dialog open={isOpen} onOpenChange={onClose}>
@@ -557,7 +195,7 @@ export function ModernCategoryModal({
               {title}
             </DialogTitle>
           </DialogHeader>
-          <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll max-h-[calc(80vh-120px)] md:max-h-[calc(65vh-120px)]">
+          <div className="flex-1 min-h-0 overflow-y-scroll overflow-x-hidden max-h-[calc(80vh-120px)] md:max-h-[calc(65vh-120px)] scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-slate-50">
             <div className="p-6 space-y-6 xs:p-3 xs:space-y-3 w-full max-w-full pb-2">
               {/* Preview da Categoria */}
               <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-4 xs:rounded-md">
@@ -578,7 +216,7 @@ export function ModernCategoryModal({
                         <Button
                           variant="outline"
                           size="sm"
-                          className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group xs:h-9 xs:px-4 xs:text-xs xs:w-full"
+                          className="inline-flex items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border border-slate-300 bg-transparent text-slate-900 shadow-sm transition-all hover:bg-white hover:shadow-md focus:outline-none group xs:h-9 xs:px-4 xs:w-full"
                         >
                           <Edit className="w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200" />
                           <span className="group-hover:text-orange-600 transition-colors duration-200">
@@ -587,7 +225,7 @@ export function ModernCategoryModal({
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="popover-content w-[380px] max-w-[calc(100vw-1rem)] p-0 shadow-2xl border rounded-2xl bg-white h-auto max-h-fit overflow-visible"
+                        className="w-[380px] max-w-[calc(100vw-1rem)] p-0 shadow-2xl border rounded-2xl bg-white h-auto max-h-fit overflow-visible"
                         style={{
                           position: 'fixed',
                           left: '50%',
@@ -620,19 +258,19 @@ export function ModernCategoryModal({
                                 variant="ghost"
                                 size="sm"
                                 onClick={resetVisualSettings}
-                                className="text-slate-400 hover:text-orange-600 h-7 w-7 p-0 rounded-lg transition-colors"
+                                className="inline-flex items-center justify-center text-slate-400 hover:text-orange-600 h-7 w-7 p-0 rounded-lg transition-colors"
                                 title="Resetar configurações visuais"
-                                style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                }}
                               >
                                 <RotateCcw
-                                  className={cn(
-                                    'w-4 h-4',
-                                    resetVisualAnimation && 'animate-reset'
-                                  )}
+                                  className="w-4 h-4"
+                                  style={
+                                    resetVisualAnimation
+                                      ? {
+                                          animation:
+                                            'spin 0.6s ease-in-out reverse',
+                                        }
+                                      : undefined
+                                  }
                                 />
                               </Button>
                               <button
@@ -663,12 +301,11 @@ export function ModernCategoryModal({
                               </h5>
                             </div>
                             <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                              <div className="relative pb-0 category-icon-grid-container max-h-[240px] overflow-y-auto">
-                                <div className="icon-grid-responsive icon-grid-scroll category-icon-grid grid grid-cols-6 gap-2">
-                                  {ICON_OPTIONS.filter((iconName) =>
-                                    iconName
-                                      .toLowerCase()
-                                      .includes(iconFilter.toLowerCase())
+                              <div className="relative pb-0 max-h-[240px] overflow-hidden">
+                                <div className="grid grid-cols-6 gap-2 max-h-40 overflow-y-auto p-2 touch-pan-y overscroll-contain scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-slate-100">
+                                  {filterIconsBySearch(
+                                    iconFilter,
+                                    AVAILABLE_CATEGORY_ICONS
                                   )
                                     .slice(0, 48)
                                     .map((iconName) => {
@@ -685,7 +322,7 @@ export function ModernCategoryModal({
                                             })
                                           }
                                           className={cn(
-                                            'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden icon-selector-button',
+                                            'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden focus:outline-black focus:outline-1 focus:outline-offset-1',
                                             isSelected
                                               ? 'border-blue-400 shadow-2xl shadow-black/50 scale-105'
                                               : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
@@ -698,8 +335,8 @@ export function ModernCategoryModal({
                                               formData.backgroundColor,
                                           }}
                                         >
-                                          {renderIcon(
-                                            iconName as keyof typeof LucideIcons,
+                                          {renderLucideIcon(
+                                            iconName,
                                             16,
                                             formData.iconColor
                                           )}
@@ -787,14 +424,18 @@ export function ModernCategoryModal({
                       variant="outline"
                       size="sm"
                       onClick={resetToDefaults}
-                      className="category-modal-button-forced h-8 px-3 text-xs font-medium rounded-lg group bg-white"
+                      className="inline-flex items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-900 shadow-sm transition-all hover:shadow-md focus:outline-none group"
                       title="Resetar configurações"
                     >
                       <RotateCcw
-                        className={cn(
-                          'w-4 h-4 group-hover:text-orange-600 transition-colors duration-200',
-                          resetAnimation && 'animate-reset'
-                        )}
+                        className="w-4 h-4 group-hover:text-orange-600 transition-colors duration-200"
+                        style={
+                          resetAnimation
+                            ? {
+                                animation: 'spin 0.6s ease-in-out reverse',
+                              }
+                            : undefined
+                        }
                       />
                       <span className="group-hover:text-orange-600 transition-colors duration-200">
                         Resetar
@@ -807,12 +448,7 @@ export function ModernCategoryModal({
                 <div className="flex justify-center items-center w-full mb-4 xs:mb-3">
                   <Badge
                     variant="outline"
-                    className={cn(
-                      'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
-                      'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
-                      'hover:scale-[1.07]',
-                      'xs:text-xs xs:px-4 xs:py-2 xs:rounded-lg xs:gap-1.5'
-                    )}
+                    className="text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300 shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)] hover:scale-[1.07] xs:text-xs xs:px-4 xs:py-2 xs:rounded-lg xs:gap-1.5"
                     style={{
                       backgroundColor: formData.backgroundColor,
                       color: formData.fontColor,
@@ -820,7 +456,11 @@ export function ModernCategoryModal({
                   >
                     {formData.icon ? (
                       <span className="flex-shrink-0">
-                        {renderIcon(formData.icon, 16, formData.iconColor)}
+                        {renderLucideIcon(
+                          formData.icon,
+                          16,
+                          formData.iconColor
+                        )}
                       </span>
                     ) : null}
                     <span className="truncate font-semibold text-sm min-w-0">
@@ -963,240 +603,5 @@ export function ModernCategoryModal({
         </DialogContent>
       </Dialog>
     </React.Fragment>
-  )
-}
-
-// ===============================================
-// MODAL DE VISUALIZAÇÃO DE CATEGORIA
-// ===============================================
-
-interface Category {
-  id: string
-  name: string
-  description?: string
-  icon?: keyof typeof LucideIcons
-  iconColor?: string
-  backgroundColor?: string
-  fontColor?: string
-  createdAt: string
-  _count?: {
-    equipments: number
-  }
-  bgColor?: string
-}
-
-interface ViewCategoryModalProps {
-  category: Category | null
-  isOpen: boolean
-  onClose: () => void
-  onEdit: (_category: Category) => void
-}
-
-// Função auxiliar para renderizar ícones (copiada da página para manter consistência)
-function renderCategoryIcon(
-  iconName?: keyof typeof LucideIcons,
-  color?: string
-) {
-  if (!iconName || !LucideIcons[iconName])
-    return <Tag className="h-4 w-4 text-gray-400" />
-
-  const IconComponent = LucideIcons[iconName] as React.ComponentType<{
-    size?: number
-    color?: string
-    className?: string
-  }>
-  return (
-    <IconComponent
-      size={16}
-      color={color || '#3b82f6'}
-      className="flex-shrink-0"
-    />
-  )
-}
-
-// Função auxiliar para criar badge de categoria (copiada da página para manter consistência)
-function getCategoryBadgePreview(category: Category) {
-  return (
-    <Badge
-      variant="outline"
-      className={cn(
-        'category-preview-badge text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full transition-all duration-300',
-        'shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)]',
-        'hover:scale-[1.07]',
-        'xs:text-[10px] xs:px-1 xs:py-1 xs:rounded-md'
-      )}
-      style={{
-        backgroundColor:
-          category.backgroundColor || category.bgColor || '#e0e7ff',
-        color: category.fontColor || '#1e40af',
-      }}
-    >
-      {category.icon ? (
-        <span className="flex-shrink-0">
-          {renderCategoryIcon(category.icon, category.iconColor)}
-        </span>
-      ) : null}
-      <span className="truncate font-semibold text-sm min-w-0">
-        {category.name}
-      </span>
-    </Badge>
-  )
-}
-
-export function ViewCategoryModal({
-  category,
-  isOpen,
-  onClose,
-  onEdit,
-}: ViewCategoryModalProps) {
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent
-        closeButtonClassName="hover:bg-white"
-        className="w-full max-w-lg max-h-[80vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0 xs:px-3"
-        style={{
-          height: '60vh',
-          maxHeight: '80vh',
-        }}
-      >
-        <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-2xl flex-shrink-0">
-          <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
-              <Eye className="w-4 h-4" />
-            </div>
-            Visualizar Categoria
-          </DialogTitle>
-        </DialogHeader>
-
-        <div
-          className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll"
-          style={{ maxHeight: 'calc(80vh - 120px)' }}
-        >
-          <div className="p-6 space-y-6 xs:p-4 xs:space-y-4 w-full max-w-full">
-            {category && (
-              <>
-                {/* Preview da Categoria */}
-                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-3 xs:rounded-md">
-                  <div className="flex items-center justify-between mb-4 w-full">
-                    <h3 className="text-sm font-semibold text-slate-700">
-                      Preview da Categoria
-                    </h3>
-                  </div>
-                  <div className="flex justify-center mb-4 w-full">
-                    {getCategoryBadgePreview(category)}
-                  </div>
-                  <div className="text-center">
-                    <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
-                      {category.description || 'Sem descrição'}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Informações Detalhadas */}
-                <div className="space-y-4 w-full max-w-full">
-                  <div
-                    className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm relative"
-                    style={{
-                      borderLeft: `4px solid ${category.bgColor || '#3b82f6'}`,
-                    }}
-                  >
-                    <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
-                      <Package className="w-4 h-4" />
-                      Informações da Categoria
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4 max-w-full">
-                      {/* Coluna Esquerda */}
-                      <div className="space-y-4 min-w-0 max-w-full">
-                        <div className="flex items-center gap-3">
-                          <Tag className="w-4 h-4 text-gray-400" />
-                          <div>
-                            <div className="text-xs text-gray-500">Nome</div>
-                            <div className="font-medium text-sm">
-                              {category.name}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-start gap-3">
-                          <FileText className="w-4 h-4 text-gray-400 mt-1 flex-shrink-0" />
-                          <div className="flex-1 min-w-0 max-w-full">
-                            <div className="text-xs text-gray-500">
-                              Descrição
-                            </div>
-                            <div
-                              className="font-medium text-sm break-words hyphens-auto leading-relaxed"
-                              title={category.description || 'Sem descrição'}
-                              style={{
-                                wordBreak: 'break-word',
-                                overflowWrap: 'break-word',
-                                hyphens: 'auto',
-                              }}
-                            >
-                              {category.description || 'Sem descrição'}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Coluna Direita */}
-                      <div className="space-y-4 min-w-0 max-w-full">
-                        <div className="flex items-center gap-3">
-                          <Package className="w-4 h-4 text-gray-400" />
-                          <div>
-                            <div className="text-xs text-gray-500">
-                              Equipamentos
-                            </div>
-                            <div className="font-medium text-sm">
-                              {category._count?.equipments || 0} equipamentos
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                          <Hash className="w-4 h-4 text-gray-400" />
-                          <div>
-                            <div className="text-xs text-gray-500">
-                              ID da Categoria
-                            </div>
-                            <div className="font-medium font-mono text-xs text-slate-600">
-                              {category.id}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
-        <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 p-6 border-t bg-gray-50 rounded-b-2xl xs:p-4 xs:rounded-b-md w-full max-w-full flex-shrink-0">
-          <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
-            <Button
-              variant="outline"
-              onClick={onClose}
-              className="flex-1 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300"
-            >
-              <X className="w-4 h-4 mr-2" />
-              Fechar
-            </Button>
-            <Button
-              onClick={() => {
-                if (category) {
-                  onClose()
-                  onEdit(category)
-                }
-              }}
-              className="flex-1 h-10 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300"
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Editar Categoria
-            </Button>
-          </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   )
 }

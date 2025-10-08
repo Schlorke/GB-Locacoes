@@ -1,5 +1,5 @@
+import { ModernCategoryModal } from '@/components/ui/category-modal'
 import type { Meta, StoryObj } from '@storybook/react'
-import { ModernCategoryModal } from '@/components/ui/modern-category-modal'
 
 const meta: Meta<typeof ModernCategoryModal> = {
   title: 'Atoms/ModernCategoryModal',
