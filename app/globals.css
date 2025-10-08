@@ -1204,19 +1204,15 @@ body {
   overflow-y: auto;
 }
 
-/* NÃO permitir scroll em elementos internos */
-div,
-section,
-article {
+/* NÃO permitir scroll em elementos internos (escopado apenas para a página Sobre) */
+.sobre-page div,
+.sobre-page section,
+.sobre-page article {
   overflow: visible !important;
 }
 
-/* CORREÇÃO CRÍTICA: Garantir que não há scroll secundário na página sobre */
-.min-h-screen {
-  overflow: visible !important;
-  position: relative !important;
-  height: auto !important;
-}
+/* CORREÇÃO CRÍTICA: Escopado para a página Sobre para evitar quebrar modais/dialogs */
+/* Obs.: já existe a regra ".sobre-page .min-h-screen" acima; removemos o escopo global */
 
 /* NÃO permitir scroll em elementos específicos */
 .material-card,
@@ -1226,15 +1222,15 @@ article {
   position: relative !important;
 }
 
-/* EXCEÇÃO: Timeline cards precisam de overflow visible para sombras */
-.material-card.relative.flex.items-start {
+/* EXCEÇÕES da página Sobre (somente nesse contexto) */
+.sobre-page .material-card.relative.flex.items-start {
   overflow: visible !important;
 }
 
-.hero-title,
-.hero-image,
-.section-title,
-.section-subtitle {
+.sobre-page .hero-title,
+.sobre-page .hero-image,
+.sobre-page .section-title,
+.sobre-page .section-subtitle {
   overflow: visible !important;
   position: relative !important;
 }
@@ -1248,8 +1244,8 @@ body {
   scroll-behavior: smooth !important;
 }
 
-/* NÃO permitir scroll em elementos aninhados */
-div > div {
+/* NÃO permitir scroll em elementos aninhados (apenas na página Sobre) */
+.sobre-page div > div {
   overflow: visible !important;
 }
 

@@ -6,6 +6,22 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [Unreleased] - Correções de UI (modais e scroll)
+
+### Fixed 🐛
+
+- Removido/escopado `overflow: visible !important` global que afetava `div`,
+  `section`, `article`, `.min-h-screen` e `div > div`, passando a valer apenas
+  dentro de `.sobre-page`. Isso restaura o comportamento correto do
+  `Radix Dialog + ScrollArea`, mantendo o header e o footer sempre visíveis nas
+  modais e reativando o scroll interno do conteúdo.
+
+### Changed 🔄
+
+- Dialog “Personalizar Design”: reduzida a altura do container scrollável da
+  grade de ícones (de `h-[240px]` para `h-[200px]`) sem alterar paddings ou a
+  grade em si, deixando o bloco mais compacto.
+
 ## [2025-10-08] - Refatoração Completa: Arquitetura Modular e Helpers Reutilizáveis
 
 ### Changed 🔄
