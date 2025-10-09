@@ -1,10 +1,10 @@
-import { SpeedInsights } from '@vercel/speed-insights/next' // ✅ Importado aqui
+import SessionProviderWrapper from '@/components/session-provider-wrapper'
 import { Analytics } from '@vercel/analytics/next' // ✅ Vercel Analytics
+import { SpeedInsights } from '@vercel/speed-insights/next' // ✅ Importado aqui
 import type { Metadata } from 'next'
 import { Inter, Jost } from 'next/font/google'
 import React from 'react'
 import ClientLayout from './ClientLayout'
-import SessionProviderWrapper from '@/components/session-provider-wrapper'
 import './globals.css'
 
 const inter = Inter({
@@ -94,6 +94,10 @@ export const metadata: Metadata = {
     google: 'google-site-verification-code',
   },
   generator: 'v0.dev',
+  other: {
+    'theme-color': '#334155', // Cor do status bar para iOS/Android
+    'apple-mobile-web-app-status-bar-style': 'light-content',
+  },
 }
 
 export default function RootLayout({

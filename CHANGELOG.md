@@ -6,6 +6,26 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-01-16] - Correção Status Bar Mobile Admin
+
+### Fixed 🐛
+
+- **Status bar (notch area) do painel admin** agora tem a mesma cor escura da
+  área pública
+- Adicionado div com `backgroundColor: '#334155'` para cobrir área do notch no
+  iPhone
+- Implementado `env(safe-area-inset-top)` para altura automática do status bar
+- Adicionado meta tag `theme-color: '#334155'` no layout principal para
+  consistência iOS
+- Configurado `apple-mobile-web-app-status-bar-style: light-content` para texto
+  branco no status bar
+
+### Changed 🔄
+
+- **AdminMobileHeader**: Adicionada área de status bar com cor consistente
+- **Layout principal**: Incluídas meta tags para controle do status bar em
+  dispositivos móveis
+
 ## [2025-10-09] - Atualização de Dependências
 
 ### Changed 🔄

@@ -3,8 +3,8 @@
 import { Button } from '@/components/ui/button'
 import { Menu } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 import MobileSidebar from './mobile-sidebar'
 
 export default function AdminMobileHeader() {
@@ -22,6 +22,16 @@ export default function AdminMobileHeader() {
 
   return (
     <>
+      {/* Status Bar Area - mesma cor da área pública */}
+      <div
+        className="w-full md:hidden"
+        style={{
+          backgroundColor: '#334155', // Mesma cor do header público
+          height: 'env(safe-area-inset-top, 0px)', // Altura do notch/status bar
+          minHeight: '44px', // Altura mínima para iPhone
+        }}
+      />
+
       <header
         className="admin-mobile-header sticky top-0 z-[9999] w-full md:hidden"
         style={{
