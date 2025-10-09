@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { SmartPagination } from '@/components/ui/smart-pagination'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useToast } from '@/hooks/use-toast'
@@ -677,8 +678,8 @@ export default function AdminEquipmentsPage() {
               </DialogTitle>
             </DialogHeader>
 
-            <div
-              className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden force-scroll"
+            <ScrollArea
+              className="flex-1 min-h-0"
               style={{ maxHeight: 'calc(80vh - 120px)' }}
             >
               <div className="p-6 space-y-6 xs:p-4 xs:space-y-4 w-full max-w-full">
@@ -968,7 +969,7 @@ export default function AdminEquipmentsPage() {
                   </>
                 )}
               </div>
-            </div>
+            </ScrollArea>
 
             <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 p-6 border-t bg-gray-50 rounded-b-lg xs:p-4 xs:rounded-b-md w-full max-w-full flex-shrink-0">
               <div className="flex gap-4 w-full xs:gap-2 flex-wrap">

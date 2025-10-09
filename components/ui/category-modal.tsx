@@ -36,6 +36,50 @@ import {
   renderLucideIcon,
 } from '@/lib/utils/category-helpers'
 
+type IconGridProps = {
+  icons: string[]
+  selected: string | null
+  bgColor: string
+  iconColor: string
+  onSelect: (_name: string) => void
+}
+
+const IconGrid: React.FC<IconGridProps> = React.memo(
+  ({ icons, selected, bgColor, iconColor, onSelect }) => {
+    return (
+      <div className="grid grid-cols-6 gap-2 p-3">
+        {icons.map((iconName) => {
+          const isSelected = selected === iconName
+          return (
+            <button
+              key={iconName}
+              type="button"
+              onClick={() => onSelect(iconName)}
+              className={cn(
+                'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white',
+                isSelected
+                  ? 'border-blue-400 shadow-2xl shadow-black/50 scale-105 ring-2 ring-blue-500 ring-offset-2 ring-offset-white'
+                  : 'border-slate-200 hover:border-slate-300 hover:shadow-sm focus:border-blue-300'
+              )}
+              title={iconName}
+              data-bg={bgColor}
+              data-icon-color={iconColor}
+              style={{ backgroundColor: bgColor }}
+            >
+              {renderLucideIcon(
+                iconName as keyof typeof LucideIcons,
+                16,
+                iconColor
+              )}
+            </button>
+          )
+        })}
+      </div>
+    )
+  }
+)
+IconGrid.displayName = 'IconGrid'
+
 /**
  * MODAL DE CATEGORIA MODERNO
  * Componente para criação/edição de categorias com personalização visual.
@@ -73,6 +117,10 @@ export function ModernCategoryModal({
   initialData,
   title = 'Nova Categoria',
 }: ModernCategoryModalProps) {
+  // Constantes locais para manter consistência visual/comportamental
+  const RESET_ANIMATION_MS = 600
+  const ICON_GRID_HEIGHT_PX = 150
+
   const [formData, setFormData] = useState<CategoryData>(
     initialData ?? {
       name: '',
@@ -104,6 +152,20 @@ export function ModernCategoryModal({
   const [resetAnimation, setResetAnimation] = useState(false)
   const [resetVisualAnimation, setResetVisualAnimation] = useState(false)
 
+  // Evita timeouts pendurados se o componente for desmontado
+  const resetTimeoutRef = React.useRef<number | null>(null)
+  const resetVisualTimeoutRef = React.useRef<number | null>(null)
+  React.useEffect(() => {
+    return () => {
+      if (resetTimeoutRef.current) {
+        clearTimeout(resetTimeoutRef.current)
+      }
+      if (resetVisualTimeoutRef.current) {
+        clearTimeout(resetVisualTimeoutRef.current)
+      }
+    }
+  }, [])
+
   // Limpa erro de submit ao abrir modal ou ao mudar nome
   React.useEffect(() => {
     setErrors((prev) => ({ ...prev, submit: undefined }))
@@ -120,9 +182,9 @@ export function ModernCategoryModal({
     }))
 
     // Remove animation class after animation completes
-    setTimeout(() => {
+    resetVisualTimeoutRef.current = window.setTimeout(() => {
       setResetVisualAnimation(false)
-    }, 600)
+    }, RESET_ANIMATION_MS)
   }
 
   // Função para resetar todas as configurações para padrão
@@ -138,9 +200,9 @@ export function ModernCategoryModal({
     setErrors({})
 
     // Remove animation class after animation completes
-    setTimeout(() => {
+    resetTimeoutRef.current = window.setTimeout(() => {
       setResetAnimation(false)
-    }, 600)
+    }, RESET_ANIMATION_MS)
   }
 
   async function handleSubmit() {
@@ -212,7 +274,7 @@ export function ModernCategoryModal({
                         variant="outline"
                         size="sm"
                         onClick={() => setIsDesignOpen(true)}
-                        className="inline-flex items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border border-slate-300 bg-transparent text-slate-900 shadow-sm transition-all hover:bg-white hover:shadow-md focus:outline-none group xs:h-9 xs:px-4 xs:w-full"
+                        className="inline-flex bg-white items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border text-slate-900 shadow-md transition-all hover:bg-white hover:shadow-lg hover:scale-none group xs:h-9 xs:px-4 xs:w-full"
                       >
                         <Edit className="w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200" />
                         <span className="group-hover:text-orange-600 transition-colors duration-200">
@@ -220,10 +282,10 @@ export function ModernCategoryModal({
                         </span>
                       </Button>
                       <Button
-                        variant="outline"
+                        variant="reset"
                         size="sm"
                         onClick={resetToDefaults}
-                        className="inline-flex items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-900 shadow-sm transition-all hover:shadow-md focus:outline-none group"
+                        className="inline-flex items-center justify-center gap-2 goo whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border bg-white text-slate-900 shadow-md transition-all hover:shadow-lg group"
                         title="Resetar configurações"
                       >
                         <RotateCcw
@@ -411,7 +473,10 @@ export function ModernCategoryModal({
 
       {/* Dialog Secundário: Personalizar Design */}
       <Dialog open={isDesignOpen} onOpenChange={setIsDesignOpen}>
-        <DialogContent className="w-[calc(100vw-0.8rem)] max-w-[420px] p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl flex flex-col h-[75vh] max-h-[75vh] fixed !left-[50%] !top-[50%] !translate-x-[-50%] !translate-y-[-50%] z-[100] overflow-hidden">
+        <DialogContent
+          closeButtonClassName="hidden"
+          className="w-[calc(100vw-2rem)] max-w-[380px] gap-0 bg-white border-0 shadow-2xl rounded-2xl flex flex-col h-[75vh] max-h-[515px] fixed !left-[50%] !top-[50%] !translate-x-[-50%] translate-y-[-40%] md:translate-y-[-50%] z-[100] overflow-hidden"
+        >
           {/* Header fixo */}
           <DialogHeader className="p-4 border-b border-slate-100 flex-shrink-0">
             <DialogTitle className="flex items-center justify-between">
@@ -423,6 +488,8 @@ export function ModernCategoryModal({
                   Personalizar Design
                 </span>
               </div>
+
+              {/* Botões de ação lado a lado */}
               <div className="flex items-center gap-1">
                 <Button
                   variant="ghost"
@@ -441,6 +508,15 @@ export function ModernCategoryModal({
                         : undefined
                     }
                   />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsDesignOpen(false)}
+                  className="inline-flex items-center justify-center text-slate-400 hover:text-orange-600 h-7 w-7 p-0 rounded-lg transition-colors"
+                  title="Fechar"
+                >
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
             </DialogTitle>
@@ -468,48 +544,30 @@ export function ModernCategoryModal({
                       Ícone
                     </h5>
                   </div>
-                  <div className="bg-slate-50 rounded-lg p-3 border border-slate-100">
-                    <ScrollArea className="h-[200px] w-full">
-                      <div className="grid grid-cols-6 gap-2 p-2">
-                        {filterIconsBySearch(
-                          iconFilter,
-                          AVAILABLE_CATEGORY_ICONS
-                        )
-                          .slice(0, 48)
-                          .map((iconName) => {
-                            const isSelected = formData.icon === iconName
-                            return (
-                              <button
-                                key={iconName}
-                                type="button"
-                                onClick={() =>
-                                  setFormData({
-                                    ...formData,
-                                    icon: iconName as keyof typeof LucideIcons,
-                                  })
-                                }
-                                className={cn(
-                                  'w-10 h-10 rounded-lg border transition-all duration-200 flex items-center justify-center group overflow-hidden focus:outline-black focus:outline-1 focus:outline-offset-1',
-                                  isSelected
-                                    ? 'border-blue-400 shadow-2xl shadow-black/50 scale-105'
-                                    : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'
-                                )}
-                                title={iconName}
-                                data-bg={formData.backgroundColor}
-                                data-icon-color={formData.iconColor}
-                                style={{
-                                  backgroundColor: formData.backgroundColor,
-                                }}
-                              >
-                                {renderLucideIcon(
-                                  iconName,
-                                  16,
-                                  formData.iconColor
-                                )}
-                              </button>
-                            )
-                          })}
-                      </div>
+                  <div className="bg-slate-50 rounded-lg pr-1.5  border border-slate-100">
+                    <ScrollArea
+                      className="w-full category-modal-scrollbar"
+                      style={{ height: ICON_GRID_HEIGHT_PX }}
+                    >
+                      <IconGrid
+                        icons={React.useMemo(
+                          () =>
+                            filterIconsBySearch(
+                              iconFilter,
+                              AVAILABLE_CATEGORY_ICONS
+                            ).slice(0, 48),
+                          [iconFilter]
+                        )}
+                        selected={formData.icon ?? null}
+                        bgColor={formData.backgroundColor}
+                        iconColor={formData.iconColor}
+                        onSelect={(name) =>
+                          setFormData({
+                            ...formData,
+                            icon: name as keyof typeof LucideIcons,
+                          })
+                        }
+                      />
                     </ScrollArea>
                   </div>
                 </div>
@@ -592,4 +650,45 @@ export function ModernCategoryModal({
       </Dialog>
     </React.Fragment>
   )
+}
+
+// Estilos específicos para o scrollbar do grid de ícones
+// Estes estilos são aplicados apenas ao scrollbar com classe "category-modal-scrollbar"
+const categoryModalScrollbarStyles = `
+.category-modal-scrollbar [data-radix-scroll-area-scrollbar] {
+  background-color: rgba(148, 163, 184, 0.1);
+  border-radius: 9999px;
+  padding: 4px 2px;
+}
+
+.category-modal-scrollbar [data-radix-scroll-area-thumb] {
+  background-color: #cbd5e1 !important;
+  border-radius: 9999px;
+  transition: background-color 200ms ease;
+  min-height: 20px;
+}
+
+.category-modal-scrollbar [data-radix-scroll-area-thumb]:hover {
+  background-color: #cbd5e1 !important;
+}
+
+/* Setas do scrollbar com bg-slate-300 */
+.category-modal-scrollbar [data-radix-scroll-area-scrollbar] > div:first-child {
+  border-bottom-color: #cbd5e1 !important;
+}
+
+.category-modal-scrollbar [data-radix-scroll-area-scrollbar] > div:last-child {
+  border-top-color: #cbd5e1 !important;
+}
+`
+
+// Injeta os estilos no head do documento
+if (typeof document !== 'undefined') {
+  const styleId = 'category-modal-scrollbar-styles'
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style')
+    style.id = styleId
+    style.textContent = categoryModalScrollbarStyles
+    document.head.appendChild(style)
+  }
 }

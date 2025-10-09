@@ -265,7 +265,7 @@ export function IconPicker({
               </div>
             </div>
 
-            <ScrollArea className="flex-grow p-4 overflow-y-auto">
+            <ScrollArea className="flex-grow p-4">
               {filteredIcons.length > 0 ? (
                 <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
                   {filteredIcons.map((iconName) => {

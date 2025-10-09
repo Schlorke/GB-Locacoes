@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -501,8 +502,8 @@ function AdminQuotesPage() {
           open={!!selectedQuote}
           onOpenChange={() => setSelectedQuote(null)}
         >
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
+          <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
+            <DialogHeader className="p-6 border-b border-gray-100 flex-shrink-0">
               <DialogTitle className="flex items-center gap-3 text-xl">
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
                   {selectedQuote?.name?.charAt(0).toUpperCase()}
@@ -511,207 +512,217 @@ function AdminQuotesPage() {
               </DialogTitle>
             </DialogHeader>
 
-            {selectedQuote && (
-              <div className="space-y-6">
-                {/* Informações do Cliente */}
-                <Card className="border-l-4 border-l-blue-500">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-2 text-lg">
-                      <User className="w-5 h-5 text-blue-600" />
-                      Informações do Cliente
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center gap-3">
-                      <Mail className="w-4 h-4 text-gray-400" />
-                      <div>
-                        <div className="text-sm text-gray-500">Email</div>
-                        <div className="font-medium">{selectedQuote.email}</div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Phone className="w-4 h-4 text-gray-400" />
-                      <div>
-                        <div className="text-sm text-gray-500">Telefone</div>
-                        <div className="font-medium">{selectedQuote.phone}</div>
-                      </div>
-                    </div>
-                    {selectedQuote.company && (
+            <ScrollArea className="flex-1 min-h-0 p-6">
+              {selectedQuote && (
+                <div className="space-y-6">
+                  {/* Informações do Cliente */}
+                  <Card className="border-l-4 border-l-blue-500">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="flex items-center gap-2 text-lg">
+                        <User className="w-5 h-5 text-blue-600" />
+                        Informações do Cliente
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="flex items-center gap-3">
-                        <Building className="w-4 h-4 text-gray-400" />
+                        <Mail className="w-4 h-4 text-gray-400" />
                         <div>
-                          <div className="text-sm text-gray-500">Empresa</div>
+                          <div className="text-sm text-gray-500">Email</div>
                           <div className="font-medium">
-                            {selectedQuote.company}
+                            {selectedQuote.email}
                           </div>
                         </div>
                       </div>
-                    )}
-                    <div className="flex items-center gap-3">
-                      <Hash className="w-4 h-4 text-gray-400" />
-                      <div>
-                        <div className="text-sm text-gray-500">
-                          ID do Orçamento
-                        </div>
-                        <div className="font-medium font-mono text-xs">
-                          {selectedQuote.id}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Período e Status */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card className="border-l-4 border-l-green-500">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        <Calendar className="w-5 h-5 text-green-600" />
-                        Período da Locação
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-2">
+                      <div className="flex items-center gap-3">
+                        <Phone className="w-4 h-4 text-gray-400" />
                         <div>
-                          <span className="text-sm text-gray-500">Início:</span>
-                          <span className="ml-2 font-medium">
-                            {formatDate(selectedQuote.startDate)}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-sm text-gray-500">Fim:</span>
-                          <span className="ml-2 font-medium">
-                            {formatDate(selectedQuote.endDate)}
-                          </span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="border-l-4 border-l-purple-500">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        <Briefcase className="w-5 h-5 text-purple-600" />
-                        Status Atual
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex items-center justify-between">
-                        {getStatusBadge(selectedQuote.status)}
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-green-600">
-                            {formatCurrency(selectedQuote.totalPrice || 0)}
+                          <div className="text-sm text-gray-500">Telefone</div>
+                          <div className="font-medium">
+                            {selectedQuote.phone}
                           </div>
+                        </div>
+                      </div>
+                      {selectedQuote.company && (
+                        <div className="flex items-center gap-3">
+                          <Building className="w-4 h-4 text-gray-400" />
+                          <div>
+                            <div className="text-sm text-gray-500">Empresa</div>
+                            <div className="font-medium">
+                              {selectedQuote.company}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-3">
+                        <Hash className="w-4 h-4 text-gray-400" />
+                        <div>
                           <div className="text-sm text-gray-500">
-                            Valor Total
+                            ID do Orçamento
+                          </div>
+                          <div className="font-medium font-mono text-xs">
+                            {selectedQuote.id}
                           </div>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
-                </div>
 
-                {/* Equipamentos */}
-                <Card className="border-l-4 border-l-orange-500">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-2 text-lg">
-                      <Package className="w-5 h-5 text-orange-600" />
-                      Equipamentos Solicitados
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {Array.isArray(selectedQuote.equipments) &&
-                        selectedQuote.equipments.map((equipment, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                          >
-                            <div>
-                              <div className="font-medium">
-                                {equipment.name}
-                              </div>
-                              <div className="text-sm text-gray-500">
-                                Quantidade: {equipment.quantity} •{' '}
-                                {formatCurrency(equipment.dailyPrice)}/dia
-                              </div>
+                  {/* Período e Status */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Card className="border-l-4 border-l-green-500">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <Calendar className="w-5 h-5 text-green-600" />
+                          Período da Locação
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          <div>
+                            <span className="text-sm text-gray-500">
+                              Início:
+                            </span>
+                            <span className="ml-2 font-medium">
+                              {formatDate(selectedQuote.startDate)}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="text-sm text-gray-500">Fim:</span>
+                            <span className="ml-2 font-medium">
+                              {formatDate(selectedQuote.endDate)}
+                            </span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-l-4 border-l-purple-500">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <Briefcase className="w-5 h-5 text-purple-600" />
+                          Status Atual
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center justify-between">
+                          {getStatusBadge(selectedQuote.status)}
+                          <div className="text-right">
+                            <div className="text-2xl font-bold text-green-600">
+                              {formatCurrency(selectedQuote.totalPrice || 0)}
                             </div>
-                            <div className="text-right">
-                              <div className="font-semibold text-green-600">
-                                {formatCurrency(
-                                  equipment.quantity * equipment.dailyPrice
-                                )}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                subtotal/dia
-                              </div>
+                            <div className="text-sm text-gray-500">
+                              Valor Total
                             </div>
                           </div>
-                        ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
 
-                {/* Mensagem */}
-                {selectedQuote.message && (
-                  <Card className="border-l-4 border-l-indigo-500">
+                  {/* Equipamentos */}
+                  <Card className="border-l-4 border-l-orange-500">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg">
-                        <MessageSquare className="w-5 h-5 text-indigo-600" />
-                        Mensagem do Cliente
+                        <Package className="w-5 h-5 text-orange-600" />
+                        Equipamentos Solicitados
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <Textarea
-                        value={selectedQuote.message}
-                        readOnly
-                        className="min-h-[100px] resize-none border-gray-200"
-                      />
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Ações Administrativas */}
-                {selectedQuote.status === 'pending' && (
-                  <Card className="border-l-4 border-l-yellow-500">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        <Briefcase className="w-5 h-5 text-yellow-600" />
-                        Ações Administrativas
-                      </CardTitle>
-                      <CardDescription>
-                        Aprove ou rejeite este orçamento
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex gap-3">
-                        <Button
-                          onClick={() =>
-                            updateQuoteStatus(selectedQuote.id, 'approved')
-                          }
-                          disabled={isUpdating}
-                          className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
-                        >
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          {isUpdating ? 'Aprovando...' : 'Aprovar Orçamento'}
-                        </Button>
-                        <Button
-                          onClick={() =>
-                            updateQuoteStatus(selectedQuote.id, 'rejected')
-                          }
-                          disabled={isUpdating}
-                          variant="outline"
-                          className="flex-1 border-red-200 text-red-600 hover:bg-red-100 hover:border-red-500 hover:text-red-800"
-                        >
-                          <XCircle className="w-4 h-4 mr-2" />
-                          {isUpdating ? 'Rejeitando...' : 'Rejeitar Orçamento'}
-                        </Button>
+                      <div className="space-y-3">
+                        {Array.isArray(selectedQuote.equipments) &&
+                          selectedQuote.equipments.map((equipment, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                            >
+                              <div>
+                                <div className="font-medium">
+                                  {equipment.name}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  Quantidade: {equipment.quantity} •{' '}
+                                  {formatCurrency(equipment.dailyPrice)}/dia
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <div className="font-semibold text-green-600">
+                                  {formatCurrency(
+                                    equipment.quantity * equipment.dailyPrice
+                                  )}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  subtotal/dia
+                                </div>
+                              </div>
+                            </div>
+                          ))}
                       </div>
                     </CardContent>
                   </Card>
-                )}
-              </div>
-            )}
+
+                  {/* Mensagem */}
+                  {selectedQuote.message && (
+                    <Card className="border-l-4 border-l-indigo-500">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <MessageSquare className="w-5 h-5 text-indigo-600" />
+                          Mensagem do Cliente
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <Textarea
+                          value={selectedQuote.message}
+                          readOnly
+                          className="min-h-[100px] resize-none border-gray-200"
+                        />
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Ações Administrativas */}
+                  {selectedQuote.status === 'pending' && (
+                    <Card className="border-l-4 border-l-yellow-500">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="flex items-center gap-2 text-lg">
+                          <Briefcase className="w-5 h-5 text-yellow-600" />
+                          Ações Administrativas
+                        </CardTitle>
+                        <CardDescription>
+                          Aprove ou rejeite este orçamento
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex gap-3">
+                          <Button
+                            onClick={() =>
+                              updateQuoteStatus(selectedQuote.id, 'approved')
+                            }
+                            disabled={isUpdating}
+                            className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
+                          >
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            {isUpdating ? 'Aprovando...' : 'Aprovar Orçamento'}
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              updateQuoteStatus(selectedQuote.id, 'rejected')
+                            }
+                            disabled={isUpdating}
+                            variant="outline"
+                            className="flex-1 border-red-200 text-red-600 hover:bg-red-100 hover:border-red-500 hover:text-red-800"
+                          >
+                            <XCircle className="w-4 h-4 mr-2" />
+                            {isUpdating
+                              ? 'Rejeitando...'
+                              : 'Rejeitar Orçamento'}
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              )}
+            </ScrollArea>
           </DialogContent>
         </Dialog>
       </div>

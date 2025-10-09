@@ -6,6 +6,25 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-09] - Atualização de Dependências
+
+### Changed 🔄
+
+- Atualizado **@sveltejs/kit** de 2.46.2 para 2.46.4
+- Atualizado **prisma-zod-generator** (dev) de 1.27.3 para 1.27.4
+- Atualizado **react-day-picker** de 9.11.0 para 9.11.1
+- Atualizado **style-dictionary** (dev) de 5.1.0 para 5.1.1
+- Atualizado **svelte** de 5.39.10 para 5.39.11
+- Atualizado **zod-openapi** de 5.4.2 para 5.4.3
+- Atualizado **@auth/prisma-adapter** de 2.10.0 para 2.11.0
+- Atualizado **eslint-plugin-react-hooks** (dev) de 6.1.1 para 7.0.0
+- Atualizado **@auth/core** de 0.40.0 para 0.41.0
+
+### Security 🔐
+
+- Aplicadas atualizações de segurança e correções de bugs menores
+- **Mantido Tailwind CSS** em 3.4.17 (decisão arquitetural)
+
 ## [Unreleased] - Correções de UI (modais e scroll)
 
 ### Fixed 🐛
