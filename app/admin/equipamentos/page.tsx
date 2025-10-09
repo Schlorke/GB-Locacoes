@@ -663,7 +663,7 @@ export default function AdminEquipmentsPage() {
         >
           <DialogContent
             closeButtonClassName="hover:bg-white"
-            className="w-full max-w-lg max-h-[80vh] p-0 gap-0 bg-white border-0 shadow-2xl rounded-lg overflow-hidden data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] !m-0 xs:max-w-[98vw] xs:p-0"
+            className="w-[calc(100vw-0.8rem)] max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[54%] md:!top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] h-[80vh] max-h-[80vh] md:h-[71vh] md:max-h-[71vh] overflow-hiddenpn"
             style={{
               height: '80vh',
               maxHeight: '80vh',
