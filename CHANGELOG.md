@@ -20,6 +20,12 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Atualizado **eslint-plugin-react-hooks** (dev) de 6.1.1 para 7.0.0
 - Atualizado **@auth/core** de 0.40.0 para 0.41.0
 
+### Fixed 🐛
+
+- Corrigido override do PNPM para **@auth/core** (0.40.0 → 0.41.0) que causava
+  conflito entre `package.json` e `pnpm-lock.yaml`
+- Sincronizado `pnpm-lock.yaml` com `package.json` para deploy no Vercel
+
 ### Security 🔐
 
 - Aplicadas atualizações de segurança e correções de bugs menores
