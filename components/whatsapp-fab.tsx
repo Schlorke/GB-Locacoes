@@ -31,68 +31,24 @@ export default function WhatsAppFAB() {
 
   const whatsappNumber = '5551998205163' // WhatsApp da GB Locações
 
-  // Função para validar número do WhatsApp
-  const validateWhatsAppNumber = (number: string): boolean => {
-    // Remove todos os caracteres não numéricos
-    const cleanNumber = number.replace(/\D/g, '')
-    // Verifica se tem pelo menos 10 dígitos e no máximo 15
-    return cleanNumber.length >= 10 && cleanNumber.length <= 15
-  }
-
   // Função para detectar se é dispositivo móvel
   const isMobile = () => {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-  }
-
-  // Função para detectar se é iOS (Safari)
-  const isIOS = () => {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent)
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
   }
 
   // Função para abrir WhatsApp corretamente em mobile e desktop
   const openWhatsApp = (message: string) => {
-    try {
-      // Validar número do WhatsApp primeiro
-      if (!validateWhatsAppNumber(whatsappNumber)) {
-        console.error('Número do WhatsApp inválido:', whatsappNumber)
-        alert('Erro: Número do WhatsApp inválido. Entre em contato pelo telefone.')
-        return
-      }
+    const encodedMessage = encodeURIComponent(message)
+    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
 
-      // Limpar e codificar a mensagem de forma mais robusta
-      const cleanMessage = message.trim().replace(/\s+/g, ' ')
-      const encodedMessage = encodeURIComponent(cleanMessage)
-
-      // Verificar se a codificação foi bem-sucedida
-      if (!encodedMessage || encodedMessage === 'undefined') {
-        console.error('Erro ao codificar mensagem do WhatsApp')
-        return
-      }
-
-      // Usar sempre wa.me que funciona universalmente
-      const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
-
-      // Debug: log da URL para verificar se está correta
-      console.log('WhatsApp URL:', whatsappURL)
-      console.log('Device:', isIOS() ? 'iOS' : isMobile() ? 'Android' : 'Desktop')
-
-      // Validar se a URL é válida antes de tentar abrir
-      try {
-        new URL(whatsappURL)
-        // Sempre abrir em nova aba para não perder a página atual
-        window.open(whatsappURL, '_blank', 'noopener,noreferrer')
-      } catch (_urlError) {
-        console.error('URL do WhatsApp inválida:', whatsappURL)
-        // Fallback: tentar sem mensagem em nova aba
-        const simpleURL = `https://wa.me/${whatsappNumber}`
-        window.open(simpleURL, '_blank', 'noopener,noreferrer')
-      }
-
-    } catch (error) {
-      console.error('Erro ao abrir WhatsApp:', error)
-      // Fallback: tentar abrir sem mensagem em nova aba
-      const fallbackURL = `https://wa.me/${whatsappNumber}`
-      window.open(fallbackURL, '_blank', 'noopener,noreferrer')
+    if (isMobile()) {
+      // Para dispositivos móveis, usar window.location.href para abrir o app diretamente
+      window.location.href = whatsappURL
+    } else {
+      // Para desktop, usar window.open como antes
+      window.open(whatsappURL, '_blank')
     }
   }
 
