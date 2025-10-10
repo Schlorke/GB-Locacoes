@@ -12,22 +12,33 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 - **Botão WhatsApp no iPhone 13** agora redireciona corretamente para o app
   mobile
-- Implementada detecção de dispositivos móveis para usar `window.location.href`
-  em vez de `window.open`
+- **Erro "Safari não pode abrir a página"** corrigido com protocolo específico
+  para iOS
+- **Simplificação da abordagem** para usar apenas `window.location.href`
+  universalmente
+- **Nova aba sempre** para preservar a página atual do usuário
+- **Validação de URL** antes de tentar abrir para evitar erros do Safari
+- **Inconsistência no número do WhatsApp** corrigida no footer (faltava um
+  dígito)
+- Implementada detecção específica de iOS para usar protocolo `whatsapp://`
 - Corrigido redirecionamento em `components/whatsapp-fab.tsx` e
-  `lib/whatsapp.ts`
+  `components/footer.tsx`
 - WhatsApp agora abre diretamente no app em dispositivos móveis (iPhone,
   Android, iPad)
 
 ### Technical Details 🔧
 
-- Adicionada função `isMobile()` para detectar dispositivos móveis via User
-  Agent
-- Criada função `openWhatsApp()` que usa abordagem diferente para mobile vs
-  desktop
-- Mobile: `window.location.href` (abre app diretamente)
-- Desktop: `window.open()` (abre WhatsApp Web em nova aba)
-- Suporte para iPhone, iPad, Android e outros dispositivos móveis
+- Adicionada função `isIOS()` para detectar dispositivos iOS/Safari
+- Criada função `openWhatsApp()` que usa abordagem universal:
+  - **Todos os dispositivos**: `window.open()` com `https://wa.me/...` em nova
+    aba
+  - **Preserva página atual**: Usuário não perde a navegação
+  - **Validação de URL**: Verifica se URL é válida antes de abrir
+  - **Fallback automático**: Se URL com mensagem falhar, tenta sem mensagem
+- Adicionada validação robusta do número do WhatsApp
+- Implementado tratamento de erros com fallback automático
+- Corrigido número no footer: `555199820516` → `5551998205163`
+- Logs de debug para facilitar troubleshooting
 
 ## [2025-10-10] - Limpeza de Loading Desnecessário
 

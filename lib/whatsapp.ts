@@ -152,13 +152,8 @@ export function openWhatsAppQuote(
       navigator.userAgent
     )
 
-  if (isMobile) {
-    // Para dispositivos móveis, usar window.location.href para abrir o app diretamente
-    window.location.href = url
-  } else {
-    // Para desktop, usar window.open como antes
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }
+  // Sempre abrir em nova aba para não perder a página atual
+  window.open(url, '_blank', 'noopener,noreferrer')
 }
 
 /**

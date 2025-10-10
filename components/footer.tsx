@@ -187,7 +187,7 @@ export default function Footer() {
                   </Link>
                   <br />
                   <Link
-                    href="tel:+555199820516"
+                    href="tel:+5551998205163"
                     className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
                     (51) 99820-5163
