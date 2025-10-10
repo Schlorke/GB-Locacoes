@@ -6,6 +6,29 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-10] - Correção Botão WhatsApp no iPhone
+
+### Fixed 🐛
+
+- **Botão WhatsApp no iPhone 13** agora redireciona corretamente para o app
+  mobile
+- Implementada detecção de dispositivos móveis para usar `window.location.href`
+  em vez de `window.open`
+- Corrigido redirecionamento em `components/whatsapp-fab.tsx` e
+  `lib/whatsapp.ts`
+- WhatsApp agora abre diretamente no app em dispositivos móveis (iPhone,
+  Android, iPad)
+
+### Technical Details 🔧
+
+- Adicionada função `isMobile()` para detectar dispositivos móveis via User
+  Agent
+- Criada função `openWhatsApp()` que usa abordagem diferente para mobile vs
+  desktop
+- Mobile: `window.location.href` (abre app diretamente)
+- Desktop: `window.open()` (abre WhatsApp Web em nova aba)
+- Suporte para iPhone, iPad, Android e outros dispositivos móveis
+
 ## [2025-10-10] - Limpeza de Loading Desnecessário
 
 ### Removed ❌

@@ -146,8 +146,19 @@ export function openWhatsAppQuote(
   const message = formatWhatsAppMessage(data)
   const url = generateWhatsAppURL(businessPhone, message)
 
-  // Abre em nova aba
-  window.open(url, '_blank', 'noopener,noreferrer')
+  // Detectar se é dispositivo móvel
+  const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    )
+
+  if (isMobile) {
+    // Para dispositivos móveis, usar window.location.href para abrir o app diretamente
+    window.location.href = url
+  } else {
+    // Para desktop, usar window.open como antes
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
 }
 
 /**

@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { MessageCircle, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { CloseButton } from '@/components/ui/close-button'
+import { Input } from '@/components/ui/input'
+import { MessageCircle, Send } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 type MessageSender = 'bot' | 'user'
 
@@ -30,6 +30,25 @@ export default function WhatsAppFAB() {
   const [showQuickMessages, setShowQuickMessages] = useState(true)
 
   const whatsappNumber = '5551998205163' // WhatsApp da GB Locações
+
+  // Função para detectar se é dispositivo móvel
+  const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  }
+
+  // Função para abrir WhatsApp corretamente em mobile e desktop
+  const openWhatsApp = (message: string) => {
+    const encodedMessage = encodeURIComponent(message)
+    const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`
+
+    if (isMobile()) {
+      // Para dispositivos móveis, usar window.location.href para abrir o app diretamente
+      window.location.href = whatsappURL
+    } else {
+      // Para desktop, usar window.open como antes
+      window.open(whatsappURL, '_blank')
+    }
+  }
 
   useEffect(() => {
     // Quando o chat é aberto, marcar mensagens como lidas
@@ -69,13 +88,8 @@ export default function WhatsAppFAB() {
 
       // Redirect to WhatsApp after bot response
       setTimeout(() => {
-        const whatsappMessage = encodeURIComponent(
-          `Olá! Vim do site da GB Locações e gostaria de solicitar informações sobre locação de equipamentos para construção civil. Minha mensagem: ${message}`
-        )
-        window.open(
-          `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
-          '_blank'
-        )
+        const whatsappMessage = `Olá! Vim do site da GB Locações e gostaria de solicitar informações sobre locação de equipamentos para construção civil. Minha mensagem: ${message}`
+        openWhatsApp(whatsappMessage)
         setIsOpen(false)
         setMessage('')
         setShowQuickMessages(true) // Reset for next time
@@ -114,13 +128,8 @@ export default function WhatsAppFAB() {
 
       // Redirect to WhatsApp after bot response
       setTimeout(() => {
-        const whatsappMessage = encodeURIComponent(
-          `Olá! Vim do site da GB Locações e gostaria de ${quickMessage}`
-        )
-        window.open(
-          `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`,
-          '_blank'
-        )
+        const whatsappMessage = `Olá! Vim do site da GB Locações e gostaria de ${quickMessage}`
+        openWhatsApp(whatsappMessage)
         setIsOpen(false)
         setShowQuickMessages(true) // Reset for next time
       }, 1500)
