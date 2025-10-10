@@ -31,9 +31,12 @@ export default function FeaturedMaterials() {
 
   // Função para renderizar ícones dinamicamente (igual ao admin)
   const renderIcon = (iconName?: string, color?: string) => {
-    if (!iconName || !LucideIcons[iconName as keyof typeof LucideIcons]) return null
+    if (!iconName || !LucideIcons[iconName as keyof typeof LucideIcons])
+      return null
 
-    const IconComponent = LucideIcons[iconName as keyof typeof LucideIcons] as React.ComponentType<{
+    const IconComponent = LucideIcons[
+      iconName as keyof typeof LucideIcons
+    ] as React.ComponentType<{
       size?: number
       color?: string
       className?: string

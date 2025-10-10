@@ -6,6 +6,25 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-10] - Limpeza de Loading Desnecessário
+
+### Removed ❌
+
+- **Admin Login Loading** (`app/admin/login/loading.tsx`) - Arquivo removido por
+  ser desnecessário
+- Loading específico para página de login admin da showcase - Simplificação do
+  sistema de loading
+- **Pasta temporária** `app/loading-showcase/` - Removida após análise dos
+  loadings
+
+### Technical Details 🔧
+
+- Removido arquivo `app/admin/login/loading.tsx` que não era utilizado
+- Criada página temporária `app/loading-showcase/` para análise dos loadings
+- Pasta temporária removida após análise e escolha do padrão
+- Sistema de loading mais limpo e focado nos casos realmente necessários
+- Preparação para padronização futura dos loadings restantes
+
 ## [2025-10-09] - Correção Ícones das Categorias nas Áreas Públicas
 
 ### Fixed 🐛

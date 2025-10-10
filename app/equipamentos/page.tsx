@@ -7,12 +7,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { SmartPagination } from '@/components/ui/smart-pagination'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
-import {
-  Loader2,
-  Package,
-  Search,
-  Star,
-} from 'lucide-react'
+import { Loader2, Package, Search, Star } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
@@ -81,9 +76,12 @@ export default function EquipmentsPage() {
 
   // Função para renderizar ícones dinamicamente (igual ao admin)
   const renderIcon = (iconName?: string, color?: string) => {
-    if (!iconName || !LucideIcons[iconName as keyof typeof LucideIcons]) return null
+    if (!iconName || !LucideIcons[iconName as keyof typeof LucideIcons])
+      return null
 
-    const IconComponent = LucideIcons[iconName as keyof typeof LucideIcons] as React.ComponentType<{
+    const IconComponent = LucideIcons[
+      iconName as keyof typeof LucideIcons
+    ] as React.ComponentType<{
       size?: number
       color?: string
       className?: string
