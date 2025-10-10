@@ -6,6 +6,29 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-09] - Correção Ícones das Categorias nas Áreas Públicas
+
+### Fixed 🐛
+
+- **Ícones das categorias** agora são exibidos corretamente nas badges das áreas
+  públicas
+- Corrigida função `renderIcon` em `app/equipamentos/page.tsx` para usar
+  `LucideIcons` completo
+- Corrigida função `renderIcon` em `components/featured-materials.tsx` para usar
+  `LucideIcons` completo
+- Removido `iconMap` limitado que causava falha na exibição de ícones não
+  mapeados
+- Implementada mesma lógica de renderização de ícones usada no painel admin
+- Agora todas as categorias configuradas no admin exibem seus ícones
+  corretamente nas páginas públicas
+
+### Technical Details 🔧
+
+- Substituído `iconMap` limitado por `LucideIcons` completo do lucide-react
+- Atualizada tipagem de `renderIcon` para aceitar qualquer ícone do Lucide
+- Mantida compatibilidade com cores personalizadas das categorias
+- Zero breaking changes - funcionalidade existente preservada
+
 ## [2025-01-16] - Correção Status Bar Mobile Admin
 
 ### Fixed 🐛

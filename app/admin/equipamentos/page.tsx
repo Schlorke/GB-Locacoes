@@ -517,7 +517,7 @@ export default function AdminEquipmentsPage() {
                         </div>
                       </CardHeader>
                       <CardContent className="relative z-10 pt-0 flex-1 flex flex-col justify-between">
-                        <div className="grid grid-cols-2 grid-rows-2 gap-y-4 md:gap-y-2">
+                        <div className="grid grid-cols-2 grid-rows-2 gap-y-4 md:gap-y-2 justify-between">
                           {/* Linha 1, Coluna 1 - Categoria */}
                           <div className="flex items-center justify-start">
                             {equipment.category ? (
@@ -549,15 +549,15 @@ export default function AdminEquipmentsPage() {
                           </div>
 
                           {/* Linha 1, Coluna 2 - Preço */}
-                          <div className="flex items-center gap-2 text-sm justify-start">
-                            <DollarSign className="w-4 h-4 text-green-500 flex-shrink-0" />
+                          <div className="flex gap-2 text-sm items-center justify-center">
+                            <DollarSign className="w-4 h-4 items-center justify-center text-green-500 flex-shrink-0" />
                             <span className="font-bold text-green-600">
                               {formatPrice(equipment.pricePerDay)}/dia
                             </span>
                           </div>
 
                           {/* Linha 2, Coluna 1 - Status */}
-                          <div className="flex items-center gap-2 text-sm justify-start">
+                          <div className="flex gap-2 text-sm items-center justify-start">
                             {equipment.isAvailable ? (
                               <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                             ) : (
@@ -577,8 +577,8 @@ export default function AdminEquipmentsPage() {
                           </div>
 
                           {/* Linha 2, Coluna 2 - Data de criação */}
-                          <div className="flex items-center gap-2 text-sm justify-start">
-                            <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                          <div className="flex gap-2 text-sm items-center justify-center pr-2.5">
+                            <Calendar className="w-4 h-4 items-start justify-start text-gray-400 flex-shrink-0" />
                             <span className="text-gray-600">
                               {formatDate(equipment.createdAt)}
                             </span>

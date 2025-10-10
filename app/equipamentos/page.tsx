@@ -6,37 +6,19 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { SmartPagination } from '@/components/ui/smart-pagination'
 import { AnimatePresence, motion } from 'framer-motion'
+import * as LucideIcons from 'lucide-react'
 import {
-  Building,
-  Container,
-  Hammer,
-  HardHat,
   Loader2,
   Package,
   Search,
-  Shield,
   Star,
-  Truck,
-  Wrench,
-  Zap,
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-// Icon mapping
-const iconMap = {
-  Package,
-  Building,
-  Container,
-  Hammer,
-  HardHat,
-  Shield,
-  Truck,
-  Wrench,
-  Zap,
-}
+// Removido iconMap limitado - agora usamos LucideIcons completo
 
 interface Review {
   id: string
@@ -97,35 +79,17 @@ export default function EquipmentsPage() {
     setFilterKey((prev) => prev + 1) // Incrementa para forçar re-render com animação
   }
 
-  // Função para renderizar ícones dinamicamente
+  // Função para renderizar ícones dinamicamente (igual ao admin)
   const renderIcon = (iconName?: string, color?: string) => {
-    if (!iconName) return null
+    if (!iconName || !LucideIcons[iconName as keyof typeof LucideIcons]) return null
 
-    try {
-      const IconComponent = iconMap[iconName as keyof typeof iconMap]
-      if (IconComponent && typeof IconComponent === 'function') {
-        return (
-          <IconComponent
-            size={14}
-            color={color || 'currentColor'}
-            className="flex-shrink-0"
-          />
-        )
-      }
-    } catch {
-      // Fallback se o ícone não existir
-      return (
-        <Package
-          size={14}
-          color={color || 'currentColor'}
-          className="flex-shrink-0"
-        />
-      )
-    }
-
-    // Fallback se o ícone não for encontrado
+    const IconComponent = LucideIcons[iconName as keyof typeof LucideIcons] as React.ComponentType<{
+      size?: number
+      color?: string
+      className?: string
+    }>
     return (
-      <Package
+      <IconComponent
         size={14}
         color={color || 'currentColor'}
         className="flex-shrink-0"

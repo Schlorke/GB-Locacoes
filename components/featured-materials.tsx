@@ -3,35 +3,10 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { Package } from 'lucide-react'
+import * as LucideIcons from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-
-// Icon mapping
-import {
-  Building,
-  Container,
-  Hammer,
-  HardHat,
-  Package as PackageIcon,
-  Shield,
-  Truck,
-  Wrench,
-  Zap,
-} from 'lucide-react'
-
-const iconMap = {
-  Package: PackageIcon,
-  Building,
-  Container,
-  Hammer,
-  HardHat,
-  Shield,
-  Truck,
-  Wrench,
-  Zap,
-}
 
 interface Equipment {
   id: string
@@ -54,35 +29,17 @@ export default function FeaturedMaterials() {
   const [equipments, setEquipments] = useState<Equipment[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  // Função para renderizar ícones dinamicamente
+  // Função para renderizar ícones dinamicamente (igual ao admin)
   const renderIcon = (iconName?: string, color?: string) => {
-    if (!iconName) return null
+    if (!iconName || !LucideIcons[iconName as keyof typeof LucideIcons]) return null
 
-    try {
-      const IconComponent = iconMap[iconName as keyof typeof iconMap]
-      if (IconComponent && typeof IconComponent === 'function') {
-        return (
-          <IconComponent
-            size={14}
-            color={color || 'currentColor'}
-            className="flex-shrink-0"
-          />
-        )
-      }
-    } catch {
-      // Fallback se o ícone não existir
-      return (
-        <Package
-          size={14}
-          color={color || 'currentColor'}
-          className="flex-shrink-0"
-        />
-      )
-    }
-
-    // Fallback final
+    const IconComponent = LucideIcons[iconName as keyof typeof LucideIcons] as React.ComponentType<{
+      size?: number
+      color?: string
+      className?: string
+    }>
     return (
-      <Package
+      <IconComponent
         size={14}
         color={color || 'currentColor'}
         className="flex-shrink-0"
