@@ -6,6 +6,47 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-01-22] - Implementação Completa de Autenticação Social
+
+### Added ✨
+
+- **Sistema completo de OAuth Social** com Google e Facebook
+- **Componente SocialLoginButtons** reutilizável em
+  `components/ui/social-login-buttons.tsx`
+- **Componente SocialDivider** para separação visual dos botões sociais
+- **Callbacks NextAuth aprimorados** para criação/atualização automática de
+  usuários OAuth
+- **Documentação completa** em `docs/guides/oauth-social-login.md`
+- **Loading states individuais** para cada provider (Google/Facebook)
+- **Tratamento de erros** com callbacks personalizáveis
+- **Design responsivo** com variantes compact e default
+
+### Changed 🔄
+
+- **Páginas de login e cadastro** agora usam componentes sociais padronizados
+- **NextAuth callbacks** implementam lógica de criação/atualização de usuários
+  OAuth
+- **UI dos botões sociais** melhorada com animações e feedback visual
+- **Estrutura de autenticação** mais robusta com validação de dados
+
+### Technical Details 🔧
+
+- **Google OAuth**: Configuração completa com client ID/secret
+- **Facebook OAuth**: Configuração completa com app ID/secret
+- **Auto-cadastro**: Usuários OAuth são criados automaticamente no banco
+- **Sincronização**: Dados do perfil são atualizados a cada login
+- **Segurança**: Validação de email e normalização de dados
+- **UX**: Loading states, error handling e feedback visual
+- **Reutilização**: Componentes modulares para login/cadastro
+
+### Documentation 📚
+
+- **Guia completo OAuth** em `docs/guides/oauth-social-login.md`
+- **Configuração Google Cloud Console** passo a passo
+- **Configuração Facebook Developers** detalhada
+- **Troubleshooting** com soluções para problemas comuns
+- **Checklist de implementação** para desenvolvimento e produção
+
 ## [2025-10-10] - Correção Botão WhatsApp no iPhone
 
 ### Fixed 🐛

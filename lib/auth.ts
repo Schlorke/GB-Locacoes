@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs'
 import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import GoogleProvider from 'next-auth/providers/google'
 import FacebookProvider from 'next-auth/providers/facebook'
+import GoogleProvider from 'next-auth/providers/google'
 
 // Runtime-only Prisma import to prevent build-time initialization
 async function getPrisma() {
@@ -119,11 +119,63 @@ export const authOptions: NextAuthOptions = {
     maxAge: 24 * 60 * 60,
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account, profile }) {
+      // Primeira vez que o usuário faz login
       if (user) {
         token.id = user.id
         token.role = user.role
       }
+
+      // Para OAuth (Google/Facebook), criar ou atualizar usuário no banco
+      if (account && profile && user) {
+        try {
+          const prisma = await getPrisma()
+          const normalizedEmail = user.email?.trim().toLowerCase()
+
+          if (normalizedEmail) {
+            // Verificar se usuário já existe
+            const existingUser = await prisma.user.findFirst({
+              where: {
+                email: { equals: normalizedEmail, mode: 'insensitive' },
+              },
+            })
+
+            if (existingUser) {
+              // Atualizar informações do usuário existente
+              await prisma.user.update({
+                where: { id: existingUser.id },
+                data: {
+                  name: user.name || existingUser.name,
+                  image: user.image || existingUser.image,
+                  // Não sobrescrever role se já existir
+                  role: existingUser.role || 'CLIENT',
+                },
+              })
+              token.id = existingUser.id
+              token.role = existingUser.role || 'CLIENT'
+            } else {
+              // Criar novo usuário
+              const newUser = await prisma.user.create({
+                data: {
+                  email: normalizedEmail,
+                  name: user.name || '',
+                  image: user.image || null,
+                  role: 'CLIENT', // Usuários OAuth são sempre CLIENT por padrão
+                  // Campos opcionais para OAuth (podem ser preenchidos depois)
+                  phone: null,
+                  cpf: null,
+                  cnpj: null,
+                },
+              })
+              token.id = newUser.id
+              token.role = newUser.role
+            }
+          }
+        } catch (error) {
+          console.error('Erro ao processar login OAuth:', error)
+        }
+      }
+
       return token
     },
     async session({ session, token }) {
@@ -134,8 +186,8 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async signIn() {
-      // Sincronização do carrinho será feita no cliente após o login
-      // O cliente fará uma chamada para /api/cart/merge com os itens do localStorage
+      // Permitir login para todos os usuários
+      // A lógica de criação/atualização está no callback jwt
       return true
     },
   },
