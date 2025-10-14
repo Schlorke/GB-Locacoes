@@ -4,6 +4,7 @@
 import { cn } from '@/lib/utils'
 import { Search, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Button } from './button'
 import { Input } from './input'
 
@@ -42,6 +43,12 @@ export function Autocomplete({
   const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
     null
   )
+  const [isMounted, setIsMounted] = useState(false)
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+  })
 
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
@@ -80,6 +87,36 @@ export function Autocomplete({
     }
   }, [])
 
+  // Mount detection
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  // Calculate dropdown position when opening
+  const updateDropdownPosition = useCallback(() => {
+    if (inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect()
+      setDropdownPosition({
+        top: rect.bottom + 4, // 4px gap, sem window.scrollY
+        left: rect.left, // sem window.scrollX
+        width: rect.width,
+      })
+    }
+  }, [])
+
+  // Update position when dropdown opens or when input changes
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      // Pequeno delay para garantir que o DOM esteja atualizado
+      const timer = setTimeout(() => {
+        updateDropdownPosition()
+      }, 0)
+
+      return () => clearTimeout(timer)
+    }
+    return undefined
+  }, [isOpen, updateDropdownPosition])
+
   // Debounce da busca
   useEffect(() => {
     if (debounceRef.current) {
@@ -117,7 +154,12 @@ export function Autocomplete({
     }
 
     const handleScroll = (event: Event) => {
-      // Só fecha se o scroll não for dentro do dropdown
+      // Atualiza posição se dropdown estiver aberto
+      if (isOpen) {
+        updateDropdownPosition()
+      }
+
+      // Fecha o dropdown se o scroll não for dentro do dropdown
       const target = event.target as Node
       if (dropdownRef.current && !dropdownRef.current.contains(target)) {
         setIsOpen(false)
@@ -125,14 +167,22 @@ export function Autocomplete({
       }
     }
 
+    const handleResize = () => {
+      if (isOpen) {
+        updateDropdownPosition()
+      }
+    }
+
     document.addEventListener('mousedown', handleClickOutside)
     window.addEventListener('scroll', handleScroll, true)
+    window.addEventListener('resize', handleResize)
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
       window.removeEventListener('scroll', handleScroll, true)
+      window.removeEventListener('resize', handleResize)
     }
-  }, [isOpen])
+  }, [isOpen, updateDropdownPosition])
 
   // Navegação com teclado
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -301,78 +351,87 @@ export function Autocomplete({
         </div>
       </div>
 
-      {/* Lista de sugestões */}
-      {isOpen && (
-        <div
-          ref={dropdownRef}
-          className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[99999]"
-          style={{ maxHeight: '300px' }}
-        >
+      {/* Dropdown via Portal */}
+      {isOpen &&
+        isMounted &&
+        createPortal(
           <div
-            className="max-h-full overflow-y-auto overscroll-contain filter-dropdown-scroll"
-            style={{ maxHeight: '280px' }}
+            ref={dropdownRef}
+            className="fixed h-auto bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[99999]"
+            style={{
+              top: `${dropdownPosition.top}px`,
+              left: `${dropdownPosition.left}px`,
+              width: `${dropdownPosition.width}px`,
+              maxHeight: '400px',
+            }}
           >
-            {isLoading ? (
-              <div className="p-4 text-center text-gray-500">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600 mx-auto mb-2"></div>
-                Buscando...
-              </div>
-            ) : suggestions.length > 0 ? (
-              <ul
-                ref={listRef}
-                role="listbox"
-                aria-label="Sugestões de equipamentos"
-              >
-                {suggestions.map((equipment, index) => {
-                  const isSelected = selectedIndex === index
-                  return (
-                    <li
-                      key={equipment.id}
-                      id={`equipment-option-${index}`}
-                      role="option"
-                      className={cn(
-                        'px-4 py-3 cursor-pointer transition-colors text-gray-900',
-                        isSelected
-                          ? 'bg-orange-50 text-orange-900'
-                          : 'hover:bg-gray-50 text-gray-900'
-                      )}
-                      onMouseDown={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        handleSelect(equipment)
-                      }}
-                    >
-                      <div className="flex items-start justify-between overflow-hidden">
-                        <div className="flex-1 min-w-0 pr-2">
-                          <p className="font-medium text-sm truncate text-gray-900">
-                            {equipment.name}
-                          </p>
-                          <p className="text-xs text-gray-600 mt-1 line-clamp-2">
-                            {equipment.description}
-                          </p>
-                          <div className="flex items-center gap-2 mt-1 flex-wrap">
-                            <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full whitespace-nowrap">
-                              {equipment.category.name}
-                            </span>
-                            <span className="text-xs text-gray-600 font-medium whitespace-nowrap">
-                              R$ {Number(equipment.pricePerDay).toFixed(2)}/dia
-                            </span>
+            <div
+              className="max-h-full overflow-y-auto overscroll-contain"
+              style={{ maxHeight: '400px' }}
+            >
+              {isLoading ? (
+                <div className="p-4 text-center text-gray-500">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600 mx-auto mb-2"></div>
+                  Buscando...
+                </div>
+              ) : suggestions.length > 0 ? (
+                <ul
+                  ref={listRef}
+                  role="listbox"
+                  aria-label="Sugestões de equipamentos"
+                >
+                  {suggestions.map((equipment, index) => {
+                    const isSelected = selectedIndex === index
+                    return (
+                      <li
+                        key={equipment.id}
+                        id={`equipment-option-${index}`}
+                        role="option"
+                        className={cn(
+                          'px-4 py-3 cursor-pointer transition-colors text-gray-900',
+                          isSelected
+                            ? 'bg-orange-50 text-orange-900'
+                            : 'hover:bg-gray-50 text-gray-900'
+                        )}
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          handleSelect(equipment)
+                        }}
+                      >
+                        <div className="flex items-start justify-between overflow-hidden">
+                          <div className="flex-1 min-w-0 pr-2">
+                            <p className="font-medium text-sm truncate text-gray-900">
+                              {equipment.name}
+                            </p>
+                            <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                              {equipment.description}
+                            </p>
+                            <div className="flex items-center gap-2 mt-1 flex-wrap">
+                              <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full whitespace-nowrap">
+                                {equipment.category.name}
+                              </span>
+                              <span className="text-xs text-gray-600 font-medium whitespace-nowrap">
+                                R$ {Number(equipment.pricePerDay).toFixed(2)}
+                                /dia
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </li>
-                  )
-                })}
-              </ul>
-            ) : query.length >= 2 ? (
-              <div className="p-4 text-center text-gray-500">
-                <p className="text-sm">Nenhum equipamento encontrado</p>
-                <p className="text-xs mt-1">Tente outro termo de busca</p>
-              </div>
-            ) : null}
-          </div>
-        </div>
-      )}
+                      </li>
+                    )
+                  })}
+                </ul>
+              ) : query.length >= 2 ? (
+                <div className="p-4 text-center text-gray-500">
+                  <p className="text-sm">Nenhum equipamento encontrado</p>
+                  <p className="text-xs mt-1">Tente outro termo de busca</p>
+                </div>
+              ) : null}
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   )
 }

@@ -156,14 +156,6 @@ html {
   }
 }
 
-/* Scrollbar moderno para navegadores que suportam */
-@supports (scrollbar-width: thin) {
-  html {
-    /* scrollbar-width: thin; */
-    /* scrollbar-color: #64748b #334155; */
-  }
-}
-
 /* Inputs com efeito hover shadow e foco azul obrigatório */
 input:not([type='checkbox']):not([type='radio']),
 select,
@@ -703,25 +695,14 @@ body:has(.sobre-page) {
 /* =============================== */
 /* 10. Scrollbar, Selection, etc.  */
 /* =============================== */
-/* Scrollbar moderna e discreta */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+/* Scrollbar moderno com identidade visual GB Locações */
+/* Aplicado apenas ao scrollbar principal das páginas públicas */
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(120, 120, 120, 0.3);
-  border-radius: 8px;
-  border: 1px solid transparent;
-  background-clip: content-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(80, 80, 80, 0.5);
+/* Scrollbar principal - WebKit (Chrome, Safari, Edge) */
+/* Scrollbar moderno */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #fc5a03d2 #f1f5f9;
 }
 
 /* Selection styles */
@@ -858,14 +839,6 @@ body:has(.sobre-page) {
   background: #f0f0f0 !important;
 }
 
-/* Firefox - WhatsApp scroll verde com máxima especificidade */
-@supports (scrollbar-width: thin) {
-  .whatsapp-chat-window .whatsapp-chat-scroll {
-    /* scrollbar-width: thin !important; */
-    /* scrollbar-color: #25d366 #f0f0f0 !important; */
-  }
-}
-
 /* Forçar aparecimento do scrollbar sempre */
 .whatsapp-chat-scroll {
   overflow-y: scroll !important;
@@ -911,12 +884,6 @@ button[role='combobox']:focus-visible,
 }
 
 /* Firefox - WhatsApp scroll verde */
-@supports (scrollbar-width: thin) {
-  .whatsapp-chat-scroll {
-    /* scrollbar-width: thin !important; */
-    /* scrollbar-color: #25d366 #f0f0f0 !important; */
-  }
-}
 
 body.admin-body-layout {
   padding-top: 0 !important;
@@ -994,14 +961,6 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 .filter-dropdown-scroll {
   overflow-y: auto !important;
   max-height: 280px !important;
-}
-
-/* Firefox scrollbar styling com suporte condicional */
-@supports (scrollbar-width: thin) {
-  .filter-dropdown-scroll {
-    /* scrollbar-width: thin; */
-    /* scrollbar-color: #d1d5db transparent; */
-  }
 }
 
 /* =============================== */
@@ -1185,16 +1144,6 @@ body {
   /* NÃO forçar overflow - deixar o scroll principal funcionar */
   pointer-events: auto !important;
   position: relative !important;
-}
-
-/* CORREÇÃO FINAL: Garantir que não há scroll secundário em nenhum elemento */
-/* Scrollbar styling para todos os elementos com suporte condicional */
-@supports (scrollbar-width: thin) {
-  * {
-    /* NÃO criar scroll secundário desnecessário */
-    /* scrollbar-width: thin; */
-    /* scrollbar-color: #64748b #334155; */
-  }
 }
 
 /* Garantir que apenas o body tenha scroll */

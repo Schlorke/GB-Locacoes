@@ -139,6 +139,28 @@ const form = useForm<FormData>({
 
 ## 🆕 Recently Implemented Features (Jan 2025)
 
+### 🔧 AgentDesk BrowserTools Integration
+
+- **Status**: ✅ INSTALLED AND CONFIGURED
+- **Purpose**: Seamless Cursor ↔ Browser integration for enhanced development
+  workflow
+- **Features**:
+  - Real-time console monitoring and error detection
+  - Automatic screenshot capture with Cursor integration
+  - DOM element selection and manipulation
+  - Lighthouse audits (SEO, Performance, Accessibility, Best Practices)
+  - Debug mode for bug analysis
+  - Network request monitoring
+- **Commands Available**:
+  - `mcp_browser-tools_takeScreenshot` - Capture screenshots
+  - `mcp_browser-tools_getConsoleErrors` - Monitor JavaScript errors
+  - `mcp_browser-tools_runSEOAudit` - SEO optimization analysis
+  - `mcp_browser-tools_runPerformanceAudit` - Performance optimization
+  - `mcp_browser-tools_runAccessibilityAudit` - Accessibility compliance
+  - `mcp_browser-tools_getSelectedElement` - DOM element analysis
+- **Usage**: Use natural language commands like "Take a screenshot" or "Run SEO
+  audit"
+
 ### 🔍 Autocomplete Search Bar
 
 - **Location**: `components/ui/autocomplete.tsx`
@@ -167,8 +189,9 @@ const form = useForm<FormData>({
 2. **CHECK** compatibility in `docs/references/dependencies.md`
 3. **USE** only documented components
 4. **IMPLEMENT** following established patterns
-5. **UPDATE** CHANGELOG.md with changes
-6. **TEST** against documentation
+5. **VALIDATE** with BrowserTools (screenshots, audits, console monitoring)
+6. **UPDATE** CHANGELOG.md with changes
+7. **TEST** against documentation
 
 ## 🚀 Useful Commands
 
@@ -206,6 +229,8 @@ npm run storybook        # Storybook
 8. **DON'T** delete `scripts/post-prisma-generate.js`
 9. **DON'T** modify build scripts without understanding
 10. **DON'T** set `PRISMA_GENERATE_DATAPROXY` environment variable
+11. **DON'T** deploy without BrowserTools validation (screenshots, audits)
+12. **DON'T** ignore console errors or performance issues
 
 ## 🚨 CRITICAL: CHANGELOG DATES - NEVER INVENT
 

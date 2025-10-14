@@ -512,6 +512,116 @@ CHANGELOG, causando perda de histórico real.
 
 ---
 
+## 🔧 **BROWSERTOOLS INTEGRATION - PROTOCOLO DE USO**
+
+> **⚠️ CRÍTICO**: Ferramenta MCP instalada e configurada. Use para maximizar
+> produtividade.
+
+### **🚀 COMANDOS DISPONÍVEIS**
+
+#### **📸 Visual & Screenshots**
+
+- `mcp_browser-tools_takeScreenshot` - Captura de tela automática
+- `mcp_browser-tools_getSelectedElement` - Análise de elemento selecionado
+
+#### **🔍 Auditorias & Análises**
+
+- `mcp_browser-tools_runSEOAudit` - Auditoria SEO completa
+- `mcp_browser-tools_runPerformanceAudit` - Análise de performance
+- `mcp_browser-tools_runAccessibilityAudit` - Auditoria de acessibilidade
+- `mcp_browser-tools_runBestPracticesAudit` - Boas práticas web
+
+#### **🐛 Debug & Monitoring**
+
+- `mcp_browser-tools_getConsoleLogs` - Logs do console
+- `mcp_browser-tools_getConsoleErrors` - Erros JavaScript
+- `mcp_browser-tools_getNetworkLogs` - Requisições de rede
+- `mcp_browser-tools_getNetworkErrors` - Erros de rede
+- `mcp_browser-tools_runDebuggerMode` - Modo debug avançado
+
+#### **📊 Modos Avançados**
+
+- `mcp_browser-tools_runAuditMode` - Análise completa da aplicação
+- `mcp_browser-tools_runNextJSAudit` - Auditoria específica Next.js
+
+### **⚡ WORKFLOW INTELIGENTE**
+
+#### **Durante Desenvolvimento:**
+
+```bash
+# 0. INICIAR DESENVOLVIMENTO COM BROWSERTOOLS (RECOMENDADO)
+pnpm dev:browsertools
+
+# 1. Implementar funcionalidade
+# 2. Capturar screenshot para documentar
+"Tire uma screenshot da nova funcionalidade"
+
+# 3. Verificar erros de console
+"Verifique se há erros no console"
+
+# 4. Testar responsividade
+"Redimensione para mobile e tire screenshot"
+
+# 5. Executar auditoria de performance
+"Execute auditoria de performance"
+```
+
+#### **Antes do Deploy:**
+
+```bash
+# 1. Auditoria completa
+"Execute modo de auditoria completo"
+
+# 2. Verificar SEO
+"Execute auditoria de SEO"
+
+# 3. Verificar acessibilidade
+"Execute auditoria de acessibilidade"
+
+# 4. Verificar boas práticas
+"Execute auditoria de boas práticas"
+```
+
+#### **Durante Debug:**
+
+```bash
+# 1. Analisar elemento problemático
+"Analise o elemento selecionado no DevTools"
+
+# 2. Verificar erros
+"Verifique logs de console e rede"
+
+# 3. Modo debug avançado
+"Entre no modo debugger para análise profunda"
+```
+
+### **📋 CHECKLIST OBRIGATÓRIO BROWSERTOOLS**
+
+Antes de qualquer commit:
+
+- [ ] **🚀 SERVIDOR INICIADO**: `pnpm dev:browsertools` (recomendado) ou
+      `npx @agentdeskai/browser-tools-server@1.2.0`
+- [ ] Screenshot capturado para documentar mudanças
+- [ ] Console errors verificados (deve estar limpo)
+- [ ] Performance audit executado (score > 90)
+- [ ] SEO audit executado (otimizações aplicadas)
+- [ ] Accessibility audit executado (WCAG 2.1 AA)
+- [ ] Responsive design testado via screenshots
+- [ ] Network errors verificados (sem erros 4xx/5xx)
+
+#### **⚠️ DEPENDÊNCIA CRÍTICA**
+
+**NUNCA tente usar BrowserTools sem o servidor rodando!** O comando é
+obrigatório:
+
+```bash
+npx @agentdeskai/browser-tools-server@1.2.0
+```
+
+- **Porta**: 3025 (deve estar disponível)
+- **Status**: Deve ficar rodando durante toda a sessão
+- **Sem servidor = Sem funcionalidade**
+
 ## 🚨 **PROTOCOLO ANTI-ALUCINAÇÃO (OBRIGATÓRIO)**
 
 > **⚠️ LEIA PRIMEIRO**: Antes de implementar QUALQUER funcionalidade, siga este
@@ -679,6 +789,8 @@ primeiro:**
 6. **✅ SEMPRE** teste responsividade
 7. **✅ SEMPRE** siga padrões de nomenclatura
 8. **✅ SEMPRE** implemente loading/error states
+9. **✅ SEMPRE** use BrowserTools para validação visual e funcional
+10. **✅ SEMPRE** execute auditorias antes de deploy
 
 ---
 
@@ -698,6 +810,72 @@ primeiro:**
 ---
 
 ## 🆕 **RECURSOS IMPLEMENTADOS (JAN 2025)**
+
+### **🔧 AgentDesk BrowserTools Integration (NOVO - JAN 2025)**
+
+> **⚠️ CRÍTICO**: Ferramenta MCP instalada para integração Cursor ↔ Browser
+
+#### **🚀 FUNCIONALIDADES DISPONÍVEIS**
+
+- **📊 Monitoramento em Tempo Real**: Console logs, erros, network requests
+- **📸 Screenshot Automático**: Captura de tela com colagem direta no Cursor
+- **🎯 Element Selection**: Interação com elementos DOM selecionados no DevTools
+- **🔍 Auditorias Lighthouse**: SEO, Performance, Accessibility, Best Practices
+- **🐛 Debug Mode**: Análise automática de bugs e problemas
+- **📈 Audit Mode**: Análise abrangente da aplicação
+
+#### **⚡ COMANDOS INTELIGENTES PARA PRODUTIVIDADE**
+
+```bash
+# Debug & Troubleshooting
+"Este elemento não está funcionando... entre no modo de depuração!"
+"Pode verificar os logs do console e da rede para ver o que deu errado?"
+"Algo não parece certo na interface. Pode tirar uma captura de tela?"
+
+# SEO & Performance
+"Preciso melhorar o SEO e o desempenho... entre no modo de auditoria."
+"Execute uma auditoria completa de SEO e performance"
+"Verifique a acessibilidade da página atual"
+
+# Element Interaction
+"Pode editar o elemento atualmente selecionado para fazer x, y e z?"
+"Modifique o elemento selecionado para ter cor laranja e padding 16px"
+"Adicione uma animação de hover no elemento selecionado"
+
+# Real-time Monitoring
+"Monitore os logs de console em tempo real"
+"Verifique se há erros de rede ou JavaScript"
+"Analise as requisições XHR da página"
+```
+
+#### **🛠️ INTEGRAÇÃO COM FLUXO DE DESENVOLVIMENTO**
+
+1. **Durante Desenvolvimento**:
+   - Use `mcp_browser-tools_takeScreenshot` para documentar mudanças visuais
+   - Monitore `mcp_browser-tools_getConsoleErrors` para detectar bugs
+     precocemente
+   - Use `mcp_browser-tools_runPerformanceAudit` para otimizar performance
+
+2. **Durante Testing**:
+   - Use `mcp_browser-tools_runSEOAudit` para validar SEO
+   - Use `mcp_browser-tools_runAccessibilityAudit` para acessibilidade
+   - Use `mcp_browser-tools_runBestPracticesAudit` para qualidade
+
+3. **Durante Debugging**:
+   - Use `mcp_browser-tools_getSelectedElement` para analisar elementos
+   - Use `mcp_browser-tools_runDebuggerMode` para análise profunda
+   - Monitore `mcp_browser-tools_getNetworkErrors` para problemas de rede
+
+#### **📋 CHECKLIST DE USO OBRIGATÓRIO**
+
+Antes de implementar qualquer funcionalidade frontend:
+
+- [ ] Use BrowserTools para validar responsividade
+- [ ] Execute auditoria de acessibilidade
+- [ ] Verifique performance com Lighthouse
+- [ ] Teste em diferentes dispositivos via screenshots
+- [ ] Monitore console para erros JavaScript
+- [ ] Valide SEO com auditoria específica
 
 ### **🎯 Sistema Completo de SEO e Conversão (NOVO - JAN 2025)**
 

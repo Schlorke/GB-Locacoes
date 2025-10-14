@@ -6,6 +6,106 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-01-22] - Correção Dropdown Autocomplete + Scrollbar Moderno
+
+### Fixed 🐛
+
+- **Dropdown do autocomplete** agora usa React Portal para aparecer sobre outras
+  seções
+- **Problema de overflow** resolvido - dropdown não é mais limitado pela seção
+  de baixo
+- **Posicionamento dinâmico** com cálculo automático de coordenadas
+- **Z-index otimizado** (99999) para garantir que dropdown apareça sobre todo
+  conteúdo
+- **Responsividade aprimorada** com recálculo de posição em resize da janela
+- **Contexto de empilhamento** corrigido usando portal para renderização no body
+
+### Added ✨
+
+- **React Portal** implementado para dropdown do autocomplete
+- **Cálculo dinâmico de posição** baseado no getBoundingClientRect do input
+- **Listeners de eventos** para resize e scroll para manter posicionamento
+  correto
+- **Estado de montagem** para evitar problemas de hidratação SSR
+- **Altura máxima aumentada** para dropdown (400px) permitindo mais resultados
+
+### Fixed 🐛
+
+- **Posicionamento do dropdown** corrigido - agora aparece exatamente abaixo do
+  search bar
+- **Cálculo de coordenadas** simplificado removendo window.scrollY/scrollX
+  desnecessários
+- **Atualização de posição** em tempo real durante scroll da página
+- **Funcionalidade de fechar dropdown** no scroll restaurada para melhor UX
+
+## [2025-01-22] - Scrollbar Moderno com Identidade Visual
+
+### Added ✨
+
+- **Scrollbar moderno** para área pública com identidade visual GB Locações
+- **Setas de navegação** superior e inferior no scrollbar principal
+- **Gradientes laranja vibrante** (#fb923c → #ea580c → #dc2626)
+- **Animações suaves** com transições cubic-bezier profissionais
+- **Efeitos hover** com transform scale e sombras dinâmicas
+- **Estados ativos** com feedback visual responsivo
+- **Compatibilidade Firefox** com scrollbar-color moderno
+- **Design responsivo** com largura otimizada (14px)
+- **Sombras inset** para profundidade visual
+- **Bordas arredondadas** consistentes (10px radius)
+
+### Changed 🔄
+
+- **Scrollbar principal** agora reflete a identidade visual da marca
+- **Cores atualizadas** de cinza discreto para laranja vibrante
+- **Largura aumentada** de 8px para 14px para melhor usabilidade
+- **Track com gradiente** sutil para profundidade visual
+- **Thumb com gradiente** dinâmico e efeitos de hover
+- **Setas visuais** inspiradas no componente scroll-area.tsx
+
+### Technical Details 🔧
+
+- **WebKit Support**: Chrome, Safari, Edge com pseudo-elementos completos
+- **Firefox Support**: scrollbar-width: thin com scrollbar-color
+- **Performance**: Transições otimizadas com cubic-bezier(0.4, 0, 0.2, 1)
+- **Accessibility**: Contraste adequado e feedback visual claro
+- **Scope**: Aplicado apenas ao scrollbar principal, preservando modais/dialogs
+
+## [2025-01-22] - Integração AgentDesk BrowserTools
+
+### Added ✨
+
+- **Integração completa AgentDesk BrowserTools** para Cursor ↔ Browser
+- **Comandos MCP disponíveis** para monitoramento em tempo real
+- **Sistema de auditorias Lighthouse** integrado (SEO, Performance,
+  Accessibility)
+- **Captura de screenshots automática** com colagem direta no Cursor
+- **Análise de elementos DOM** selecionados no DevTools
+- **Monitoramento de console** e erros JavaScript em tempo real
+- **Análise de requisições de rede** e detecção de erros
+- **Modos Debug e Audit** para análise profunda da aplicação
+- **Documentação completa** em `AGENTS.md` e `.cursor/rules/gb-locacoes.mdc`
+- **Workflow inteligente** com comandos em linguagem natural
+- **Checklist obrigatório** de validação com BrowserTools
+- **Comandos integrados** `pnpm dev:browsertools` e `pnpm dev:with-browsertools`
+- **Concurrently** para execução paralela de servidores
+- **Interface colorida** e organizada para logs separados
+
+### Changed 🔄
+
+- **Fluxo de desenvolvimento** agora inclui validação visual automática
+- **Processo de deploy** inclui auditorias obrigatórias
+- **Documentação de agentes** atualizada com protocolos BrowserTools
+- **Cursor Rules** expandidas com comandos e workflows
+- **GitHub Copilot Instructions** atualizadas com integração
+- **Comandos de desenvolvimento** agora incluem BrowserTools automaticamente
+- **Workflow simplificado** com um único comando para iniciar tudo
+
+### Security 🔐
+
+- **Validação automática de acessibilidade** WCAG 2.1 AA
+- **Monitoramento de performance** em tempo real
+- **Detecção proativa de erros** JavaScript e rede
+
 ## [2025-01-22] - Implementação Completa de Autenticação Social
 
 ### Added ✨

@@ -378,6 +378,60 @@ const MyForm = () => {
   - 100% acessível com ARIA labels
 - **Documentação Completa**: `docs/features/autocomplete-search.md`
 
+### **🔧 AgentDesk BrowserTools Integration (NOVO - JAN 2025)**
+
+> **⚠️ CRÍTICO**: Ferramenta MCP instalada para integração Cursor ↔ Browser
+
+#### **🚀 FUNCIONALIDADES DISPONÍVEIS**
+
+- **📊 Monitoramento em Tempo Real**: Console logs, erros, network requests
+- **📸 Screenshot Automático**: Captura de tela com colagem direta no Cursor
+- **🎯 Element Selection**: Interação com elementos DOM selecionados no DevTools
+- **🔍 Auditorias Lighthouse**: SEO, Performance, Accessibility, Best Practices
+- **🐛 Debug Mode**: Análise automática de bugs e problemas
+- **📈 Audit Mode**: Análise abrangente da aplicação
+
+#### **⚡ COMANDOS INTELIGENTES PARA PRODUTIVIDADE**
+
+```bash
+# Debug & Troubleshooting
+"Este elemento não está funcionando... entre no modo de depuração!"
+"Pode verificar os logs do console e da rede para ver o que deu errado?"
+"Algo não parece certo na interface. Pode tirar uma captura de tela?"
+
+# SEO & Performance
+"Preciso melhorar o SEO e o desempenho... entre no modo de auditoria."
+"Execute uma auditoria completa de SEO e performance"
+"Verifique a acessibilidade da página atual"
+
+# Element Interaction
+"Pode editar o elemento atualmente selecionado para fazer x, y e z?"
+"Modifique o elemento selecionado para ter cor laranja e padding 16px"
+"Adicione uma animação de hover no elemento selecionado"
+
+# Real-time Monitoring
+"Monitore os logs de console em tempo real"
+"Verifique se há erros de rede ou JavaScript"
+"Analise as requisições XHR da página"
+```
+
+#### **🛠️ INTEGRAÇÃO COM FLUXO DE DESENVOLVIMENTO**
+
+1. **Durante Desenvolvimento**:
+   - Use `mcp_browser-tools_takeScreenshot` para documentar mudanças visuais
+   - Monitore `mcp_browser-tools_getConsoleErrors` para detectar bugs precocemente
+   - Use `mcp_browser-tools_runPerformanceAudit` para otimizar performance
+
+2. **Durante Testing**:
+   - Use `mcp_browser-tools_runSEOAudit` para validar SEO
+   - Use `mcp_browser-tools_runAccessibilityAudit` para acessibilidade
+   - Use `mcp_browser-tools_runBestPracticesAudit` para qualidade
+
+3. **Durante Debugging**:
+   - Use `mcp_browser-tools_getSelectedElement` para analisar elementos
+   - Use `mcp_browser-tools_runDebuggerMode` para análise profunda
+   - Monitore `mcp_browser-tools_getNetworkErrors` para problemas de rede
+
 ### **Performance**
 
 - **Next.js Image**: Otimização de imagens
@@ -410,7 +464,7 @@ const MyForm = () => {
 
 #### **Containers Principais**
 - **Mobile**: `px-4` (16px lateral)
-- **Tablet**: `sm:px-6` (24px lateral)  
+- **Tablet**: `sm:px-6` (24px lateral)
 - **Desktop**: `lg:px-8` (32px lateral)
 - **Padrão Completo**: `px-4 sm:px-6 lg:px-8`
 
@@ -550,7 +604,7 @@ Antes de implementar QUALQUER componente novo, verifique:
 
 #### **Responsividade**
 - [ ] Testado em mobile (320px-767px)
-- [ ] Testado em tablet (768px-1023px)  
+- [ ] Testado em tablet (768px-1023px)
 - [ ] Testado em desktop (1024px+)
 - [ ] Usa breakpoints consistentes com o projeto
 
@@ -740,6 +794,29 @@ Antes de submeter qualquer código, verifique:
 - [ ] Acessível (ARIA, keyboard, contrast)
 - [ ] Animações suaves
 - [ ] Estados visuais (hover, focus, active)
+
+### **BrowserTools Validation**
+
+- [ ] **🚀 SERVIDOR INICIADO**: `pnpm dev:browsertools` (recomendado) ou `npx @agentdeskai/browser-tools-server@1.2.0`
+- [ ] **Screenshot capturado** para documentar mudanças visuais
+- [ ] **Console errors verificados** (sem erros JavaScript)
+- [ ] **Performance audit executado** (Lighthouse score > 90)
+- [ ] **SEO audit executado** (otimizações aplicadas)
+- [ ] **Accessibility audit executado** (WCAG 2.1 AA compliance)
+- [ ] **Network requests monitorados** (sem erros de rede)
+- [ ] **Responsive design testado** via screenshots em diferentes resoluções
+
+#### **⚠️ DEPENDÊNCIA CRÍTICA BROWSERTOOLS**
+
+**BrowserTools NÃO FUNCIONA sem o servidor rodando!** Comando obrigatório:
+
+```bash
+npx @agentdeskai/browser-tools-server@1.2.0
+```
+
+- **Porta**: 3025 (deve estar disponível)
+- **Status**: Deve ficar rodando durante toda a sessão de desenvolvimento
+- **Sem servidor = Sem funcionalidade**
 
 ### **Código**
 
