@@ -1067,25 +1067,22 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
 }
 
 /* =============================== */
-/* 16. CORREÇÃO DE SCROLL - PÁGINA SOBRE */
+/* 16. SCROLL CONFIGURATION - CLEAN SOLUTION */
 /* =============================== */
 
-/* REMOVER SCROLL SECUNDÁRIO - Deixar apenas o scroll principal da página */
+/* Solução limpa: apenas um scroll principal */
 .sobre-page {
-  /* NÃO criar scroll secundário */
-  overflow: visible !important;
-  position: relative !important;
-  height: auto !important;
-  min-height: 100vh !important;
+  overflow: visible;
+  position: relative;
+  height: auto;
 }
 
-/* Corrigir problemas de scroll em dispositivos móveis */
+/* Mobile: manter a mesma configuração */
 @media (max-width: 768px) {
   .sobre-page {
-    /* NÃO criar scroll secundário */
-    overflow: visible !important;
-    position: relative !important;
-    height: auto !important;
+    overflow: visible;
+    position: relative;
+    height: auto;
   }
 }
 
@@ -1107,95 +1104,36 @@ header {
   overflow: hidden !important;
 }
 
-/* Garantir que o body tenha scroll funcional */
-body {
-  overflow-y: auto !important;
+/* Configuração simples e limpa do scroll - APENAS UM SCROLL */
+html {
   overflow-x: hidden !important;
-  /* -webkit-overflow-scrolling: touch !important; */
-  position: relative !important;
-  height: auto !important;
-}
-
-/* Corrigir problemas de scroll em elementos com min-h-screen */
-.min-h-screen {
-  min-height: 100vh !important;
-  /* NÃO forçar overflow - deixar o scroll principal funcionar */
-  position: relative !important;
-  height: auto !important;
-}
-
-/* CORREÇÃO CRÍTICA: NÃO criar scroll secundário na página sobre */
-.sobre-page * {
-  /* NÃO forçar overflow - deixar o scroll principal funcionar */
-  pointer-events: auto !important;
-}
-
-.sobre-page .min-h-screen {
-  /* NÃO criar scroll secundário */
-  overflow: visible !important;
-  position: relative !important;
-  height: auto !important;
-}
-
-/* NÃO forçar scroll secundário em elementos da página sobre */
-.sobre-page .material-card,
-.sobre-page .benefit-card,
-.sobre-page .cta-section {
-  /* NÃO forçar overflow - deixar o scroll principal funcionar */
-  pointer-events: auto !important;
-  position: relative !important;
-}
-
-/* Garantir que apenas o body tenha scroll */
-html,
-body {
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-/* NÃO permitir scroll em elementos internos (escopado apenas para a página Sobre) */
-.sobre-page div,
-.sobre-page section,
-.sobre-page article {
-  overflow: visible !important;
-}
-
-/* CORREÇÃO CRÍTICA: Escopado para a página Sobre para evitar quebrar modais/dialogs */
-/* Obs.: já existe a regra ".sobre-page .min-h-screen" acima; removemos o escopo global */
-
-/* NÃO permitir scroll em elementos específicos */
-.material-card,
-.benefit-card,
-.cta-section {
-  overflow: hidden !important;
-  position: relative !important;
-}
-
-/* EXCEÇÕES da página Sobre (somente nesse contexto) */
-.sobre-page .material-card.relative.flex.items-start {
-  overflow: visible !important;
-}
-
-.sobre-page .hero-title,
-.sobre-page .hero-image,
-.sobre-page .section-title,
-.sobre-page .section-subtitle {
-  overflow: visible !important;
-  position: relative !important;
-}
-
-/* CORREÇÃO FINAL: Garantir que o scroll principal funcione perfeitamente */
-body {
   overflow-y: auto !important;
-  overflow-x: hidden !important;
-  -webkit-overflow-scrolling: touch !important;
-  -webkit-scroll-behavior: smooth !important;
   scroll-behavior: smooth !important;
 }
 
-/* NÃO permitir scroll em elementos aninhados (apenas na página Sobre) */
-.sobre-page div > div {
+body {
   overflow: visible !important;
+  scroll-behavior: smooth !important;
+}
+
+/* Elementos com altura mínima não devem criar scroll interno */
+.min-h-screen {
+  min-height: 100vh !important;
+  overflow: visible !important;
+}
+
+/* Correção específica para o body com classe min-h-screen */
+body.min-h-screen {
+  overflow: visible !important;
+  height: auto !important;
+}
+
+/* Cards devem ter overflow controlado */
+.material-card,
+.benefit-card,
+.cta-section {
+  overflow: hidden;
+  position: relative;
 }
 
 /* =============================== */

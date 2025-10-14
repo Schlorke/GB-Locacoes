@@ -6,7 +6,54 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [2025-01-22] - Correção Dropdown Autocomplete + Scrollbar Moderno
+## [2025-10-14] - Atualização de Dependências e Correção de Schemas
+
+### Fixed 🐛
+
+- **Schemas de Validação Prisma**: Corrigidos problemas de sintaxe em arquivos
+  de validação
+  - `findFirstOrThrowSetting.schema.ts` - removido parâmetro `include`
+    malformado
+  - `findFirstOrThrowVerificationToken.schema.ts` - removido parâmetro `include`
+    malformado
+  - `findFirstSetting.schema.ts` - removido parâmetro `include` malformado
+  - `findFirstVerificationToken.schema.ts` - removido parâmetro `include`
+    malformado
+  - `findManySetting.schema.ts` - removido parâmetro `include` malformado
+  - `findManyVerificationToken.schema.ts` - removido parâmetro `include`
+    malformado
+- **Comando pnpm format** agora funciona sem erros de sintaxe
+
+### Changed 🔄
+
+- **Next.js**: Atualizado de 15.5.4 para 15.5.5
+- **@next/bundle-analyzer**: Atualizado de 15.5.4 para 15.5.5
+- **@next/eslint-plugin-next**: Atualizado de 15.5.4 para 15.5.5
+- **eslint-config-next**: Atualizado de 15.5.4 para 15.5.5
+- **@typescript-eslint/eslint-plugin**: Atualizado de 8.46.0 para 8.46.1
+- **@typescript-eslint/parser**: Atualizado de 8.46.0 para 8.46.1
+- **typescript-eslint**: Atualizado de 8.46.0 para 8.46.1
+- **@types/react-dom**: Atualizado de 19.2.1 para 19.2.2
+- **@sveltejs/kit**: Atualizado de 2.46.4 para 2.46.5
+- **svelte**: Atualizado de 5.39.11 para 5.39.12
+- **prisma-zod-generator**: Atualizado de 1.27.6 para 1.28.1
+- **markdownlint**: Atualizado de 0.38.0 para 0.39.0
+
+### Security 🔐
+
+- **Dependências**: Mantidas atualizadas com as versões mais recentes para
+  segurança
+- **Tailwind CSS**: Mantido em 3.4.17 (versão estável recomendada)
+
+### Notes 📝
+
+- **Build Status**: ✅ Sucesso (compilado em 22.4s)
+- **Tests Status**: ✅ 30/30 testes passando
+- **Lint Status**: ✅ Zero problemas
+- **Format Status**: ✅ Todos os arquivos formatados corretamente
+- **Compatibilidade**: ✅ 100% mantida após atualizações
+
+## [2025-01-22] - Correção Dropdown Autocomplete + Scroll Duplo + Scrollbar Moderno
 
 ### Fixed 🐛
 
@@ -19,6 +66,9 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   conteúdo
 - **Responsividade aprimorada** com recálculo de posição em resize da janela
 - **Contexto de empilhamento** corrigido usando portal para renderização no body
+- **Scroll duplo na página Sobre** eliminado - agora apenas um scroll principal
+- **Conflitos CSS de overflow** resolvidos entre HTML e BODY
+- **Sintaxe inválida em schemas Prisma** corrigida (vírgulas órfãs removidas)
 
 ### Added ✨
 
