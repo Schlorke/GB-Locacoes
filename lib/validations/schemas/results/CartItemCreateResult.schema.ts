@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 export const CartItemCreateResultSchema = z.object({
   id: z.string(),
   cartId: z.string(),
@@ -10,5 +10,5 @@ export const CartItemCreateResultSchema = z.object({
   days: z.number().int(),
   pricePerDay: z.number(),
   finalPrice: z.number().optional(),
-  createdAt: z.date()
-});
+  createdAt: z.date(),
+})

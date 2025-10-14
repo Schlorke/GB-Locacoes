@@ -183,7 +183,7 @@ export const DEFAULT_LOCAL_BUSINESS: LocalBusinessData = {
     'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
   url: 'https://locacoesgb.com.br',
   telephone: '+55 51 9999-9999', // Substitua pelo telefone real
-  email: 'contato@gblocacoes.com.br', // Substitua pelo email real
+  email: 'contato@locacoesgb.com.br',
   address: {
     streetAddress: 'Rua dos Equipamentos, 123', // Substitua pelo endereço real
     addressLocality: 'Porto Alegre',

@@ -47,8 +47,8 @@ de registro e melhorando a experiência do usuário.
 3. Preencha as informações obrigatórias:
    ```
    App name: GB Locações
-   User support email: seu@email.com
-   Developer contact: seu@email.com
+   User support email: contato@locacoesgb.com.br
+   Developer contact: contato@locacoesgb.com.br
    ```
 4. Adicione os domínios autorizados:
    ```
@@ -97,7 +97,7 @@ Após criar, você receberá:
 4. Preencha as informações:
    ```
    App name: GB Locações
-   App contact email: seu@email.com
+   App contact email: contato@locacoesgb.com.br
    ```
 
 ### 2. **Configurar Facebook Login**

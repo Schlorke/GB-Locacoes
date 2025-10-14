@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 
 // prettier-ignore
 export const VerificationTokenResultSchema = z.object({
@@ -8,4 +8,6 @@ export const VerificationTokenResultSchema = z.object({
     expires: z.date()
 }).strict();
 
-export type VerificationTokenResultType = z.infer<typeof VerificationTokenResultSchema>;
+export type VerificationTokenResultType = z.infer<
+  typeof VerificationTokenResultSchema
+>

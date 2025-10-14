@@ -309,7 +309,7 @@ export default function SettingsPage() {
                         onChange={(e) =>
                           updateField('contactEmail', e.target.value)
                         }
-                        placeholder="contato@gblocacoes.com.br"
+                        placeholder="contato@locacoesgb.com.br"
                         className="mt-1 focus:border-blue-500"
                       />
                     </div>

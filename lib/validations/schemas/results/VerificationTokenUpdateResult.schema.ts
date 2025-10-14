@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
-export const VerificationTokenUpdateResultSchema = z.nullable(z.object({
-  identifier: z.string(),
-  token: z.string(),
-  expires: z.date()
-}));
+import * as z from 'zod'
+export const VerificationTokenUpdateResultSchema = z.nullable(
+  z.object({
+    identifier: z.string(),
+    token: z.string(),
+    expires: z.date(),
+  })
+)

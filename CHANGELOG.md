@@ -6,6 +6,41 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-14] - Padronização de Email Oficial
+
+### Changed 🔄
+
+- **Email Oficial**: Padronizado email de contato para
+  `contato@locacoesgb.com.br` em todo o projeto
+  - Atualizado `next-openapi-gen.config.js` - configuração OpenAPI
+  - Atualizado `components/footer.tsx` - rodapé do site
+  - Atualizado `components/contact-section.tsx` - seção de contato
+  - Atualizado `components/structured-data.tsx` - dados estruturados Schema.org
+  - Atualizado `lib/openapi-generator.ts` - gerador de documentação API
+  - Atualizado `README.md` e `CONTRIBUTING.md` - documentação do projeto
+  - Atualizado `docs/README.md` - documentação interna
+
+- **Placeholders de Formulário**: Substituídos `seu@email.com` por
+  `contato@locacoesgb.com.br`
+  - Formulários de contato, orçamento, login, cadastro e recuperação de senha
+  - Stories do Storybook para componente Input
+  - Páginas administrativas e formulários
+
+- **Documentação**: Atualizados emails de exemplo na documentação OAuth
+  - `docs/guides/oauth-social-login.md` - configuração Google e Facebook
+  - `docs/guides/oauth-setup-example.md` - usuários de teste
+  - `docs/architecture/api.md` - exemplos de JWT payload
+
+### Technical Details 🔧
+
+- **Emails Mantidos**: Preservados emails específicos funcionais
+  - `admin@gblocacoes.com.br` - conta administrativa específica
+  - `noreply@gblocacoes.com.br` - emails automáticos do sistema
+- **Abrangência**: 18 arquivos atualizados em componentes, páginas, documentação
+  e configurações
+- **Compatibilidade**: Todas as alterações são backwards-compatible
+- **SEO**: Dados estruturados Schema.org atualizados com email oficial
+
 ## [2025-10-14] - Atualização de Dependências e Correção de Schemas
 
 ### Fixed 🐛

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 
 // prettier-ignore
 export const CategoryModelSchema = z.object({
@@ -16,4 +16,4 @@ export const CategoryModelSchema = z.object({
     equipments: z.array(z.unknown())
 }).strict();
 
-export type CategoryPureType = z.infer<typeof CategoryModelSchema>;
+export type CategoryPureType = z.infer<typeof CategoryModelSchema>

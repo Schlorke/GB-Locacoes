@@ -1,6 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 
-export const RentalItemsScalarFieldEnumSchema = z.enum(['id', 'rentalid', 'equipmentid', 'quantity', 'priceperday', 'totaldays', 'totalprice', 'createdat', 'updatedat'])
+export const RentalItemsScalarFieldEnumSchema = z.enum([
+  'id',
+  'rentalid',
+  'equipmentid',
+  'quantity',
+  'priceperday',
+  'totaldays',
+  'totalprice',
+  'createdat',
+  'updatedat',
+])
 
-export type RentalItemsScalarFieldEnum = z.infer<typeof RentalItemsScalarFieldEnumSchema>;
+export type RentalItemsScalarFieldEnum = z.infer<
+  typeof RentalItemsScalarFieldEnumSchema
+>

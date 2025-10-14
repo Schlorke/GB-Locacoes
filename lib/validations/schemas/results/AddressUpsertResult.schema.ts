@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 export const AddressUpsertResultSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -13,5 +13,5 @@ export const AddressUpsertResultSchema = z.object({
   zipCode: z.string(),
   isPrimary: z.boolean(),
   createdAt: z.date(),
-  updatedAt: z.date()
-});
+  updatedAt: z.date(),
+})

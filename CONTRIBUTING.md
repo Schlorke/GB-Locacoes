@@ -665,7 +665,7 @@ git push origin feature/minha-funcionalidade
 - **Issues**: [GitHub Issues](https://github.com/GBLocacoes/GB-Locacoes/issues)
 - **Discussions**:
   [GitHub Discussions](https://github.com/GBLocacoes/GB-Locacoes/discussions)
-- **Email**: contato@gblocacoes.com.br
+- **Email**: contato@locacoesgb.com.br
 
 ### 🙏 Agradecimentos
 

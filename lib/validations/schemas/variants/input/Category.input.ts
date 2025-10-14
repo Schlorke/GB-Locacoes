@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 
 // prettier-ignore
 export const CategoryInputSchema = z.object({
@@ -16,4 +16,4 @@ export const CategoryInputSchema = z.object({
     equipments: z.array(z.unknown())
 }).strict();
 
-export type CategoryInputType = z.infer<typeof CategoryInputSchema>;
+export type CategoryInputType = z.infer<typeof CategoryInputSchema>

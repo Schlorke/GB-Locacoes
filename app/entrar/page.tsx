@@ -13,9 +13,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { AlertTriangle, Eye, EyeOff } from 'lucide-react'
 import { getSession, signIn } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState, type FormEvent, Suspense } from 'react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { Suspense, useEffect, useState, type FormEvent } from 'react'
 
 function LoginForm() {
   const router = useRouter()
@@ -171,7 +171,7 @@ function LoginForm() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="seu@email.com"
+                      placeholder="contato@locacoesgb.com.br"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 
 // prettier-ignore
 export const QuoteItemResultSchema = z.object({
@@ -16,4 +16,4 @@ export const QuoteItemResultSchema = z.object({
     quote: z.unknown()
 }).strict();
 
-export type QuoteItemResultType = z.infer<typeof QuoteItemResultSchema>;
+export type QuoteItemResultType = z.infer<typeof QuoteItemResultSchema>

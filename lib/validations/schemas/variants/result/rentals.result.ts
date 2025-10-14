@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 
 // prettier-ignore
 export const rentalsResultSchema = z.object({
@@ -15,4 +15,4 @@ export const rentalsResultSchema = z.object({
     users: z.unknown()
 }).strict();
 
-export type rentalsResultType = z.infer<typeof rentalsResultSchema>;
+export type rentalsResultType = z.infer<typeof rentalsResultSchema>

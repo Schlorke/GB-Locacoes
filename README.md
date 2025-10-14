@@ -677,7 +677,7 @@ Este projeto está licenciado sob a **MIT License** - veja o arquivo
 **Equipe GB Locações**
 
 - **Website**: [locacoesgb.com.br](https://locacoesgb.com.br)
-- **Email**: contato@gblocacoes.com.br
+- **Email**: contato@locacoesgb.com.br
 - **GitHub**: [@GBLocacoes](https://github.com/GBLocacoes)
 
 ## 🙏 Agradecimentos

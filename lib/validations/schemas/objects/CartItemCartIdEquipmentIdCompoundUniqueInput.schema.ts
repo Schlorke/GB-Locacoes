@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
-import type { Prisma } from '@prisma/client';
+import * as z from 'zod'
+import type { Prisma } from '@prisma/client'
 
-
-const makeSchema = () => z.object({
-  cartId: z.string(),
-  equipmentId: z.string()
-}).strict();
-export const CartItemCartIdEquipmentIdCompoundUniqueInputObjectSchema: z.ZodType<Prisma.CartItemCartIdEquipmentIdCompoundUniqueInput> = makeSchema() as unknown as z.ZodType<Prisma.CartItemCartIdEquipmentIdCompoundUniqueInput>;
-export const CartItemCartIdEquipmentIdCompoundUniqueInputObjectZodSchema = makeSchema();
+const makeSchema = () =>
+  z
+    .object({
+      cartId: z.string(),
+      equipmentId: z.string(),
+    })
+    .strict()
+export const CartItemCartIdEquipmentIdCompoundUniqueInputObjectSchema: z.ZodType<Prisma.CartItemCartIdEquipmentIdCompoundUniqueInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.CartItemCartIdEquipmentIdCompoundUniqueInput>
+export const CartItemCartIdEquipmentIdCompoundUniqueInputObjectZodSchema =
+  makeSchema()

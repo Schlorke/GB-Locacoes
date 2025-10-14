@@ -202,10 +202,10 @@ export default function Footer() {
                 <Mail className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
                   <Link
-                    href="mailto:contato@gblocacoes.com.br"
+                    href="mailto:contato@locacoesgb.com.br"
                     className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
-                    contato@gblocacoes.com.br
+                    contato@locacoesgb.com.br
                   </Link>
                   <p className="text-sm text-gray-400">
                     Resposta rápida garantida

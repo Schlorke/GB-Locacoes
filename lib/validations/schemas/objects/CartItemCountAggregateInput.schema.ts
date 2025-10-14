@@ -1,18 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
-import type { Prisma } from '@prisma/client';
+import * as z from 'zod'
+import type { Prisma } from '@prisma/client'
 
-
-const makeSchema = () => z.object({
-  id: z.literal(true).optional(),
-  cartId: z.literal(true).optional(),
-  equipmentId: z.literal(true).optional(),
-  quantity: z.literal(true).optional(),
-  days: z.literal(true).optional(),
-  pricePerDay: z.literal(true).optional(),
-  finalPrice: z.literal(true).optional(),
-  createdAt: z.literal(true).optional(),
-  _all: z.literal(true).optional()
-}).strict();
-export const CartItemCountAggregateInputObjectSchema: z.ZodType<Prisma.CartItemCountAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.CartItemCountAggregateInputType>;
-export const CartItemCountAggregateInputObjectZodSchema = makeSchema();
+const makeSchema = () =>
+  z
+    .object({
+      id: z.literal(true).optional(),
+      cartId: z.literal(true).optional(),
+      equipmentId: z.literal(true).optional(),
+      quantity: z.literal(true).optional(),
+      days: z.literal(true).optional(),
+      pricePerDay: z.literal(true).optional(),
+      finalPrice: z.literal(true).optional(),
+      createdAt: z.literal(true).optional(),
+      _all: z.literal(true).optional(),
+    })
+    .strict()
+export const CartItemCountAggregateInputObjectSchema: z.ZodType<Prisma.CartItemCountAggregateInputType> =
+  makeSchema() as unknown as z.ZodType<Prisma.CartItemCountAggregateInputType>
+export const CartItemCountAggregateInputObjectZodSchema = makeSchema()

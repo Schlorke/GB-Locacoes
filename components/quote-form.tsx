@@ -1,30 +1,30 @@
 'use client'
 
-import { useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { motion, AnimatePresence } from 'framer-motion'
 
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from '@/hooks/use-toast'
 import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
 
 import {
   ArrowLeft,
   ArrowRight,
-  Check,
-  Phone,
-  Mail,
   Building,
-  MessageSquare,
   Calendar,
+  Check,
+  Mail,
+  MessageSquare,
   Package,
+  Phone,
 } from 'lucide-react'
 
 // Schema de validação otimizado
@@ -404,7 +404,7 @@ export default function QuoteForm({
                         {...field}
                         id="customerEmail"
                         type="email"
-                        placeholder="seu@email.com"
+                        placeholder="contato@locacoesgb.com.br"
                         className={errors.customerEmail ? 'border-red-500' : ''}
                       />
                     )}

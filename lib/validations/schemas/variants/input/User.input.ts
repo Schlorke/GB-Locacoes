@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 
-import { RoleSchema } from '../../enums/Role.schema';
+import { RoleSchema } from '../../enums/Role.schema'
 // prettier-ignore
 export const UserInputSchema = z.object({
     id: z.string(),
@@ -24,4 +24,4 @@ export const UserInputSchema = z.object({
     cart: z.unknown().optional().nullable()
 }).strict();
 
-export type UserInputType = z.infer<typeof UserInputSchema>;
+export type UserInputType = z.infer<typeof UserInputSchema>

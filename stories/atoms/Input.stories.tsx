@@ -36,7 +36,7 @@ export const Default: StoryObj<typeof Input> = {
 export const Email: StoryObj<typeof Input> = {
   args: {
     type: 'email',
-    placeholder: 'seu@email.com',
+    placeholder: 'contato@locacoesgb.com.br',
   },
 }
 

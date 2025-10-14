@@ -1,11 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
-import type { Prisma } from '@prisma/client';
+import * as z from 'zod'
+import type { Prisma } from '@prisma/client'
 import { UserWhereInputObjectSchema as UserWhereInputObjectSchema } from './UserWhereInput.schema'
 
-const makeSchema = () => z.object({
-  is: z.lazy(() => UserWhereInputObjectSchema).optional().nullable(),
-  isNot: z.lazy(() => UserWhereInputObjectSchema).optional().nullable()
-}).strict();
-export const UserNullableScalarRelationFilterObjectSchema: z.ZodType<Prisma.UserNullableScalarRelationFilter> = makeSchema() as unknown as z.ZodType<Prisma.UserNullableScalarRelationFilter>;
-export const UserNullableScalarRelationFilterObjectZodSchema = makeSchema();
+const makeSchema = () =>
+  z
+    .object({
+      is: z
+        .lazy(() => UserWhereInputObjectSchema)
+        .optional()
+        .nullable(),
+      isNot: z
+        .lazy(() => UserWhereInputObjectSchema)
+        .optional()
+        .nullable(),
+    })
+    .strict()
+export const UserNullableScalarRelationFilterObjectSchema: z.ZodType<Prisma.UserNullableScalarRelationFilter> =
+  makeSchema() as unknown as z.ZodType<Prisma.UserNullableScalarRelationFilter>
+export const UserNullableScalarRelationFilterObjectZodSchema = makeSchema()

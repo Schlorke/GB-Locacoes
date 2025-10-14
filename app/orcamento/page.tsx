@@ -11,10 +11,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { useCartStore, type CartItem } from '@/stores/useCartStore'
 import { toast } from '@/hooks/use-toast'
 import { formatCurrency } from '@/lib/utils'
 import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
+import { useCartStore, type CartItem } from '@/stores/useCartStore'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Minus, Package, Plus, ShoppingCart, Trash2, User } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
@@ -1094,7 +1094,7 @@ function QuotePage() {
                         }
                         required
                         className="mt-1"
-                        placeholder="seu@email.com"
+                        placeholder="contato@locacoesgb.com.br"
                       />
                     </div>
                     <div>

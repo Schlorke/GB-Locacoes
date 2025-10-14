@@ -362,12 +362,12 @@ export function Autocomplete({
               top: `${dropdownPosition.top}px`,
               left: `${dropdownPosition.left}px`,
               width: `${dropdownPosition.width}px`,
-              maxHeight: '400px',
+              maxHeight: '370px',
             }}
           >
             <div
               className="max-h-full overflow-y-auto overscroll-contain"
-              style={{ maxHeight: '400px' }}
+              style={{ maxHeight: '370px' }}
             >
               {isLoading ? (
                 <div className="p-4 text-center text-gray-500">

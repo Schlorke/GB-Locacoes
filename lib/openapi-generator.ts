@@ -22,7 +22,7 @@ API completa da plataforma GB-Locações para locação de equipamentos de const
 ## 🚀 Funcionalidades
 
 - **🏗️ Equipamentos**: Catálogo completo de equipamentos para locação
-- **📋 Categorias**: Organização por tipos de equipamento  
+- **📋 Categorias**: Organização por tipos de equipamento
 - **💰 Orçamentos**: Sistema de solicitação e gestão de orçamentos
 - **🔐 Autenticação**: Sistema de login com roles (ADMIN/CLIENT)
 - **📤 Upload**: Sistema de upload de arquivos e imagens
@@ -42,10 +42,10 @@ Authorization: Bearer <seu-jwt-token>
 
 ## 🤖 Para Agentes de IA
 
-Esta API foi documentada especificamente para orientar agentes de IA. 
+Esta API foi documentada especificamente para orientar agentes de IA.
 Cada endpoint inclui descrições detalhadas, exemplos e contexto específico para evitar alucinações.
 
-**Fonte de Verdade**: Esta documentação é sincronizada com os schemas Zod 
+**Fonte de Verdade**: Esta documentação é sincronizada com os schemas Zod
 e modelos Prisma do projeto, garantindo consistência perfeita.
       `,
       contact: {
@@ -422,7 +422,7 @@ Cada categoria inclui contagem de equipamentos associados.`,
 
 **🌐 Endpoint Público** - Não requer autenticação
 
-**Para IAs**: Use este endpoint para criar orçamentos. 
+**Para IAs**: Use este endpoint para criar orçamentos.
 Todos os campos são obrigatórios exceto 'company' e 'message'.
 O array 'equipments' deve conter IDs válidos de equipamentos.`,
           requestBody: {

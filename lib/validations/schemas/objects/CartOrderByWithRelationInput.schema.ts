@@ -1,17 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
-import type { Prisma } from '@prisma/client';
-import { SortOrderSchema } from '../enums/SortOrder.schema';
-import { UserOrderByWithRelationInputObjectSchema as UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema';
+import * as z from 'zod'
+import type { Prisma } from '@prisma/client'
+import { SortOrderSchema } from '../enums/SortOrder.schema'
+import { UserOrderByWithRelationInputObjectSchema as UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema'
 import { CartItemOrderByRelationAggregateInputObjectSchema as CartItemOrderByRelationAggregateInputObjectSchema } from './CartItemOrderByRelationAggregateInput.schema'
 
-const makeSchema = () => z.object({
-  id: SortOrderSchema.optional(),
-  userId: SortOrderSchema.optional(),
-  createdAt: SortOrderSchema.optional(),
-  updatedAt: SortOrderSchema.optional(),
-  user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
-  items: z.lazy(() => CartItemOrderByRelationAggregateInputObjectSchema).optional()
-}).strict();
-export const CartOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.CartOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.CartOrderByWithRelationInput>;
-export const CartOrderByWithRelationInputObjectZodSchema = makeSchema();
+const makeSchema = () =>
+  z
+    .object({
+      id: SortOrderSchema.optional(),
+      userId: SortOrderSchema.optional(),
+      createdAt: SortOrderSchema.optional(),
+      updatedAt: SortOrderSchema.optional(),
+      user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
+      items: z
+        .lazy(() => CartItemOrderByRelationAggregateInputObjectSchema)
+        .optional(),
+    })
+    .strict()
+export const CartOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.CartOrderByWithRelationInput> =
+  makeSchema() as unknown as z.ZodType<Prisma.CartOrderByWithRelationInput>
+export const CartOrderByWithRelationInputObjectZodSchema = makeSchema()

@@ -1,7 +1,6 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
-import Link from 'next/link'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -12,8 +11,9 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { AlertTriangle, CheckCircle, Mail, ArrowLeft } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, CheckCircle, Mail } from 'lucide-react'
+import Link from 'next/link'
+import { useState, type FormEvent } from 'react'
 
 export default function RecuperarSenhaPage() {
   const [email, setEmail] = useState('')
@@ -169,7 +169,7 @@ export default function RecuperarSenhaPage() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="seu@email.com"
+                      placeholder="contato@locacoesgb.com.br"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}

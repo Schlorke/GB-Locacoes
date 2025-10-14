@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 export const EquipmentCreateResultSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -28,5 +28,5 @@ export const EquipmentCreateResultSchema = z.object({
   category: z.unknown(),
   quoteItems: z.array(z.unknown()),
   rental_items: z.array(z.unknown()),
-  cartItems: z.array(z.unknown())
-});
+  cartItems: z.array(z.unknown()),
+})

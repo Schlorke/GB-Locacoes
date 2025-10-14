@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 
 // prettier-ignore
 export const EquipmentModelSchema = z.object({
@@ -33,4 +33,4 @@ export const EquipmentModelSchema = z.object({
     cartItems: z.array(z.unknown())
 }).strict();
 
-export type EquipmentPureType = z.infer<typeof EquipmentModelSchema>;
+export type EquipmentPureType = z.infer<typeof EquipmentModelSchema>

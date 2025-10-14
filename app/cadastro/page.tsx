@@ -251,7 +251,7 @@ function CadastroForm() {
                         id="email"
                         name="email"
                         type="email"
-                        placeholder="seu@email.com"
+                        placeholder="contato@locacoesgb.com.br"
                         required
                         value={formData.email}
                         onChange={handleInputChange}

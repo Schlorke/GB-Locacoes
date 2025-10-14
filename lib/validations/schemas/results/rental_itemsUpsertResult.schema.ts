@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
+import * as z from 'zod'
 export const rental_itemsUpsertResultSchema = z.object({
   id: z.string(),
   rentalid: z.string(),
@@ -11,5 +11,5 @@ export const rental_itemsUpsertResultSchema = z.object({
   createdat: z.date().optional(),
   updatedat: z.date().optional(),
   equipments: z.unknown(),
-  rentals: z.unknown()
-});
+  rentals: z.unknown(),
+})

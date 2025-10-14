@@ -136,7 +136,7 @@ Encontrou algo confuso ou desatualizado?
 - 🐛 [Abra uma issue](https://github.com/GBLocacoes/GB-Locacoes/issues)
 - 💬
   [Inicie uma discussão](https://github.com/GBLocacoes/GB-Locacoes/discussions)
-- 📧 Email: dev@gblocacoes.com.br
+- 📧 Email: contato@locacoesgb.com.br
 
 ---
 

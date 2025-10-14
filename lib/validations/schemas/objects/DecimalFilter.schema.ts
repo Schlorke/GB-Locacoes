@@ -1,17 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod';
-import type { Prisma } from '@prisma/client';
+import * as z from 'zod'
+import type { Prisma } from '@prisma/client'
 import { NestedDecimalFilterObjectSchema as NestedDecimalFilterObjectSchema } from './NestedDecimalFilter.schema'
 
-const makeSchema = () => z.object({
-  equals: z.number().optional(),
-  in: z.number().array().optional(),
-  notIn: z.number().array().optional(),
-  lt: z.number().optional(),
-  lte: z.number().optional(),
-  gt: z.number().optional(),
-  gte: z.number().optional(),
-  not: z.union([z.number(), z.lazy(() => NestedDecimalFilterObjectSchema)]).optional()
-}).strict();
-export const DecimalFilterObjectSchema: z.ZodType<Prisma.DecimalFilter> = makeSchema() as unknown as z.ZodType<Prisma.DecimalFilter>;
-export const DecimalFilterObjectZodSchema = makeSchema();
+const makeSchema = () =>
+  z
+    .object({
+      equals: z.number().optional(),
+      in: z.number().array().optional(),
+      notIn: z.number().array().optional(),
+      lt: z.number().optional(),
+      lte: z.number().optional(),
+      gt: z.number().optional(),
+      gte: z.number().optional(),
+      not: z
+        .union([z.number(), z.lazy(() => NestedDecimalFilterObjectSchema)])
+        .optional(),
+    })
+    .strict()
+export const DecimalFilterObjectSchema: z.ZodType<Prisma.DecimalFilter> =
+  makeSchema() as unknown as z.ZodType<Prisma.DecimalFilter>
+export const DecimalFilterObjectZodSchema = makeSchema()

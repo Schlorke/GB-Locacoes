@@ -145,7 +145,7 @@ A API utiliza **JWT (JSON Web Tokens)** para autenticação, gerenciados pelo
   },
   "payload": {
     "sub": "user_id",
-    "email": "user@example.com",
+    "email": "contato@locacoesgb.com.br",
     "role": "ADMIN",
     "iat": 1640995200,
     "exp": 1641081600

@@ -116,7 +116,7 @@ export default function ContactForm() {
           onChange={(e) =>
             setFormData((prev) => ({ ...prev, email: e.target.value }))
           }
-          placeholder="seu@email.com"
+          placeholder="contato@locacoesgb.com.br"
           required
           className="mt-1"
         />

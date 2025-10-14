@@ -83,8 +83,8 @@ http://localhost:3000/api/auth/callback/facebook
 2. Adicione **Test users**:
    ```
    Test users:
-   - seu@email.com
-   - outro@email.com
+   - contato@locacoesgb.com.br
+   - admin@gblocacoes.com.br
    ```
 
 ### **Erro: "App in development mode" (Facebook)**
@@ -95,8 +95,8 @@ http://localhost:3000/api/auth/callback/facebook
 2. Adicione **Testers**:
    ```
    Testers:
-   - seu@email.com
-   - outro@email.com
+   - contato@locacoesgb.com.br
+   - admin@gblocacoes.com.br
    ```
 
 ### **Erro: "Environment variables missing"**

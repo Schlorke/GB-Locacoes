@@ -35,7 +35,7 @@ export default function ContatoPage() {
     {
       icon: Mail,
       title: 'E-mail',
-      main: 'contato@gblocacoes.com.br',
+      main: 'contato@locacoesgb.com.br',
       subtitle: 'Resposta em até 24 horas',
       color: 'blue',
       delay: 0.2,
