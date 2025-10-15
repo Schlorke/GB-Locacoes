@@ -459,21 +459,21 @@ export default async function EquipmentDetailPage(props: Props) {
                     Incluído na locação:
                   </h4>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg hover:text-orange-600 transition-all duration-300">
+                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group">
                       <CheckCircle className="h-5 w-5 text-green-600" />
-                      <span className="text-gray-700 font-medium">
+                      <span className="text-gray-700 font-medium transition-colors duration-300 group-hover:text-orange-600">
                         Manutenção preventiva
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg hover:text-orange-600 transition-all duration-300">
+                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group">
                       <CheckCircle className="h-5 w-5 text-blue-600" />
-                      <span className="text-gray-700 font-medium">
+                      <span className="text-gray-700 font-medium transition-colors duration-300 group-hover:text-orange-600">
                         Suporte técnico 24h
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg hover:text-orange-600 transition-all duration-300">
+                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group">
                       <CheckCircle className="h-5 w-5 text-orange-600" />
-                      <span className="text-gray-700 font-medium">
+                      <span className="text-gray-700 font-medium transition-colors duration-300 group-hover:text-orange-600">
                         Entrega e retirada
                       </span>
                     </div>
