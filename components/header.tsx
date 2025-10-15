@@ -3,13 +3,13 @@
 import { Button } from '@/components/ui/button'
 import { CloseButton } from '@/components/ui/close-button'
 import { NotificationBadgeWrapper } from '@/components/ui/notification-badge'
-import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState, useEffect } from 'react'
 import { useCartNotifications } from '@/hooks/use-cart-notifications'
 import { useNotifications } from '@/hooks/use-notifications'
+import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -122,7 +122,7 @@ export default function Header() {
                 </div>
               </div>
               <span className="hidden md:inline text-slate-200 font-light">
-                Atendimento especializado - Entregamos em toda região
+                Atendimento especializado • Entregamos em toda região
               </span>
             </div>
             <div className="flex items-center gap-4">
