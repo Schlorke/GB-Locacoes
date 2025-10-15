@@ -1,23 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
-import type { Prisma } from '@prisma/client'
+import * as z from 'zod';
+import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema'
 
-const makeSchema = () =>
-  z
-    .object({
-      id: SortOrderSchema.optional(),
-      rentalid: SortOrderSchema.optional(),
-      equipmentid: SortOrderSchema.optional(),
-      quantity: SortOrderSchema.optional(),
-      priceperday: SortOrderSchema.optional(),
-      totaldays: SortOrderSchema.optional(),
-      totalprice: SortOrderSchema.optional(),
-      createdat: SortOrderSchema.optional(),
-      updatedat: SortOrderSchema.optional(),
-    })
-    .strict()
-export const rental_itemsCountOrderByAggregateInputObjectSchema: z.ZodType<Prisma.rental_itemsCountOrderByAggregateInput> =
-  makeSchema() as unknown as z.ZodType<Prisma.rental_itemsCountOrderByAggregateInput>
-export const rental_itemsCountOrderByAggregateInputObjectZodSchema =
-  makeSchema()
+const makeSchema = () => z.object({
+  id: SortOrderSchema.optional(),
+  rentalid: SortOrderSchema.optional(),
+  equipmentid: SortOrderSchema.optional(),
+  quantity: SortOrderSchema.optional(),
+  priceperday: SortOrderSchema.optional(),
+  totaldays: SortOrderSchema.optional(),
+  totalprice: SortOrderSchema.optional(),
+  createdat: SortOrderSchema.optional(),
+  updatedat: SortOrderSchema.optional()
+}).strict();
+export const rental_itemsCountOrderByAggregateInputObjectSchema: z.ZodType<Prisma.rental_itemsCountOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.rental_itemsCountOrderByAggregateInput>;
+export const rental_itemsCountOrderByAggregateInputObjectZodSchema = makeSchema();

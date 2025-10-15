@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
+import * as z from 'zod';
 
 // prettier-ignore
 export const CartItemInputSchema = z.object({
@@ -15,4 +15,4 @@ export const CartItemInputSchema = z.object({
     createdAt: z.date()
 }).strict();
 
-export type CartItemInputType = z.infer<typeof CartItemInputSchema>
+export type CartItemInputType = z.infer<typeof CartItemInputSchema>;

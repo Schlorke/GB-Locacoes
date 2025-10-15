@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
+import * as z from 'zod';
 
 // prettier-ignore
 export const AddressInputSchema = z.object({
@@ -18,4 +18,4 @@ export const AddressInputSchema = z.object({
     updatedAt: z.date()
 }).strict();
 
-export type AddressInputType = z.infer<typeof AddressInputSchema>
+export type AddressInputType = z.infer<typeof AddressInputSchema>;

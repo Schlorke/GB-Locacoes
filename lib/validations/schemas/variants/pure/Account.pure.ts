@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
+import * as z from 'zod';
 
 // prettier-ignore
 export const AccountModelSchema = z.object({
@@ -18,4 +18,4 @@ export const AccountModelSchema = z.object({
     user: z.unknown()
 }).strict();
 
-export type AccountPureType = z.infer<typeof AccountModelSchema>
+export type AccountPureType = z.infer<typeof AccountModelSchema>;

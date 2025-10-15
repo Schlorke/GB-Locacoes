@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
+import * as z from 'zod';
 export const AccountCreateResultSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -13,5 +13,5 @@ export const AccountCreateResultSchema = z.object({
   scope: z.string().optional(),
   id_token: z.string().optional(),
   session_state: z.string().optional(),
-  user: z.unknown(),
-})
+  user: z.unknown()
+});

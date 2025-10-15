@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
+import * as z from 'zod';
 export const QuoteItemUpsertResultSchema = z.object({
   id: z.string(),
   quoteId: z.string(),
@@ -11,5 +11,5 @@ export const QuoteItemUpsertResultSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   equipment: z.unknown(),
-  quote: z.unknown(),
-})
+  quote: z.unknown()
+});

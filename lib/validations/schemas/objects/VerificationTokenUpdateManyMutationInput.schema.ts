@@ -1,33 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
-import type { Prisma } from '@prisma/client'
-import { StringFieldUpdateOperationsInputObjectSchema as StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema'
+import * as z from 'zod';
+import type { Prisma } from '@prisma/client';
+import { StringFieldUpdateOperationsInputObjectSchema as StringFieldUpdateOperationsInputObjectSchema } from './StringFieldUpdateOperationsInput.schema';
 import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema'
 
-const makeSchema = () =>
-  z
-    .object({
-      identifier: z
-        .union([
-          z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      token: z
-        .union([
-          z.string(),
-          z.lazy(() => StringFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-      expires: z
-        .union([
-          z.coerce.date(),
-          z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema),
-        ])
-        .optional(),
-    })
-    .strict()
-export const VerificationTokenUpdateManyMutationInputObjectSchema: z.ZodType<Prisma.VerificationTokenUpdateManyMutationInput> =
-  makeSchema() as unknown as z.ZodType<Prisma.VerificationTokenUpdateManyMutationInput>
-export const VerificationTokenUpdateManyMutationInputObjectZodSchema =
-  makeSchema()
+const makeSchema = () => z.object({
+  identifier: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
+  token: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
+  expires: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional()
+}).strict();
+export const VerificationTokenUpdateManyMutationInputObjectSchema: z.ZodType<Prisma.VerificationTokenUpdateManyMutationInput> = makeSchema() as unknown as z.ZodType<Prisma.VerificationTokenUpdateManyMutationInput>;
+export const VerificationTokenUpdateManyMutationInputObjectZodSchema = makeSchema();

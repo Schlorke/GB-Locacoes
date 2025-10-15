@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
+import * as z from 'zod';
 
 // prettier-ignore
 export const SessionInputSchema = z.object({
@@ -10,4 +10,4 @@ export const SessionInputSchema = z.object({
     user: z.unknown()
 }).strict();
 
-export type SessionInputType = z.infer<typeof SessionInputSchema>
+export type SessionInputType = z.infer<typeof SessionInputSchema>;

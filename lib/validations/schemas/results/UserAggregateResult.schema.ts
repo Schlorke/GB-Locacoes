@@ -1,58 +1,48 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
-export const UserAggregateResultSchema = z.object({
-  _count: z
-    .object({
-      id: z.number(),
-      name: z.number(),
-      email: z.number(),
-      password: z.number(),
-      phone: z.number(),
-      cpf: z.number(),
-      cnpj: z.number(),
-      role: z.number(),
-      emailVerified: z.number(),
-      image: z.number(),
-      createdAt: z.number(),
-      updatedAt: z.number(),
-      accounts: z.number(),
-      quotes: z.number(),
-      rentals: z.number(),
-      sessions: z.number(),
-      addresses: z.number(),
-      cart: z.number(),
-    })
-    .optional(),
-  _min: z
-    .object({
-      id: z.string().nullable(),
-      name: z.string().nullable(),
-      email: z.string().nullable(),
-      password: z.string().nullable(),
-      phone: z.string().nullable(),
-      cpf: z.string().nullable(),
-      cnpj: z.string().nullable(),
-      emailVerified: z.date().nullable(),
-      image: z.string().nullable(),
-      createdAt: z.date().nullable(),
-      updatedAt: z.date().nullable(),
-    })
-    .nullable()
-    .optional(),
-  _max: z
-    .object({
-      id: z.string().nullable(),
-      name: z.string().nullable(),
-      email: z.string().nullable(),
-      password: z.string().nullable(),
-      phone: z.string().nullable(),
-      cpf: z.string().nullable(),
-      cnpj: z.string().nullable(),
-      emailVerified: z.date().nullable(),
-      image: z.string().nullable(),
-      createdAt: z.date().nullable(),
-      updatedAt: z.date().nullable(),
-    })
-    .nullable()
-    .optional(),
-})
+import * as z from 'zod';
+export const UserAggregateResultSchema = z.object({  _count: z.object({
+    id: z.number(),
+    name: z.number(),
+    email: z.number(),
+    password: z.number(),
+    phone: z.number(),
+    cpf: z.number(),
+    cnpj: z.number(),
+    role: z.number(),
+    emailVerified: z.number(),
+    image: z.number(),
+    createdAt: z.number(),
+    updatedAt: z.number(),
+    accounts: z.number(),
+    quotes: z.number(),
+    rentals: z.number(),
+    sessions: z.number(),
+    addresses: z.number(),
+    cart: z.number()
+  }).optional(),
+  _min: z.object({
+    id: z.string().nullable(),
+    name: z.string().nullable(),
+    email: z.string().nullable(),
+    password: z.string().nullable(),
+    phone: z.string().nullable(),
+    cpf: z.string().nullable(),
+    cnpj: z.string().nullable(),
+    emailVerified: z.date().nullable(),
+    image: z.string().nullable(),
+    createdAt: z.date().nullable(),
+    updatedAt: z.date().nullable()
+  }).nullable().optional(),
+  _max: z.object({
+    id: z.string().nullable(),
+    name: z.string().nullable(),
+    email: z.string().nullable(),
+    password: z.string().nullable(),
+    phone: z.string().nullable(),
+    cpf: z.string().nullable(),
+    cnpj: z.string().nullable(),
+    emailVerified: z.date().nullable(),
+    image: z.string().nullable(),
+    createdAt: z.date().nullable(),
+    updatedAt: z.date().nullable()
+  }).nullable().optional()});

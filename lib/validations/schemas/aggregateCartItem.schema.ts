@@ -1,56 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import type { Prisma } from '@prisma/client'
-import * as z from 'zod'
-import { CartItemOrderByWithRelationInputObjectSchema as CartItemOrderByWithRelationInputObjectSchema } from './objects/CartItemOrderByWithRelationInput.schema'
-import { CartItemWhereInputObjectSchema as CartItemWhereInputObjectSchema } from './objects/CartItemWhereInput.schema'
-import { CartItemWhereUniqueInputObjectSchema as CartItemWhereUniqueInputObjectSchema } from './objects/CartItemWhereUniqueInput.schema'
-import { CartItemCountAggregateInputObjectSchema as CartItemCountAggregateInputObjectSchema } from './objects/CartItemCountAggregateInput.schema'
-import { CartItemMinAggregateInputObjectSchema as CartItemMinAggregateInputObjectSchema } from './objects/CartItemMinAggregateInput.schema'
-import { CartItemMaxAggregateInputObjectSchema as CartItemMaxAggregateInputObjectSchema } from './objects/CartItemMaxAggregateInput.schema'
-import { CartItemAvgAggregateInputObjectSchema as CartItemAvgAggregateInputObjectSchema } from './objects/CartItemAvgAggregateInput.schema'
-import { CartItemSumAggregateInputObjectSchema as CartItemSumAggregateInputObjectSchema } from './objects/CartItemSumAggregateInput.schema'
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { CartItemOrderByWithRelationInputObjectSchema as CartItemOrderByWithRelationInputObjectSchema } from './objects/CartItemOrderByWithRelationInput.schema';
+import { CartItemWhereInputObjectSchema as CartItemWhereInputObjectSchema } from './objects/CartItemWhereInput.schema';
+import { CartItemWhereUniqueInputObjectSchema as CartItemWhereUniqueInputObjectSchema } from './objects/CartItemWhereUniqueInput.schema';
+import { CartItemCountAggregateInputObjectSchema as CartItemCountAggregateInputObjectSchema } from './objects/CartItemCountAggregateInput.schema';
+import { CartItemMinAggregateInputObjectSchema as CartItemMinAggregateInputObjectSchema } from './objects/CartItemMinAggregateInput.schema';
+import { CartItemMaxAggregateInputObjectSchema as CartItemMaxAggregateInputObjectSchema } from './objects/CartItemMaxAggregateInput.schema';
+import { CartItemAvgAggregateInputObjectSchema as CartItemAvgAggregateInputObjectSchema } from './objects/CartItemAvgAggregateInput.schema';
+import { CartItemSumAggregateInputObjectSchema as CartItemSumAggregateInputObjectSchema } from './objects/CartItemSumAggregateInput.schema';
 
-export const CartItemAggregateSchema: z.ZodType<Prisma.CartItemAggregateArgs> =
-  z
-    .object({
-      orderBy: z
-        .union([
-          CartItemOrderByWithRelationInputObjectSchema,
-          CartItemOrderByWithRelationInputObjectSchema.array(),
-        ])
-        .optional(),
-      where: CartItemWhereInputObjectSchema.optional(),
-      cursor: CartItemWhereUniqueInputObjectSchema.optional(),
-      take: z.number().optional(),
-      skip: z.number().optional(),
-      _count: z
-        .union([z.literal(true), CartItemCountAggregateInputObjectSchema])
-        .optional(),
-      _min: CartItemMinAggregateInputObjectSchema.optional(),
-      _max: CartItemMaxAggregateInputObjectSchema.optional(),
-      _avg: CartItemAvgAggregateInputObjectSchema.optional(),
-      _sum: CartItemSumAggregateInputObjectSchema.optional(),
-    })
-    .strict() as unknown as z.ZodType<Prisma.CartItemAggregateArgs>
+export const CartItemAggregateSchema: z.ZodType<Prisma.CartItemAggregateArgs> = z.object({ orderBy: z.union([CartItemOrderByWithRelationInputObjectSchema, CartItemOrderByWithRelationInputObjectSchema.array()]).optional(), where: CartItemWhereInputObjectSchema.optional(), cursor: CartItemWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), CartItemCountAggregateInputObjectSchema ]).optional(), _min: CartItemMinAggregateInputObjectSchema.optional(), _max: CartItemMaxAggregateInputObjectSchema.optional(), _avg: CartItemAvgAggregateInputObjectSchema.optional(), _sum: CartItemSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.CartItemAggregateArgs>;
 
-export const CartItemAggregateZodSchema = z
-  .object({
-    orderBy: z
-      .union([
-        CartItemOrderByWithRelationInputObjectSchema,
-        CartItemOrderByWithRelationInputObjectSchema.array(),
-      ])
-      .optional(),
-    where: CartItemWhereInputObjectSchema.optional(),
-    cursor: CartItemWhereUniqueInputObjectSchema.optional(),
-    take: z.number().optional(),
-    skip: z.number().optional(),
-    _count: z
-      .union([z.literal(true), CartItemCountAggregateInputObjectSchema])
-      .optional(),
-    _min: CartItemMinAggregateInputObjectSchema.optional(),
-    _max: CartItemMaxAggregateInputObjectSchema.optional(),
-    _avg: CartItemAvgAggregateInputObjectSchema.optional(),
-    _sum: CartItemSumAggregateInputObjectSchema.optional(),
-  })
-  .strict()
+export const CartItemAggregateZodSchema = z.object({ orderBy: z.union([CartItemOrderByWithRelationInputObjectSchema, CartItemOrderByWithRelationInputObjectSchema.array()]).optional(), where: CartItemWhereInputObjectSchema.optional(), cursor: CartItemWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), _count: z.union([ z.literal(true), CartItemCountAggregateInputObjectSchema ]).optional(), _min: CartItemMinAggregateInputObjectSchema.optional(), _max: CartItemMaxAggregateInputObjectSchema.optional(), _avg: CartItemAvgAggregateInputObjectSchema.optional(), _sum: CartItemSumAggregateInputObjectSchema.optional() }).strict();

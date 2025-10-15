@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
+import * as z from 'zod';
 
-import { QuoteStatusSchema } from '../../enums/QuoteStatus.schema'
+import { QuoteStatusSchema } from '../../enums/QuoteStatus.schema';
 // prettier-ignore
 export const QuoteModelSchema = z.object({
     id: z.string(),
@@ -19,4 +19,4 @@ export const QuoteModelSchema = z.object({
     user: z.unknown().nullable()
 }).strict();
 
-export type QuotePureType = z.infer<typeof QuoteModelSchema>
+export type QuotePureType = z.infer<typeof QuoteModelSchema>;

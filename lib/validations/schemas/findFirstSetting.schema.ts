@@ -1,16 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import type { Prisma } from '@prisma/client'
-import * as z from 'zod'
-import { SettingOrderByWithRelationInputObjectSchema as SettingOrderByWithRelationInputObjectSchema } from './objects/SettingOrderByWithRelationInput.schema'
-import { SettingWhereInputObjectSchema as SettingWhereInputObjectSchema } from './objects/SettingWhereInput.schema'
-import { SettingWhereUniqueInputObjectSchema as SettingWhereUniqueInputObjectSchema } from './objects/SettingWhereUniqueInput.schema'
-import { SettingScalarFieldEnumSchema } from './enums/SettingScalarFieldEnum.schema'
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { SettingOrderByWithRelationInputObjectSchema as SettingOrderByWithRelationInputObjectSchema } from './objects/SettingOrderByWithRelationInput.schema';
+import { SettingWhereInputObjectSchema as SettingWhereInputObjectSchema } from './objects/SettingWhereInput.schema';
+import { SettingWhereUniqueInputObjectSchema as SettingWhereUniqueInputObjectSchema } from './objects/SettingWhereUniqueInput.schema';
+import { SettingScalarFieldEnumSchema } from './enums/SettingScalarFieldEnum.schema';
 
 // Select schema needs to be in file to prevent circular imports
 //------------------------------------------------------
 
-export const SettingFindFirstSelectSchema: z.ZodType<Prisma.SettingSelect> = z
-  .object({
+export const SettingFindFirstSelectSchema: z.ZodType<Prisma.SettingSelect> = z.object({
     id: z.boolean().optional(),
     companyPhone: z.boolean().optional(),
     companyIconUrl: z.boolean().optional(),
@@ -39,12 +38,10 @@ export const SettingFindFirstSelectSchema: z.ZodType<Prisma.SettingSelect> = z
     customCss: z.boolean().optional(),
     customJs: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional(),
-  })
-  .strict() as unknown as z.ZodType<Prisma.SettingSelect>
+    updatedAt: z.boolean().optional()
+  }).strict() as unknown as z.ZodType<Prisma.SettingSelect>;
 
-export const SettingFindFirstSelectZodSchema = z
-  .object({
+export const SettingFindFirstSelectZodSchema = z.object({
     id: z.boolean().optional(),
     companyPhone: z.boolean().optional(),
     companyIconUrl: z.boolean().optional(),
@@ -73,50 +70,9 @@ export const SettingFindFirstSelectZodSchema = z
     customCss: z.boolean().optional(),
     customJs: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional(),
-  })
-  .strict()
+    updatedAt: z.boolean().optional()
+  }).strict();
 
-export const SettingFindFirstSchema: z.ZodType<Prisma.SettingFindFirstArgs> = z
-  .object({
-    select: SettingFindFirstSelectSchema.optional(),
-    orderBy: z
-      .union([
-        SettingOrderByWithRelationInputObjectSchema,
-        SettingOrderByWithRelationInputObjectSchema.array(),
-      ])
-      .optional(),
-    where: SettingWhereInputObjectSchema.optional(),
-    cursor: SettingWhereUniqueInputObjectSchema.optional(),
-    take: z.number().optional(),
-    skip: z.number().optional(),
-    distinct: z
-      .union([
-        SettingScalarFieldEnumSchema,
-        SettingScalarFieldEnumSchema.array(),
-      ])
-      .optional(),
-  })
-  .strict() as unknown as z.ZodType<Prisma.SettingFindFirstArgs>
+export const SettingFindFirstSchema: z.ZodType<Prisma.SettingFindFirstArgs> = z.object({ select: SettingFindFirstSelectSchema.optional(),  orderBy: z.union([SettingOrderByWithRelationInputObjectSchema, SettingOrderByWithRelationInputObjectSchema.array()]).optional(), where: SettingWhereInputObjectSchema.optional(), cursor: SettingWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([SettingScalarFieldEnumSchema, SettingScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.SettingFindFirstArgs>;
 
-export const SettingFindFirstZodSchema = z
-  .object({
-    select: SettingFindFirstSelectSchema.optional(),
-    orderBy: z
-      .union([
-        SettingOrderByWithRelationInputObjectSchema,
-        SettingOrderByWithRelationInputObjectSchema.array(),
-      ])
-      .optional(),
-    where: SettingWhereInputObjectSchema.optional(),
-    cursor: SettingWhereUniqueInputObjectSchema.optional(),
-    take: z.number().optional(),
-    skip: z.number().optional(),
-    distinct: z
-      .union([
-        SettingScalarFieldEnumSchema,
-        SettingScalarFieldEnumSchema.array(),
-      ])
-      .optional(),
-  })
-  .strict()
+export const SettingFindFirstZodSchema = z.object({ select: SettingFindFirstSelectSchema.optional(),  orderBy: z.union([SettingOrderByWithRelationInputObjectSchema, SettingOrderByWithRelationInputObjectSchema.array()]).optional(), where: SettingWhereInputObjectSchema.optional(), cursor: SettingWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([SettingScalarFieldEnumSchema, SettingScalarFieldEnumSchema.array()]).optional() }).strict();

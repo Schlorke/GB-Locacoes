@@ -683,6 +683,20 @@ body:has(.sobre-page) {
   animation: scale-in 0.4s ease-out;
 }
 
+/* Animação de reset - rotação completa anti-horário */
+@keyframes reset {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-reset {
+  animation: reset 0.6s ease-in-out;
+}
+
 @keyframes loading {
   0% {
     background-position: 200% 0;

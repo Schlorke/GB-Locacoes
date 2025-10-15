@@ -4,6 +4,7 @@ import {
   AnimatedSection,
 } from '@/components/equipment-detail-animations'
 import { EquipmentImageGallery } from '@/components/equipment-image-gallery'
+import { EquipmentInclusionItem } from '@/components/equipment-inclusion-item'
 import { ShareButton } from '@/components/share-button'
 import { SmartEquipmentPricing } from '@/components/smart-equipment-pricing'
 import {
@@ -447,7 +448,7 @@ export default async function EquipmentDetailPage(props: Props) {
                   <div className="flex justify-between items-center py-3 border-b border-gray-100">
                     <span className="text-gray-600 font-medium">Status</span>
                     <Badge
-                      className={`text-sm px-3 py-1 shadow-sm ${equipment.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}
+                      className={`text-sm px-3 py-1 shadow-sm transition-colors duration-200 ${equipment.available ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200'}`}
                     >
                       {equipment.available ? 'Disponível' : 'Indisponível'}
                     </Badge>
@@ -459,24 +460,18 @@ export default async function EquipmentDetailPage(props: Props) {
                     Incluído na locação:
                   </h4>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group">
-                      <CheckCircle className="h-5 w-5 text-green-600" />
-                      <span className="text-gray-700 font-medium transition-colors duration-300 group-hover:text-orange-600">
-                        Manutenção preventiva
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group">
-                      <CheckCircle className="h-5 w-5 text-blue-600" />
-                      <span className="text-gray-700 font-medium transition-colors duration-300 group-hover:text-orange-600">
-                        Suporte técnico 24h
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group">
-                      <CheckCircle className="h-5 w-5 text-orange-600" />
-                      <span className="text-gray-700 font-medium transition-colors duration-300 group-hover:text-orange-600">
-                        Entrega e retirada
-                      </span>
-                    </div>
+                    <EquipmentInclusionItem
+                      iconColor="green"
+                      text="Manutenção preventiva"
+                    />
+                    <EquipmentInclusionItem
+                      iconColor="blue"
+                      text="Suporte técnico 24h"
+                    />
+                    <EquipmentInclusionItem
+                      iconColor="orange"
+                      text="Entrega e retirada"
+                    />
                   </div>
                 </div>
               </CardContent>

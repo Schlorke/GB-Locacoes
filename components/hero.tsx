@@ -79,17 +79,11 @@ export default function Hero() {
               <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
                 <Phone className="h-5 w-5 group-hover:animate-bounce" />
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                  <a
-                    href="tel:+555123136262"
-                    className="hover:underline"
-                  >
+                  <a href="tel:+555123136262" className="hover:underline">
                     (51) 2313-6262
                   </a>
                   <span className="hidden sm:inline">|</span>
-                  <a
-                    href="tel:+5551998205163"
-                    className="hover:underline"
-                  >
+                  <a href="tel:+5551998205163" className="hover:underline">
                     (51) 99820-5163
                   </a>
                 </div>

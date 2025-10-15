@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
+import * as z from 'zod';
 export const CategoryCreateResultSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -11,5 +11,5 @@ export const CategoryCreateResultSchema = z.object({
   slug: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  equipments: z.array(z.unknown()),
-})
+  equipments: z.array(z.unknown())
+});

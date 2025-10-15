@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
-import * as z from 'zod'
-import type { Prisma } from '@prisma/client'
-import { SortOrderSchema } from '../enums/SortOrder.schema'
+import * as z from 'zod';
+import type { Prisma } from '@prisma/client';
+import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { NullsOrderSchema } from '../enums/NullsOrder.schema'
 
-const makeSchema = () =>
-  z
-    .object({
-      sort: SortOrderSchema,
-      nulls: NullsOrderSchema.optional(),
-    })
-    .strict()
-export const SortOrderInputObjectSchema: z.ZodType<Prisma.SortOrderInput> =
-  makeSchema() as unknown as z.ZodType<Prisma.SortOrderInput>
-export const SortOrderInputObjectZodSchema = makeSchema()
+const makeSchema = () => z.object({
+  sort: SortOrderSchema,
+  nulls: NullsOrderSchema.optional()
+}).strict();
+export const SortOrderInputObjectSchema: z.ZodType<Prisma.SortOrderInput> = makeSchema() as unknown as z.ZodType<Prisma.SortOrderInput>;
+export const SortOrderInputObjectZodSchema = makeSchema();
