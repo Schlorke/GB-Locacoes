@@ -141,7 +141,7 @@ export function generateWhatsAppURL(phone: string, message: string): string {
  */
 export function openWhatsAppQuote(
   data: WhatsAppQuoteData,
-  businessPhone: string = '555123136262'
+  businessPhone: string = '5551998205163'
 ): void {
   const message = formatWhatsAppMessage(data)
   const url = generateWhatsAppURL(businessPhone, message)

@@ -91,9 +91,9 @@ import CTAButton, {
 // Pre-configured CTAs (recommended)
 <QuoteCTA href="/orcamento" />
 <ContactCTA href="/contato" />
-<PhoneCTA phone="+5551999999999" />
+<PhoneCTA phone="+555123136262" />
 <WhatsAppCTA
-  phone="5551999999999"
+  phone="5551998205163"
   message="Olá! Gostaria de um orçamento."
 />
 

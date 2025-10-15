@@ -168,9 +168,9 @@ export default function ContactSection() {
                       E-mail
                     </h4>
                     <p className="text-gray-600 mb-1">
-                      contato@gblocacoes.com.br
+                      contato@locacoesgb.com.br
                     </p>
-                    <p className="text-gray-600">comercial@gblocacoes.com.br</p>
+                    <p className="text-gray-600">comercial@locacoesgb.com.br</p>
                     <p className="text-sm text-orange-600 mt-2">
                       Resposta rápida garantida
                     </p>
@@ -195,7 +195,7 @@ export default function ContactSection() {
                       Humaitá - Porto Alegre/RS
                     </p>
                     <p className="text-sm text-orange-600 mt-2">
-                      Entregamos em toda região de Porto Alegre
+                      Entregamos em toda região
                     </p>
                   </div>
                 </div>

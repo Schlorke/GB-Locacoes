@@ -169,7 +169,7 @@ export default function RecuperarSenhaPage() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="contato@locacoesgb.com.br"
+                      placeholder="seu@email.com"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}

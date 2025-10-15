@@ -119,14 +119,21 @@ export default function WhyChooseUs() {
               constante dos equipamentos.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="tel:+5551231362"
-                className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group"
-              >
-                <span className="group-hover:animate-pulse">
+              <div className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group gap-2">
+                <a
+                  href="tel:+555123136262"
+                  className="group-hover:animate-pulse"
+                >
                   (51) 2313-6262
-                </span>
-              </a>
+                </a>
+                <span className="hidden sm:inline text-orange-400">|</span>
+                <a
+                  href="tel:+5551998205163"
+                  className="group-hover:animate-pulse"
+                >
+                  (51) 99820-5163
+                </a>
+              </div>
               <a
                 href="/orcamento"
                 className="inline-flex items-center justify-center px-8 h-12 bg-yellow-500 text-gray-900 font-semibold rounded-xl hover:bg-yellow-400 transition-all duration-300 hover:scale-105"

@@ -50,7 +50,7 @@ e modelos Prisma do projeto, garantindo consistência perfeita.
       `,
       contact: {
         name: 'GB-Locações',
-        email: 'contato@gblocacoes.com.br',
+        email: 'contato@locacoesgb.com.br',
         url: 'https://locacoesgb.com.br',
       },
       license: {

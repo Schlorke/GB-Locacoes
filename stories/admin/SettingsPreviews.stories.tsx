@@ -22,9 +22,9 @@ export const Default: StoryObj<typeof CompanyInfoPreview> = {
     data: {
       name: 'GB Locações',
       description: 'Sua parceira de confiança para locação de equipamentos.',
-      address: 'Rua das Flores, 123 - Centro',
-      phone: '(11) 99999-9999',
-      email: 'contato@gblocacoes.com',
+      address: 'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS',
+      phone: '(51) 2313-6262 / (51) 99820-5163',
+      email: 'contato@locacoesgb.com.br',
       businessHours: {
         'segunda-feira': { open: '08:00', close: '18:00', isOpen: true },
         'terça-feira': { open: '08:00', close: '18:00', isOpen: true },

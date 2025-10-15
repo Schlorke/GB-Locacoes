@@ -1029,6 +1029,7 @@ function QuotePage() {
                       <Label htmlFor="name">Nome Completo *</Label>
                       <Input
                         id="name"
+                        placeholder="Seu nome completo"
                         value={formData.name}
                         onChange={(e) =>
                           setFormData((prev) => ({
@@ -1094,7 +1095,7 @@ function QuotePage() {
                         }
                         required
                         className="mt-1"
-                        placeholder="contato@locacoesgb.com.br"
+                        placeholder="seu@email.com"
                       />
                     </div>
                     <div>

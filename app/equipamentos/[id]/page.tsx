@@ -7,22 +7,22 @@ import { EquipmentImageGallery } from '@/components/equipment-image-gallery'
 import { ShareButton } from '@/components/share-button'
 import { SmartEquipmentPricing } from '@/components/smart-equipment-pricing'
 import {
-  StructuredData,
   DEFAULT_LOCAL_BUSINESS,
+  StructuredData,
 } from '@/components/structured-data'
-import { EquipmentBreadcrumb } from '@/components/ui/breadcrumb'
 import { Badge } from '@/components/ui/badge'
+import { EquipmentBreadcrumb } from '@/components/ui/breadcrumb'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import * as LucideIcons from 'lucide-react'
+import { ArrowLeft, CheckCircle, Shield, Star, Tag, Truck } from 'lucide-react'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 // Runtime-only Prisma import for server components
 async function getPrisma() {
   const { prisma } = await import('@/lib/prisma')
   return prisma
 }
-import * as LucideIcons from 'lucide-react'
-import { ArrowLeft, CheckCircle, Shield, Star, Tag, Truck } from 'lucide-react'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -459,19 +459,19 @@ export default async function EquipmentDetailPage(props: Props) {
                     Incluído na locação:
                   </h4>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-3 bg-green-50/50 rounded-lg border border-green-100">
+                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg hover:text-orange-600 transition-all duration-300">
                       <CheckCircle className="h-5 w-5 text-green-600" />
                       <span className="text-gray-700 font-medium">
                         Manutenção preventiva
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-blue-50/50 rounded-lg border border-blue-100">
+                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg hover:text-orange-600 transition-all duration-300">
                       <CheckCircle className="h-5 w-5 text-blue-600" />
                       <span className="text-gray-700 font-medium">
                         Suporte técnico 24h
                       </span>
                     </div>
-                    <div className="flex items-center gap-3 p-3 bg-orange-50/50 rounded-lg border border-orange-100">
+                    <div className="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200 shadow-md hover:shadow-lg hover:text-orange-600 transition-all duration-300">
                       <CheckCircle className="h-5 w-5 text-orange-600" />
                       <span className="text-gray-700 font-medium">
                         Entrega e retirada

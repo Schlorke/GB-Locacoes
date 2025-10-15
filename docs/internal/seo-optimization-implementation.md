@@ -153,8 +153,8 @@ import CTAButton, { QuoteCTA, ContactCTA, PhoneCTA, WhatsAppCTA } from '@/compon
 // CTAs pré-configurados
 <QuoteCTA href="/orcamento" />
 <ContactCTA href="/contato" />
-<PhoneCTA phone="+5551999999999" />
-<WhatsAppCTA phone="5551999999999" message="Olá! Gostaria de um orçamento." />
+<PhoneCTA phone="+555123136262" />
+<WhatsAppCTA phone="5551998205163" message="Olá! Gostaria de um orçamento." />
 ```
 
 **⚙️ Componentes pré-configurados**:
@@ -377,7 +377,7 @@ Sitemap: https://locacoesgb.com.br/sitemap.xml
   "@type": "LocalBusiness",
   "name": "GB Locações",
   "address": { "@type": "PostalAddress", ... },
-  "telephone": "+55 51 9999-9999",
+  "telephone": "+55 51 2313-6262",
   "openingHours": ["Mo-Fr 08:00-18:00"]
 }
 ```

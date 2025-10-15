@@ -103,13 +103,26 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center gap-4">
-              <span className="flex items-center gap-2 font-medium">
+              <div className="flex items-start sm:items-center gap-2 font-medium">
                 <Phone className="h-4 w-4 text-slate-200" />
-                <span className="text-slate-100">(51) 2313-6262</span>
-              </span>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                  <a
+                    href="tel:+555123136262"
+                    className="hidden sm:inline text-slate-100 hover:text-white transition-colors"
+                  >
+                    (51) 2313-6262
+                  </a>
+                  <span className="hidden sm:inline text-slate-300">|</span>
+                  <a
+                    href="tel:+5551998205163"
+                    className="text-slate-100 hover:text-white transition-colors"
+                  >
+                    (51) 99820-5163
+                  </a>
+                </div>
+              </div>
               <span className="hidden md:inline text-slate-200 font-light">
-                Atendimento especializado • Entrega em toda região de Porto
-                Alegre
+                Atendimento especializado - Entregamos em toda região
               </span>
             </div>
             <div className="flex items-center gap-4">
@@ -367,3 +380,8 @@ export default function Header() {
     </header>
   )
 }
+
+
+
+
+

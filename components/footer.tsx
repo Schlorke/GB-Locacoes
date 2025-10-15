@@ -180,14 +180,14 @@ export default function Footer() {
                 <Phone className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
                   <Link
-                    href="tel:+5151231362626"
+                    href="tel:+555123136262"
                     className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
                     (51) 2313-6262
                   </Link>
                   <br />
                   <Link
-                    href="tel:+555199820516"
+                    href="tel:+5551998205163"
                     className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
                     (51) 99820-5163

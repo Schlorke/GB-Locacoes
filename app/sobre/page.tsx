@@ -336,13 +336,19 @@ export default function SobrePage() {
                   <Target className="w-5 h-5" />
                   Solicitar Orçamento
                 </a>
-                <a
-                  href="tel:(51)2313-6262"
-                  className="inline-flex items-center gap-2 px-8 py-3 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/30 transition-all duration-300 hover:scale-105 border border-white/30"
-                >
+                <div className="inline-flex items-center gap-3 px-8 py-3 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/30 transition-all duration-300 hover:scale-105 border border-white/30">
                   <Phone className="w-5 h-5" />
-                  (51) 2313-6262
-                </a>
+                  <a
+                    href="tel:+555123136262"
+                    className="hidden sm:inline hover:underline"
+                  >
+                    (51) 2313-6262
+                  </a>
+                  <span className="hidden sm:inline text-white/70">|</span>
+                  <a href="tel:+5551998205163" className="hover:underline">
+                    (51) 99820-5163
+                  </a>
+                </div>
               </div>
             </CardContent>
           </Card>

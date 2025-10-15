@@ -45,8 +45,8 @@ import { QuoteCTA, ContactCTA, PhoneCTA, WhatsAppCTA } from '@/components/ui/cta
 
 <QuoteCTA href="/orcamento" />
 <ContactCTA href="/contato" />
-<PhoneCTA phone="+5551999999999" />
-<WhatsAppCTA phone="5551999999999" message="Custom message" />
+<PhoneCTA phone="+555123136262" />
+<WhatsAppCTA phone="5551998205163" message="Custom message" />
 ```
 
 **Features**: Analytics tracking, multiple variants, animations, accessibility

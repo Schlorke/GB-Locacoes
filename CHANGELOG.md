@@ -1,12 +1,33 @@
 # Changelog
 
+- `components/structured-data.tsx`: suporte a `taxID`, `areaServed` e cole��es
+  `contactPoint` para representar m�ltiplos telefones e o CNPJ no Schema.org
+  LocalBusiness
+
+# Changelog
+
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
 O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-## [2025-10-14] - Padronização de Email Oficial
+## [2025-10-14] - Melhorias de UX na Página de Detalhes do Equipamento
+
+### Changed 🔄
+
+- **Página de Detalhes do Equipamento**: Melhorado estilo dos elementos
+  "Incluído na locação"
+  - Removidas cores de fundo específicas (verde, azul, laranja)
+  - Aplicado fundo branco uniforme para todos os elementos
+  - Adicionada sombra sutil (`shadow-sm`) e efeito hover com sombra mais
+    pronunciada (`hover:shadow-md`)
+  - Implementado efeito hover com texto laranja (`hover:text-orange-600`)
+  - Adicionada transição suave (`transition-all duration-300`)
+  - Mantidas as cores dos ícones CheckCircle para identificação visual
+  - Localização: `app/equipamentos/[id]/page.tsx` (linhas 462-480)
+
+## [2025-10-14] - Padronização de Contato e Dados Oficiais
 
 ### Changed 🔄
 
@@ -23,6 +44,8 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Placeholders de Formulário**: Substituídos `seu@email.com` por
   `contato@locacoesgb.com.br`
   - Formulários de contato, orçamento, login, cadastro e recuperação de senha
+    - Campo "Nome Completo" do orçamento agora exibe placeholder "Seu nome
+      completo"
   - Stories do Storybook para componente Input
   - Páginas administrativas e formulários
 
@@ -30,6 +53,23 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - `docs/guides/oauth-social-login.md` - configuração Google e Facebook
   - `docs/guides/oauth-setup-example.md` - usuários de teste
   - `docs/architecture/api.md` - exemplos de JWT payload
+- **Contatos e localização**: Telefones (51) 2313-6262 / (51) 99820-5163,
+  endereço (Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS), CEP
+  90240-100 e CNPJ 34.780.330/0001-69 sincronizados em toda a experiência
+  pública com links `tel:` corrigidos
+  - Componentes: `components/header.tsx`, `components/hero.tsx`,
+    `components/footer.tsx`, `components/contact-section.tsx`,
+    `components/why-choose-us.tsx`
+    - Header: exibe apenas o WhatsApp no modo mobile e ambos os números a partir
+      de `sm`
+    - Sobre: botão de contato exibe só o WhatsApp em mobile, ambos os números em
+      `sm`+
+  - Páginas: `app/contato/page.tsx`, `app/sobre/page.tsx`
+  - Documentação de suporte: `docs/internal/seo-optimization-implementation.md`,
+    `docs/internal/cursor-instructions.md`,
+    `docs/getting-started/developer-guide.md`
+- **WhatsApp**: Número padrão do fluxo de orçamento atualizado para
+  `5551998205163` em `lib/whatsapp.ts`
 
 ### Technical Details 🔧
 
@@ -105,8 +145,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Conflitos CSS de overflow** resolvidos entre HTML e BODY
 - **Sintaxe inválida em schemas Prisma** corrigida (vírgulas órfãs removidas)
 
-### Added ✨
-
 - **React Portal** implementado para dropdown do autocomplete
 - **Cálculo dinâmico de posição** baseado no getBoundingClientRect do input
 - **Listeners de eventos** para resize e scroll para manter posicionamento
@@ -124,8 +162,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Funcionalidade de fechar dropdown** no scroll restaurada para melhor UX
 
 ## [2025-01-22] - Scrollbar Moderno com Identidade Visual
-
-### Added ✨
 
 - **Scrollbar moderno** para área pública com identidade visual GB Locações
 - **Setas de navegação** superior e inferior no scrollbar principal
@@ -156,8 +192,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Scope**: Aplicado apenas ao scrollbar principal, preservando modais/dialogs
 
 ## [2025-01-22] - Integração AgentDesk BrowserTools
-
-### Added ✨
 
 - **Integração completa AgentDesk BrowserTools** para Cursor ↔ Browser
 - **Comandos MCP disponíveis** para monitoramento em tempo real
@@ -192,8 +226,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Detecção proativa de erros** JavaScript e rede
 
 ## [2025-01-22] - Implementação Completa de Autenticação Social
-
-### Added ✨
 
 - **Sistema completo de OAuth Social** com Google e Facebook
 - **Componente SocialLoginButtons** reutilizável em
@@ -373,8 +405,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - Funções utilitárias centralizadas e documentadas
   - Constantes organizadas por domínio
 
-### Added ✨
-
 - **`lib/constants/lucide-icons.ts`** - Constantes organizadas:
   - 200+ ícones curados e organizados por tema
   - Type-safe com `CategoryIcon` type
@@ -532,8 +562,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - Estilos `[data-radix-portal]` movidos para `globals.css`
   - Componente agora 100% limpo, sem CSS injetado
 
-### Added ✨
-
 - **Design tokens em `app/globals.css`**:
   - `--popover`: Cor de fundo do popover (light/dark)
   - `--popover-foreground`: Cor do texto do popover (light/dark)
@@ -590,8 +618,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - `.category-icon-grid` - Grid principal de ícones (6 colunas)
   - `@keyframes reset-spin` - Animação de reset
   - `.animate-reset` - Classe de animação
-
-### Added ✨
 
 - **Estilos genéricos em `popover.tsx`** (componente base ShadCN):
   - Variáveis de tema `--popover` e `--popover-foreground` (light/dark)
@@ -709,8 +735,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [2025-10-05] - Redesign da Barra de Pesquisa e Melhorias de Layout
 
-### Added ✨
-
 - **Ícone de Filtro Integrado**: Ícone de filtro agora integrado dentro de cada
   combobox
 - **Feedback Visual**: Ícone de filtro "acende" em laranja quando filtro está
@@ -782,8 +806,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ---
 
 ## [2025-10-05] - Otimização Mobile do Painel Administrativo
-
-### Added ✨
 
 - **Header Contextual Mobile**: Título dinâmico da página no header mobile do
   admin
@@ -999,8 +1021,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [2025-10-02] - Melhoria Visual dos Comboboxes de Filtro
 
-### Added ✨
-
 - **Indicação Visual de Categoria Selecionada**: Implementado sistema de
   destaque visual para comboboxes quando uma categoria está selecionada
   - Fundo laranja claro (`bg-orange-50`) quando categoria ativa
@@ -1047,8 +1067,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [2025-10-02] - Badges sem Hover na Área do Cliente
 
-### Added ✨
-
 - **Sistema de Badges sem Hover**: Implementado sistema para remover efeitos de
   hover dos badges especificamente na área do cliente
   - Novas variantes de badge: `no-hover-default`, `no-hover-secondary`,
@@ -1078,8 +1096,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   indesejados
 
 ## [2025-01-22] - Badge de Notificação WhatsApp-Style + Correções de UI
-
-### Added ✨
 
 - **Badge de Notificação WhatsApp-Style**: Implementado sistema de notificação
   visual no menu lateral
@@ -1207,8 +1223,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [2025-10-01] - Reutilização da Barra de Pesquisa na Área do Cliente
 
-### Added ✨
-
 - **SearchBar Component**: Novo componente reutilizável baseado no
   AdminFilterCard
   - Suporte a múltiplas variantes: `default`, `compact`, `inline`
@@ -1327,8 +1341,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - Políticas agora separadas por operação (SELECT, INSERT, UPDATE, DELETE)
   - Código mais claro e manutenível
 
-### Added ✨
-
 - **🔍 Índices para Foreign Keys**: Adicionados 11 índices críticos para
   melhorar performance de JOINs
   - `idx_accounts_userId` - Otimiza queries de contas de usuário
@@ -1444,8 +1456,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - Node.js types atualizados com correções de segurança
 
 ## [2025-01-22] - Configuração Global do Spellchecker
-
-### Added ✨
 
 - **Configuração global do cSpell**: Adicionado suporte para português
   brasileiro e inglês americano
