@@ -122,7 +122,7 @@ export default function WhyChooseUs() {
               <div className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group gap-2">
                 <a
                   href="tel:+555123136262"
-                  className="group-hover:animate-pulse"
+                  className="hidden sm:inline group-hover:animate-pulse"
                 >
                   (51) 2313-6262
                 </a>

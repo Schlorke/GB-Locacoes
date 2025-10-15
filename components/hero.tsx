@@ -79,16 +79,20 @@ export default function Hero() {
               <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
                 <Phone className="h-5 w-5 group-hover:animate-bounce" />
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                  <a
-                    href="tel:+555123136262"
-                    className="hidden sm:inline hover:underline"
-                  >
-                    (51) 2313-6262
-                  </a>
-                  <span className="hidden sm:inline">|</span>
-                  <a href="tel:+5551998205163" className="hover:underline">
-                    (51) 99820-5163
-                  </a>
+                  <div className="sm:hidden">
+                    <a href="tel:+5551998205163" className="hover:underline">
+                      (51) 99820-5163
+                    </a>
+                  </div>
+                  <div className="hidden sm:flex sm:items-center sm:gap-2">
+                    <a href="tel:+555123136262" className="hover:underline">
+                      (51) 2313-6262
+                    </a>
+                    <span>|</span>
+                    <a href="tel:+5551998205163" className="hover:underline">
+                      (51) 99820-5163
+                    </a>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
@@ -107,14 +111,14 @@ export default function Hero() {
                 priority
                 className="rounded-2xl shadow-2xl w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
               />
-              {/* Floating Stats */}
-              <div className="absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+              {/* Floating Stats - Ocultos no mobile */}
+              <div className="hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                 <div className="text-2xl font-bold animate-count-up">+200</div>
                 <div className="text-sm font-medium">
                   Equipamentos Disponíveis
                 </div>
               </div>
-              <div className="absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+              <div className="hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                 <div className="text-2xl font-bold">10+</div>
                 <div className="text-sm font-medium">Anos de Experiência</div>
               </div>
