@@ -62,6 +62,8 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
     `components/why-choose-us.tsx`
     - Header: exibe apenas o WhatsApp no modo mobile e ambos os números a partir
       de `sm`
+    - Hero: contato rápido exibe só o WhatsApp em mobile, ambos os números em
+      `sm`+
     - Sobre: botão de contato exibe só o WhatsApp em mobile, ambos os números em
       `sm`+
   - Páginas: `app/contato/page.tsx`, `app/sobre/page.tsx`
