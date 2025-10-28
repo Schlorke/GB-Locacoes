@@ -26,7 +26,7 @@ export default function ContactSection() {
               <h3 className="text-2xl font-semibold mb-6">
                 Solicite um Orçamento de Equipamentos
               </h3>
-              <form className="space-y-6">
+              <form className="space-y-6" suppressHydrationWarning>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="group">
                     <label

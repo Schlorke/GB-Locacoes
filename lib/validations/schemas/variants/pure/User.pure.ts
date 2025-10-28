@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
-
 import { RoleSchema } from '../../enums/Role.schema';
 // prettier-ignore
 export const UserModelSchema = z.object({

@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import Decimal from 'decimal.js';
 import { QuoteStatusSchema } from '../enums/QuoteStatus.schema';
 import { QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema as QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema } from './QuoteItemCreateNestedManyWithoutQuoteInput.schema';
 import { UserCreateNestedOneWithoutQuotesInputObjectSchema as UserCreateNestedOneWithoutQuotesInputObjectSchema } from './UserCreateNestedOneWithoutQuotesInput.schema'
 
+import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const makeSchema = () => z.object({
   id: z.string().optional(),
   name: z.string(),
@@ -12,7 +14,15 @@ const makeSchema = () => z.object({
   phone: z.string(),
   company: z.string().optional().nullable(),
   message: z.string().optional().nullable(),
-  total: z.number().optional(),
+  total: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: 'Field 'total' must be a Decimal',
+}).optional(),
   status: QuoteStatusSchema.optional(),
   createdAt: z.coerce.date().optional(),
   items: z.lazy(() => QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema),

@@ -475,7 +475,7 @@ function CadastroForm() {
                     variant="outline"
                     onClick={() => handleSocialLogin('google')}
                     disabled={isLoading}
-                    className="h-12 border-slate-300 hover:bg-slate-50"
+                    className="h-12 px-4 py-2 border-slate-300 hover:bg-slate-50"
                   >
                     <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                       <path
@@ -502,7 +502,7 @@ function CadastroForm() {
                     variant="outline"
                     onClick={() => handleSocialLogin('facebook')}
                     disabled={isLoading}
-                    className="h-12 border-slate-300 hover:bg-slate-50"
+                    className="h-12 px-4 py-2 border-slate-300 hover:bg-slate-50"
                   >
                     <svg
                       className="w-4 h-4 mr-2"

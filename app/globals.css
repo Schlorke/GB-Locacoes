@@ -137,10 +137,6 @@ small {
   font-size: clamp(0.875rem, 1.5vw, 1rem);
   line-height: 1.5;
 }
-button {
-  font-size: clamp(1rem, 2vw, 1.125rem);
-  line-height: 1.6;
-}
 html {
   scroll-behavior: smooth;
   max-width: 100%;

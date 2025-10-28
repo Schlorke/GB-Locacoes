@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import Decimal from 'decimal.js';
 import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
 import { StringNullableFilterObjectSchema as StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { DecimalFilterObjectSchema as DecimalFilterObjectSchema } from './DecimalFilter.schema';
@@ -17,6 +18,7 @@ import { QuoteItemListRelationFilterObjectSchema as QuoteItemListRelationFilterO
 import { Rental_itemsListRelationFilterObjectSchema as Rental_itemsListRelationFilterObjectSchema } from './Rental_itemsListRelationFilter.schema';
 import { CartItemListRelationFilterObjectSchema as CartItemListRelationFilterObjectSchema } from './CartItemListRelationFilter.schema'
 
+import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const equipmentwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => EquipmentWhereInputObjectSchema), z.lazy(() => EquipmentWhereInputObjectSchema).array()]).optional(),
   OR: z.lazy(() => EquipmentWhereInputObjectSchema).array().optional(),
@@ -24,7 +26,15 @@ const equipmentwhereinputSchema = z.object({
   id: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   name: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   description: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
-  pricePerDay: z.union([z.lazy(() => DecimalFilterObjectSchema), z.number()]).optional(),
+  pricePerDay: z.union([z.lazy(() => DecimalFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: 'Field 'pricePerDay' must be a Decimal',
+})]).optional(),
   images: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   available: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   categoryId: z.union([z.lazy(() => UuidFilterObjectSchema), z.string()]).optional(),
@@ -35,10 +45,42 @@ const equipmentwhereinputSchema = z.object({
   biweeklyDiscount: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).optional().nullable(),
   monthlyDiscount: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).optional().nullable(),
   popularPeriod: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
-  dailyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.number()]).optional().nullable(),
-  weeklyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.number()]).optional().nullable(),
-  biweeklyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.number()]).optional().nullable(),
-  monthlyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.number()]).optional().nullable(),
+  dailyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: 'Field 'dailyDirectValue' must be a Decimal',
+})]).optional().nullable(),
+  weeklyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: 'Field 'weeklyDirectValue' must be a Decimal',
+})]).optional().nullable(),
+  biweeklyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: 'Field 'biweeklyDirectValue' must be a Decimal',
+})]).optional().nullable(),
+  monthlyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: 'Field 'monthlyDirectValue' must be a Decimal',
+})]).optional().nullable(),
   dailyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   weeklyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   biweeklyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),

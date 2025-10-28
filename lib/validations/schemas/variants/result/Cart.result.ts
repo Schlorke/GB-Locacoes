@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
-
 // prettier-ignore
 export const CartResultSchema = z.object({
     id: z.string(),

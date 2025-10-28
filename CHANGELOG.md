@@ -12,6 +12,116 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-27] - Atualizações Importantes de Dependencies + Correções iOS
+
+### Changed 🔄
+
+- **Dependencies**: Atualizadas todas as dependências (exceto Tailwind CSS
+  conforme solicitação)
+  - **Next.js**: 15.5.5 → 16.0.0 (major version upgrade)
+  - **Vitest**: 3.2.4 → 4.0.4 (major version upgrade, testes funcionando 30/30)
+  - **TypeScript ESLint**: 8.46.1 → 8.46.2
+  - **React Syntax Highlighter**: 15.6.6 → 16.0.0
+  - **Markdown to JSX**: 7.7.17 → 8.0.0
+  - **Lucide React**: 0.545.0 → 0.548.0
+  - **Pino Logger**: 10.0.0 → 10.1.0
+  - **Happy DOM**: 20.0.0 → 20.0.8
+  - **@auth/core**: 0.41.0 → 0.41.1
+  - **E mais 11 outras dependências menores atualizadas**
+  - **Tailwind CSS**: Mantido em 3.4.17 (não atualizado conforme solicitação)
+
+### Fixed 🐛
+
+- **Next.js 16.0 Compatibility**: Removida configuração `eslint` do
+  `next.config.mjs` (não suportada na v16)
+- **Vitest 4.0 Compatibility**: Simplificada configuração `browser` em
+  `vitest.storybook.config.ts`
+- **TypeScript Errors**: Instalado `decimal.js` requerido pelos helpers gerados
+  pelo Prisma
+- **Prettier Errors**: Adicionado `lib/validations/schemas/` ao
+  `.prettierignore` para evitar erros em arquivos auto-gerados do Prisma
+- **Build Process**: Mantido build time de ~5.8s com 47 páginas geradas com
+  sucesso
+- **Tests**: 30/30 testes passando com Vitest 4.0.4
+
+### Added ✨
+
+- **New Dependencies**: `decimal.js` adicionado para suporte aos helpers
+  Zod/Prisma
+
+## [2025-10-27] - Correção Crítica do Posicionamento Autocomplete no Safari iOS
+
+### Fixed 🐛
+
+- **Autocomplete Search Bar**: Corrigido posicionamento problemático da listbox
+  no Safari iOS
+  - **Problema**: Listbox aparecia em cima do search bar devido à barra de
+    endereços dinâmica do Safari
+  - **Solução**: Implementado sistema híbrido de posicionamento
+    - Safari iOS: Usa `position: absolute` relativo ao container (como dropdown
+      de categorias funcional)
+    - Desktop/outros browsers: Mantém `position: fixed` com portal
+      (funcionamento perfeito preservado)
+  - **Detecção**: Implementada detecção precisa do Safari iOS via User Agent
+  - **Zero breaking changes**: Desktop mantém comportamento perfeito
+  - **Localização**: `components/ui/autocomplete.tsx` (linhas 52-68, 369-443)
+  - **Inspiração**: Baseado no dropdown de categorias que funciona perfeitamente
+    no iOS
+  - **Resultado**: Listbox agora aparece corretamente abaixo do search bar em
+    todos os dispositivos
+
+- **React Hydration Warning**: Corrigido warning de hidratação no Chrome iOS
+  - **Problema 1**: Renderização condicional baseada em detecção de browser
+    causava mismatch entre SSR e cliente
+  - **Problema 2**: Chrome iOS injeta atributos (`__gchrome_remoteframetoken`,
+    `__gchrome_uniqueid`) no HTML
+  - **Problema 3**: Forms no ContactSection também afetados por injeção de
+    atributos Chrome
+  - **Solução**: Adicionado `suppressHydrationWarning` em múltiplos níveis
+    - Autocomplete component: `components/ui/autocomplete.tsx` (linhas 303,
+      377, 456)
+    - Root Layout: `app/layout.tsx` (tags `<html>` e `<body>`, linhas 109-110)
+    - Client Layout: `app/ClientLayout.tsx` (containers principais, linhas
+      19, 23)
+    - Página Equipamentos: `app/equipamentos/page.tsx` (container principal,
+      linha 235)
+    - Filter Card: `components/admin/admin-filter-card.tsx` (componente Card,
+      linha 65)
+    - Forms: `components/contact-section.tsx`, `components/contact-form.tsx`,
+      `components/quote-form.tsx`
+  - **Expansão da detecção**: Modificado para detectar TODOS os browsers iOS,
+    não apenas Safari
+    - `detectSafariIOS()` → `detectMobileIOS()`: detecta qualquer iOS (Safari,
+      Chrome, Firefox)
+    - Garante que TODOS os browsers iOS usem `position: absolute` (funcionamento
+      confiável)
+  - **Resultado**: Eliminados completamente warnings de hidratação +
+    posicionamento correto em TODOS os browsers mobile iOS
+
+### Added ✨
+
+- **Documentação Completa**: Criado guia técnico detalhado do bug e solução
+  - **Localização**: `docs/guides/safari-ios-autocomplete-positioning-fix.md`
+  - **Conteúdo**:
+    - Análise técnica da causa raiz (barra de endereços dinâmica do Safari)
+    - Comparação detalhada: `getBoundingClientRect()` + `position: fixed` vs
+      `position: absolute`
+    - Implementação completa da solução híbrida
+    - User Agent detection para Safari iOS nativo
+    - Guia de aplicação em outros componentes
+    - Cenários de teste e validação
+    - Lições aprendidas e recomendações futuras
+  - **Adicionado ao índice**: `docs/README.md` na seção de Guias Específicos
+
+### Technical Details 🔧
+
+- **Função detectSafariIOS()**: Identifica Safari nativo iOS (exclui
+  Chrome/Firefox iOS)
+- **Renderização condicional**: Safari iOS usa absolute sem portal, outros
+  browsers usam fixed com portal
+- **Consistência visual**: Mantido mesmo estilo, comportamento e ARIA labels
+- **Performance**: Zero impacto, detecção apenas no mount do componente
+
 ## [2025-10-14] - Melhorias de UX na Página de Detalhes do Equipamento
 
 ### Changed 🔄

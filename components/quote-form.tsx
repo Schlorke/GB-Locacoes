@@ -316,7 +316,7 @@ export default function QuoteForm({
       </CardHeader>
 
       <CardContent className="p-6">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} suppressHydrationWarning>
           <AnimatePresence mode="wait">
             {/* Etapa 1: Informações Pessoais */}
             {currentStep === 1 && (

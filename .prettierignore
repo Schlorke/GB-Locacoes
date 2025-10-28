@@ -6,3 +6,4 @@ coverage
 *.lock
 design-tokens/output/
 storybook-static/
+lib/validations/schemas/

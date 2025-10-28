@@ -49,11 +49,24 @@ export function Autocomplete({
     left: 0,
     width: 0,
   })
+  const [isMobileIOS, setIsMobileIOS] = useState(false)
 
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<NodeJS.Timeout | undefined>(undefined)
+
+  // Detecta QUALQUER browser iOS para aplicar posicionamento correto
+  const detectMobileIOS = useCallback(() => {
+    if (typeof window === 'undefined') return false
+
+    const userAgent = window.navigator.userAgent
+    // Detecta qualquer dispositivo iOS (iPhone, iPad, iPod)
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent)
+
+    // Para iOS, sempre usa absolute positioning independente do browser
+    return isIOS
+  }, [])
 
   // Função de busca com debounce
   const searchEquipments = useCallback(async (searchQuery: string) => {
@@ -87,10 +100,11 @@ export function Autocomplete({
     }
   }, [])
 
-  // Mount detection
+  // Mount detection e detecção Mobile iOS
   useEffect(() => {
     setIsMounted(true)
-  }, [])
+    setIsMobileIOS(detectMobileIOS())
+  }, [detectMobileIOS])
 
   // Calculate dropdown position when opening
   const updateDropdownPosition = useCallback(() => {
@@ -287,7 +301,7 @@ export function Autocomplete({
   }, [selectedIndex])
 
   return (
-    <div className={cn('relative w-full', className)}>
+    <div className={cn('relative w-full', className)} suppressHydrationWarning>
       <div className="relative z-[9999]">
         <Input
           ref={inputRef}
@@ -351,19 +365,18 @@ export function Autocomplete({
         </div>
       </div>
 
-      {/* Dropdown via Portal */}
+      {/* Dropdown - Posicionamento híbrido */}
       {isOpen &&
         isMounted &&
-        createPortal(
+        (isMobileIOS ? (
+          // Mobile iOS (Safari, Chrome, Firefox): usa absolute positioning (sem portal)
           <div
             ref={dropdownRef}
-            className="fixed h-auto bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[99999]"
+            className="absolute top-full left-0 right-0 h-auto bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[99999] mt-1"
             style={{
-              top: `${dropdownPosition.top}px`,
-              left: `${dropdownPosition.left}px`,
-              width: `${dropdownPosition.width}px`,
               maxHeight: '370px',
             }}
+            suppressHydrationWarning
           >
             <div
               className="max-h-full overflow-y-auto overscroll-contain"
@@ -429,9 +442,89 @@ export function Autocomplete({
                 </div>
               ) : null}
             </div>
-          </div>,
-          document.body
-        )}
+          </div>
+        ) : (
+          // Desktop/outros browsers: usa fixed positioning (via portal)
+          createPortal(
+            <div
+              ref={dropdownRef}
+              className="fixed h-auto bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[99999]"
+              style={{
+                top: `${dropdownPosition.top}px`,
+                left: `${dropdownPosition.left}px`,
+                width: `${dropdownPosition.width}px`,
+                maxHeight: '370px',
+              }}
+              suppressHydrationWarning
+            >
+              <div
+                className="max-h-full overflow-y-auto overscroll-contain"
+                style={{ maxHeight: '370px' }}
+              >
+                {isLoading ? (
+                  <div className="p-4 text-center text-gray-500">
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600 mx-auto mb-2"></div>
+                    Buscando...
+                  </div>
+                ) : suggestions.length > 0 ? (
+                  <ul
+                    ref={listRef}
+                    role="listbox"
+                    aria-label="Sugestões de equipamentos"
+                  >
+                    {suggestions.map((equipment, index) => {
+                      const isSelected = selectedIndex === index
+                      return (
+                        <li
+                          key={equipment.id}
+                          id={`equipment-option-${index}`}
+                          role="option"
+                          className={cn(
+                            'px-4 py-3 cursor-pointer transition-colors text-gray-900',
+                            isSelected
+                              ? 'bg-orange-50 text-orange-900'
+                              : 'hover:bg-gray-50 text-gray-900'
+                          )}
+                          onMouseDown={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            handleSelect(equipment)
+                          }}
+                        >
+                          <div className="flex items-start justify-between overflow-hidden">
+                            <div className="flex-1 min-w-0 pr-2">
+                              <p className="font-medium text-sm truncate text-gray-900">
+                                {equipment.name}
+                              </p>
+                              <p className="text-xs text-gray-600 mt-1 line-clamp-2">
+                                {equipment.description}
+                              </p>
+                              <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full whitespace-nowrap">
+                                  {equipment.category.name}
+                                </span>
+                                <span className="text-xs text-gray-600 font-medium whitespace-nowrap">
+                                  R$ {Number(equipment.pricePerDay).toFixed(2)}
+                                  /dia
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                ) : query.length >= 2 ? (
+                  <div className="p-4 text-center text-gray-500">
+                    <p className="text-sm">Nenhum equipamento encontrado</p>
+                    <p className="text-xs mt-1">Tente outro termo de busca</p>
+                  </div>
+                ) : null}
+              </div>
+            </div>,
+            document.body
+          )
+        ))}
     </div>
   )
 }

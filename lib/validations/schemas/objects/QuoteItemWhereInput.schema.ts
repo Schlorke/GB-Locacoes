@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import Decimal from 'decimal.js';
 import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
 import { IntFilterObjectSchema as IntFilterObjectSchema } from './IntFilter.schema';
 import { DecimalFilterObjectSchema as DecimalFilterObjectSchema } from './DecimalFilter.schema';
@@ -10,6 +11,7 @@ import { EquipmentWhereInputObjectSchema as EquipmentWhereInputObjectSchema } fr
 import { QuoteScalarRelationFilterObjectSchema as QuoteScalarRelationFilterObjectSchema } from './QuoteScalarRelationFilter.schema';
 import { QuoteWhereInputObjectSchema as QuoteWhereInputObjectSchema } from './QuoteWhereInput.schema'
 
+import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const quoteitemwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => QuoteItemWhereInputObjectSchema), z.lazy(() => QuoteItemWhereInputObjectSchema).array()]).optional(),
   OR: z.lazy(() => QuoteItemWhereInputObjectSchema).array().optional(),
@@ -19,8 +21,24 @@ const quoteitemwhereinputSchema = z.object({
   equipmentId: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   quantity: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
   days: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
-  pricePerDay: z.union([z.lazy(() => DecimalFilterObjectSchema), z.number()]).optional(),
-  total: z.union([z.lazy(() => DecimalFilterObjectSchema), z.number()]).optional(),
+  pricePerDay: z.union([z.lazy(() => DecimalFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: 'Field 'pricePerDay' must be a Decimal',
+})]).optional(),
+  total: z.union([z.lazy(() => DecimalFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: 'Field 'total' must be a Decimal',
+})]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   equipment: z.union([z.lazy(() => EquipmentScalarRelationFilterObjectSchema), z.lazy(() => EquipmentWhereInputObjectSchema)]).optional(),

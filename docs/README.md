@@ -37,6 +37,8 @@ com o projeto.
 - **[storybook.md](./guides/storybook.md)** - Documentação do Storybook
 - **[testing.md](./guides/testing.md)** - Testes e controle de qualidade
 - **[ci-cd.md](./guides/ci-cd.md)** - Integração e deploy contínuo
+- **[safari-ios-autocomplete-positioning-fix.md](./guides/safari-ios-autocomplete-positioning-fix.md)** -
+  🐛 Correção de bug crítico no Safari iOS
 
 ### 📋 [references/](./references/) - Referências
 

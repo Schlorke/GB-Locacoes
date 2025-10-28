@@ -16,10 +16,11 @@ export default function ClientLayout({
   const isAdminRoute = pathname?.startsWith('/admin') || false
 
   return (
-    <div data-scroll-behavior="smooth">
+    <div data-scroll-behavior="smooth" suppressHydrationWarning>
       {!isAdminRoute && <Header />}
       <div
         className={`overflow-x-hidden min-h-screen ${!isAdminRoute ? 'pt-[100px] md:pt-[96px]' : ''}`}
+        suppressHydrationWarning
       >
         {children}
       </div>

@@ -106,8 +106,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${jost.variable}`}>
-      <body className="min-h-screen bg-background font-sans antialiased">
+    <html
+      lang="pt-BR"
+      className={`${inter.variable} ${jost.variable}`}
+      suppressHydrationWarning
+    >
+      <body
+        className="min-h-screen bg-background font-sans antialiased"
+        suppressHydrationWarning
+      >
         <SessionProviderWrapper>
           <ClientLayout>
             {children}

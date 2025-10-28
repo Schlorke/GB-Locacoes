@@ -62,6 +62,7 @@ export function AdminFilterCard({
         'admin-filter-card relative overflow-visible border-0 shadow-xl bg-white backdrop-blur-sm transition-all duration-300',
         className
       )}
+      suppressHydrationWarning
     >
       {/* Clean depth layers for filter card */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
