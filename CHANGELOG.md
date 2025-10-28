@@ -12,6 +12,65 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [2025-10-28] - Correção Menu Mobile Admin + Google OAuth IPs Privados + Redirecionamento por Role
+
+### Fixed 🐛
+
+- **Mobile Sidebar**: Adicionado item "Configurações" ao menu mobile do painel
+  administrativo
+  - Importado ícone `Settings` do lucide-react
+  - Adicionado rota `/admin/settings` ao array `navItems` em
+    `mobile-sidebar.tsx`
+  - Corrigida inconsistência entre sidebar desktop e mobile
+  - Menu mobile agora exibe todas as 5 opções: Dashboard, Equipamentos,
+    Categorias, Orçamentos, Configurações
+
+### Changed 🔄
+
+- **Settings Navigation Bar**: Ajustes visuais nos botões de navegação de
+  configurações
+  - Removido `hover:border-gray-300` para manter borda consistente
+  - Removido background azul (`bg-blue-50/50`) quando active
+  - Removido border color quando active (mantém `border-gray-200` sempre)
+  - Removido completamente estilos de focus (sem outline, sem ring, sem border
+    color)
+  - Removido hover scale (`hover:scale-105`)
+  - Alterado para identidade visual laranja quando active: APENAS ícone
+    `text-orange-500` e texto `text-orange-600`
+  - Mantém comportamento de hover laranja para ícone e texto
+  - Shadow aplicada: `shadow-md` normal, `shadow-lg` no hover e quando active
+  - Arquivo modificado: `components/admin/settings-navigation-bar.tsx`
+
+- **Google OAuth**: Documentado erro "device_id and device_name are required for
+  private IP"
+  - **IMPORTANTE**: Parâmetros `device_id` e `device_name` são APENAS para
+    native apps (iOS/Android)
+  - **Solução para web apps**: Usar APENAS `localhost:3000` ao invés de IPs
+    privados (192.168.x.x)
+  - Google OAuth NÃO suporta device info em aplicações web por questões de
+    segurança
+  - Adicionado `prompt: 'consent'` e `access_type: 'offline'` para melhor
+    experiência OAuth
+  - Documentação completa adicionada em
+    `docs/getting-started/troubleshooting.md`
+
+- **OAuth Redirecionamento**: Corrigido redirecionamento baseado em role após
+  login social
+  - **PROBLEMA**: Login com Google/Facebook sempre redirecionava para
+    `/area-cliente`, mesmo para admins
+  - **SOLUÇÃO**: Criada página intermediária `/auth/callback` que verifica role
+    e redireciona adequadamente
+  - Admins (`role === 'ADMIN'` ou email `admin@gblocacoes.com.br`) →
+    `/admin/dashboard`
+  - Clientes (`role === 'CLIENT'`) → `/area-cliente`
+  - Modificado `components/ui/social-login-buttons.tsx` para aceitar prop
+    `callbackUrl` customizável
+  - Atualizado callbacks em `lib/auth.ts` para suportar redirecionamento baseado
+    em role
+  - Arquivos modificados: `app/login/page.tsx`, `app/entrar/page.tsx`,
+    `app/cadastro/page.tsx`
+  - Novo arquivo: `app/auth/callback/page.tsx`
+
 ## [2025-10-27] - Atualizações Importantes de Dependencies + Correções iOS
 
 ### Changed 🔄

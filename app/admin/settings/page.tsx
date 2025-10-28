@@ -346,6 +346,21 @@ export default function SettingsPage() {
   const saveSystemSettings = () => saveSection('system')
   const saveCustomSettings = () => saveSection('custom')
 
+  // Função para mudar seção e fazer scroll automático no mobile
+  const handleSectionChange = (sectionId: string) => {
+    // Mudar a seção ativa
+    setActiveSection(sectionId)
+
+    // Fazer scroll para o container de configurações (mobile-friendly)
+    const container = document.getElementById('settings-content-container')
+    if (container) {
+      container.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }
+
   if (isLoadingData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -402,19 +417,20 @@ export default function SettingsPage() {
           transition={{ delay: 0.05 }}
         >
           <SettingsNavigationBar
-            onSectionSelect={setActiveSection}
+            onSectionSelect={handleSectionChange}
             activeSection={activeSection}
           />
         </motion.div>
 
         {/* Conteúdo das configurações */}
-        <div className="space-y-8">
+        <div id="settings-content-container" className="space-y-8">
           {/* Renderização condicional das seções */}
           {activeSection === 'company' && (
             <motion.div
+              id="section-company"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+              transition={{ duration: 0.3 }}
             >
               <SettingsBlock
                 title="Informações da Empresa"
@@ -513,9 +529,10 @@ export default function SettingsPage() {
           {/* Hero Carousel */}
           {activeSection === 'hero' && (
             <motion.div
+              id="section-hero"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ duration: 0.3 }}
             >
               <SettingsBlock
                 title="Carousel Principal"
@@ -547,9 +564,10 @@ export default function SettingsPage() {
           {/* Redes Sociais */}
           {activeSection === 'social' && (
             <motion.div
+              id="section-social"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              transition={{ duration: 0.3 }}
             >
               <SettingsBlock
                 title="Redes Sociais"
@@ -590,9 +608,10 @@ export default function SettingsPage() {
           {/* SEO */}
           {activeSection === 'seo' && (
             <motion.div
+              id="section-seo"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
+              transition={{ duration: 0.3 }}
             >
               <SettingsBlock
                 title="SEO e Metadados"
@@ -665,9 +684,10 @@ export default function SettingsPage() {
           {/* Sistema */}
           {activeSection === 'system' && (
             <motion.div
+              id="section-system"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              transition={{ duration: 0.3 }}
             >
               <SettingsBlock
                 title="Configurações do Sistema"
@@ -755,9 +775,10 @@ export default function SettingsPage() {
           {/* Configurações Avançadas */}
           {activeSection === 'custom' && (
             <motion.div
+              id="section-custom"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
+              transition={{ duration: 0.3 }}
             >
               <SettingsBlock
                 title="Configurações Avançadas"

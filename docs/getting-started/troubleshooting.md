@@ -330,7 +330,108 @@ cat .env.local | grep "="
 pnpm dev
 ```
 
-### **4. Storybook Issues**
+### **4. Google OAuth: "device_id and device_name are required for private IP"**
+
+#### **Problema:**
+
+```
+Acesso bloqueado: erro de autorização
+device_id and device_name are required for private IP:
+http://192.168.0.x:3000/api/auth/callback/google
+Erro 400: invalid_request
+```
+
+#### **Causa Raiz:**
+
+O Google OAuth **bloqueia completamente** autenticações vindas de **IPs
+privados** (192.168.x.x, 172.x.x.x, 10.x.x.x) em aplicações web. Os parâmetros
+`device_id` e `device_name` são **APENAS para native apps** (iOS, Android,
+desktop), **NÃO para web apps**.
+
+#### **⚠️ IMPORTANTE: Web Apps x Native Apps**
+
+- **Web Apps (nosso caso)**: NÃO podem usar `device_id`/`device_name`
+- **Native Apps**: Podem usar parâmetros de device info
+- **Erro "Device info can be set only for native apps"**: Confirma que é web app
+
+#### **Soluções (2 opções para web apps):**
+
+##### **🎯 Opção 1: Use `localhost` (RECOMENDADO)**
+
+```bash
+# ❌ NÃO use o IP da rede
+http://192.168.0.2:3000
+
+# ✅ Use localhost
+http://localhost:3000
+```
+
+**Por quê funciona?** O Google reconhece `localhost` como ambiente de
+desenvolvimento seguro.
+
+##### **⚙️ Opção 2: Configure `NEXTAUTH_URL` corretamente**
+
+Adicione ao seu `.env.local`:
+
+```bash
+# .env.local
+NEXTAUTH_URL="http://localhost:3000"
+
+# Suas credenciais Google OAuth
+GOOGLE_CLIENT_ID="seu_client_id.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="seu_client_secret"
+```
+
+E na **Google Cloud Console**, configure a URL de redirect como:
+
+```
+http://localhost:3000/api/auth/callback/google
+```
+
+#### **❌ SOLUÇÃO INCORRETA (NÃO FUNCIONA)**
+
+~~Adicionar `device_id` e `device_name` ao GoogleProvider~~ - **NÃO FUNCIONA!**
+
+**Por quê não funciona?**
+
+- Esses parâmetros são exclusivos para **native apps** (iOS, Android, desktop)
+- Web apps **NÃO podem** usar device info por limitações do Google OAuth
+- Tentativa resulta em erro: **"Device info can be set only for native apps"**
+
+#### **Verificação:**
+
+```bash
+# 1. Reiniciar servidor
+pnpm dev
+
+# 2. Acessar via localhost
+http://localhost:3000
+
+# 3. Testar login com Google
+# Deve funcionar sem erros
+```
+
+#### **Troubleshooting Adicional:**
+
+Se ainda tiver problemas:
+
+1. **Limpe cookies do navegador** - OAuth pode ter tokens antigos
+2. **Verifique Google Cloud Console** - Certifique-se que a URL de redirect está
+   correta
+3. **Verifique .env.local** - `NEXTAUTH_URL` deve ser `http://localhost:3000`
+4. **Teste em modo anônimo** - Para descartar problemas de cache
+
+#### **Referências:**
+
+- **Código implementado**: `lib/auth.ts` (linhas 27-37)
+- **Google OAuth Documentation**:
+  - [OAuth 2.0 for Web Apps](https://developers.google.com/identity/protocols/oauth2/web-server)
+  - **Nota**: Device authorization é apenas para native apps
+- **NextAuth.js Google Provider**:
+  [Docs](https://next-auth.js.org/providers/google)
+- **Limitações conhecidas**: Google OAuth não suporta IPs privados em web apps
+
+### **5. Storybook Issues**
 
 #### **Problema:**
 

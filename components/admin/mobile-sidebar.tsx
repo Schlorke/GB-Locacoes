@@ -9,6 +9,7 @@ import {
   ListChecks,
   LogOut,
   PackageSearch,
+  Settings,
   UserCircle,
   X,
 } from 'lucide-react'
@@ -22,6 +23,7 @@ const navItems = [
   { href: '/admin/equipamentos', icon: PackageSearch, label: 'Equipamentos' },
   { href: '/admin/categorias', icon: ListChecks, label: 'Categorias' },
   { href: '/admin/orcamentos', icon: FileText, label: 'Orçamentos' },
+  { href: '/admin/settings', icon: Settings, label: 'Configurações' },
 ]
 
 interface MobileSidebarProps {

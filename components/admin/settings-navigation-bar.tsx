@@ -107,28 +107,21 @@ export function SettingsNavigationBar({
                   onMouseLeave={() => setHoveredSection(null)}
                   className={cn(
                     // Base styles similar to reset button
-                    'flex flex-col items-center justify-center gap-2 p-4 rounded-lg border transition-all duration-300',
-                    'bg-transparent hover:bg-background hover:scale-105 hover:shadow-sm',
-                    'focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0',
-                    // Shadow like inputs
-                    'border-gray-200 hover:border-gray-300',
-                    // Active state
-                    isActive && 'border-blue-500 bg-blue-50/50 shadow-md'
+                    'flex flex-col items-center justify-center gap-2 p-6 md:p-4 rounded-lg border transition-all duration-300',
+                    'bg-transparent hover:bg-background',
+                    // Shadow: md normal, lg on hover and active
+                    'border-gray-200',
+                    isActive ? 'shadow-lg' : 'shadow-md hover:shadow-lg'
                   )}
-                  style={{
-                    boxShadow: isActive
-                      ? '0 4px 6px -1px rgba(59, 130, 246, 0.15), 0 2px 4px -1px rgba(59, 130, 246, 0.1)'
-                      : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                  }}
                   title={section.description}
                   aria-label={`Configurar ${section.label}`}
                 >
                   {/* Ícone com hover laranja */}
                   <Icon
                     className={cn(
-                      'w-5 h-5 transition-all duration-300',
+                      'w-[22px] h-[22px] md:w-5 md:h-5 transition-all duration-300',
                       isActive
-                        ? 'text-blue-600'
+                        ? 'text-orange-500'
                         : isHovered
                           ? 'text-orange-500'
                           : 'text-gray-600'
@@ -138,9 +131,9 @@ export function SettingsNavigationBar({
                   {/* Texto com hover laranja */}
                   <span
                     className={cn(
-                      'text-xs font-medium text-center leading-tight transition-all duration-300',
+                      'text-sm md:text-xs font-medium text-center leading-tight transition-all duration-300',
                       isActive
-                        ? 'text-blue-700'
+                        ? 'text-orange-600'
                         : isHovered
                           ? 'text-orange-500'
                           : 'text-gray-700'

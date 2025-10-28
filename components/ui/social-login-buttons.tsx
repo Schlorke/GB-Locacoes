@@ -9,6 +9,7 @@ interface SocialLoginButtonsProps {
   onError?: (_error: string) => void
   className?: string
   variant?: 'default' | 'compact'
+  callbackUrl?: string
 }
 
 export function SocialLoginButtons({
@@ -16,6 +17,7 @@ export function SocialLoginButtons({
   onError,
   className = '',
   variant = 'default',
+  callbackUrl,
 }: SocialLoginButtonsProps) {
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null)
 
@@ -23,7 +25,9 @@ export function SocialLoginButtons({
     setLoadingProvider(provider)
 
     try {
-      await signIn(provider, { callbackUrl: '/area-cliente' })
+      // Se callbackUrl não for fornecido, deixa NextAuth decidir
+      const options = callbackUrl ? { callbackUrl } : {}
+      await signIn(provider, options)
     } catch (error) {
       console.error('Social login error:', error)
       onError?.(

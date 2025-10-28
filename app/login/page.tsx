@@ -255,6 +255,7 @@ function LoginForm() {
                 <SocialLoginButtons
                   isLoading={isLoading}
                   onError={handleSocialError}
+                  callbackUrl="/auth/callback"
                 />
 
                 {/* Links de navegação */}

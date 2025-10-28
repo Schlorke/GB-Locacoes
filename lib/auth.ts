@@ -27,6 +27,13 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
+        },
+      },
     }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_CLIENT_ID!,
@@ -185,10 +192,31 @@ export const authOptions: NextAuthOptions = {
       }
       return session
     },
-    async signIn() {
+    async signIn({ account }) {
       // Permitir login para todos os usuários
       // A lógica de criação/atualização está no callback jwt
+
+      // Para OAuth (Google/Facebook), verificar role e redirecionar
+      if (account?.provider === 'google' || account?.provider === 'facebook') {
+        // O role será definido no callback jwt, então retornamos true
+        // O redirecionamento será feito com base no callbackUrl
+        return true
+      }
+
       return true
+    },
+    async redirect({ url, baseUrl }) {
+      // Permite que a aplicação redirecione para URLs relativas ou absolutas que começam com baseUrl
+      if (url.startsWith('/')) {
+        return `${baseUrl}${url}`
+      }
+
+      // Permite callback URLs que começam com baseUrl
+      if (url.startsWith(baseUrl)) {
+        return url
+      }
+
+      return baseUrl
     },
   },
   pages: {

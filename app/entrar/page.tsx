@@ -107,7 +107,7 @@ function LoginForm() {
     setError(null)
 
     try {
-      await signIn(provider, { callbackUrl: '/area-cliente' })
+      await signIn(provider, { callbackUrl: '/auth/callback' })
     } catch (err) {
       console.error('Social login error:', err)
       setError('Falha ao fazer login com ' + provider)
