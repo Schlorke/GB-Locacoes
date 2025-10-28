@@ -1,6 +1,7 @@
 'use client'
 
 import { Autocomplete } from '@/components/ui/autocomplete'
+import { usePublicSettings } from '@/hooks/use-public-settings'
 import { ArrowRight, MapPin, Phone, Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -8,6 +9,7 @@ import { useRouter } from 'next/navigation'
 
 export default function Hero() {
   const router = useRouter()
+  const { settings } = usePublicSettings()
 
   const handleEquipmentSelect = (equipment: { id: string; name: string }) => {
     // Sempre que onSelect for chamado (seja por seleção ou clique na lupa com item selecionado)
@@ -80,17 +82,26 @@ export default function Hero() {
                 <Phone className="h-5 w-5 group-hover:animate-bounce" />
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                   <div className="sm:hidden">
-                    <a href="tel:+5551998205163" className="hover:underline">
-                      (51) 99820-5163
+                    <a
+                      href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
+                      className="hover:underline"
+                    >
+                      {settings.whatsappNumber}
                     </a>
                   </div>
                   <div className="hidden sm:flex sm:items-center sm:gap-2">
-                    <a href="tel:+555123136262" className="hover:underline">
-                      (51) 2313-6262
+                    <a
+                      href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
+                      className="hover:underline"
+                    >
+                      {settings.companyPhone}
                     </a>
                     <span>|</span>
-                    <a href="tel:+5551998205163" className="hover:underline">
-                      (51) 99820-5163
+                    <a
+                      href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
+                      className="hover:underline"
+                    >
+                      {settings.whatsappNumber}
                     </a>
                   </div>
                 </div>

@@ -439,16 +439,35 @@ export default function SettingsPage() {
                 form={
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="companyPhone">Telefone da Empresa</Label>
+                      <Label htmlFor="companyPhone">Telefone Fixo</Label>
                       <Input
                         id="companyPhone"
                         value={formData.companyPhone || ''}
                         onChange={(e) =>
                           updateField('companyPhone', e.target.value)
                         }
-                        placeholder="(11) 99999-9999"
+                        placeholder="(51) 2313-6262"
                         className="mt-1"
                       />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Telefone fixo da empresa exibido em todo o site
+                      </p>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="whatsappNumber">WhatsApp / Celular</Label>
+                      <Input
+                        id="whatsappNumber"
+                        value={formData.whatsappNumber || ''}
+                        onChange={(e) =>
+                          updateField('whatsappNumber', e.target.value)
+                        }
+                        placeholder="(51) 99820-5163"
+                        className="mt-1"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Número WhatsApp/celular exibido em todo o site
+                      </p>
                     </div>
 
                     <div>
@@ -513,7 +532,7 @@ export default function SettingsPage() {
                       name: 'GB Locações',
                       description: formData.aboutUsText,
                       address: formData.companyAddress,
-                      phone: formData.companyPhone,
+                      phone: `${formData.companyPhone || '(51) 2313-6262'} | ${formData.whatsappNumber || '(51) 99820-5163'}`,
                       email: formData.contactEmail,
                     }}
                   />

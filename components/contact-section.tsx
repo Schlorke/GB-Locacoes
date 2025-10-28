@@ -1,10 +1,14 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { usePublicSettings } from '@/hooks/use-public-settings'
 import { Clock, Mail, MapPin, Phone } from 'lucide-react'
 
 export default function ContactSection() {
+  const { settings } = usePublicSettings()
   return (
     <section className="py-16 bg-gray-50">
       {/* Container com largura consistente */}
@@ -147,8 +151,10 @@ export default function ContactSection() {
                     <h4 className="font-semibold text-lg mb-2 group-hover:text-orange-600 transition-colors">
                       Telefone
                     </h4>
-                    <p className="text-gray-600 mb-1">(51) 2313-6262</p>
-                    <p className="text-gray-600">(51) 99820-5163</p>
+                    <p className="text-gray-600 mb-1">
+                      {settings.companyPhone}
+                    </p>
+                    <p className="text-gray-600">{settings.whatsappNumber}</p>
                     <p className="text-sm text-orange-600 mt-2">
                       Atendimento especializado
                     </p>

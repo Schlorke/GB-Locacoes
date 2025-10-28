@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
+import { usePublicSettings } from '@/hooks/use-public-settings'
 import {
   Award,
   Building,
@@ -15,6 +15,7 @@ import {
   Wrench,
 } from 'lucide-react'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
 
 const stats = [
   {
@@ -100,6 +101,7 @@ const timeline = [
 
 export default function SobrePage() {
   const [isReady, setIsReady] = useState(false)
+  const { settings } = usePublicSettings()
 
   useEffect(() => {
     // Pequeno delay para garantir que tudo esteja carregado
@@ -339,14 +341,17 @@ export default function SobrePage() {
                 <div className="inline-flex items-center gap-3 px-8 py-3 bg-white/20 backdrop-blur-sm text-white font-semibold rounded-xl hover:bg-white/30 transition-all duration-300 hover:scale-105 border border-white/30">
                   <Phone className="w-5 h-5" />
                   <a
-                    href="tel:+555123136262"
+                    href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
                     className="hidden sm:inline hover:underline"
                   >
-                    (51) 2313-6262
+                    {settings.companyPhone}
                   </a>
                   <span className="hidden sm:inline text-white/70">|</span>
-                  <a href="tel:+5551998205163" className="hover:underline">
-                    (51) 99820-5163
+                  <a
+                    href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
+                    className="hover:underline"
+                  >
+                    {settings.whatsappNumber}
                   </a>
                 </div>
               </div>

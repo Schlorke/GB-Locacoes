@@ -1,4 +1,7 @@
+'use client'
+
 import { Card, CardContent } from '@/components/ui/card'
+import { usePublicSettings } from '@/hooks/use-public-settings'
 import { Award, Clock, Headphones, Shield, Truck, Users } from 'lucide-react'
 
 const benefits = [
@@ -47,6 +50,7 @@ const benefits = [
 ]
 
 export default function WhyChooseUs() {
+  const { settings } = usePublicSettings()
   return (
     <section className="py-16 bg-gray-900 text-white relative overflow-hidden">
       {/* Animated background - constrain within bounds */}
@@ -121,17 +125,17 @@ export default function WhyChooseUs() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <div className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group gap-2">
                 <a
-                  href="tel:+555123136262"
+                  href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
                   className="hidden sm:inline group-hover:animate-pulse"
                 >
-                  (51) 2313-6262
+                  {settings.companyPhone}
                 </a>
                 <span className="hidden sm:inline text-orange-400">|</span>
                 <a
-                  href="tel:+5551998205163"
+                  href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
                   className="group-hover:animate-pulse"
                 >
-                  (51) 99820-5163
+                  {settings.whatsappNumber}
                 </a>
               </div>
               <a

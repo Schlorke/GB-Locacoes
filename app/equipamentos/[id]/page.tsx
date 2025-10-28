@@ -8,8 +8,8 @@ import { EquipmentInclusionItem } from '@/components/equipment-inclusion-item'
 import { ShareButton } from '@/components/share-button'
 import { SmartEquipmentPricing } from '@/components/smart-equipment-pricing'
 import {
-  DEFAULT_LOCAL_BUSINESS,
   StructuredData,
+  getLocalBusinessData,
 } from '@/components/structured-data'
 import { Badge } from '@/components/ui/badge'
 import { EquipmentBreadcrumb } from '@/components/ui/breadcrumb'
@@ -160,26 +160,41 @@ export async function generateMetadata(props: Props) {
 export default async function EquipmentDetailPage(props: Props) {
   const params = await props.params
   const prisma = await getPrisma()
-  const equipment = await prisma.equipment.findUnique({
-    where: { id: params.id },
-    include: {
-      category: {
-        select: {
-          id: true,
-          name: true,
-          icon: true,
-          iconColor: true,
-          bgColor: true,
-          fontColor: true,
-          slug: true,
+
+  // Buscar equipment e settings em paralelo
+  const [equipment, settings] = await Promise.all([
+    prisma.equipment.findUnique({
+      where: { id: params.id },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+            icon: true,
+            iconColor: true,
+            bgColor: true,
+            fontColor: true,
+            slug: true,
+          },
         },
       },
-    },
-  })
+    }),
+    prisma.setting.findFirst({
+      select: {
+        companyPhone: true,
+        whatsappNumber: true,
+        contactEmail: true,
+        companyAddress: true,
+      },
+    }),
+  ])
 
   if (!equipment) {
     notFound()
   }
+
+  // Gerar dados dinâmicos do LocalBusiness com os settings do banco
+  const localBusinessData = getLocalBusinessData(settings || undefined)
 
   // Converter Decimal para number para cálculos
   const pricePerDay = Number(equipment.pricePerDay)
@@ -221,7 +236,7 @@ export default async function EquipmentDetailPage(props: Props) {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50/30">
       <StructuredData
-        localBusiness={DEFAULT_LOCAL_BUSINESS}
+        localBusiness={localBusinessData}
         product={structuredDataProduct}
         breadcrumbs={breadcrumbs}
       />

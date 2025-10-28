@@ -86,7 +86,7 @@ export function SettingsBlock({
           </div>
 
           {/* Botões de ação no canto inferior direito do bloco principal */}
-          <div className="flex items-center justify-end gap-2 mt-6 pt-4 border-t border-gray-200/60">
+          <div className="flex items-center justify-end gap-2 md:gap-3 mt-6 pt-4 border-t border-gray-200/60">
             {/* Botão Reset */}
             <Button
               type="button"
@@ -95,6 +95,7 @@ export function SettingsBlock({
               onClick={onReset}
               disabled={isSaving || isResetting}
               title="Restaurar configurações padrão"
+              className="flex-1 md:flex-initial"
             >
               {isResetting ? (
                 <Loader2 className="w-4 h-4 animate-spin -rotate-180 group-hover:text-orange-500 transition-colors duration-200" />
@@ -113,6 +114,7 @@ export function SettingsBlock({
               size="default"
               onClick={onSave}
               disabled={isSaving}
+              className="flex-1 md:flex-initial"
             >
               {isSaving ? (
                 <Loader2 className="w-4 h-4 animate-spin group-hover:text-orange-500 transition-colors duration-200" />

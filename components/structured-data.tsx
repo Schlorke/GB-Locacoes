@@ -205,7 +205,7 @@ export function StructuredData({
   )
 }
 
-// Default data for GB Locações
+// Default data for GB Locações (valores padrão mantidos)
 export const DEFAULT_LOCAL_BUSINESS: LocalBusinessData = {
   name: 'GB Locações',
   description:
@@ -246,4 +246,47 @@ export const DEFAULT_LOCAL_BUSINESS: LocalBusinessData = {
     'https://www.instagram.com/locacoesgb',
     'https://api.whatsapp.com/send?phone=5551998205163',
   ],
+}
+
+// Função para gerar dados dinâmicos baseados nas configurações
+export function getLocalBusinessData(settings?: {
+  companyPhone?: string
+  whatsappNumber?: string
+  contactEmail?: string
+  companyAddress?: string
+}): LocalBusinessData {
+  if (!settings) return DEFAULT_LOCAL_BUSINESS
+
+  return {
+    ...DEFAULT_LOCAL_BUSINESS,
+    telephone: settings.companyPhone
+      ? `+55 ${settings.companyPhone.replace(/\D/g, '')}`
+      : DEFAULT_LOCAL_BUSINESS.telephone,
+    email: settings.contactEmail || DEFAULT_LOCAL_BUSINESS.email,
+    contactPoints: [
+      {
+        contactType: 'Serviço ao cliente',
+        telephone: settings.companyPhone
+          ? `+55 ${settings.companyPhone.replace(/\D/g, '')}`
+          : '+55 51 2313-6262',
+        areaServed: 'Porto Alegre e região metropolitana',
+        availableLanguage: 'Português',
+      },
+      {
+        contactType: 'Atendimento via WhatsApp',
+        telephone: settings.whatsappNumber
+          ? `+55 ${settings.whatsappNumber.replace(/\D/g, '')}`
+          : '+55 51 99820-5163',
+        areaServed: 'Porto Alegre e região metropolitana',
+        availableLanguage: 'Português',
+      },
+    ],
+    sameAs: [
+      'https://www.facebook.com/locacoesgb',
+      'https://www.instagram.com/locacoesgb',
+      settings.whatsappNumber
+        ? `https://api.whatsapp.com/send?phone=55${settings.whatsappNumber.replace(/\D/g, '')}`
+        : 'https://api.whatsapp.com/send?phone=5551998205163',
+    ],
+  }
 }

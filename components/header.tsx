@@ -5,6 +5,7 @@ import { CloseButton } from '@/components/ui/close-button'
 import { NotificationBadgeWrapper } from '@/components/ui/notification-badge'
 import { useCartNotifications } from '@/hooks/use-cart-notifications'
 import { useNotifications } from '@/hooks/use-notifications'
+import { usePublicSettings } from '@/hooks/use-public-settings'
 import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -17,6 +18,7 @@ export default function Header() {
   const { data: session } = useSession()
   const { itemCount } = useCartNotifications()
   const { markAllAsRead } = useNotifications()
+  const { settings } = usePublicSettings()
   const [notificationCount, setNotificationCount] = useState(0)
 
   // Escutar mudanças nas notificações via evento customizado
@@ -107,17 +109,17 @@ export default function Header() {
                 <Phone className="h-4 w-4 text-slate-200" />
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                   <a
-                    href="tel:+555123136262"
+                    href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
                     className="hidden sm:inline text-slate-100 hover:text-white transition-colors"
                   >
-                    (51) 2313-6262
+                    {settings.companyPhone}
                   </a>
                   <span className="hidden sm:inline text-slate-300">|</span>
                   <a
-                    href="tel:+5551998205163"
+                    href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
                     className="text-slate-100 hover:text-white transition-colors"
                   >
-                    (51) 99820-5163
+                    {settings.whatsappNumber}
                   </a>
                 </div>
               </div>

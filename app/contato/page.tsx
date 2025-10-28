@@ -3,6 +3,7 @@
 import ContactForm from '@/components/contact-form'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { usePublicSettings } from '@/hooks/use-public-settings'
 import { motion } from 'framer-motion'
 import {
   Award,
@@ -19,6 +20,8 @@ import {
 import { useEffect } from 'react'
 
 export default function ContatoPage() {
+  const { settings } = usePublicSettings()
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -27,7 +30,7 @@ export default function ContatoPage() {
     {
       icon: Phone,
       title: 'Telefone',
-      main: '(51) 2313-6262 | (51) 99820-5163',
+      main: `${settings.companyPhone} | ${settings.whatsappNumber}`,
       subtitle: 'Atendimento de segunda a sexta | WhatsApp disponível',
       color: 'orange',
       delay: 0.1,

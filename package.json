@@ -24,6 +24,7 @@
     "db:generate": "prisma generate && node scripts/post-prisma-generate.js",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed:phones": "tsx scripts/seed-company-phones.ts",
     "db:studio": "prisma studio",
     "dev": "next dev --turbopack",
     "dev:with-browsertools": "concurrently --kill-others --names \"NEXT,TOOLS,STORY\" \"pnpm dev\" \"npx @agentdeskai/browser-tools-server@1.2.0\" \"pnpm storybook\"",

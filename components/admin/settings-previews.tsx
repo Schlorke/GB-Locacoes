@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Building2, Mail, MapPin, Phone } from 'lucide-react'
+import { Mail, MapPin, Phone } from 'lucide-react'
 import Image from 'next/image'
 import { memo } from 'react'
 import { MiniCarousel } from './mini-carousel'
@@ -23,85 +23,99 @@ interface CompanyInfoPreviewProps {
 export const CompanyInfoPreview = memo(function CompanyInfoPreview({
   data,
 }: CompanyInfoPreviewProps) {
-  const { name, description, address, phone, email, businessHours } = data
-
-  const today = new Date()
-    .toLocaleDateString('pt-BR', { weekday: 'long' })
-    .toLowerCase()
-  // const todaySchedule = businessHours?.[today]
+  const { name, description, address, phone, email } = data
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="space-y-6"
+      className="space-y-4"
     >
-      {/* Header da empresa */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-100">
-        <div className="flex items-start gap-4">
-          <div className="p-3 bg-blue-500 rounded-lg">
-            <Building2 className="h-6 w-6 text-white" />
+      {/* Label de preview */}
+      <div className="flex items-center gap-2 pb-3 border-b border-gray-300">
+        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+        <span className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+          Como aparece no Google
+        </span>
+      </div>
+
+      {/* Simulação de resultado do Google */}
+      <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
+        {/* Publisher Info */}
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-7 h-7 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md">
+            GB
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-semibold text-gray-900">
-              {name || 'Nome da Empresa'}
-            </h3>
-            <p className="text-gray-600 mt-2 leading-relaxed">
-              {description || 'Descrição da empresa aparecerá aqui...'}
-            </p>
+            <div className="text-sm font-medium text-gray-900">
+              {name || 'GB Locações'}
+            </div>
+            <div className="text-xs text-gray-600 flex items-center gap-1">
+              <span>https://locacoesgb.com.br</span>
+              <span className="text-gray-400">›</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Informações de contato */}
-      <div className="grid grid-cols-1 gap-4">
-        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-          <MapPin className="h-5 w-5 text-blue-500" />
-          <span className="text-sm text-gray-700">
-            {address || 'Endereço da empresa'}
-          </span>
+        {/* Title (blue link) */}
+        <h3 className="text-xl font-normal text-blue-600 mb-2 hover:underline cursor-pointer leading-tight">
+          {name || 'GB Locações'} - Locação de Equipamentos para Construção
+        </h3>
+
+        {/* Description/Snippet */}
+        <p className="text-sm text-gray-700 leading-relaxed mb-3">
+          {description ||
+            'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.'}
+        </p>
+
+        {/* Contact Info inline (Google style) */}
+        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 pt-3 border-t border-gray-100">
+          {phone && (
+            <div className="flex items-center gap-1.5">
+              <Phone className="h-3.5 w-3.5 text-gray-500" />
+              <span>{phone}</span>
+            </div>
+          )}
+          {address && (
+            <div className="flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 text-gray-500" />
+              <span className="line-clamp-1">{address}</span>
+            </div>
+          )}
+          {email && (
+            <div className="flex items-center gap-1.5">
+              <Mail className="h-3.5 w-3.5 text-gray-500" />
+              <span>{email}</span>
+            </div>
+          )}
         </div>
 
-        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-          <Phone className="h-5 w-5 text-green-500" />
-          <span className="text-sm text-gray-700">
-            {phone || '(00) 00000-0000'}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-          <Mail className="h-5 w-5 text-red-500" />
-          <span className="text-sm text-gray-700">
-            {email || 'contato@empresa.com'}
-          </span>
-        </div>
-      </div>
-
-      {/* Horário de funcionamento */}
-      {businessHours && (
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h4 className="font-medium text-gray-900 mb-3">
-            Horário de Funcionamento
-          </h4>
-          <div className="space-y-2">
-            {Object.entries(businessHours).map(([day, schedule]) => (
-              <div
-                key={day}
-                className={`flex justify-between text-sm ${
-                  day === today ? 'font-medium text-blue-600' : 'text-gray-600'
-                }`}
+        {/* Rating stars (opcional - Google style) */}
+        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+          <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+              <svg
+                key={i}
+                className="w-4 h-4 text-yellow-400 fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
               >
-                <span className="capitalize">{day}:</span>
-                <span>
-                  {schedule.isOpen
-                    ? `${schedule.open} - ${schedule.close}`
-                    : 'Fechado'}
-                </span>
-              </div>
+                <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+              </svg>
             ))}
           </div>
+          <span className="text-xs text-gray-600">4.9 · 500+ avaliações</span>
         </div>
-      )}
+      </div>
+
+      {/* Info adicional */}
+      <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
+        <p className="text-sm text-gray-700 leading-relaxed">
+          💡 <strong>Preview SEO:</strong> Este é um exemplo de como as
+          informações da sua empresa aparecerão nos resultados de busca do
+          Google. Mantenha descrições claras e objetivas.
+        </p>
+      </div>
     </motion.div>
   )
 })

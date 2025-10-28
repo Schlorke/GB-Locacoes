@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Clock,
   Facebook,
@@ -8,8 +10,10 @@ import {
   Phone,
 } from 'lucide-react'
 import Link from 'next/link'
+import { usePublicSettings } from '@/hooks/use-public-settings'
 
 export default function Footer() {
+  const { settings } = usePublicSettings()
   return (
     <footer className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
@@ -180,17 +184,17 @@ export default function Footer() {
                 <Phone className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
                   <Link
-                    href="tel:+555123136262"
+                    href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
                     className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
-                    (51) 2313-6262
+                    {settings.companyPhone}
                   </Link>
                   <br />
                   <Link
-                    href="tel:+5551998205163"
+                    href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
                     className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
-                    (51) 99820-5163
+                    {settings.whatsappNumber}
                   </Link>
                   <p className="text-sm text-gray-400">
                     Atendimento especializado
