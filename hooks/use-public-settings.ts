@@ -5,15 +5,19 @@ interface PublicSettings {
   whatsappNumber: string
   contactEmail: string
   companyAddress: string
+  companyIconUrl: string
   socialLinks: Record<string, string>
 }
 
+// Valores padrão da empresa GB Locações
+// IMPORTANTE: Estes valores são restaurados quando o usuário clica em "Resetar"
 const defaultSettings: PublicSettings = {
   companyPhone: '(51) 2313-6262',
   whatsappNumber: '(51) 99820-5163',
   contactEmail: 'contato@locacoesgb.com.br',
   companyAddress:
     'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
+  companyIconUrl: '', // Vazio = usa logo padrão "GB"
   socialLinks: {},
 }
 

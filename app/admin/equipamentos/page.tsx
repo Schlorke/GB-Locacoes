@@ -14,7 +14,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { SmartPagination } from '@/components/ui/smart-pagination'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { useToast } from '@/hooks/use-toast'
+import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
 import {
@@ -87,7 +87,7 @@ export default function AdminEquipmentsPage() {
   const [itemsPerPage] = useState(9) // 3 linhas × 3 colunas
   const [pageKey, setPageKey] = useState(0) // Key para forçar re-render com animação
 
-  const { toast } = useToast()
+  const { success, error: errorToast } = useToastSonner()
   const isMobile = useIsMobile()
 
   // Função para renderizar ícones
@@ -117,23 +117,16 @@ export default function AdminEquipmentsPage() {
         const equipmentsData = Array.isArray(data) ? data : data.equipments
         setEquipments(equipmentsData)
       } else {
-        toast({
-          title: 'Erro',
-          description: 'Erro ao carregar equipamentos',
-          variant: 'destructive',
-        })
+        errorToast('Erro', 'Erro ao carregar equipamentos.')
       }
     } catch (error) {
       console.error('Error fetching equipments:', error)
-      toast({
-        title: 'Erro',
-        description: 'Erro ao carregar equipamentos',
-        variant: 'destructive',
-      })
+      errorToast('Erro', 'Erro ao carregar equipamentos.')
     } finally {
       setLoading(false)
     }
-  }, [toast])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -213,26 +206,15 @@ export default function AdminEquipmentsPage() {
         method: 'DELETE',
       })
       if (response.ok) {
-        toast({
-          title: 'Sucesso',
-          description: 'Equipamento excluído com sucesso',
-        })
+        success('Equipamento Excluído!', 'Equipamento excluído com sucesso.')
         fetchEquipments()
       } else {
         const errorData = await response.json()
-        toast({
-          title: 'Erro',
-          description: errorData.error || 'Erro ao excluir equipamento',
-          variant: 'destructive',
-        })
+        errorToast('Erro', errorData.error || 'Erro ao excluir equipamento.')
       }
     } catch (error) {
       console.error('Error deleting equipment:', error)
-      toast({
-        title: 'Erro',
-        description: 'Erro ao excluir equipamento',
-        variant: 'destructive',
-      })
+      errorToast('Erro', 'Erro ao excluir equipamento.')
     } finally {
       setIsDeleting(false)
     }
@@ -602,7 +584,7 @@ export default function AdminEquipmentsPage() {
                               e.stopPropagation()
                               setSelectedEquipment(equipment)
                             }}
-                            className="flex-shrink-0"
+                            className="admin-action-button view-button flex-shrink-0"
                           >
                             <Eye className="w-4 h-4" />
                           </Button>
@@ -610,7 +592,7 @@ export default function AdminEquipmentsPage() {
                             variant="ghost"
                             size="sm"
                             asChild
-                            className="flex-shrink-0"
+                            className="admin-action-button edit-button flex-shrink-0"
                           >
                             <Link
                               href={`/admin/equipamentos/${equipment.id}/editar`}
@@ -625,7 +607,7 @@ export default function AdminEquipmentsPage() {
                               e.stopPropagation()
                               deleteEquipment(equipment.id)
                             }}
-                            className="text-red-500 hover:text-red-700 hover:bg-red-100 flex-shrink-0"
+                            className="admin-action-button delete-button flex-shrink-0"
                             disabled={isDeleting}
                           >
                             <Trash2 className="w-4 h-4" />
@@ -976,7 +958,7 @@ export default function AdminEquipmentsPage() {
                 <Button
                   variant="outline"
                   onClick={() => setSelectedEquipment(null)}
-                  className="flex-1 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-sm hover:scale-105 hover:shadow-sm transition-all duration-300"
+                  className="flex-1 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
                 >
                   <X className="w-4 h-4 mr-2" />
                   Fechar
@@ -989,7 +971,7 @@ export default function AdminEquipmentsPage() {
                       window.location.href = `/admin/equipamentos/${selectedEquipment.id}/editar`
                     }
                   }}
-                  className="flex-1"
+                  className="flex-1 shadow-md hover:shadow-lg transition-all duration-300"
                 >
                   <Edit className="w-4 h-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
                   <span className="group-hover:text-orange-500 transition-colors duration-200">

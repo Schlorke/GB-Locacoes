@@ -75,7 +75,7 @@ export function SettingsNavigationBar({
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-      <CardContent className="relative z-10 p-4 sm:p-6">
+      <CardContent className="relative z-10 p-4 md:p-6">
         <div className="flex flex-col gap-4">
           {/* Título da barra */}
           <div className="flex items-center gap-3">

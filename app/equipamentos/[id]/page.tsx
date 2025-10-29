@@ -185,6 +185,7 @@ export default async function EquipmentDetailPage(props: Props) {
         whatsappNumber: true,
         contactEmail: true,
         companyAddress: true,
+        aboutUsText: true,
       },
     }),
   ])

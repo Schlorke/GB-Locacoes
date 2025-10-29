@@ -6,6 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
     const file = formData.get('file') as File
+    const type = (formData.get('type') as string) || 'equipment' // 'equipment' ou 'logo'
 
     if (!file) {
       return NextResponse.json(
@@ -21,10 +22,14 @@ export async function POST(request: NextRequest) {
       'image/png',
       'image/webp',
       'image/gif',
+      'image/svg+xml',
     ]
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: 'Tipo de arquivo não permitido. Use: JPG, PNG, WebP ou GIF' },
+        {
+          error:
+            'Tipo de arquivo não permitido. Use: JPG, PNG, WebP, GIF ou SVG',
+        },
         { status: 400 }
       )
     }
@@ -37,10 +42,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Gerar nome único para o arquivo
+    // Gerar nome único para o arquivo baseado no tipo
     const fileExtension = file.name.split('.').pop() || 'jpg'
-    const fileName = `equipment-${randomUUID()}.${fileExtension}`
-    const filePath = `equipments/${fileName}`
+    const prefix = type === 'logo' ? 'logo' : 'equipment'
+    const fileName = `${prefix}-${randomUUID()}.${fileExtension}`
+    const folder = type === 'logo' ? 'logos' : 'equipments'
+    const filePath = `${folder}/${fileName}`
 
     // Converter o arquivo para ArrayBuffer
     const arrayBuffer = await file.arrayBuffer()

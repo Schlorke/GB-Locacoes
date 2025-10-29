@@ -8,6 +8,7 @@ import { useNotifications } from '@/hooks/use-notifications'
 import { usePublicSettings } from '@/hooks/use-public-settings'
 import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -156,9 +157,21 @@ export default function Header() {
             className="flex items-center space-x-3 group"
             onClick={handleInternalNavigation}
           >
-            <div className="bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg transition-all duration-200 group-hover:scale-105">
-              GB
-            </div>
+            {settings.companyIconUrl ? (
+              <div className="relative w-12 h-12 rounded-xl overflow-hidden shadow-lg transition-all duration-200 group-hover:scale-105">
+                <Image
+                  src={settings.companyIconUrl}
+                  alt="GB Locações"
+                  fill
+                  className="object-contain p-1"
+                  unoptimized
+                />
+              </div>
+            ) : (
+              <div className="bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg transition-all duration-200 group-hover:scale-105">
+                GB
+              </div>
+            )}
             <div>
               <div className="font-bold text-lg text-slate-800 group-hover:text-slate-900 transition-colors duration-200">
                 GB Locações

@@ -9,7 +9,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { ViewCategoryModal } from '@/components/ui/view-category-modal'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { useToast } from '@/hooks/use-toast'
+import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { getCategoryBadgePreview } from '@/lib/utils/category-helpers'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
@@ -48,7 +48,7 @@ export default function AdminCategoriesPage() {
   const [editingCategoryData, setEditingCategoryData] =
     useState<CategoryData | null>(null)
 
-  const { toast } = useToast()
+  const { success, error: errorToast } = useToastSonner()
   const isMobile = useIsMobile()
 
   // Função para converter Category para CategoryData
@@ -78,16 +78,13 @@ export default function AdminCategoriesPage() {
       setCategories(categoriesArray)
     } catch (error) {
       console.error('Error fetching categories:', error)
-      toast({
-        title: 'Erro',
-        description: 'Erro ao carregar categorias. Tente novamente.',
-        variant: 'destructive',
-      })
+      errorToast('Erro', 'Erro ao carregar categorias. Tente novamente.')
       setCategories([])
     } finally {
       setLoading(false)
     }
-  }, [toast])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const filterCategories = useCallback(() => {
     if (!Array.isArray(categories)) {
@@ -173,12 +170,12 @@ export default function AdminCategoriesPage() {
     // Recarrega as categorias
     await fetchCategories()
 
-    toast({
-      title: 'Sucesso',
-      description: isEditing
-        ? 'Categoria atualizada com sucesso'
-        : 'Categoria criada com sucesso',
-    })
+    success(
+      'Sucesso!',
+      isEditing
+        ? 'Categoria atualizada com sucesso.'
+        : 'Categoria criada com sucesso.'
+    )
   }
 
   const deleteCategory = async (categoryId: string) => {
@@ -195,26 +192,15 @@ export default function AdminCategoriesPage() {
         method: 'DELETE',
       })
       if (response.ok) {
-        toast({
-          title: 'Sucesso',
-          description: 'Categoria excluída com sucesso',
-        })
+        success('Categoria Excluída!', 'Categoria excluída com sucesso.')
         fetchCategories()
       } else {
         const errorData = await response.json()
-        toast({
-          title: 'Erro',
-          description: errorData.error || 'Erro ao excluir categoria',
-          variant: 'destructive',
-        })
+        errorToast('Erro', errorData.error || 'Erro ao excluir categoria.')
       }
     } catch (error) {
       console.error('Error deleting category:', error)
-      toast({
-        title: 'Erro',
-        description: 'Erro ao excluir categoria',
-        variant: 'destructive',
-      })
+      errorToast('Erro', 'Erro ao excluir categoria.')
     } finally {
       setIsSubmitting(false)
     }
@@ -407,7 +393,7 @@ export default function AdminCategoriesPage() {
                                 e.stopPropagation()
                                 setSelectedCategory(category)
                               }}
-                              className="flex-shrink-0"
+                              className="admin-action-button view-button flex-shrink-0"
                             >
                               <Eye className="w-4 h-4" />
                             </Button>
@@ -418,7 +404,7 @@ export default function AdminCategoriesPage() {
                                 e.stopPropagation()
                                 openEditCategoryModal(category)
                               }}
-                              className="flex-shrink-0"
+                              className="admin-action-button edit-button flex-shrink-0"
                             >
                               <Edit className="w-4 h-4" />
                             </Button>
@@ -433,7 +419,7 @@ export default function AdminCategoriesPage() {
                                 (category._count?.equipments || 0) > 0 ||
                                 isSubmitting
                               }
-                              className="hover:bg-red-100 hover:text-red-700 disabled:opacity-50 flex-shrink-0"
+                              className="admin-action-button delete-button flex-shrink-0 disabled:opacity-50"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>

@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '@/hooks/use-toast'
+import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Briefcase,
@@ -96,7 +96,7 @@ function AdminQuotesPage() {
   const [periodFilter, setPeriodFilter] = useState<string>('all')
   const [valueFilter, setValueFilter] = useState<string>('all')
   const [isUpdating, setIsUpdating] = useState(false)
-  const { toast } = useToast()
+  const { success, error: errorToast } = useToastSonner()
 
   const fetchQuotes = useCallback(async () => {
     try {
@@ -110,16 +110,13 @@ function AdminQuotesPage() {
       setQuotes(quotesArray)
     } catch (error) {
       console.error('Error fetching quotes:', error)
-      toast({
-        title: 'Erro',
-        description: 'Erro ao carregar orçamentos. Tente novamente.',
-        variant: 'destructive',
-      })
+      errorToast('Erro', 'Erro ao carregar orçamentos. Tente novamente.')
       setQuotes([])
     } finally {
       setLoading(false)
     }
-  }, [toast])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const filterQuotes = useCallback(() => {
     if (!Array.isArray(quotes)) {
@@ -220,17 +217,13 @@ function AdminQuotesPage() {
       await fetchQuotes()
       setSelectedQuote(null)
 
-      toast({
-        title: 'Sucesso',
-        description: `Orçamento ${newStatus === 'approved' ? 'aprovado' : 'rejeitado'} com sucesso!`,
-      })
+      success(
+        'Sucesso!',
+        `Orçamento ${newStatus === 'approved' ? 'aprovado' : 'rejeitado'} com sucesso!`
+      )
     } catch (error) {
       console.error('Error updating quote:', error)
-      toast({
-        title: 'Erro',
-        description: 'Erro ao atualizar status do orçamento.',
-        variant: 'destructive',
-      })
+      errorToast('Erro', 'Erro ao atualizar status do orçamento.')
     } finally {
       setIsUpdating(false)
     }
@@ -466,7 +459,7 @@ function AdminQuotesPage() {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => setSelectedQuote(quote)}
-                                className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-opacity"
                               >
                                 <Eye className="w-4 h-4 mr-2" />
                                 Ver Detalhes

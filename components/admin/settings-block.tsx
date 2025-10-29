@@ -41,7 +41,7 @@ export function SettingsBlock({
         <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-        <CardContent className="relative z-10 p-6">
+        <CardContent className="relative z-10 p-4 md:p-6">
           <div className="grid grid-cols-1 lg:grid-cols-[400px,1fr] gap-8 items-start">
             {/* Coluna Esquerda: Título + Form */}
             <div className="space-y-6">
@@ -78,7 +78,7 @@ export function SettingsBlock({
               >
                 {/* Removendo gradientes para usar cor exata do equipamento */}
 
-                <CardContent className="relative z-10 p-6" aria-live="polite">
+                <CardContent className="relative z-10 p-4" aria-live="polite">
                   {preview}
                 </CardContent>
               </Card>

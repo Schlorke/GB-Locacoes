@@ -254,11 +254,13 @@ export function getLocalBusinessData(settings?: {
   whatsappNumber?: string
   contactEmail?: string
   companyAddress?: string
+  aboutUsText?: string
 }): LocalBusinessData {
   if (!settings) return DEFAULT_LOCAL_BUSINESS
 
   return {
     ...DEFAULT_LOCAL_BUSINESS,
+    description: settings.aboutUsText || DEFAULT_LOCAL_BUSINESS.description,
     telephone: settings.companyPhone
       ? `+55 ${settings.companyPhone.replace(/\D/g, '')}`
       : DEFAULT_LOCAL_BUSINESS.telephone,

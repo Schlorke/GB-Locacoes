@@ -274,7 +274,7 @@ export function ModernCategoryModal({
                         variant="outline"
                         size="sm"
                         onClick={() => setIsDesignOpen(true)}
-                        className="inline-flex bg-white items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border text-slate-900 shadow-md transition-all hover:bg-white hover:shadow-lg hover:scale-none group xs:h-9 xs:px-4 xs:w-full"
+                        className="inline-flex bg-white items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border text-slate-900 shadow-md transition-all hover:bg-white hover:shadow-lg hover:scale-105 group xs:h-9 xs:px-4 xs:w-full"
                       >
                         <Edit className="w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200" />
                         <span className="group-hover:text-orange-600 transition-colors duration-200">

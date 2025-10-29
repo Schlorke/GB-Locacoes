@@ -1233,3 +1233,51 @@ body.min-h-screen {
 .bg-red-100.status-badge-hover:hover {
   background-color: rgb(254 226 226) !important; /* bg-red-100 */
 }
+
+/* =============================== */
+/* 17.5. Botões de Ação Admin (Exceção) */
+/* =============================== */
+
+/* Botões de ação (Eye/Edit/Trash) - EXCEÇÃO da regra hover orange */
+.admin-action-button {
+  transition: all 0.2s ease-in-out !important;
+}
+
+/* Eye e Edit - hover cinza suave, SEM orange */
+.admin-action-button.view-button,
+.admin-action-button.edit-button {
+  color: rgb(51 65 85) !important; /* slate-700 */
+}
+
+.admin-action-button.view-button:hover,
+.admin-action-button.edit-button:hover {
+  background-color: rgb(241 245 249) !important; /* slate-100 */
+  color: rgb(51 65 85) !important; /* slate-700 - SEM orange */
+  transform: none !important; /* sem scale */
+}
+
+.admin-action-button.view-button:hover svg,
+.admin-action-button.edit-button:hover svg {
+  color: rgb(51 65 85) !important; /* slate-700 - SEM orange */
+}
+
+/* Trash - hover vermelho, mantém estilo original */
+.admin-action-button.delete-button {
+  color: rgb(239 68 68) !important; /* red-500 */
+}
+
+.admin-action-button.delete-button:hover {
+  background-color: rgb(254 226 226) !important; /* red-100 */
+  color: rgb(185 28 28) !important; /* red-700 */
+  transform: none !important; /* sem scale */
+}
+
+.admin-action-button.delete-button:hover svg {
+  color: rgb(185 28 28) !important; /* red-700 */
+}
+
+/* Classe específica para descrições de inputs */
+.input-description {
+  font-size: 14px !important;
+  color: #6b7280 !important;
+}

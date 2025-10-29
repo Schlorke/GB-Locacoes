@@ -36,17 +36,18 @@ paleta da marca
 ghost: "hover:bg-gray-200 hover:text-gray-900 hover:text-slate-900"
 ```
 
-**Depois**:
+**Depois** (Identidade Visual GB Locações):
 
 ```tsx
-ghost: "hover:bg-accent hover:text-accent-foreground"
+ghost: "hover:text-orange-600 hover:scale-105"
 ```
 
 **Benefícios**:
 
-- **Consistência**: Com as variáveis CSS do design system
-- **Integração**: Melhor integração com temas claro/escuro
-- **Alinhamento**: Com a paleta de cores da marca
+- **Consistência**: Com a identidade visual laranja (#ea580c) da marca
+- **Limpeza Visual**: Sem mudança de background, apenas texto e escala
+- **Alinhamento**: Com a paleta de cores oficial do projeto
+- **Micro-interações**: Hover com escala sutil para melhor feedback visual
 
 ### 3. Padrão de Foco para Acessibilidade ✅
 

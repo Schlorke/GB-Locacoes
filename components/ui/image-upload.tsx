@@ -393,7 +393,7 @@ export function ImageUpload({
                   }
                   alt={`Equipamento - Imagem ${currentImageIndex + 1}`}
                   fill
-                  className="object-cover cursor-pointer transition-all duration-500"
+                  className="object-contain cursor-pointer transition-all duration-500"
                   onClick={() => onImageZoom?.()}
                 />
               </motion.div>

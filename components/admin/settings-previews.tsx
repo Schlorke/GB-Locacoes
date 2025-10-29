@@ -13,6 +13,7 @@ interface CompanyInfoPreviewProps {
     address?: string
     phone?: string
     email?: string
+    logoUrl?: string
     businessHours?: Record<
       string,
       { open: string; close: string; isOpen: boolean }
@@ -23,7 +24,7 @@ interface CompanyInfoPreviewProps {
 export const CompanyInfoPreview = memo(function CompanyInfoPreview({
   data,
 }: CompanyInfoPreviewProps) {
-  const { name, description, address, phone, email } = data
+  const { name, description, address, phone, email, logoUrl } = data
 
   return (
     <motion.div
@@ -43,9 +44,21 @@ export const CompanyInfoPreview = memo(function CompanyInfoPreview({
       <div className="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
         {/* Publisher Info */}
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-7 h-7 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md">
-            GB
-          </div>
+          {logoUrl ? (
+            <div className="relative w-7 h-7 rounded-full overflow-hidden shadow-md bg-white border border-gray-200">
+              <Image
+                src={logoUrl}
+                alt="Logo"
+                fill
+                className="object-contain p-0.5"
+                unoptimized
+              />
+            </div>
+          ) : (
+            <div className="w-7 h-7 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md">
+              GB
+            </div>
+          )}
           <div className="flex-1">
             <div className="text-sm font-medium text-gray-900">
               {name || 'GB Locações'}

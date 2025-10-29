@@ -1,0 +1,196 @@
+/* =============================== */
+/* Sonner Toast Styles             */
+/* =============================== */
+
+/* Posicionamento centralizado do Sonner - abaixo do header */
+[data-sonner-toaster] {
+  position: fixed !important;
+  top: 120px !important; /* Abaixo do header público */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 100 !important;
+  max-width: 420px !important;
+  padding: 0 1rem !important;
+}
+
+/* Admin: mais próximo do topo (sem header público) */
+body:has([class*='admin']) [data-sonner-toaster],
+.admin-body-layout [data-sonner-toaster] {
+  top: 1.5rem !important;
+}
+
+/* Mobile: mesma centralização */
+@media (max-width: 640px) {
+  [data-sonner-toaster] {
+    top: 100px !important;
+    max-width: calc(100% - 2rem) !important;
+  }
+
+  body:has([class*='admin']) [data-sonner-toaster],
+  .admin-body-layout [data-sonner-toaster] {
+    top: 1rem !important;
+  }
+}
+
+/* Success Toast - Verde */
+[data-sonner-toast][data-type='success'] {
+  border: 1px solid rgb(187 247 208) !important;
+  background: linear-gradient(
+    to bottom right,
+    rgba(240, 253, 244, 0.95),
+    rgba(209, 250, 229, 0.95)
+  ) !important;
+  color: rgb(20 83 45) !important;
+}
+
+[data-sonner-toast][data-type='success'] [data-icon] {
+  color: rgb(22 163 74) !important;
+}
+
+/* Error Toast - Vermelho */
+[data-sonner-toast][data-type='error'] {
+  border: 1px solid rgb(254 202 202) !important;
+  background: linear-gradient(
+    to bottom right,
+    rgba(254, 242, 242, 0.95),
+    rgba(254, 226, 226, 0.95)
+  ) !important;
+  color: rgb(127 29 29) !important;
+}
+
+[data-sonner-toast][data-type='error'] [data-icon] {
+  color: rgb(220 38 38) !important;
+}
+
+/* Warning Toast - Laranja (#ea580c da identidade visual) */
+[data-sonner-toast][data-type='warning'] {
+  border: 1px solid rgb(254 215 170) !important;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 247, 237, 0.95),
+    rgba(254, 243, 199, 0.95)
+  ) !important;
+  color: rgb(124 45 18) !important;
+}
+
+[data-sonner-toast][data-type='warning'] [data-icon] {
+  color: #ea580c !important; /* Cor primária do projeto */
+}
+
+/* Info Toast - Azul */
+[data-sonner-toast][data-type='info'] {
+  border: 1px solid rgb(191 219 254) !important;
+  background: linear-gradient(
+    to bottom right,
+    rgba(239, 246, 255, 0.95),
+    rgba(224, 242, 254, 0.95)
+  ) !important;
+  color: rgb(30 58 138) !important;
+}
+
+[data-sonner-toast][data-type='info'] [data-icon] {
+  color: rgb(37 99 235) !important;
+}
+
+/* Default Toast - Neutro */
+[data-sonner-toast]:not([data-type]) {
+  border: 1px solid rgb(229 231 235) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: rgb(17 24 39) !important;
+}
+
+/* Hover effect para todos os toasts */
+[data-sonner-toast]:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Ícone ao lado do título (posição no topo à esquerda) */
+[data-sonner-toast] {
+  position: relative !important;
+  padding-left: 2.5rem !important;
+}
+
+[data-sonner-toast] [data-icon] {
+  position: absolute !important;
+  left: 0.875rem !important;
+  top: 0.85rem !important;
+}
+
+/* Close button customização - estilo premium */
+[data-sonner-toast] [data-close-button] {
+  position: absolute !important;
+  right: 0.75rem !important;
+  top: 0.75rem !important;
+  left: auto !important;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 0.5rem !important;
+  background: transparent !important;
+  color: rgb(148 163 184) !important;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease !important;
+  border: none !important;
+  padding: 0 !important;
+  transform: none !important;
+}
+
+[data-sonner-toast] [data-close-button]:hover {
+  background-color: rgb(255 255 255 / 0.8) !important;
+  color: rgb(71 85 105) !important;
+  transform: none !important;
+}
+
+[data-sonner-toast] [data-close-button]:active {
+  transform: none !important;
+}
+
+[data-sonner-toast] [data-close-button] svg {
+  width: 0.75rem !important;
+  height: 0.75rem !important;
+}
+
+/* Ícones - tamanho e posicionamento */
+[data-sonner-toast] [data-icon] {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  margin-top: 0.125rem !important;
+}
+
+/* Título e descrição */
+[data-sonner-toast] [data-title] {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+}
+
+[data-sonner-toast] [data-description] {
+  font-size: 0.875rem !important;
+  opacity: 0.9 !important;
+  line-height: 1.375 !important;
+  margin-top: 0.25rem !important;
+}
+
+/* Toasts antigos ficam menores (scaled) */
+[data-sonner-toast][data-index='1'] {
+  transform: scale(0.95) !important;
+  opacity: 0.95 !important;
+}
+
+[data-sonner-toast][data-index='2'] {
+  transform: scale(0.9) !important;
+  opacity: 0.9 !important;
+}
+
+[data-sonner-toast][data-index='3'] {
+  transform: scale(0.85) !important;
+  opacity: 0.85 !important;
+}
+
+[data-sonner-toast][data-index='4'] {
+  transform: scale(0.8) !important;
+  opacity: 0.8 !important;
+}

@@ -9,6 +9,7 @@ import {
   MapPin,
   Phone,
 } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePublicSettings } from '@/hooks/use-public-settings'
 
@@ -21,9 +22,21 @@ export default function Footer() {
           {/* Company Info */}
           <div className="flex flex-col space-y-3">
             <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg transition-all duration-200 hover:scale-105">
-                GB
-              </div>
+              {settings.companyIconUrl ? (
+                <div className="relative w-12 h-12 rounded-xl overflow-hidden shadow-lg transition-all duration-200 hover:scale-105 bg-white">
+                  <Image
+                    src={settings.companyIconUrl}
+                    alt="GB Locações"
+                    fill
+                    className="object-contain p-1"
+                    unoptimized
+                  />
+                </div>
+              ) : (
+                <div className="bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white p-2.5 rounded-xl font-bold text-lg shadow-lg transition-all duration-200 hover:scale-105">
+                  GB
+                </div>
+              )}
               <div>
                 <div className="font-display text-xl font-bold text-orange-500">
                   GB Locações
@@ -220,7 +233,7 @@ export default function Footer() {
               <div className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
-                  <p className="text-sm text-gray-300">
+                  <p className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500 cursor-default">
                     Travessa Doutor Heinzelmann, 365
                     <br />
                     Humaitá - Porto Alegre/RS
@@ -234,8 +247,12 @@ export default function Footer() {
               <div className="flex items-start space-x-3">
                 <Clock className="h-5 w-5 text-orange-500 mt-1" />
                 <div>
-                  <p className="text-sm text-gray-300">Seg-Sex: 8h às 18h</p>
-                  <p className="text-sm text-gray-300">Sáb: 8h às 12h</p>
+                  <p className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500 cursor-default">
+                    Seg-Sex: 8h às 18h
+                  </p>
+                  <p className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500 cursor-default">
+                    Sáb: 8h às 12h
+                  </p>
                   <p className="text-sm text-gray-400">
                     CNPJ: 34.780.330/0001-69
                   </p>

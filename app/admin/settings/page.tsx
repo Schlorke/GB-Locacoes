@@ -11,11 +11,12 @@ import {
   SocialLinksPreview,
   SystemPreview,
 } from '@/components/admin/settings-previews'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '@/hooks/use-toast'
+import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { SettingsInput } from '@/schemas/settings.schema'
 import { motion } from 'framer-motion'
 import {
@@ -26,14 +27,19 @@ import {
   Search,
   Settings,
   Share2,
+  Upload,
+  X,
 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import Image from 'next/image'
+import { useEffect, useRef, useState } from 'react'
 
 export default function SettingsPage() {
-  const { toast } = useToast()
+  const { success, error: errorToast } = useToastSonner()
   // const [isLoading, setIsLoading] = useState(false)
   const [isLoadingData, setIsLoadingData] = useState(true)
   const [activeSection, setActiveSection] = useState<string>('company')
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false)
 
   // Estados de loading por seção
   const [sectionLoading, setSectionLoading] = useState({
@@ -56,12 +62,14 @@ export default function SettingsPage() {
   })
 
   const [formData, setFormData] = useState<SettingsInput>({
-    companyPhone: '',
+    companyPhone: '(51) 2313-6262',
     companyIconUrl: '',
-    aboutUsText: '',
-    companyAddress: '',
+    aboutUsText:
+      'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
+    companyAddress:
+      'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
     heroCarousel: [],
-    contactEmail: '',
+    contactEmail: 'contato@locacoesgb.com.br',
     socialLinks: {},
     seoTitle: 'GB Locações - Equipamentos para Construção',
     seoDescription:
@@ -72,7 +80,7 @@ export default function SettingsPage() {
     footerText: '',
     businessHours: {},
     supportChat: true,
-    whatsappNumber: '',
+    whatsappNumber: '(51) 99820-5163',
     favicon: '',
     logoSecondary: '',
     defaultLanguage: 'pt-BR',
@@ -173,18 +181,15 @@ export default function SettingsPage() {
         }
       } catch (error) {
         console.error('Erro ao carregar configurações:', error)
-        toast({
-          title: 'Erro',
-          description: 'Não foi possível carregar as configurações.',
-          variant: 'destructive',
-        })
+        errorToast('Erro', 'Não foi possível carregar as configurações.')
       } finally {
         setIsLoadingData(false)
       }
     }
 
     loadSettings()
-  }, [toast])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // const handleSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault()
@@ -225,6 +230,90 @@ export default function SettingsPage() {
     }))
   }
 
+  // Função para formatar número de telefone
+  const formatPhoneNumber = (value: string) => {
+    // Remove tudo que não é dígito
+    const numbers = value.replace(/\D/g, '')
+
+    // Limita a 11 dígitos (DDD + 9 dígitos para celular)
+    const limitedNumbers = numbers.slice(0, 11)
+
+    // Aplica a máscara
+    if (limitedNumbers.length <= 2) {
+      return limitedNumbers
+    } else if (limitedNumbers.length <= 6) {
+      return `(${limitedNumbers.slice(0, 2)}) ${limitedNumbers.slice(2)}`
+    } else if (limitedNumbers.length <= 10) {
+      return `(${limitedNumbers.slice(0, 2)}) ${limitedNumbers.slice(2, 6)}-${limitedNumbers.slice(6)}`
+    } else {
+      return `(${limitedNumbers.slice(0, 2)}) ${limitedNumbers.slice(2, 7)}-${limitedNumbers.slice(7)}`
+    }
+  }
+
+  // Handler específico para campos de telefone
+  const handlePhoneChange = (field: keyof SettingsInput, value: string) => {
+    const formattedValue = formatPhoneNumber(value)
+    updateField(field, formattedValue)
+  }
+
+  // Função para fazer upload do logo
+  const handleLogoUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validar tipo de arquivo
+    if (!file.type.startsWith('image/')) {
+      errorToast('Erro', 'Por favor, selecione um arquivo de imagem válido.')
+      return
+    }
+
+    // Validar tamanho (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      errorToast('Erro', 'A imagem deve ter no máximo 5MB.')
+      return
+    }
+
+    setIsUploadingLogo(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('type', 'logo')
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('Erro ao fazer upload')
+      }
+
+      const data = await response.json()
+
+      // Atualizar URL do logo
+      updateField('companyIconUrl', data.url)
+
+      success('Sucesso!', 'Logo enviado com sucesso.')
+    } catch (error) {
+      console.error('Erro ao fazer upload:', error)
+      errorToast('Erro', 'Não foi possível fazer upload da imagem.')
+    } finally {
+      setIsUploadingLogo(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
+
+  // Função para remover logo
+  const handleRemoveLogo = () => {
+    updateField('companyIconUrl', '')
+    success('Logo removido', 'O logo foi removido com sucesso.')
+  }
+
   // Funções específicas para salvar cada seção
   const saveSection = async (section: keyof typeof sectionLoading) => {
     setSectionLoading((prev) => ({ ...prev, [section]: true }))
@@ -233,24 +322,16 @@ export default function SettingsPage() {
       const result = await updateSettings(formData)
 
       if (result.success) {
-        toast({
-          title: 'Sucesso!',
-          description: `Configurações de ${getSectionName(section)} atualizadas com sucesso.`,
-        })
+        success(
+          'Sucesso!',
+          `Configurações de ${getSectionName(section)} atualizadas com sucesso.`
+        )
       } else {
-        toast({
-          title: 'Erro',
-          description: result.error || 'Erro ao atualizar configurações.',
-          variant: 'destructive',
-        })
+        errorToast('Erro', result.error || 'Erro ao atualizar configurações.')
       }
     } catch (error) {
       console.error('Erro ao salvar:', error)
-      toast({
-        title: 'Erro',
-        description: 'Erro interno do servidor.',
-        variant: 'destructive',
-      })
+      errorToast('Erro', 'Erro interno do servidor.')
     } finally {
       setSectionLoading((prev) => ({ ...prev, [section]: false }))
     }
@@ -279,16 +360,15 @@ export default function SettingsPage() {
       const defaults = getDefaultValues(section)
       setFormData((prev) => ({ ...prev, ...defaults }))
 
-      toast({
-        title: 'Configurações resetadas',
-        description: `Configurações de ${getSectionName(section)} foram restauradas para os valores padrão.`,
-      })
+      success(
+        'Configurações resetadas',
+        `Configurações de ${getSectionName(section)} foram restauradas para os valores padrão.`
+      )
     } catch {
-      toast({
-        title: 'Erro ao resetar',
-        description: 'Ocorreu um erro ao restaurar as configurações.',
-        variant: 'destructive',
-      })
+      errorToast(
+        'Erro ao resetar',
+        'Ocorreu um erro ao restaurar as configurações.'
+      )
     } finally {
       setSectionResetting((prev) => ({ ...prev, [section]: false }))
     }
@@ -298,11 +378,14 @@ export default function SettingsPage() {
     switch (section) {
       case 'company':
         return {
-          companyPhone: '',
-          contactEmail: '',
-          companyAddress: '',
-          aboutUsText: '',
-          companyIconUrl: '',
+          companyPhone: '(51) 2313-6262',
+          whatsappNumber: '(51) 99820-5163',
+          contactEmail: 'contato@locacoesgb.com.br',
+          companyAddress:
+            'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
+          aboutUsText:
+            'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
+          companyIconUrl: '', // Vazio = volta para logo padrão "GB"
         }
       case 'hero':
         return {
@@ -437,19 +520,109 @@ export default function SettingsPage() {
                 description="Dados básicos da empresa e informações de contato"
                 icon={Building2}
                 form={
-                  <div className="space-y-4">
+                  <div className="space-y-6">
+                    {/* Logo Upload - TOPO */}
+                    <div className="space-y-4">
+                      <Label className="text-base font-semibold">
+                        Logo da Empresa
+                      </Label>
+
+                      {/* Preview do Logo */}
+                      {formData.companyIconUrl && (
+                        <div className="mb-2 relative inline-block">
+                          <div className="relative w-32 h-32 border-2 border-gray-200 rounded-lg overflow-hidden bg-white">
+                            <Image
+                              src={formData.companyIconUrl}
+                              alt="Logo da empresa"
+                              fill
+                              className="object-contain p-2"
+                              unoptimized
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleRemoveLogo}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-md"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
+
+                      {/* URL Input - EM CIMA */}
+                      <div>
+                        <Label htmlFor="companyIconUrl" className="text-sm">
+                          URL do Logo
+                        </Label>
+                        <Input
+                          id="companyIconUrl"
+                          value={formData.companyIconUrl || ''}
+                          onChange={(e) =>
+                            updateField('companyIconUrl', e.target.value)
+                          }
+                          placeholder="https://exemplo.com/logo.png"
+                          className="mt-1"
+                        />
+                        <p className="input-description mt-1">
+                          Cole a URL do logo ou faça upload de uma imagem
+                        </p>
+                      </div>
+
+                      {/* Separador "ou" */}
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 h-px bg-gray-200"></div>
+                        <span className="text-sm text-gray-500">ou</span>
+                        <div className="flex-1 h-px bg-gray-200"></div>
+                      </div>
+
+                      {/* Upload Button - EMBAIXO */}
+                      <div>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleLogoUpload}
+                          className="hidden"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => fileInputRef.current?.click()}
+                          disabled={isUploadingLogo}
+                          className="w-full"
+                        >
+                          {isUploadingLogo ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Enviando...
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="w-4 h-4 mr-2" />
+                              Fazer Upload de Imagem
+                            </>
+                          )}
+                        </Button>
+                        <p className="input-description mt-1">
+                          Tamanho recomendado: 512x512px • Formatos: PNG, JPG,
+                          SVG
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Demais campos */}
                     <div>
                       <Label htmlFor="companyPhone">Telefone Fixo</Label>
                       <Input
                         id="companyPhone"
                         value={formData.companyPhone || ''}
                         onChange={(e) =>
-                          updateField('companyPhone', e.target.value)
+                          handlePhoneChange('companyPhone', e.target.value)
                         }
                         placeholder="(51) 2313-6262"
                         className="mt-1"
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="input-description mt-1">
                         Telefone fixo da empresa exibido em todo o site
                       </p>
                     </div>
@@ -460,12 +633,12 @@ export default function SettingsPage() {
                         id="whatsappNumber"
                         value={formData.whatsappNumber || ''}
                         onChange={(e) =>
-                          updateField('whatsappNumber', e.target.value)
+                          handlePhoneChange('whatsappNumber', e.target.value)
                         }
                         placeholder="(51) 99820-5163"
                         className="mt-1"
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="input-description mt-1">
                         Número WhatsApp/celular exibido em todo o site
                       </p>
                     </div>
@@ -499,30 +672,23 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="aboutUsText">Sobre Nós</Label>
+                      <Label htmlFor="aboutUsText">
+                        Sobre Nós / Descrição SEO
+                      </Label>
                       <Textarea
                         id="aboutUsText"
                         value={formData.aboutUsText || ''}
                         onChange={(e) =>
                           updateField('aboutUsText', e.target.value)
                         }
-                        placeholder="Descrição da empresa"
+                        placeholder="Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura."
                         className="mt-1"
                         rows={4}
                       />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="companyIconUrl">URL do Logo</Label>
-                      <Input
-                        id="companyIconUrl"
-                        value={formData.companyIconUrl || ''}
-                        onChange={(e) =>
-                          updateField('companyIconUrl', e.target.value)
-                        }
-                        placeholder="https://exemplo.com/logo.png"
-                        className="mt-1"
-                      />
+                      <p className="input-description mt-1">
+                        Esta descrição será usada para SEO e exibida nos
+                        resultados de busca do Google
+                      </p>
                     </div>
                   </div>
                 }
@@ -530,10 +696,13 @@ export default function SettingsPage() {
                   <CompanyInfoPreview
                     data={{
                       name: 'GB Locações',
-                      description: formData.aboutUsText,
+                      description:
+                        formData.aboutUsText ||
+                        'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
                       address: formData.companyAddress,
                       phone: `${formData.companyPhone || '(51) 2313-6262'} | ${formData.whatsappNumber || '(51) 99820-5163'}`,
                       email: formData.contactEmail,
+                      logoUrl: formData.companyIconUrl,
                     }}
                   />
                 }
@@ -600,9 +769,9 @@ export default function SettingsPage() {
                         id="whatsappNumber"
                         value={formData.whatsappNumber || ''}
                         onChange={(e) =>
-                          updateField('whatsappNumber', e.target.value)
+                          handlePhoneChange('whatsappNumber', e.target.value)
                         }
-                        placeholder="5511999999999"
+                        placeholder="(51) 99820-5163"
                         className="mt-1"
                       />
                     </div>
@@ -649,7 +818,7 @@ export default function SettingsPage() {
                         placeholder="GB Locações - Equipamentos para Construção"
                         className="mt-1"
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="input-description mt-1">
                         Máximo 60 caracteres recomendado
                       </p>
                     </div>
@@ -666,7 +835,7 @@ export default function SettingsPage() {
                         className="mt-1"
                         rows={3}
                       />
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="input-description mt-1">
                         Máximo 160 caracteres recomendado
                       </p>
                     </div>

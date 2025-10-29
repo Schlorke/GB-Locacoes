@@ -10,6 +10,7 @@ export async function GET() {
         whatsappNumber: true,
         contactEmail: true,
         companyAddress: true,
+        companyIconUrl: true,
         socialLinks: true,
       },
     })
@@ -21,10 +22,25 @@ export async function GET() {
       contactEmail: 'contato@locacoesgb.com.br',
       companyAddress:
         'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
+      companyIconUrl: '', // Vazio = usa logo padrão "GB"
       socialLinks: {},
     }
 
-    return NextResponse.json(settings || defaultSettings)
+    // Retornar settings ou valores padrão, garantindo que valores vazios sejam substituídos por padrões
+    const result = settings
+      ? {
+          companyPhone: settings.companyPhone || defaultSettings.companyPhone,
+          whatsappNumber:
+            settings.whatsappNumber || defaultSettings.whatsappNumber,
+          contactEmail: settings.contactEmail || defaultSettings.contactEmail,
+          companyAddress:
+            settings.companyAddress || defaultSettings.companyAddress,
+          companyIconUrl: settings.companyIconUrl || '',
+          socialLinks: settings.socialLinks || {},
+        }
+      : defaultSettings
+
+    return NextResponse.json(result)
   } catch (error) {
     console.error('Erro ao buscar configurações públicas:', error)
     // Retornar valores padrão em caso de erro
@@ -34,6 +50,7 @@ export async function GET() {
       contactEmail: 'contato@locacoesgb.com.br',
       companyAddress:
         'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
+      companyIconUrl: '', // Vazio = usa logo padrão "GB"
       socialLinks: {},
     })
   }
