@@ -207,8 +207,8 @@ export default function PrivacidadePage() {
                             <span className="text-orange-600">1.</span>
                             Informações que Coletamos
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Solicitamos informações pessoais apenas quando
                               realmente precisamos delas para lhe fornecer um
                               serviço. Fazemo-lo por meios justos e legais, com
@@ -216,7 +216,7 @@ export default function PrivacidadePage() {
                               informamos por que estamos coletando e como será
                               usado.
                             </p>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               Apenas retemos as informações coletadas pelo tempo
                               necessário para fornecer o serviço solicitado.
                               Quando armazenamos dados, protegemos dentro de
@@ -239,8 +239,8 @@ export default function PrivacidadePage() {
                             <span className="text-orange-600">2.</span>
                             Como Usamos Suas Informações
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Usamos as informações que coletamos de várias
                               maneiras, incluindo para:
                             </p>
@@ -278,8 +278,8 @@ export default function PrivacidadePage() {
                             <span className="text-orange-600">3.</span>
                             Cookies e Tecnologias
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Usamos cookies e tecnologias semelhantes para
                               rastrear a atividade em nosso site e armazenar
                               certas informações. As tecnologias de rastreamento
@@ -287,7 +287,7 @@ export default function PrivacidadePage() {
                               coletar e rastrear informações e para melhorar e
                               analisar nosso serviço.
                             </p>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               Você pode instruir seu navegador a recusar todos
                               os cookies ou a indicar quando um cookie está
                               sendo enviado. No entanto, se você não aceitar
@@ -309,14 +309,14 @@ export default function PrivacidadePage() {
                             <span className="text-orange-600">4.</span>
                             Links para Terceiros
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Nosso serviço pode conter links para sites de
                               terceiros que não são operados por nós. Se você
                               clicar em um link de terceiros, será direcionado
                               para o site desse terceiro.
                             </p>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               Recomendamos fortemente que você revise a Política
                               de Privacidade de cada site que visitar. Não temos
                               controle sobre e não assumimos responsabilidade
@@ -338,8 +338,8 @@ export default function PrivacidadePage() {
                             <span className="text-orange-600">5.</span>
                             Consentimento
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Ao usar nosso site, você consente com nossa
                               política de privacidade e concorda com seus
                               termos. Você tem o direito de retirar seu
@@ -360,14 +360,14 @@ export default function PrivacidadePage() {
                             <span className="text-orange-600">6.</span>
                             Alterações na Política
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Podemos atualizar nossa Política de Privacidade de
                               tempos em tempos. Notificaremos você sobre
                               quaisquer alterações, publicando a nova Política
                               de Privacidade nesta página.
                             </p>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               Recomendamos que você revise esta Política de
                               Privacidade periodicamente para quaisquer
                               alterações. As alterações a esta Política de
@@ -390,7 +390,7 @@ export default function PrivacidadePage() {
                             Contato
                           </h2>
                           <div className="space-y-4">
-                            <p className="text-gray-700 leading-relaxed">
+                            <p className="text-[16px] text-gray-700 leading-relaxed">
                               Se você tiver alguma dúvida sobre esta Política de
                               Privacidade, entre em contato conosco:
                             </p>
@@ -407,14 +407,14 @@ export default function PrivacidadePage() {
                                     Nossa equipe está pronta para esclarecer
                                     suas dúvidas sobre privacidade.
                                   </p>
-                                  <div className="space-y-2 text-[16px]">
-                                    <p className="text-gray-700">
+                                  <div className="space-y-2">
+                                    <p className="text-[16px] text-gray-700">
                                       <span className="font-medium">
                                         Email:
                                       </span>{' '}
                                       contato@locacoesgb.com.br
                                     </p>
-                                    <p className="text-gray-700">
+                                    <p className="text-[16px] text-gray-700">
                                       <span className="font-medium">
                                         Telefone:
                                       </span>{' '}

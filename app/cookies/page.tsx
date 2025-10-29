@@ -194,8 +194,8 @@ export default function CookiesPage() {
                             <span className="text-orange-600">1.</span>
                             Introdução
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Cookies são pequenos arquivos de texto que são
                               colocados no seu computador ou dispositivo móvel
                               quando você visita um site. Eles são amplamente
@@ -203,7 +203,7 @@ export default function CookiesPage() {
                               funcionarem de forma mais eficiente, bem como para
                               fornecer informações aos proprietários do site.
                             </p>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               Usamos cookies para melhorar sua experiência em
                               nosso site, lembrar suas preferências e entender
                               como você interage com nosso conteúdo.
@@ -222,8 +222,8 @@ export default function CookiesPage() {
                             <span className="text-orange-600">2.</span>
                             Tipos de Cookies
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Utilizamos os seguintes tipos de cookies em nosso
                               site:
                             </p>
@@ -289,8 +289,8 @@ export default function CookiesPage() {
                             <span className="text-orange-600">3.</span>
                             Cookies Essenciais
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Estes cookies são estritamente necessários para
                               fornecer serviços disponíveis em nosso site e para
                               usar alguns de seus recursos, como acesso a áreas
@@ -319,8 +319,8 @@ export default function CookiesPage() {
                             <span className="text-orange-600">4.</span>
                             Cookies de Funcionalidade
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Estes cookies nos permitem lembrar as escolhas que
                               você faz quando usa nosso site, como lembrar seus
                               detalhes de login ou preferência de idioma.
@@ -334,7 +334,7 @@ export default function CookiesPage() {
                                 exibição e personalizações
                               </p>
                             </div>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               O objetivo destes cookies é proporcionar uma
                               experiência mais personalizada e evitar que você
                               tenha que inserir novamente suas preferências toda
@@ -354,8 +354,8 @@ export default function CookiesPage() {
                             <span className="text-orange-600">5.</span>
                             Cookies de Analytics
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Estes cookies nos permitem reconhecer e contar o
                               número de visitantes e ver como os visitantes se
                               movem pelo site quando o estão usando.
@@ -369,7 +369,7 @@ export default function CookiesPage() {
                                 análise de comportamento do usuário
                               </p>
                             </div>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               Isso nos ajuda a melhorar a forma como nosso site
                               funciona, por exemplo, garantindo que os usuários
                               encontrem facilmente o que procuram.
@@ -388,15 +388,15 @@ export default function CookiesPage() {
                             <span className="text-orange-600">6.</span>
                             Como Gerenciar Cookies
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Você pode controlar e excluir cookies conforme
                               desejar. Você pode excluir todos os cookies que já
                               estão no seu computador e pode configurar a
                               maioria dos navegadores para impedir que sejam
                               colocados.
                             </p>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               No entanto, se você fizer isso, talvez precise
                               ajustar manualmente algumas preferências toda vez
                               que visitar um site e alguns serviços e
@@ -426,7 +426,7 @@ export default function CookiesPage() {
                             Contato
                           </h2>
                           <div className="space-y-4">
-                            <p className="text-gray-700 leading-relaxed">
+                            <p className="text-[16px] text-gray-700 leading-relaxed">
                               Se você tiver dúvidas sobre nossa Política de
                               Cookies, entre em contato:
                             </p>
@@ -443,20 +443,20 @@ export default function CookiesPage() {
                                     Estamos prontos para esclarecer suas dúvidas
                                     sobre cookies.
                                   </p>
-                                  <div className="space-y-2 text-[16px]">
-                                    <p className="text-gray-700">
+                                  <div className="space-y-2">
+                                    <p className="text-[16px] text-gray-700">
                                       <span className="font-medium">
                                         Email:
                                       </span>{' '}
                                       contato@locacoesgb.com.br
                                     </p>
-                                    <p className="text-gray-700">
+                                    <p className="text-[16px] text-gray-700">
                                       <span className="font-medium">
                                         Telefone:
                                       </span>{' '}
                                       (51) 2313-6262
                                     </p>
-                                    <p className="text-gray-700">
+                                    <p className="text-[16px] text-gray-700">
                                       <span className="font-medium">
                                         Endereço:
                                       </span>{' '}

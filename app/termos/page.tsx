@@ -203,15 +203,15 @@ export default function TermosPage() {
                             <span className="text-orange-600">1.</span>
                             Introdução
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Estes Termos e Condições de Uso regulam o uso do
                               site e dos serviços oferecidos pela GB Locações.
                               Ao acessar e utilizar nossos serviços, você
                               declara ter lido, compreendido e concordado em
                               estar vinculado a estes termos.
                             </p>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               Se você não concordar com qualquer parte destes
                               termos, não deve utilizar nossos serviços.
                             </p>
@@ -229,8 +229,8 @@ export default function TermosPage() {
                             <span className="text-orange-600">2.</span>
                             Uso dos Serviços
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               A GB Locações oferece serviços de locação de
                               equipamentos para construção civil. Ao utilizar
                               nossos serviços, você concorda em:
@@ -271,8 +271,10 @@ export default function TermosPage() {
                             <span className="text-orange-600">3.</span>
                             Responsabilidades do Cliente
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>O cliente é responsável por:</p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
+                              O cliente é responsável por:
+                            </p>
                             <ul className="list-disc list-inside space-y-2 ml-4">
                               <li>
                                 Conservar os equipamentos em bom estado durante
@@ -313,8 +315,8 @@ export default function TermosPage() {
                             <span className="text-orange-600">4.</span>
                             Pagamentos e Prazos
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Os pagamentos devem ser realizados conforme
                               acordado no contrato de locação. As formas de
                               pagamento aceitas incluem:
@@ -326,7 +328,7 @@ export default function TermosPage() {
                               <li>Boleto bancário</li>
                               <li>Transferência bancária</li>
                             </ul>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               O não pagamento dentro do prazo estabelecido pode
                               resultar em:
                             </p>
@@ -357,8 +359,8 @@ export default function TermosPage() {
                             <span className="text-orange-600">5.</span>
                             Cancelamentos e Devoluções
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Cancelamentos devem ser solicitados com
                               antecedência mínima de 48 horas. Política de
                               cancelamento:
@@ -376,7 +378,7 @@ export default function TermosPage() {
                                 Cancelamento com menos de 24h: cobrança integral
                               </li>
                             </ul>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               Devoluções antecipadas não geram direito a
                               reembolso proporcional, exceto em casos de defeito
                               do equipamento comprovado.
@@ -395,8 +397,10 @@ export default function TermosPage() {
                             <span className="text-orange-600">6.</span>
                             Limitações de Responsabilidade
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>A GB Locações não se responsabiliza por:</p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
+                              A GB Locações não se responsabiliza por:
+                            </p>
                             <ul className="list-disc list-inside space-y-2 ml-4">
                               <li>
                                 Danos causados por uso inadequado ou negligente
@@ -433,8 +437,8 @@ export default function TermosPage() {
                             <span className="text-orange-600">7.</span>
                             Propriedade Intelectual
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Todo o conteúdo presente neste site, incluindo mas
                               não limitado a textos, gráficos, logos, ícones,
                               imagens, fotografias, vídeos e software, é
@@ -442,7 +446,7 @@ export default function TermosPage() {
                               de conteúdo e é protegido por leis de direitos
                               autorais.
                             </p>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               É proibida a reprodução, distribuição ou
                               modificação de qualquer conteúdo sem autorização
                               prévia por escrito.
@@ -461,14 +465,14 @@ export default function TermosPage() {
                             <span className="text-orange-600">8.</span>
                             Alterações nos Termos
                           </h2>
-                          <div className="space-y-4 text-[16px] text-gray-700 leading-relaxed">
-                            <p>
+                          <div className="space-y-4 leading-relaxed">
+                            <p className="text-[16px] text-gray-700">
                               Reservamo-nos o direito de modificar estes Termos
                               e Condições a qualquer momento. Alterações
                               significativas serão comunicadas aos usuários
                               registrados por e-mail.
                             </p>
-                            <p>
+                            <p className="text-[16px] text-gray-700">
                               O uso continuado dos serviços após a publicação de
                               alterações constitui aceitação dos novos termos.
                             </p>
@@ -487,7 +491,7 @@ export default function TermosPage() {
                             Contato
                           </h2>
                           <div className="space-y-4">
-                            <p className="text-gray-700 leading-relaxed">
+                            <p className="text-[16px] text-gray-700 leading-relaxed">
                               Para dúvidas sobre estes Termos e Condições, entre
                               em contato:
                             </p>
@@ -504,20 +508,20 @@ export default function TermosPage() {
                                     Estamos à disposição para esclarecer
                                     quaisquer dúvidas.
                                   </p>
-                                  <div className="space-y-2 text-[16px]">
-                                    <p className="text-gray-700">
+                                  <div className="space-y-2">
+                                    <p className="text-[16px] text-gray-700">
                                       <span className="font-medium">
                                         Email:
                                       </span>{' '}
                                       contato@locacoesgb.com.br
                                     </p>
-                                    <p className="text-gray-700">
+                                    <p className="text-[16px] text-gray-700">
                                       <span className="font-medium">
                                         Telefone:
                                       </span>{' '}
                                       (51) 2313-6262
                                     </p>
-                                    <p className="text-gray-700">
+                                    <p className="text-[16px] text-gray-700">
                                       <span className="font-medium">
                                         Endereço:
                                       </span>{' '}
