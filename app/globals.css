@@ -1278,6 +1278,6 @@ body.min-h-screen {
 
 /* Classe específica para descrições de inputs */
 .input-description {
-  font-size: 14px !important;
+  font-size: 12px !important;
   color: #6b7280 !important;
 }

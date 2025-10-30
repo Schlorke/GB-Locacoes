@@ -7,12 +7,10 @@ import { EquipmentImageGallery } from '@/components/equipment-image-gallery'
 import { EquipmentInclusionItem } from '@/components/equipment-inclusion-item'
 import { ShareButton } from '@/components/share-button'
 import { SmartEquipmentPricing } from '@/components/smart-equipment-pricing'
-import {
-  StructuredData,
-  getLocalBusinessData,
-} from '@/components/structured-data'
+import { StructuredData } from '@/components/structured-data'
 import { Badge } from '@/components/ui/badge'
 import { EquipmentBreadcrumb } from '@/components/ui/breadcrumb'
+import { getLocalBusinessData } from '@/lib/structured-data-utils'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import * as LucideIcons from 'lucide-react'

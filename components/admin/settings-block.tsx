@@ -44,9 +44,9 @@ export function SettingsBlock({
         <CardContent className="relative z-10 p-4 md:p-6">
           <div className="grid grid-cols-1 lg:grid-cols-[400px,1fr] gap-8 items-start">
             {/* Coluna Esquerda: Título + Form */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Título e Descrição */}
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center text-white">
                     <Icon className="w-5 h-5" />

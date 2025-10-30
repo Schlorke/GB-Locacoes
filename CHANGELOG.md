@@ -1,16 +1,49 @@
 # Changelog
 
-- `components/structured-data.tsx`: suporte a `taxID`, `areaServed` e cole��es
-  `contactPoint` para representar m�ltiplos telefones e o CNPJ no Schema.org
-  LocalBusiness
-
-# Changelog
-
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
 O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
+
+## [Unreleased] - Correções de UI (modais e scroll)
+
+### Added ✨
+
+- `components/structured-data.tsx`: suporte a `taxID`, `areaServed` e coleções
+  `contactPoint` para representar múltiplos telefones e o CNPJ no Schema.org
+  LocalBusiness
+- `lib/structured-data-utils.ts`: novo arquivo utilitário server-safe para
+  funções de structured data, permitindo uso em Server Components
+
+### Fixed 🐛
+
+- **Server/Client Component Boundary**: Corrigido erro "Cannot call client
+  function from server"
+  - Movidas funções `getLocalBusinessData()` e `DEFAULT_LOCAL_BUSINESS` para
+    `lib/structured-data-utils.ts` (sem `'use client'`)
+  - `components/structured-data.tsx` agora faz re-export para compatibilidade
+  - `app/equipamentos/[id]/page.tsx` atualizado para importar do arquivo utils
+  - Resolve erro "digest: 1642271456" ao renderizar páginas de equipamentos
+- Removido/escopado `overflow: visible !important` global que afetava `div`,
+  `section`, `article`, `.min-h-screen` e `div > div`, passando a valer apenas
+  dentro de `.sobre-page`. Isso restaura o comportamento correto do
+  `Radix Dialog + ScrollArea`, mantendo o header e o footer sempre visíveis nas
+  modais e reativando o scroll interno do conteúdo.
+
+### Changed 🔄
+
+- Dialog "Personalizar Design": reduzida a altura do container scrollável da
+  grade de ícones (de `h-[240px]` para `h-[200px]`) sem alterar paddings ou a
+  grade em si, deixando o bloco mais compacto.
+- **Settings UI**: Ajustados tamanhos de fonte para consistência com páginas de
+  equipamentos
+  - Reduzido tamanho de fonte das descrições de inputs de `14px` para `12px` em
+    `app/globals.css`
+  - Ajustado espaçamento entre título e descrição de `space-y-3` para
+    `space-y-1.5` em `components/admin/settings-block.tsx`
+  - Mantém consistência visual com padrões das páginas de edição/novo
+    equipamento
 
 ## [2025-10-28] - Correção Menu Mobile Admin + Google OAuth IPs Privados + Redirecionamento por Role
 
@@ -309,142 +342,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Format Status**: ✅ Todos os arquivos formatados corretamente
 - **Compatibilidade**: ✅ 100% mantida após atualizações
 
-## [2025-01-22] - Correção Dropdown Autocomplete + Scroll Duplo + Scrollbar Moderno
-
-### Fixed 🐛
-
-- **Dropdown do autocomplete** agora usa React Portal para aparecer sobre outras
-  seções
-- **Problema de overflow** resolvido - dropdown não é mais limitado pela seção
-  de baixo
-- **Posicionamento dinâmico** com cálculo automático de coordenadas
-- **Z-index otimizado** (99999) para garantir que dropdown apareça sobre todo
-  conteúdo
-- **Responsividade aprimorada** com recálculo de posição em resize da janela
-- **Contexto de empilhamento** corrigido usando portal para renderização no body
-- **Scroll duplo na página Sobre** eliminado - agora apenas um scroll principal
-- **Conflitos CSS de overflow** resolvidos entre HTML e BODY
-- **Sintaxe inválida em schemas Prisma** corrigida (vírgulas órfãs removidas)
-
-- **React Portal** implementado para dropdown do autocomplete
-- **Cálculo dinâmico de posição** baseado no getBoundingClientRect do input
-- **Listeners de eventos** para resize e scroll para manter posicionamento
-  correto
-- **Estado de montagem** para evitar problemas de hidratação SSR
-- **Altura máxima aumentada** para dropdown (400px) permitindo mais resultados
-
-### Fixed 🐛
-
-- **Posicionamento do dropdown** corrigido - agora aparece exatamente abaixo do
-  search bar
-- **Cálculo de coordenadas** simplificado removendo window.scrollY/scrollX
-  desnecessários
-- **Atualização de posição** em tempo real durante scroll da página
-- **Funcionalidade de fechar dropdown** no scroll restaurada para melhor UX
-
-## [2025-01-22] - Scrollbar Moderno com Identidade Visual
-
-- **Scrollbar moderno** para área pública com identidade visual GB Locações
-- **Setas de navegação** superior e inferior no scrollbar principal
-- **Gradientes laranja vibrante** (#fb923c → #ea580c → #dc2626)
-- **Animações suaves** com transições cubic-bezier profissionais
-- **Efeitos hover** com transform scale e sombras dinâmicas
-- **Estados ativos** com feedback visual responsivo
-- **Compatibilidade Firefox** com scrollbar-color moderno
-- **Design responsivo** com largura otimizada (14px)
-- **Sombras inset** para profundidade visual
-- **Bordas arredondadas** consistentes (10px radius)
-
-### Changed 🔄
-
-- **Scrollbar principal** agora reflete a identidade visual da marca
-- **Cores atualizadas** de cinza discreto para laranja vibrante
-- **Largura aumentada** de 8px para 14px para melhor usabilidade
-- **Track com gradiente** sutil para profundidade visual
-- **Thumb com gradiente** dinâmico e efeitos de hover
-- **Setas visuais** inspiradas no componente scroll-area.tsx
-
-### Technical Details 🔧
-
-- **WebKit Support**: Chrome, Safari, Edge com pseudo-elementos completos
-- **Firefox Support**: scrollbar-width: thin com scrollbar-color
-- **Performance**: Transições otimizadas com cubic-bezier(0.4, 0, 0.2, 1)
-- **Accessibility**: Contraste adequado e feedback visual claro
-- **Scope**: Aplicado apenas ao scrollbar principal, preservando modais/dialogs
-
-## [2025-01-22] - Integração AgentDesk BrowserTools
-
-- **Integração completa AgentDesk BrowserTools** para Cursor ↔ Browser
-- **Comandos MCP disponíveis** para monitoramento em tempo real
-- **Sistema de auditorias Lighthouse** integrado (SEO, Performance,
-  Accessibility)
-- **Captura de screenshots automática** com colagem direta no Cursor
-- **Análise de elementos DOM** selecionados no DevTools
-- **Monitoramento de console** e erros JavaScript em tempo real
-- **Análise de requisições de rede** e detecção de erros
-- **Modos Debug e Audit** para análise profunda da aplicação
-- **Documentação completa** em `AGENTS.md` e `.cursor/rules/gb-locacoes.mdc`
-- **Workflow inteligente** com comandos em linguagem natural
-- **Checklist obrigatório** de validação com BrowserTools
-- **Comandos integrados** `pnpm dev:browsertools` e `pnpm dev:with-browsertools`
-- **Concurrently** para execução paralela de servidores
-- **Interface colorida** e organizada para logs separados
-
-### Changed 🔄
-
-- **Fluxo de desenvolvimento** agora inclui validação visual automática
-- **Processo de deploy** inclui auditorias obrigatórias
-- **Documentação de agentes** atualizada com protocolos BrowserTools
-- **Cursor Rules** expandidas com comandos e workflows
-- **GitHub Copilot Instructions** atualizadas com integração
-- **Comandos de desenvolvimento** agora incluem BrowserTools automaticamente
-- **Workflow simplificado** com um único comando para iniciar tudo
-
-### Security 🔐
-
-- **Validação automática de acessibilidade** WCAG 2.1 AA
-- **Monitoramento de performance** em tempo real
-- **Detecção proativa de erros** JavaScript e rede
-
-## [2025-01-22] - Implementação Completa de Autenticação Social
-
-- **Sistema completo de OAuth Social** com Google e Facebook
-- **Componente SocialLoginButtons** reutilizável em
-  `components/ui/social-login-buttons.tsx`
-- **Componente SocialDivider** para separação visual dos botões sociais
-- **Callbacks NextAuth aprimorados** para criação/atualização automática de
-  usuários OAuth
-- **Documentação completa** em `docs/guides/oauth-social-login.md`
-- **Loading states individuais** para cada provider (Google/Facebook)
-- **Tratamento de erros** com callbacks personalizáveis
-- **Design responsivo** com variantes compact e default
-
-### Changed 🔄
-
-- **Páginas de login e cadastro** agora usam componentes sociais padronizados
-- **NextAuth callbacks** implementam lógica de criação/atualização de usuários
-  OAuth
-- **UI dos botões sociais** melhorada com animações e feedback visual
-- **Estrutura de autenticação** mais robusta com validação de dados
-
-### Technical Details 🔧
-
-- **Google OAuth**: Configuração completa com client ID/secret
-- **Facebook OAuth**: Configuração completa com app ID/secret
-- **Auto-cadastro**: Usuários OAuth são criados automaticamente no banco
-- **Sincronização**: Dados do perfil são atualizados a cada login
-- **Segurança**: Validação de email e normalização de dados
-- **UX**: Loading states, error handling e feedback visual
-- **Reutilização**: Componentes modulares para login/cadastro
-
-### Documentation 📚
-
-- **Guia completo OAuth** em `docs/guides/oauth-social-login.md`
-- **Configuração Google Cloud Console** passo a passo
-- **Configuração Facebook Developers** detalhada
-- **Troubleshooting** com soluções para problemas comuns
-- **Checklist de implementação** para desenvolvimento e produção
-
 ## [2025-10-10] - Correção Botão WhatsApp no iPhone
 
 ### Fixed 🐛
@@ -510,26 +407,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Mantida compatibilidade com cores personalizadas das categorias
 - Zero breaking changes - funcionalidade existente preservada
 
-## [2025-01-16] - Correção Status Bar Mobile Admin
-
-### Fixed 🐛
-
-- **Status bar (notch area) do painel admin** agora tem a mesma cor escura da
-  área pública
-- Adicionado div com `backgroundColor: '#334155'` para cobrir área do notch no
-  iPhone
-- Implementado `env(safe-area-inset-top)` para altura automática do status bar
-- Adicionado meta tag `theme-color: '#334155'` no layout principal para
-  consistência iOS
-- Configurado `apple-mobile-web-app-status-bar-style: light-content` para texto
-  branco no status bar
-
-### Changed 🔄
-
-- **AdminMobileHeader**: Adicionada área de status bar com cor consistente
-- **Layout principal**: Incluídas meta tags para controle do status bar em
-  dispositivos móveis
-
 ## [2025-10-09] - Atualização de Dependências
 
 ### Changed 🔄
@@ -554,22 +431,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 - Aplicadas atualizações de segurança e correções de bugs menores
 - **Mantido Tailwind CSS** em 3.4.17 (decisão arquitetural)
-
-## [Unreleased] - Correções de UI (modais e scroll)
-
-### Fixed 🐛
-
-- Removido/escopado `overflow: visible !important` global que afetava `div`,
-  `section`, `article`, `.min-h-screen` e `div > div`, passando a valer apenas
-  dentro de `.sobre-page`. Isso restaura o comportamento correto do
-  `Radix Dialog + ScrollArea`, mantendo o header e o footer sempre visíveis nas
-  modais e reativando o scroll interno do conteúdo.
-
-### Changed 🔄
-
-- Dialog “Personalizar Design”: reduzida a altura do container scrollável da
-  grade de ícones (de `h-[240px]` para `h-[200px]`) sem alterar paddings ou a
-  grade em si, deixando o bloco mais compacto.
 
 ## [2025-10-08] - Refatoração Completa: Arquitetura Modular e Helpers Reutilizáveis
 
@@ -1276,132 +1137,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Consistência Visual**: Mantida identidade visual sem efeitos de hover
   indesejados
 
-## [2025-01-22] - Badge de Notificação WhatsApp-Style + Correções de UI
-
-- **Badge de Notificação WhatsApp-Style**: Implementado sistema de notificação
-  visual no menu lateral
-  - Bolinha vermelha pulsante (`animate-pulse`) ao lado do ícone de notificação
-  - Contador numérico de notificações não lidas (estilo WhatsApp)
-  - Badge adaptativo: vermelho quando inativo, branco translúcido quando ativo
-  - Posicionamento absoluto com `border-2 border-white` para destaque
-  - Estado `unreadNotifications` para controle dinâmico das notificações
-  - Simulação de 2 notificações não lidas para demonstração
-
-### Fixed 🐛
-
-- **FilterResetButton**: Corrigido problema de shadow e hover shadow sendo
-  impedidos pela classe `admin-filter-element`
-
-### Fixed 🐛
-
-- **FilterResetButton**: Corrigido problema de shadow e hover shadow sendo
-  impedidos pela classe `admin-filter-element`
-  - Removida classe `admin-filter-element` conflitante do botão de reset
-  - Implementadas regras CSS específicas para `.filter-reset-button` com shadow
-    e hover shadow próprios
-  - Garantido que o botão tenha efeitos visuais independentes dos outros
-    elementos de filtro
-  - Mantida consistência visual com outros elementos admin sem interferência de
-    classes
-  - **Simplificado comportamento**: Removido hover scale e focus ring para
-    interface mais limpa
-  - **Corrigido variant reset**: Removido `hover:scale-105` da variante reset do
-    componente Button
-  - **Corrigido warning ESLint**: Removida variável `stats` não utilizada em
-    `app/area-cliente/orcamentos/page.tsx`
-  - **Corrigido dropdown de filtros**: Resolvido problema de seleção de opções
-    "Aprovado" e "Rejeitado" no filtro de status dos orçamentos
-    - Aumentado z-index do dropdown para `z-[99999]` para ficar acima de outros
-      elementos
-    - Melhorado evento de click outside com delay de 100ms para evitar
-      fechamento prematuro
-    - Mudado de `mousedown` para `click` para ser menos agressivo
-    - Ajustado z-index do Card "Ações Rápidas" para `z-0` e SearchBar para
-      `z-10`
-    - **Corrigido conflito de z-index**: Ajustado z-index do Card "Lista de
-      Orçamentos" para `z-0` para evitar interferência com dropdown de filtros
-  - **Removida seção Ações Rápidas**: Eliminado bloco "Ações Rápidas" da página
-    de orçamentos
-    - Simplificado layout da página removendo botões "Novo Orçamento" e "Ver
-      Equipamentos"
-    - Ajustado delay de animação da "Lista de Orçamentos" de 0.6s para 0.5s
-    - Mantido botão "Solicitar Primeiro Orçamento" quando não há orçamentos
-  - **Melhorado design dos blocos de orçamento**: Aplicada identidade visual do
-    projeto
-    - Substituído gradiente por fundo branco limpo com shadow-lg e
-      hover:shadow-xl
-    - Aumentado padding interno de p-6 para p-8 para melhor respiração visual
-    - Melhorado espaçamento entre blocos de space-y-4 para space-y-6
-    - Aumentado espaçamento interno entre seções de mb-4 para mb-6
-    - Melhorado espaçamento entre campos de informação de gap-4 para gap-6
-    - Aplicado shadow-md e hover:shadow-lg nos botões "Ver" e "PDF"
-    - Adicionado hover:bg-orange-50 e hover:bg-blue-50 nos botões com cores
-      temáticas
-    - Melhorado espaçamento dos labels de mb-1 para mb-2 com font-medium
-    - Removido hover scale, mantendo apenas shadows para consistência visual
-  - **Melhorada tipografia dos blocos de orçamento**: Aplicada expertise em
-    UI/UX
-    - **ID do orçamento**: Aumentado para `text-xl font-bold` com
-      `tracking-tight`
-    - **Labels**: Transformados em
-      `text-xs font-semibold uppercase tracking-wide` para melhor hierarquia
-    - **Valores**: Melhorado contraste com `text-base font-semibold` e
-      `leading-relaxed`
-    - **Valor Total**: Destacado com `text-xl font-bold` para maior impacto
-      visual
-    - **Ícones**: Aplicado `text-gray-400` para melhor contraste e hierarquia
-    - **Botões**: Adicionado `text-sm` para consistência tipográfica
-    - **Espaçamento**: Aumentado gap entre campos de `gap-6` para `gap-8`
-    - **Line height**: Aplicado `leading-relaxed` e `leading-tight` para melhor
-      legibilidade
-  - **Corrigido hover das badges**: Removido hover background das badges de
-    status
-    - Adicionado `hover:bg-transparent hover:shadow-none` para evitar efeitos
-      indesejados
-  - **Melhorado layout dos botões**: Adicionado `flex-wrap` nos botões de ação
-    - Removido `md:flex-nowrap` para permitir quebra de linha em todas as telas
-    - Removido import não utilizado `TrendingUp`
-  - **Aplicado design consistente nas páginas da área do cliente**: Usando
-    página orçamentos como modelo
-    - **Histórico**: Removido hover scale dos cards de estatísticas e blocos de
-      histórico
-    - **Histórico**: Substituído barra de pesquisa customizada pela SearchBar
-      component
-    - **Histórico**: Aplicado CSS para remover hover background das badges
-    - **Endereços**: Removido hover scale dos ícones dos cards de estatísticas
-    - **Endereços**: Aplicado design dos blocos com fundo branco, shadow-lg e
-      hover:shadow-xl
-    - **Endereços**: Aplicado design dos botões com hover:bg-white e shadow-md
-    - **Endereços**: Aplicado CSS para remover hover background das badges
-    - **Notificações**: Removido hover scale dos ícones dos cards de
-      estatísticas
-    - **Identidade visual**: Mantida consistência com shadow, hover shadow, sem
-      hover scale
-  - **Corrigido dropdown de histórico**: Resolvido problema de seleção de opções
-    no filtro
-    - Aplicado z-index fix nos blocos de histórico (`z-0`) para evitar
-      interferência com dropdown
-    - Removido hover scale dos ícones dos blocos de histórico
-    - Removido hover border color dos botões (não documentado no projeto)
-    - Aplicado `hover:bg-white` nos botões para consistência
-    - Removidos cards de estatísticas da primeira linha conforme solicitado
-    - Ajustado delays de animação após remoção dos cards
-    - Removido import não utilizado `TrendingUp` e corrigido ícone `History`
-  - **Corrigido botões da página endereços**: Aplicado padrão consistente nos
-    botões
-    - Removido hover border color do botão "Cancelar" no formulário
-    - Aplicado `hover:bg-white` em vez de `hover:bg-gray-50`
-    - Corrigido botão "Editar" do endereço principal
-    - Mantida consistência com padrão estabelecido no projeto
-  - **Padronizado rounded-lg em todos os botões**: Aplicado `rounded-lg`
-    consistente
-    - **Endereços**: Corrigido botões do formulário de `rounded-xl` para
-      `rounded-lg`
-    - **Histórico**: Corrigido botões "Ver Detalhes" e "Cancelar" de
-      `rounded-xl` para `rounded-lg`
-    - **Consistência**: Todos os botões agora seguem o mesmo padrão de
-      border-radius
-
 ## [2025-10-01] - Reutilização da Barra de Pesquisa na Área do Cliente
 
 - **SearchBar Component**: Novo componente reutilizável baseado no
@@ -1466,39 +1201,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **Consistência Visual**: Mantém identidade visual do projeto
 - **Performance**: Componente otimizado para reutilização
 - **Acessibilidade**: Suporte completo a navegação por teclado
-
----
-
-## [2025-01-22] - Remoção do Chromatic e Atualizações de Dependências
-
-### Removed ❌
-
-- **Chromatic**: Removido completamente do projeto
-- **@chromatic-com/storybook**: Dependência removida
-- **Scripts relacionados ao Chromatic**: Todos removidos
-- **Configurações do Chromatic**: Token e referências removidas
-
-### Changed 🔄
-
-- **Design System**: Foco total no Storybook para documentação
-- **Documentação**: Todas as referências atualizadas para Storybook
-- **Scripts**: `design-system:publish` agora usa `build-storybook`
-- **Configurações**: Limpeza completa de referências ao Chromatic
-
-### Updated 📦
-
-- **@types/react**: 19.1.13 → 19.2.0
-- **@types/react-dom**: 19.1.11 → 19.2.0
-- **react**: 19.1.1 → 19.2.0
-- **react-dom**: 19.1.1 → 19.2.0
-- **eslint-plugin-react-hooks**: 5.2.0 → 6.1.0
-
-### Fixed 🐛
-
-- **Build do Storybook**: Funcionando perfeitamente sem Chromatic
-- **Dependências**: Projeto mais limpo e focado
-- **TypeScript**: Compatibilidade com React 19.2.0
-- **ESLint**: Plugin React Hooks atualizado
 
 ---
 
@@ -1636,30 +1338,6 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - TypeScript atualizado com correções de tipos
   - Node.js types atualizados com correções de segurança
 
-## [2025-01-22] - Configuração Global do Spellchecker
-
-- **Configuração global do cSpell**: Adicionado suporte para português
-  brasileiro e inglês americano
-  - Arquivo `cspell.config.js` com configuração completa
-  - Suporte a múltiplos idiomas: `en,pt-BR`
-  - Lista extensa de palavras personalizadas do projeto
-  - Configuração de arquivos a serem ignorados (node_modules, dist, etc.)
-  - Configuração otimizada para desenvolvimento React/Next.js
-
-- **Atualização do .vscode/settings.json**: Melhorada configuração do cSpell no
-  VS Code
-  - Adicionado `cSpell.language: "en,pt-BR"`
-  - Expandida lista de palavras com termos específicos do projeto
-  - Incluídas palavras comuns da interface em português
-
-### Fixed 🐛
-
-- **Spellchecker irritante**: Resolvido problema de palavras em português sendo
-  marcadas como erro
-  - Palavras como "Nenhuma", "Tente", "Solicitar", "locações" agora reconhecidas
-  - Termos técnicos do projeto adicionados ao dicionário
-  - Configuração global aplicada a todo o workspace
-
 ## [2025-09-28] - Correções de Code Quality e ESLint
 
 ### Fixed 🐛
@@ -1762,3 +1440,342 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   arquivos auto-gerados foram eliminados
 
 ---
+
+## [2025-01-22] - Correção Dropdown Autocomplete + Scroll Duplo + Scrollbar Moderno
+
+### Fixed 🐛
+
+- **Dropdown do autocomplete** agora usa React Portal para aparecer sobre outras
+  seções
+- **Problema de overflow** resolvido - dropdown não é mais limitado pela seção
+  de baixo
+- **Posicionamento dinâmico** com cálculo automático de coordenadas
+- **Z-index otimizado** (99999) para garantir que dropdown apareça sobre todo
+  conteúdo
+- **Responsividade aprimorada** com recálculo de posição em resize da janela
+- **Contexto de empilhamento** corrigido usando portal para renderização no body
+- **Scroll duplo na página Sobre** eliminado - agora apenas um scroll principal
+- **Conflitos CSS de overflow** resolvidos entre HTML e BODY
+- **Sintaxe inválida em schemas Prisma** corrigida (vírgulas órfãs removidas)
+
+- **React Portal** implementado para dropdown do autocomplete
+- **Cálculo dinâmico de posição** baseado no getBoundingClientRect do input
+- **Listeners de eventos** para resize e scroll para manter posicionamento
+  correto
+- **Estado de montagem** para evitar problemas de hidratação SSR
+- **Altura máxima aumentada** para dropdown (400px) permitindo mais resultados
+
+### Fixed 🐛
+
+- **Posicionamento do dropdown** corrigido - agora aparece exatamente abaixo do
+  search bar
+- **Cálculo de coordenadas** simplificado removendo window.scrollY/scrollX
+  desnecessários
+- **Atualização de posição** em tempo real durante scroll da página
+- **Funcionalidade de fechar dropdown** no scroll restaurada para melhor UX
+
+## [2025-01-22] - Scrollbar Moderno com Identidade Visual
+
+- **Scrollbar moderno** para área pública com identidade visual GB Locações
+- **Setas de navegação** superior e inferior no scrollbar principal
+- **Gradientes laranja vibrante** (#fb923c → #ea580c → #dc2626)
+- **Animações suaves** com transições cubic-bezier profissionais
+- **Efeitos hover** com transform scale e sombras dinâmicas
+- **Estados ativos** com feedback visual responsivo
+- **Compatibilidade Firefox** com scrollbar-color moderno
+- **Design responsivo** com largura otimizada (14px)
+- **Sombras inset** para profundidade visual
+- **Bordas arredondadas** consistentes (10px radius)
+
+### Changed 🔄
+
+- **Scrollbar principal** agora reflete a identidade visual da marca
+- **Cores atualizadas** de cinza discreto para laranja vibrante
+- **Largura aumentada** de 8px para 14px para melhor usabilidade
+- **Track com gradiente** sutil para profundidade visual
+- **Thumb com gradiente** dinâmico e efeitos de hover
+- **Setas visuais** inspiradas no componente scroll-area.tsx
+
+### Technical Details 🔧
+
+- **WebKit Support**: Chrome, Safari, Edge com pseudo-elementos completos
+- **Firefox Support**: scrollbar-width: thin com scrollbar-color
+- **Performance**: Transições otimizadas com cubic-bezier(0.4, 0, 0.2, 1)
+- **Accessibility**: Contraste adequado e feedback visual claro
+- **Scope**: Aplicado apenas ao scrollbar principal, preservando modais/dialogs
+
+## [2025-01-22] - Integração AgentDesk BrowserTools
+
+- **Integração completa AgentDesk BrowserTools** para Cursor ↔ Browser
+- **Comandos MCP disponíveis** para monitoramento em tempo real
+- **Sistema de auditorias Lighthouse** integrado (SEO, Performance,
+  Accessibility)
+- **Captura de screenshots automática** com colagem direta no Cursor
+- **Análise de elementos DOM** selecionados no DevTools
+- **Monitoramento de console** e erros JavaScript em tempo real
+- **Análise de requisições de rede** e detecção de erros
+- **Modos Debug e Audit** para análise profunda da aplicação
+- **Documentação completa** em `AGENTS.md` e `.cursor/rules/gb-locacoes.mdc`
+- **Workflow inteligente** com comandos em linguagem natural
+- **Checklist obrigatório** de validação com BrowserTools
+- **Comandos integrados** `pnpm dev:browsertools` e `pnpm dev:with-browsertools`
+- **Concurrently** para execução paralela de servidores
+- **Interface colorida** e organizada para logs separados
+
+### Changed 🔄
+
+- **Fluxo de desenvolvimento** agora inclui validação visual automática
+- **Processo de deploy** inclui auditorias obrigatórias
+- **Documentação de agentes** atualizada com protocolos BrowserTools
+- **Cursor Rules** expandidas com comandos e workflows
+- **GitHub Copilot Instructions** atualizadas com integração
+- **Comandos de desenvolvimento** agora incluem BrowserTools automaticamente
+- **Workflow simplificado** com um único comando para iniciar tudo
+
+### Security 🔐
+
+- **Validação automática de acessibilidade** WCAG 2.1 AA
+- **Monitoramento de performance** em tempo real
+- **Detecção proativa de erros** JavaScript e rede
+
+## [2025-01-22] - Implementação Completa de Autenticação Social
+
+- **Sistema completo de OAuth Social** com Google e Facebook
+- **Componente SocialLoginButtons** reutilizável em
+  `components/ui/social-login-buttons.tsx`
+- **Componente SocialDivider** para separação visual dos botões sociais
+- **Callbacks NextAuth aprimorados** para criação/atualização automática de
+  usuários OAuth
+- **Documentação completa** em `docs/guides/oauth-social-login.md`
+- **Loading states individuais** para cada provider (Google/Facebook)
+- **Tratamento de erros** com callbacks personalizáveis
+- **Design responsivo** com variantes compact e default
+
+### Changed 🔄
+
+- **Páginas de login e cadastro** agora usam componentes sociais padronizados
+- **NextAuth callbacks** implementam lógica de criação/atualização de usuários
+  OAuth
+- **UI dos botões sociais** melhorada com animações e feedback visual
+- **Estrutura de autenticação** mais robusta com validação de dados
+
+### Technical Details 🔧
+
+- **Google OAuth**: Configuração completa com client ID/secret
+- **Facebook OAuth**: Configuração completa com app ID/secret
+- **Auto-cadastro**: Usuários OAuth são criados automaticamente no banco
+- **Sincronização**: Dados do perfil são atualizados a cada login
+- **Segurança**: Validação de email e normalização de dados
+- **UX**: Loading states, error handling e feedback visual
+- **Reutilização**: Componentes modulares para login/cadastro
+
+### Documentation 📚
+
+- **Guia completo OAuth** em `docs/guides/oauth-social-login.md`
+- **Configuração Google Cloud Console** passo a passo
+- **Configuração Facebook Developers** detalhada
+- **Troubleshooting** com soluções para problemas comuns
+- **Checklist de implementação** para desenvolvimento e produção
+
+## [2025-01-22] - Badge de Notificação WhatsApp-Style + Correções de UI
+
+- **Badge de Notificação WhatsApp-Style**: Implementado sistema de notificação
+  visual no menu lateral
+  - Bolinha vermelha pulsante (`animate-pulse`) ao lado do ícone de notificação
+  - Contador numérico de notificações não lidas (estilo WhatsApp)
+  - Badge adaptativo: vermelho quando inativo, branco translúcido quando ativo
+  - Posicionamento absoluto com `border-2 border-white` para destaque
+  - Estado `unreadNotifications` para controle dinâmico das notificações
+  - Simulação de 2 notificações não lidas para demonstração
+
+### Fixed 🐛
+
+- **FilterResetButton**: Corrigido problema de shadow e hover shadow sendo
+  impedidos pela classe `admin-filter-element`
+
+### Fixed 🐛
+
+- **FilterResetButton**: Corrigido problema de shadow e hover shadow sendo
+  impedidos pela classe `admin-filter-element`
+  - Removida classe `admin-filter-element` conflitante do botão de reset
+  - Implementadas regras CSS específicas para `.filter-reset-button` com shadow
+    e hover shadow próprios
+  - Garantido que o botão tenha efeitos visuais independentes dos outros
+    elementos de filtro
+  - Mantida consistência visual com outros elementos admin sem interferência de
+    classes
+  - **Simplificado comportamento**: Removido hover scale e focus ring para
+    interface mais limpa
+  - **Corrigido variant reset**: Removido `hover:scale-105` da variante reset do
+    componente Button
+  - **Corrigido warning ESLint**: Removida variável `stats` não utilizada em
+    `app/area-cliente/orcamentos/page.tsx`
+  - **Corrigido dropdown de filtros**: Resolvido problema de seleção de opções
+    "Aprovado" e "Rejeitado" no filtro de status dos orçamentos
+    - Aumentado z-index do dropdown para `z-[99999]` para ficar acima de outros
+      elementos
+    - Melhorado evento de click outside com delay de 100ms para evitar
+      fechamento prematuro
+    - Mudado de `mousedown` para `click` para ser menos agressivo
+    - Ajustado z-index do Card "Ações Rápidas" para `z-0` e SearchBar para
+      `z-10`
+    - **Corrigido conflito de z-index**: Ajustado z-index do Card "Lista de
+      Orçamentos" para `z-0` para evitar interferência com dropdown de filtros
+  - **Removida seção Ações Rápidas**: Eliminado bloco "Ações Rápidas" da página
+    de orçamentos
+    - Simplificado layout da página removendo botões "Novo Orçamento" e "Ver
+      Equipamentos"
+    - Ajustado delay de animação da "Lista de Orçamentos" de 0.6s para 0.5s
+    - Mantido botão "Solicitar Primeiro Orçamento" quando não há orçamentos
+  - **Melhorado design dos blocos de orçamento**: Aplicada identidade visual do
+    projeto
+    - Substituído gradiente por fundo branco limpo com shadow-lg e
+      hover:shadow-xl
+    - Aumentado padding interno de p-6 para p-8 para melhor respiração visual
+    - Melhorado espaçamento entre blocos de space-y-4 para space-y-6
+    - Aumentado espaçamento interno entre seções de mb-4 para mb-6
+    - Melhorado espaçamento entre campos de informação de gap-4 para gap-6
+    - Aplicado shadow-md e hover:shadow-lg nos botões "Ver" e "PDF"
+    - Adicionado hover:bg-orange-50 e hover:bg-blue-50 nos botões com cores
+      temáticas
+    - Melhorado espaçamento dos labels de mb-1 para mb-2 com font-medium
+    - Removido hover scale, mantendo apenas shadows para consistência visual
+  - **Melhorada tipografia dos blocos de orçamento**: Aplicada expertise em
+    UI/UX
+    - **ID do orçamento**: Aumentado para `text-xl font-bold` com
+      `tracking-tight`
+    - **Labels**: Transformados em
+      `text-xs font-semibold uppercase tracking-wide` para melhor hierarquia
+    - **Valores**: Melhorado contraste com `text-base font-semibold` e
+      `leading-relaxed`
+    - **Valor Total**: Destacado com `text-xl font-bold` para maior impacto
+      visual
+    - **Ícones**: Aplicado `text-gray-400` para melhor contraste e hierarquia
+    - **Botões**: Adicionado `text-sm` para consistência tipográfica
+    - **Espaçamento**: Aumentado gap entre campos de `gap-6` para `gap-8`
+    - **Line height**: Aplicado `leading-relaxed` e `leading-tight` para melhor
+      legibilidade
+  - **Corrigido hover das badges**: Removido hover background das badges de
+    status
+    - Adicionado `hover:bg-transparent hover:shadow-none` para evitar efeitos
+      indesejados
+  - **Melhorado layout dos botões**: Adicionado `flex-wrap` nos botões de ação
+    - Removido `md:flex-nowrap` para permitir quebra de linha em todas as telas
+    - Removido import não utilizado `TrendingUp`
+  - **Aplicado design consistente nas páginas da área do cliente**: Usando
+    página orçamentos como modelo
+    - **Histórico**: Removido hover scale dos cards de estatísticas e blocos de
+      histórico
+    - **Histórico**: Substituído barra de pesquisa customizada pela SearchBar
+      component
+    - **Histórico**: Aplicado CSS para remover hover background das badges
+    - **Endereços**: Removido hover scale dos ícones dos cards de estatísticas
+    - **Endereços**: Aplicado design dos blocos com fundo branco, shadow-lg e
+      hover:shadow-xl
+    - **Endereços**: Aplicado design dos botões com hover:bg-white e shadow-md
+    - **Endereços**: Aplicado CSS para remover hover background das badges
+    - **Notificações**: Removido hover scale dos ícones dos cards de
+      estatísticas
+    - **Identidade visual**: Mantida consistência com shadow, hover shadow, sem
+      hover scale
+  - **Corrigido dropdown de histórico**: Resolvido problema de seleção de opções
+    no filtro
+    - Aplicado z-index fix nos blocos de histórico (`z-0`) para evitar
+      interferência com dropdown
+    - Removido hover scale dos ícones dos blocos de histórico
+    - Removido hover border color dos botões (não documentado no projeto)
+    - Aplicado `hover:bg-white` nos botões para consistência
+    - Removidos cards de estatísticas da primeira linha conforme solicitado
+    - Ajustado delays de animação após remoção dos cards
+    - Removido import não utilizado `TrendingUp` e corrigido ícone `History`
+  - **Corrigido botões da página endereços**: Aplicado padrão consistente nos
+    botões
+    - Removido hover border color do botão "Cancelar" no formulário
+    - Aplicado `hover:bg-white` em vez de `hover:bg-gray-50`
+    - Corrigido botão "Editar" do endereço principal
+    - Mantida consistência com padrão estabelecido no projeto
+  - **Padronizado rounded-lg em todos os botões**: Aplicado `rounded-lg`
+    consistente
+    - **Endereços**: Corrigido botões do formulário de `rounded-xl` para
+      `rounded-lg`
+    - **Histórico**: Corrigido botões "Ver Detalhes" e "Cancelar" de
+      `rounded-xl` para `rounded-lg`
+    - **Consistência**: Todos os botões agora seguem o mesmo padrão de
+      border-radius
+
+## [2025-01-22] - Remoção do Chromatic e Atualizações de Dependências
+
+### Removed ❌
+
+- **Chromatic**: Removido completamente do projeto
+- **@chromatic-com/storybook**: Dependência removida
+- **Scripts relacionados ao Chromatic**: Todos removidos
+- **Configurações do Chromatic**: Token e referências removidas
+
+### Changed 🔄
+
+- **Design System**: Foco total no Storybook para documentação
+- **Documentação**: Todas as referências atualizadas para Storybook
+- **Scripts**: `design-system:publish` agora usa `build-storybook`
+- **Configurações**: Limpeza completa de referências ao Chromatic
+
+### Updated 📦
+
+- **@types/react**: 19.1.13 → 19.2.0
+- **@types/react-dom**: 19.1.11 → 19.2.0
+- **react**: 19.1.1 → 19.2.0
+- **react-dom**: 19.1.1 → 19.2.0
+- **eslint-plugin-react-hooks**: 5.2.0 → 6.1.0
+
+### Fixed 🐛
+
+- **Build do Storybook**: Funcionando perfeitamente sem Chromatic
+- **Dependências**: Projeto mais limpo e focado
+- **TypeScript**: Compatibilidade com React 19.2.0
+- **ESLint**: Plugin React Hooks atualizado
+
+---
+
+## [2025-01-22] - Configuração Global do Spellchecker
+
+- **Configuração global do cSpell**: Adicionado suporte para português
+  brasileiro e inglês americano
+  - Arquivo `cspell.config.js` com configuração completa
+  - Suporte a múltiplos idiomas: `en,pt-BR`
+  - Lista extensa de palavras personalizadas do projeto
+  - Configuração de arquivos a serem ignorados (node_modules, dist, etc.)
+  - Configuração otimizada para desenvolvimento React/Next.js
+
+- **Atualização do .vscode/settings.json**: Melhorada configuração do cSpell no
+  VS Code
+  - Adicionado `cSpell.language: "en,pt-BR"`
+  - Expandida lista de palavras com termos específicos do projeto
+  - Incluídas palavras comuns da interface em português
+
+### Fixed 🐛
+
+- **Spellchecker irritante**: Resolvido problema de palavras em português sendo
+  marcadas como erro
+  - Palavras como "Nenhuma", "Tente", "Solicitar", "locações" agora reconhecidas
+  - Termos técnicos do projeto adicionados ao dicionário
+  - Configuração global aplicada a todo o workspace
+
+## [2025-01-16] - Correção Status Bar Mobile Admin
+
+### Fixed 🐛
+
+- **Status bar (notch area) do painel admin** agora tem a mesma cor escura da
+  área pública
+- Adicionado div com `backgroundColor: '#334155'` para cobrir área do notch no
+  iPhone
+- Implementado `env(safe-area-inset-top)` para altura automática do status bar
+- Adicionado meta tag `theme-color: '#334155'` no layout principal para
+  consistência iOS
+- Configurado `apple-mobile-web-app-status-bar-style: light-content` para texto
+  branco no status bar
+
+### Changed 🔄
+
+- **AdminMobileHeader**: Adicionada área de status bar com cor consistente
+- **Layout principal**: Incluídas meta tags para controle do status bar em
+  dispositivos móveis
