@@ -8,6 +8,16 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased] - Correções de UI (modais e scroll)
 
+### Changed 🔄
+
+- **Loading Padrão Admin**: Padronizado loading da página `/admin/settings` para
+  usar o mesmo spinner azul das outras páginas admin (Dashboard, Analytics,
+  Orçamentos, Categorias)
+  - Substituído ícone Loader2 laranja por spinner azul com animação Framer
+    Motion
+  - Removido texto "Carregando configurações..." para manter consistência visual
+  - Mantém identidade visual uniforme em todo painel administrativo
+
 ### Added ✨
 
 - `components/structured-data.tsx`: suporte a `taxID`, `areaServed` e coleções

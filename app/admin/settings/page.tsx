@@ -4,12 +4,12 @@ import { getSettings, updateSettings } from '@/app/api/admin/settings/actions'
 import { SettingsBlock } from '@/components/admin/settings-block'
 import { SettingsNavigationBar } from '@/components/admin/settings-navigation-bar'
 import {
-  CompanyInfoPreview,
-  CustomSettingsPreview,
-  HeroCarouselPreview,
-  SeoPreview,
-  SocialLinksPreview,
-  SystemPreview,
+    CompanyInfoPreview,
+    CustomSettingsPreview,
+    HeroCarouselPreview,
+    SeoPreview,
+    SocialLinksPreview,
+    SystemPreview,
 } from '@/components/admin/settings-previews'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -20,15 +20,14 @@ import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { SettingsInput } from '@/schemas/settings.schema'
 import { motion } from 'framer-motion'
 import {
-  Building2,
-  Code,
-  Images,
-  Loader2,
-  Search,
-  Settings,
-  Share2,
-  Upload,
-  X,
+    Building2,
+    Code,
+    Images,
+    Search,
+    Settings,
+    Share2,
+    Upload,
+    X,
 } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
@@ -446,15 +445,12 @@ export default function SettingsPage() {
 
   if (isLoadingData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="flex items-center justify-center h-[calc(100vh-200px)]">
-          <div className="text-center">
-            <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-            <p className="text-lg text-muted-foreground">
-              Carregando configurações...
-            </p>
-          </div>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
+        />
       </div>
     )
   }
