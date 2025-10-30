@@ -16,15 +16,15 @@ import { toast } from '@/hooks/use-toast'
 import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
 
 import {
-  ArrowLeft,
-  ArrowRight,
-  Building,
-  Calendar,
-  Check,
-  Mail,
-  MessageSquare,
-  Package,
-  Phone,
+    ArrowLeft,
+    ArrowRight,
+    Building,
+    Calendar,
+    Check,
+    Mail,
+    MessageSquare,
+    Package,
+    Phone,
 } from 'lucide-react'
 
 // Schema de validação otimizado
@@ -40,6 +40,9 @@ const QuoteFormSchema = z.object({
     .min(10, 'Telefone deve ter pelo menos 10 dígitos')
     .max(15),
   customerCompany: z.string().optional(),
+  cep: z.string().optional(),
+  cpf: z.string().optional(),
+  cnpj: z.string().optional(),
 
   // Etapa 2: Equipamento e período
   equipmentName: z.string().optional(),
@@ -76,6 +79,33 @@ export default function QuoteForm({
   // Removido: estado de isSubmitting não utilizado
   const totalSteps = 3
 
+  // Funções de formatação
+  const formatCPF = (value: string) => {
+    const numbers = value.replace(/\D/g, '')
+    if (numbers.length <= 3) return numbers
+    if (numbers.length <= 6) return `${numbers.slice(0, 3)}.${numbers.slice(3)}`
+    if (numbers.length <= 9)
+      return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`
+    return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6, 9)}-${numbers.slice(9, 11)}`
+  }
+
+  const formatCNPJ = (value: string) => {
+    const numbers = value.replace(/\D/g, '')
+    if (numbers.length <= 2) return numbers
+    if (numbers.length <= 5) return `${numbers.slice(0, 2)}.${numbers.slice(2)}`
+    if (numbers.length <= 8)
+      return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(5)}`
+    if (numbers.length <= 12)
+      return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(5, 8)}/${numbers.slice(8)}`
+    return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(5, 8)}/${numbers.slice(8, 12)}-${numbers.slice(12, 14)}`
+  }
+
+  const formatCEP = (value: string) => {
+    const numbers = value.replace(/\D/g, '')
+    if (numbers.length <= 5) return numbers
+    return `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`
+  }
+
   const {
     control,
     handleSubmit,
@@ -90,6 +120,9 @@ export default function QuoteForm({
       customerEmail: '',
       customerPhone: '',
       customerCompany: '',
+      cep: '',
+      cpf: '',
+      cnpj: '',
       equipmentName: prefilledEquipment?.name || '',
       equipmentId: prefilledEquipment?.id || '',
       rentalDays: 7,
@@ -388,32 +421,60 @@ export default function QuoteForm({
                   </div>
                 </div>
 
-                <div>
-                  <Label
-                    htmlFor="customerEmail"
-                    className="flex items-center gap-2"
-                  >
-                    <Mail className="w-4 h-4" />
-                    E-mail *
-                  </Label>
-                  <Controller
-                    name="customerEmail"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        {...field}
-                        id="customerEmail"
-                        type="email"
-                        placeholder="contato@locacoesgb.com.br"
-                        className={errors.customerEmail ? 'border-red-500' : ''}
-                      />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Label
+                      htmlFor="customerEmail"
+                      className="flex items-center gap-2"
+                    >
+                      <Mail className="w-4 h-4" />
+                      E-mail *
+                    </Label>
+                    <Controller
+                      name="customerEmail"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          id="customerEmail"
+                          type="email"
+                          placeholder="seu@email.com"
+                          className={errors.customerEmail ? 'border-red-500' : ''}
+                        />
+                      )}
+                    />
+                    {errors.customerEmail && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.customerEmail.message}
+                      </p>
                     )}
-                  />
-                  {errors.customerEmail && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {errors.customerEmail.message}
-                    </p>
-                  )}
+                  </div>
+
+                  <div>
+                    <Label htmlFor="cep">CEP</Label>
+                    <Controller
+                      name="cep"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          id="cep"
+                          placeholder="00000-000"
+                          maxLength={9}
+                          onChange={(e) => {
+                            const formatted = formatCEP(e.target.value)
+                            field.onChange(formatted)
+                          }}
+                          className={errors.cep ? 'border-red-500' : ''}
+                        />
+                      )}
+                    />
+                    {errors.cep && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.cep.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -448,7 +509,7 @@ export default function QuoteForm({
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-4"
               >
-                {prefilledEquipment ? (
+                {prefilledEquipment && (
                   <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
                     <p className="text-sm text-orange-700 mb-2">
                       Equipamento selecionado:
@@ -460,28 +521,61 @@ export default function QuoteForm({
                       {prefilledEquipment.name}
                     </Badge>
                   </div>
-                ) : (
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label
-                      htmlFor="equipmentName"
-                      className="flex items-center gap-2"
-                    >
-                      <Package className="w-4 h-4" />
-                      Equipamento de Interesse
-                    </Label>
+                    <Label htmlFor="cpf">CPF</Label>
                     <Controller
-                      name="equipmentName"
+                      name="cpf"
                       control={control}
                       render={({ field }) => (
                         <Input
                           {...field}
-                          id="equipmentName"
-                          placeholder="Ex: Betoneira, Andaime Suspenso, etc."
+                          id="cpf"
+                          placeholder="000.000.000-00"
+                          maxLength={14}
+                          onChange={(e) => {
+                            const formatted = formatCPF(e.target.value)
+                            field.onChange(formatted)
+                          }}
+                          className={errors.cpf ? 'border-red-500' : ''}
                         />
                       )}
                     />
+                    {errors.cpf && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.cpf.message}
+                      </p>
+                    )}
                   </div>
-                )}
+
+                  <div>
+                    <Label htmlFor="cnpj">CNPJ</Label>
+                    <Controller
+                      name="cnpj"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          {...field}
+                          id="cnpj"
+                          placeholder="00.000.000/0000-00"
+                          maxLength={18}
+                          onChange={(e) => {
+                            const formatted = formatCNPJ(e.target.value)
+                            field.onChange(formatted)
+                          }}
+                          className={errors.cnpj ? 'border-red-500' : ''}
+                        />
+                      )}
+                    />
+                    {errors.cnpj && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {errors.cnpj.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
 
                 <div>
                   <Label
