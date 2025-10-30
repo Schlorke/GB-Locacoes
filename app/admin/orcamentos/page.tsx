@@ -566,7 +566,7 @@ function AdminQuotesPage() {
                       <CardHeader className="pb-3">
                         <CardTitle className="flex items-center gap-2 text-lg">
                           <Calendar className="w-5 h-5 text-green-600" />
-                          Período da Loca├º├úo
+                          Período da Locação
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
