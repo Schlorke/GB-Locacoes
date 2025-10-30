@@ -4,37 +4,37 @@ import { AdminFilterCard } from '@/components/admin/admin-filter-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from '@/components/ui/card'
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
 } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  Briefcase,
-  Building,
-  Calendar,
-  CheckCircle,
-  Clock,
-  Eye,
-  FileText,
-  Hash,
-  Mail,
-  MessageSquare,
-  Package,
-  Phone,
-  User,
-  XCircle,
+    Briefcase,
+    Building,
+    Calendar,
+    CheckCircle,
+    Clock,
+    Eye,
+    FileText,
+    Hash,
+    Mail,
+    MessageSquare,
+    Package,
+    Phone,
+    User,
+    XCircle,
 } from 'lucide-react'
 import { Suspense, useCallback, useEffect, useState } from 'react'
 
@@ -104,13 +104,13 @@ function AdminQuotesPage() {
       const response = await fetch('/api/admin/quotes')
       const data = await response.json()
 
-      // Verifica├º├úo defensiva para garantir que data ├® um array
+      // Verificação defensiva para garantir que data é um array
       const quotesArray = Array.isArray(data) ? data : data?.quotes || []
 
       setQuotes(quotesArray)
     } catch (error) {
       console.error('Error fetching quotes:', error)
-      errorToast('Erro', 'Erro ao carregar or├ºamentos. Tente novamente.')
+      errorToast('Erro', 'Erro ao carregar orçamentos. Tente novamente.')
       setQuotes([])
     } finally {
       setLoading(false)
@@ -134,7 +134,7 @@ function AdminQuotesPage() {
       const matchesStatus =
         statusFilter === 'all' || quote.status === statusFilter
 
-      // Filtro por per├¡odo
+      // Filtro por período
       let matchesPeriod = true
       if (periodFilter !== 'all') {
         const now = new Date()
@@ -219,11 +219,11 @@ function AdminQuotesPage() {
 
       success(
         'Sucesso!',
-        `Or├ºamento ${newStatus === 'approved' ? 'aprovado' : 'rejeitado'} com sucesso!`
+        `Orçamento ${newStatus === 'approved' ? 'aprovado' : 'rejeitado'} com sucesso!`
       )
     } catch (error) {
       console.error('Error updating quote:', error)
-      errorToast('Erro', 'Erro ao atualizar status do or├ºamento.')
+      errorToast('Erro', 'Erro ao atualizar status do orçamento.')
     } finally {
       setIsUpdating(false)
     }
@@ -287,16 +287,16 @@ function AdminQuotesPage() {
             {/* Content */}
             <div className="relative z-10">
               <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
-                Gerenciar Or├ºamentos
+                Gerenciar Orçamentos
               </h1>
               <p className="text-orange-50 mb-4 font-medium">
-                Visualize, analise e gerencie todos os or├ºamentos solicitados
+                Visualize, analise e gerencie todos os orçamentos solicitados
               </p>
               <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
                 <FileText className="w-5 h-5 text-orange-50" />
                 <span className="font-semibold text-white">
                   {Array.isArray(filteredQuotes) ? filteredQuotes.length : 0}{' '}
-                  or├ºamentos encontrados
+                  orçamentos encontrados
                 </span>
               </div>
             </div>
@@ -328,15 +328,15 @@ function AdminQuotesPage() {
                 ],
               },
               {
-                label: 'Per├¡odo',
+                label: 'Período',
                 value: periodFilter,
                 onValueChange: setPeriodFilter,
-                placeholder: 'Filtrar por per├¡odo',
+                placeholder: 'Filtrar por período',
                 options: [
-                  { value: 'all', label: 'Todos os per├¡odos' },
+                  { value: 'all', label: 'Todos os períodos' },
                   { value: 'today', label: 'Hoje' },
-                  { value: 'week', label: '├Ültima semana' },
-                  { value: 'month', label: '├Ültimo m├¬s' },
+                  { value: 'week', label: 'Última semana' },
+                  { value: 'month', label: 'Último mês' },
                 ],
               },
               {
@@ -346,7 +346,7 @@ function AdminQuotesPage() {
                 placeholder: 'Filtrar por valor',
                 options: [
                   { value: 'all', label: 'Todos os valores' },
-                  { value: 'low', label: 'At├® R$ 500' },
+                  { value: 'low', label: 'Até R$ 500' },
                   { value: 'medium', label: 'R$ 500 - R$ 2.000' },
                   { value: 'high', label: 'Acima de R$ 2.000' },
                 ],
@@ -355,7 +355,7 @@ function AdminQuotesPage() {
           />
         </motion.div>
 
-        {/* Tabela de Or├ºamentos */}
+        {/* Tabela de Orçamentos */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -378,7 +378,7 @@ function AdminQuotesPage() {
                         Equipamentos
                       </th>
                       <th className="text-left p-4 font-semibold text-gray-700">
-                        Per├¡odo
+                        Período
                       </th>
                       <th className="text-left p-4 font-semibold text-gray-700">
                         Valor Total
@@ -387,7 +387,7 @@ function AdminQuotesPage() {
                         Status
                       </th>
                       <th className="text-left p-4 font-semibold text-gray-700">
-                        A├º├Áes
+                        Ações
                       </th>
                     </tr>
                   </thead>
@@ -442,7 +442,7 @@ function AdminQuotesPage() {
                                   {formatDate(quote.startDate)}
                                 </div>
                                 <div className="text-gray-500 ml-4">
-                                  at├® {formatDate(quote.endDate)}
+                                  até {formatDate(quote.endDate)}
                                 </div>
                               </div>
                             </td>
@@ -501,19 +501,19 @@ function AdminQuotesPage() {
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
                   {selectedQuote?.name?.charAt(0).toUpperCase()}
                 </div>
-                Detalhes do Or├ºamento - {selectedQuote?.name}
+                Detalhes do Orçamento - {selectedQuote?.name}
               </DialogTitle>
             </DialogHeader>
 
             <ScrollArea className="flex-1 min-h-0 p-6">
               {selectedQuote && (
                 <div className="space-y-6">
-                  {/* Informa├º├Áes do Cliente */}
+                  {/* Informações do Cliente */}
                   <Card className="border-l-4 border-l-blue-500">
                     <CardHeader className="pb-3">
                       <CardTitle className="flex items-center gap-2 text-lg">
                         <User className="w-5 h-5 text-blue-600" />
-                        Informa├º├Áes do Cliente
+                        Informações do Cliente
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -550,7 +550,7 @@ function AdminQuotesPage() {
                         <Hash className="w-4 h-4 text-gray-400" />
                         <div>
                           <div className="text-sm text-gray-500">
-                            ID do Or├ºamento
+                            ID do Orçamento
                           </div>
                           <div className="font-medium font-mono text-xs">
                             {selectedQuote.id}
@@ -560,20 +560,20 @@ function AdminQuotesPage() {
                     </CardContent>
                   </Card>
 
-                  {/* Per├¡odo e Status */}
+                  {/* Período e Status */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Card className="border-l-4 border-l-green-500">
                       <CardHeader className="pb-3">
                         <CardTitle className="flex items-center gap-2 text-lg">
                           <Calendar className="w-5 h-5 text-green-600" />
-                          Per├¡odo da Loca├º├úo
+                          Período da Loca├º├úo
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-2">
                           <div>
                             <span className="text-sm text-gray-500">
-                              In├¡cio:
+                              Início:
                             </span>
                             <span className="ml-2 font-medium">
                               {formatDate(selectedQuote.startDate)}
@@ -672,16 +672,16 @@ function AdminQuotesPage() {
                     </Card>
                   )}
 
-                  {/* A├º├Áes Administrativas */}
+                  {/* Ações Administrativas */}
                   {selectedQuote.status === 'pending' && (
                     <Card className="border-l-4 border-l-yellow-500">
                       <CardHeader className="pb-3">
                         <CardTitle className="flex items-center gap-2 text-lg">
                           <Briefcase className="w-5 h-5 text-yellow-600" />
-                          A├º├Áes Administrativas
+                          Ações Administrativas
                         </CardTitle>
                         <CardDescription>
-                          Aprove ou rejeite este or├ºamento
+                          Aprove ou rejeite este orçamento
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
@@ -694,7 +694,7 @@ function AdminQuotesPage() {
                             className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
                           >
                             <CheckCircle className="w-4 h-4 mr-2" />
-                            {isUpdating ? 'Aprovando...' : 'Aprovar Or├ºamento'}
+                            {isUpdating ? 'Aprovando...' : 'Aprovar Orçamento'}
                           </Button>
                           <Button
                             onClick={() =>
@@ -707,7 +707,7 @@ function AdminQuotesPage() {
                             <XCircle className="w-4 h-4 mr-2" />
                             {isUpdating
                               ? 'Rejeitando...'
-                              : 'Rejeitar Or├ºamento'}
+                              : 'Rejeitar Orçamento'}
                           </Button>
                         </div>
                       </CardContent>
