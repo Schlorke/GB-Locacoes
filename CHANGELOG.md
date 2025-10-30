@@ -8,6 +8,13 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased] - Correções de UI (modais e scroll)
 
+### Removed ❌
+
+- **Página Analytics Admin**: Removida página `/admin/analytics` não utilizada
+  - Arquivo deletado: `app/admin/analytics/page.tsx`
+  - Simplifica estrutura do painel administrativo
+  - Remove funcionalidade desnecessária conforme solicitação do cliente
+
 ### Added ✨
 
 - **🎯 UX Mobile - Padding Inferior Inteligente**: Adicionado padding-bottom
