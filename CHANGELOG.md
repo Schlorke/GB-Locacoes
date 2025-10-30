@@ -32,6 +32,15 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **🎨 Preview de Imagens Descentralizado**: Corrigido alinhamento de imagens no
+  componente ImageUpload
+  - Problema: Imagens ficavam alinhadas à esquerda com espaço vazio à direita
+  - Causa: `object-contain` sem centralização explícita no container
+  - Solução: Adicionado `flex items-center justify-center` no container
+    `aspect-[16/10]` e no `motion.div` absoluto
+  - Resultado: Imagens perfeitamente centralizadas horizontal e verticalmente
+  - Aplica-se: `/admin/equipamentos/[id]/editar` e qualquer uso do ImageUpload
+
 - **🔥 HOTFIX - Encoding UTF-8 em Orçamentos**: Corrigido problema de encoding
   de caracteres no arquivo `app/admin/orcamentos/page.tsx`
   - Caracteres 'ç' exibidos incorretamente como '├º'
