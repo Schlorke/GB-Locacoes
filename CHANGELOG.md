@@ -24,6 +24,16 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - Corrigida inconsistência entre sidebar desktop e mobile
   - Menu mobile agora exibe todas as 5 opções: Dashboard, Equipamentos,
     Categorias, Orçamentos, Configurações
+- **Toast layout**: Realinhado icon, textos e botao de fechar do componente
+  `SonnerToaster`
+  - Grid CSS agora fixa colunas dedicadas para ícone, conteúdo, ações e botão de
+    fechar, garantindo alinhamento horizontal consistente
+  - Animacao de redimensionamento refinada com `transform` para que toasts
+    antigos reduzam suavemente de tamanho, sem saltos visuais
+  - Limite simultaneo configurado para exibir no maximo 3 toasts na tela,
+    ocultando indices adicionais via CSS
+  - Ajustada tipagem do `style` para aceitar CSS custom property (`--gap`)
+  - Arquivo modificado: `components/ui/sonner-toaster.tsx`
 
 ### Changed 🔄
 

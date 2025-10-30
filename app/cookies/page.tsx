@@ -433,7 +433,7 @@ export default function CookiesPage() {
                             <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200">
                               <div className="flex items-start gap-4">
                                 <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white">
-                                  <Mail className="h-6 w-6" />
+                                  <Mail className="h-5 w-5" />
                                 </div>
                                 <div>
                                   <h3 className="font-bold text-[20px] text-gray-900 mb-2">
