@@ -417,13 +417,14 @@ export default async function EquipmentDetailPage(props: Props) {
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-                <CardHeader className="relative z-10 p-4 sm:p-6 lg:p-6">
+                <CardHeader className="relative z-10 p-4 !pb-4 md:p-6 lg:p-6">
                   <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-gray-900">
                     Sobre este equipamento
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="relative z-10 p-4 sm:p-6 lg:p-6 pt-0">
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-base">
+                <div className="border-b border-gray-100 w-full"></div>
+                <CardContent className="relative z-10 pt-2 px-4 sm:px-6 lg:px-6">
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-[16px] ">
                     {equipment.description}
                   </p>
                 </CardContent>
@@ -438,12 +439,13 @@ export default async function EquipmentDetailPage(props: Props) {
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-              <CardHeader className="relative z-10 p-4 sm:p-6 lg:p-6">
+              <CardHeader className="relative z-10 p-4 !pb-4 lg:p-6">
                 <CardTitle className="flex items-center gap-3 text-xl sm:text-2xl font-bold text-gray-900">
                   Informações
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 space-y-6 p-4 sm:p-6 lg:p-6 pt-0">
+              <div className="border-b border-gray-100 px-4 sm:px-6 lg:px-6"></div>
+              <CardContent className="relative z-10 space-y-6 pt-2 px-4 sm:px-6 lg:px-6">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-3 border-b border-gray-100">
                     <span className="text-gray-600 font-medium">Categoria</span>
@@ -469,7 +471,7 @@ export default async function EquipmentDetailPage(props: Props) {
                   </div>
                 </div>
 
-                <div className="pt-6 space-y-4">
+                <div className="pt-4 space-y-4">
                   <h4 className="font-semibold text-base text-gray-900">
                     Incluído na locação:
                   </h4>

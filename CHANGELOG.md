@@ -58,6 +58,13 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
     `space-y-1.5` em `components/admin/settings-block.tsx`
   - Mantém consistência visual com padrões das páginas de edição/novo
     equipamento
+- **Equipment Details Page**: Melhoradas divisórias após títulos dos cards
+  - Divisória com linha horizontal cinza clara (`h-px bg-gray-100`)
+  - Aplicada em "Sobre este equipamento" e "Informações"
+  - Divisória com padding horizontal responsivo (`mx-4 sm:mx-6 lg:mx-6`)
+  - Alinhada perfeitamente com o título (mesmos paddings laterais)
+  - Espaçamento de 12px entre título e divisória (`pb-3`)
+  - Design limpo, sutil e profissional
 
 ## [2025-10-28] - Correção Menu Mobile Admin + Google OAuth IPs Privados + Redirecionamento por Role
 
