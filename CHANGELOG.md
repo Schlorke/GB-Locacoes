@@ -13,12 +13,22 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - **🎯 Scroll Automático para Topo**: Implementado scroll automático para o topo
   em todas as navegações do painel admin
   - useEffect no AdminLayoutContent monitora mudanças no pathname
-  - `window.scrollTo({ top: 0, behavior: 'instant' })` executado em toda
-    navegação
+  - **CORREÇÃO CRÍTICA**: `mainElement.scrollTo()` no elemento `<main>` com
+    `overflow-y-auto` (scroll acontece no elemento, não no window)
+  - Fallback `window.scrollTo()` como backup
   - Aplica-se automaticamente a todas as páginas admin sem código duplicado
   - Comportamento: sempre carrega no topo da página ao navegar
   - Não interfere com página de login
   - UX consistente em toda área administrativa
+
+### Changed 🔄
+
+- **🎨 Background Consistente Admin**: Adicionado background gradiente no
+  elemento `<main>` para consistência visual
+  - Background: `bg-gradient-to-br from-slate-50 to-blue-50`
+  - Elimina disparidade de cores entre main e sections internas
+  - Visual uniforme e profissional em toda área admin
+  - Aplica-se automaticamente a todas as páginas
 
 ### Fixed 🐛
 
