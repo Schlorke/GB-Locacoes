@@ -26,10 +26,9 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - Permite scroll adequado para alcançar elementos interativos no final das
     páginas
   - Espaçamento generoso tanto no mobile quanto no desktop
-  - **Páginas atualizadas (8 no total)**:
+  - **Páginas atualizadas (7 no total)**:
     - `/admin/settings` - Padding adicionado ao container principal
     - `/admin/dashboard` - Padding adicionado ao container principal
-    - `/admin/analytics` - Padding adicionado ao container principal
     - `/admin/orcamentos` - Padding adicionado ao container principal
     - `/admin/categorias` - Padding adicionado ao container principal
     - `/admin/equipamentos` - Padding adicionado ao container principal
