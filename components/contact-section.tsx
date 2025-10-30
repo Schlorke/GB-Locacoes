@@ -9,6 +9,46 @@ import { Clock, Mail, MapPin, Phone } from 'lucide-react'
 
 export default function ContactSection() {
   const { settings } = usePublicSettings()
+
+  // Funções de formatação
+  const formatCPF = (value: string) => {
+    const numbers = value.replace(/\D/g, '')
+    if (numbers.length <= 3) return numbers
+    if (numbers.length <= 6) return `${numbers.slice(0, 3)}.${numbers.slice(3)}`
+    if (numbers.length <= 9)
+      return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`
+    return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6, 9)}-${numbers.slice(9, 11)}`
+  }
+
+  const formatCNPJ = (value: string) => {
+    const numbers = value.replace(/\D/g, '')
+    if (numbers.length <= 2) return numbers
+    if (numbers.length <= 5) return `${numbers.slice(0, 2)}.${numbers.slice(2)}`
+    if (numbers.length <= 8)
+      return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(5)}`
+    if (numbers.length <= 12)
+      return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(5, 8)}/${numbers.slice(8)}`
+    return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(5, 8)}/${numbers.slice(8, 12)}-${numbers.slice(12, 14)}`
+  }
+
+  const formatCEP = (value: string) => {
+    const numbers = value.replace(/\D/g, '')
+    if (numbers.length <= 5) return numbers
+    return `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`
+  }
+
+  const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target.value = formatCPF(e.target.value)
+  }
+
+  const handleCNPJChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target.value = formatCNPJ(e.target.value)
+  }
+
+  const handleCEPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target.value = formatCEP(e.target.value)
+  }
+
   return (
     <section className="py-16 bg-gray-50">
       {/* Container com largura consistente */}
@@ -65,21 +105,39 @@ export default function ContactSection() {
                   </div>
                 </div>
 
-                <div className="group">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-orange-600 transition-colors"
-                  >
-                    E-mail *
-                  </label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    placeholder="seu@email.com"
-                    className="transition-all duration-300 focus:scale-105 focus:shadow-md"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="group">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-orange-600 transition-colors"
+                    >
+                      E-mail *
+                    </label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="seu@email.com"
+                      className="transition-all duration-300 focus:scale-105 focus:shadow-md"
+                    />
+                  </div>
+                  <div className="group">
+                    <label
+                      htmlFor="cep"
+                      className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-orange-600 transition-colors"
+                    >
+                      CEP
+                    </label>
+                    <Input
+                      id="cep"
+                      name="cep"
+                      placeholder="00000-000"
+                      maxLength={9}
+                      onChange={handleCEPChange}
+                      className="transition-all duration-300 focus:scale-105 focus:shadow-md"
+                    />
+                  </div>
                 </div>
 
                 <div className="group">
@@ -97,19 +155,39 @@ export default function ContactSection() {
                   />
                 </div>
 
-                <div className="group">
-                  <label
-                    htmlFor="materials"
-                    className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-orange-600 transition-colors"
-                  >
-                    Equipamentos de Interesse
-                  </label>
-                  <Input
-                    id="materials"
-                    name="materials"
-                    placeholder="Ex: andaime suspenso, cadeira elétrica, betoneira"
-                    className="transition-all duration-300 focus:scale-105 focus:shadow-md"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="group">
+                    <label
+                      htmlFor="cpf"
+                      className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-orange-600 transition-colors"
+                    >
+                      CPF
+                    </label>
+                    <Input
+                      id="cpf"
+                      name="cpf"
+                      placeholder="000.000.000-00"
+                      maxLength={14}
+                      onChange={handleCPFChange}
+                      className="transition-all duration-300 focus:scale-105 focus:shadow-md"
+                    />
+                  </div>
+                  <div className="group">
+                    <label
+                      htmlFor="cnpj"
+                      className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-orange-600 transition-colors"
+                    >
+                      CNPJ
+                    </label>
+                    <Input
+                      id="cnpj"
+                      name="cnpj"
+                      placeholder="00.000.000/0000-00"
+                      maxLength={18}
+                      onChange={handleCNPJChange}
+                      className="transition-all duration-300 focus:scale-105 focus:shadow-md"
+                    />
+                  </div>
                 </div>
 
                 <div className="group">
