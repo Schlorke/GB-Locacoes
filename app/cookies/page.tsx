@@ -1,8 +1,9 @@
 'use client'
 
 import { Card, CardContent } from '@/components/ui/card'
+import { ContactInfoCard } from '@/components/ui/contact-info-card'
 import { motion } from 'framer-motion'
-import { CheckCircle, ChevronRight, Cookie, FileText, Mail } from 'lucide-react'
+import { CheckCircle, ChevronRight, Cookie, FileText } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 const sections = [
@@ -172,9 +173,8 @@ export default function CookiesPage() {
                   <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
                     <div className="space-y-6">
                       <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
-                          <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+                          <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-blue-100/50">
                             <p className="text-[16px] leading-relaxed text-gray-700 m-0">
                               Esta Política de Cookies explica o que são
                               cookies, como os usamos e quais são suas opções em
@@ -188,7 +188,6 @@ export default function CookiesPage() {
                         id="introducao"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">1.</span>
@@ -283,7 +282,6 @@ export default function CookiesPage() {
                         id="cookies-essenciais"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">3.</span>
@@ -296,7 +294,7 @@ export default function CookiesPage() {
                               usar alguns de seus recursos, como acesso a áreas
                               seguras.
                             </p>
-                            <div className="p-4 bg-white rounded-lg border border-green-200">
+                            <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border border-green-200/50">
                               <p className="text-[16px] text-gray-700">
                                 <span className="font-medium text-green-700">
                                   Exemplos:
@@ -313,7 +311,6 @@ export default function CookiesPage() {
                         id="cookies-funcionalidade"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">4.</span>
@@ -325,7 +322,7 @@ export default function CookiesPage() {
                               você faz quando usa nosso site, como lembrar seus
                               detalhes de login ou preferência de idioma.
                             </p>
-                            <div className="p-4 bg-white rounded-lg border border-blue-200">
+                            <div className="p-4 bg-gradient-to-br from-blue-50 to-sky-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border border-blue-200/50">
                               <p className="text-[16px] text-gray-700">
                                 <span className="font-medium text-blue-700">
                                   Exemplos:
@@ -348,7 +345,6 @@ export default function CookiesPage() {
                         id="cookies-analytics"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">5.</span>
@@ -360,7 +356,7 @@ export default function CookiesPage() {
                               número de visitantes e ver como os visitantes se
                               movem pelo site quando o estão usando.
                             </p>
-                            <div className="p-4 bg-white rounded-lg border border-purple-200">
+                            <div className="p-4 bg-gradient-to-br from-purple-50 to-violet-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border border-purple-200/50">
                               <p className="text-[16px] text-gray-700">
                                 <span className="font-medium text-purple-700">
                                   Exemplos:
@@ -382,7 +378,6 @@ export default function CookiesPage() {
                         id="gerenciar-cookies"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">6.</span>
@@ -402,7 +397,7 @@ export default function CookiesPage() {
                               que visitar um site e alguns serviços e
                               funcionalidades podem não funcionar.
                             </p>
-                            <div className="p-4 bg-white rounded-lg border border-yellow-200 mt-4">
+                            <div className="p-4 bg-gradient-to-br from-yellow-50 to-amber-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 border border-yellow-200/50 mt-4">
                               <p className="text-[16px] text-gray-700">
                                 <span className="font-medium text-yellow-700">
                                   Nota:
@@ -419,7 +414,6 @@ export default function CookiesPage() {
                         id="contato"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">7.</span>
@@ -430,43 +424,7 @@ export default function CookiesPage() {
                               Se você tiver dúvidas sobre nossa Política de
                               Cookies, entre em contato:
                             </p>
-                            <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200">
-                              <div className="flex items-start gap-4">
-                                <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white">
-                                  <Mail className="h-5 w-5" />
-                                </div>
-                                <div>
-                                  <h3 className="font-bold text-[20px] text-gray-900 mb-2">
-                                    Entre em Contato
-                                  </h3>
-                                  <p className="text-[16px] text-gray-700 mb-3">
-                                    Estamos prontos para esclarecer suas dúvidas
-                                    sobre cookies.
-                                  </p>
-                                  <div className="space-y-2">
-                                    <p className="text-[16px] text-gray-700">
-                                      <span className="font-medium">
-                                        Email:
-                                      </span>{' '}
-                                      contato@locacoesgb.com.br
-                                    </p>
-                                    <p className="text-[16px] text-gray-700">
-                                      <span className="font-medium">
-                                        Telefone:
-                                      </span>{' '}
-                                      (51) 2313-6262
-                                    </p>
-                                    <p className="text-[16px] text-gray-700">
-                                      <span className="font-medium">
-                                        Endereço:
-                                      </span>{' '}
-                                      Travessa Doutor Heinzelmann, 365 -
-                                      Humaitá, Porto Alegre - RS - CEP 90240-100
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <ContactInfoCard description="Estamos prontos para esclarecer suas dúvidas sobre cookies." />
                           </div>
                         </CardContent>
                       </Card>

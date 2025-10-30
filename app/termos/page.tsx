@@ -1,13 +1,9 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import {
-  FileText as FileTextIcon,
-  FileText,
-  ChevronRight,
-  Mail,
-} from 'lucide-react'
+import { FileText as FileTextIcon, FileText, ChevronRight } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
+import { ContactInfoCard } from '@/components/ui/contact-info-card'
 import { useState, useEffect } from 'react'
 
 const sections = [
@@ -179,9 +175,8 @@ export default function TermosPage() {
                   <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
                     <div className="space-y-6">
                       <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
-                          <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+                          <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-blue-100/50">
                             <p className="text-[16px] leading-relaxed text-gray-700 m-0">
                               Bem-vindo aos Termos e Condições de Uso da GB
                               Locações. Ao utilizar nossos serviços, você
@@ -197,7 +192,6 @@ export default function TermosPage() {
                         id="introducao"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">1.</span>
@@ -223,7 +217,6 @@ export default function TermosPage() {
                         id="servicos"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">2.</span>
@@ -265,7 +258,6 @@ export default function TermosPage() {
                         id="responsabilidades"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">3.</span>
@@ -309,7 +301,6 @@ export default function TermosPage() {
                         id="pagamentos"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">4.</span>
@@ -353,7 +344,6 @@ export default function TermosPage() {
                         id="cancelamentos"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">5.</span>
@@ -391,7 +381,6 @@ export default function TermosPage() {
                         id="limitacoes"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">6.</span>
@@ -431,7 +420,6 @@ export default function TermosPage() {
                         id="propriedade"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-pink-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">7.</span>
@@ -459,7 +447,6 @@ export default function TermosPage() {
                         id="alteracoes"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">8.</span>
@@ -484,7 +471,6 @@ export default function TermosPage() {
                         id="contato"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">9.</span>
@@ -495,43 +481,7 @@ export default function TermosPage() {
                               Para dúvidas sobre estes Termos e Condições, entre
                               em contato:
                             </p>
-                            <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200">
-                              <div className="flex items-start gap-4">
-                                <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white">
-                                  <Mail className="h-5 w-5" />
-                                </div>
-                                <div>
-                                  <h3 className="font-bold text-[20px] text-gray-900 mb-2">
-                                    Entre em Contato
-                                  </h3>
-                                  <p className="text-[16px] text-gray-700 mb-3">
-                                    Estamos à disposição para esclarecer
-                                    quaisquer dúvidas.
-                                  </p>
-                                  <div className="space-y-2">
-                                    <p className="text-[16px] text-gray-700">
-                                      <span className="font-medium">
-                                        Email:
-                                      </span>{' '}
-                                      contato@locacoesgb.com.br
-                                    </p>
-                                    <p className="text-[16px] text-gray-700">
-                                      <span className="font-medium">
-                                        Telefone:
-                                      </span>{' '}
-                                      (51) 2313-6262
-                                    </p>
-                                    <p className="text-[16px] text-gray-700">
-                                      <span className="font-medium">
-                                        Endereço:
-                                      </span>{' '}
-                                      Travessa Doutor Heinzelmann, 365 -
-                                      Humaitá, Porto Alegre - RS - CEP 90240-100
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <ContactInfoCard description="Estamos à disposição para esclarecer quaisquer dúvidas." />
                           </div>
                         </CardContent>
                       </Card>

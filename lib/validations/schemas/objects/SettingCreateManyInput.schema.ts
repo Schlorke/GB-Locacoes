@@ -13,6 +13,7 @@ const makeSchema = () => z.object({
   companyAddress: z.string().optional(),
   heroCarousel: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   contactEmail: z.string().optional(),
+  marketingEmail: z.string().optional(),
   socialLinks: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),

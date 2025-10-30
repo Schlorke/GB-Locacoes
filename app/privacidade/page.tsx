@@ -1,8 +1,9 @@
 'use client'
 
 import { Card, CardContent } from '@/components/ui/card'
+import { ContactInfoCard } from '@/components/ui/contact-info-card'
 import { motion } from 'framer-motion'
-import { ChevronRight, FileText, Mail, Shield } from 'lucide-react'
+import { ChevronRight, FileText, Shield } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 const sections = [
@@ -182,9 +183,8 @@ export default function PrivacidadePage() {
                     <div className="space-y-6">
                       {/* Card de Introdução */}
                       <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0">
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
-                          <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
+                          <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-blue-100/50">
                             <p className="text-[16px] leading-relaxed text-gray-700 m-0">
                               A sua privacidade é importante para nós. É
                               política da GB Locações respeitar a sua
@@ -201,7 +201,6 @@ export default function PrivacidadePage() {
                         id="informacoes-coletadas"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">1.</span>
@@ -233,7 +232,6 @@ export default function PrivacidadePage() {
                         id="como-usamos"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">2.</span>
@@ -272,7 +270,6 @@ export default function PrivacidadePage() {
                         id="cookies"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">3.</span>
@@ -303,7 +300,6 @@ export default function PrivacidadePage() {
                         id="links-terceiros"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">4.</span>
@@ -332,7 +328,6 @@ export default function PrivacidadePage() {
                         id="consentimento"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">5.</span>
@@ -354,7 +349,6 @@ export default function PrivacidadePage() {
                         id="alteracoes"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-50 to-transparent opacity-30"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">6.</span>
@@ -383,7 +377,6 @@ export default function PrivacidadePage() {
                         id="contato"
                         className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 scroll-mt-32"
                       >
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-transparent opacity-50"></div>
                         <CardContent className="relative z-10 p-6 md:p-8">
                           <h2 className="text-[20px] font-bold text-gray-900 mb-4 flex items-center gap-3">
                             <span className="text-orange-600">7.</span>
@@ -394,36 +387,7 @@ export default function PrivacidadePage() {
                               Se você tiver alguma dúvida sobre esta Política de
                               Privacidade, entre em contato conosco:
                             </p>
-                            <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                              <div className="flex items-start gap-4">
-                                <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white">
-                                  <Mail className="h-5 w-5" />
-                                </div>
-                                <div>
-                                  <h3 className="font-bold text-[20px] text-gray-900 mb-2">
-                                    Entre em Contato
-                                  </h3>
-                                  <p className="text-[16px] text-gray-700 mb-3">
-                                    Nossa equipe está pronta para esclarecer
-                                    suas dúvidas sobre privacidade.
-                                  </p>
-                                  <div className="space-y-2">
-                                    <p className="text-[16px] text-gray-700">
-                                      <span className="font-medium">
-                                        Email:
-                                      </span>{' '}
-                                      contato@locacoesgb.com.br
-                                    </p>
-                                    <p className="text-[16px] text-gray-700">
-                                      <span className="font-medium">
-                                        Telefone:
-                                      </span>{' '}
-                                      (51) 2313-6262
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <ContactInfoCard />
                           </div>
                         </CardContent>
                       </Card>

@@ -13,6 +13,7 @@ interface CompanyInfoPreviewProps {
     address?: string
     phone?: string
     email?: string
+    marketingEmail?: string
     logoUrl?: string
     businessHours?: Record<
       string,
@@ -24,7 +25,8 @@ interface CompanyInfoPreviewProps {
 export const CompanyInfoPreview = memo(function CompanyInfoPreview({
   data,
 }: CompanyInfoPreviewProps) {
-  const { name, description, address, phone, email, logoUrl } = data
+  const { name, description, address, phone, email, marketingEmail, logoUrl } =
+    data
 
   return (
     <motion.div
@@ -99,6 +101,12 @@ export const CompanyInfoPreview = memo(function CompanyInfoPreview({
             <div className="flex items-center gap-1.5">
               <Mail className="h-3.5 w-3.5 text-gray-500" />
               <span>{email}</span>
+            </div>
+          )}
+          {marketingEmail && (
+            <div className="flex items-center gap-1.5">
+              <Mail className="h-3.5 w-3.5 text-gray-400" />
+              <span>{marketingEmail} · Automático</span>
             </div>
           )}
         </div>

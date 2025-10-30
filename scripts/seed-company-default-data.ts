@@ -13,6 +13,7 @@ async function seedCompanyDefaultData() {
       companyPhone: '(51) 2313-6262',
       whatsappNumber: '(51) 99820-5163',
       contactEmail: 'contato@locacoesgb.com.br',
+      marketingEmail: 'comercial@locacoesgb.com.br',
       companyAddress:
         'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
       aboutUsText:
@@ -41,6 +42,9 @@ async function seedCompanyDefaultData() {
       }
       if (!existingSettings.contactEmail) {
         updates.contactEmail = defaultData.contactEmail
+      }
+      if (!existingSettings.marketingEmail) {
+        updates.marketingEmail = defaultData.marketingEmail
       }
       if (!existingSettings.companyAddress) {
         updates.companyAddress = defaultData.companyAddress

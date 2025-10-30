@@ -10,6 +10,7 @@ const makeSchema = () => z.object({
   aboutUsText: SortOrderSchema.optional(),
   companyAddress: SortOrderSchema.optional(),
   contactEmail: SortOrderSchema.optional(),
+  marketingEmail: SortOrderSchema.optional(),
   seoTitle: SortOrderSchema.optional(),
   seoDescription: SortOrderSchema.optional(),
   themeColorPrimary: SortOrderSchema.optional(),

@@ -44,6 +44,20 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **🎨 Card de Contato - Página Privacidade**: Melhorado estilo visual do card
+  de contato
+  - Removida borda laranja (`border border-orange-200`)
+  - Adicionada sombra padrão (`shadow-lg`)
+  - Adicionada sombra maior no hover (`hover:shadow-xl`)
+  - Transição suave (`transition-shadow duration-300`)
+  - **Ícone padronizado** seguindo padrão do ÍNDICE:
+    - Padding reduzido: `p-3` → `p-2` (igual ao índice)
+    - Arredondamento reduzido: `rounded-xl` → `rounded-lg` (igual ao índice)
+    - Alinhamento: `items-start` → `items-center` (centralizado)
+    - Espaçamento: `gap-4` → `gap-3` (igual ao índice)
+  - Visual mais moderno e limpo com efeito de elevação
+  - Consistência perfeita com padrão de ícones da página
+
 - **🎨 Background Consistente Admin**: Adicionado background gradiente no
   elemento `<main>` para consistência visual
   - Background: `bg-gradient-to-br from-slate-50 to-blue-50`

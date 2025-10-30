@@ -1,7 +1,9 @@
+import ContactSection from '@/components/contact-section'
 import Hero from '@/components/hero'
 import HomePageClient from '@/components/home-page-client'
 import WhyChooseUs from '@/components/why-choose-us'
-import ContactSection from '@/components/contact-section'
+import { StructuredData } from '@/components/structured-data'
+import { getLocalBusinessData } from '@/lib/structured-data-utils'
 
 export const metadata = {
   title: 'GB Locações - Locação de Equipamentos para Construção Civil',
@@ -17,13 +19,34 @@ export const metadata = {
   },
 }
 
-export default function HomePage() {
+async function getPrisma() {
+  const { prisma } = await import('@/lib/prisma')
+  return prisma
+}
+
+export default async function HomePage() {
+  const prisma = await getPrisma()
+  const settings = await prisma.setting.findFirst({
+    select: {
+      companyPhone: true,
+      whatsappNumber: true,
+      contactEmail: true,
+      companyAddress: true,
+      aboutUsText: true,
+    },
+  })
+
+  const localBusinessData = getLocalBusinessData(settings || undefined)
+
   return (
-    <main>
-      <Hero />
-      <HomePageClient />
-      <WhyChooseUs />
-      <ContactSection />
-    </main>
+    <>
+      <StructuredData localBusiness={localBusinessData} />
+      <main>
+        <Hero />
+        <HomePageClient />
+        <WhyChooseUs />
+        <ContactSection />
+      </main>
+    </>
   )
 }

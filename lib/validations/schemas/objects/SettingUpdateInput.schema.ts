@@ -16,6 +16,7 @@ const makeSchema = () => z.object({
   companyAddress: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   heroCarousel: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   contactEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
+  marketingEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   socialLinks: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   seoTitle: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   seoDescription: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),

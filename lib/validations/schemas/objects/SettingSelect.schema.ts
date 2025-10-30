@@ -11,6 +11,7 @@ const makeSchema = () => z.object({
   companyAddress: z.boolean().optional(),
   heroCarousel: z.boolean().optional(),
   contactEmail: z.boolean().optional(),
+  marketingEmail: z.boolean().optional(),
   socialLinks: z.boolean().optional(),
   seoTitle: z.boolean().optional(),
   seoDescription: z.boolean().optional(),

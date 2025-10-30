@@ -8,6 +8,7 @@ export const SettingUpsertResultSchema = z.object({
   companyAddress: z.string(),
   heroCarousel: z.unknown(),
   contactEmail: z.string(),
+  marketingEmail: z.string(),
   socialLinks: z.unknown(),
   seoTitle: z.string(),
   seoDescription: z.string(),

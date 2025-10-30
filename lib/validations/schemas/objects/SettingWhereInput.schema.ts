@@ -17,6 +17,7 @@ const settingwhereinputSchema = z.object({
   companyAddress: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   heroCarousel: z.lazy(() => JsonFilterObjectSchema).optional(),
   contactEmail: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
+  marketingEmail: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   socialLinks: z.lazy(() => JsonFilterObjectSchema).optional(),
   seoTitle: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   seoDescription: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),

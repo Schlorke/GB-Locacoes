@@ -1,5 +1,6 @@
 'use client'
 
+import { usePublicSettings } from '@/hooks/use-public-settings'
 import {
   Clock,
   Facebook,
@@ -11,10 +12,19 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePublicSettings } from '@/hooks/use-public-settings'
 
 export default function Footer() {
   const { settings } = usePublicSettings()
+  const addressLines = (() => {
+    const raw = settings.companyAddress?.trim()
+    if (!raw) return []
+    const [firstLine, ...rest] = raw.split(' - ')
+    if (rest.length === 0) {
+      return [firstLine]
+    }
+    return [firstLine, rest.join(' - ')]
+  })()
+
   return (
     <footer className="relative bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white">
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
@@ -194,7 +204,7 @@ export default function Footer() {
             </h3>
             <div className="flex flex-col space-y-2">
               <div className="flex items-start space-x-3">
-                <Phone className="h-5 w-5 text-orange-500 mt-1" />
+                <Phone className="w-5 h-5 min-w-5 min-h-5 text-orange-500 mt-0.5 flex-shrink-0" />
                 <div>
                   <Link
                     href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
@@ -216,14 +226,22 @@ export default function Footer() {
               </div>
 
               <div className="flex items-start space-x-3">
-                <Mail className="h-5 w-5 text-orange-500 mt-1" />
-                <div>
+                <Mail className="w-5 h-5 min-w-5 min-h-5 text-orange-500 mt-0.5 flex-shrink-0" />
+                <div className="flex flex-col space-y-1">
                   <Link
-                    href="mailto:contato@locacoesgb.com.br"
+                    href={`mailto:${settings.contactEmail}`}
                     className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
                   >
-                    contato@locacoesgb.com.br
+                    {settings.contactEmail}
                   </Link>
+                  {settings.marketingEmail && (
+                    <Link
+                      href={`mailto:${settings.marketingEmail}`}
+                      className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500"
+                    >
+                      {settings.marketingEmail}
+                    </Link>
+                  )}
                   <p className="text-sm text-gray-400">
                     Resposta rápida garantida
                   </p>
@@ -231,12 +249,17 @@ export default function Footer() {
               </div>
 
               <div className="flex items-start space-x-3">
-                <MapPin className="h-5 w-5 text-orange-500 mt-1" />
+                <MapPin className="w-5 h-5 min-w-5 min-h-5 text-orange-500 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-300 transition-colors duration-300 ease-in-out hover:text-orange-500 cursor-default">
-                    Travessa Doutor Heinzelmann, 365
-                    <br />
-                    Humaitá - Porto Alegre/RS
+                    {addressLines.length > 0
+                      ? addressLines.map((line, index) => (
+                          <span key={index}>
+                            {line}
+                            {index < addressLines.length - 1 && <br />}
+                          </span>
+                        ))
+                      : settings.companyAddress}
                   </p>
                   <p className="text-sm text-gray-400">
                     Entregamos em toda região

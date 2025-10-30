@@ -17,6 +17,7 @@ const settingscalarwherewithaggregatesinputSchema = z.object({
   companyAddress: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
   heroCarousel: z.lazy(() => JsonWithAggregatesFilterObjectSchema).optional(),
   contactEmail: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
+  marketingEmail: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
   socialLinks: z.lazy(() => JsonWithAggregatesFilterObjectSchema).optional(),
   seoTitle: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),
   seoDescription: z.union([z.lazy(() => StringWithAggregatesFilterObjectSchema), z.string()]).optional(),

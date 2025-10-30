@@ -62,6 +62,7 @@ export function useCompanyInfo() {
     companyPhone: settings?.companyPhone || '',
     companyAddress: settings?.companyAddress || '',
     contactEmail: settings?.contactEmail || '',
+    marketingEmail: settings?.marketingEmail || '',
     whatsappNumber: settings?.whatsappNumber || '',
     aboutUsText: settings?.aboutUsText || '',
   }

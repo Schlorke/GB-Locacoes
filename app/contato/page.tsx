@@ -26,6 +26,10 @@ export default function ContatoPage() {
     window.scrollTo(0, 0)
   }, [])
 
+  const primaryEmail = settings.contactEmail
+  const marketingEmail = settings.marketingEmail
+  const contactAddress = settings.companyAddress
+
   const contactInfo = [
     {
       icon: Phone,
@@ -38,16 +42,18 @@ export default function ContatoPage() {
     {
       icon: Mail,
       title: 'E-mail',
-      main: 'contato@locacoesgb.com.br',
-      subtitle: 'Resposta em até 24 horas',
+      main: primaryEmail,
+      subtitle: marketingEmail
+        ? `${marketingEmail} · Automação comercial`
+        : 'Resposta em até 24 horas',
       color: 'blue',
       delay: 0.2,
     },
     {
       icon: MapPin,
       title: 'Endereço',
-      main: 'Travessa Doutor Heinzelmann, 365',
-      subtitle: 'Humaitá - Porto Alegre/RS - CEP: 90240-100',
+      main: contactAddress,
+      subtitle: 'Atendimento em Porto Alegre e região metropolitana',
       color: 'green',
       delay: 0.3,
     },

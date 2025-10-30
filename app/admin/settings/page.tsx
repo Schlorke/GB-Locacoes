@@ -4,12 +4,12 @@ import { getSettings, updateSettings } from '@/app/api/admin/settings/actions'
 import { SettingsBlock } from '@/components/admin/settings-block'
 import { SettingsNavigationBar } from '@/components/admin/settings-navigation-bar'
 import {
-    CompanyInfoPreview,
-    CustomSettingsPreview,
-    HeroCarouselPreview,
-    SeoPreview,
-    SocialLinksPreview,
-    SystemPreview,
+  CompanyInfoPreview,
+  CustomSettingsPreview,
+  HeroCarouselPreview,
+  SeoPreview,
+  SocialLinksPreview,
+  SystemPreview,
 } from '@/components/admin/settings-previews'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -20,17 +20,30 @@ import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { SettingsInput } from '@/schemas/settings.schema'
 import { motion } from 'framer-motion'
 import {
-    Building2,
-    Code,
-    Images,
-    Search,
-    Settings,
-    Share2,
-    Upload,
-    X,
+  Building2,
+  Code,
+  Images,
+  Loader2,
+  Search,
+  Settings,
+  Share2,
+  Upload,
+  X,
 } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+
+const DEFAULT_COMPANY_PHONE = '(51) 2313-6262'
+const DEFAULT_WHATSAPP_NUMBER = '(51) 99820-5163'
+const DEFAULT_CONTACT_EMAIL = 'contato@locacoesgb.com.br'
+const DEFAULT_MARKETING_EMAIL = 'comercial@locacoesgb.com.br'
+const DEFAULT_COMPANY_ADDRESS =
+  'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100'
+const DEFAULT_ABOUT_US_TEXT =
+  'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.'
+const DEFAULT_SEO_TITLE = 'GB Locações - Equipamentos para Construção'
+const DEFAULT_SEO_DESCRIPTION =
+  'Locação de equipamentos para construção civil com qualidade e segurança'
 
 export default function SettingsPage() {
   const { success, error: errorToast } = useToastSonner()
@@ -61,26 +74,23 @@ export default function SettingsPage() {
   })
 
   const [formData, setFormData] = useState<SettingsInput>({
-    companyPhone: '(51) 2313-6262',
+    companyPhone: DEFAULT_COMPANY_PHONE,
     companyIconUrl: '',
-    aboutUsText:
-      'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
-    companyAddress:
-      'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
+    aboutUsText: DEFAULT_ABOUT_US_TEXT,
+    companyAddress: DEFAULT_COMPANY_ADDRESS,
     heroCarousel: [],
-    contactEmail: 'contato@locacoesgb.com.br',
-    marketingEmail: 'comercial@locacoesgb.com.br',
+    contactEmail: DEFAULT_CONTACT_EMAIL,
+    marketingEmail: DEFAULT_MARKETING_EMAIL,
     socialLinks: {},
-    seoTitle: 'GB Locações - Equipamentos para Construção',
-    seoDescription:
-      'Locação de equipamentos para construção civil com qualidade e segurança',
+    seoTitle: DEFAULT_SEO_TITLE,
+    seoDescription: DEFAULT_SEO_DESCRIPTION,
     themeColorPrimary: '#ea580c',
     maintenanceMode: false,
     analyticsTrackingId: '',
     footerText: '',
     businessHours: {},
     supportChat: true,
-    whatsappNumber: '(51) 99820-5163',
+    whatsappNumber: DEFAULT_WHATSAPP_NUMBER,
     favicon: '',
     logoSecondary: '',
     defaultLanguage: 'pt-BR',
@@ -100,10 +110,11 @@ export default function SettingsPage() {
         const result = await getSettings()
         if (result.success && result.data) {
           setFormData({
-            companyPhone: result.data.companyPhone || '',
+            companyPhone: result.data.companyPhone || DEFAULT_COMPANY_PHONE,
             companyIconUrl: result.data.companyIconUrl || '',
-            aboutUsText: result.data.aboutUsText || '',
-            companyAddress: result.data.companyAddress || '',
+            aboutUsText: result.data.aboutUsText || DEFAULT_ABOUT_US_TEXT,
+            companyAddress:
+              result.data.companyAddress || DEFAULT_COMPANY_ADDRESS,
             heroCarousel:
               (result.data.heroCarousel as Array<{
                 imageUrl: string
@@ -113,8 +124,9 @@ export default function SettingsPage() {
                 link?: string
                 order?: number
               }>) || [],
-            contactEmail: result.data.contactEmail || '',
-            marketingEmail: result.data.marketingEmail || '',
+            contactEmail: result.data.contactEmail || DEFAULT_CONTACT_EMAIL,
+            marketingEmail:
+              result.data.marketingEmail || DEFAULT_MARKETING_EMAIL,
             socialLinks:
               (result.data.socialLinks as {
                 facebook?: string
@@ -124,12 +136,9 @@ export default function SettingsPage() {
                 youtube?: string
                 twitter?: string
               }) || {},
-            seoTitle:
-              result.data.seoTitle ||
-              'GB Locações - Equipamentos para Construção',
+            seoTitle: result.data.seoTitle || DEFAULT_SEO_TITLE,
             seoDescription:
-              result.data.seoDescription ||
-              'Locação de equipamentos para construção civil com qualidade e segurança',
+              result.data.seoDescription || DEFAULT_SEO_DESCRIPTION,
             themeColorPrimary: result.data.themeColorPrimary || '#ea580c',
             maintenanceMode: result.data.maintenanceMode || false,
             analyticsTrackingId: result.data.analyticsTrackingId || '',
@@ -145,7 +154,8 @@ export default function SettingsPage() {
                 sunday?: { closed: boolean; open?: string; close?: string }
               }) || {},
             supportChat: result.data.supportChat !== false,
-            whatsappNumber: result.data.whatsappNumber || '',
+            whatsappNumber:
+              result.data.whatsappNumber || DEFAULT_WHATSAPP_NUMBER,
             favicon: result.data.favicon || '',
             logoSecondary: result.data.logoSecondary || '',
             defaultLanguage: result.data.defaultLanguage || 'pt-BR',
@@ -225,10 +235,33 @@ export default function SettingsPage() {
   // }
 
   const updateField = (field: keyof SettingsInput, value: unknown) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }))
+    setFormData((prev) => {
+      const next = {
+        ...prev,
+        [field]: value,
+      }
+
+      if (field === 'aboutUsText') {
+        const textValue =
+          typeof value === 'string' && value.trim().length > 0
+            ? value
+            : DEFAULT_ABOUT_US_TEXT
+        const shouldSyncSeoDescription =
+          !prev.seoDescription ||
+          prev.seoDescription === prev.aboutUsText ||
+          prev.seoDescription === DEFAULT_SEO_DESCRIPTION
+        if (shouldSyncSeoDescription) {
+          next.seoDescription = textValue
+        }
+      }
+
+      if (field === 'seoDescription' && typeof value === 'string') {
+        next.seoDescription =
+          value.trim().length > 0 ? value : DEFAULT_SEO_DESCRIPTION
+      }
+
+      return next
+    })
   }
 
   // Função para formatar número de telefone
@@ -379,13 +412,12 @@ export default function SettingsPage() {
     switch (section) {
       case 'company':
         return {
-          companyPhone: '(51) 2313-6262',
-          whatsappNumber: '(51) 99820-5163',
-          contactEmail: 'contato@locacoesgb.com.br',
-          companyAddress:
-            'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
-          aboutUsText:
-            'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
+          companyPhone: DEFAULT_COMPANY_PHONE,
+          whatsappNumber: DEFAULT_WHATSAPP_NUMBER,
+          contactEmail: DEFAULT_CONTACT_EMAIL,
+          marketingEmail: DEFAULT_MARKETING_EMAIL,
+          companyAddress: DEFAULT_COMPANY_ADDRESS,
+          aboutUsText: DEFAULT_ABOUT_US_TEXT,
           companyIconUrl: '', // Vazio = volta para logo padrão "GB"
         }
       case 'hero':
@@ -399,9 +431,8 @@ export default function SettingsPage() {
         }
       case 'seo':
         return {
-          seoTitle: 'GB Locações - Equipamentos para Construção',
-          seoDescription:
-            'Locação de equipamentos para construção civil com qualidade e segurança',
+          seoTitle: DEFAULT_SEO_TITLE,
+          seoDescription: DEFAULT_SEO_DESCRIPTION,
           favicon: '',
         }
       case 'system':
@@ -656,6 +687,26 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
+                      <Label htmlFor="marketingEmail">
+                        E-mail Comercial / No-reply
+                      </Label>
+                      <Input
+                        id="marketingEmail"
+                        type="email"
+                        value={formData.marketingEmail || ''}
+                        onChange={(e) =>
+                          updateField('marketingEmail', e.target.value)
+                        }
+                        placeholder="comercial@locacoesgb.com.br"
+                        className="mt-1"
+                      />
+                      <p className="input-description mt-1">
+                        Endereço usado para disparos automáticos e comunicações
+                        comerciais.
+                      </p>
+                    </div>
+
+                    <div>
                       <Label htmlFor="companyAddress">Endereço</Label>
                       <Textarea
                         id="companyAddress"
@@ -700,6 +751,7 @@ export default function SettingsPage() {
                       address: formData.companyAddress,
                       phone: `${formData.companyPhone || '(51) 2313-6262'} | ${formData.whatsappNumber || '(51) 99820-5163'}`,
                       email: formData.contactEmail,
+                      marketingEmail: formData.marketingEmail,
                       logoUrl: formData.companyIconUrl,
                     }}
                   />

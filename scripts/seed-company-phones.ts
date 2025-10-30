@@ -17,6 +17,7 @@ async function seedCompanyPhones() {
           companyPhone: '(51) 2313-6262',
           whatsappNumber: '(51) 99820-5163',
           contactEmail: 'contato@locacoesgb.com.br',
+          marketingEmail: 'comercial@locacoesgb.com.br',
           companyAddress:
             'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
         },
@@ -29,6 +30,7 @@ async function seedCompanyPhones() {
           companyPhone: '(51) 2313-6262',
           whatsappNumber: '(51) 99820-5163',
           contactEmail: 'contato@locacoesgb.com.br',
+          marketingEmail: 'comercial@locacoesgb.com.br',
           companyAddress:
             'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
           seoTitle: 'GB Locações - Equipamentos para Construção',
@@ -47,6 +49,8 @@ async function seedCompanyPhones() {
     console.log('📞 Telefones da empresa:')
     console.log('   - Fixo: (51) 2313-6262')
     console.log('   - WhatsApp: (51) 99820-5163')
+    console.log('   - E-mail: contato@locacoesgb.com.br')
+    console.log('   - E-mail Comercial: comercial@locacoesgb.com.br')
     console.log('✅ Seed executado com sucesso!')
   } catch (error) {
     console.error('❌ Erro ao popular telefones:', error)

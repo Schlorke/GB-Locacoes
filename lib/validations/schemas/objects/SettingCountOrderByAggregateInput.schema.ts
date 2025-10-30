@@ -11,6 +11,7 @@ const makeSchema = () => z.object({
   companyAddress: SortOrderSchema.optional(),
   heroCarousel: SortOrderSchema.optional(),
   contactEmail: SortOrderSchema.optional(),
+  marketingEmail: SortOrderSchema.optional(),
   socialLinks: SortOrderSchema.optional(),
   seoTitle: SortOrderSchema.optional(),
   seoDescription: SortOrderSchema.optional(),

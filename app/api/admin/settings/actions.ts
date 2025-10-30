@@ -18,6 +18,8 @@ export async function getSettings() {
           seoDescription:
             'Locação de equipamentos para construção civil com qualidade e segurança',
           themeColorPrimary: '#ea580c',
+          contactEmail: 'contato@locacoesgb.com.br',
+          marketingEmail: 'comercial@locacoesgb.com.br',
           heroCarousel: [],
           socialLinks: {},
           businessHours: {},
@@ -91,6 +93,7 @@ export async function updateSettings(data: SettingsInput) {
           companyAddress: validatedData.companyAddress || '',
           heroCarousel: validatedData.heroCarousel || [],
           contactEmail: validatedData.contactEmail || '',
+          marketingEmail: validatedData.marketingEmail || '',
           socialLinks: validatedData.socialLinks || {},
           seoTitle: validatedData.seoTitle,
           seoDescription: validatedData.seoDescription,
@@ -125,6 +128,7 @@ export async function updateSettings(data: SettingsInput) {
           companyAddress: validatedData.companyAddress || '',
           heroCarousel: validatedData.heroCarousel || [],
           contactEmail: validatedData.contactEmail || '',
+          marketingEmail: validatedData.marketingEmail || '',
           socialLinks: validatedData.socialLinks || {},
           seoTitle: validatedData.seoTitle,
           seoDescription: validatedData.seoDescription,
@@ -198,6 +202,8 @@ export async function toggleMaintenanceMode(enabled: boolean) {
           seoDescription:
             'Locação de equipamentos para construção civil com qualidade e segurança',
           themeColorPrimary: '#ea580c',
+          contactEmail: 'contato@locacoesgb.com.br',
+          marketingEmail: 'comercial@locacoesgb.com.br',
         },
       })
     }

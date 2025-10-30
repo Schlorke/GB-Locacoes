@@ -16,15 +16,15 @@ import { toast } from '@/hooks/use-toast'
 import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
 
 import {
-    ArrowLeft,
-    ArrowRight,
-    Building,
-    Calendar,
-    Check,
-    Mail,
-    MessageSquare,
-    Package,
-    Phone,
+  ArrowLeft,
+  ArrowRight,
+  Building,
+  Calendar,
+  Check,
+  Mail,
+  MessageSquare,
+  Package,
+  Phone,
 } from 'lucide-react'
 
 // Schema de validação otimizado
@@ -439,7 +439,9 @@ export default function QuoteForm({
                           id="customerEmail"
                           type="email"
                           placeholder="seu@email.com"
-                          className={errors.customerEmail ? 'border-red-500' : ''}
+                          className={
+                            errors.customerEmail ? 'border-red-500' : ''
+                          }
                         />
                       )}
                     />

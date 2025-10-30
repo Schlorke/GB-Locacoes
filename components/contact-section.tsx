@@ -267,11 +267,25 @@ export default function ContactSection() {
                       E-mail
                     </h4>
                     <p className="text-gray-600 mb-1">
-                      contato@locacoesgb.com.br
+                      <a
+                        href={`mailto:${settings.contactEmail}`}
+                        className="hover:underline"
+                      >
+                        {settings.contactEmail}
+                      </a>
                     </p>
-                    <p className="text-gray-600">comercial@locacoesgb.com.br</p>
+                    {settings.marketingEmail && (
+                      <p className="text-gray-600">
+                        <a
+                          href={`mailto:${settings.marketingEmail}`}
+                          className="hover:underline"
+                        >
+                          {settings.marketingEmail}
+                        </a>
+                      </p>
+                    )}
                     <p className="text-sm text-orange-600 mt-2">
-                      Resposta rápida garantida
+                      Resposta rápida garantida · Automação comercial
                     </p>
                   </div>
                 </div>
@@ -288,10 +302,8 @@ export default function ContactSection() {
                     <h4 className="font-semibold text-lg mb-2 group-hover:text-orange-600 transition-colors">
                       Endereço
                     </h4>
-                    <p className="text-gray-600 mb-1">
-                      Travessa Doutor Heinzelmann, 365
-                      <br />
-                      Humaitá - Porto Alegre/RS
+                    <p className="text-gray-600 mb-1 whitespace-pre-line">
+                      {settings.companyAddress}
                     </p>
                     <p className="text-sm text-orange-600 mt-2">
                       Entregamos em toda região

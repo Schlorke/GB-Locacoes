@@ -4,37 +4,37 @@ import { AdminFilterCard } from '@/components/admin/admin-filter-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from '@/components/ui/card'
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-    Briefcase,
-    Building,
-    Calendar,
-    CheckCircle,
-    Clock,
-    Eye,
-    FileText,
-    Hash,
-    Mail,
-    MessageSquare,
-    Package,
-    Phone,
-    User,
-    XCircle,
+  Briefcase,
+  Building,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Eye,
+  FileText,
+  Hash,
+  Mail,
+  MessageSquare,
+  Package,
+  Phone,
+  User,
+  XCircle,
 } from 'lucide-react'
 import { Suspense, useCallback, useEffect, useState } from 'react'
 
