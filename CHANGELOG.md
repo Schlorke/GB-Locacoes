@@ -10,6 +10,15 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **🔥 HOTFIX - Encoding UTF-8 em Orçamentos**: Corrigido problema de encoding
+  de caracteres no arquivo `app/admin/orcamentos/page.tsx`
+  - Caracteres 'ç' exibidos incorretamente como '├º'
+  - Mensagens bugadas: "Nenhum or├ºamento encontrado" e "novos or├ºamentos"
+  - Arquivo restaurado do commit 721bd9fe com encoding UTF-8 correto
+  - Corrigido: 'or├ºamento' → 'orçamento' e 'or├ºamentos' → 'orçamentos'
+  - Padding-bottom pb-24 md:pb-12 preservado
+  - Página de orçamentos admin funcionando e com texto correto
+
 - **🔥 HOTFIX - Categorias Page Corrompido**: Restaurado arquivo
   `app/admin/categorias/page.tsx` que havia sido corrompido no commit anterior
   - Arquivo estava com apenas 1 linha vazia
