@@ -255,11 +255,6 @@ export default function SettingsPage() {
         }
       }
 
-      if (field === 'seoDescription' && typeof value === 'string') {
-        next.seoDescription =
-          value.trim().length > 0 ? value : DEFAULT_SEO_DESCRIPTION
-      }
-
       return next
     })
   }
@@ -745,9 +740,7 @@ export default function SettingsPage() {
                   <CompanyInfoPreview
                     data={{
                       name: 'GB Locações',
-                      description:
-                        formData.aboutUsText ||
-                        'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
+                      description: formData.aboutUsText,
                       address: formData.companyAddress,
                       phone: `${formData.companyPhone || '(51) 2313-6262'} | ${formData.whatsappNumber || '(51) 99820-5163'}`,
                       email: formData.contactEmail,

@@ -38,9 +38,6 @@ export function SettingsBlock({
       transition={{ delay }}
     >
       <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
-
         <CardContent className="relative z-10 p-4 md:p-6">
           <div className="grid grid-cols-1 lg:grid-cols-[400px,1fr] gap-8 items-start">
             {/* Coluna Esquerda: Título + Form */}
@@ -67,22 +64,7 @@ export function SettingsBlock({
             </div>
 
             {/* Coluna Direita: Preview ocupando toda altura */}
-            <div className="relative min-h-full">
-              <Card
-                className="relative overflow-hidden shadow-xl backdrop-blur-sm"
-                style={{
-                  backgroundColor: 'rgb(248, 250, 252)',
-                  borderColor: 'rgb(224, 230, 235)',
-                  borderWidth: '1.5px',
-                }}
-              >
-                {/* Removendo gradientes para usar cor exata do equipamento */}
-
-                <CardContent className="relative z-10 p-4" aria-live="polite">
-                  {preview}
-                </CardContent>
-              </Card>
-            </div>
+            <div className="relative min-h-full space-y-6">{preview}</div>
           </div>
 
           {/* Botões de ação no canto inferior direito do bloco principal */}
