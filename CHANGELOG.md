@@ -8,6 +8,16 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased] - Correções de UI (modais e scroll)
 
+### Fixed 🐛
+
+- **🔥 HOTFIX - Categorias Page Corrompido**: Restaurado arquivo
+  `app/admin/categorias/page.tsx` que havia sido corrompido no commit anterior
+  - Arquivo estava com apenas 1 linha vazia
+  - Restaurado do commit anterior com padding-bottom já aplicado
+  - Corrige erro: "The default export is not a React Component in
+    /admin/categorias/page"
+  - Página de categorias admin funcionando novamente
+
 ### Removed ❌
 
 - **Página Analytics Admin**: Removida página `/admin/analytics` não utilizada
