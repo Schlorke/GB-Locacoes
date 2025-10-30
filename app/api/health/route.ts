@@ -1,92 +1,36 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
+/**
+ * Health check endpoint para manter o database acordado
+ * Configure um Vercel Cron para chamar esta rota a cada 5 minutos
+ */
 export async function GET() {
   try {
-    const healthCheck = {
-      status: 'ok' as 'ok' | 'error',
+    // Query simples para manter conexão ativa
+    await prisma.$queryRaw`SELECT 1`
+
+    return NextResponse.json({
+      status: 'healthy',
       timestamp: new Date().toISOString(),
-      uptime: process.uptime(),
-      environment: process.env.NODE_ENV || 'development',
-      version: '1.0.0',
-      database: {
-        status: 'unknown' as
-          | 'unknown'
-          | 'connected'
-          | 'error'
-          | 'not_configured',
-        connection: null as string | null,
-        error: null as {
-          message: string
-          code: string
-          type: string
-        } | null,
-      },
-      environment_vars: {
-        NODE_ENV: process.env.NODE_ENV,
-        DATABASE_URL: process.env.DATABASE_URL ? 'configured' : 'missing',
-        DIRECT_URL: process.env.DIRECT_URL ? 'configured' : 'missing',
-        SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL
-          ? 'configured'
-          : 'missing',
-      },
-    }
-
-    // Testar conexão com banco se DATABASE_URL estiver configurado
-    if (process.env.DATABASE_URL) {
-      try {
-        // Prisma importado estaticamente
-
-        // Testar conexão com timeout
-        const connectionPromise = prisma.$connect()
-        const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Connection timeout')), 5000)
-        )
-
-        await Promise.race([connectionPromise, timeoutPromise])
-
-        // Testar query simples
-        await prisma.$queryRaw`SELECT 1`
-
-        healthCheck.database.status = 'connected'
-        healthCheck.database.connection = 'success'
-
-        // Fechar conexão
-        await prisma.$disconnect()
-      } catch (dbError) {
-        healthCheck.database.status = 'error'
-        healthCheck.database.error = {
-          message:
-            dbError instanceof Error
-              ? dbError.message
-              : 'Unknown database error',
-          code:
-            dbError instanceof Error && 'code' in dbError
-              ? String(dbError.code)
-              : 'UNKNOWN',
-          type: dbError?.constructor?.name || 'Unknown',
-        }
-
-        // Se o banco falhar, marcar status geral como error
-        healthCheck.status = 'error'
-      }
-    } else {
-      healthCheck.database.status = 'not_configured'
-    }
-
-    const statusCode = healthCheck.status === 'ok' ? 200 : 503
-
-    return NextResponse.json(healthCheck, { status: statusCode })
+      database: 'connected',
+    })
   } catch (error) {
     console.error('Health check failed:', error)
+
     return NextResponse.json(
       {
-        status: 'error',
-        message: 'Health check failed',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        status: 'unhealthy',
         timestamp: new Date().toISOString(),
+        database: 'disconnected',
+        error: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 }
+      { status: 503 }
     )
   }
 }
+
+// Configuração do Vercel Cron
+// Runtime padrão (Node.js) é necessário para Prisma funcionar
+export const dynamic = 'force-dynamic'
+export const maxDuration = 10 // Timeout de 10 segundos

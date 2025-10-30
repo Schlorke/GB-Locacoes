@@ -1,8 +1,20 @@
 {
-  "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "images": {
-    "formats": ["image/avif", "image/webp"],
-    "sizes": [16, 32, 48, 64, 96, 128, 256, 384, 512, 1024, 2048]
+  "buildCommand": "prisma generate && next build",
+  "framework": "nextjs",
+  "rewrites": [
+    {
+      "source": "/api-docs",
+      "destination": "/api-docs"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/health",
+      "schedule": "*/5 * * * *"
+    }
+  ],
+  "env": {
+    "NEXT_PUBLIC_SUPABASE_URL": "@supabase-url",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase-anon-key"
   }
 }

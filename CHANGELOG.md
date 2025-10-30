@@ -15,6 +15,15 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   LocalBusiness
 - `lib/structured-data-utils.ts`: novo arquivo utilitário server-safe para
   funções de structured data, permitindo uso em Server Components
+- `app/api/health/route.ts`: endpoint de health check para manter database
+  acordado
+  - Previne auto-pause do Supabase Free Tier (pausa após 1h de inatividade)
+  - Retorna status de conexão com timestamp
+  - Configurado para Edge Runtime
+- `vercel.json`: configuração de Vercel Cron
+  - Health check executado a cada 5 minutos (`*/5 * * * *`)
+  - Mantém database acordado evitando timeout P1001
+  - Previne erro "Can't reach database server" em cold starts
 
 ### Fixed 🐛
 
@@ -25,6 +34,11 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - `components/structured-data.tsx` agora faz re-export para compatibilidade
   - `app/equipamentos/[id]/page.tsx` atualizado para importar do arquivo utils
   - Resolve erro "digest: 1642271456" ao renderizar páginas de equipamentos
+- **Health Check API**: Corrigido erro "global is not defined" no build
+  - Removido `export const runtime = 'edge'` de `app/api/health/route.ts`
+  - Prisma Client não é compatível com Edge Runtime
+  - Usando Node.js runtime padrão com `maxDuration = 10`
+  - Resolve erro "Failed to collect page data for /api/health"
 - Removido/escopado `overflow: visible !important` global que afetava `div`,
   `section`, `article`, `.min-h-screen` e `div > div`, passando a valer apenas
   dentro de `.sobre-page`. Isso restaura o comportamento correto do
