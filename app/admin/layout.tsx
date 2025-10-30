@@ -24,6 +24,12 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
 
   // Scroll to top sempre que a rota mudar
   useEffect(() => {
+    // Scroll no elemento main que tem overflow-y-auto
+    const mainElement = document.querySelector('main')
+    if (mainElement) {
+      mainElement.scrollTo({ top: 0, behavior: 'instant' })
+    }
+    // Fallback para window scroll
     window.scrollTo({ top: 0, behavior: 'instant' })
   }, [pathname])
 
