@@ -8,6 +8,29 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased] - Correções de UI (modais e scroll)
 
+### Added ✨
+
+- **🎯 UX Mobile - Padding Inferior Inteligente**: Adicionado padding-bottom
+  responsivo em TODAS as páginas admin para melhorar acessibilidade de conteúdo
+  inferior em navegadores mobile (Safari, Chrome iOS)
+  - **Problema resolvido**: Conteúdos interativos inferiores ficavam obstruídos
+    pela barra de endereços/navegação do Safari e outros navegadores mobile
+  - **Solução**: `pb-20 md:pb-8` (80px no mobile, 32px no desktop)
+  - Permite scroll adequado para alcançar elementos interativos no final das
+    páginas
+  - **Páginas atualizadas (8 no total)**:
+    - `/admin/settings` - Padding adicionado ao container principal
+    - `/admin/dashboard` - Padding adicionado ao container principal
+    - `/admin/analytics` - Padding adicionado ao container principal
+    - `/admin/orcamentos` - Padding adicionado ao container principal
+    - `/admin/categorias` - Padding adicionado ao container principal
+    - `/admin/equipamentos` - Padding adicionado ao container principal
+    - `/admin/equipamentos/[id]` - Padding adicionado ao container principal
+    - `/admin/equipamentos/[id]/editar` - Padding adicionado ao container
+      principal
+  - Melhora significativa na experiência mobile do painel administrativo
+  - Espaçamento respirável e acessível em todos os breakpoints
+
 ### Fixed 🐛
 
 - **🔥 CRÍTICO - Mobile Loading Scroll Bug**: Corrigido bug de scroll vertical
