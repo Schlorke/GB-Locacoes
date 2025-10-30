@@ -8,6 +8,18 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased] - Correções de UI (modais e scroll)
 
+### Added ✨
+
+- **🎯 Scroll Automático para Topo**: Implementado scroll automático para o topo
+  em todas as navegações do painel admin
+  - useEffect no AdminLayoutContent monitora mudanças no pathname
+  - `window.scrollTo({ top: 0, behavior: 'instant' })` executado em toda
+    navegação
+  - Aplica-se automaticamente a todas as páginas admin sem código duplicado
+  - Comportamento: sempre carrega no topo da página ao navegar
+  - Não interfere com página de login
+  - UX consistente em toda área administrativa
+
 ### Fixed 🐛
 
 - **🔥 HOTFIX - Encoding UTF-8 em Orçamentos**: Corrigido problema de encoding
