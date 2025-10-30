@@ -258,6 +258,7 @@ model Setting {
   companyAddress      String   @default("")
   heroCarousel        Json     @default("[]")
   contactEmail        String   @default("")
+  marketingEmail      String   @default("")
   socialLinks         Json     @default("{}")
   seoTitle            String   @default("GB Locações - Equipamentos para Construção")
   seoDescription      String   @default("Locação de equipamentos para construção civil com qualidade e segurança")

@@ -11,6 +11,7 @@ export async function GET() {
         contactEmail: true,
         companyAddress: true,
         companyIconUrl: true,
+        marketingEmail: true,
         socialLinks: true,
       },
     })
@@ -20,6 +21,7 @@ export async function GET() {
       companyPhone: '(51) 2313-6262',
       whatsappNumber: '(51) 99820-5163',
       contactEmail: 'contato@locacoesgb.com.br',
+      marketingEmail: 'comercial@locacoesgb.com.br',
       companyAddress:
         'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
       companyIconUrl: '', // Vazio = usa logo padrão "GB"
@@ -33,6 +35,8 @@ export async function GET() {
           whatsappNumber:
             settings.whatsappNumber || defaultSettings.whatsappNumber,
           contactEmail: settings.contactEmail || defaultSettings.contactEmail,
+          marketingEmail:
+            settings.marketingEmail || defaultSettings.marketingEmail,
           companyAddress:
             settings.companyAddress || defaultSettings.companyAddress,
           companyIconUrl: settings.companyIconUrl || '',
@@ -48,6 +52,7 @@ export async function GET() {
       companyPhone: '(51) 2313-6262',
       whatsappNumber: '(51) 99820-5163',
       contactEmail: 'contato@locacoesgb.com.br',
+      marketingEmail: 'comercial@locacoesgb.com.br',
       companyAddress:
         'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
       companyIconUrl: '', // Vazio = usa logo padrão "GB"

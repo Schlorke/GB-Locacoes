@@ -394,7 +394,7 @@ export default function PrivacidadePage() {
                               Se você tiver alguma dúvida sobre esta Política de
                               Privacidade, entre em contato conosco:
                             </p>
-                            <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl border border-orange-200">
+                            <div className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                               <div className="flex items-start gap-4">
                                 <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl text-white">
                                   <Mail className="h-5 w-5" />

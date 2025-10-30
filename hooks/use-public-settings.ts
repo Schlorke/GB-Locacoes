@@ -4,6 +4,7 @@ interface PublicSettings {
   companyPhone: string
   whatsappNumber: string
   contactEmail: string
+  marketingEmail: string
   companyAddress: string
   companyIconUrl: string
   socialLinks: Record<string, string>
@@ -15,6 +16,7 @@ const defaultSettings: PublicSettings = {
   companyPhone: '(51) 2313-6262',
   whatsappNumber: '(51) 99820-5163',
   contactEmail: 'contato@locacoesgb.com.br',
+  marketingEmail: 'comercial@locacoesgb.com.br',
   companyAddress:
     'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
   companyIconUrl: '', // Vazio = usa logo padrão "GB"
@@ -31,7 +33,10 @@ export function usePublicSettings() {
         const response = await fetch('/api/settings/public')
         if (response.ok) {
           const data = await response.json()
-          setSettings(data)
+          setSettings({
+            ...defaultSettings,
+            ...data,
+          })
         }
       } catch (error) {
         console.error('Erro ao carregar configurações:', error)

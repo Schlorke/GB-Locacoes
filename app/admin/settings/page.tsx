@@ -69,6 +69,7 @@ export default function SettingsPage() {
       'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
     heroCarousel: [],
     contactEmail: 'contato@locacoesgb.com.br',
+    marketingEmail: 'comercial@locacoesgb.com.br',
     socialLinks: {},
     seoTitle: 'GB Locações - Equipamentos para Construção',
     seoDescription:
@@ -113,6 +114,7 @@ export default function SettingsPage() {
                 order?: number
               }>) || [],
             contactEmail: result.data.contactEmail || '',
+            marketingEmail: result.data.marketingEmail || '',
             socialLinks:
               (result.data.socialLinks as {
                 facebook?: string

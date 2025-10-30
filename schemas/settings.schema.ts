@@ -109,6 +109,7 @@ export const SettingsSchema = z.object({
   aboutUsText: z.string().optional(),
   companyAddress: z.string().optional(),
   contactEmail: z.string().email().optional().or(z.literal('')),
+  marketingEmail: z.string().email().optional().or(z.literal('')),
   whatsappNumber: z.string().optional(),
 
   // Hero Carousel
