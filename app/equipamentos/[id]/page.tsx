@@ -423,8 +423,8 @@ export default async function EquipmentDetailPage(props: Props) {
                   </CardTitle>
                 </CardHeader>
                 <div className="border-b border-gray-100 w-full"></div>
-                <CardContent className="relative z-10 pt-2 px-4 sm:px-6 lg:px-6">
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-[16px] ">
+                <CardContent className="relative z-10 pt-4 px-4 sm:px-6 lg:px-6">
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-[16px]">
                     {equipment.description}
                   </p>
                 </CardContent>
