@@ -378,13 +378,13 @@ export function ImageUpload({
 
           {/* Imagem Principal */}
           <div className="relative bg-gray-50 rounded-lg overflow-hidden group border border-gray-200">
-            <div className="aspect-[16/10] relative">
+            <div className="aspect-[16/10] relative flex items-center justify-center">
               <motion.div
                 key={currentImageIndex}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
-                className="absolute inset-0"
+                className="absolute inset-0 flex items-center justify-center"
               >
                 <StorybookImage
                   src={
