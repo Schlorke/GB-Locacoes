@@ -10,6 +10,27 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **📝 Campos Adicionais no QuoteForm**: Adicionados campos CEP, CPF e CNPJ no
+  formulário de orçamento da página inicial
+  - **Etapa 1 - Dados para Contato**:
+    - E-mail e CEP agora lado a lado (grid 2 colunas responsivo)
+    - CEP com formatação automática: `00000-000` (maxLength: 9)
+    - Placeholder atualizado: `seu@email.com`
+  - **Etapa 2 - Equipamento & Período**:
+    - Substituído "Equipamento de Interesse" por CPF e CNPJ
+    - CPF à esquerda com formatação: `000.000.000-00` (maxLength: 14)
+    - CNPJ à direita com formatação: `00.000.000/0000-00` (maxLength: 18)
+    - Ambos em grid 2 colunas responsivo
+    - Mantém badge de equipamento pré-selecionado quando aplicável
+  - **Schema & Validação**:
+    - Campos opcionais: `cep`, `cpf`, `cnpj` adicionados ao Zod schema
+    - Funções de formatação: `formatCEP()`, `formatCPF()`, `formatCNPJ()`
+    - Formatação automática ao digitar (remove caracteres não numéricos)
+    - Mensagens de erro configuradas
+  - Layout segue padrão da página `/orcamento`
+  - 100% responsivo (mobile 1 coluna, desktop 2 colunas)
+  - Melhora significativa na coleta de dados do cliente
+
 - **🎯 Scroll Automático para Topo**: Implementado scroll automático para o topo
   em todas as navegações do painel admin
   - useEffect no AdminLayoutContent monitora mudanças no pathname
