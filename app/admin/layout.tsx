@@ -77,7 +77,7 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
         <AdminMobileHeader />
 
         {/* Conteúdo Principal */}
-        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw] pt-16 md:pt-0">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden max-w-[100vw] pt-16 md:pt-0 bg-gradient-to-br from-slate-50 to-blue-50">
           {children}
         </main>
       </div>
