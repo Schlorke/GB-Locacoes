@@ -22,6 +22,11 @@ function AdminLayoutContent({ children }: AdminLayoutProps) {
     }
   }, [])
 
+  // Scroll to top sempre que a rota mudar
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [pathname])
+
   const isLoginPage = pathname === '/admin/login'
 
   useEffect(() => {
