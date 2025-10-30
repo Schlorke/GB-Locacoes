@@ -155,6 +155,21 @@ export default function ContactSection() {
                   />
                 </div>
 
+                <div className="group">
+                  <label
+                    htmlFor="materials"
+                    className="block text-sm font-medium text-gray-700 mb-2 group-focus-within:text-orange-600 transition-colors"
+                  >
+                    Equipamentos de Interesse
+                  </label>
+                  <Input
+                    id="materials"
+                    name="materials"
+                    placeholder="Ex: andaime suspenso, cadeira elétrica, betoneira"
+                    className="transition-all duration-300 focus:scale-105 focus:shadow-md"
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="group">
                     <label
