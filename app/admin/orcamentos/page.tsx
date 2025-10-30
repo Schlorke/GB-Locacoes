@@ -477,10 +477,10 @@ function AdminQuotesPage() {
                     <div className="text-gray-400 mb-4">
                       <FileText className="w-12 h-12 mx-auto mb-3" />
                       <p className="text-lg font-medium">
-                        Nenhum or├ºamento encontrado
+                        Nenhum orçamento encontrado
                       </p>
                       <p className="text-sm">
-                        Tente ajustar os filtros ou aguarde novos or├ºamentos
+                        Tente ajustar os filtros ou aguarde novos orçamentos
                       </p>
                     </div>
                   </div>
