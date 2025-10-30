@@ -272,7 +272,7 @@ function AdminQuotesPage() {
   }
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="p-3 sm:p-4 lg:p-6 xl:p-8 pb-20 md:pb-8 max-w-7xl mx-auto">
+      <div className="p-3 sm:p-4 lg:p-6 xl:p-8 pb-24 md:pb-12 max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

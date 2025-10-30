@@ -15,9 +15,10 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   inferior em navegadores mobile (Safari, Chrome iOS)
   - **Problema resolvido**: Conteúdos interativos inferiores ficavam obstruídos
     pela barra de endereços/navegação do Safari e outros navegadores mobile
-  - **Solução**: `pb-20 md:pb-8` (80px no mobile, 32px no desktop)
+  - **Solução**: `pb-24 md:pb-12` (96px no mobile, 48px no desktop)
   - Permite scroll adequado para alcançar elementos interativos no final das
     páginas
+  - Espaçamento generoso tanto no mobile quanto no desktop
   - **Páginas atualizadas (8 no total)**:
     - `/admin/settings` - Padding adicionado ao container principal
     - `/admin/dashboard` - Padding adicionado ao container principal
