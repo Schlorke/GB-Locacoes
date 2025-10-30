@@ -8,15 +8,38 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased] - Correções de UI (modais e scroll)
 
+### Fixed 🐛
+
+- **🔥 CRÍTICO - Mobile Loading Scroll Bug**: Corrigido bug de scroll vertical
+  em TODAS as páginas de loading do painel admin que causava problemas de
+  renderização no Safari e Chrome mobile (iPhone)
+  - Substituído `min-h-screen` por `h-screen w-full overflow-hidden` em todas as
+    páginas de loading
+  - Previne scroll adicional que confundia motores de navegadores mobile
+  - Garante que loading ocupe 100% da viewport sem overflow
+  - **Páginas corrigidas**:
+    - `/admin/settings` - Loading inline
+    - `/admin/dashboard` - Loading inline
+    - `/admin/analytics` - Loading inline (substituído skeleton por spinner
+      padrão)
+    - `/admin/orcamentos` - `loading.tsx`
+    - `/admin/categorias` - `loading.tsx` (implementado spinner completo,
+      substituiu `return null`)
+    - `/admin/equipamentos` - Loading inline
+    - `/admin/equipamentos/[id]` - Loading inline
+    - `/admin/equipamentos/[id]/editar` - Loading inline
+  - Removidos imports não utilizados de `Loader2` em equipamentos
+  - Mantém identidade visual uniforme em todo painel administrativo
+
 ### Changed 🔄
 
-- **Loading Padrão Admin**: Padronizado loading da página `/admin/settings` para
-  usar o mesmo spinner azul das outras páginas admin (Dashboard, Analytics,
-  Orçamentos, Categorias)
-  - Substituído ícone Loader2 laranja por spinner azul com animação Framer
-    Motion
-  - Removido texto "Carregando configurações..." para manter consistência visual
-  - Mantém identidade visual uniforme em todo painel administrativo
+- **Loading Padrão Admin**: Padronizado loading de TODAS as páginas admin para
+  usar o mesmo spinner azul com animação Framer Motion
+  - Substituído ícones Loader2 laranja por spinner azul consistente
+  - Removidos textos "Carregando..." para manter minimalismo
+  - Spinner azul pequeno (8x8) centralizado com fundo gradiente
+  - 100% consistente entre Dashboard, Settings, Analytics, Orçamentos,
+    Categorias e Equipamentos
 
 ### Added ✨
 

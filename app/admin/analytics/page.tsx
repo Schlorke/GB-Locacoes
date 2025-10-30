@@ -169,60 +169,13 @@ export default function AnalyticsPage() {
 
   if (loading && !analytics) {
     return (
-      <Suspense fallback={<div>Carregando...</div>}>
-        <div className="space-y-6 p-6">
-          {/* Header Skeleton */}
-          <div className="flex items-center justify-between">
-            <div>
-              <Skeleton className="h-8 w-64 mb-2" />
-              <Skeleton className="h-4 w-96" />
-            </div>
-            <Skeleton className="h-10 w-32" />
-          </div>
-
-          {/* Filter Card Skeleton */}
-          <Card className="border-border/40">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <Skeleton className="h-10 flex-1" />
-                <Skeleton className="h-10 w-32" />
-                <Skeleton className="h-10 w-24" />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Metrics Grid Skeleton */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {[...Array(4)].map((_, i) => (
-              <Card key={i} className="border-border/40">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <Skeleton className="h-4 w-24" />
-                  <Skeleton className="h-4 w-4" />
-                </CardHeader>
-                <CardContent>
-                  <Skeleton className="h-8 w-16 mb-2" />
-                  <Skeleton className="h-3 w-32" />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Charts Grid Skeleton */}
-          <div className="grid gap-6 md:grid-cols-2">
-            {[...Array(2)].map((_, i) => (
-              <Card key={i} className="border-border/40">
-                <CardHeader>
-                  <Skeleton className="h-6 w-48" />
-                  <Skeleton className="h-4 w-64" />
-                </CardHeader>
-                <CardContent>
-                  <Skeleton className="h-64 w-full" />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </Suspense>
+      <div className="h-screen w-full overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
+        />
+      </div>
     )
   }
 

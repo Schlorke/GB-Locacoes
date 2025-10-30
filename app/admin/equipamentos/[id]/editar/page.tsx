@@ -18,7 +18,6 @@ import {
   ArrowLeft,
   ChevronLeft,
   ChevronRight,
-  Loader2,
   Package,
   PlusCircle,
   Save,
@@ -302,13 +301,12 @@ export default function EditarEquipamento() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-[calc(100vh-200px)]">
-        <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-lg text-muted-foreground">
-            Carregando equipamento...
-          </p>
-        </div>
+      <div className="h-screen w-full overflow-hidden bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full"
+        />
       </div>
     )
   }
