@@ -59,12 +59,12 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - Mantém consistência visual com padrões das páginas de edição/novo
     equipamento
 - **Equipment Details Page**: Melhoradas divisórias após títulos dos cards
-  - Divisória com linha horizontal cinza clara (`h-px bg-gray-100`)
+  - Divisória com linha horizontal cinza clara (`border-b border-gray-100`)
   - Aplicada em "Sobre este equipamento" e "Informações"
-  - Divisória com padding horizontal responsivo (`mx-4 sm:mx-6 lg:mx-6`)
-  - Alinhada perfeitamente com o título (mesmos paddings laterais)
-  - Espaçamento de 12px entre título e divisória (`pb-3`)
-  - Design limpo, sutil e profissional
+  - Divisória ocupa 100% da largura do card (sem padding horizontal)
+  - Fonte da descrição ajustada para 16px (`text-[16px]`)
+  - Espaçamento otimizado entre elementos
+  - Design limpo, sutil e profissional seguindo identidade do projeto
 
 ## [2025-10-28] - Correção Menu Mobile Admin + Google OAuth IPs Privados + Redirecionamento por Role
 
