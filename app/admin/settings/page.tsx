@@ -547,29 +547,32 @@ export default function SettingsPage() {
                   <div className="space-y-6">
                     {/* Logo Upload - TOPO */}
                     <div className="space-y-4">
-                      <Label className="text-base font-semibold">
+                      {/* Título no topo - CENTRALIZADO */}
+                      <Label className="text-base font-semibold block text-center">
                         Logo da Empresa
                       </Label>
 
-                      {/* Preview do Logo */}
+                      {/* Preview do Logo - CENTRALIZADO */}
                       {formData.companyIconUrl && (
-                        <div className="mb-2 relative inline-block">
-                          <div className="relative w-32 h-32 border-2 border-gray-200 rounded-lg overflow-hidden bg-white">
-                            <Image
-                              src={formData.companyIconUrl}
-                              alt="Logo da empresa"
-                              fill
-                              className="object-contain p-2"
-                              unoptimized
-                            />
+                        <div className="flex justify-center">
+                          <div className="relative inline-block">
+                            <div className="relative w-32 h-32 border-2 border-gray-200 rounded-lg overflow-hidden bg-white">
+                              <Image
+                                src={formData.companyIconUrl}
+                                alt="Logo da empresa"
+                                fill
+                                className="object-contain p-2"
+                                unoptimized
+                              />
+                            </div>
+                            <button
+                              type="button"
+                              onClick={handleRemoveLogo}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-md"
+                            >
+                              <X className="w-4 h-4" />
+                            </button>
                           </div>
-                          <button
-                            type="button"
-                            onClick={handleRemoveLogo}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-md"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
                         </div>
                       )}
 

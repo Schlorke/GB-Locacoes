@@ -1,12 +1,12 @@
 'use client'
 
-import type { CSSProperties } from 'react'
 import {
   CircleCheckIcon,
   InfoIcon,
   OctagonXIcon,
   TriangleAlertIcon,
 } from 'lucide-react'
+import type { CSSProperties } from 'react'
 import { Toaster as Sonner } from 'sonner'
 
 export function SonnerToaster() {
@@ -92,7 +92,7 @@ export function SonnerToaster() {
           will-change: transform, opacity;
         }
 
-        /* Icon aligned vertically */
+        /* Icon aligned with title */
         [data-sonner-toast][data-styled='true'] [data-icon] {
           display: flex !important;
           align-items: center !important;
@@ -123,7 +123,7 @@ export function SonnerToaster() {
           margin-top: 0.125rem !important;
         }
 
-        /* Close button aligned vertically */
+        /* Close button aligned with title */
         [data-sonner-toast][data-styled='true'] [data-close-button] {
           position: relative !important;
           right: auto !important;
@@ -206,17 +206,17 @@ export function SonnerToaster() {
         toastOptions={{
           classNames: {
             toast:
-              'rounded-lg shadow-xl backdrop-blur-sm border hover:shadow-2xl transition-all duration-300',
+              'rounded-lg shadow-xl backdrop-blur-sm border-0 hover:shadow-2xl transition-all duration-300',
             title: 'text-sm font-semibold',
             description: 'text-sm opacity-90',
             success:
-              'border-green-200 bg-gradient-to-br from-green-50/95 to-emerald-50/95 text-green-900',
+              'bg-gradient-to-br from-green-50/95 to-emerald-50/95 text-green-900',
             error:
-              'border-red-200 bg-gradient-to-br from-red-50/95 to-rose-50/95 text-red-900',
+              'bg-gradient-to-br from-red-50/95 to-rose-50/95 text-red-900',
             warning:
-              'border-orange-200 bg-gradient-to-br from-orange-50/95 to-amber-50/95 text-orange-900',
-            info: 'border-blue-200 bg-gradient-to-br from-blue-50/95 to-sky-50/95 text-blue-900',
-            default: 'border-gray-200 bg-white/95 text-gray-900',
+              'bg-gradient-to-br from-orange-50/95 to-amber-50/95 text-orange-900',
+            info: 'bg-gradient-to-br from-blue-50/95 to-sky-50/95 text-blue-900',
+            default: 'bg-white/95 text-gray-900',
             closeButton: '',
             icon: 'h-5 w-5',
           },

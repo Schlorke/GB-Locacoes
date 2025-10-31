@@ -33,7 +33,7 @@ export default function Hero() {
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
       {/* Container com largura consistente */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 !py-16 md:py-20 relative z-10">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           <div className="space-y-6">
             <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold leading-tight opacity-0">
@@ -43,7 +43,7 @@ export default function Hero() {
                 <div className="absolute -bottom-2 left-0 w-full h-1 bg-yellow-300 rounded-full transform scale-x-0 animate-scale-x"></div>
               </span>
             </h1>
-            <p className="hero-subtitle text-xl md:text-2xl leading-relaxed opacity-0">
+            <p className="hero-subtitle text-lg md:text-xl leading-relaxed opacity-0">
               Há 10 anos oferecendo soluções em locação de equipamentos para
               obras e serviços em altura. Segurança, qualidade e manutenção
               constante.
