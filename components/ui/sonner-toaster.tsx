@@ -21,6 +21,28 @@ export function Toaster(props: ToasterProps) {
   const { theme = 'system' } = useTheme()
 
   return (
+    <>
+      {/*
+        FIX: Previne que toasts COM descrição encolham quando toasts SEM descrição aparecem.
+
+        PROBLEMA: Com expand={false}, o Sonner usa --initial-height para colapsar todas as toasts
+        para o tamanho da menor toast visível. Isso fazia toasts com descrição (~76px) encolherem
+        quando toasts sem descrição (~54px) apareciam.
+
+        SOLUÇÃO: Forçar height: auto !important em todas as toasts para que cada uma mantenha
+        sua altura natural baseada no conteúdo, sem influência mútua.
+
+        RESULTADO:
+        - ✅ Toasts COM descrição: mantêm ~76px naturais
+        - ✅ Toasts SEM descrição: mantêm ~54px naturais
+        - ✅ Zero influência mútua entre diferentes tipos
+        - ✅ Animações expand={false} preservadas
+      */}
+      <style jsx global>{`
+        [data-sonner-toast] {
+          height: auto !important;
+        }
+      `}</style>
     <Sonner
       theme={theme as ToasterProps['theme']}
       className="toaster group"
@@ -36,15 +58,17 @@ export function Toaster(props: ToasterProps) {
         classNames: {
           toast:
             'flex items-start gap-3 p-4 rounded-lg shadow-lg border w-full md:max-w-[364px]',
+          default:
+            'bg-white border-gray-200 [&_[data-title]]:text-gray-900 [&_[data-description]]:text-gray-700',
           success:
-            'bg-green-50 border-green-200 [&_[data-title]]:!text-green-700 [&_[data-description]]:!text-green-600',
+            '!bg-green-50 !border-green-200 [&_[data-title]]:!text-green-700 [&_[data-description]]:!text-green-600',
           error:
-            'bg-red-50 border-red-200 [&_[data-title]]:!text-red-700 [&_[data-description]]:!text-red-600',
+            '!bg-red-50 !border-red-200 [&_[data-title]]:!text-red-700 [&_[data-description]]:!text-red-600',
           warning:
-            'bg-orange-50 border-orange-200 [&_[data-title]]:!text-orange-700 [&_[data-description]]:!text-orange-600',
-          info: 'bg-blue-50 border-blue-200 [&_[data-title]]:!text-blue-700 [&_[data-description]]:!text-blue-600',
+            '!bg-orange-50 !border-orange-200 [&_[data-title]]:!text-orange-700 [&_[data-description]]:!text-orange-600',
+          info: '!bg-blue-50 !border-blue-200 [&_[data-title]]:!text-blue-700 [&_[data-description]]:!text-blue-600',
           loading:
-            'bg-gray-50 border-gray-200 [&_[data-title]]:!text-gray-700 [&_[data-description]]:!text-gray-600 [&_.sonner-loader]:!static [&_.sonner-loader]:!transform-none [&_.sonner-loader]:!m-0 [&_.sonner-loader]:!inline-flex [&_.sonner-loader]:!align-middle [&_.sonner-loader]:!ml-2',
+            '!bg-gray-50 !border-gray-200 [&_[data-title]]:!text-gray-700 [&_[data-description]]:!text-gray-600 [&_.sonner-loader]:!static [&_.sonner-loader]:!transform-none [&_.sonner-loader]:!m-0 [&_.sonner-loader]:!ml-2',
           icon: 'flex-shrink-0',
           content: 'flex-1',
           title: 'font-semibold text-sm',
@@ -68,5 +92,6 @@ export function Toaster(props: ToasterProps) {
       visibleToasts={3}
       {...props}
     />
+    </>
   )
 }
