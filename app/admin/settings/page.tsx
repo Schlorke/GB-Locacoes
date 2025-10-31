@@ -16,7 +16,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { SettingsInput } from '@/schemas/settings.schema'
 import { motion } from 'framer-motion'
 import {
@@ -32,6 +31,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 const DEFAULT_COMPANY_PHONE = '(51) 2313-6262'
 const DEFAULT_WHATSAPP_NUMBER = '(51) 99820-5163'
@@ -46,7 +46,6 @@ const DEFAULT_SEO_DESCRIPTION =
   'Locação de equipamentos para construção civil com qualidade e segurança'
 
 export default function SettingsPage() {
-  const { success, error: errorToast } = useToastSonner()
   // const [isLoading, setIsLoading] = useState(false)
   const [isLoadingData, setIsLoadingData] = useState(true)
   const [activeSection, setActiveSection] = useState<string>('company')
@@ -192,14 +191,15 @@ export default function SettingsPage() {
         }
       } catch (error) {
         console.error('Erro ao carregar configurações:', error)
-        errorToast('Erro', 'Não foi possível carregar as configurações.')
+        toast.error('Erro', {
+          description: 'Não foi possível carregar as configurações.',
+        })
       } finally {
         setIsLoadingData(false)
       }
     }
 
     loadSettings()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // const handleSubmit = async (e: React.FormEvent) => {
@@ -294,13 +294,15 @@ export default function SettingsPage() {
 
     // Validar tipo de arquivo
     if (!file.type.startsWith('image/')) {
-      errorToast('Erro', 'Por favor, selecione um arquivo de imagem válido.')
+      toast.error('Erro', {
+        description: 'Por favor, selecione um arquivo de imagem válido.',
+      })
       return
     }
 
     // Validar tamanho (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      errorToast('Erro', 'A imagem deve ter no máximo 5MB.')
+      toast.error('Erro', { description: 'A imagem deve ter no máximo 5MB.' })
       return
     }
 
@@ -325,10 +327,12 @@ export default function SettingsPage() {
       // Atualizar URL do logo
       updateField('companyIconUrl', data.url)
 
-      success('Sucesso!', 'Logo enviado com sucesso.')
+      toast.success('Sucesso!', { description: 'Logo enviado com sucesso.' })
     } catch (error) {
       console.error('Erro ao fazer upload:', error)
-      errorToast('Erro', 'Não foi possível fazer upload da imagem.')
+      toast.error('Erro', {
+        description: 'Não foi possível fazer upload da imagem.',
+      })
     } finally {
       setIsUploadingLogo(false)
       if (fileInputRef.current) {
@@ -340,7 +344,9 @@ export default function SettingsPage() {
   // Função para remover logo
   const handleRemoveLogo = () => {
     updateField('companyIconUrl', '')
-    success('Logo removido', 'O logo foi removido com sucesso.')
+    toast.success('Logo removido', {
+      description: 'O logo foi removido com sucesso.',
+    })
   }
 
   // Funções específicas para salvar cada seção
@@ -351,16 +357,17 @@ export default function SettingsPage() {
       const result = await updateSettings(formData)
 
       if (result.success) {
-        success(
-          'Sucesso!',
-          `Configurações de ${getSectionName(section)} atualizadas com sucesso.`
-        )
+        toast.success('Sucesso!', {
+          description: `Configurações de ${getSectionName(section)} atualizadas com sucesso.`,
+        })
       } else {
-        errorToast('Erro', result.error || 'Erro ao atualizar configurações.')
+        toast.error('Erro', {
+          description: result.error || 'Erro ao atualizar configurações.',
+        })
       }
     } catch (error) {
       console.error('Erro ao salvar:', error)
-      errorToast('Erro', 'Erro interno do servidor.')
+      toast.error('Erro', { description: 'Erro interno do servidor.' })
     } finally {
       setSectionLoading((prev) => ({ ...prev, [section]: false }))
     }
@@ -389,15 +396,13 @@ export default function SettingsPage() {
       const defaults = getDefaultValues(section)
       setFormData((prev) => ({ ...prev, ...defaults }))
 
-      success(
-        'Configurações resetadas',
-        `Configurações de ${getSectionName(section)} foram restauradas para os valores padrão.`
-      )
+      toast.success('Configurações resetadas', {
+        description: `Configurações de ${getSectionName(section)} foram restauradas para os valores padrão.`,
+      })
     } catch {
-      errorToast(
-        'Erro ao resetar',
-        'Ocorreu um erro ao restaurar as configurações.'
-      )
+      toast.error('Erro ao resetar', {
+        description: 'Ocorreu um erro ao restaurar as configurações.',
+      })
     } finally {
       setSectionResetting((prev) => ({ ...prev, [section]: false }))
     }

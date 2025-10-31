@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
-import { useToastSonner } from '@/hooks/use-toast-sonner'
+import { toast } from 'sonner'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
@@ -75,7 +75,6 @@ interface FormData {
 export default function EditarEquipamento() {
   const params = useParams()
   const router = useRouter()
-  const { success, error: errorToast, warning } = useToastSonner()
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
@@ -158,7 +157,6 @@ export default function EditarEquipamento() {
 
     fetchEquipment(params.id as string)
     fetchCategories()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id])
 
   const fetchCategories = async () => {
@@ -170,7 +168,7 @@ export default function EditarEquipamento() {
       }
     } catch (error) {
       console.error('Erro ao carregar categorias:', error)
-      errorToast('Erro', 'Falha ao carregar categorias.')
+      toast.error('Erro', { description: 'Falha ao carregar categorias.' })
     }
   }
 
@@ -186,7 +184,9 @@ export default function EditarEquipamento() {
       setSpecKey('')
       setSpecValue('')
     } else {
-      warning('Atenção', 'Preencha a chave e o valor da especificação.')
+      toast.warning('Atenção', {
+        description: 'Preencha a chave e o valor da especificação.',
+      })
     }
   }
 
@@ -246,18 +246,17 @@ export default function EditarEquipamento() {
       !formData.categoryId ||
       formData.pricePerDay <= 0
     ) {
-      errorToast(
-        'Erro de Validação',
-        'Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.'
-      )
+      toast.error('Erro de Validação', {
+        description:
+          'Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.',
+      })
       return
     }
 
     if (formData.images.length === 0) {
-      errorToast(
-        'Erro de Validação',
-        'Adicione pelo menos uma imagem do equipamento.'
-      )
+      toast.error('Erro de Validação', {
+        description: 'Adicione pelo menos uma imagem do equipamento.',
+      })
       return
     }
 
@@ -270,10 +269,9 @@ export default function EditarEquipamento() {
       })
 
       if (response.ok) {
-        success(
-          'Equipamento Atualizado!',
-          'Equipamento atualizado com sucesso.'
-        )
+        toast.success('Equipamento Atualizado!', {
+          description: 'Equipamento atualizado com sucesso.',
+        })
         router.push('/admin/equipamentos')
       } else {
         const errorData = await response.json()
@@ -288,12 +286,12 @@ export default function EditarEquipamento() {
       }
     } catch (error) {
       console.error('Erro ao atualizar equipamento:', error)
-      errorToast(
-        'Erro',
-        error instanceof Error
-          ? error.message
-          : 'Ocorreu um erro ao atualizar o equipamento.'
-      )
+      toast.error('Erro', {
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Ocorreu um erro ao atualizar o equipamento.',
+      })
     } finally {
       setIsSaving(false)
     }

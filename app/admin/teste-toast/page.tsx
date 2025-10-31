@@ -1,11 +1,9 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useToastSonner } from '@/hooks/use-toast-sonner'
+import { toast } from 'sonner'
 
 export default function TesteToastPage() {
-  const { success, error, warning, info, toast } = useToastSonner()
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-8">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -28,7 +26,9 @@ export default function TesteToastPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Button
               onClick={() =>
-                success('Sucesso!', 'Operação concluída com sucesso.')
+                toast.success('Sucesso!', {
+                  description: 'Operação concluída com sucesso.',
+                })
               }
               className="bg-green-600 hover:bg-green-700"
             >
@@ -37,7 +37,9 @@ export default function TesteToastPage() {
 
             <Button
               onClick={() =>
-                error('Erro!', 'Algo deu errado. Tente novamente.')
+                toast.error('Erro!', {
+                  description: 'Algo deu errado. Tente novamente.',
+                })
               }
               variant="destructive"
             >
@@ -46,7 +48,9 @@ export default function TesteToastPage() {
 
             <Button
               onClick={() =>
-                warning('Atenção!', 'Cuidado com esta ação importante.')
+                toast.warning('Atenção!', {
+                  description: 'Cuidado com esta ação importante.',
+                })
               }
               className="bg-orange-600 hover:bg-orange-700"
             >
@@ -55,7 +59,9 @@ export default function TesteToastPage() {
 
             <Button
               onClick={() =>
-                info('Informação', 'Esta é uma informação útil para você.')
+                toast.info('Informação', {
+                  description: 'Esta é uma informação útil para você.',
+                })
               }
               className="bg-blue-600 hover:bg-blue-700"
             >
@@ -64,7 +70,7 @@ export default function TesteToastPage() {
 
             <Button
               onClick={() =>
-                toast({ title: 'Default', description: 'Toast padrão neutro' })
+                toast('Default', { description: 'Toast padrão neutro' })
               }
               variant="outline"
             >
@@ -73,10 +79,9 @@ export default function TesteToastPage() {
 
             <Button
               onClick={() =>
-                toast({
-                  title: 'Sem Ícone',
+                toast('Sem Ícone', {
                   description: 'Toast sem ícone',
-                  showIcon: false,
+                  icon: null,
                 })
               }
               variant="secondary"
@@ -94,7 +99,9 @@ export default function TesteToastPage() {
           <div className="space-y-3">
             <Button
               onClick={() =>
-                success('Perfil Atualizado!', 'Suas informações foram salvas.')
+                toast.success('Perfil Atualizado!', {
+                  description: 'Suas informações foram salvas.',
+                })
               }
               className="w-full bg-green-600 hover:bg-green-700"
             >
@@ -103,10 +110,9 @@ export default function TesteToastPage() {
 
             <Button
               onClick={() =>
-                success(
-                  'Endereço Adicionado!',
-                  'Novo endereço salvo com sucesso.'
-                )
+                toast.success('Endereço Adicionado!', {
+                  description: 'Novo endereço salvo com sucesso.',
+                })
               }
               className="w-full bg-green-600 hover:bg-green-700"
             >
@@ -115,10 +121,9 @@ export default function TesteToastPage() {
 
             <Button
               onClick={() =>
-                error(
-                  'Erro ao Atualizar',
-                  'Não foi possível salvar as alterações.'
-                )
+                toast.error('Erro ao Atualizar', {
+                  description: 'Não foi possível salvar as alterações.',
+                })
               }
               variant="destructive"
               className="w-full"
@@ -128,10 +133,9 @@ export default function TesteToastPage() {
 
             <Button
               onClick={() =>
-                warning(
-                  'Campo Obrigatório',
-                  'Por favor, preencha todos os campos.'
-                )
+                toast.warning('Campo Obrigatório', {
+                  description: 'Por favor, preencha todos os campos.',
+                })
               }
               className="w-full bg-orange-600 hover:bg-orange-700"
             >
@@ -140,7 +144,9 @@ export default function TesteToastPage() {
 
             <Button
               onClick={() =>
-                info('Novo Recurso', 'Agora você pode personalizar seu perfil!')
+                toast.info('Novo Recurso', {
+                  description: 'Agora você pode personalizar seu perfil!',
+                })
               }
               className="w-full bg-blue-600 hover:bg-blue-700"
             >
@@ -156,23 +162,30 @@ export default function TesteToastPage() {
           </h2>
           <Button
             onClick={() => {
-              success('Toast 1', 'Primeiro toast')
-              setTimeout(() => success('Toast 2', 'Segundo toast'), 100)
-              setTimeout(() => success('Toast 3', 'Terceiro toast'), 200)
+              toast.success('Toast 1', { description: 'Primeiro toast' })
               setTimeout(
                 () =>
-                  warning(
-                    'Toast 4',
-                    'Este deve substituir o primeiro (limite de 3)'
-                  ),
+                  toast.success('Toast 2', { description: 'Segundo toast' }),
+                100
+              )
+              setTimeout(
+                () =>
+                  toast.success('Toast 3', { description: 'Terceiro toast' }),
+                200
+              )
+              setTimeout(
+                () =>
+                  toast.warning('Toast 4', {
+                    description:
+                      'Este deve substituir o primeiro (limite de 3)',
+                  }),
                 300
               )
               setTimeout(
                 () =>
-                  info(
-                    'Toast 5',
-                    'Este deve substituir o segundo (limite de 3)'
-                  ),
+                  toast.info('Toast 5', {
+                    description: 'Este deve substituir o segundo (limite de 3)',
+                  }),
                 400
               )
             }}
@@ -189,10 +202,10 @@ export default function TesteToastPage() {
           </h2>
           <Button
             onClick={() =>
-              info(
-                'Auto-Dismiss',
-                'Esta notificação desaparecerá em 4 segundos automaticamente.'
-              )
+              toast.info('Auto-Dismiss', {
+                description:
+                  'Esta notificação desaparecerá em 4 segundos automaticamente.',
+              })
             }
             className="w-full bg-blue-600 hover:bg-blue-700"
           >

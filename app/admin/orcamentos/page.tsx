@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
-import { useToastSonner } from '@/hooks/use-toast-sonner'
+import { toast } from 'sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Briefcase,
@@ -96,7 +96,6 @@ function AdminQuotesPage() {
   const [periodFilter, setPeriodFilter] = useState<string>('all')
   const [valueFilter, setValueFilter] = useState<string>('all')
   const [isUpdating, setIsUpdating] = useState(false)
-  const { success, error: errorToast } = useToastSonner()
 
   const fetchQuotes = useCallback(async () => {
     try {
@@ -110,12 +109,13 @@ function AdminQuotesPage() {
       setQuotes(quotesArray)
     } catch (error) {
       console.error('Error fetching quotes:', error)
-      errorToast('Erro', 'Erro ao carregar orçamentos. Tente novamente.')
+      toast.error('Erro', {
+        description: 'Erro ao carregar orçamentos. Tente novamente.',
+      })
       setQuotes([])
     } finally {
       setLoading(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const filterQuotes = useCallback(() => {
@@ -217,13 +217,14 @@ function AdminQuotesPage() {
       await fetchQuotes()
       setSelectedQuote(null)
 
-      success(
-        'Sucesso!',
-        `Orçamento ${newStatus === 'approved' ? 'aprovado' : 'rejeitado'} com sucesso!`
-      )
+      toast.success('Sucesso!', {
+        description: `Orçamento ${newStatus === 'approved' ? 'aprovado' : 'rejeitado'} com sucesso!`,
+      })
     } catch (error) {
       console.error('Error updating quote:', error)
-      errorToast('Erro', 'Erro ao atualizar status do orçamento.')
+      toast.error('Erro', {
+        description: 'Erro ao atualizar status do orçamento.',
+      })
     } finally {
       setIsUpdating(false)
     }

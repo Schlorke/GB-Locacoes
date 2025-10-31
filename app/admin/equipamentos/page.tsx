@@ -14,7 +14,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { SmartPagination } from '@/components/ui/smart-pagination'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { useToastSonner } from '@/hooks/use-toast-sonner'
+import { toast } from 'sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
 import {
@@ -87,7 +87,6 @@ export default function AdminEquipmentsPage() {
   const [itemsPerPage] = useState(9) // 3 linhas × 3 colunas
   const [pageKey, setPageKey] = useState(0) // Key para forçar re-render com animação
 
-  const { success, error: errorToast } = useToastSonner()
   const isMobile = useIsMobile()
 
   // Função para renderizar ícones
@@ -117,15 +116,14 @@ export default function AdminEquipmentsPage() {
         const equipmentsData = Array.isArray(data) ? data : data.equipments
         setEquipments(equipmentsData)
       } else {
-        errorToast('Erro', 'Erro ao carregar equipamentos.')
+        toast.error('Erro', { description: 'Erro ao carregar equipamentos.' })
       }
     } catch (error) {
       console.error('Error fetching equipments:', error)
-      errorToast('Erro', 'Erro ao carregar equipamentos.')
+      toast.error('Erro', { description: 'Erro ao carregar equipamentos.' })
     } finally {
       setLoading(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchCategories = useCallback(async () => {
@@ -206,15 +204,19 @@ export default function AdminEquipmentsPage() {
         method: 'DELETE',
       })
       if (response.ok) {
-        success('Equipamento Excluído!', 'Equipamento excluído com sucesso.')
+        toast.success('Equipamento Excluído!', {
+          description: 'Equipamento excluído com sucesso.',
+        })
         fetchEquipments()
       } else {
         const errorData = await response.json()
-        errorToast('Erro', errorData.error || 'Erro ao excluir equipamento.')
+        toast.error('Erro', {
+          description: errorData.error || 'Erro ao excluir equipamento.',
+        })
       }
     } catch (error) {
       console.error('Error deleting equipment:', error)
-      errorToast('Erro', 'Erro ao excluir equipamento.')
+      toast.error('Erro', { description: 'Erro ao excluir equipamento.' })
     } finally {
       setIsDeleting(false)
     }

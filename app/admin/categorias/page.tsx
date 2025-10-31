@@ -9,7 +9,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { ViewCategoryModal } from '@/components/ui/view-category-modal'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { useToastSonner } from '@/hooks/use-toast-sonner'
+import { toast } from 'sonner'
 import { getCategoryBadgePreview } from '@/lib/utils/category-helpers'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
@@ -48,7 +48,6 @@ export default function AdminCategoriesPage() {
   const [editingCategoryData, setEditingCategoryData] =
     useState<CategoryData | null>(null)
 
-  const { success, error: errorToast } = useToastSonner()
   const isMobile = useIsMobile()
 
   // Função para converter Category para CategoryData
@@ -78,12 +77,13 @@ export default function AdminCategoriesPage() {
       setCategories(categoriesArray)
     } catch (error) {
       console.error('Error fetching categories:', error)
-      errorToast('Erro', 'Erro ao carregar categorias. Tente novamente.')
+      toast.error('Erro', {
+        description: 'Erro ao carregar categorias. Tente novamente.',
+      })
       setCategories([])
     } finally {
       setLoading(false)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const filterCategories = useCallback(() => {
@@ -170,12 +170,11 @@ export default function AdminCategoriesPage() {
     // Recarrega as categorias
     await fetchCategories()
 
-    success(
-      'Sucesso!',
-      isEditing
+    toast.success('Sucesso!', {
+      description: isEditing
         ? 'Categoria atualizada com sucesso.'
-        : 'Categoria criada com sucesso.'
-    )
+        : 'Categoria criada com sucesso.',
+    })
   }
 
   const deleteCategory = async (categoryId: string) => {
@@ -192,15 +191,19 @@ export default function AdminCategoriesPage() {
         method: 'DELETE',
       })
       if (response.ok) {
-        success('Categoria Excluída!', 'Categoria excluída com sucesso.')
+        toast.success('Categoria Excluída!', {
+          description: 'Categoria excluída com sucesso.',
+        })
         fetchCategories()
       } else {
         const errorData = await response.json()
-        errorToast('Erro', errorData.error || 'Erro ao excluir categoria.')
+        toast.error('Erro', {
+          description: errorData.error || 'Erro ao excluir categoria.',
+        })
       }
     } catch (error) {
       console.error('Error deleting category:', error)
-      errorToast('Erro', 'Erro ao excluir categoria.')
+      toast.error('Erro', { description: 'Erro ao excluir categoria.' })
     } finally {
       setIsSubmitting(false)
     }

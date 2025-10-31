@@ -3,7 +3,7 @@
 import Footer from '@/components/footer'
 import Header from '@/components/header'
 import ScrollRevealInit from '@/components/scroll-reveal-init'
-import { SonnerToaster } from '@/components/ui/sonner-toaster'
+import { Toaster } from '@/components/ui/sonner-toaster'
 import WhatsAppFAB from '@/components/whatsapp-fab'
 import { usePathname } from 'next/navigation'
 import React from 'react'
@@ -28,7 +28,7 @@ export default function ClientLayout({
       {!isAdminRoute && <Footer />}
       {!isAdminRoute && <WhatsAppFAB />}
       <ScrollRevealInit />
-      <SonnerToaster />
+      <Toaster />
     </div>
   )
 }

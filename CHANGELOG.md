@@ -6,6 +6,131 @@ O formato é baseado em
 [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [31/10/2025] - Customização Completa do Sistema de Toasts Sonner
+
+### Added ✨
+
+- **🎨 Página de Testes de Toasts**: Criada página `/admin/teste-toasts-new`
+  para visualização completa de todos os toasts
+  - 📢 Seção de toasts básicos (Success, Error, Warning, Info, Loading, Default)
+  - 📝 Toasts apenas com título (sem descrição)
+  - 🔘 Toasts com botões de ação customizados
+  - ⏳ Promise toasts com estados loading/success/error
+  - 🎯 Exemplos práticos do sistema (cadastros, validações, anúncios)
+  - 🔢 Teste de limite de toasts simultâneos (máx 3)
+  - ✨ Especificações técnicas e documentação visual
+
+### Fixed 🐛
+
+- **🎯 Componente Sonner Customizado com `unstyled: true`**: Implementação
+  completa usando abordagem headless
+  - ✅ Adicionados ícones coloridos do lucide-react com cores específicas:
+    - Success: `!text-green-700` (verde médio)
+    - Error: `!text-red-700` (vermelho médio)
+    - Warning: `!text-orange-700` (laranja médio)
+    - Info: `!text-blue-700` (azul médio)
+    - Loading: `!text-gray-700` (cinza médio)
+  - ✅ Cores de texto otimizadas para legibilidade:
+    - Título: `!text-green-700` (verde médio, bem legível)
+    - Descrição: `!text-green-600` (verde suave, contraste adequado)
+  - ✅ Botão close estilizado:
+    - Cor do ícone X: `!text-gray-500` (cinza médio)
+    - Hover: `hover:!bg-white/90` (fundo branco suave 90%)
+    - Transição suave com `!transition-colors`
+  - ✅ Layout flex otimizado:
+    - Toast: `flex items-start gap-3` (elementos alinhados)
+    - Ícone: `size-5` para success (maior destaque)
+    - Ícone: `size-4` para outros tipos
+    - Close button: `order-last ml-auto` (posicionado à direita)
+  - ✅ Cores de fundo suaves (tons pastéis):
+    - Success: `bg-green-50 border-green-200`
+    - Error: `bg-red-50 border-red-200`
+    - Warning: `bg-orange-50 border-orange-200`
+    - Info: `bg-blue-50 border-blue-200`
+  - ✅ Corrigido hook `useTheme` de `resolvedTheme` para `theme` com fallback
+    `'system'` (previne hydration mismatch)
+  - ✅ Variáveis CSS integradas com design system:
+    - `--normal-bg: var(--popover)`
+    - `--normal-text: var(--popover-foreground)`
+    - `--normal-border: var(--border)`
+    - `--border-radius: var(--radius)`
+  - ✅ Props mantidas: `position="top-center"`, `closeButton`, `expand={false}`,
+    `duration={4000}`, `visibleToasts={3}`
+  - **Impacto**: Toast completamente customizado com cores equilibradas,
+    legibilidade perfeita, hover suave no close button, layout profissional
+    alinhado
+
+## [31/10/2025] - Refatoração Completa para Padrões Oficiais do Sonner
+
+### Changed 🔄
+
+- **🎯 Toaster 100% Padrões Oficiais Sonner**: Refatorado
+  `components/ui/sonner-toaster.tsx` para seguir rigorosamente a documentação
+  oficial
+  - Componente simplificado de 104 para 27 linhas
+  - Removidas todas as customizações que não são suportadas pela API oficial
+  - Nome do componente alterado de `SonnerToaster` para `Toaster` (padrão
+    oficial)
+  - Usa `resolvedTheme` do `next-themes` para tema dinâmico automático
+  - Props padrão: `position="top-center"`, `richColors`, `closeButton`,
+    `expand={false}`, `duration={4000}`, `visibleToasts={3}`
+  - Todas as props do Sonner disponíveis via spread `{...props}`
+  - Links oficiais adicionados na documentação JSDoc
+  - **Posicionamento**: Notificações aparecem centralizadas no topo da página
+
+- **🪝 Hook use-toast-sonner Simplificado**: Refatorado
+  `hooks/use-toast-sonner.ts` para re-exportar API oficial
+  - Arquivo reduzido de 163 para 9 linhas
+  - Apenas re-exporta `toast` e `useSonner` diretamente do Sonner
+  - Remove wrappers customizados desnecessários
+  - Mantém compatibilidade 100% com API oficial do Sonner
+  - Links oficiais adicionados na documentação JSDoc
+
+- **📝 Atualização Massiva de Uso do Toast**: Migrados 7 arquivos
+  administrativos para API oficial do Sonner
+  - `app/admin/settings/page.tsx` (10 ocorrências)
+  - `app/admin/orcamentos/page.tsx` (3 ocorrências)
+  - `app/admin/categorias/page.tsx` (4 ocorrências)
+  - `app/admin/equipamentos/page.tsx` (3 ocorrências)
+  - `app/admin/equipamentos/novo/page.tsx` (4 ocorrências)
+  - `app/admin/equipamentos/[id]/editar/page.tsx` (5 ocorrências)
+  - `app/admin/teste-toast/page.tsx` (11 ocorrências - página de testes)
+  - **Padrão antigo**: `const { success, error: errorToast } = useToastSonner()`
+  - **Padrão novo**: `import { toast } from 'sonner'` + `toast.success()`,
+    `toast.error()`, etc.
+  - Sintaxe atualizada de `success('Título', 'Descrição')` para
+    `toast.success('Título', { description: 'Descrição' })`
+
+- **🔄 ClientLayout Atualizado**: Import atualizado de `SonnerToaster` para
+  `Toaster`
+
+### Removed ❌
+
+- **❌ Customizações Não Suportadas**: Removidas todas as customizações que não
+  seguem a API oficial
+  - Estilos CSS inline customizados
+  - Variáveis CSS customizadas (`--width`, `--border-radius`)
+  - Ícones customizados (Lucide Icons) - agora usa ícones padrão do Sonner
+  - Classes Tailwind customizadas para cada tipo de toast
+  - Lógica de offset condicional baseada em rotas
+  - Wrappers de função customizados no hook
+
+### Technical 🔧
+
+- **📚 Seguindo Documentação Oficial**:
+  - [Sonner Documentation](https://sonner.emilkowal.ski/getting-started)
+  - [GitHub Repository](https://github.com/emilkowalski/sonner)
+  - [Toaster API Reference](https://sonner.emilkowal.ski/toaster)
+  - [Toast API Reference](https://sonner.emilkowal.ski/toast)
+
+- **✅ Benefícios da Refatoração**:
+  - Código mais limpo e manutenível
+  - Compatibilidade garantida com futuras versões do Sonner
+  - Menos código customizado para manter
+  - Melhor performance (menos overhead)
+  - Documentação oficial sempre aplicável
+  - Facilita troubleshooting e suporte
+
 ## [Unreleased] - Correções de UI (modais e scroll)
 
 ### Added ✨
@@ -43,6 +168,16 @@ adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
   - UX consistente em toda área administrativa
 
 ### Changed 🔄
+
+- **?? SonnerToaster alinhado ao Sonner oficial**: Refatorado
+  `components/ui/sonner-toaster.tsx` para usar apenas APIs suportadas pela
+  biblioteca
+  - Removido `<style>` inline e todas as declarações `!important`, adotando
+    `toastOptions`, `icons` e `style` do próprio `<Toaster />`
+  - Offset superior agora utiliza `offset`/`mobileOffset` oficiais (mantendo
+    120px no site público e 1.5rem no painel admin)
+  - Ícones `lucide` padronizados (inclui estado `loading`) e suporte a tema
+    dinâmico via `next-themes`
 
 - **🎨 Card de Contato - Página Privacidade**: Melhorado estilo visual do card
   de contato

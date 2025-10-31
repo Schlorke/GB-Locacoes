@@ -1,5 +1,6 @@
 'use client'
 
+import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CurrencyInput } from '@/components/ui/currency-input'
@@ -9,8 +10,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
-import { useToastSonner } from '@/hooks/use-toast-sonner'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
@@ -26,6 +25,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 interface Category {
   id: string
@@ -62,7 +62,6 @@ interface FormData {
 
 export default function NovoEquipamento() {
   const router = useRouter()
-  const { success, error: errorToast, warning } = useToastSonner()
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -99,7 +98,6 @@ export default function NovoEquipamento() {
 
   useEffect(() => {
     fetchCategories()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchCategories = async () => {
@@ -111,7 +109,7 @@ export default function NovoEquipamento() {
       }
     } catch (error) {
       console.error('Erro ao carregar categorias:', error)
-      errorToast('Erro', 'Falha ao carregar categorias.')
+      toast.error('Erro', { description: 'Falha ao carregar categorias.' })
     }
   }
 
@@ -127,7 +125,9 @@ export default function NovoEquipamento() {
       setSpecKey('')
       setSpecValue('')
     } else {
-      warning('Atenção', 'Preencha a chave e o valor da especificação.')
+      toast.warning('Atenção', {
+        description: 'Preencha a chave e o valor da especificação.',
+      })
     }
   }
 
@@ -156,18 +156,17 @@ export default function NovoEquipamento() {
       !formData.categoryId ||
       formData.pricePerDay <= 0
     ) {
-      errorToast(
-        'Erro de Validação',
-        'Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.'
-      )
+      toast.error('Erro de Validação', {
+        description:
+          'Preencha todos os campos obrigatórios (*). O preço deve ser maior que zero.',
+      })
       return
     }
 
     if (formData.images.length === 0) {
-      errorToast(
-        'Erro de Validação',
-        'Adicione pelo menos uma imagem do equipamento.'
-      )
+      toast.error('Erro de Validação', {
+        description: 'Adicione pelo menos uma imagem do equipamento.',
+      })
       return
     }
 
@@ -180,7 +179,9 @@ export default function NovoEquipamento() {
       })
 
       if (response.ok) {
-        success('Equipamento Criado!', 'Equipamento criado com sucesso.')
+        toast.success('Equipamento Criado!', {
+          description: 'Equipamento criado com sucesso.',
+        })
         router.push('/admin/equipamentos')
       } else {
         const errorData = await response.json()
@@ -188,12 +189,12 @@ export default function NovoEquipamento() {
       }
     } catch (error) {
       console.error('Erro ao criar equipamento:', error)
-      errorToast(
-        'Erro',
-        error instanceof Error
-          ? error.message
-          : 'Ocorreu um erro ao criar o equipamento.'
-      )
+      toast.error('Erro', {
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Ocorreu um erro ao criar o equipamento.',
+      })
     } finally {
       setIsLoading(false)
     }
