@@ -43,6 +43,8 @@ export function Toaster(props: ToasterProps) {
           warning:
             'bg-orange-50 border-orange-200 [&_[data-title]]:!text-orange-700 [&_[data-description]]:!text-orange-600',
           info: 'bg-blue-50 border-blue-200 [&_[data-title]]:!text-blue-700 [&_[data-description]]:!text-blue-600',
+          loading:
+            'bg-gray-50 border-gray-200 [&_[data-title]]:!text-gray-700 [&_[data-description]]:!text-gray-600 [&_.sonner-loader]:!static [&_.sonner-loader]:!transform-none [&_.sonner-loader]:!m-0 [&_.sonner-loader]:!inline-flex [&_.sonner-loader]:!align-middle [&_.sonner-loader]:!ml-2',
           icon: 'flex-shrink-0',
           content: 'flex-1',
           title: 'font-semibold text-sm',
