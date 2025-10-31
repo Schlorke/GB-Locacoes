@@ -139,7 +139,7 @@ export default function TesteToastsPage() {
           <h2 className="text-2xl font-semibold text-slate-800 mb-6">
             🔘 Toasts com Botão de Ação
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Button
               onClick={() =>
                 toast.success('Arquivo deletado', {
@@ -163,12 +163,33 @@ export default function TesteToastsPage() {
                     label: 'Ver',
                     onClick: () => toast.info('Abrindo mensagem...'),
                   },
+
                 })
               }
               variant="outline"
               className="h-16"
             >
               Default com Ação
+            </Button>
+
+            <Button
+              onClick={() =>
+                toast.warning('Confirmar exclusão?', {
+                  description: 'Esta ação não pode ser desfeita.',
+                  action: {
+                    label: 'Confirmar',
+                    onClick: () => toast.success('Item excluído!'),
+                  },
+                  cancel: {
+                    label: 'Cancelar',
+                    onClick: () => toast.info('Ação cancelada'),
+                  },
+
+                })
+              }
+              className="bg-orange-600 hover:bg-orange-700 h-16"
+            >
+              Toast com Action + Cancel
             </Button>
           </div>
         </div>
