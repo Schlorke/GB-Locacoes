@@ -14,8 +14,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   globais para ficar inline apenas enquanto `data-visible='true'` e desaparece
   quando `data-visible='false'`, eliminando o flash do spinner após a resolução.
 - **Botoes de acao**: toasts "Default com Acao" e "Toast com Action + Cancel"
-  agora usam classes do componente para quebrar os botões em uma segunda linha,
-  mantendo Cancelar e Confirmar alinhados sem ajustes nas páginas.
+  agora usam classes do componente para quebrar os botoes em uma segunda linha,
+  mantendo Cancelar e Confirmar alinhados sem ajustes nas paginas, com `mt-1`
+  compartilhado para espaçamento consistente.
+- **Descricao full width**: `data-description` agora fica em
+  `col-start-2 row-start-2`, garantindo alinhamento vertical com o título e
+  ocupando toda a coluna central.
+- **Close button**: forcado `order-1` com `ml-auto` para permanecer sempre
+  alinhado à direita independentemente de ações/cancelamentos.
+- **Loader alinhado ao ícone**: agora usamos `toastOptions.classNames.loader`
+  (`col-start-1 row-start-1 ... data-[visible=false]:hidden`) para posicionar o
+  spinner na coluna do ícone e removê-lo da árvore visual ao resolver a promise.
 
 ## [31/10/2025] - Customização Completa do Sistema de Toasts Sonner
 

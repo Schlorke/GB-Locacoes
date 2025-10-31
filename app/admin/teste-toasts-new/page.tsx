@@ -163,7 +163,6 @@ export default function TesteToastsPage() {
                     label: 'Ver',
                     onClick: () => toast.info('Abrindo mensagem...'),
                   },
-
                 })
               }
               variant="outline"
@@ -184,7 +183,6 @@ export default function TesteToastsPage() {
                     label: 'Cancelar',
                     onClick: () => toast.info('Ação cancelada'),
                   },
-
                 })
               }
               className="bg-orange-600 hover:bg-orange-700 h-16"

@@ -22,49 +22,13 @@ export function Toaster(props: ToasterProps) {
 
   return (
     <>
-      {/*
-        FIX: Previne que toasts COM descrição encolham quando toasts SEM descrição aparecem.
-
-        PROBLEMA: Com expand={false}, o Sonner usa --initial-height para colapsar todas as toasts
-        para o tamanho da menor toast visível. Isso fazia toasts com descrição (~76px) encolherem
-        quando toasts sem descrição (~54px) apareciam.
-
-        SOLUÇÃO: Forçar height: auto !important em todas as toasts para que cada uma mantenha
-        sua altura natural baseada no conteúdo, sem influência mútua.
-
-        RESULTADO:
-        - ✅ Toasts COM descrição: mantêm ~76px naturais
-        - ✅ Toasts SEM descrição: mantêm ~54px naturais
-        - ✅ Zero influência mútua entre diferentes tipos
-        - ✅ Animações expand={false} preservadas
-
-        FIX: mantém loader das toasts promise alinhado sem aparecer após resolução
-
-        [data-sonner-toast] .sonner-loader[data-visible='true'] {
-          position: static !important;
-          transform: none !important;
-          margin: 0 !important;
-          margin-left: 0.5rem !important;
-        }
-        [data-sonner-toast] .sonner-loader[data-visible='false'] {
-          display: none !important;
-        }
-
-      */}
+      {/* Mantém a altura natural das toasts mesmo com expand={false} */}
       <style jsx global>{`
         [data-sonner-toast] {
           height: auto !important;
         }
-        [data-sonner-toast] .sonner-loader[data-visible='true'] {
-          position: static !important;
-          transform: none !important;
-          margin: 0 !important;
-          margin-left: 0.5rem !important;
-        }
-        [data-sonner-toast] .sonner-loader[data-visible='false'] {
-          display: none !important;
-        }
       `}</style>
+
       <Sonner
         theme={theme as ToasterProps['theme']}
         className="toaster group"
@@ -80,11 +44,10 @@ export function Toaster(props: ToasterProps) {
         toastOptions={{
           unstyled: true,
           descriptionClassName:
-            'text-sm block mt-0.5 !text-gray-500 basis-full w-full',
-          // Grid layout keeps icon/content on the first row and places cancel/confirm buttons below.
+            'col-start-2 row-start-2 text-sm block !text-gray-500',
           classNames: {
             toast:
-              'grid grid-cols-[auto_1fr_auto] items-start gap-x-3 p-4 rounded-lg shadow-lg border w-full md:max-w-[364px]',
+              'grid grid-cols-[auto_1fr_auto] items-start gap-x-3 gap-y-1 p-4 rounded-lg shadow-lg border w-full md:max-w-[364px]',
             default: 'bg-white border-gray-200 [&_[data-title]]:text-gray-900 ',
             success:
               '!bg-green-50 !border-green-200 [&_[data-title]]:!text-green-700 [&_[data-description]]:!text-green-600',
@@ -95,13 +58,16 @@ export function Toaster(props: ToasterProps) {
             info: '!bg-blue-50 !border-blue-200 [&_[data-title]]:!text-blue-700 [&_[data-description]]:!text-blue-600',
             loading:
               '!bg-gray-50 !border-gray-200 [&_[data-title]]:!text-gray-700 [&_[data-description]]:!text-gray-600',
-            icon: 'col-start-1 row-span-2 self-start',
-            content: 'col-start-2 row-start-1 flex flex-col gap-1 min-w-0',
-            title: 'font-semibold text-sm',
+            icon: 'col-start-1 row-start-1 self-start',
+            loader:
+              'col-start-1 row-start-1 self-start justify-self-center data-[visible=false]:hidden ![position:static] ![transform:none] !m-0',
+            content: 'contents',
+            title:
+              'col-start-2 row-start-1 font-semibold text-sm flex min-w-0 items-start',
             actionButton:
-              'col-start-3 row-start-2 mt-3 inline-flex items-center justify-center gap-2 rounded-md bg-orange-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-orange-500',
+              'col-start-3 row-start-3 mt-1 inline-flex items-center justify-center gap-2 rounded-md bg-orange-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-orange-500',
             cancelButton:
-              'col-start-2 row-start-2 mt-3 inline-flex items-center justify-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50',
+              'col-start-2 row-start-3 mt-1 inline-flex items-center justify-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50',
             closeButton:
               'col-start-3 row-start-1 justify-self-end rounded-md p-1 !text-gray-500 hover:!bg-white/90 !transition-colors',
           },
@@ -124,4 +90,3 @@ export function Toaster(props: ToasterProps) {
     </>
   )
 }
-
