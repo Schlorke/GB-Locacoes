@@ -57,9 +57,8 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-base leading-relaxed text-gray-300">
-              Há 10 anos oferecendo soluções em locação de equipamentos para
-              construção civil. Especializada em equipamentos para obras e
-              serviços em altura com segurança e qualidade.
+              {settings.aboutUsText ||
+                'Há 10 anos oferecendo soluções em locação de equipamentos para construção civil. Especializada em equipamentos para obras e serviços em altura com segurança e qualidade.'}
             </p>
             <div className="flex space-x-3">
               <button

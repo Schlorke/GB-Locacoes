@@ -44,9 +44,8 @@ export default function Hero() {
               </span>
             </h1>
             <p className="hero-subtitle text-lg md:text-xl leading-relaxed opacity-0">
-              Há 10 anos oferecendo soluções em locação de equipamentos para
-              obras e serviços em altura. Segurança, qualidade e manutenção
-              constante.
+              {settings.aboutUsText ||
+                'Há 10 anos oferecendo soluções em locação de equipamentos para obras e serviços em altura. Segurança, qualidade e manutenção constante.'}
             </p>
             {/* Animated Search Bar with Autocomplete */}
             <div className="hero-search bg-white rounded-2xl p-2 max-w-md border border-white/20 transition-all duration-300 relative z-[9998] opacity-0">

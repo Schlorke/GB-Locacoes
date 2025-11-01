@@ -89,7 +89,7 @@ export async function updateSettings(data: SettingsInput) {
 
         return {
           success: false,
-          message: errorMessages,
+          error: errorMessages,
         }
       }
       throw error
