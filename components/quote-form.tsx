@@ -191,8 +191,7 @@ export default function QuoteForm({
       const result = await response.json()
 
       if (result.success) {
-        toast({
-          title: 'Orçamento Solicitado! 🎉',
+        toast.success('Orçamento Solicitado! 🎉', {
           description: 'Entraremos em contato em até 2 horas úteis.',
         })
 
@@ -207,13 +206,11 @@ export default function QuoteForm({
       }
     } catch (error) {
       console.error('Erro ao enviar orçamento:', error)
-      toast({
-        title: 'Erro ao Enviar',
+      toast.error('Erro ao Enviar', {
         description:
           error instanceof Error
             ? error.message
             : 'Tente novamente em alguns instantes.',
-        variant: 'destructive',
       })
     } finally {
       // fim envio (estado visual removido)
@@ -229,10 +226,8 @@ export default function QuoteForm({
       !data.customerEmail.trim() ||
       !data.customerPhone.trim()
     ) {
-      toast({
-        title: 'Erro de Validação',
+      toast.error('Erro de Validação', {
         description: 'Por favor, preencha todos os campos obrigatórios.',
-        variant: 'destructive',
       })
       return
     }
@@ -263,16 +258,13 @@ export default function QuoteForm({
       // Abrir WhatsApp com mensagem formatada
       openWhatsAppQuote(whatsappData, '555198205163') // Número da GB Locações
 
-      toast({
-        title: 'Orçamento Preparado! 📱',
+      toast.success('Orçamento Preparado! 📱', {
         description: 'WhatsApp aberto com sua solicitação formatada.',
       })
     } catch (error) {
       console.error('Erro ao preparar mensagem WhatsApp:', error)
-      toast({
-        title: 'Erro',
+      toast.error('Erro', {
         description: 'Erro ao preparar mensagem para WhatsApp.',
-        variant: 'destructive',
       })
     }
   }

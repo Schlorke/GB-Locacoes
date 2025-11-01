@@ -101,7 +101,7 @@ export function Toaster(props: ToasterProps) {
         position="top-center"
         closeButton
         expand={false}
-        duration={40000}
+        duration={4000}
         visibleToasts={3}
         {...props}
       />

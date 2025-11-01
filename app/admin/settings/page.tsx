@@ -733,13 +733,13 @@ export default function SettingsPage() {
                         onChange={(e) =>
                           updateField('aboutUsText', e.target.value)
                         }
-                        placeholder="Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura."
+                        placeholder="Ex: Locação de equipamentos para construção em Porto Alegre. Andaimes, betoneiras, compressores e muito mais. Qualidade e segurança garantidas."
                         className="mt-1"
                         rows={4}
                       />
                       <p className="input-description mt-1">
-                        Esta descrição será usada para SEO e exibida nos
-                        resultados de busca do Google
+                        Texto sobre sua empresa exibido no rodapé do site. Pode
+                        ser mais detalhado que a meta descrição.
                       </p>
                     </div>
                   </div>
@@ -875,19 +875,32 @@ export default function SettingsPage() {
                     </div>
 
                     <div>
-                      <Label htmlFor="seoDescription">Meta Descrição</Label>
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="seoDescription">Meta Descrição</Label>
+                        <span
+                          className={`text-xs font-medium ${
+                            (formData.seoDescription || '').length > 160
+                              ? 'text-red-600'
+                              : (formData.seoDescription || '').length > 150
+                                ? 'text-orange-600'
+                                : 'text-gray-500'
+                          }`}
+                        >
+                          {(formData.seoDescription || '').length}/160
+                        </span>
+                      </div>
                       <Textarea
                         id="seoDescription"
                         value={formData.seoDescription || ''}
                         onChange={(e) =>
                           updateField('seoDescription', e.target.value)
                         }
-                        placeholder="Descrição que aparece nos resultados de busca"
+                        placeholder="Descreva sua empresa em até 160 caracteres. Ex: Locação de equipamentos para construção em Porto Alegre com qualidade e segurança garantidas."
                         className="mt-1"
                         rows={3}
                       />
                       <p className="input-description mt-1">
-                        Máximo 160 caracteres recomendado
+                        Máximo 160 caracteres. Aparece nos resultados do Google.
                       </p>
                     </div>
 

@@ -44,8 +44,7 @@ export default function ContactForm() {
       const data = await response.json()
 
       if (data.success) {
-        toast({
-          title: 'Sucesso!',
+        toast.success('Sucesso!', {
           description: data.message,
         })
 
@@ -62,13 +61,11 @@ export default function ContactForm() {
       }
     } catch (error) {
       console.error('Erro ao enviar formulário:', error)
-      toast({
-        title: 'Erro',
+      toast.error('Erro', {
         description:
           error instanceof Error
             ? error.message
             : 'Erro ao enviar mensagem. Tente novamente.',
-        variant: 'destructive',
       })
     } finally {
       setIsSubmitting(false)

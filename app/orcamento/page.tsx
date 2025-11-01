@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
-import { toast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 import { formatCurrency } from '@/lib/utils'
 import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
 import { useCartStore, type CartItem } from '@/stores/useCartStore'
@@ -379,10 +379,8 @@ function QuotePage() {
 
     // Validação: pelo menos um dos campos CPF ou CNPJ deve ser preenchido
     if (!formData.cpf.trim() && !formData.cnpj.trim()) {
-      toast({
-        title: 'Erro de Validação',
+      toast.error('Erro de Validação', {
         description: 'Por favor, preencha pelo menos o CPF ou CNPJ.',
-        variant: 'destructive',
       })
       return
     }
@@ -405,8 +403,7 @@ function QuotePage() {
       })
 
       if (response.ok) {
-        toast({
-          title: 'Sucesso!',
+        toast.success('Sucesso!', {
           description:
             'Orçamento enviado com sucesso. Entraremos em contato em breve.',
         })
@@ -424,10 +421,8 @@ function QuotePage() {
         throw new Error('Erro ao enviar orçamento')
       }
     } catch {
-      toast({
-        title: 'Erro',
+      toast.error('Erro', {
         description: 'Erro ao enviar orçamento. Tente novamente.',
-        variant: 'destructive',
       })
     } finally {
       // fim envio (estado visual não utilizado)
@@ -437,10 +432,8 @@ function QuotePage() {
   const handleWhatsAppSubmit = () => {
     // Validação: pelo menos um dos campos CPF ou CNPJ deve ser preenchido
     if (!formData.cpf.trim() && !formData.cnpj.trim()) {
-      toast({
-        title: 'Erro de Validação',
+      toast.error('Erro de Validação', {
         description: 'Por favor, preencha pelo menos o CPF ou CNPJ.',
-        variant: 'destructive',
       })
       return
     }
@@ -451,10 +444,8 @@ function QuotePage() {
       !formData.email.trim() ||
       !formData.phone.trim()
     ) {
-      toast({
-        title: 'Erro de Validação',
+      toast.error('Erro de Validação', {
         description: 'Por favor, preencha todos os campos obrigatórios.',
-        variant: 'destructive',
       })
       return
     }
@@ -496,16 +487,13 @@ function QuotePage() {
       // Abrir WhatsApp com mensagem formatada
       openWhatsAppQuote(whatsappData, '555198205163') // Número da GB Locações
 
-      toast({
-        title: 'Orçamento Preparado! 📱',
+      toast.success('Orçamento Preparado! 📱', {
         description: 'WhatsApp aberto com sua solicitação formatada.',
       })
     } catch (error) {
       console.error('Erro ao preparar mensagem WhatsApp:', error)
-      toast({
-        title: 'Erro',
+      toast.error('Erro', {
         description: 'Erro ao preparar mensagem para WhatsApp.',
-        variant: 'destructive',
       })
     }
   }

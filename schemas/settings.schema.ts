@@ -126,7 +126,7 @@ export const SettingsSchema = z.object({
   seoDescription: z
     .string()
     .min(1, 'Descrição SEO é obrigatória')
-    .max(160, 'Descrição muito longa'),
+    .max(160, 'Máximo de 160 caracteres para SEO (ideal para Google)'),
 
   // Tema e aparência
   themeColorPrimary: z

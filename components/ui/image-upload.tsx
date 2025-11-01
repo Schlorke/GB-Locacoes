@@ -1,6 +1,6 @@
 'use client'
 
-import { toast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 import {
   DndContext,
   KeyboardSensor,
@@ -258,10 +258,8 @@ export function ImageUpload({
     if (!files || files.length === 0) return
 
     if (images.length + files.length > maxImages) {
-      toast({
-        title: 'Limite excedido',
+      toast.error('Limite excedido', {
         description: `Máximo de ${maxImages} imagens permitidas`,
-        variant: 'destructive',
       })
       return
     }
@@ -289,8 +287,7 @@ export function ImageUpload({
       }
 
       onImagesChange([...images, ...uploadedUrls])
-      toast({
-        title: 'Upload concluído',
+      toast.success('Upload concluído', {
         description: `${uploadedUrls.length} imagem(ns) enviada(s) com sucesso`,
       })
     } catch (error) {
@@ -298,18 +295,14 @@ export function ImageUpload({
 
       // Verificar se é erro de configuração do Supabase
       if (error instanceof Error && error.message.includes('Supabase')) {
-        toast({
-          title: 'Configuração do Supabase necessária',
+        toast.error('Configuração do Supabase necessária', {
           description:
             'Substitua os valores placeholder no arquivo .env.local pelos valores reais do seu projeto Supabase',
-          variant: 'destructive',
         })
       } else {
-        toast({
-          title: 'Erro no upload',
+        toast.error('Erro no upload', {
           description:
             error instanceof Error ? error.message : 'Erro desconhecido',
-          variant: 'destructive',
         })
       }
     } finally {
@@ -323,10 +316,8 @@ export function ImageUpload({
     if (!urlInput.trim()) return
 
     if (images.length >= maxImages) {
-      toast({
-        title: 'Limite excedido',
+      toast.error('Limite excedido', {
         description: `Máximo de ${maxImages} imagens permitidas`,
-        variant: 'destructive',
       })
       return
     }
@@ -337,10 +328,8 @@ export function ImageUpload({
       onImagesChange([...images, urlInput.trim()])
       setUrlInput('')
     } catch {
-      toast({
-        title: 'URL inválida',
+      toast.error('URL inválida', {
         description: 'Por favor, insira uma URL válida',
-        variant: 'destructive',
       })
     }
   }

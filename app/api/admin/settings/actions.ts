@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { SettingsInput, SettingsSchema } from '@/schemas/settings.schema'
 import { getServerSession } from 'next-auth'
 import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 
 export async function getSettings() {
   try {
@@ -77,7 +78,22 @@ export async function updateSettings(data: SettingsInput) {
     }
 
     // Validar dados
-    const validatedData = SettingsSchema.parse(data)
+    let validatedData
+    try {
+      validatedData = SettingsSchema.parse(data)
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        // Extrair mensagens de erro amigáveis
+        const errorMessages = error.issues.map((err) => err.message).join(', ')
+        console.error(`❌ Erro de validação: ${errorMessages}`)
+
+        return {
+          success: false,
+          message: errorMessages,
+        }
+      }
+      throw error
+    }
 
     // Buscar configuração existente ou criar uma nova
     const existingSettings = await prisma.setting.findFirst()
@@ -166,11 +182,13 @@ export async function updateSettings(data: SettingsInput) {
       message: 'Configurações atualizadas com sucesso!',
     }
   } catch (error) {
-    console.error('Erro ao atualizar configurações:', error)
+    const errorMessage =
+      error instanceof Error ? error.message : 'Erro interno do servidor'
+    console.error(`❌ Erro ao atualizar configurações: ${errorMessage}`)
+
     return {
       success: false,
-      error:
-        error instanceof Error ? error.message : 'Erro interno do servidor',
+      error: errorMessage,
     }
   }
 }
