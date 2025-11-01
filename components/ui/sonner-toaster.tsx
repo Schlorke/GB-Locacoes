@@ -13,6 +13,21 @@ import { Toaster as Sonner, type ToasterProps } from 'sonner'
 /**
  * Toaster component seguindo 100% os padrões oficiais da biblioteca Sonner.
  * Implementação conforme documentação oficial shadcn/ui (atualizada 13/10/2025).
+ *
+ * ESTILIZAÇÃO DE BOTÕES POR TIPO DE TOAST:
+ * Use a sintaxe Tailwind CSS para estilizar elementos internos baseado no tipo de toast:
+ *
+ * Exemplo: [&_button[data-close-button]:hover]:!bg-gray-100
+ *
+ * Onde:
+ * - [&_ ...] = Seletor filho descendente (scoped ao classNames do tipo de toast)
+ * - button[data-close-button] = Seletor específico do botão close
+ * - :hover = Pseudo-classe CSS
+ * - :!bg-gray-100 = Classe Tailwind com !important após os dois pontos
+ *
+ * Esta sintaxe permite que cada TIPO de toast (success, error, warning, info, loading, default)
+ * tenha cores diferentes para os MESMOS elementos (botões, ícones, textos).
+ *
  * @see https://sonner.emilkowal.ski/getting-started
  * @see https://github.com/emilkowalski/sonner
  * @see https://ui.shadcn.com/docs/components/sonner
@@ -34,7 +49,7 @@ export function Toaster(props: ToasterProps) {
         className="toaster group"
         icons={{
           success: <CircleCheckIcon className=" size-5 !text-green-700" />,
-          info: <InfoIcon className="size-5 !text-blue-700" />,
+          info: <InfoIcon className="size-5 !text-gray-700" />,
           warning: <TriangleAlertIcon className="size-5 !text-orange-700" />,
           error: <OctagonXIcon className="size-5 !text-red-700" />,
           loading: (
@@ -48,26 +63,29 @@ export function Toaster(props: ToasterProps) {
           classNames: {
             toast:
               'grid grid-cols-[auto_1fr_auto] items-start gap-x-3 gap-y-1 p-4 rounded-lg shadow-lg border w-full md:max-w-[364px]',
-            default: 'bg-white border-gray-200 [&_[data-title]]:text-gray-900 ',
+            default:
+              'bg-white border shadow-md hover:shadow-lg [&_[data-title]]:text-gray-900',
             success:
-              '!bg-green-50 !border-green-200 [&_[data-title]]:!text-green-700 [&_[data-description]]:!text-green-600',
+              '!bg-green-50 !border-green-100 [&_[data-title]]:!text-green-700 [&_[data-description]]:!text-green-600',
             error:
-              '!bg-red-50 !border-red-200 [&_[data-title]]:!text-red-700 [&_[data-description]]:!text-red-600',
+              '!bg-red-50 !border-red-100 [&_[data-title]]:!text-red-700 [&_[data-description]]:!text-red-600',
             warning:
-              '!bg-orange-50 !border-orange-200 [&_[data-title]]:!text-orange-700 [&_[data-description]]:!text-orange-600',
-            info: '!bg-blue-50 !border-blue-200 [&_[data-title]]:!text-blue-700 [&_[data-description]]:!text-blue-600',
+              '!bg-yellow-50 !border-yellow-100 [&_[data-title]]:!text-orange-700 [&_[data-description]]:!text-orange-600',
+            // Sintaxe para estilizar botões por tipo: [&_button[seletor]:hover]:!classe
+            // Permite cada tipo de toast ter cores diferentes para os mesmos botões
+            info: '!bg-gray !border-gray-100 [&_[data-title]]:!text-gray-700 [&_[data-description]]:!text-gray-600 [&_button[data-close-button]:hover]:!bg-gray-100',
             loading:
-              '!bg-gray-50 !border-gray-200 [&_[data-title]]:!text-gray-700 [&_[data-description]]:!text-gray-600',
+              '!bg-gray-40 !border-gray-100 [&_[data-title]]:!text-gray-700 [&_[data-description]]:!text-gray-600',
             icon: 'col-start-1 row-start-1 self-start',
             loader:
-              'col-start-1 row-start-1 self-start justify-self-center data-[visible=false]:hidden ![position:static] ![transform:none] !m-0',
+              'col-start-1 row-start-1 self-start justify-self-center data-[visible=false]:hidden ![position:static] ![transform:none]',
             content: 'contents',
             title:
               'col-start-2 row-start-1 font-semibold text-sm flex min-w-0 items-start',
             actionButton:
-              'col-start-3 row-start-3 mt-1 inline-flex items-center justify-center gap-2 rounded-md bg-orange-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-orange-500',
+              'col-start-3 row-start-3 mt-1 inline-flex items-center justify-center gap-2  rounded-md bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors shadow-md hover:shadow-sm active:shadow-none active:text-gray-500 !transition-all',
             cancelButton:
-              'col-start-2 row-start-3 mt-1 inline-flex items-center justify-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50',
+              'col-start-2 row-start-3 mt-1 justify-self-end w-auto inline-flex items-center justify-center gap-2 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors shadow-md hover:shadow-sm active:shadow-none active:text-gray-500 !transition-all',
             closeButton:
               'col-start-3 row-start-1 justify-self-end rounded-md p-1 !text-gray-500 hover:!bg-white/90 !transition-colors',
           },
