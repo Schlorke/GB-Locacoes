@@ -47,8 +47,11 @@ export function HeroCarouselPreview({
           </span>
         </div>
 
-        {/* Bloco cinza escuro - IGUAL ao exemplo do Header/Footer */}
-        <div className="bg-[#2a2d3a] rounded-lg overflow-hidden border border-gray-700">
+        {/* Bloco cinza escuro - COM INLINE STYLE PARA GARANTIR COR */}
+        <div
+          className="rounded-lg overflow-hidden border border-gray-700"
+          style={{ backgroundColor: '#2a2d3a' }}
+        >
           {/* Preview Container - Miniatura do Hero */}
           <div
             className={cn(
@@ -227,8 +230,11 @@ export function HeroCarouselPreview({
             </div>
           </div>
 
-          {/* Informações de status - MESMA COR do bloco cinza */}
-          <div className="bg-[#2a2d3a] p-4 border-t border-gray-700">
+          {/* Informações de status - COM INLINE STYLE PARA GARANTIR COR */}
+          <div
+            className="p-4 border-t border-gray-700"
+            style={{ backgroundColor: '#2a2d3a' }}
+          >
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div className="space-y-1">
                 <div className="text-gray-400 text-xs">Status da Onda</div>
