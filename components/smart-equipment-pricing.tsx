@@ -2,7 +2,7 @@
 
 import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
 import { SmartQuoteButton } from '@/components/smart-quote-button'
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 export interface PricingOption {
   id: string
@@ -122,7 +122,8 @@ export function SmartEquipmentPricing({
             weeklyDiscount={weeklyDiscount}
             biweeklyDiscount={biweeklyDiscount}
             monthlyDiscount={monthlyDiscount}
-            className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 shadow-lg"
+            variant="gradient"
+            className="w-full bg-[linear-gradient(to_right,#f97316,#ea580c,#f97316)] bg-[length:200%_100%] bg-left hover:bg-right transition-[background-position,transform,box-shadow] duration-500 ease-in-out"
           />
         ) : (
           <SmartQuoteButton
@@ -147,7 +148,8 @@ export function SmartEquipmentPricing({
             weeklyDiscount={weeklyDiscount}
             biweeklyDiscount={biweeklyDiscount}
             monthlyDiscount={monthlyDiscount}
-            className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 shadow-lg"
+            variant="gradient"
+            className="w-full bg-[linear-gradient(to_right,#f97316,#ea580c,#f97316)] bg-[length:200%_100%] bg-left hover:bg-right transition-[background-position,transform,box-shadow] duration-500 ease-in-out"
           />
         )}
 

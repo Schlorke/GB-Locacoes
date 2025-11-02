@@ -33,6 +33,15 @@ interface SmartQuoteButtonProps {
   monthlyDiscount?: number
   className?: string
   size?: 'sm' | 'lg' | 'default'
+  variant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'reset'
+    | 'gradient'
+    | 'link'
   children?: React.ReactNode
 }
 
@@ -53,6 +62,7 @@ export function SmartQuoteButton({
   monthlyDiscount,
   className,
   size = 'lg',
+  variant = 'default',
   children = 'Solicitar Orçamento Grátis',
 }: SmartQuoteButtonProps) {
   const { addItem } = useCartStore()
@@ -106,14 +116,19 @@ export function SmartQuoteButton({
 
   if (!isAvailable) {
     return (
-      <Button size={size} className={className} disabled>
+      <Button size={size} variant={variant} className={className} disabled>
         Equipamento Indisponível
       </Button>
     )
   }
 
   return (
-    <Button size={size} className={className} onClick={handleQuoteRequest}>
+    <Button
+      size={size}
+      variant={variant}
+      className={className}
+      onClick={handleQuoteRequest}
+    >
       {children}
     </Button>
   )

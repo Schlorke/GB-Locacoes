@@ -1261,7 +1261,7 @@ function QuotePage() {
                     <div className="pt-4">
                       <Button
                         onClick={handleWhatsAppSubmit}
-                        className="w-full hover:scale-105 transition-transform duration-200"
+                        className="w-full hover:scale-105 transition-all duration-300"
                         size="lg"
                       >
                         Solicitar Orçamento

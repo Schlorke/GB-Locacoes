@@ -447,7 +447,7 @@ export default function EquipmentsPage() {
                               size="sm"
                               disabled={!equipment.isAvailable}
                               asChild={equipment.isAvailable}
-                              className="w-full hover:scale-105 transition-transform duration-200"
+                              className="w-full hover:scale-105 transition-all duration-300"
                             >
                               {equipment.isAvailable ? (
                                 <Link href={`/equipamentos/${equipment.id}`}>

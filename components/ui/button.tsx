@@ -20,6 +20,7 @@ const buttonVariants = cva(
         ghost: 'hover:text-orange-600 hover:scale-105',
         reset:
           'border shadow-md hover:text-orange-500 hover:scale-105 hover:shadow-lg group',
+        gradient: 'text-white border shadow-md hover:scale-105 hover:shadow-lg',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
