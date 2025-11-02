@@ -24,7 +24,7 @@ const quoteitemscalarwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'pricePerDay' must be a Decimal',
+  message: "Field 'pricePerDay' must be a Decimal",
 })]).optional(),
   total: z.union([z.lazy(() => DecimalFilterObjectSchema), z.union([
   z.number(),
@@ -33,7 +33,7 @@ const quoteitemscalarwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'total' must be a Decimal',
+  message: "Field 'total' must be a Decimal",
 })]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional()

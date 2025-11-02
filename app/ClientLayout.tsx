@@ -20,8 +20,9 @@ export default function ClientLayout({
     <div data-scroll-behavior="smooth" suppressHydrationWarning>
       {!isAdminRoute && <Header />}
       <div
-        className={`overflow-x-hidden min-h-screen ${!isAdminRoute ? 'pt-[100px] md:pt-[96px]' : ''}`}
-        suppressHydrationWarning
+        className={`overflow-x-hidden min-h-screen ${
+          !isAdminRoute ? 'pt-[104px]' : ''
+        }`}
       >
         {children}
       </div>

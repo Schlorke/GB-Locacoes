@@ -26,7 +26,7 @@ const rentalswhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'total' must be a Decimal',
+  message: "Field 'total' must be a Decimal",
 })]).optional(),
   status: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
   userid: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),

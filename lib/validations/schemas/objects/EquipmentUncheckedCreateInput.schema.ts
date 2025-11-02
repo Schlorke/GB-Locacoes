@@ -22,7 +22,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'pricePerDay' must be a Decimal',
+  message: "Field 'pricePerDay' must be a Decimal",
 }),
   images: z.union([z.lazy(() => EquipmentCreateimagesInputObjectSchema), z.string().array()]),
   available: z.boolean().optional(),
@@ -41,7 +41,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'dailyDirectValue' must be a Decimal',
+  message: "Field 'dailyDirectValue' must be a Decimal",
 }).optional().nullable(),
   weeklyDirectValue: z.union([
   z.number(),
@@ -50,7 +50,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'weeklyDirectValue' must be a Decimal',
+  message: "Field 'weeklyDirectValue' must be a Decimal",
 }).optional().nullable(),
   biweeklyDirectValue: z.union([
   z.number(),
@@ -59,7 +59,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'biweeklyDirectValue' must be a Decimal',
+  message: "Field 'biweeklyDirectValue' must be a Decimal",
 }).optional().nullable(),
   monthlyDirectValue: z.union([
   z.number(),
@@ -68,7 +68,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'monthlyDirectValue' must be a Decimal',
+  message: "Field 'monthlyDirectValue' must be a Decimal",
 }).optional().nullable(),
   dailyUseDirectValue: z.boolean().optional(),
   weeklyUseDirectValue: z.boolean().optional(),

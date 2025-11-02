@@ -33,7 +33,7 @@ const equipmentwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'pricePerDay' must be a Decimal',
+  message: "Field 'pricePerDay' must be a Decimal",
 })]).optional(),
   images: z.lazy(() => StringNullableListFilterObjectSchema).optional(),
   available: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
@@ -52,7 +52,7 @@ const equipmentwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'dailyDirectValue' must be a Decimal',
+  message: "Field 'dailyDirectValue' must be a Decimal",
 })]).optional().nullable(),
   weeklyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
   z.number(),
@@ -61,7 +61,7 @@ const equipmentwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'weeklyDirectValue' must be a Decimal',
+  message: "Field 'weeklyDirectValue' must be a Decimal",
 })]).optional().nullable(),
   biweeklyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
   z.number(),
@@ -70,7 +70,7 @@ const equipmentwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'biweeklyDirectValue' must be a Decimal',
+  message: "Field 'biweeklyDirectValue' must be a Decimal",
 })]).optional().nullable(),
   monthlyDirectValue: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
   z.number(),
@@ -79,7 +79,7 @@ const equipmentwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'monthlyDirectValue' must be a Decimal',
+  message: "Field 'monthlyDirectValue' must be a Decimal",
 })]).optional().nullable(),
   dailyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   weeklyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),

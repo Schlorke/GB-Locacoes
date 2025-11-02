@@ -16,7 +16,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'pricePerDay' must be a Decimal',
+  message: "Field 'pricePerDay' must be a Decimal",
 }),
   finalPrice: z.union([
   z.number(),
@@ -25,7 +25,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'finalPrice' must be a Decimal',
+  message: "Field 'finalPrice' must be a Decimal",
 }).optional().nullable(),
   createdAt: z.coerce.date().optional(),
   equipment: z.lazy(() => EquipmentCreateNestedOneWithoutCartItemsInputObjectSchema)

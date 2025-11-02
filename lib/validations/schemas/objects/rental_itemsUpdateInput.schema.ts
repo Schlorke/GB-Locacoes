@@ -20,7 +20,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'priceperday' must be a Decimal',
+  message: "Field 'priceperday' must be a Decimal",
 }), z.lazy(() => DecimalFieldUpdateOperationsInputObjectSchema)]).optional(),
   totaldays: z.union([z.number().int(), z.lazy(() => IntFieldUpdateOperationsInputObjectSchema)]).optional(),
   totalprice: z.union([z.union([
@@ -30,7 +30,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'totalprice' must be a Decimal',
+  message: "Field 'totalprice' must be a Decimal",
 }), z.lazy(() => DecimalFieldUpdateOperationsInputObjectSchema)]).optional(),
   createdat: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
   updatedat: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),

@@ -27,7 +27,7 @@ const quotescalarwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'total' must be a Decimal',
+  message: "Field 'total' must be a Decimal",
 })]).optional(),
   status: z.union([z.lazy(() => EnumQuoteStatusFilterObjectSchema), QuoteStatusSchema]).optional(),
   userId: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),

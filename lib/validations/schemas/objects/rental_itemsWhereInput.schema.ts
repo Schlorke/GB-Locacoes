@@ -27,7 +27,7 @@ const rental_itemswhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'priceperday' must be a Decimal',
+  message: "Field 'priceperday' must be a Decimal",
 })]).optional(),
   totaldays: z.union([z.lazy(() => IntFilterObjectSchema), z.number().int()]).optional(),
   totalprice: z.union([z.lazy(() => DecimalFilterObjectSchema), z.union([
@@ -37,7 +37,7 @@ const rental_itemswhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'totalprice' must be a Decimal',
+  message: "Field 'totalprice' must be a Decimal",
 })]).optional(),
   createdat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
   updatedat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),

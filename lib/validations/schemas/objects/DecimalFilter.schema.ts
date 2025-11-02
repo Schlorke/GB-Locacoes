@@ -13,7 +13,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'equals' must be a Decimal',
+  message: "Field 'equals' must be a Decimal",
 }).optional(),
   in: z.union([
   z.number(),
@@ -22,7 +22,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'in' must be a Decimal',
+  message: "Field 'in' must be a Decimal",
 }).array().optional(),
   notIn: z.union([
   z.number(),
@@ -31,7 +31,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'notIn' must be a Decimal',
+  message: "Field 'notIn' must be a Decimal",
 }).array().optional(),
   lt: z.union([
   z.number(),
@@ -40,7 +40,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'lt' must be a Decimal',
+  message: "Field 'lt' must be a Decimal",
 }).optional(),
   lte: z.union([
   z.number(),
@@ -49,7 +49,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'lte' must be a Decimal',
+  message: "Field 'lte' must be a Decimal",
 }).optional(),
   gt: z.union([
   z.number(),
@@ -58,7 +58,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'gt' must be a Decimal',
+  message: "Field 'gt' must be a Decimal",
 }).optional(),
   gte: z.union([
   z.number(),
@@ -67,7 +67,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'gte' must be a Decimal',
+  message: "Field 'gte' must be a Decimal",
 }).optional(),
   not: z.union([z.union([
   z.number(),
@@ -76,7 +76,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'not' must be a Decimal',
+  message: "Field 'not' must be a Decimal",
 }), z.lazy(() => NestedDecimalFilterObjectSchema)]).optional()
 }).strict();
 export const DecimalFilterObjectSchema: z.ZodType<Prisma.DecimalFilter> = makeSchema() as unknown as z.ZodType<Prisma.DecimalFilter>;

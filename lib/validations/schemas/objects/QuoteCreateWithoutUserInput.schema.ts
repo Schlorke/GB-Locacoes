@@ -20,7 +20,7 @@ const makeSchema = () => z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'total' must be a Decimal',
+  message: "Field 'total' must be a Decimal",
 }).optional(),
   status: QuoteStatusSchema.optional(),
   createdAt: z.coerce.date().optional(),

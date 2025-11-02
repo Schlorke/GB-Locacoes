@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { CloseButton } from '@/components/ui/close-button'
 import { Input } from '@/components/ui/input'
 import { MessageCircle, Send } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type MessageSender = 'bot' | 'user'
 
@@ -29,7 +29,20 @@ export default function WhatsAppFAB() {
   const [unreadCount, setUnreadCount] = useState(1) // Contador de mensagens não lidas
   const [showQuickMessages, setShowQuickMessages] = useState(true)
 
+  // Ref para scroll automático
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
   const whatsappNumber = '5551998205163' // WhatsApp da GB Locações
+
+  // Função para rolar para baixo automaticamente
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+      })
+    }, 100)
+  }
 
   // Função para detectar se é dispositivo móvel
   const isMobile = () => {
@@ -58,6 +71,13 @@ export default function WhatsAppFAB() {
       setUnreadCount(0)
     }
   }, [isOpen])
+
+  // Auto-scroll quando novas mensagens são adicionadas
+  useEffect(() => {
+    if (isOpen && messages.length > 0) {
+      scrollToBottom()
+    }
+  }, [messages, isOpen])
 
   const handleSendMessage = () => {
     if (!message.trim()) return
@@ -231,6 +251,8 @@ export default function WhatsAppFAB() {
                   </div>
                 </div>
               ))}
+              {/* Elemento invisível para scroll automático */}
+              <div ref={messagesEndRef} />
             </div>
 
             {/* Quick Messages - apenas quando não há conversa */}

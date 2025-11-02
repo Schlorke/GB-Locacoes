@@ -26,9 +26,9 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 pt- text-white">
+    <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white">
       {/* Container com largura consistente */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 !py-16 md:py-20 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 relative z-10 w-full">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           <div className="space-y-6">
             <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold leading-tight opacity-0">
@@ -134,7 +134,7 @@ export default function Hero() {
         </div>
       </div>
       {/* Bottom wave */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full mt-2 overflow-hidden">
         <svg
           className="relative block w-full h-12"
           data-name="Layer 1"

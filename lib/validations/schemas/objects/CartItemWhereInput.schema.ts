@@ -29,7 +29,7 @@ const cartitemwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'pricePerDay' must be a Decimal',
+  message: "Field 'pricePerDay' must be a Decimal",
 })]).optional(),
   finalPrice: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
   z.number(),
@@ -38,7 +38,7 @@ const cartitemwhereinputSchema = z.object({
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: 'Field 'finalPrice' must be a Decimal',
+  message: "Field 'finalPrice' must be a Decimal",
 })]).optional().nullable(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   cart: z.union([z.lazy(() => CartScalarRelationFilterObjectSchema), z.lazy(() => CartWhereInputObjectSchema)]).optional(),
