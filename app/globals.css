@@ -2,14 +2,16 @@
 /* eslint-disable */
 /* @microsoft-edge-tools-disable */
 
+/* ================================ */
+/* 1. TAILWIND DIRECTIVES           */
+/* ================================ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* =============================== */
-/* 2. Variáveis e Temas Globais    */
-/* =============================== */
-/* @layer base */
+/* ================================ */
+/* 2. VARIÁVEIS CSS (DESIGN TOKENS) */
+/* ================================ */
 :root {
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
@@ -50,6 +52,7 @@
   --z-popover: 10001;
   --z-tooltip: 10002;
 }
+
 .dark {
   --background: 222.2 84% 4.9%;
   --foreground: 210 40% 98%;
@@ -84,19 +87,139 @@
   --popover: 222.2 84% 4.9%;
   --popover-foreground: 210 40% 98%;
 }
+
+/* ================================ */
+/* 3. RESET GLOBAL                  */
+/* ================================ */
 * {
   border-color: hsl(var(--border));
+  scrollbar-width: thin;
+  scrollbar-color: #fc5a03d2 #f1f5f9;
 }
+
+html {
+  max-width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px; /* Altura do header fixo */
+}
+
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: var(--font-inter), sans-serif;
   font-size: 1rem;
   margin: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Ajuste mobile para scroll-padding */
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 84px;
+  }
+}
+
+@media (min-width: 640px) {
+  :root {
+    --header-height: 4.5rem;
+  }
+}
+
+/* ================================ */
+/* 4. TIPOGRAFIA                    */
+/* ================================ */
+h1 {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: 1.2;
+  font-family: var(--font-jost), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.3;
+  font-family: var(--font-jost), sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.4;
+  font-family: var(--font-jost), sans-serif;
+  font-weight: 600;
+}
+
+p {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.6;
+}
+
+small {
+  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  line-height: 1.5;
+}
+
+/* ================================ */
+/* 5. LAYOUT ESTRUTURAL             */
+/* ================================ */
+
+/* Header fixo (consolidado de 3 duplicações) */
+header {
+  width: 100vw !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
+  border-bottom: 1px solid rgba(229, 231, 235, 0.8) !important;
+}
+
+/* Header específico para admin mobile */
+header.admin-mobile-header {
+  background: rgb(51, 65, 85) !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-bottom: none !important;
+}
+
+/* Garantir que o conteúdo do header não ultrapasse a área visível */
+header .max-w-7xl {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: max(1rem, calc((100vw - 100%) / 2 + 1rem));
+  padding-left: 1rem;
+}
+
+@media (max-width: 768px) {
+  header .max-w-7xl {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+}
+
+/* Sections e Containers */
+section,
+.container {
+  width: 100%;
+  max-width: 100vw;
   overflow-x: hidden;
 }
 
-/* Radix UI Portal (usado por Popover, Dialog, etc) */
+.absolute {
+  max-width: 100vw;
+}
+
+/* ================================ */
+/* 6. COMPONENTES RADIX UI          */
+/* ================================ */
 [data-radix-portal] {
   position: fixed;
   top: 0;
@@ -109,48 +232,14 @@ body {
   pointer-events: auto;
 }
 
-h1 {
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  line-height: 1.2;
-  font-family: var(--font-jost), sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-}
-h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.3;
-  font-family: var(--font-jost), sans-serif;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-}
-h3 {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  line-height: 1.4;
-  font-family: var(--font-jost), sans-serif;
-  font-weight: 600;
-}
-p {
-  font-size: clamp(1rem, 2vw, 1.125rem);
-  line-height: 1.6;
-}
-small {
-  font-size: clamp(0.875rem, 1.5vw, 1rem);
-  line-height: 1.5;
-}
-html {
-  scroll-behavior: smooth;
-  max-width: 100%;
-  overflow-x: hidden;
-  /* Ajuste para evitar que o scroll corte o conteúdo no topo */
-  scroll-padding-top: 84px; /* Altura total do header fixo (top bar + main header) */
+[data-radix-select-content] {
+  position: absolute !important;
+  z-index: var(--z-dropdown) !important;
 }
 
-/* Ajuste específico para mobile */
-@media (max-width: 768px) {
-  html {
-    scroll-padding-top: 84px; /* Mesma altura no mobile */
-  }
-}
+/* ================================ */
+/* 7. FORMULÁRIOS E INPUTS          */
+/* ================================ */
 
 /* Inputs com efeito hover shadow e foco azul obrigatório */
 input:not([type='checkbox']):not([type='radio']),
@@ -166,24 +255,13 @@ button[aria-controls],
     0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Botão de reset - sem foco azul, mas com outras propriedades */
-.admin-reset-button,
-.filter-reset-button {
-  @apply border-gray-200 focus:ring-0 transition-all duration-200;
-  box-shadow:
-    0 1px 2px 0 rgba(0, 0, 0, 0.05),
-    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-}
-
 input:not([type='checkbox']):not([type='radio']):hover,
 select:hover,
 textarea:hover,
 button[role='combobox']:hover,
 button[aria-controls]:hover,
 [data-radix-select-trigger]:hover,
-.select-trigger:hover,
-.admin-reset-button:hover,
-.filter-reset-button:hover {
+.select-trigger:hover {
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
@@ -202,18 +280,7 @@ button[aria-controls]:focus,
     0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
-/* Botão de reset - foco com sombra mas sem borda/outline azul */
-.admin-reset-button:focus,
-.filter-reset-button:focus {
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-}
-
-/* =============================== */
-/* 2.0. Regras específicas para ShadCN UI Textarea */
-/* =============================== */
-/* Forçar o estilo nos componentes ShadCN UI */
+/* Textarea específico (ShadCN UI) */
 textarea.flex,
 textarea[class*='border-input'],
 textarea[class*='bg-background'] {
@@ -242,133 +309,340 @@ textarea[class*='bg-background']:focus {
     0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
-/* =============================== */
-/* 2.1. Correções Radix UI Select  */
-/* =============================== */
-[data-radix-select-content] {
-  position: absolute !important;
-  z-index: var(--z-dropdown) !important;
+/* Remove focus outline padrão (mantém acessibilidade com box-shadow) */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible,
+[role='combobox']:focus,
+[role='combobox']:focus-visible,
+button[role='combobox']:focus,
+button[role='combobox']:focus-visible,
+[aria-haspopup='listbox']:focus,
+[aria-haspopup='listbox']:focus-visible,
+.admin-filter-element:focus,
+.admin-filter-element:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-/* =============================== */
-/* 3. Layout e Containers          */
-/* =============================== */
-header {
-  width: 100vw !important;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  background: rgba(255, 255, 255, 0.95);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(229, 231, 235, 0.8);
-}
-header .max-w-7xl {
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: max(1rem, calc((100vw - 100%) / 2 + 1rem));
-  padding-left: 1rem;
-}
-@media (max-width: 768px) {
-  header .max-w-7xl {
-    padding-right: 1rem;
-    padding-left: 1rem;
-  }
-}
-section,
-.container {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-.absolute {
-  max-width: 100vw;
+/* ================================ */
+/* 8. BOTÕES E INTERAÇÕES          */
+/* ================================ */
+
+/* Botões de reset admin - sem foco azul */
+.admin-reset-button,
+.filter-reset-button {
+  @apply border-gray-200 focus:ring-0 transition-all duration-200;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
-/* =============================== */
-/* 4. Keyframes e Animações        */
-/* =============================== */
-/* ...existing code... */
-
-/* =============================== */
-/* 4. Header, Layout e Containers   */
-/* =============================== */
-/* Header que ocupa toda a largura da tela, incluindo área do scrollbar */
-header {
-  width: 100vw !important;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  background: rgba(255, 255, 255, 0.95);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(229, 231, 235, 0.8);
+.admin-reset-button:hover,
+.filter-reset-button:hover {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
 }
 
-/* Header específico para admin mobile - sobrescreve o estilo global */
-header.admin-mobile-header {
-  background: rgb(51, 65, 85) !important;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  border-bottom: none !important;
+.admin-reset-button:focus,
+.filter-reset-button:focus {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Garantir que o conteúdo do header não ultrapasse a área visível */
-header .max-w-7xl {
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: max(1rem, calc((100vw - 100%) / 2 + 1rem));
-  padding-left: 1rem;
+/* Botões padrão admin */
+.admin-button {
+  transition: all 0.3s ease-in-out !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Compensar altura do header fixo */
-body {
-  margin: 0;
-  overflow-x: hidden;
+.admin-button:hover {
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  transform: translateY(-1px) !important;
 }
 
-/* Ajuste para mobile */
-@media (max-width: 768px) {
-  header .max-w-7xl {
-    padding-right: 1rem;
-    padding-left: 1rem;
-  }
+/* Botões de ação admin (Eye/Edit/Trash) */
+.admin-action-button {
+  transition: all 0.2s ease-in-out !important;
 }
 
-/* Add these rules to prevent horizontal scrolling */
-html,
-body {
-  max-width: 100%;
-  overflow-x: hidden;
+.admin-action-button.view-button,
+.admin-action-button.edit-button {
+  color: rgb(51 65 85) !important; /* slate-700 */
 }
 
-/* Ensure all sections respect container width */
-section {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
+.admin-action-button.view-button:hover,
+.admin-action-button.edit-button:hover {
+  background-color: rgb(241 245 249) !important; /* slate-100 */
+  color: rgb(51 65 85) !important;
+  transform: none !important;
 }
 
-/* Ensure container doesn't overflow */
-.container {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+.admin-action-button.view-button:hover svg,
+.admin-action-button.edit-button:hover svg {
+  color: rgb(51 65 85) !important;
 }
 
-/* Fix for absolute positioned elements */
-.absolute {
-  max-width: 100vw;
+.admin-action-button.delete-button {
+  color: rgb(239 68 68) !important; /* red-500 */
 }
 
-/* =============================== */
-/* 5. Keyframes e Animações        */
-/* =============================== */
-/* Animation keyframes */
+.admin-action-button.delete-button:hover {
+  background-color: rgb(254 226 226) !important; /* red-100 */
+  color: rgb(185 28 28) !important; /* red-700 */
+  transform: none !important;
+}
+
+.admin-action-button.delete-button:hover svg {
+  color: rgb(185 28 28) !important;
+}
+
+/* Hover effects genéricos */
+.btn-hover-lift {
+  transition: all 0.3s ease;
+}
+
+.btn-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-hover-float {
+  transition: all 0.3s ease;
+}
+
+.card-hover-float:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* ================================ */
+/* 9. FILTROS E ELEMENTOS ADMIN    */
+/* ================================ */
+
+.filter-container,
+.admin-filter-card {
+  position: relative;
+  z-index: 1;
+  border: none !important;
+  outline: none !important;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+.admin-filter-element {
+  border-color: rgb(229 231 235) !important; /* border-gray-200 */
+  transition: all 0.2s ease-in-out !important;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.admin-filter-element.selected {
+  border-color: rgb(251 146 60) !important; /* border-orange-300 */
+  background-color: rgb(255 247 237) !important; /* bg-orange-50 */
+  color: rgb(234 88 12) !important; /* text-orange-600 */
+}
+
+.admin-filter-element:focus {
+  border-color: rgb(59 130 246) !important; /* border-blue-500 */
+  outline-offset: 0 !important;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+.admin-filter-card {
+  isolation: isolate;
+  contain: layout;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.filter-active {
+  border-color: rgb(251 146 60) !important; /* border-orange-300 */
+  background-color: rgb(255 247 237) !important; /* bg-orange-50 */
+}
+
+/* ================================ */
+/* 10. SIDEBAR ADMIN                */
+/* ================================ */
+
+body.admin-body-layout {
+  padding-top: 0 !important;
+}
+
+aside.admin-sidebar-dark {
+  background: linear-gradient(
+    145deg,
+    rgba(30, 41, 59, 0.98),
+    rgba(20, 31, 45, 0.95)
+  ) !important;
+  background-color: rgba(30, 41, 59, 0.98) !important;
+  position: relative !important;
+  z-index: 9999 !important;
+}
+
+/* ================================ */
+/* 11. SCROLLBAR CUSTOMIZADO        */
+/* ================================ */
+
+/* Scrollbar para dropdowns de filtros */
+.filter-dropdown-scroll {
+  overflow-y: auto !important;
+  max-height: 280px !important;
+}
+
+.filter-dropdown-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filter-dropdown-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.filter-dropdown-scroll::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.filter-dropdown-scroll::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Scrollbar WhatsApp (verde) */
+.whatsapp-chat-scroll {
+  overflow-y: scroll !important;
+}
+
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0 !important;
+  border-radius: 3px !important;
+}
+
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-thumb {
+  background: #25d366 !important;
+  border-radius: 3px !important;
+  opacity: 0.8 !important;
+  border: none !important;
+}
+
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-thumb:hover {
+  background: #128c7e !important;
+  opacity: 1 !important;
+}
+
+.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-corner {
+  background: #f0f0f0 !important;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar-track {
+  background: #f0f0f0 !important;
+  border-radius: 3px !important;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar-thumb {
+  background: #25d366 !important;
+  border-radius: 3px !important;
+  opacity: 0.7 !important;
+}
+
+.whatsapp-chat-scroll::-webkit-scrollbar-thumb:hover {
+  background: #128c7e !important;
+  opacity: 1 !important;
+}
+
+/* ================================ */
+/* 12. WHATSAPP FAB                 */
+/* ================================ */
+
+.whatsapp-green {
+  background-color: #25d366;
+}
+
+.whatsapp-green:hover {
+  background-color: #128c7e;
+}
+
+.whatsapp-header {
+  background-color: #25d366;
+}
+
+.whatsapp-chat-window {
+  max-height: 90vh;
+  min-height: 400px;
+  bottom: 90px !important;
+}
+
+.whatsapp-input-area {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
+
+/* ================================ */
+/* 13. BADGES E STATUS              */
+/* ================================ */
+
+/* Badge customizations - bordas arredondadas */
+div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2'] {
+  border-radius: 9999px !important;
+}
+
+/* Status badges - manter cores originais no hover */
+.status-badge-hover:hover {
+  background-color: inherit !important;
+}
+
+.bg-yellow-100.status-badge-hover:hover {
+  background-color: rgb(254 249 195) !important; /* bg-yellow-100 */
+}
+
+.bg-green-100.status-badge-hover:hover {
+  background-color: rgb(220 252 231) !important; /* bg-green-100 */
+}
+
+.bg-red-100.status-badge-hover:hover {
+  background-color: rgb(254 226 226) !important; /* bg-red-100 */
+}
+
+/* ================================ */
+/* 14. SELECTION E UTILITY          */
+/* ================================ */
+
+::selection {
+  background-color: #c7d2fe;
+  color: #1e1b4b;
+}
+
+.input-description {
+  font-size: 12px !important;
+  color: #6b7280 !important;
+}
+
+/* ================================ */
+/* 15. KEYFRAMES (ANIMAÇÕES)        */
+/* ================================ */
+
 @keyframes slideInLeft {
   0% {
     opacity: 0;
@@ -402,7 +676,6 @@ section {
   }
 }
 
-/* Nova animação completamente linear para CTA Section */
 @keyframes fadeInUpSmooth {
   0% {
     opacity: 0;
@@ -414,7 +687,6 @@ section {
   }
 }
 
-/* Animação de fade in para o header da página Sobre */
 @keyframes fadeInHeader {
   0% {
     opacity: 0;
@@ -424,37 +696,6 @@ section {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Aplicar animação ao bloco header da página Sobre */
-.sobre-header-block {
-  animation: fadeInHeader 1s ease-out forwards;
-  /* Remover opacity aqui pois a animação já cuida disso */
-}
-
-/* CORREÇÃO: Remover regras muito agressivas que estavam impedindo elementos de aparecer */
-/* O sistema de scroll reveal já cuida da inicialização dos elementos */
-
-/* CORREÇÃO: Prevenir scroll horizontal apenas no body durante animações */
-body:has(.sobre-page) {
-  overflow-x: hidden !important;
-}
-
-/* CORREÇÃO: Prevenir FOUC (Flash of Unstyled Content) no refresh da página Sobre */
-.sobre-page:not(.opacity-100) .material-card,
-.sobre-page:not(.opacity-100) .benefit-card,
-.sobre-page:not(.opacity-100) .cta-section,
-.sobre-page:not(.opacity-100) .sobre-header-block {
-  visibility: hidden !important;
-}
-
-/* Prevenir que elementos com transform causem overflow horizontal */
-.sobre-page .material-card,
-.sobre-page .benefit-card,
-.sobre-page .cta-section,
-.sobre-page .sobre-header-block {
-  will-change: transform, opacity;
-  backface-visibility: hidden;
 }
 
 @keyframes scaleIn {
@@ -527,10 +768,51 @@ body:has(.sobre-page) {
   }
 }
 
-/* =============================== */
-/* 6. Classes de Animação          */
-/* =============================== */
-/* CSS-only animation classes to prevent hydration mismatches */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes reset {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ================================ */
+/* 16. CLASSES DE ANIMAÇÃO          */
+/* ================================ */
+
+/* Scroll reveal animations */
 .animate-on-scroll {
   opacity: 0;
   transform: translate3d(0, 30px, 0);
@@ -581,7 +863,7 @@ body:has(.sobre-page) {
   transform: translate3d(0, 0, 0);
 }
 
-/* Staggered animation delays for category cards */
+/* Staggered animation delays */
 .category-card-animate:nth-child(1) {
   transition-delay: 0.1s;
 }
@@ -607,10 +889,7 @@ body:has(.sobre-page) {
   transition-delay: 0.8s;
 }
 
-/* =============================== */
-/* 7. Utility Classes              */
-/* =============================== */
-/* Utility classes */
+/* Utility animation classes */
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
@@ -633,42 +912,8 @@ body:has(.sobre-page) {
   animation: count-up 1s ease-out forwards;
 }
 
-/* @layer utilities */
-/* =============================== */
-/* 8. Tailwind Utility Layer       */
-/* =============================== */
-.animation-delay-1000 {
-  animation-delay: 1s;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-/* =============================== */
-/* 9. Login Animations             */
-/* =============================== */
-/* Animações suaves para o login */
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.animate-slide-in-up {
+  animation: slideInUp 0.8s ease-out forwards;
 }
 
 .animate-fade-in-up {
@@ -679,94 +924,146 @@ body:has(.sobre-page) {
   animation: scale-in 0.4s ease-out;
 }
 
-/* Animação de reset - rotação completa anti-horário */
-@keyframes reset {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-360deg);
-  }
-}
-
 .animate-reset {
   animation: reset 0.6s ease-in-out;
 }
 
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
+.animation-delay-1000 {
+  animation-delay: 1s;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+/* ================================ */
+/* 17. PÁGINA SOBRE (ESPECÍFICA)   */
+/* ================================ */
+
+.sobre-header-block {
+  animation: fadeInHeader 1s ease-out forwards;
+}
+
+.sobre-page {
+  overflow: visible;
+  position: relative;
+  height: auto;
+}
+
+body:has(.sobre-page) {
+  overflow-x: hidden !important;
+}
+
+/* Prevenir FOUC na página Sobre */
+.sobre-page:not(.opacity-100) .material-card,
+.sobre-page:not(.opacity-100) .benefit-card,
+.sobre-page:not(.opacity-100) .cta-section,
+.sobre-page:not(.opacity-100) .sobre-header-block {
+  visibility: hidden !important;
+}
+
+.sobre-page .material-card,
+.sobre-page .benefit-card,
+.sobre-page .cta-section,
+.sobre-page .sobre-header-block {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+/* ================================ */
+/* 18. ÁREA DO CLIENTE              */
+/* ================================ */
+
+.area-cliente-container {
+  scroll-padding-top: 2rem;
+}
+
+.area-cliente-section {
+  padding-top: 1rem;
+}
+
+.area-cliente-banner {
+  scroll-margin-top: -2rem;
+}
+
+#area-cliente-dashboard,
+#dashboard-banner {
+  scroll-margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 1rem;
   }
-  100% {
-    background-position: -200% 0;
+
+  .area-cliente-container {
+    scroll-padding-top: 0.5rem;
+  }
+
+  #area-cliente-dashboard,
+  #dashboard-banner {
+    scroll-margin-top: 84px;
+    padding-top: 0;
+  }
+
+  .min-h-screen {
+    scroll-behavior: smooth;
+  }
+
+  section.bg-gradient-to-br {
+    scroll-margin-top: 84px;
   }
 }
 
-/* =============================== */
-/* 10. Scrollbar, Selection, etc.  */
-/* =============================== */
-/* Scrollbar moderno com identidade visual GB Locações */
-/* Aplicado apenas ao scrollbar principal das páginas públicas */
+@media (min-width: 769px) {
+  #area-cliente-dashboard,
+  #dashboard-banner {
+    scroll-margin-top: 84px;
+  }
 
-/* Scrollbar principal - WebKit (Chrome, Safari, Edge) */
-/* Scrollbar moderno */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #fc5a03d2 #f1f5f9;
+  section.bg-gradient-to-br {
+    scroll-margin-top: 84px;
+  }
 }
 
-/* Selection styles */
-::selection {
-  background-color: #c7d2fe;
-  color: #1e1b4b;
-}
+/* ================================ */
+/* 19. ANIMAÇÕES - CARD HOVERS     */
+/* ================================ */
 
-/* =============================== */
-/* 11. Botões, Cards, Badges, etc. */
-/* =============================== */
-/* Button hover effects */
-.btn-hover-lift {
-  transition: all 0.3s ease;
-}
-
-.btn-hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-}
-
-/* Card hover effects */
-.card-hover-float {
-  transition: all 0.3s ease;
-}
-
-.card-hover-float:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-}
-
-/*
-  IMPORTANTE: Elementos animados começam invisíveis apenas na primeira visita
-  Durante navegação interna, eles permanecem visíveis
-*/
-/* Elementos com animações - sem regras por padrão, controlado por JavaScript
-.category-card,
-.material-card,
-.benefit-card,
+/* Garantir transições nos cards animados */
 .contact-form,
-.contact-info,
 .contact-card,
-.cta-section,
-.section-title,
-.section-subtitle,
-.hero-title,
-.hero-subtitle,
-.hero-search,
-.hero-buttons,
-.hero-contact,
-.hero-image {
-  // Não definir opacity: 0 aqui, será controlado pelo JavaScript
+.benefit-card,
+.category-card,
+.material-card {
+  transition: all 0.3s ease !important;
+  overflow: hidden !important;
 }
-*/ /* Para usuários que preferem movimento reduzido */
+
+.contact-form:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.contact-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Correção específica para transição do formulário de contato */
+.contact-form-hover {
+  transition:
+    box-shadow 0.5s ease,
+    transform 0.3s ease !important;
+}
+
+.contact-form-hover:hover {
+  transform: scale(1.02) !important;
+}
+
+/* ================================ */
+/* 20. ACCESSIBILITY (A11Y)         */
+/* ================================ */
+
+/* Para usuários que preferem movimento reduzido */
 @media (prefers-reduced-motion: reduce) {
   .category-card,
   .material-card,
@@ -789,332 +1086,11 @@ body:has(.sobre-page) {
   }
 }
 
-/* Utility class for better animation control */
-.animate-slide-in-up {
-  animation: slideInUp 0.8s ease-out forwards;
-}
+/* ================================ */
+/* 21. CORREÇÕES DE SCROLL          */
+/* ================================ */
 
-/* WhatsApp FAB Styles */
-.whatsapp-green {
-  background-color: #25d366;
-}
-
-.whatsapp-green:hover {
-  background-color: #128c7e;
-}
-
-.whatsapp-header {
-  background-color: #25d366;
-}
-
-/* WhatsApp Chat Window - garantir visibilidade */
-.whatsapp-chat-window {
-  max-height: 90vh;
-  min-height: 400px;
-  bottom: 90px !important;
-}
-
-/* Garantir que o input do WhatsApp seja sempre visível */
-.whatsapp-input-area {
-  position: -webkit-sticky;
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-}
-
-/* WhatsApp Chat Scroll - Verde específico com máxima prioridade */
-.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar {
-  width: 6px !important;
-  height: 6px !important;
-}
-
-.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-track {
-  background: #f0f0f0 !important;
-  border-radius: 3px !important;
-}
-
-.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-thumb {
-  background: #25d366 !important;
-  border-radius: 3px !important;
-  opacity: 0.8 !important;
-  border: none !important;
-}
-
-.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-thumb:hover {
-  background: #128c7e !important;
-  opacity: 1 !important;
-}
-
-.whatsapp-chat-window .whatsapp-chat-scroll::-webkit-scrollbar-corner {
-  background: #f0f0f0 !important;
-}
-
-/* Forçar aparecimento do scrollbar sempre */
-.whatsapp-chat-scroll {
-  overflow-y: scroll !important;
-}
-
-.whatsapp-chat-scroll::-webkit-scrollbar {
-  width: 6px !important;
-}
-
-.whatsapp-chat-scroll::-webkit-scrollbar-track {
-  background: #f0f0f0 !important;
-  border-radius: 3px !important;
-}
-
-/* Remove focus-visible ring/outline from inputs and comboboxes */
-input:focus,
-input:focus-visible,
-textarea:focus,
-textarea:focus-visible,
-select:focus,
-select:focus-visible,
-[role='combobox']:focus,
-[role='combobox']:focus-visible,
-button[role='combobox']:focus,
-button[role='combobox']:focus-visible,
-[aria-haspopup='listbox']:focus,
-[aria-haspopup='listbox']:focus-visible,
-.admin-filter-element:focus,
-.admin-filter-element:focus-visible {
-  outline: none !important;
-  box-shadow: none !important; /* neutraliza Tailwind ring */
-}
-
-.whatsapp-chat-scroll::-webkit-scrollbar-thumb {
-  background: #25d366 !important;
-  border-radius: 3px !important;
-  opacity: 0.7 !important;
-}
-
-.whatsapp-chat-scroll::-webkit-scrollbar-thumb:hover {
-  background: #128c7e !important;
-  opacity: 1 !important;
-}
-
-/* Firefox - WhatsApp scroll verde */
-
-body.admin-body-layout {
-  padding-top: 0 !important;
-}
-
-/* Força a sidebar admin a ter as mesmas cores do MobileSidebar */
-aside.admin-sidebar-dark {
-  background: linear-gradient(
-    145deg,
-    rgba(30, 41, 59, 0.98),
-    rgba(20, 31, 45, 0.95)
-  ) !important;
-  background-color: rgba(30, 41, 59, 0.98) !important;
-  position: relative !important;
-  z-index: 9999 !important;
-}
-
-/* Correção específica para transição de sombra do formulário de contato */
-.contact-form-hover {
-  transition:
-    box-shadow 0.5s ease,
-    transform 0.3s ease !important;
-}
-
-.contact-form-hover:hover {
-  transform: scale(1.02) !important;
-}
-
-/* Badge customizations - bordas mais arredondadas apenas para badges */
-div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2'] {
-  border-radius: 9999px !important;
-}
-
-/* Garantir que elementos com animações mantenham transições de hover */
-.contact-form,
-.contact-card,
-.benefit-card,
-.category-card,
-.material-card {
-  transition: all 0.3s ease !important;
-  overflow: hidden !important;
-}
-
-.contact-form:hover {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
-}
-
-.contact-card:hover {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
-}
-
-/* =============================== */
-/* 12. Scrollbar Utilitários       */
-/* =============================== */
-
-/* Scrollbar para dropdown de filtros */
-.filter-dropdown-scroll::-webkit-scrollbar {
-  width: 6px;
-}
-
-.filter-dropdown-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.filter-dropdown-scroll::-webkit-scrollbar-thumb {
-  background: #d1d5db;
-  border-radius: 3px;
-}
-
-.filter-dropdown-scroll::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
-}
-
-/* Firefox scrollbar for filter dropdown */
-.filter-dropdown-scroll {
-  overflow-y: auto !important;
-  max-height: 280px !important;
-}
-
-/* =============================== */
-/* 14. Badges e Ícones Dinâmicos   */
-/* =============================== */
-
-/* =============================== */
-/* 15. Grid de Ícones de Categoria */
-/* =============================== */
-
-@media (min-width: 640px) {
-  :root {
-    --header-height: 4.5rem;
-  }
-}
-
-/* =============================== */
-/* 7. Estilos Padronizados Admin   */
-/* =============================== */
-
-/* Estilos padrão para elementos de filtro e cards admin */
-.filter-container,
-.admin-filter-card {
-  position: relative;
-  z-index: 1;
-  border: none !important;
-  outline: none !important;
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-}
-
-.admin-filter-element {
-  border-color: rgb(229 231 235) !important; /* border-gray-200 */
-  transition: all 0.2s ease-in-out !important;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-}
-
-/* Estilo laranja para combobox com categoria selecionada */
-.admin-filter-element.selected {
-  border-color: rgb(251 146 60) !important; /* border-orange-300 */
-  background-color: rgb(255 247 237) !important; /* bg-orange-50 */
-  color: rgb(234 88 12) !important; /* text-orange-600 */
-}
-
-.admin-filter-element:focus {
-  border-color: rgb(59 130 246) !important; /* border-blue-500 */
-  outline-offset: 0 !important;
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05),
-    0 0 0 3px rgba(59, 130, 246, 0.1) !important;
-}
-
-/* Correção específica para problemas de borda no SearchBar */
-.admin-filter-card {
-  isolation: isolate;
-  contain: layout;
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-/* Hover shadow para FilterResetButton - específico e sem interferência */
-.filter-reset-button {
-  border-color: rgb(229 231 235) !important; /* border-gray-200 */
-  transition: all 0.2s ease-in-out !important;
-  box-shadow:
-    0 1px 2px 0 rgba(0, 0, 0, 0.05),
-    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-}
-
-.filter-reset-button:hover {
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-}
-
-.filter-reset-button:focus {
-  outline: none !important;
-  box-shadow:
-    0 1px 2px 0 rgba(0, 0, 0, 0.05),
-    0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
-}
-
-/* Botões padrão admin com hover shadow */
-.admin-button {
-  transition: all 0.3s ease-in-out !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important; /* shadow-md */
-}
-
-.admin-button:hover {
-  box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; /* hover:shadow-lg */
-  transform: translateY(-1px) !important;
-}
-
-/* Estilos para selects ativos com filtro */
-.filter-active {
-  border-color: rgb(251 146 60) !important; /* border-orange-300 */
-  background-color: rgb(255 247 237) !important; /* bg-orange-50 */
-}
-
-/* =============================== */
-/* 16. SCROLL CONFIGURATION - CLEAN SOLUTION */
-/* =============================== */
-
-/* Solução limpa: apenas um scroll principal */
-.sobre-page {
-  overflow: visible;
-  position: relative;
-  height: auto;
-}
-
-/* Mobile: manter a mesma configuração */
-@media (max-width: 768px) {
-  .sobre-page {
-    overflow: visible;
-    position: relative;
-    height: auto;
-  }
-}
-
-/* Garantir que elementos com position: fixed não interfiram no scroll */
-header {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 9999 !important;
-  background: rgba(255, 255, 255, 0.95) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  backdrop-filter: blur(8px) !important;
-  border-bottom: 1px solid rgba(229, 231, 235, 0.8) !important;
-}
-
-/* Corrigir problemas de scroll em elementos com overflow hidden */
-.overflow-hidden {
-  overflow: hidden !important;
-}
-
-/* Configuração simples e limpa do scroll - APENAS UM SCROLL */
+/* Scroll limpo - apenas um scroll principal */
 html {
   overflow-x: hidden !important;
   overflow-y: auto !important;
@@ -1126,158 +1102,23 @@ body {
   scroll-behavior: smooth !important;
 }
 
-/* Elementos com altura mínima não devem criar scroll interno */
 .min-h-screen {
   min-height: 100vh !important;
   overflow: visible !important;
 }
 
-/* Correção específica para o body com classe min-h-screen */
 body.min-h-screen {
   overflow: visible !important;
   height: auto !important;
 }
 
-/* Cards devem ter overflow controlado */
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
 .material-card,
 .benefit-card,
 .cta-section {
   overflow: hidden;
   position: relative;
-}
-
-/* =============================== */
-/* 17. Correção de Scroll - Área Cliente */
-/* =============================== */
-
-/* Ajuste do scroll-padding para área do cliente */
-.area-cliente-container {
-  scroll-padding-top: 2rem;
-}
-
-/* Ajuste específico para mobile */
-@media (max-width: 768px) {
-  html {
-    scroll-padding-top: 1rem; /* Menos espaço no mobile */
-  }
-
-  .area-cliente-container {
-    scroll-padding-top: 0.5rem;
-  }
-}
-
-/* Garantir que as seções da área do cliente tenham padding adequado */
-.area-cliente-section {
-  padding-top: 1rem;
-}
-
-/* Ajuste para o banner não ser cortado */
-.area-cliente-banner {
-  scroll-margin-top: -2rem;
-}
-
-/* Ajuste específico para o dashboard da área do cliente */
-#area-cliente-dashboard {
-  scroll-margin-top: 0;
-}
-
-#dashboard-banner {
-  scroll-margin-top: 0;
-}
-
-/* No mobile, garantir que o conteúdo não seja cortado */
-@media (max-width: 768px) {
-  #area-cliente-dashboard,
-  #dashboard-banner {
-    scroll-margin-top: 84px; /* Altura total do header (top bar + main) */
-    padding-top: 0;
-  }
-
-  /* Ajuste para quando clicar no menu */
-  .min-h-screen {
-    scroll-behavior: smooth;
-  }
-
-  /* Garantir que o banner da área do cliente não seja cortado */
-  section.bg-gradient-to-br {
-    scroll-margin-top: 84px;
-  }
-}
-
-/* Desktop */
-@media (min-width: 769px) {
-  #area-cliente-dashboard,
-  #dashboard-banner {
-    scroll-margin-top: 84px; /* Altura total do header (top bar + main) */
-  }
-
-  section.bg-gradient-to-br {
-    scroll-margin-top: 84px;
-  }
-}
-
-/* Status badges - manter cores originais no hover */
-.status-badge-hover:hover {
-  background-color: inherit !important;
-}
-
-/* Específico para cada tipo de badge */
-.bg-yellow-100.status-badge-hover:hover {
-  background-color: rgb(254 249 195) !important; /* bg-yellow-100 */
-}
-
-.bg-green-100.status-badge-hover:hover {
-  background-color: rgb(220 252 231) !important; /* bg-green-100 */
-}
-
-.bg-red-100.status-badge-hover:hover {
-  background-color: rgb(254 226 226) !important; /* bg-red-100 */
-}
-
-/* =============================== */
-/* 17.5. Botões de Ação Admin (Exceção) */
-/* =============================== */
-
-/* Botões de ação (Eye/Edit/Trash) - EXCEÇÃO da regra hover orange */
-.admin-action-button {
-  transition: all 0.2s ease-in-out !important;
-}
-
-/* Eye e Edit - hover cinza suave, SEM orange */
-.admin-action-button.view-button,
-.admin-action-button.edit-button {
-  color: rgb(51 65 85) !important; /* slate-700 */
-}
-
-.admin-action-button.view-button:hover,
-.admin-action-button.edit-button:hover {
-  background-color: rgb(241 245 249) !important; /* slate-100 */
-  color: rgb(51 65 85) !important; /* slate-700 - SEM orange */
-  transform: none !important; /* sem scale */
-}
-
-.admin-action-button.view-button:hover svg,
-.admin-action-button.edit-button:hover svg {
-  color: rgb(51 65 85) !important; /* slate-700 - SEM orange */
-}
-
-/* Trash - hover vermelho, mantém estilo original */
-.admin-action-button.delete-button {
-  color: rgb(239 68 68) !important; /* red-500 */
-}
-
-.admin-action-button.delete-button:hover {
-  background-color: rgb(254 226 226) !important; /* red-100 */
-  color: rgb(185 28 28) !important; /* red-700 */
-  transform: none !important; /* sem scale */
-}
-
-.admin-action-button.delete-button:hover svg {
-  color: rgb(185 28 28) !important; /* red-700 */
-}
-
-/* Classe específica para descrições de inputs */
-.input-description {
-  font-size: 12px !important;
-  color: #6b7280 !important;
 }

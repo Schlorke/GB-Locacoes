@@ -130,8 +130,7 @@ export const HeaderFooterPreview = memo(function HeaderFooterPreview({
           <div className="space-y-2">
             <h4 className="text-sm font-semibold text-orange-500">Sobre Nós</h4>
             <p className="text-sm leading-relaxed text-gray-300 line-clamp-3">
-              {aboutUsText ||
-                'Há 10 anos oferecendo soluções em locação de equipamentos para construção civil. Especializada em equipamentos para obras e serviços em altura com segurança e qualidade.'}
+              {aboutUsText || 'Sua descrição personalizada aparecerá aqui.'}
             </p>
           </div>
 

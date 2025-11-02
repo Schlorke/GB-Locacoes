@@ -123,33 +123,32 @@ export const CompanyInfoPreview = memo(function CompanyInfoPreview({
 
               {/* Description/Snippet */}
               <p className="text-sm text-gray-700 leading-relaxed mb-3">
-                {description ||
-                  'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.'}
+                {description || 'Sua descrição personalizada aparecerá aqui.'}
               </p>
 
               {/* Contact Info inline (Google style) */}
               <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 pt-3 border-t border-gray-100">
                 {phone && (
                   <div className="flex items-center gap-1.5">
-                    <Phone className="h-3.5 w-3.5 text-gray-500" />
+                    <Phone className="h-4 w-4 min-h-4 min-w-4 flex-shrink-0 text-gray-500" />
                     <span>{phone}</span>
                   </div>
                 )}
                 {address && (
                   <div className="flex items-center gap-1.5">
-                    <MapPin className="h-3.5 w-3.5 text-gray-500" />
+                    <MapPin className="h-4 w-4 min-h-4 min-w-4 flex-shrink-0 text-gray-500" />
                     <span className="line-clamp-1">{address}</span>
                   </div>
                 )}
                 {email && (
                   <div className="flex items-center gap-1.5">
-                    <Mail className="h-3.5 w-3.5 text-gray-500" />
+                    <Mail className="h-4 w-4 min-h-4 min-w-4 flex-shrink-0 text-gray-500" />
                     <span>{email}</span>
                   </div>
                 )}
                 {marketingEmail && (
                   <div className="flex items-center gap-1.5">
-                    <Mail className="h-3.5 w-3.5 text-gray-400" />
+                    <Mail className="h-4 w-4 min-h-4 min-w-4 flex-shrink-0 text-gray-400" />
                     <span>{marketingEmail} · Automático</span>
                   </div>
                 )}

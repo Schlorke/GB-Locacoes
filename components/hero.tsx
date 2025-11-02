@@ -26,12 +26,7 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden z-[1]">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
+    <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 pt- text-white">
       {/* Container com largura consistente */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 !py-16 md:py-20 relative z-10">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">

@@ -33,8 +33,7 @@ export interface LocalBusinessData {
 // Default data for GB Locações
 export const DEFAULT_LOCAL_BUSINESS: LocalBusinessData = {
   name: 'GB Locações',
-  description:
-    'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
+  description: '', // ✅ VAZIO
   url: 'https://locacoesgb.com.br',
   telephone: '+55 51 2313-6262',
   taxID: '34.780.330/0001-69',

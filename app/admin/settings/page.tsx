@@ -39,8 +39,7 @@ const DEFAULT_CONTACT_EMAIL = 'contato@locacoesgb.com.br'
 const DEFAULT_MARKETING_EMAIL = 'comercial@locacoesgb.com.br'
 const DEFAULT_COMPANY_ADDRESS =
   'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100'
-const DEFAULT_ABOUT_US_TEXT =
-  'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.'
+const DEFAULT_ABOUT_US_TEXT = '' // ✅ VAZIO - Resetar deixa o campo em branco
 const DEFAULT_SEO_TITLE = 'GB Locações - Equipamentos para Construção'
 const DEFAULT_SEO_DESCRIPTION =
   'Locação de equipamentos para construção civil com qualidade e segurança'
@@ -358,7 +357,12 @@ export default function SettingsPage() {
 
       if (result.success) {
         toast.success('Sucesso!', {
-          description: `Configurações de ${getSectionName(section)} atualizadas com sucesso.`,
+          description: (
+            <>
+              Configurações de <strong>{getSectionName(section)}</strong>{' '}
+              atualizadas com sucesso.
+            </>
+          ),
         })
       } else {
         toast.error('Erro', {
@@ -375,37 +379,82 @@ export default function SettingsPage() {
 
   const getSectionName = (section: string) => {
     const names = {
-      company: 'empresa',
-      hero: 'carrossel',
-      social: 'redes sociais',
-      seo: 'SEO',
-      system: 'sistema',
-      custom: 'personalização',
+      company: 'Informações da Empresa',
+      hero: 'Carousel Principal',
+      social: 'Redes Sociais',
+      seo: 'SEO e Metadados',
+      system: 'Configurações do Sistema',
+      custom: 'Configurações Avançadas',
     }
     return names[section as keyof typeof names] || section
   }
 
   // Funções de reset por seção
   const resetSection = async (section: keyof typeof sectionResetting) => {
-    setSectionResetting((prev) => ({ ...prev, [section]: true }))
+    const sectionName = getSectionName(section)
 
-    try {
-      // Simula um delay para mostrar a animação
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Mostrar confirmação antes de resetar
+    toast.warning(`Resetar configurações de ${sectionName}?`, {
+      description: (
+        <>
+          Apenas as configurações da seção{' '}
+          <strong>&quot;{sectionName}&quot;</strong> serão restauradas aos
+          valores padrão. As demais configurações não serão afetadas.
+        </>
+      ),
+      duration: Infinity, // Não fechar automaticamente
+      action: {
+        label: 'Confirmar',
+        onClick: async () => {
+          setSectionResetting((prev) => ({ ...prev, [section]: true }))
 
-      const defaults = getDefaultValues(section)
-      setFormData((prev) => ({ ...prev, ...defaults }))
+          try {
+            // Restaurar valores padrão
+            const defaults = getDefaultValues(section)
+            const newFormData = { ...formData, ...defaults }
+            setFormData(newFormData)
 
-      toast.success('Configurações resetadas', {
-        description: `Configurações de ${getSectionName(section)} foram restauradas para os valores padrão.`,
-      })
-    } catch {
-      toast.error('Erro ao resetar', {
-        description: 'Ocorreu um erro ao restaurar as configurações.',
-      })
-    } finally {
-      setSectionResetting((prev) => ({ ...prev, [section]: false }))
-    }
+            // Aguardar um momento para o state atualizar
+            await new Promise((resolve) => setTimeout(resolve, 100))
+
+            // Salvar automaticamente no banco de dados
+            const result = await updateSettings(newFormData)
+
+            if (result.success) {
+              toast.success(`Seção "${sectionName}" restaurada!`, {
+                description: (
+                  <>
+                    As configurações de{' '}
+                    <strong>&quot;{sectionName}&quot;</strong> foram restauradas
+                    aos valores padrão e salvas com sucesso.
+                  </>
+                ),
+              })
+            } else {
+              toast.error('Erro ao salvar', {
+                description:
+                  result.error || 'Não foi possível salvar as configurações.',
+              })
+            }
+          } catch (error) {
+            console.error('Erro ao resetar e salvar:', error)
+            toast.error('Erro ao resetar', {
+              description: 'Ocorreu um erro ao restaurar as configurações.',
+            })
+          } finally {
+            setSectionResetting((prev) => ({ ...prev, [section]: false }))
+          }
+        },
+      },
+      cancel: {
+        label: 'Cancelar',
+        onClick: () => {
+          toast.info('Operação cancelada', {
+            description: 'As configurações não foram alteradas.',
+          })
+        },
+      },
+    })
   }
 
   const getDefaultValues = (section: string): Partial<SettingsInput> => {

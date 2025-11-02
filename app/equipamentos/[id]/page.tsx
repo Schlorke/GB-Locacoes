@@ -261,7 +261,7 @@ export default async function EquipmentDetailPage(props: Props) {
           </nav>
 
           {/* Voltar aos Equipamentos - Mobile only */}
-          <div className="pt-12 mb-7 lg:hidden">
+          <div className="pt-8 md:pt-12 mb-4 md:mb-7 lg:hidden">
             <Link
               href="/equipamentos"
               className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors duration-200 font-medium"
@@ -271,7 +271,7 @@ export default async function EquipmentDetailPage(props: Props) {
             </Link>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-white/80 text-sm mb-2">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5 text-white/80 text-sm mb-2">
             <div className="flex items-center gap-2">
               <Shield className="h-4 w-4 text-green-400" />
               <span>Equipamento Certificado</span>
@@ -423,7 +423,7 @@ export default async function EquipmentDetailPage(props: Props) {
                   </CardTitle>
                 </CardHeader>
                 <div className="border-b border-gray-100 w-full"></div>
-                <CardContent className="relative z-10 pt-2 px-4 sm:px-6 lg:px-6">
+                <CardContent className="relative z-10 px-4 sm:p-6 lg:p-6">
                   <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-[16px] ">
                     {equipment.description}
                   </p>
@@ -445,7 +445,7 @@ export default async function EquipmentDetailPage(props: Props) {
                 </CardTitle>
               </CardHeader>
               <div className="border-b border-gray-100 px-4 sm:px-6 lg:px-6"></div>
-              <CardContent className="relative z-10 space-y-6 pt-2 px-4 sm:px-6 lg:px-6">
+              <CardContent className="relative z-10 space-y-6 px-4 sm:p-6 lg:p-6">
                 <div className="space-y-4">
                   <div className="flex justify-between items-center py-3 border-b border-gray-100">
                     <span className="text-gray-600 font-medium">Categoria</span>

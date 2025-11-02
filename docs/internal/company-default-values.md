@@ -22,7 +22,7 @@ CEP 90240-100
 ### 📝 Sobre Nós (Descrição SEO)
 
 ```
-Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.
+(Vazio por padrão - Campo em branco)
 ```
 
 ### 🎨 Logo

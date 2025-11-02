@@ -1,7 +1,7 @@
 import SessionProviderWrapper from '@/components/session-provider-wrapper'
 import { prisma } from '@/lib/prisma'
-import { Analytics } from '@vercel/analytics/next'; // ✅ Vercel Analytics
-import { SpeedInsights } from '@vercel/speed-insights/next'; // ✅ Importado aqui
+import { Analytics } from '@vercel/analytics/next' // ✅ Vercel Analytics
+import { SpeedInsights } from '@vercel/speed-insights/next' // ✅ Importado aqui
 import type { Metadata } from 'next'
 import { Inter, Jost } from 'next/font/google'
 import React from 'react'
@@ -36,9 +36,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
   })
 
-  // Valores padrão caso não existam no banco
+  // Valores padrão caso não existam no banco (fallback se aboutUsText estiver vazio)
   const defaultAboutUs =
-    'Há 10 anos oferecendo soluções em locação de equipamentos para construção civil. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para serviços em altura. Atendimento especializado em Porto Alegre.'
+    'Há 10 anos oferecendo soluções em locação de equipamentos para obras e serviços em altura. Segurança, qualidade e manutenção constante.'
 
   const description = settings?.aboutUsText || defaultAboutUs
   const title =

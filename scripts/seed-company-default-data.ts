@@ -16,8 +16,7 @@ async function seedCompanyDefaultData() {
       marketingEmail: 'comercial@locacoesgb.com.br',
       companyAddress:
         'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
-      aboutUsText:
-        'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.',
+      aboutUsText: '', // ✅ VAZIO - não forçar valor padrão
       seoTitle: 'GB Locações - Equipamentos para Construção',
       seoDescription:
         'Locação de equipamentos para construção civil com qualidade e segurança',

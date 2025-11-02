@@ -58,8 +58,11 @@ export function Toaster(props: ToasterProps) {
         }}
         toastOptions={{
           unstyled: true,
+          // Descrição ocupa 2 colunas (col-start-2 + col-span-2 = colunas 2 e 3)
+          // Isso evita que a descrição fique comprimida pelos botões na linha 3
+          // col-span-2: Expande a descrição para ocupar as colunas 2 e 3, ficando mais larga
           descriptionClassName:
-            'col-start-2 row-start-2 text-sm block !text-gray-500',
+            'col-start-2 col-span-2 row-start-2 text-sm block !text-gray-500',
           classNames: {
             toast:
               'grid grid-cols-[auto_1fr_auto] items-start gap-x-3 gap-y-1 p-4 rounded-lg shadow-lg border w-full md:max-w-[364px]',
@@ -83,11 +86,11 @@ export function Toaster(props: ToasterProps) {
             title:
               'col-start-2 row-start-1 font-semibold text-sm flex min-w-0 items-start',
             actionButton:
-              'col-start-3 row-start-3 mt-1 inline-flex items-center justify-center gap-2  rounded-md bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors shadow-md hover:shadow-sm active:shadow-none active:text-gray-500 !transition-all',
+              'col-start-3 row-start-3 mt-4 inline-flex items-center justify-center gap-2  rounded-md bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors shadow-md hover:shadow-sm active:shadow-none active:text-gray-500 !transition-all',
             cancelButton:
-              'col-start-2 row-start-3 mt-1 justify-self-end w-auto inline-flex items-center justify-center gap-2 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors shadow-md hover:shadow-sm active:shadow-none active:text-gray-500 !transition-all',
+              'col-start-2 row-start-3 mt-4 justify-self-end w-auto inline-flex items-center justify-center gap-2 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:text-orange-600 transition-colors shadow-md hover:shadow-sm active:shadow-none active:text-gray-500 !transition-all',
             closeButton:
-              'col-start-3 row-start-1 justify-self-end rounded-md p-1 !text-gray-500 hover:!bg-white/90 !transition-colors',
+              'absolute top-2 right-2 rounded-md p-1 !text-gray-500 hover:!bg-white/90 !transition-colors',
           },
         }}
         style={

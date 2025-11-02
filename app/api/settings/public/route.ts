@@ -26,8 +26,7 @@ export async function GET() {
       companyAddress:
         'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
       companyIconUrl: '', // Vazio = usa logo padrão "GB"
-      aboutUsText:
-        'Há 10 anos oferecendo soluções em locação de equipamentos para construção civil. Especializada em equipamentos para obras e serviços em altura com segurança e qualidade.',
+      aboutUsText: '', // ✅ VAZIO por padrão
       socialLinks: {},
     }
 
@@ -60,8 +59,7 @@ export async function GET() {
       companyAddress:
         'Travessa Doutor Heinzelmann, 365 - Humaitá, Porto Alegre/RS - CEP 90240-100',
       companyIconUrl: '', // Vazio = usa logo padrão "GB"
-      aboutUsText:
-        'Há 10 anos oferecendo soluções em locação de equipamentos para construção civil. Especializada em equipamentos para obras e serviços em altura com segurança e qualidade.',
+      aboutUsText: '', // ✅ VAZIO por padrão
       socialLinks: {},
     })
   }

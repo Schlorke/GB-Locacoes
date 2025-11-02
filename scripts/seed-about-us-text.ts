@@ -9,8 +9,7 @@ async function seedAboutUsText() {
     // Buscar a configuração existente
     const existingSettings = await prisma.setting.findFirst()
 
-    const defaultAboutUsText =
-      'Especializada em locação de equipamentos para construção civil em Porto Alegre há mais de 10 anos. Andaimes suspensos, cadeiras elétricas, betoneiras, compressores e equipamentos para altura.'
+    const defaultAboutUsText = '' // ✅ VAZIO - não forçar valor padrão
 
     if (!existingSettings) {
       // Criar nova configuração com aboutUsText

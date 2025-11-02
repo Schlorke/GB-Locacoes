@@ -6,6 +6,112 @@ O formato é baseado em
 [Keep a Changelog](HTTPS://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
+## [2025-11-02] - Sistema de Configurações Dinâmicas e Refatoração CSS
+
+### Added ✨
+
+- **Sistema de aboutUsText Dinâmico**: Campo "Sobre Nós / Descrição SEO" agora é
+  totalmente dinâmico
+  - ✅ Exibido no Hero da homepage
+  - ✅ Exibido no Footer
+  - ✅ Usado nos metadados Open Graph (Facebook/WhatsApp)
+  - ✅ API pública `/api/settings/public` retorna o valor
+  - ✅ Fallback inteligente quando campo está vazio
+- **Sistema de Confirmação para Reset**: Toast de confirmação antes de resetar
+  configurações
+  - ⚠️ Toast amarela (Warning) com ação/cancelamento
+  - ✅ Confirmação salva automaticamente no banco
+  - 🔵 Cancelamento exibe toast informativa
+  - 📝 Mensagens específicas por seção ("Informações da Empresa", "SEO e
+    Metadados", etc.)
+  - 💪 Nome da seção em negrito nas descrições
+- **Configuração VS Code para Tailwind**: Warnings de `@tailwind` e `@apply`
+  agora são ignorados
+
+### Changed 🔄
+
+- **Metadata Dinâmico no Layout**: Transformado `export const metadata` em
+  `generateMetadata()` async
+  - Busca `aboutUsText`, `seoTitle` do banco de dados
+  - Open Graph e Twitter Cards agora dinâmicos
+  - Permite personalização completa via admin
+- **Nomes de Seções Padronizados**: Mensagens de toast usam nomes exatos dos
+  botões da interface
+  - "Informações da Empresa" (antes: "empresa")
+  - "Carousel Principal" (antes: "carrossel")
+  - "SEO e Metadados" (antes: "SEO")
+  - "Configurações do Sistema" (antes: "sistema")
+  - "Configurações Avançadas" (antes: "personalização")
+- **Valores Padrão Limpos**: Campo "Sobre Nós" fica vazio após reset (não força
+  valor)
+- **Descrição Toast Layout**: Expandida para 2 colunas (`col-span-2`) para
+  melhor legibilidade
+  - Evita compressão pelos botões de ação
+  - Texto mais largo e confortável de ler
+- **Botão Close Reposicionado**: Movido para canto superior direito (padrão
+  internacional)
+  - Adicionado `self-start` para alinhamento correto
+  - Depois alterado para `absolute top-2 right-2` para posição fixa
+- **Ícones SEO Preview Padronizados**: Todos os ícones na seção "Como aparece no
+  Google" agora são 16px
+  - `h-4 w-4 min-h-4 min-w-4 flex-shrink-0`
+  - Tamanho consistente em mobile e desktop
+  - Nunca encolhem independente do texto
+
+### Fixed 🐛
+
+- **Erro de Validação não Exibido**: Mensagens de erro do Zod agora aparecem
+  corretamente nas toasts
+  - Corrigido retorno de `message` para `error` em
+    `app/api/admin/settings/actions.ts`
+- **Metadata Duplicado**: Removido metadata hardcoded de `app/page.tsx`
+  - Estava sobrescrevendo o metadata dinâmico do `layout.tsx`
+  - Facebook Debugger agora lê valores corretos do banco
+- **Toast Description Color**: Aplicada cor padrão via `descriptionClassName`
+  conforme documentação Sonner
+  - Solução oficial documentada pela lib
+
+### Removed ❌
+
+- **Arquivos Obsoletos Limpos**:
+  - `app/admin/login/page.clean.tsx` (backup não usado)
+  - `app/admin/login/loading.clean.tsx` (backup não usado)
+  - `app/admin/exemplo/` (página de exemplo com mock data)
+  - `app/admin/teste/` (página de teste antiga duplicada)
+  - `app/admin/utils/` (utilitários não referenciados)
+  - `app/admin/teste-toasts-new/` (renomeada para `teste-toast`)
+- **Valores Padrão Forçados**: Removido texto padrão de aboutUsText em 6
+  arquivos
+  - `lib/structured-data-utils.ts`
+  - `components/admin/settings-previews.tsx`
+  - `docs/internal/company-default-values.md`
+  - `scripts/seed-about-us-text.ts`
+  - `scripts/seed-company-default-data.ts`
+
+### Refactored 🏗️
+
+- **globals.css - Refatoração Massiva**:
+  - 📉 **Tamanho**: 30,119 bytes → 24,273 bytes (-19.4%)
+  - 📉 **Linhas**: 1,284 → 1,125 (-12.4%)
+  - ✅ **Consolidação**: 3 definições de `header` → 1 definição
+  - ✅ **Organização**: Renumeração lógica de seções (1-21)
+  - ✅ **Agrupamento**: Keyframes, scrollbars, animações agrupados
+  - ✅ **Manutenibilidade**: Estrutura hierárquica clara
+
+### Updated 📦
+
+- **Dependências Atualizadas** (patches/minors seguros):
+  - `@sveltejs/kit`: 2.48.3 → 2.48.4
+  - `@vitest/*`: 4.0.5 → 4.0.6
+  - `@eslint/js`: 9.38.0 → 9.39.0
+  - `eslint`: 9.38.0 → 9.39.0
+  - `jsdom`: 27.0.1 → 27.1.0
+  - `react-hook-form`: 7.65.0 → 7.66.0
+  - `resend`: 6.3.0 → 6.4.0
+  - `lucide-react`: 0.548.0 → 0.552.0
+  - `next-openapi-gen`: 0.8.1 → 0.8.2
+  - ⚠️ `tailwindcss` mantido em 3.4.17 (não atualizado para v4 por preferência)
+
 ## [2025-10-31] - Ajuste visual das toasts Promise
 
 ### Fixed
@@ -30,8 +136,8 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
-- **📄 Página de Testes de Toasts**: Criada página `/admin/teste-toasts-new`
-  para visualização completa de todos os toasts
+- **📄 Página de Testes de Toasts**: Criada página `/admin/teste-toast` para
+  visualização completa de todos os toasts
 - 📊 Seção de toasts básicos (Success, Error, Warning, Info, Loading, Default)
 - 📝 Toasts apenas com título (sem descrição)
 - 🔘 Toasts com botões de ação customizados

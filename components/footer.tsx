@@ -58,7 +58,7 @@ export default function Footer() {
             </div>
             <p className="text-base leading-relaxed text-gray-300">
               {settings.aboutUsText ||
-                'Há 10 anos oferecendo soluções em locação de equipamentos para construção civil. Especializada em equipamentos para obras e serviços em altura com segurança e qualidade.'}
+                'Há 10 anos oferecendo soluções em locação de equipamentos para obras e serviços em altura. Segurança, qualidade e manutenção constante.'}
             </p>
             <div className="flex space-x-3">
               <button
