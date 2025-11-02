@@ -91,12 +91,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 ### Refactored 🏗️
 
 - **globals.css - Refatoração Massiva**:
-  - 📉 **Tamanho**: 30,119 bytes → 24,273 bytes (-19.4%)
-  - 📉 **Linhas**: 1,284 → 1,125 (-12.4%)
+  - 📉 **Tamanho**: 30,119 bytes → 23,895 bytes (-20.7%)
+  - 📉 **Linhas**: 1,284 → 1,107 (-13.8%)
   - ✅ **Consolidação**: 3 definições de `header` → 1 definição
+  - ✅ **Consolidação**: 2 definições de `html` → 1 definição (sem conflitos)
+  - ✅ **Consolidação**: 2 definições de `body` → 1 definição (sem conflitos)
   - ✅ **Organização**: Renumeração lógica de seções (1-21)
   - ✅ **Agrupamento**: Keyframes, scrollbars, animações agrupados
   - ✅ **Manutenibilidade**: Estrutura hierárquica clara
+  - 🛡️ **Backup**: Criado `app/globals.css.backup` para segurança
 
 ### Updated 📦
 

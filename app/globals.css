@@ -99,8 +99,9 @@
 
 html {
   max-width: 100%;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth !important;
   scroll-padding-top: 84px; /* Altura do header fixo */
 }
 
@@ -111,15 +112,8 @@ body {
   font-size: 1rem;
   margin: 0;
   max-width: 100%;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-}
-
-/* Ajuste mobile para scroll-padding */
-@media (max-width: 768px) {
-  html {
-    scroll-padding-top: 84px;
-  }
+  overflow: visible !important;
+  scroll-behavior: smooth !important;
 }
 
 @media (min-width: 640px) {
@@ -992,10 +986,6 @@ body:has(.sobre-page) {
 }
 
 @media (max-width: 768px) {
-  html {
-    scroll-padding-top: 1rem;
-  }
-
   .area-cliente-container {
     scroll-padding-top: 0.5rem;
   }
@@ -1004,10 +994,6 @@ body:has(.sobre-page) {
   #dashboard-banner {
     scroll-margin-top: 84px;
     padding-top: 0;
-  }
-
-  .min-h-screen {
-    scroll-behavior: smooth;
   }
 
   section.bg-gradient-to-br {
@@ -1087,20 +1073,8 @@ body:has(.sobre-page) {
 }
 
 /* ================================ */
-/* 21. CORREÇÕES DE SCROLL          */
+/* 21. UTILITIES E OVERRIDES        */
 /* ================================ */
-
-/* Scroll limpo - apenas um scroll principal */
-html {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  scroll-behavior: smooth !important;
-}
-
-body {
-  overflow: visible !important;
-  scroll-behavior: smooth !important;
-}
 
 .min-h-screen {
   min-height: 100vh !important;
