@@ -6,7 +6,7 @@ import { Mail, MapPin, Phone } from 'lucide-react'
 import Image from 'next/image'
 import { memo } from 'react'
 import { HeaderFooterPreview } from './header-footer-preview'
-import { MiniCarousel } from './mini-carousel'
+import { HeroCarouselPreview } from './hero-carousel-preview'
 
 interface CompanyInfoPreviewProps {
   data: {
@@ -244,78 +244,6 @@ export const SocialLinksPreview = memo(function SocialLinksPreview({
                 </div>
               </motion.div>
             ))}
-          </div>
-        )}
-      </div>
-    </Card>
-  )
-})
-
-interface HeroCarouselPreviewProps {
-  data: {
-    heroCarousel?: Array<{
-      image: string
-      title: string
-      subtitle: string
-      ctaText: string
-      ctaLink: string
-    }>
-  }
-}
-
-export const HeroCarouselPreview = memo(function HeroCarouselPreview({
-  data,
-}: HeroCarouselPreviewProps) {
-  const { heroCarousel = [] } = data
-
-  return (
-    <Card
-      className="relative overflow-hidden shadow-xl backdrop-blur-sm"
-      style={{
-        backgroundColor: 'rgb(248, 250, 252)',
-        borderColor: 'rgb(224, 230, 235)',
-        borderWidth: '1.5px',
-      }}
-    >
-      <div className="p-4 md:p-5 space-y-4">
-        <h3 className="font-semibold text-gray-900">Hero Carousel</h3>
-
-        {heroCarousel.length === 0 ? (
-          <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-            <span className="text-gray-400">
-              Configure o carousel principal
-            </span>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <MiniCarousel
-              images={heroCarousel.map((item) => item.image).filter(Boolean)}
-              height={200}
-              className="rounded-lg"
-            />
-
-            {/* Informações do slide atual */}
-            {heroCarousel[0] && (
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-100">
-                <h4 className="font-medium text-gray-900">
-                  {heroCarousel[0].title || 'Título do slide'}
-                </h4>
-                <p className="text-sm text-gray-600 mt-1">
-                  {heroCarousel[0].subtitle || 'Subtítulo do slide'}
-                </p>
-                {heroCarousel[0].ctaText && (
-                  <div className="mt-3">
-                    <span className="inline-block bg-blue-500 text-white px-3 py-1 rounded text-xs">
-                      {heroCarousel[0].ctaText}
-                    </span>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div className="text-xs text-gray-500 text-center">
-              {heroCarousel.length} slide(s) configurado(s)
-            </div>
           </div>
         )}
       </div>

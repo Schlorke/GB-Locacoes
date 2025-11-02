@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 export * from './enums/TransactionIsolationLevel.schema'
 export * from './enums/UserScalarFieldEnum.schema'
 export * from './enums/AccountScalarFieldEnum.schema'

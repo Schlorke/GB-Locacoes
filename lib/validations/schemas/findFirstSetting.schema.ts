@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
 import * as z from 'zod';
 import { SettingOrderByWithRelationInputObjectSchema as SettingOrderByWithRelationInputObjectSchema } from './objects/SettingOrderByWithRelationInput.schema';
@@ -38,6 +37,7 @@ export const SettingFindFirstSelectSchema: z.ZodType<Prisma.SettingSelect> = z.o
     securityConfig: z.boolean().optional(),
     customCss: z.boolean().optional(),
     customJs: z.boolean().optional(),
+    waveAnimation: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     updatedAt: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.SettingSelect>;
@@ -71,6 +71,7 @@ export const SettingFindFirstSelectZodSchema = z.object({
     securityConfig: z.boolean().optional(),
     customCss: z.boolean().optional(),
     customJs: z.boolean().optional(),
+    waveAnimation: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     updatedAt: z.boolean().optional()
   }).strict();

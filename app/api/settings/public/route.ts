@@ -14,6 +14,8 @@ export async function GET() {
         marketingEmail: true,
         aboutUsText: true,
         socialLinks: true,
+        heroCarousel: true,
+        waveAnimation: true,
       },
     })
 
@@ -28,6 +30,8 @@ export async function GET() {
       companyIconUrl: '', // Vazio = usa logo padrão "GB"
       aboutUsText: '', // ✅ VAZIO por padrão
       socialLinks: {},
+      heroCarousel: [], // Vazio = usa fundo laranja padrão
+      waveAnimation: 'animated', // Padrão: onda animada
     }
 
     // Retornar settings ou valores padrão, garantindo que valores vazios sejam substituídos por padrões
@@ -44,6 +48,8 @@ export async function GET() {
           companyIconUrl: settings.companyIconUrl || '',
           aboutUsText: settings.aboutUsText || defaultSettings.aboutUsText,
           socialLinks: settings.socialLinks || {},
+          heroCarousel: settings.heroCarousel || [],
+          waveAnimation: settings.waveAnimation || 'animated',
         }
       : defaultSettings
 
@@ -61,6 +67,8 @@ export async function GET() {
       companyIconUrl: '', // Vazio = usa logo padrão "GB"
       aboutUsText: '', // ✅ VAZIO por padrão
       socialLinks: {},
+      heroCarousel: [],
+      waveAnimation: 'animated',
     })
   }
 }

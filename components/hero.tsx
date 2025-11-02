@@ -2,14 +2,39 @@
 
 import { Autocomplete } from '@/components/ui/autocomplete'
 import { usePublicSettings } from '@/hooks/use-public-settings'
+import { cn } from '@/lib/utils'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, MapPin, Phone, Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function Hero() {
   const router = useRouter()
   const { settings } = usePublicSettings()
+  const [currentImage, setCurrentImage] = useState(0)
+
+  // Extrair imagens do carousel
+  const carouselImages =
+    (settings.heroCarousel as Array<{ imageUrl: string }> | undefined)?.map(
+      (item) => item.imageUrl
+    ) || []
+  const hasImages = carouselImages.length > 0
+  const waveAnimation =
+    (settings.waveAnimation as 'none' | 'static' | 'animated' | undefined) ||
+    'animated'
+
+  // Auto-play carousel
+  useEffect(() => {
+    if (!hasImages || carouselImages.length <= 1) return
+
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % carouselImages.length)
+    }, 5000) // 5 segundos por imagem
+
+    return () => clearInterval(interval)
+  }, [hasImages, carouselImages.length])
 
   const handleEquipmentSelect = (equipment: { id: string; name: string }) => {
     // Sempre que onSelect for chamado (seja por seleção ou clique na lupa com item selecionado)
@@ -26,8 +51,156 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white">
-      {/* Container com largura consistente */}
+    <section
+      className={cn(
+        'relative text-white',
+        // FALLBACK: Background laranja quando não há imagens
+        !hasImages &&
+          'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
+      )}
+      role="region"
+      aria-roledescription={hasImages ? 'carousel' : undefined}
+    >
+      {/* CONDICIONAL: Carrossel de fundo - só renderiza se houver imagens */}
+      {hasImages && (
+        <>
+          <div className="absolute inset-0 z-0">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentImage}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.5, ease: 'easeInOut' }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={carouselImages[currentImage] || '/placeholder.svg'}
+                  alt={`Slide ${currentImage + 1}`}
+                  fill
+                  className="object-cover"
+                  priority={currentImage < 2}
+                  sizes="100vw"
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Overlay gradiente melhorado para legibilidade */}
+            <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-gray-900/70 to-orange-900/60" />
+          </div>
+
+          {/* Indicadores do carrossel */}
+          {carouselImages.length > 1 && (
+            <div className="absolute bottom-12 left-1/2 z-20 flex -translate-x-1/2 transform space-x-3">
+              {carouselImages.map((_, index) => (
+                <motion.button
+                  key={index}
+                  className={cn(
+                    'h-3 w-3 rounded-full transition-all duration-500',
+                    currentImage === index
+                      ? 'scale-125 bg-orange-500 shadow-lg'
+                      : 'bg-white/60 hover:bg-white/80'
+                  )}
+                  onClick={() => setCurrentImage(index)}
+                  aria-label={`Ir para imagem ${index + 1}`}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Efeito ondulado no final do carrossel - baseado em waveAnimation */}
+      {waveAnimation !== 'none' && (
+        <div className="absolute bottom-0 left-0 z-20 w-full overflow-hidden leading-none">
+          <svg
+            className="relative block h-12 w-full"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            {waveAnimation === 'animated' ? (
+              // Paths ANIMADOS com motion.path
+              <>
+                <motion.path
+                  d="M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z"
+                  opacity="0.3"
+                  fill="oklch(0.96 0.01 25)"
+                  animate={{
+                    d: [
+                      'M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z',
+                      'M0,120V63.71c47.79,-15.2,103.59,-25.17,158,-21,70.36,5.37,136.33,23.31,206.8,27.5C438.64,77.57,512.34,56.33,583,37.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,85,1113,124.29,1200,57.53V120Z',
+                      'M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z',
+                    ],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    repeatType: 'reverse',
+                  }}
+                />
+                <motion.path
+                  d="M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z"
+                  opacity="0.6"
+                  fill="oklch(0.96 0.01 25)"
+                  animate={{
+                    d: [
+                      'M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z',
+                      'M0,120V94.19C13,73.08,27.64,53.14,47.69,37.95,99.41,-1.27,165,-1,224.58,18.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z',
+                      'M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z',
+                    ],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: 'reverse',
+                    delay: 1,
+                  }}
+                />
+                <motion.path
+                  d="M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z"
+                  fill="oklch(0.96 0.01 25)"
+                  animate={{
+                    d: [
+                      'M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z',
+                      'M0,120V104.37C149.93,51,314.09,38.68,475.83,67.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,32.78,886,14.76,951.2,20c86.53,7,172.46,45.71,248.8,84.81V120Z',
+                      'M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z',
+                    ],
+                  }}
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    repeatType: 'reverse',
+                    delay: 2,
+                  }}
+                />
+              </>
+            ) : (
+              // Paths ESTÁTICOS sem animação
+              <>
+                <path
+                  d="M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z"
+                  opacity="0.3"
+                  fill="oklch(0.96 0.01 25)"
+                />
+                <path
+                  d="M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z"
+                  opacity="0.6"
+                  fill="oklch(0.96 0.01 25)"
+                />
+                <path
+                  d="M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z"
+                  fill="oklch(0.96 0.01 25)"
+                />
+              </>
+            )}
+          </svg>
+        </div>
+      )}
+
+      {/* Container de conteúdo - MANTIDO INTACTO */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 relative z-10 w-full">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           <div className="space-y-6">
@@ -132,21 +305,6 @@ export default function Hero() {
             </div>
           </div>
         </div>
-      </div>
-      {/* Bottom wave */}
-      <div className="relative w-full mt-2 overflow-hidden">
-        <svg
-          className="relative block w-full h-12"
-          data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
-            className="fill-gray-50"
-          />
-        </svg>
       </div>
     </section>
   )

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { QuoteStatusSchema } from '../../enums/QuoteStatus.schema';
 // prettier-ignore

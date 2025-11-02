@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 export const SettingGroupByResultSchema = z.array(z.object({
   id: z.string(),
@@ -29,6 +28,7 @@ export const SettingGroupByResultSchema = z.array(z.object({
   securityConfig: z.unknown(),
   customCss: z.string(),
   customJs: z.string(),
+  waveAnimation: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
   _count: z.object({
@@ -60,6 +60,7 @@ export const SettingGroupByResultSchema = z.array(z.object({
     securityConfig: z.number(),
     customCss: z.number(),
     customJs: z.number(),
+    waveAnimation: z.number(),
     createdAt: z.number(),
     updatedAt: z.number()
   }).optional(),
@@ -84,6 +85,7 @@ export const SettingGroupByResultSchema = z.array(z.object({
     maintenanceMessage: z.string().nullable(),
     customCss: z.string().nullable(),
     customJs: z.string().nullable(),
+    waveAnimation: z.string().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional(),
@@ -108,6 +110,7 @@ export const SettingGroupByResultSchema = z.array(z.object({
     maintenanceMessage: z.string().nullable(),
     customCss: z.string().nullable(),
     customJs: z.string().nullable(),
+    waveAnimation: z.string().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional()

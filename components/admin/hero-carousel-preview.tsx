@@ -1,0 +1,268 @@
+'use client'
+
+import { Card } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
+import { AnimatePresence, motion } from 'framer-motion'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+
+interface HeroCarouselPreviewProps {
+  images: string[]
+  waveAnimation: 'none' | 'static' | 'animated'
+}
+
+export function HeroCarouselPreview({
+  images = [],
+  waveAnimation = 'animated',
+}: HeroCarouselPreviewProps) {
+  const [currentImage, setCurrentImage] = useState(0)
+  const hasImages = images.length > 0
+
+  // Auto-play carousel
+  useEffect(() => {
+    if (!hasImages || images.length <= 1) return
+
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length)
+    }, 3000) // 3 segundos no preview (mais rápido que no real)
+
+    return () => clearInterval(interval)
+  }, [hasImages, images.length])
+
+  return (
+    <Card
+      className="relative overflow-hidden shadow-xl backdrop-blur-sm"
+      style={{
+        backgroundColor: 'rgb(248, 250, 252)',
+        borderColor: 'rgb(224, 230, 235)',
+        borderWidth: '1.5px',
+      }}
+    >
+      <div className="p-4 md:p-5 space-y-4">
+        {/* Label de preview - IGUAL ao exemplo */}
+        <div className="flex items-center gap-2 pb-3 border-b border-gray-300">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <span className="text-xs font-medium text-gray-600 uppercase tracking-wide">
+            Preview Hero Carousel
+          </span>
+        </div>
+
+        {/* Bloco cinza escuro - IGUAL ao exemplo do Header/Footer */}
+        <div className="bg-[#2a2d3a] rounded-lg overflow-hidden border border-gray-700">
+          {/* Preview Container - Miniatura do Hero */}
+          <div
+            className={cn(
+              'relative overflow-hidden',
+              // FALLBACK: Background laranja quando não há imagens
+              !hasImages &&
+                'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
+            )}
+            style={{ height: '400px' }}
+          >
+            {/* Carrossel - só renderiza se houver imagens */}
+            {hasImages && (
+              <>
+                <div className="absolute inset-0 z-0">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={currentImage}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.8, ease: 'easeInOut' }}
+                      className="absolute inset-0"
+                    >
+                      <Image
+                        src={images[currentImage] || '/placeholder.svg'}
+                        alt={`Slide ${currentImage + 1}`}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* Overlay gradiente para legibilidade */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-gray-900/70 to-orange-900/60" />
+                </div>
+
+                {/* Indicadores do carrossel */}
+                {images.length > 1 && (
+                  <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 transform space-x-2">
+                    {images.map((_, index) => (
+                      <motion.button
+                        key={index}
+                        className={cn(
+                          'h-2 w-2 rounded-full transition-all duration-500',
+                          currentImage === index
+                            ? 'scale-125 bg-orange-500 shadow-lg'
+                            : 'bg-white/60 hover:bg-white/80'
+                        )}
+                        onClick={() => setCurrentImage(index)}
+                        aria-label={`Ir para imagem ${index + 1}`}
+                        whileHover={{ scale: 1.2 }}
+                        whileTap={{ scale: 0.9 }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* SVG ONDULADO - CÓDIGO REFEITO E FUNCIONAL */}
+            {waveAnimation !== 'none' && (
+              <div className="absolute bottom-0 left-0 z-20 w-full overflow-hidden leading-none">
+                <svg
+                  className="relative block h-12 w-full"
+                  viewBox="0 0 1200 120"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  {waveAnimation === 'animated' ? (
+                    // ✨ MODO ANIMADO - motion.path com animações suaves
+                    <>
+                      {/* Onda 1 - Camada traseira com opacidade 30% */}
+                      <motion.path
+                        d="M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z"
+                        fill="rgb(248, 250, 252)"
+                        opacity="0.3"
+                        animate={{
+                          d: [
+                            'M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z',
+                            'M0,120V63.71c47.79,-15.2,103.59,-25.17,158,-21,70.36,5.37,136.33,23.31,206.8,27.5C438.64,77.57,512.34,56.33,583,37.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,85,1113,124.29,1200,57.53V120Z',
+                            'M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z',
+                          ],
+                        }}
+                        transition={{
+                          duration: 8,
+                          repeat: Infinity,
+                          repeatType: 'reverse',
+                          ease: 'easeInOut',
+                        }}
+                      />
+
+                      {/* Onda 2 - Camada do meio com opacidade 60% */}
+                      <motion.path
+                        d="M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z"
+                        fill="rgb(248, 250, 252)"
+                        opacity="0.6"
+                        animate={{
+                          d: [
+                            'M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z',
+                            'M0,120V94.19C13,73.08,27.64,53.14,47.69,37.95,99.41,-1.27,165,-1,224.58,18.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z',
+                            'M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z',
+                          ],
+                        }}
+                        transition={{
+                          duration: 6,
+                          repeat: Infinity,
+                          repeatType: 'reverse',
+                          ease: 'easeInOut',
+                          delay: 1,
+                        }}
+                      />
+
+                      {/* Onda 3 - Camada frontal opacidade 100% */}
+                      <motion.path
+                        d="M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z"
+                        fill="rgb(248, 250, 252)"
+                        opacity="1"
+                        animate={{
+                          d: [
+                            'M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z',
+                            'M0,120V104.37C149.93,51,314.09,38.68,475.83,67.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,32.78,886,14.76,951.2,20c86.53,7,172.46,45.71,248.8,84.81V120Z',
+                            'M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z',
+                          ],
+                        }}
+                        transition={{
+                          duration: 10,
+                          repeat: Infinity,
+                          repeatType: 'reverse',
+                          ease: 'easeInOut',
+                          delay: 2,
+                        }}
+                      />
+                    </>
+                  ) : (
+                    // ⏸️ MODO ESTÁTICO - paths normais sem animação
+                    <>
+                      <path
+                        d="M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z"
+                        fill="rgb(248, 250, 252)"
+                        opacity="0.3"
+                      />
+                      <path
+                        d="M0,120V104.19C13,83.08,27.64,63.14,47.69,47.95,99.41,8.73,165,9,224.58,28.42c31.15,10.15,60.09,26.07,89.67,39.8,40.92,19,84.73,46,130.83,49.67,36.26,2.85,70.9,-9.42,98.6,-31.56,31.77,-25.39,62.32,-62,103.63,-73,40.44,-10.79,81.35,6.69,119.13,24.28s75.16,39,116.92,43.05c59.73,5.85,113.28,-22.88,168.9,-38.84,30.2,-8.66,59,-6.17,87.09,7.5,22.43,10.89,48,26.93,60.65,49.24V120Z"
+                        fill="rgb(248, 250, 252)"
+                        opacity="0.6"
+                      />
+                      <path
+                        d="M0,120V114.37C149.93,61,314.09,48.68,475.83,77.43c43,7.64,84.23,20.12,127.61,26.46,59,8.63,112.48,-12.24,165.56,-35.4C827.93,42.78,886,24.76,951.2,30c86.53,7,172.46,45.71,248.8,84.81V120Z"
+                        fill="rgb(248, 250, 252)"
+                        opacity="1"
+                      />
+                    </>
+                  )}
+                </svg>
+              </div>
+            )}
+
+            {/* Conteúdo de exemplo */}
+            <div className="absolute inset-0 z-10 flex items-center justify-center">
+              <div className="text-center text-white px-4">
+                <h2 className="text-2xl md:text-3xl font-bold mb-2 drop-shadow-2xl">
+                  Locação de Equipamentos
+                </h2>
+                <p className="text-sm md:text-base text-white/90 drop-shadow-lg">
+                  {hasImages
+                    ? 'Preview com carrossel ativo'
+                    : 'Background laranja padrão (sem imagens configuradas)'}
+                </p>
+                {hasImages && images.length > 1 && (
+                  <p className="text-xs text-white/70 mt-2">
+                    {images.length} imagens configuradas
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Informações de status - MESMA COR do bloco cinza */}
+          <div className="bg-[#2a2d3a] p-4 border-t border-gray-700">
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="space-y-1">
+                <div className="text-gray-400 text-xs">Status da Onda</div>
+                <div className="text-gray-200 font-medium">
+                  {waveAnimation === 'none'
+                    ? '❌ Desativada'
+                    : waveAnimation === 'static'
+                      ? '⏸️ Estática'
+                      : '✨ Animada'}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-gray-400 text-xs">Background</div>
+                <div className="text-gray-200 font-medium">
+                  {hasImages
+                    ? `🖼️ ${images.length} imagem${images.length > 1 ? 'ns' : ''}`
+                    : '🟠 Padrão'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Info "Preview em Tempo Real" - FORA do bloco cinza, IGUAL ao exemplo */}
+        <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
+          <p className="text-sm text-gray-700 leading-relaxed">
+            💡 <strong>Preview em Tempo Real:</strong>{' '}
+            {hasImages
+              ? `Carrossel ativo com ${images.length} imagem${images.length > 1 ? 'ns' : ''}. `
+              : 'Fundo laranja padrão (sem imagens configuradas). '}
+            Veja como ficará na página inicial.
+          </p>
+        </div>
+      </div>
+    </Card>
+  )
+}

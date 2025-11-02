@@ -3,15 +3,16 @@
 import { getSettings, updateSettings } from '@/app/api/admin/settings/actions'
 import { SettingsBlock } from '@/components/admin/settings-block'
 import { SettingsNavigationBar } from '@/components/admin/settings-navigation-bar'
+import { HeroCarouselPreview } from '@/components/admin/hero-carousel-preview'
 import {
   CompanyInfoPreview,
   CustomSettingsPreview,
-  HeroCarouselPreview,
   SeoPreview,
   SocialLinksPreview,
   SystemPreview,
 } from '@/components/admin/settings-previews'
 import { Button } from '@/components/ui/button'
+import { ImageUpload } from '@/components/ui/image-upload'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
@@ -50,6 +51,7 @@ export default function SettingsPage() {
   const [activeSection, setActiveSection] = useState<string>('company')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isUploadingLogo, setIsUploadingLogo] = useState(false)
+  const [heroCarouselIndex, setHeroCarouselIndex] = useState(0)
 
   // Estados de loading por seção
   const [sectionLoading, setSectionLoading] = useState({
@@ -77,6 +79,7 @@ export default function SettingsPage() {
     aboutUsText: DEFAULT_ABOUT_US_TEXT,
     companyAddress: DEFAULT_COMPANY_ADDRESS,
     heroCarousel: [],
+    waveAnimation: 'animated',
     contactEmail: DEFAULT_CONTACT_EMAIL,
     marketingEmail: DEFAULT_MARKETING_EMAIL,
     socialLinks: {},
@@ -122,6 +125,7 @@ export default function SettingsPage() {
                 link?: string
                 order?: number
               }>) || [],
+            waveAnimation: (result.data.waveAnimation as 'none' | 'static' | 'animated') || 'animated',
             contactEmail: result.data.contactEmail || DEFAULT_CONTACT_EMAIL,
             marketingEmail:
               result.data.marketingEmail || DEFAULT_MARKETING_EMAIL,
@@ -472,6 +476,7 @@ export default function SettingsPage() {
       case 'hero':
         return {
           heroCarousel: [],
+          waveAnimation: 'animated',
         }
       case 'social':
         return {
@@ -827,20 +832,94 @@ export default function SettingsPage() {
                 description="Configure as imagens e conteúdo do carousel da página inicial"
                 icon={Images}
                 form={
-                  <div className="space-y-4">
-                    <p className="text-sm text-gray-600">
-                      Gerencie as imagens e conteúdo do carousel principal da
-                      página inicial.
+                  <div className="space-y-6">
+                    {/* Informação sobre fallback - IGUAL ao padrão do projeto */}
+                    <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        💡 <strong>Background Padrão:</strong> Quando nenhuma
+                        imagem estiver configurada, o fundo laranja atual será
+                        exibido automaticamente.
                     </p>
-                    <div className="bg-gray-50 p-4 rounded-lg text-center">
-                      <p className="text-sm text-gray-500">
-                        Componente de gerenciamento do carousel em
-                        desenvolvimento
+                    </div>
+
+                    {/* Reutilizar ImageUpload component */}
+                    <ImageUpload
+                      images={
+                        formData.heroCarousel.map((item) =>
+                          typeof item === 'string' ? item : item.imageUrl
+                        ) || []
+                      }
+                      onImagesChange={(urls) => {
+                        updateField(
+                          'heroCarousel',
+                          urls.map((url) => ({ imageUrl: url }))
+                        )
+                      }}
+                      maxImages={10}
+                      currentImageIndex={heroCarouselIndex}
+                      onImageIndexChange={setHeroCarouselIndex}
+                    />
+
+                    {/* Controle de Animação da Onda */}
+                    <div>
+                      <Label>Animação da Onda</Label>
+                      <p className="text-xs text-gray-600 mb-2">
+                        Controle o efeito ondulado na parte inferior da seção
+                        Hero
                       </p>
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant={
+                            formData.waveAnimation === 'none'
+                              ? 'default'
+                              : 'outline'
+                          }
+                          onClick={() => updateField('waveAnimation', 'none')}
+                        >
+                          Sem Onda
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant={
+                            formData.waveAnimation === 'static'
+                              ? 'default'
+                              : 'outline'
+                          }
+                          onClick={() => updateField('waveAnimation', 'static')}
+                        >
+                          Estática
+                        </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant={
+                            formData.waveAnimation === 'animated'
+                              ? 'default'
+                              : 'outline'
+                          }
+                          onClick={() =>
+                            updateField('waveAnimation', 'animated')
+                          }
+                        >
+                          Animada
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 }
-                preview={<HeroCarouselPreview data={{ heroCarousel: [] }} />}
+                preview={
+                  <HeroCarouselPreview
+                    images={
+                      formData.heroCarousel.map((item) =>
+                        typeof item === 'string' ? item : item.imageUrl
+                      ) || []
+                    }
+                    waveAnimation={formData.waveAnimation}
+                  />
+                }
                 onSave={saveHeroSettings}
                 onReset={() => resetSection('hero')}
                 isSaving={sectionLoading.hero}

@@ -114,6 +114,7 @@ export const SettingsSchema = z.object({
 
   // Hero Carousel
   heroCarousel: z.array(HeroCarouselItemSchema).optional(),
+  waveAnimation: z.enum(['none', 'static', 'animated']).default('animated'),
 
   // Redes sociais
   socialLinks: SocialLinksSchema.optional(),

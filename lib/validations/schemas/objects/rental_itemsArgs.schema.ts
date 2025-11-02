@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { rental_itemsSelectObjectSchema as rental_itemsSelectObjectSchema } from './rental_itemsSelect.schema';

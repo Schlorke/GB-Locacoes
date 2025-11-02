@@ -167,13 +167,13 @@ model Equipment {
   biweeklyDiscount  Int?           @default(0) // Percentage discount for biweekly rentals
   monthlyDiscount   Int?           @default(0) // Percentage discount for monthly rentals
   popularPeriod     String?        @default("weekly") // Which period to mark as popular (daily, weekly, biweekly, monthly)
-  
+
   // Direct value pricing configurations
   dailyDirectValue     Decimal?     // Direct value for daily rentals (overrides discount)
   weeklyDirectValue    Decimal?     // Direct value for weekly rentals (overrides discount)
   biweeklyDirectValue  Decimal?     // Direct value for biweekly rentals (overrides discount)
   monthlyDirectValue   Decimal?     // Direct value for monthly rentals (overrides discount)
-  
+
   // Pricing method control (percentage or direct value)
   dailyUseDirectValue     Boolean   @default(false) // Use direct value instead of percentage for daily
   weeklyUseDirectValue    Boolean   @default(false) // Use direct value instead of percentage for weekly
@@ -279,6 +279,7 @@ model Setting {
   securityConfig      Json     @default("{}")
   customCss           String   @default("")
   customJs            String   @default("")
+  waveAnimation       String   @default("animated")
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 

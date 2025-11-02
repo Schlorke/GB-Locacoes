@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 export const SettingAggregateResultSchema = z.object({  _count: z.object({
     id: z.number(),
@@ -29,6 +28,7 @@ export const SettingAggregateResultSchema = z.object({  _count: z.object({
     securityConfig: z.number(),
     customCss: z.number(),
     customJs: z.number(),
+    waveAnimation: z.number(),
     createdAt: z.number(),
     updatedAt: z.number()
   }).optional(),
@@ -53,6 +53,7 @@ export const SettingAggregateResultSchema = z.object({  _count: z.object({
     maintenanceMessage: z.string().nullable(),
     customCss: z.string().nullable(),
     customJs: z.string().nullable(),
+    waveAnimation: z.string().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional(),
@@ -77,6 +78,7 @@ export const SettingAggregateResultSchema = z.object({  _count: z.object({
     maintenanceMessage: z.string().nullable(),
     customCss: z.string().nullable(),
     customJs: z.string().nullable(),
+    waveAnimation: z.string().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional()});

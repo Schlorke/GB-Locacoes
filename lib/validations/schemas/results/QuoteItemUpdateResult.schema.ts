@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 export const QuoteItemUpdateResultSchema = z.nullable(z.object({
   id: z.string(),

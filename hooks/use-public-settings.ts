@@ -9,6 +9,8 @@ interface PublicSettings {
   companyIconUrl: string
   aboutUsText: string
   socialLinks: Record<string, string>
+  heroCarousel: Array<{ imageUrl: string }>
+  waveAnimation: 'none' | 'static' | 'animated'
 }
 
 // Valores padrão da empresa GB Locações
@@ -23,6 +25,8 @@ const defaultSettings: PublicSettings = {
   companyIconUrl: '', // Vazio = usa logo padrão "GB"
   aboutUsText: '', // ✅ VAZIO por padrão
   socialLinks: {},
+  heroCarousel: [], // Vazio = usa fundo laranja padrão
+  waveAnimation: 'animated', // Padrão: onda animada
 }
 
 export function usePublicSettings() {

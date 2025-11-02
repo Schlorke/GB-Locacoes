@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { JsonNullValueInputSchema } from '../enums/JsonNullValueInput.schema'
@@ -34,6 +33,7 @@ const makeSchema = () => z.object({
   securityConfig: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   customCss: z.string().optional(),
   customJs: z.string().optional(),
+  waveAnimation: z.string().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();

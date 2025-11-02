@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
@@ -38,6 +37,7 @@ const settingwhereinputSchema = z.object({
   securityConfig: z.lazy(() => JsonFilterObjectSchema).optional(),
   customCss: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   customJs: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
+  waveAnimation: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional()
 }).strict();

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 
@@ -32,6 +31,7 @@ const makeSchema = () => z.object({
   securityConfig: z.literal(true).optional(),
   customCss: z.literal(true).optional(),
   customJs: z.literal(true).optional(),
+  waveAnimation: z.literal(true).optional(),
   createdAt: z.literal(true).optional(),
   updatedAt: z.literal(true).optional(),
   _all: z.literal(true).optional()

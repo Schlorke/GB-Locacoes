@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
@@ -35,6 +34,7 @@ const makeSchema = () => z.object({
   securityConfig: SortOrderSchema.optional(),
   customCss: SortOrderSchema.optional(),
   customJs: SortOrderSchema.optional(),
+  waveAnimation: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional(),
   _count: z.lazy(() => SettingCountOrderByAggregateInputObjectSchema).optional(),
