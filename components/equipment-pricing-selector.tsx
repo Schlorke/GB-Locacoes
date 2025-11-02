@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Clock, TrendingDown } from 'lucide-react'
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 interface PricingOption {
   id: string
@@ -253,13 +253,13 @@ export function EquipmentPricingSelector({
             <Button
               key={option.id}
               type="button"
-              variant={selectedPeriod.id === option.id ? 'default' : 'outline'}
+              variant={selectedPeriod.id === option.id ? 'gradient' : 'outline'}
               size="sm"
               className={cn(
-                'relative justify-center text-sm py-3 h-auto border transition-all duration-200 shadow-sm',
+                'relative justify-center text-sm py-3 h-auto border shadow-sm',
                 selectedPeriod.id === option.id
-                  ? 'bg-orange-600 hover:bg-orange-700 text-white border-orange-600 shadow-lg'
-                  : 'bg-white border-gray-200 text-gray-700 hover:text-orange-500 hover:!bg-white hover:!border-gray-200'
+                  ? 'bg-[linear-gradient(to_right,#f97316,#ea580c,#f97316)] bg-[length:200%_100%] bg-left hover:bg-right text-white border-orange-600 shadow-lg transition-[background-position,transform,box-shadow] duration-500 ease-in-out'
+                  : 'bg-white border-gray-200 text-gray-700 hover:text-orange-500 hover:!bg-white hover:!border-gray-200 transition-[color,transform,box-shadow] duration-300'
               )}
               onClick={(e) => handlePeriodChange(option, e)}
             >
