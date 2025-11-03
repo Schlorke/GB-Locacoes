@@ -835,15 +835,6 @@ export default function SettingsPage() {
                 icon={Images}
                 form={
                   <div className="space-y-6">
-                    {/* Informação sobre fallback - IGUAL ao padrão do projeto */}
-                    <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
-                      <p className="text-sm text-gray-700 leading-relaxed">
-                        💡 <strong>Background Padrão:</strong> Quando nenhuma
-                        imagem estiver configurada, o fundo laranja atual será
-                        exibido automaticamente.
-                      </p>
-                    </div>
-
                     {/* Reutilizar ImageUpload component */}
                     <ImageUpload
                       images={
@@ -861,7 +852,6 @@ export default function SettingsPage() {
                       currentImageIndex={heroCarouselIndex}
                       onImageIndexChange={setHeroCarouselIndex}
                     />
-
                   </div>
                 }
                 preview={
@@ -877,7 +867,9 @@ export default function SettingsPage() {
 
                     {/* Controle de Animação da Onda - movido para baixo do preview */}
                     <div className="mt-6 text-center">
-                      <Label className="text-center block">Animação da Onda</Label>
+                      <Label className="text-center block">
+                        Animação da Onda
+                      </Label>
                       <p className="text-xs text-gray-600 mb-2 text-center">
                         Controle o efeito ondulado na parte inferior da seção
                         Hero

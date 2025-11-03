@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from 'eslint-plugin-storybook'
+
 // ESLint v9 flat config for Next.js project
 import js from '@eslint/js'
 import typescript from '@typescript-eslint/eslint-plugin'
@@ -8,6 +11,7 @@ import globals from 'globals'
 
 export default [
   // Global ignores
+  // JavaScript recommended config
   {
     ignores: [
       'lib/validations/schemas/**/*',
@@ -39,12 +43,8 @@ export default [
       '**/*.config.mjs',
       '**/*.config.ts',
     ],
-  },
-
-  // JavaScript recommended config
-  js.configs.recommended,
-
-  // TypeScript files
+  }, // TypeScript files
+  js.configs.recommended, // JavaScript files
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
@@ -110,8 +110,6 @@ export default [
       },
     },
   },
-
-  // JavaScript files
   {
     files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
@@ -143,4 +141,6 @@ export default [
       ],
     },
   },
+  ...storybook.configs['flat/recommended'],
+  ...storybook.configs['flat/recommended'],
 ]

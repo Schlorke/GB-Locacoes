@@ -24,6 +24,7 @@ import {
   ChevronLeft,
   ChevronRight,
   GripVertical,
+  InfoIcon,
   Link,
   Upload,
 } from 'lucide-react'
@@ -34,6 +35,12 @@ import { Button } from './button'
 import { CloseButton } from './close-button'
 import { Input } from './input'
 import { Label } from './label'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './tooltip'
 
 // Configuração para permitir imagens externas no Storybook
 const StorybookImage = ({
@@ -356,9 +363,38 @@ export function ImageUpload({
           {/* Header com indicador */}
           {images.length > 1 && (
             <div className="flex items-center justify-between mb-4 w-full">
-              <h3 className="text-sm font-semibold text-slate-700">
-                Preview do Equipamento
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-slate-700">
+                  Preview do Equipamento
+                </h3>
+                <TooltipProvider delayDuration={200}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center rounded-full p-0.5 text-slate-500 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+                        aria-label="Informação sobre background padrão"
+                      >
+                        <InfoIcon className="size-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent
+                      side="right"
+                      align="center"
+                      className="max-w-xs bg-white text-slate-700 border border-slate-200 shadow-lg"
+                    >
+                      <p className="text-sm leading-relaxed">
+                        💡{' '}
+                        <strong className="font-semibold">
+                          Background Padrão:
+                        </strong>{' '}
+                        Quando nenhuma imagem estiver configurada, o fundo
+                        laranja atual será exibido automaticamente.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
               <div className="text-xs text-slate-500 bg-white/70 px-2 py-1 rounded-full">
                 {currentImageIndex + 1} de {images.length}
               </div>

@@ -1,7 +1,10 @@
 'use client'
 
 import { Autocomplete } from '@/components/ui/autocomplete'
-import { usePublicSettings, type PublicSettings } from '@/hooks/use-public-settings'
+import {
+  usePublicSettings,
+  type PublicSettings,
+} from '@/hooks/use-public-settings'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, MapPin, Phone, Play } from 'lucide-react'
