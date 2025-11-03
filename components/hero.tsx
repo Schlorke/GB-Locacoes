@@ -25,8 +25,20 @@ export default function Hero() {
     (settings.waveAnimation as 'none' | 'static' | 'animated' | undefined) ||
     'animated'
 
-  // Background BRANCO APENAS quando há imagens configuradas (efeito "abrindo os olhos")
-  // Background LARANJA quando NÃO há imagens (fallback padrão - SEMPRE laranja, mesmo durante loading)
+  // SOLUÇÃO DEFINITIVA: Aguarda settings carregarem para decidir o background correto
+  // Evita flash entre branco/laranja durante loading
+  if (isLoading) {
+    // Renderiza Hero com background neutro durante loading (evita flash)
+    return (
+      <section className="relative min-h-[70vh] bg-slate-50 text-white overflow-hidden">
+        {/* Loading silencioso - sem conteúdo visível */}
+      </section>
+    )
+  }
+
+  // Após loading, decide o background correto baseado em hasImages
+  // Background BRANCO quando há imagens (efeito "abrindo os olhos")
+  // Background LARANJA quando NÃO há imagens (fallback padrão)
   const shouldShowWhite = hasImages
 
   // Auto-play carousel
