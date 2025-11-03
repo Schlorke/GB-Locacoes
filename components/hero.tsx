@@ -65,7 +65,8 @@ export default function Hero() {
       {hasImages && (
         <>
           <div className="absolute inset-0 z-0">
-            <AnimatePresence mode="wait">
+            {/* Transição SUAVE - uma imagem desaparece enquanto outra aparece (SEM flash branco) */}
+            <AnimatePresence initial={false}>
               <motion.div
                 key={currentImage}
                 initial={{ opacity: 0 }}

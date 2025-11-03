@@ -6,7 +6,6 @@ import { Mail, MapPin, Phone } from 'lucide-react'
 import Image from 'next/image'
 import { memo } from 'react'
 import { HeaderFooterPreview } from './header-footer-preview'
-import { HeroCarouselPreview } from './hero-carousel-preview'
 
 interface CompanyInfoPreviewProps {
   data: {

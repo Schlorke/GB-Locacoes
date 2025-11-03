@@ -1,8 +1,10 @@
 'use client'
 
 import { Card } from '@/components/ui/card'
+import { FilterResetButton } from '@/components/ui/filter-reset-button'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowRight, MapPin, Phone, Play, Search } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
@@ -16,7 +18,13 @@ export function HeroCarouselPreview({
   waveAnimation = 'animated',
 }: HeroCarouselPreviewProps) {
   const [currentImage, setCurrentImage] = useState(0)
+  const [animationKey, setAnimationKey] = useState(0)
   const hasImages = images.length > 0
+
+  // Função para reiniciar animações
+  const resetAnimations = () => {
+    setAnimationKey((prev) => prev + 1)
+  }
 
   // Auto-play carousel
   useEffect(() => {
@@ -47,11 +55,56 @@ export function HeroCarouselPreview({
           </span>
         </div>
 
-        {/* Bloco cinza escuro - COM INLINE STYLE PARA GARANTIR COR */}
-        <div
-          className="rounded-lg overflow-hidden border border-gray-700"
-          style={{ backgroundColor: '#2a2d3a' }}
-        >
+        {/* Bloco do preview */}
+        <div className="rounded-lg overflow-hidden border border-gray-200">
+          {/* HEADER PREVIEW - Igual ao de "Informações da Empresa" */}
+          <div className="bg-white rounded-t-lg border-b border-gray-200 shadow-sm overflow-hidden">
+            {/* Top Bar */}
+            <div className="bg-slate-700 px-3 py-2">
+              <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <Phone className="h-3 w-3 text-slate-200" />
+                  <div className="flex items-center gap-2 text-slate-100">
+                    <span className="hidden sm:inline">(51) 2313-6262</span>
+                    <span className="text-slate-300 hidden sm:inline">|</span>
+                    <span>(51) 99820-5163</span>
+                  </div>
+                </div>
+                <div className="text-slate-200 text-xs hidden md:block">
+                  Atendimento especializado
+                </div>
+              </div>
+            </div>
+
+            {/* Main Header */}
+            <div className="px-3 py-2.5 flex items-center justify-between gap-3">
+              {/* Logo + Company Name */}
+              <div className="flex items-center gap-3">
+                {/* Logo */}
+                <div className="bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 text-white p-2.5 rounded-xl font-bold text-[15px] shadow-md">
+                  GB
+                </div>
+
+                {/* Company Name */}
+                <div>
+                  <div className="font-bold text-sm text-slate-800">
+                    GB Locações
+                  </div>
+                  <div className="text-xs text-slate-500">
+                    Equipamentos para Construção
+                  </div>
+                </div>
+              </div>
+
+              {/* Botão de reset */}
+              <FilterResetButton
+                onClick={resetAnimations}
+                title="Resetar animações"
+                size="sm"
+              />
+            </div>
+          </div>
+
           {/* Preview Container - Miniatura do Hero */}
           <div
             className={cn(
@@ -60,19 +113,20 @@ export function HeroCarouselPreview({
               !hasImages &&
                 'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
             )}
-            style={{ height: '400px' }}
+            style={{ height: '320px' }}
           >
             {/* Carrossel - só renderiza se houver imagens */}
             {hasImages && (
               <>
                 <div className="absolute inset-0 z-0">
-                  <AnimatePresence mode="wait">
+                  {/* Transição SUAVE - uma imagem desaparece enquanto outra aparece */}
+                  <AnimatePresence initial={false}>
                     <motion.div
                       key={currentImage}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.8, ease: 'easeInOut' }}
+                      transition={{ duration: 1.5, ease: 'easeInOut' }}
                       className="absolute inset-0"
                     >
                       <Image
@@ -210,60 +264,230 @@ export function HeroCarouselPreview({
               </div>
             )}
 
-            {/* Conteúdo de exemplo */}
-            <div className="absolute inset-0 z-10 flex items-center justify-center">
-              <div className="text-center text-white px-4">
-                <h2 className="text-2xl md:text-3xl font-bold mb-2 drop-shadow-2xl">
-                  Locação de Equipamentos
-                </h2>
-                <p className="text-sm md:text-base text-white/90 drop-shadow-lg">
-                  {hasImages
-                    ? 'Preview com carrossel ativo'
-                    : 'Background laranja padrão (sem imagens configuradas)'}
-                </p>
-                {hasImages && images.length > 1 && (
-                  <p className="text-xs text-white/70 mt-2">
-                    {images.length} imagens configuradas
-                  </p>
-                )}
+            {/* Miniatura FIEL dos componentes do Hero com ANIMAÇÕES */}
+            <div className="absolute inset-0 z-10">
+              {/* Container centralizado como no Hero real */}
+              <div className="max-w-4xl mx-auto px-4 py-4 h-full">
+                <div
+                  key={animationKey}
+                  className="grid lg:grid-cols-2 gap-6 items-center h-full"
+                >
+                  {/*
+                    Lado esquerdo - Conteúdo vindo DA ESQUERDA
+
+                    ⚠️ IMPORTANTE: Animação HORIZONTAL (x: -60 → 0)
+                    - Container vem da ESQUERDA PARA DIREITA (x: -60)
+                    - Elementos filhos usam APENAS opacity (SEM y)
+                    - Motivo: Evitar soma de transformações que causaria movimento DIAGONAL
+                    - Resultado: Movimento 100% RETO da esquerda
+                  */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -60 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 1.2, delay: 0.2, ease: 'easeOut' }}
+                    className="space-y-3"
+                  >
+                    {/*
+                      Título - APENAS opacity (sem y)
+                      Se usar y: 20, somaria com x: -60 do container = movimento diagonal ❌
+                    */}
+                    <motion.h1
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.6, delay: 0.3 }}
+                      className="text-xl font-bold leading-tight text-white drop-shadow-2xl"
+                    >
+                      Locação de Equipamentos para{' '}
+                      <span className="text-yellow-300 relative">
+                        Construção Civil
+                        <motion.div
+                          initial={{ scaleX: 0 }}
+                          animate={{ scaleX: 1 }}
+                          transition={{ duration: 0.8, delay: 0.6 }}
+                          className="absolute -bottom-1 left-0 w-full h-0.5 bg-yellow-300 rounded-full origin-left"
+                        />
+                      </span>
+                    </motion.h1>
+
+                    {/* Texto descritivo - APENAS opacity (herda movimento horizontal do pai) */}
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.6, delay: 0.4 }}
+                      className="text-[11px] leading-relaxed text-white/90 drop-shadow-lg"
+                    >
+                      Há 10 anos oferecendo soluções em locação de equipamentos
+                      para obras e serviços em altura
+                    </motion.p>
+
+                    {/* Barra de busca - APENAS opacity (herda movimento horizontal do pai) */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.6, delay: 0.5 }}
+                      className="bg-white rounded-xl p-1.5 max-w-[200px] shadow-lg"
+                    >
+                      <div className="flex items-center gap-1">
+                        <input
+                          className="text-[9px] flex-1 bg-transparent outline-none text-gray-500 px-1"
+                          placeholder="Buscar equipamentos..."
+                          disabled
+                        />
+                        <div className="bg-orange-600 rounded-lg p-1 shadow-sm flex items-center justify-center">
+                          <Search className="w-2 h-2 text-white" />
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Botões - APENAS opacity (herda movimento horizontal do pai) */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.6, delay: 0.6 }}
+                      className="flex gap-2"
+                    >
+                      <div className="inline-flex items-center justify-center gap-1 bg-yellow-500 hover:bg-yellow-600 text-gray-900 hover:text-white px-3 py-1.5 rounded-lg text-[9px] font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
+                        Ver Catálogo
+                        <ArrowRight className="h-2 w-2 group-hover:translate-x-0.5 transition-transform" />
+                      </div>
+                      <div className="inline-flex items-center justify-center gap-1 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 px-3 py-1.5 rounded-lg text-[9px] font-semibold border-2 border-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
+                        <Play className="h-2 w-2 group-hover:scale-110 transition-transform" />
+                        Orçamento
+                      </div>
+                    </motion.div>
+
+                    {/* Contato - APENAS opacity (herda movimento horizontal do pai) */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.6, delay: 0.7 }}
+                      className="flex gap-3 text-[9px] text-orange-100"
+                    >
+                      <div className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer group">
+                        <Phone className="h-2.5 w-2.5 group-hover:animate-bounce" />
+                        <span>(51) 2313-6262 | (51) 99820-5163</span>
+                      </div>
+                      <div className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer group">
+                        <MapPin className="h-2.5 w-2.5 group-hover:animate-pulse" />
+                        <span>Entregamos em toda região</span>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+
+                  {/*
+                    Lado direito - Imagem vindo DA DIREITA
+
+                    ⚠️ IMPORTANTE: Animação HORIZONTAL (x: 60 → 0)
+                    - Container vem da DIREITA PARA ESQUERDA (x: 60)
+                    - Movimento 100% RETO horizontal
+                  */}
+                  <motion.div
+                    initial={{ opacity: 0, x: 60 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 1.2, delay: 0.3, ease: 'easeOut' }}
+                    className="relative h-full flex items-center justify-center"
+                  >
+                    <div className="relative group w-full lg:w-60 h-auto">
+                      {/* Imagem placeholder com hover scale */}
+                      <div className="flex w-full h-full min-h-[180px] bg-white/10 backdrop-blur-sm rounded-xl border-2 border-white/20 items-center justify-center shadow-2xl transform group-hover:scale-105 transition-transform duration-500">
+                        <span className="text-white/60 text-xs font-medium">
+                          Imagem
+                        </span>
+                      </div>
+
+                      {/* Badge +200 - Com hover scale FRAMER MOTION */}
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute -bottom-1 -left-1 bg-yellow-500 text-gray-900 px-2 py-1 rounded-xl shadow-lg hover:shadow-xl cursor-pointer"
+                      >
+                        <div className="text-[10px] font-bold">+200</div>
+                        <div className="text-[7px] font-medium leading-tight">
+                          Equipamentos Disponíveis
+                        </div>
+                      </motion.div>
+
+                      {/* Badge 10+ - Com hover scale FRAMER MOTION */}
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute -top-1 -right-1 bg-white/90 backdrop-blur-sm text-orange-600 px-2 py-1 rounded-xl shadow-lg hover:shadow-xl cursor-pointer"
+                      >
+                        <div className="text-[10px] font-bold">10+</div>
+                        <div className="text-[7px] font-medium leading-tight">
+                          Anos de Experiência
+                        </div>
+                      </motion.div>
+
+                      {/* Borda decorativa animada - Também com group-hover */}
+                      <div className="absolute inset-[-0.5rem] border border-white/20 rounded-xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-500"></div>
+                    </div>
+                  </motion.div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Informações de status - COM INLINE STYLE PARA GARANTIR COR */}
-          <div
-            className="p-4 border-t border-gray-700"
-            style={{ backgroundColor: '#2a2d3a' }}
-          >
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="space-y-1">
-                <div className="text-gray-400 text-xs">Status da Onda</div>
-                <div className="text-gray-200 font-medium">
-                  {waveAnimation === 'none'
-                    ? '❌ Desativada'
-                    : waveAnimation === 'static'
-                      ? '⏸️ Estática'
-                      : '✨ Animada'}
+          {/* Informações de status - Estilo cinza escuro com texto claro */}
+          <div className="p-6" style={{ backgroundColor: '#2a2d3a' }}>
+            {/* Estrutura de 2 linhas separadas */}
+            <div className="space-y-2">
+              {/* LINHA 1 - Títulos centralizados */}
+              <div className="grid grid-cols-2 gap-8 text-center">
+                <div className="flex text-gray-300 items-center justify-end text-xs font-medium">
+                  Status da Onda
+                </div>
+                <div className="flex text-gray-300 items-center justify-start text-xs font-medium">
+                  Background
                 </div>
               </div>
-              <div className="space-y-1">
-                <div className="text-gray-400 text-xs">Background</div>
-                <div className="text-gray-200 font-medium">
-                  {hasImages
-                    ? `🖼️ ${images.length} imagem${images.length > 1 ? 'ns' : ''}`
-                    : '🟠 Padrão'}
+
+              {/* LINHA 2 - Subtítulos com emojis (largura fixa para alinhamento) */}
+              <div className="grid grid-cols-2 gap-8">
+                {/* Status da Onda */}
+                <div className="flex items-center justify-end gap-2">
+                  <span className="text-xs w-5 flex-shrink-0 text-center">
+                    {waveAnimation === 'none'
+                      ? '❌'
+                      : waveAnimation === 'static'
+                        ? '⏸️'
+                        : '✨'}
+                  </span>
+                  <span className="text-white font-medium text-xs">
+                    {waveAnimation === 'none'
+                      ? 'Desativada'
+                      : waveAnimation === 'static'
+                        ? 'Estática'
+                        : 'Animada'}
+                  </span>
+                </div>
+
+                {/* Background */}
+                <div className="flex items-center justify-start gap-2">
+                  <span className="text-white font-medium text-xs">
+                    {hasImages
+                      ? `${images.length} ${images.length > 1 ? 'imagens' : 'imagem'}`
+                      : 'Padrão'}
+                  </span>
+                  <span className="text-xs w-5 flex-shrink-0 text-center">
+                    {hasImages ? '🖼️' : '🟠'}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Info "Preview em Tempo Real" - FORA do bloco cinza, IGUAL ao exemplo */}
+        {/* Info "Preview em Tempo Real" - FORA do bloco do preview */}
         <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
           <p className="text-sm text-gray-700 leading-relaxed">
             💡 <strong>Preview em Tempo Real:</strong>{' '}
             {hasImages
-              ? `Carrossel ativo com ${images.length} imagem${images.length > 1 ? 'ns' : ''}. `
+              ? `Carrossel ativo com ${images.length} ${images.length > 1 ? 'imagens' : 'imagem'}. `
               : 'Fundo laranja padrão (sem imagens configuradas). '}
             Veja como ficará na página inicial.
           </p>

@@ -125,7 +125,9 @@ export default function SettingsPage() {
                 link?: string
                 order?: number
               }>) || [],
-            waveAnimation: (result.data.waveAnimation as 'none' | 'static' | 'animated') || 'animated',
+            waveAnimation:
+              (result.data.waveAnimation as 'none' | 'static' | 'animated') ||
+              'animated',
             contactEmail: result.data.contactEmail || DEFAULT_CONTACT_EMAIL,
             marketingEmail:
               result.data.marketingEmail || DEFAULT_MARKETING_EMAIL,
@@ -839,7 +841,7 @@ export default function SettingsPage() {
                         💡 <strong>Background Padrão:</strong> Quando nenhuma
                         imagem estiver configurada, o fundo laranja atual será
                         exibido automaticamente.
-                    </p>
+                      </p>
                     </div>
 
                     {/* Reutilizar ImageUpload component */}
