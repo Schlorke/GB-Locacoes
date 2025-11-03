@@ -19,15 +19,17 @@ export function HeroCarouselPreview({
 }: HeroCarouselPreviewProps) {
   const [currentImage, setCurrentImage] = useState(0)
   const [animationKey, setAnimationKey] = useState(0)
+  const [carouselKey, setCarouselKey] = useState(0) // Separado para forçar remount do carrossel
   const hasImages = images.length > 0
 
   // Função para reiniciar animações (carrossel + miniatura)
   const resetAnimations = () => {
     setCurrentImage(0) // Volta para primeira imagem
-    setAnimationKey((prev) => prev + 1) // Força remount = reinicia animações
+    setAnimationKey((prev) => prev + 1) // Força remount da miniatura
+    setCarouselKey((prev) => prev + 1) // Força remount do carrossel
   }
 
-  // Auto-play carousel (reinicia quando animationKey muda)
+  // Auto-play carousel (sempre com mesmas dependências)
   useEffect(() => {
     if (!hasImages || images.length <= 1) return
 
@@ -36,7 +38,7 @@ export function HeroCarouselPreview({
     }, 3000) // 3 segundos no preview (mais rápido que no real)
 
     return () => clearInterval(interval)
-  }, [hasImages, images.length, animationKey])
+  }, [hasImages, images.length])
 
   return (
     <Card
@@ -121,13 +123,13 @@ export function HeroCarouselPreview({
             {/* Carrossel - só renderiza se houver imagens */}
             {hasImages && (
               <>
-                <div key={animationKey} className="absolute inset-0 z-0">
+                <div key={carouselKey} className="absolute inset-0 z-0">
                   {/*
                     Transição SUAVE com animação inicial
                     - initial={true} permite fade-in no primeiro carregamento
                     - Cria efeito de "abrindo os olhos" ao carregar a página
                     - Uma imagem desaparece enquanto outra aparece (SEM flash branco)
-                    - key={animationKey} força remount ao clicar no reset
+                    - key={carouselKey} força remount ao clicar no reset
                   */}
                   <AnimatePresence initial={true}>
                     <motion.div
@@ -150,7 +152,7 @@ export function HeroCarouselPreview({
 
                   {/* Overlay gradiente - anima JUNTO com a primeira imagem (sem flash cinza) */}
                   <motion.div
-                    key={`overlay-${animationKey}`}
+                    key={`overlay-${carouselKey}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1.5, ease: 'easeInOut' }}
