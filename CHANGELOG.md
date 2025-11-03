@@ -6,6 +6,20 @@ O formato é baseado em
 [Keep a Changelog](HTTPS://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
+## [2025-11-03] - Correção visual do Hero
+
+### Fixed 🐛
+
+- Eliminado o flash branco → laranja no `Hero` ao prever o background correto
+  durante o estado de loading quando o carrossel está vazio.
+
+### Changed 🔄
+
+- `usePublicSettings` agora aceita `initialData` para hidratar o cliente com
+  valores pré-carregados sem mudar o estado visual.
+- A homepage injeta as configurações iniciais do carrossel do Prisma no
+  componente `Hero`, garantindo consistência desde a primeira renderização.
+
 ## [2025-11-02] - Sistema de Configurações Dinâmicas e Refatoração CSS
 
 ### Added ✨

@@ -1,7 +1,7 @@
 'use client'
 
 import { Autocomplete } from '@/components/ui/autocomplete'
-import { usePublicSettings } from '@/hooks/use-public-settings'
+import { usePublicSettings, type PublicSettings } from '@/hooks/use-public-settings'
 import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, MapPin, Phone, Play } from 'lucide-react'
@@ -10,9 +10,15 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export default function Hero() {
+type HeroProps = {
+  initialSettings?: Partial<PublicSettings> | null
+}
+
+export default function Hero({ initialSettings }: HeroProps = {}) {
   const router = useRouter()
-  const { settings, isLoading } = usePublicSettings()
+  const { settings, isLoading } = usePublicSettings({
+    initialData: initialSettings ?? undefined,
+  })
   const [currentImage, setCurrentImage] = useState(0)
 
   // Extrair imagens do carousel
@@ -25,10 +31,13 @@ export default function Hero() {
     (settings.waveAnimation as 'none' | 'static' | 'animated' | undefined) ||
     'animated'
 
-  // Após loading, decide o background correto baseado em hasImages
-  // Background BRANCO quando há imagens (efeito "abrindo os olhos")
-  // Background LARANJA quando NÃO há imagens (fallback padrão)
+  const initialHeroCarousel = Array.isArray(initialSettings?.heroCarousel)
+    ? initialSettings?.heroCarousel
+    : undefined
+  const hasInitialImages =
+    Array.isArray(initialHeroCarousel) && initialHeroCarousel.length > 0
   const shouldShowWhite = hasImages
+  const loadingShouldShowWhite = hasImages || hasInitialImages
 
   // Auto-play carousel (HOOK SEMPRE chamado - Rules of Hooks)
   useEffect(() => {
@@ -55,10 +64,18 @@ export default function Hero() {
     router.push(`/equipamentos?search=${encodeURIComponent(query)}`)
   }
 
-  // Durante loading, renderiza estado neutro
+  // Durante loading, usa background previsto a partir de dados iniciais
   if (isLoading) {
     return (
-      <section className="relative min-h-[70vh] bg-slate-50 text-white overflow-hidden">
+      <section
+        className={cn(
+          'relative min-h-[70vh] text-white overflow-hidden',
+          waveAnimation !== 'none' ? 'pb-12' : 'pb-0',
+          loadingShouldShowWhite
+            ? 'bg-slate-50'
+            : 'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
+        )}
+      >
         {/* Loading silencioso - aguarda settings carregarem */}
       </section>
     )

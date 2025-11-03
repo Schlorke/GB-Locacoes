@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-interface PublicSettings {
+export interface PublicSettings {
   companyPhone: string
   whatsappNumber: string
   contactEmail: string
@@ -29,16 +29,30 @@ const defaultSettings: PublicSettings = {
   waveAnimation: 'animated', // Padrão: onda animada
 }
 
-export function usePublicSettings() {
-  const [settings, setSettings] = useState<PublicSettings>(defaultSettings)
-  const [isLoading, setIsLoading] = useState(true)
+type UsePublicSettingsOptions = {
+  initialData?: Partial<PublicSettings> | null
+}
+
+export function usePublicSettings(options?: UsePublicSettingsOptions) {
+  const hasInitialData = Boolean(options?.initialData)
+
+  const [settings, setSettings] = useState<PublicSettings>(() => ({
+    ...defaultSettings,
+    ...(options?.initialData ?? {}),
+  }))
+  const [isLoading, setIsLoading] = useState(!hasInitialData)
 
   useEffect(() => {
+    let isActive = true
+
     async function fetchSettings() {
       try {
         const response = await fetch('/api/settings/public')
         if (response.ok) {
           const data = await response.json()
+          if (!isActive) {
+            return
+          }
           setSettings({
             ...defaultSettings,
             ...data,
@@ -48,11 +62,17 @@ export function usePublicSettings() {
         console.error('Erro ao carregar configurações:', error)
         // Manter valores padrão em caso de erro
       } finally {
-        setIsLoading(false)
+        if (isActive) {
+          setIsLoading(false)
+        }
       }
     }
 
     fetchSettings()
+
+    return () => {
+      isActive = false
+    }
   }, [])
 
   return { settings, isLoading }
