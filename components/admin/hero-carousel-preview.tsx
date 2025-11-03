@@ -112,6 +112,8 @@ export function HeroCarouselPreview({
           <div
             className={cn(
               'relative overflow-hidden',
+              // padding-bottom para compensar altura da onda (faz onda "empurrar" conteúdo)
+              waveAnimation !== 'none' ? 'pb-8' : 'pb-0',
               // Background BRANCO quando HÁ imagens (efeito "abrindo os olhos")
               // Background LARANJA apenas como fallback quando NÃO há imagens
               hasImages

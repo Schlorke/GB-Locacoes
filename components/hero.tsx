@@ -58,6 +58,9 @@ export default function Hero() {
     <section
       className={cn(
         'relative text-white overflow-hidden',
+        // padding-bottom para compensar altura da onda (h-12 = 48px)
+        // Faz a onda "empurrar" conteúdo sem afetar animações
+        waveAnimation !== 'none' ? 'pb-12' : 'pb-0',
         // Background BRANCO durante loading OU quando há imagens (efeito "abrindo os olhos")
         // Background LARANJA apenas como fallback quando não está loading E não há imagens
         shouldShowWhite
