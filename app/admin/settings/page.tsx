@@ -847,7 +847,7 @@ export default function SettingsPage() {
                     {/* Reutilizar ImageUpload component */}
                     <ImageUpload
                       images={
-                        formData.heroCarousel.map((item) =>
+                        formData.heroCarousel?.map((item) =>
                           typeof item === 'string' ? item : item.imageUrl
                         ) || []
                       }
@@ -915,7 +915,7 @@ export default function SettingsPage() {
                 preview={
                   <HeroCarouselPreview
                     images={
-                      formData.heroCarousel.map((item) =>
+                      formData.heroCarousel?.map((item) =>
                         typeof item === 'string' ? item : item.imageUrl
                       ) || []
                     }

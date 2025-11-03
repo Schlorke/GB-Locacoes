@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react'
 
 export default function Hero() {
   const router = useRouter()
-  const { settings } = usePublicSettings()
+  const { settings, isLoading } = usePublicSettings()
   const [currentImage, setCurrentImage] = useState(0)
 
   // Extrair imagens do carousel
@@ -24,6 +24,10 @@ export default function Hero() {
   const waveAnimation =
     (settings.waveAnimation as 'none' | 'static' | 'animated' | undefined) ||
     'animated'
+
+  // Background BRANCO durante loading OU quando há imagens configuradas
+  // Background LARANJA apenas quando NÃO está loading E NÃO há imagens (fallback real)
+  const shouldShowWhite = isLoading || hasImages
 
   // Auto-play carousel
   useEffect(() => {
@@ -54,9 +58,11 @@ export default function Hero() {
     <section
       className={cn(
         'relative text-white',
-        // FALLBACK: Background laranja quando não há imagens
-        !hasImages &&
-          'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
+        // Background BRANCO durante loading OU quando há imagens (efeito "abrindo os olhos")
+        // Background LARANJA apenas como fallback quando não está loading E não há imagens
+        shouldShowWhite
+          ? 'bg-slate-50'
+          : 'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
       )}
       role="region"
       aria-roledescription={hasImages ? 'carousel' : undefined}
@@ -65,8 +71,13 @@ export default function Hero() {
       {hasImages && (
         <>
           <div className="absolute inset-0 z-0">
-            {/* Transição SUAVE - uma imagem desaparece enquanto outra aparece (SEM flash branco) */}
-            <AnimatePresence initial={false}>
+            {/*
+              Transição SUAVE com animação inicial
+              - initial={true} permite fade-in no primeiro carregamento
+              - Cria efeito de "abrindo os olhos" ao carregar a página
+              - Uma imagem desaparece enquanto outra aparece (SEM flash branco)
+            */}
+            <AnimatePresence initial={true}>
               <motion.div
                 key={currentImage}
                 initial={{ opacity: 0 }}
@@ -86,8 +97,8 @@ export default function Hero() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Overlay gradiente melhorado para legibilidade */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-gray-900/70 to-orange-900/60" />
+            {/* Overlay gradiente para legibilidade - mais leve para mostrar bg branco */}
+            <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-900/30 to-black/20" />
           </div>
 
           {/* Indicadores do carrossel */}
