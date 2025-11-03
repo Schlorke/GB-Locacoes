@@ -57,7 +57,7 @@ export default function Hero() {
   return (
     <section
       className={cn(
-        'relative text-white',
+        'relative text-white overflow-hidden',
         // Background BRANCO durante loading OU quando há imagens (efeito "abrindo os olhos")
         // Background LARANJA apenas como fallback quando não está loading E não há imagens
         shouldShowWhite
@@ -97,8 +97,13 @@ export default function Hero() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Overlay gradiente para legibilidade - mais leve para mostrar bg branco */}
-            <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-900/30 to-black/20" />
+            {/* Overlay gradiente - anima JUNTO com a primeira imagem (sem flash cinza) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.5, ease: 'easeInOut' }}
+              className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-900/30 to-black/20"
+            />
           </div>
 
           {/* Indicadores do carrossel */}
