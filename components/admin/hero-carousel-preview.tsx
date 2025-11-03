@@ -350,8 +350,8 @@ export function HeroCarouselPreview({
                           placeholder="Buscar equipamentos..."
                           disabled
                         />
-                        <div className="bg-orange-600 rounded-lg p-1 shadow-sm flex items-center justify-center">
-                          <Search className="w-2 h-2 text-white" />
+                        <div className="bg-orange-600 hover:bg-slate-700 rounded-lg p-1 shadow-sm flex items-center justify-center transition-colors group">
+                          <Search className="w-2 h-2 text-white group-hover:text-white/90" />
                         </div>
                       </div>
                     </motion.div>
