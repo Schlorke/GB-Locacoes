@@ -862,8 +862,21 @@ export default function SettingsPage() {
                       onImageIndexChange={setHeroCarouselIndex}
                     />
 
-                    {/* Controle de Animação da Onda */}
-                    <div>
+                  </div>
+                }
+                preview={
+                  <>
+                    <HeroCarouselPreview
+                      images={
+                        formData.heroCarousel?.map((item) =>
+                          typeof item === 'string' ? item : item.imageUrl
+                        ) || []
+                      }
+                      waveAnimation={formData.waveAnimation}
+                    />
+                    
+                    {/* Controle de Animação da Onda - movido para baixo do preview */}
+                    <div className="mt-6">
                       <Label>Animação da Onda</Label>
                       <p className="text-xs text-gray-600 mb-2">
                         Controle o efeito ondulado na parte inferior da seção
@@ -910,17 +923,7 @@ export default function SettingsPage() {
                         </Button>
                       </div>
                     </div>
-                  </div>
-                }
-                preview={
-                  <HeroCarouselPreview
-                    images={
-                      formData.heroCarousel?.map((item) =>
-                        typeof item === 'string' ? item : item.imageUrl
-                      ) || []
-                    }
-                    waveAnimation={formData.waveAnimation}
-                  />
+                  </>
                 }
                 onSave={saveHeroSettings}
                 onReset={() => resetSection('hero')}
