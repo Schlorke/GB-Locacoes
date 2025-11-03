@@ -21,12 +21,13 @@ export function HeroCarouselPreview({
   const [animationKey, setAnimationKey] = useState(0)
   const hasImages = images.length > 0
 
-  // Função para reiniciar animações
+  // Função para reiniciar animações (carrossel + miniatura)
   const resetAnimations = () => {
-    setAnimationKey((prev) => prev + 1)
+    setCurrentImage(0) // Volta para primeira imagem
+    setAnimationKey((prev) => prev + 1) // Força remount = reinicia animações
   }
 
-  // Auto-play carousel
+  // Auto-play carousel (reinicia quando animationKey muda)
   useEffect(() => {
     if (!hasImages || images.length <= 1) return
 
@@ -35,7 +36,7 @@ export function HeroCarouselPreview({
     }, 3000) // 3 segundos no preview (mais rápido que no real)
 
     return () => clearInterval(interval)
-  }, [hasImages, images.length])
+  }, [hasImages, images.length, animationKey])
 
   return (
     <Card
@@ -120,12 +121,13 @@ export function HeroCarouselPreview({
             {/* Carrossel - só renderiza se houver imagens */}
             {hasImages && (
               <>
-                <div className="absolute inset-0 z-0">
+                <div key={animationKey} className="absolute inset-0 z-0">
                   {/*
                     Transição SUAVE com animação inicial
                     - initial={true} permite fade-in no primeiro carregamento
                     - Cria efeito de "abrindo os olhos" ao carregar a página
                     - Uma imagem desaparece enquanto outra aparece (SEM flash branco)
+                    - key={animationKey} força remount ao clicar no reset
                   */}
                   <AnimatePresence initial={true}>
                     <motion.div
@@ -148,6 +150,7 @@ export function HeroCarouselPreview({
 
                   {/* Overlay gradiente - anima JUNTO com a primeira imagem (sem flash cinza) */}
                   <motion.div
+                    key={`overlay-${animationKey}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1.5, ease: 'easeInOut' }}
