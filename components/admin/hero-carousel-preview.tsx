@@ -365,11 +365,11 @@ export function HeroCarouselPreview({
                       transition={{ duration: 0.6, delay: 0.6 }}
                       className="flex gap-2"
                     >
-                      <div className="inline-flex items-center justify-center gap-1 bg-yellow-500 hover:bg-yellow-600 text-gray-900 hover:text-white px-3 py-1.5 rounded-lg text-[9px] font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
+                      <div className="inline-flex items-center justify-center gap-1 bg-yellow-500 hover:bg-yellow-600 text-gray-900 hover:text-white px-3 py-1 rounded-lg text-[9px] font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
                         Ver Catálogo
                         <ArrowRight className="h-2 w-2 group-hover:translate-x-0.5 transition-transform" />
                       </div>
-                      <div className="inline-flex items-center justify-center gap-1 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 px-3 py-1.5 rounded-lg text-[9px] font-semibold border-2 border-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
+                      <div className="inline-flex items-center justify-center gap-1 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 px-3 py-1 rounded-lg text-[9px] font-semibold border-2 border-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group">
                         <Play className="h-2 w-2 group-hover:scale-110 transition-transform" />
                         Orçamento
                       </div>
