@@ -25,9 +25,9 @@ export default function Hero() {
     (settings.waveAnimation as 'none' | 'static' | 'animated' | undefined) ||
     'animated'
 
-  // Background BRANCO durante loading OU quando há imagens configuradas
-  // Background LARANJA apenas quando NÃO está loading E NÃO há imagens (fallback real)
-  const shouldShowWhite = isLoading || hasImages
+  // Background BRANCO APENAS quando há imagens configuradas (efeito "abrindo os olhos")
+  // Background LARANJA quando NÃO há imagens (fallback padrão - SEMPRE laranja, mesmo durante loading)
+  const shouldShowWhite = hasImages
 
   // Auto-play carousel
   useEffect(() => {
