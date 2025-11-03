@@ -25,23 +25,12 @@ export default function Hero() {
     (settings.waveAnimation as 'none' | 'static' | 'animated' | undefined) ||
     'animated'
 
-  // SOLUÇÃO DEFINITIVA: Aguarda settings carregarem para decidir o background correto
-  // Evita flash entre branco/laranja durante loading
-  if (isLoading) {
-    // Renderiza Hero com background neutro durante loading (evita flash)
-    return (
-      <section className="relative min-h-[70vh] bg-slate-50 text-white overflow-hidden">
-        {/* Loading silencioso - sem conteúdo visível */}
-      </section>
-    )
-  }
-
   // Após loading, decide o background correto baseado em hasImages
   // Background BRANCO quando há imagens (efeito "abrindo os olhos")
   // Background LARANJA quando NÃO há imagens (fallback padrão)
   const shouldShowWhite = hasImages
 
-  // Auto-play carousel
+  // Auto-play carousel (HOOK SEMPRE chamado - Rules of Hooks)
   useEffect(() => {
     if (!hasImages || carouselImages.length <= 1) return
 
@@ -66,6 +55,15 @@ export default function Hero() {
     router.push(`/equipamentos?search=${encodeURIComponent(query)}`)
   }
 
+  // Durante loading, renderiza estado neutro
+  if (isLoading) {
+    return (
+      <section className="relative min-h-[70vh] bg-slate-50 text-white overflow-hidden">
+        {/* Loading silencioso - aguarda settings carregarem */}
+      </section>
+    )
+  }
+
   return (
     <section
       className={cn(
@@ -73,8 +71,8 @@ export default function Hero() {
         // padding-bottom para compensar altura da onda (h-12 = 48px)
         // Faz a onda "empurrar" conteúdo sem afetar animações
         waveAnimation !== 'none' ? 'pb-12' : 'pb-0',
-        // Background BRANCO durante loading OU quando há imagens (efeito "abrindo os olhos")
-        // Background LARANJA apenas como fallback quando não está loading E não há imagens
+        // Background BRANCO quando há imagens (efeito "abrindo os olhos")
+        // Background LARANJA quando NÃO há imagens (fallback padrão)
         shouldShowWhite
           ? 'bg-slate-50'
           : 'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
