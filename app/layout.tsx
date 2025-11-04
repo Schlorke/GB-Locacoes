@@ -27,23 +27,29 @@ const jost = Jost({
 
 // Gerar metadados dinâmicos a partir do banco de dados
 export async function generateMetadata(): Promise<Metadata> {
-  // Buscar configurações do banco
-  const settings = await prisma.setting.findFirst({
-    select: {
-      aboutUsText: true,
-      seoTitle: true,
-      seoDescription: true,
-    },
-  })
-
-  // Valores padrão caso não existam no banco (fallback se aboutUsText estiver vazio)
+  // Valores padrão caso não existam no banco ou durante CI build
   const defaultAboutUs =
     'Há 10 anos oferecendo soluções em locação de equipamentos para obras e serviços em altura. Segurança, qualidade e manutenção constante.'
+  const defaultTitle =
+    'GB Locações - Especializada em Locação de Equipamentos para Construção Civil'
+
+  let settings = null
+  try {
+    // Buscar configurações do banco (pode falhar no CI)
+    settings = await prisma.setting.findFirst({
+      select: {
+        aboutUsText: true,
+        seoTitle: true,
+        seoDescription: true,
+      },
+    })
+  } catch (_error) {
+    // Ignorar erro durante build no CI
+    console.log('Using default metadata (database not available)')
+  }
 
   const description = settings?.aboutUsText || defaultAboutUs
-  const title =
-    settings?.seoTitle ||
-    'GB Locações - Especializada em Locação de Equipamentos para Construção Civil'
+  const title = settings?.seoTitle || defaultTitle
 
   return {
     metadataBase: new URL('https://locacoesgb.com.br'),

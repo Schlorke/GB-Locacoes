@@ -867,71 +867,17 @@ export default function SettingsPage() {
                     </div>
                   }
                   preview={
-                    <>
-                      <HeroCarouselPreview
-                        images={
-                          formData.heroCarousel?.map((item) =>
-                            typeof item === 'string' ? item : item.imageUrl
-                          ) || []
-                        }
-                        waveAnimation={formData.waveAnimation}
-                      />
-
-                      {/* Controle de Animação da Onda - movido para baixo do preview */}
-                      <div className="mt-6 text-center">
-                        <div className="space-y-1.5">
-                          <Label className="text-center block">
-                            Animação da Onda
-                          </Label>
-                          <p className="text-xs text-gray-600 text-center">
-                            Controle o efeito ondulado na parte inferior da
-                            seção Hero
-                          </p>
-                        </div>
-                        <div className="flex gap-2 justify-center mt-3">
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant={
-                              formData.waveAnimation === 'none'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            onClick={() => updateField('waveAnimation', 'none')}
-                          >
-                            Sem Onda
-                          </Button>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant={
-                              formData.waveAnimation === 'static'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            onClick={() =>
-                              updateField('waveAnimation', 'static')
-                            }
-                          >
-                            Estática
-                          </Button>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant={
-                              formData.waveAnimation === 'animated'
-                                ? 'default'
-                                : 'outline'
-                            }
-                            onClick={() =>
-                              updateField('waveAnimation', 'animated')
-                            }
-                          >
-                            Animada
-                          </Button>
-                        </div>
-                      </div>
-                    </>
+                    <HeroCarouselPreview
+                      images={
+                        formData.heroCarousel?.map((item) =>
+                          typeof item === 'string' ? item : item.imageUrl
+                        ) || []
+                      }
+                      waveAnimation={formData.waveAnimation}
+                      onWaveAnimationChange={(value) =>
+                        updateField('waveAnimation', value)
+                      }
+                    />
                   }
                   onSave={saveHeroSettings}
                   onReset={() => resetSection('hero')}

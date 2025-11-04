@@ -6,7 +6,6 @@ const config: StorybookConfig = {
     '../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
-    '@chromatic-com/storybook',
     '@storybook/addon-docs',
     '@storybook/addon-onboarding',
     '@storybook/addon-a11y',
@@ -16,6 +15,6 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs',
     options: {},
   },
-  staticDirs: ['..\\public'],
+  staticDirs: ['../public'],
 }
 export default config

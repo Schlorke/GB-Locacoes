@@ -68,17 +68,24 @@ function buildHeroInitialSettings(data: {
 
 export default async function HomePage() {
   const prisma = await getPrisma()
-  const publicSettings = await prisma.setting.findFirst({
-    select: {
-      companyPhone: true,
-      whatsappNumber: true,
-      contactEmail: true,
-      companyAddress: true,
-      heroCarousel: true,
-      waveAnimation: true,
-      aboutUsText: true,
-    },
-  })
+
+  let publicSettings = null
+  try {
+    publicSettings = await prisma.setting.findFirst({
+      select: {
+        companyPhone: true,
+        whatsappNumber: true,
+        contactEmail: true,
+        companyAddress: true,
+        heroCarousel: true,
+        waveAnimation: true,
+        aboutUsText: true,
+      },
+    })
+  } catch (_error) {
+    // Ignorar erro durante build no CI
+    console.log('Using default settings (database not available)')
+  }
 
   const localBusinessData = getLocalBusinessData(publicSettings || undefined)
   const heroInitialSettings = buildHeroInitialSettings({

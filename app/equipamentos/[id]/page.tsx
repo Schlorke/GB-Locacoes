@@ -15,6 +15,7 @@ import { getLocalBusinessData } from '@/lib/structured-data-utils'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import * as LucideIcons from 'lucide-react'
 import { ArrowLeft, CheckCircle, Shield, Star, Tag, Truck } from 'lucide-react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 // Runtime-only Prisma import for server components
@@ -46,7 +47,7 @@ const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
   )
 }
 
-export async function generateMetadata(props: Props) {
+export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
   const prisma = await getPrisma()
   const equipment = await prisma.equipment.findUnique({
@@ -155,38 +156,50 @@ export async function generateMetadata(props: Props) {
   }
 }
 
+// Force dynamic rendering to avoid build-time database queries
+export const dynamic = 'force-dynamic'
+
 export default async function EquipmentDetailPage(props: Props) {
   const params = await props.params
   const prisma = await getPrisma()
 
-  // Buscar equipment e settings em paralelo
-  const [equipment, settings] = await Promise.all([
-    prisma.equipment.findUnique({
-      where: { id: params.id },
-      include: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-            icon: true,
-            iconColor: true,
-            bgColor: true,
-            fontColor: true,
-            slug: true,
+  let equipment = null
+  let settings = null
+
+  try {
+    // Buscar equipment e settings em paralelo
+    const results = await Promise.all([
+      prisma.equipment.findUnique({
+        where: { id: params.id },
+        include: {
+          category: {
+            select: {
+              id: true,
+              name: true,
+              icon: true,
+              iconColor: true,
+              bgColor: true,
+              fontColor: true,
+              slug: true,
+            },
           },
         },
-      },
-    }),
-    prisma.setting.findFirst({
-      select: {
-        companyPhone: true,
-        whatsappNumber: true,
-        contactEmail: true,
-        companyAddress: true,
-        aboutUsText: true,
-      },
-    }),
-  ])
+      }),
+      prisma.setting.findFirst({
+        select: {
+          companyPhone: true,
+          whatsappNumber: true,
+          contactEmail: true,
+          companyAddress: true,
+          aboutUsText: true,
+        },
+      }),
+    ])
+    equipment = results[0]
+    settings = results[1]
+  } catch (_error) {
+    console.log('Database query failed (CI build or connection error)')
+  }
 
   if (!equipment) {
     notFound()

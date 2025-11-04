@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { FilterResetButton } from '@/components/ui/filter-reset-button'
 import { cn } from '@/lib/utils'
@@ -11,11 +12,13 @@ import { useEffect, useState } from 'react'
 interface HeroCarouselPreviewProps {
   images: string[]
   waveAnimation: 'none' | 'static' | 'animated'
+  onWaveAnimationChange?: (_value: 'none' | 'static' | 'animated') => void
 }
 
 export function HeroCarouselPreview({
   images = [],
   waveAnimation = 'animated',
+  onWaveAnimationChange,
 }: HeroCarouselPreviewProps) {
   const [currentImage, setCurrentImage] = useState(0)
   const [animationKey, setAnimationKey] = useState(0)
@@ -511,6 +514,46 @@ export function HeroCarouselPreview({
             Veja como ficará na página inicial.
           </p>
         </div>
+
+        {/* Controle de Animação da Onda */}
+        {onWaveAnimationChange && (
+          <div className="text-center border-t border-gray-200 pt-4">
+            <div className="space-y-1.5 mb-3">
+              <h4 className="text-sm font-semibold text-gray-900">
+                Animação da Onda
+              </h4>
+              <p className="text-xs text-gray-600">
+                Controle o efeito ondulado na parte inferior da seção Hero
+              </p>
+            </div>
+            <div className="flex gap-2 justify-center">
+              <Button
+                type="button"
+                size="sm"
+                variant={waveAnimation === 'none' ? 'default' : 'outline'}
+                onClick={() => onWaveAnimationChange('none')}
+              >
+                Sem Onda
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant={waveAnimation === 'static' ? 'default' : 'outline'}
+                onClick={() => onWaveAnimationChange('static')}
+              >
+                Estática
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant={waveAnimation === 'animated' ? 'default' : 'outline'}
+                onClick={() => onWaveAnimationChange('animated')}
+              >
+                Animada
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </Card>
   )
