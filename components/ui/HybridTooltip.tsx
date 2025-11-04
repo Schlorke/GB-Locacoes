@@ -22,18 +22,26 @@ const contentClassName = cn(
   'data-[side=top]:slide-in-from-bottom-4'
 )
 
-// --- INTERFACE ---
+// --- INTERFACE COM PROPS FLEXÍVEIS ---
 interface HybridTooltipProps {
   children: React.ReactNode
   content: React.ReactNode
-  [key: string]: unknown
+  side?: 'top' | 'right' | 'bottom' | 'left'
+  align?: 'start' | 'center' | 'end'
+  sideOffset?: number
+  delayDuration?: number
+  className?: string
 }
 
-// --- COMPONENTE HÍBRIDO ---
+// --- COMPONENTE HÍBRIDO REUTILIZÁVEL ---
 const HybridTooltip: React.FC<HybridTooltipProps> = ({
   children,
   content,
-  ...props
+  side = 'top',
+  align = 'center',
+  sideOffset = 5,
+  delayDuration = 500,
+  className,
 }) => {
   const hasHover = useHasHover()
 
@@ -41,17 +49,16 @@ const HybridTooltip: React.FC<HybridTooltipProps> = ({
   if (hasHover) {
     return (
       <TooltipPrimitive.Provider>
-        <TooltipPrimitive.Root delayDuration={500}>
+        <TooltipPrimitive.Root delayDuration={delayDuration}>
           <TooltipPrimitive.Trigger asChild>
             {children}
           </TooltipPrimitive.Trigger>
           <TooltipPrimitive.Portal>
             <TooltipPrimitive.Content
-              side="top" // Garante posicionamento acima
-              align="center"
-              sideOffset={5}
-              className={contentClassName}
-              {...props}
+              side={side}
+              align={align}
+              sideOffset={sideOffset}
+              className={cn(contentClassName, className)}
             >
               {content}
               <TooltipPrimitive.Arrow className="fill-white" />
@@ -68,11 +75,10 @@ const HybridTooltip: React.FC<HybridTooltipProps> = ({
       <PopoverPrimitive.Trigger asChild>{children}</PopoverPrimitive.Trigger>
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
-          side="top" // CRÍTICO: Força o Popover a abrir para cima
-          align="center"
-          sideOffset={5}
-          className={contentClassName}
-          {...props}
+          side={side}
+          align={align}
+          sideOffset={sideOffset}
+          className={cn(contentClassName, className)}
         >
           {content}
           <PopoverPrimitive.Arrow className="fill-white" />
@@ -83,3 +89,45 @@ const HybridTooltip: React.FC<HybridTooltipProps> = ({
 }
 
 export { HybridTooltip }
+
+// --- EXEMPLO DE USO RECOMENDADO ---
+/*
+// 1. USO BÁSICO (com ícone de informação padrão):
+import { HybridTooltip } from '@/components/ui/HybridTooltip'
+import { Info } from 'lucide-react'
+
+<HybridTooltip content="Texto explicativo aqui">
+  <Info className="size-4 text-gray-700 cursor-help transition-colors hover:text-orange-600" />
+</HybridTooltip>
+
+// 2. USO CUSTOMIZADO (posição e delay personalizados):
+<HybridTooltip
+  content="Tooltip à direita com delay menor"
+  side="right"
+  align="start"
+  delayDuration={300}
+>
+  <Info className="size-4 text-gray-700 cursor-help transition-colors hover:text-orange-600" />
+</HybridTooltip>
+
+// 3. USO COM TEXTO LONGO (quebra automática até max-w-xs):
+<HybridTooltip
+  content="Este é um texto mais longo que será automaticamente quebrado em múltiplas linhas graças ao max-w-xs configurado no estilo padrão."
+>
+  <Info className="size-4 text-gray-700 cursor-help transition-colors hover:text-orange-600" />
+</HybridTooltip>
+
+// 4. USO COM BOTÃO OU QUALQUER ELEMENTO:
+<HybridTooltip content="Clique para salvar as alterações">
+  <button className="px-4 py-2 bg-orange-600 text-white rounded-md">
+    Salvar
+  </button>
+</HybridTooltip>
+
+// PADRÃO RECOMENDADO PARA ÍCONES DE INFORMAÇÃO:
+// - Tamanho: size-4 (16px)
+// - Cor padrão: text-gray-700
+// - Hover: hover:text-orange-600
+// - Cursor: cursor-help
+// - Transição: transition-colors
+*/

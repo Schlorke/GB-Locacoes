@@ -879,14 +879,16 @@ export default function SettingsPage() {
 
                       {/* Controle de Animação da Onda - movido para baixo do preview */}
                       <div className="mt-6 text-center">
-                        <Label className="text-center block">
-                          Animação da Onda
-                        </Label>
-                        <p className="text-xs text-gray-600 mb-2 text-center">
-                          Controle o efeito ondulado na parte inferior da seção
-                          Hero
-                        </p>
-                        <div className="flex gap-2 justify-center">
+                        <div className="space-y-1.5">
+                          <Label className="text-center block">
+                            Animação da Onda
+                          </Label>
+                          <p className="text-xs text-gray-600 text-center">
+                            Controle o efeito ondulado na parte inferior da
+                            seção Hero
+                          </p>
+                        </div>
+                        <div className="flex gap-2 justify-center mt-3">
                           <Button
                             type="button"
                             size="sm"
