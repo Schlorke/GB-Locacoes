@@ -1,0 +1,233 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as DialogStories from './Dialog.stories'
+
+<Meta of={DialogStories} />
+
+# Dialog
+
+Componente de modal/dialog acessível baseado em Radix UI. Para exibir conteúdo
+sobreposto que requer atenção e interação do usuário, bloqueando o conteúdo de
+fundo.
+
+## Quando Usar
+
+✅ **Para confirmações críticas** - Deletar, cancelar, sair ✅ **Para
+formulários modais** - Criar/editar dados sem sair da página ✅ **Para
+informações detalhadas** - Detalhes que não cabem na tela principal ✅ **Para
+ações destrutivas** - Confirmar antes de executar
+
+## Quando NÃO Usar
+
+❌ **Para notificações** - Use Toast ao invés ❌ **Para mensagens inline** - Use
+Alert ao invés ❌ **Para navegação** - Use rotas/páginas ao invés ❌ **Para
+conteúdo extenso** - Considere página dedicada
+
+---
+
+## Exemplos
+
+### Dialog Básico
+
+<Canvas of={DialogStories.Default} />
+
+### Dialog Simples
+
+<Canvas of={DialogStories.Simple} />
+
+---
+
+## Tipos de Dialog
+
+### Confirmação
+
+<Canvas of={DialogStories.ConfirmationDialog} />
+
+### Formulário
+
+<Canvas of={DialogStories.FormDialog} />
+
+### Informação
+
+<Canvas of={DialogStories.InfoDialog} />
+
+### Alerta
+
+<Canvas of={DialogStories.AlertDialog} />
+
+---
+
+## Tamanhos
+
+### Tamanho Customizado
+
+<Canvas of={DialogStories.CustomSize} />
+
+---
+
+## Playground
+
+<Canvas of={DialogStories.Playground} />
+<Controls of={DialogStories.Playground} />
+
+---
+
+## Acessibilidade
+
+- ✅ **Trap de foco** - Foco fica dentro do dialog
+- ✅ **ESC para fechar** - Pressione ESC para dispensar
+- ✅ **Overlay clicável** - Click fora fecha o dialog
+- ✅ **DialogTitle obrigatório** - Para leitores de tela
+- ✅ **DialogDescription** - Contexto adicional
+- ✅ **Botão de fechar** - Sempre visível
+
+---
+
+## Subcomponentes
+
+- **Dialog** - Wrapper principal
+- **DialogTrigger** - Botão que abre o dialog
+- **DialogContent** - Conteúdo do modal
+- **DialogHeader** - Cabeçalho
+- **DialogTitle** - Título (obrigatório)
+- **DialogDescription** - Descrição
+- **DialogFooter** - Rodapé com ações
+- **DialogClose** - Para fechar programaticamente
+
+---
+
+## Design Tokens
+
+### Dimensões
+
+- **Default**: `max-w-md` (448px)
+- **Height**: `h-[90dvh]` mobile, `h-[85dvh]` desktop
+- **Custom**: Use `className="max-w-3xl"` para outros tamanhos
+
+### Cores
+
+- **Overlay**: `bg-black/50` (50% opacidade)
+- **Background**: `bg-white`
+- **Border**: `border-0`
+
+### Animações
+
+- **Open**: `fade-in + zoom-in-95`
+- **Close**: `fade-out + zoom-out-95`
+- **Duration**: Transições suaves automáticas
+
+---
+
+## Exemplos de Código
+
+### Dialog Básico
+
+```tsx
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+;<Dialog>
+  <DialogTrigger asChild>
+    <Button>Abrir</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Título</DialogTitle>
+      <DialogDescription>Descrição</DialogDescription>
+    </DialogHeader>
+    <div className="py-4">{/* Conteúdo */}</div>
+  </DialogContent>
+</Dialog>
+```
+
+### Dialog de Confirmação
+
+```tsx
+import { DialogFooter, DialogClose } from '@/components/ui/dialog'
+;<Dialog>
+  <DialogTrigger asChild>
+    <Button variant="destructive">Deletar</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Confirmar Exclusão</DialogTitle>
+      <DialogDescription>Esta ação não pode ser desfeita.</DialogDescription>
+    </DialogHeader>
+    <DialogFooter>
+      <DialogClose asChild>
+        <Button variant="outline">Cancelar</Button>
+      </DialogClose>
+      <Button variant="destructive">Confirmar</Button>
+    </DialogFooter>
+  </DialogContent>
+</Dialog>
+```
+
+### Dialog com Formulário
+
+```tsx
+<Dialog>
+  <DialogTrigger asChild>
+    <Button>Editar</Button>
+  </DialogTrigger>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Editar Dados</DialogTitle>
+    </DialogHeader>
+    <form className="space-y-4 py-4">
+      <div className="space-y-2">
+        <Label htmlFor="name">Nome</Label>
+        <Input id="name" />
+      </div>
+      <DialogFooter>
+        <DialogClose asChild>
+          <Button type="button" variant="outline">
+            Cancelar
+          </Button>
+        </DialogClose>
+        <Button type="submit">Salvar</Button>
+      </DialogFooter>
+    </form>
+  </DialogContent>
+</Dialog>
+```
+
+### Tamanho Customizado
+
+```tsx
+<DialogContent className="max-w-3xl">{/* Conteúdo largo */}</DialogContent>
+```
+
+---
+
+## Dicas e Melhores Práticas
+
+### ✅ Sempre faça
+
+- Use DialogTitle (obrigatório para acessibilidade)
+- Adicione DialogDescription para contexto
+- Use DialogFooter com botões de ação
+- Inclua botão "Cancelar" em ações destrutivas
+- Use `asChild` no DialogTrigger para composição
+
+### ❌ Evite
+
+- Dialogs aninhados (dialog dentro de dialog)
+- Conteúdo muito longo (considere scroll ou página)
+- Múltiplos dialogs abertos simultaneamente
+- Dialogs sem forma clara de fechar
+
+---
+
+## Props
+
+<Controls />
+
+---
+
+**Última atualização**: Janeiro 2025 **Versão**: 1.0.0

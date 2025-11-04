@@ -1,0 +1,125 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as CheckboxStories from './Checkbox.stories'
+
+<Meta of={CheckboxStories} />
+
+# Checkbox
+
+Componente de checkbox acessível baseado em Radix UI. Suporta estados checked,
+unchecked e indeterminate com navegação por teclado completa.
+
+## Quando Usar
+
+✅ **Para seleção múltipla** - Quando usuário pode escolher várias opções ✅
+**Para aceitar termos** - Confirmações e acordos ✅ **Para preferências** -
+Configurações com múltiplas escolhas ✅ **Para filtros** - Seleção de categorias
+ou atributos
+
+## Quando NÃO Usar
+
+❌ **Para seleção única** - Use Radio Group ao invés ❌ **Para toggle on/off** -
+Use Switch para estados binários ❌ **Para ações imediatas** - Use Button ao
+invés
+
+---
+
+## Exemplos
+
+### Com Label
+
+<Canvas of={CheckboxStories.WithLabel} />
+
+### Checked
+
+<Canvas of={CheckboxStories.Checked} />
+
+### Disabled
+
+<Canvas of={CheckboxStories.Disabled} />
+
+---
+
+## Casos de Uso
+
+### Formulário
+
+<Canvas of={CheckboxStories.FormExample} />
+
+### Grupo de Checkboxes
+
+<Canvas of={CheckboxStories.CheckboxGroup} />
+
+### Com Descrição
+
+<Canvas of={CheckboxStories.WithDescription} />
+
+### Aceitação de Termos
+
+<Canvas of={CheckboxStories.TermsAcceptance} />
+
+---
+
+## Playground
+
+<Canvas of={CheckboxStories.Playground} />
+<Controls of={CheckboxStories.Playground} />
+
+---
+
+## Acessibilidade
+
+- ✅ **SEMPRE use com Label** - Associe com htmlFor e id
+- ✅ **Navegação por teclado** - Space para marcar/desmarcar
+- ✅ **Estados visíveis** - Foco claro com ring
+- ✅ **Disabled acessível** - Removido de tab order quando disabled
+
+---
+
+## Design Tokens
+
+- **Size**: `h-4 w-4` (16px x 16px)
+- **Border**: `border-primary`
+- **Checked**: `bg-primary text-primary-foreground`
+- **Focus**: `focus:border-blue-500 focus:outline-blue-500`
+
+---
+
+## Exemplos de Código
+
+### Básico
+
+```tsx
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
+;<div className="flex items-center space-x-2">
+  <Checkbox id="accept" />
+  <Label htmlFor="accept">Aceito os termos</Label>
+</div>
+```
+
+### Com React Hook Form
+
+```tsx
+import { useForm } from 'react-hook-form'
+
+function MyForm() {
+  const { register } = useForm()
+
+  return (
+    <div className="flex items-center space-x-2">
+      <Checkbox id="terms" {...register('terms')} />
+      <Label htmlFor="terms">Aceito os termos</Label>
+    </div>
+  )
+}
+```
+
+---
+
+## Props
+
+<Controls />
+
+---
+
+**Última atualização**: Janeiro 2025 **Versão**: 1.0.0

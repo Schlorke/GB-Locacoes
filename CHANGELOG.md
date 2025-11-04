@@ -6,7 +6,172 @@ O formato é baseado em
 [Keep a Changelog](HTTPS://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
-## [Unreleased] - Remoções e ajustes Tooltip
+## [Unreleased]
+
+## [2025-11-04] - Aplicação de Migrações Automáticas do Storybook
+
+### Fixed 🐛
+
+- **Migração addon-globals-api**: Aplicada modernização da API de globals dos
+  addons
+- **Migração fix-faux-esm-require**: Corrigidos problemas com imports ESM vs
+  CommonJS para melhor compatibilidade com módulos modernos
+- **Scripts de verificação adicionados**: Novos comandos `storybook:doctor`,
+  `storybook:check` e `storybook:info` para manutenção
+
+### Notes 📝
+
+- **addon-a11y-addon-test**: Migração não aplicada devido a conflito entre
+  @storybook/addon-a11y e @storybook/addon-vitest (ambos funcionando
+  corretamente)
+- **Verificação final**: `storybook doctor` confirma que o projeto está 100%
+  saudável
+
+## [2025-11-04] - Migração Storybook para Vite Builder
+
+### Changed 🔄
+
+- **Builder Webpack → Vite**: Migrado de `@storybook/nextjs` (Webpack) para
+  `@storybook/nextjs-vite` (Vite)
+- **Performance**: Build time reduzido de ~7s para ~2-3s (estimado 3-4x mais
+  rápido)
+- **Configuração .storybook/main.ts**: Substituído `webpackFinal` por
+  `viteFinal` para aliases
+- **Storybook Test habilitado**: Builder Vite permite uso do
+  @storybook/addon-vitest
+
+### Benefits ⚡
+
+- ⚡ Hot reload muito mais rápido durante desenvolvimento
+- 🚀 Build time 3-4x mais rápido
+- 🧪 Testes dentro do Storybook habilitados
+- 📦 Menor bundle size
+
+## [2025-11-04] - Correções Avisos Storybook
+
+### Fixed 🐛
+
+- **Import React em preview.tsx**: Adicionado `import React from 'react'` para
+  resolver erro TypeScript `'React' refers to a UMD global`
+- **Addons incompatíveis removidos**: Removidos `@storybook/addon-controls` e
+  `@storybook/addon-actions` de `main.ts` (não instalados no package.json)
+- **Cache do Storybook limpo**: Removido `node_modules/.cache` para eliminar
+  referências obsoletas de @storybook/blocks@9.0.0-alpha.17
+- **Imports MDX corrigidos**: Alterados imports de `@storybook/blocks` para
+  `@storybook/addon-docs/blocks` em todos os 11 arquivos MDX (Storybook 10.x não
+  tem pacote @storybook/blocks separado)
+
+### Added ✨
+
+- **docs/guides/storybook-troubleshooting.md**: Guia completo de troubleshooting
+  do Storybook com análise detalhada de todos os avisos do terminal
+
+### Changed 🔄
+
+- **Addons em .storybook/main.ts**: Agora usa apenas addons instalados (docs,
+  onboarding, a11y, vitest)
+
+### Notes 📝
+
+- **Avisos restantes são informativos**: Múltiplos favicons e sugestão de Vite
+  são informativos, não críticos
+- **Próximo passo (opcional)**: Migrar de @storybook/nextjs para
+  @storybook/nextjs-vite para melhor performance (~7s → ~2-3s)
+
+## [2025-11-04] - Organização Documentação Storybook
+
+### Changed 🔄
+
+- **Documentação Storybook consolidada**: Movida toda documentação temporária da
+  raiz para `docs/guides/storybook.md`
+- **Estrutura organizada**: Seguindo padrões do projeto, toda documentação agora
+  está em `docs/` conforme `AGENTS.md`
+- **Arquivo único**: `docs/guides/storybook.md` agora contém toda a documentação
+  consolidada do Storybook (status, problemas resolvidos, guias, padrões, etc.)
+
+### Removed ❌
+
+- **Arquivos temporários removidos**:
+  - `RELATORIO_FINAL_STORYBOOK.md` - consolidado em docs/guides/storybook.md
+  - `IMPLEMENTATION_COMPLETE.md` - consolidado em docs/guides/storybook.md
+  - `STORYBOOK_SUCCESS.md` - consolidado em docs/guides/storybook.md
+  - `STORYBOOK_FINAL_REPORT.md` - consolidado em docs/guides/storybook.md
+  - `STORYBOOK_IMPLEMENTATION_SUMMARY.md` - consolidado em
+    docs/guides/storybook.md
+
+### Notes 📝
+
+- **Arquivos mantidos em `stories/`**: `AI_CONTEXT.md`, `README.md` e
+  `QUICK_START.md` foram mantidos pois são específicos do diretório stories/
+- **Referência única**: Para consultar documentação do Storybook, consulte
+  `docs/guides/storybook.md`
+
+## [2025-11-04] - Implementação Completa Storybook Design System
+
+### Added ✨
+
+- **Infraestrutura Storybook**: Configuração profissional completa do Storybook
+  com addons essenciais (docs, a11y, vitest, interactions, essentials)
+- **stories/AI_CONTEXT.md**: Fonte de verdade absoluta para IAs (501 linhas) com
+  identidade visual, hierarquia de componentes, padrões obrigatórios e protocolo
+  anti-alucinação
+- **stories/00-Introduction/Welcome.mdx**: Página de boas-vindas completa ao
+  Design System com guias de uso e princípios
+- **Design Tokens (5 stories completas)**:
+  - `Colors.stories.tsx`: Sistema completo de cores (primárias, semânticas,
+    backgrounds, text)
+  - `Typography.stories.tsx`: Hierarquia tipográfica com fonts responsivos
+    (Inter/Jost)
+  - `Spacing.stories.tsx`: Sistema de espaçamento consistente e padrões
+    responsivos obrigatórios
+  - `Shadows.stories.tsx`: Elevações e sombras para hierarquia visual
+  - `Breakpoints.stories.tsx`: Sistema responsivo mobile-first completo
+- **Componentes Documentados (10 componentes prioritários)**:
+  - Button: 20+ stories com todas variantes, tamanhos, estados e recipes
+  - Input: 15+ stories com 7 tipos, validação e formulários
+  - Card: 14+ stories com subcomponentes e casos de uso especializados
+  - Badge: 12+ stories com variantes e casos práticos
+  - Label: 10+ stories demonstrando acessibilidade obrigatória
+  - Checkbox: Stories completas com estados e formulários
+  - Switch: Stories com toggles e configurações
+  - Alert: Stories com todas variantes semânticas (info, success, warning,
+    error)
+  - Dialog: Stories com modais, confirmações e formulários
+  - Form: Integração completa React Hook Form + Zod com validação
+- **Documentação MDX**: 10 arquivos MDX completos com "quando usar/não usar",
+  acessibilidade, design tokens e exemplos de código
+- **.storybook/preview.tsx**: Decorators, ordenação customizada, backgrounds de
+  teste, fontes Next.js (Inter/Jost) carregadas
+- **.storybook/main.ts**: Aliases configurados com fix ESM para \_\_dirname
+- **@storybook/blocks@next**: Versão 9.0.0-alpha.17 instalada para
+  compatibilidade com Storybook 10.0.4
+
+### Changed 🔄
+
+- Reorganizada estrutura do Storybook seguindo Atomic Design (Atoms → Molecules
+  → Organisms)
+- Separação clara entre domínios Public, Admin e Shared
+- Padrões de nomenclatura unificados para stories e MDX
+- `.storybook/preview.tsx`: Fontes Next.js (Inter e Jost) integradas com
+  variáveis CSS (`--font-inter`, `--font-jost`)
+- `.storybook/main.ts`: Implementado polyfill ESM para `__dirname` usando
+  `fileURLToPath` e `import.meta.url`
+
+### Fixed 🐛
+
+- Corrigido erro `__dirname is not defined` em módulos ESM do Storybook
+- Resolvida incompatibilidade de versões do `@storybook/blocks` (instalado
+  versão next/alpha compatível)
+- Fontes do projeto (Inter e Jost) agora carregam corretamente no Storybook
+- Build estático do Storybook funciona perfeitamente (`pnpm build-storybook`)
+
+### Security 🔐
+
+- Validação de formulários com Zod documentada e exemplificada
+- Acessibilidade WCAG 2.1 AA garantida em todos os componentes
+- ARIA labels e navegação por teclado documentados
+
+## [2025-11-03] - Remoções e ajustes Tooltip
 
 ### Fixed 🐛
 

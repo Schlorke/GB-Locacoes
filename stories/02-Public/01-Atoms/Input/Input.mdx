@@ -1,0 +1,416 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as InputStories from './Input.stories'
+
+<Meta of={InputStories} />
+
+# Input
+
+Componente de input de texto simples, acessível e versátil. Suporta todos os
+tipos nativos de HTML input e se integra perfeitamente com formulários, labels e
+validação.
+
+## Quando Usar
+
+✅ **Para entrada de texto** simples (nome, endereço, etc.) ✅ **Para emails e
+senhas** em formulários de autenticação ✅ **Para números** (idade, quantidade,
+preço) ✅ **Para busca** com type="search" ✅ **Para telefones e URLs** com
+validação nativa do navegador
+
+## Quando NÃO Usar
+
+❌ **Para texto longo** - use `<textarea>` ao invés ❌ **Para seleção de
+opções** - use `<Select>` ou `<RadioGroup>` ❌ **Para datas** - use `<Calendar>`
+ou date picker ❌ **Para upload de arquivos** - use componente de file upload
+customizado
+
+---
+
+## Tipos de Input
+
+### Text
+
+Input de texto padrão para entrada geral.
+
+<Canvas of={InputStories.Text} />
+
+### Email
+
+Validação automática de email pelo navegador.
+
+<Canvas of={InputStories.Email} />
+
+### Password
+
+Oculta o texto digitado.
+
+<Canvas of={InputStories.Password} />
+
+### Number
+
+Apenas números, com setas de incremento/decremento.
+
+<Canvas of={InputStories.Number} />
+
+### Search
+
+Otimizado para busca, com ícone "x" para limpar (em alguns navegadores).
+
+<Canvas of={InputStories.Search} />
+
+### Tel
+
+Para números de telefone.
+
+<Canvas of={InputStories.Tel} />
+
+### URL
+
+Para endereços web com validação.
+
+<Canvas of={InputStories.Url} />
+
+---
+
+## Estados
+
+### Disabled
+
+<Canvas of={InputStories.Disabled} />
+
+### With Value
+
+<Canvas of={InputStories.WithValue} />
+
+### Read Only
+
+<Canvas of={InputStories.ReadOnly} />
+
+---
+
+## Com Label
+
+### Label Básico
+
+<Canvas of={InputStories.WithLabel} />
+
+### Com Texto de Ajuda
+
+<Canvas of={InputStories.WithLabelAndHelper} />
+
+---
+
+## Receitas e Padrões Comuns
+
+### Com Ícone à Esquerda
+
+<Canvas of={InputStories.WithIconLeft} />
+
+### Com Ícone à Direita
+
+<Canvas of={InputStories.WithIconRight} />
+
+### Toggle de Senha
+
+<Canvas of={InputStories.PasswordToggle} />
+
+---
+
+## Exemplos de Formulários
+
+### Formulário de Login
+
+<Canvas of={InputStories.LoginForm} />
+
+### Formulário de Contato
+
+<Canvas of={InputStories.ContactForm} />
+
+---
+
+## Estados de Validação
+
+### Sucesso
+
+<Canvas of={InputStories.ValidationSuccess} />
+
+### Erro
+
+<Canvas of={InputStories.ValidationError} />
+
+---
+
+## Playground
+
+<Canvas of={InputStories.Playground} />
+<Controls of={InputStories.Playground} />
+
+---
+
+## Acessibilidade
+
+- ✅ **SEMPRE use Label** - Associe input com label usando `htmlFor` e `id`
+- ✅ **Placeholder não substitui label** - Placeholder desaparece ao digitar
+- ✅ **Estados de foco visíveis** - Ring azul ao focar
+- ✅ **Navegação por teclado** - Focável com Tab
+- ✅ **Validação acessível** - Use `aria-invalid` e `aria-describedby` para
+  erros
+
+### Exemplo Acessível
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="username">Nome de usuário</Label>
+  <Input
+    id="username"
+    type="text"
+    aria-describedby="username-error"
+    aria-invalid={hasError}
+  />
+  {hasError && (
+    <p id="username-error" className="text-sm text-red-600">
+      Nome de usuário é obrigatório
+    </p>
+  )}
+</div>
+```
+
+---
+
+## Design Tokens Utilizados
+
+### Dimensões
+
+- **Height**: `h-10` (40px) - padrão
+- **Padding horizontal**: `px-3` (12px)
+- **Padding vertical**: `py-2` (8px)
+
+### Cores
+
+- **Background**: `bg-background` (branco)
+- **Border**: `border-input` (cinza claro)
+- **Text**: `text-foreground` (cinza escuro)
+- **Placeholder**: `placeholder:text-muted-foreground` (cinza médio)
+
+### Border
+
+- **Radius**: `rounded-md` (6px)
+- **Width**: `border` (1px)
+
+### Focus
+
+- **Ring**: `focus-visible:ring-2 ring-ring` (azul)
+- **Outline**: `focus-visible:outline-none`
+
+### Estados
+
+- **Disabled**: `opacity-50 cursor-not-allowed`
+- **File input**: Customização especial para upload
+
+---
+
+## Exemplos de Código
+
+### Input Básico
+
+```tsx
+import { Input } from '@/components/ui/input'
+;<Input placeholder="Digite algo..." />
+```
+
+### Com Label
+
+```tsx
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+;<div className="space-y-2">
+  <Label htmlFor="email">Email</Label>
+  <Input id="email" type="email" placeholder="seu@email.com" />
+</div>
+```
+
+### Com Ícone
+
+```tsx
+import { Search } from 'lucide-react'
+;<div className="relative">
+  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+  <Input className="pl-10" placeholder="Pesquisar..." />
+</div>
+```
+
+### Password Toggle
+
+```tsx
+import { useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
+
+function PasswordInput() {
+  const [show, setShow] = useState(false)
+
+  return (
+    <div className="relative">
+      <Input
+        type={show ? 'text' : 'password'}
+        placeholder="Senha"
+        className="pr-10"
+      />
+      <button
+        type="button"
+        onClick={() => setShow(!show)}
+        className="absolute right-3 top-1/2 -translate-y-1/2"
+      >
+        {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+      </button>
+    </div>
+  )
+}
+```
+
+---
+
+## Integração com React Hook Form
+
+```tsx
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+const schema = z.object({
+  email: z.string().email('Email inválido'),
+  password: z.string().min(8, 'Mínimo 8 caracteres'),
+})
+
+function LoginForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+  })
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          {...register('email')}
+          aria-invalid={!!errors.email}
+        />
+        {errors.email && (
+          <p className="text-sm text-red-600">{errors.email.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="password">Senha</Label>
+        <Input
+          id="password"
+          type="password"
+          {...register('password')}
+          aria-invalid={!!errors.password}
+        />
+        {errors.password && (
+          <p className="text-sm text-red-600">{errors.password.message}</p>
+        )}
+      </div>
+
+      <Button type="submit">Entrar</Button>
+    </form>
+  )
+}
+```
+
+---
+
+## Customização de Estilos
+
+### Tamanhos Customizados
+
+```tsx
+{
+  /* Small */
+}
+;<Input className="h-8 text-sm" />
+
+{
+  /* Large */
+}
+;<Input className="h-12 text-base" />
+
+{
+  /* Full Width */
+}
+;<Input className="w-full" />
+```
+
+### Estados de Validação
+
+```tsx
+{
+  /* Success */
+}
+;<Input className="border-green-500 focus-visible:ring-green-500" />
+
+{
+  /* Error */
+}
+;<Input className="border-red-500 focus-visible:ring-red-500" />
+
+{
+  /* Warning */
+}
+;<Input className="border-yellow-500 focus-visible:ring-yellow-500" />
+```
+
+---
+
+## Dicas e Melhores Práticas
+
+### ✅ Sempre faça
+
+- Associe inputs com labels usando `id` e `htmlFor`
+- Use `type` apropriado para cada caso (email, tel, number)
+- Adicione placeholder descritivo
+- Implemente validação visual (cores, ícones, mensagens)
+- Use `autoComplete` para melhorar UX
+
+### ❌ Evite
+
+- Labels ausentes (placeholder não substitui label)
+- Placeholders como única instrução (desaparecem ao digitar)
+- Validação apenas no submit (valide em tempo real quando possível)
+- Mensagens de erro genéricas ("Erro" não ajuda)
+
+---
+
+## Atributos HTML Úteis
+
+```tsx
+<Input
+  type="email"
+  required
+  autoComplete="email"
+  autoFocus
+  maxLength={100}
+  minLength={3}
+  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+  disabled
+  readOnly
+  aria-label="Email do usuário"
+  aria-describedby="email-help"
+  aria-invalid={hasError}
+/>
+```
+
+---
+
+## Props
+
+<Controls />
+
+---
+
+**Última atualização**: Janeiro 2025 **Versão**: 1.0.0

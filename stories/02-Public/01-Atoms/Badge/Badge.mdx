@@ -1,0 +1,151 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as BadgeStories from './Badge.stories'
+
+<Meta of={BadgeStories} />
+
+# Badge
+
+Componente compacto para exibir status, categorias, tags ou contadores. Pequeno
+e discreto, ideal para metadados visuais e informações complementares.
+
+## Quando Usar
+
+✅ **Para indicar status** (aprovado, pendente, cancelado) ✅ **Para categorias
+e tags** (categoria de produto, filtros) ✅ **Para contadores** (notificações,
+itens no carrinho) ✅ **Para destacar informações** (novo, popular, urgente) ✅
+**Para metadados** (versão, tipo, prioridade)
+
+## Quando NÃO Usar
+
+❌ **Para botões ou ações** - use `Button` ao invés ❌ **Para textos longos** -
+badges devem ser concisos ❌ **Para informações críticas sozinhas** - combine
+com texto explicativo ❌ **Como único indicador de estado** - sempre tenha
+contexto adicional
+
+---
+
+## Variantes
+
+<Canvas of={BadgeStories.DefaultVariant} />
+<Canvas of={BadgeStories.Secondary} />
+<Canvas of={BadgeStories.Destructive} />
+<Canvas of={BadgeStories.Outline} />
+
+---
+
+## Com Ícones
+
+<Canvas of={BadgeStories.WithIconLeft} />
+<Canvas of={BadgeStories.WithIconRight} />
+<Canvas of={BadgeStories.DestructiveWithIcon} />
+
+---
+
+## Casos de Uso
+
+### Status Badges
+
+<Canvas of={BadgeStories.StatusBadges} />
+
+### Category Badges
+
+<Canvas of={BadgeStories.CategoryBadges} />
+
+### Count Badges
+
+<Canvas of={BadgeStories.CountBadges} />
+
+### Notification Badges
+
+<Canvas of={BadgeStories.NotificationBadges} />
+
+---
+
+## Playground
+
+<Canvas of={BadgeStories.Playground} />
+<Controls of={BadgeStories.Playground} />
+
+---
+
+## Acessibilidade
+
+- ✅ **Não use apenas cor** para transmitir significado
+- ✅ **Adicione contexto** - combine badge com label ou texto explicativo
+- ✅ **Ícones com significado** - use ícones que reforcem o status
+- ✅ **Contraste adequado** - todas as variantes atendem WCAG 2.1 AA
+
+---
+
+## Design Tokens Utilizados
+
+### Dimensões
+
+- **Padding**: `px-2.5 py-0.5` (10px x 2px)
+- **Font size**: `text-xs` (12px)
+- **Border radius**: `rounded-full`
+
+### Cores
+
+- **Default**: `bg-primary` (#ea580c - orange-600)
+- **Secondary**: `bg-secondary`
+- **Destructive**: `bg-destructive` (red)
+- **Outline**: `border` com texto colorido
+
+---
+
+## Exemplos de Código
+
+### Badge Básico
+
+```tsx
+import { Badge } from '@/components/ui/badge'
+;<Badge>Novo</Badge>
+```
+
+### Badge com Variante
+
+```tsx
+<Badge variant="destructive">Urgente</Badge>
+<Badge variant="secondary">Pendente</Badge>
+<Badge variant="outline">Em Análise</Badge>
+```
+
+### Badge com Ícone
+
+```tsx
+import { Check } from 'lucide-react'
+;<Badge>
+  <Check className="mr-1 h-3 w-3" />
+  Aprovado
+</Badge>
+```
+
+### Badge de Notificação
+
+```tsx
+<div className="relative">
+  <button>Notificações</button>
+  <Badge className="absolute -top-1 -right-1">3</Badge>
+</div>
+```
+
+### Badge em Lista de Produtos
+
+```tsx
+<div className="flex items-center gap-2">
+  <span>Betoneira 400L</span>
+  <Badge>Disponível</Badge>
+  <Badge variant="outline">Novo</Badge>
+</div>
+```
+
+---
+
+## Props
+
+<Controls />
+
+---
+
+**Última atualização**: Janeiro 2025 **Versão**: 1.0.0

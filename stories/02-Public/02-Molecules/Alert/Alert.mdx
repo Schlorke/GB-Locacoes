@@ -1,0 +1,188 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as AlertStories from './Alert.stories'
+
+<Meta of={AlertStories} />
+
+# Alert
+
+Componente de alerta para exibir mensagens importantes, avisos, erros ou
+informações ao usuário. Com suporte para ícones, títulos e ações.
+
+## Quando Usar
+
+✅ **Para feedback de sistema** - Sucesso, erro, aviso ✅ **Para informações
+importantes** - Que usuário deve ler ✅ **Para avisos** - Alertas que requerem
+atenção ✅ **Para dicas e sugestões** - Informações úteis ao usuário
+
+## Quando NÃO Usar
+
+❌ **Para notificações temporárias** - Use Toast ao invés ❌ **Para validação de
+campos** - Use mensagens de erro inline ❌ **Para modais** - Use Dialog ao invés
+❌ **Para banners** - Use componente de banner específico
+
+---
+
+## Variantes
+
+### Default
+
+<Canvas of={AlertStories.DefaultVariant} />
+
+### Destructive (Erro)
+
+<Canvas of={AlertStories.Destructive} />
+
+---
+
+## Variantes Customizadas
+
+### Success
+
+<Canvas of={AlertStories.Success} />
+
+### Warning
+
+<Canvas of={AlertStories.Warning} />
+
+### Info
+
+<Canvas of={AlertStories.Info} />
+
+---
+
+## Composições
+
+### Sem Título
+
+<Canvas of={AlertStories.WithoutTitle} />
+
+### Sem Ícone
+
+<Canvas of={AlertStories.WithoutIcon} />
+
+### Com Ações
+
+<Canvas of={AlertStories.WithActions} />
+
+### Dismissible
+
+<Canvas of={AlertStories.Dismissible} />
+
+---
+
+## Todos os Tipos
+
+<Canvas of={AlertStories.AllTypes} />
+
+---
+
+## Playground
+
+<Canvas of={AlertStories.Playground} />
+<Controls of={AlertStories.Playground} />
+
+---
+
+## Acessibilidade
+
+- ✅ **role="alert"** - Automático no componente
+- ✅ **Ícones significativos** - Reforçam o tipo de mensagem
+- ✅ **Não use apenas cor** - Sempre tenha ícone ou texto claro
+- ✅ **Contraste adequado** - WCAG 2.1 AA compliance
+
+---
+
+## Design Tokens
+
+### Dimensões
+
+- **Padding**: `p-4` (16px)
+- **Border radius**: `rounded-lg` (8px)
+
+### Cores
+
+- **Default**: `bg-background border`
+- **Destructive**: `border-destructive/50 text-destructive`
+- **Success**: `border-green-500 bg-green-50 text-green-900`
+- **Warning**: `border-yellow-500 bg-yellow-50 text-yellow-900`
+- **Info**: `border-blue-500 bg-blue-50 text-blue-900`
+
+---
+
+## Exemplos de Código
+
+### Alert Básico
+
+```tsx
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Info } from 'lucide-react'
+;<Alert>
+  <Info className="h-4 w-4" />
+  <AlertTitle>Informação</AlertTitle>
+  <AlertDescription>Esta é uma mensagem importante.</AlertDescription>
+</Alert>
+```
+
+### Alert de Erro
+
+```tsx
+import { AlertCircle } from 'lucide-react'
+;<Alert variant="destructive">
+  <AlertCircle className="h-4 w-4" />
+  <AlertTitle>Erro</AlertTitle>
+  <AlertDescription>Ocorreu um erro ao salvar.</AlertDescription>
+</Alert>
+```
+
+### Alert de Sucesso (customizado)
+
+```tsx
+import { CheckCircle2 } from 'lucide-react'
+;<Alert className="border-green-500 bg-green-50 text-green-900">
+  <CheckCircle2 className="h-4 w-4 text-green-600" />
+  <AlertTitle>Sucesso!</AlertTitle>
+  <AlertDescription>Operação concluída com êxito.</AlertDescription>
+</Alert>
+```
+
+### Alert com Botão
+
+```tsx
+<Alert className="border-blue-500 bg-blue-50">
+  <Info className="h-4 w-4 text-blue-600" />
+  <AlertTitle className="text-blue-900">Atualização disponível</AlertTitle>
+  <AlertDescription className="text-blue-800">
+    Nova versão do sistema.
+  </AlertDescription>
+  <div className="mt-4">
+    <Button size="sm">Atualizar</Button>
+  </div>
+</Alert>
+```
+
+### Alert Dismissible
+
+```tsx
+import { X } from 'lucide-react'
+;<Alert className="relative">
+  <Info className="h-4 w-4" />
+  <AlertTitle>Dica</AlertTitle>
+  <AlertDescription>Mensagem útil aqui.</AlertDescription>
+  <button
+    onClick={handleDismiss}
+    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+  >
+    <X className="h-4 w-4" />
+  </button>
+</Alert>
+```
+
+---
+
+## Props
+
+<Controls />
+
+---
+
+**Última atualização**: Janeiro 2025 **Versão**: 1.0.0

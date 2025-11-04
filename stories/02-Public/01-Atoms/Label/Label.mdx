@@ -1,0 +1,219 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as LabelStories from './Label.stories'
+
+<Meta of={LabelStories} />
+
+# Label
+
+Componente de label acessível baseado em Radix UI. **SEMPRE** associe inputs com
+labels usando `htmlFor` e `id` para garantir acessibilidade completa.
+
+## Quando Usar
+
+✅ **SEMPRE com inputs** - Todo input deve ter um label associado ✅ **Para
+checkboxes e switches** - Associar com controles de formulário ✅ **Para
+identificar campos** - Nunca dependa apenas de placeholder ✅ **Para campos
+obrigatórios** - Indicar com asterisco (\*) vermelho
+
+## Quando NÃO Usar
+
+❌ **Nunca omita labels** - Placeholder não substitui label ❌ **Para botões** -
+Botões têm seu próprio texto ❌ **Para títulos de seção** - Use headings (h1-h6)
+ao invés
+
+---
+
+## Exemplos Básicos
+
+### Label com Input
+
+<Canvas of={LabelStories.WithInput} />
+
+### Campo Obrigatório
+
+<Canvas of={LabelStories.RequiredField} />
+
+### Com Helper Text
+
+<Canvas of={LabelStories.WithHelperText} />
+
+### Com Erro
+
+<Canvas of={LabelStories.WithError} />
+
+---
+
+## Com Controles de Formulário
+
+### Com Checkbox
+
+<Canvas of={LabelStories.WithCheckbox} />
+
+### Com Switch
+
+<Canvas of={LabelStories.WithSwitch} />
+
+---
+
+## Estados
+
+### Disabled
+
+<Canvas of={LabelStories.Disabled} />
+
+---
+
+## Exemplos Práticos
+
+### Formulário Completo
+
+<Canvas of={LabelStories.FormExample} />
+
+### Tamanhos
+
+<Canvas of={LabelStories.Sizes} />
+
+---
+
+## Playground
+
+<Canvas of={LabelStories.Playground} />
+<Controls of={LabelStories.Playground} />
+
+---
+
+## Acessibilidade
+
+- ✅ **SEMPRE use htmlFor** - Associar com id do input
+- ✅ **Clicável** - Label deve focar o input quando clicada
+- ✅ **Leitores de tela** - Label é lida automaticamente
+- ✅ **Campos obrigatórios** - Indicar visualmente com asterisco
+- ✅ **Desabilitado** - Reduzir opacity quando disabled
+
+### Exemplo Acessível Perfeito
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="email">
+    Email <span className="text-red-500">*</span>
+  </Label>
+  <Input id="email" type="email" required aria-describedby="email-error" />
+  <p id="email-error" className="text-sm text-red-600">
+    Email é obrigatório
+  </p>
+</div>
+```
+
+---
+
+## Design Tokens Utilizados
+
+### Tipografia
+
+- **Font size**: `text-sm` (14px)
+- **Font weight**: `font-medium` (500)
+- **Line height**: `leading-none`
+
+### Cores
+
+- **Text color**: `text-foreground` (cinza escuro)
+- **Disabled**: `peer-disabled:opacity-70`
+
+### Estados
+
+- **Disabled cursor**: `peer-disabled:cursor-not-allowed`
+
+---
+
+## Exemplos de Código
+
+### Label Básico
+
+```tsx
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
+;<div className="space-y-2">
+  <Label htmlFor="name">Nome</Label>
+  <Input id="name" />
+</div>
+```
+
+### Campo Obrigatório
+
+```tsx
+<Label htmlFor="email">
+  Email <span className="text-red-500">*</span>
+</Label>
+<Input id="email" type="email" required />
+```
+
+### Com Helper Text
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="username">Nome de usuário</Label>
+  <Input id="username" placeholder="@usuario" />
+  <p className="text-sm text-gray-500">Escolha um nome único.</p>
+</div>
+```
+
+### Com Checkbox
+
+```tsx
+import { Checkbox } from '@/components/ui/checkbox'
+;<div className="flex items-center space-x-2">
+  <Checkbox id="terms" />
+  <Label htmlFor="terms" className="cursor-pointer">
+    Aceito os termos
+  </Label>
+</div>
+```
+
+### Com Validação de Erro
+
+```tsx
+<div className="space-y-2">
+  <Label htmlFor="email">Email</Label>
+  <Input
+    id="email"
+    type="email"
+    aria-invalid={hasError}
+    aria-describedby="email-error"
+    className={hasError ? 'border-red-500' : ''}
+  />
+  {hasError && (
+    <p id="email-error" className="text-sm text-red-600">
+      {errorMessage}
+    </p>
+  )}
+</div>
+```
+
+---
+
+## Dicas e Melhores Práticas
+
+### ✅ Sempre faça
+
+- Associe SEMPRE label com input via `htmlFor` e `id`
+- Use asterisco vermelho para campos obrigatórios
+- Adicione `cursor-pointer` quando label for clicável (checkbox/switch)
+- Forneça helper text quando necessário
+- Use `aria-describedby` para mensagens de erro
+
+### ❌ Evite
+
+- Labels sem `htmlFor` (quebra acessibilidade)
+- Placeholder como única indicação (desaparece ao digitar)
+- Labels muito longas (seja conciso)
+- Omitir labels completamente (grave erro de acessibilidade)
+
+---
+
+## Props
+
+<Controls />
+
+---
+
+**Última atualização**: Janeiro 2025 **Versão**: 1.0.0

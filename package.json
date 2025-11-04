@@ -77,7 +77,10 @@
     "diagnose:connection": "node scripts/diagnose-connection.js",
     "supabase": "npx -y supabase",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "storybook:doctor": "storybook doctor",
+    "storybook:check": "storybook automigrate --dry-run",
+    "storybook:info": "storybook info"
   },
   "dependencies": {
     "@auth/core": "0.41.1",
@@ -183,7 +186,7 @@
     "@storybook/addon-docs": "^10.0.4",
     "@storybook/addon-onboarding": "^10.0.4",
     "@storybook/addon-vitest": "^10.0.4",
-    "@storybook/nextjs": "^10.0.4",
+    "@storybook/nextjs-vite": "^10.0.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",

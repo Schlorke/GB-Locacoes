@@ -1,0 +1,368 @@
+import { Meta, Canvas, Story, Controls } from '@storybook/addon-docs/blocks'
+import * as ButtonStories from './Button.stories'
+
+<Meta of={ButtonStories} />
+
+# Button
+
+Componente de botão reutilizável com múltiplas variantes, tamanhos e estados.
+Baseado em **Radix UI Slot** para máxima flexibilidade, permitindo que o botão
+seja renderizado como qualquer elemento.
+
+## Quando Usar
+
+✅ **Para ações primárias** na interface (salvar, enviar, confirmar) ✅ **Para
+ações secundárias** (cancelar, voltar) ✅ **Para navegação entre páginas**
+(próximo, anterior) ✅ **Para submissão de formulários** ✅ **Para ações
+destrutivas** (deletar, remover) com variante `destructive`
+
+## Quando NÃO Usar
+
+❌ **Para links de navegação simples** - use `<a>` ou Next.js `<Link>` ao invés
+❌ **Para ações inline em texto** - use a variante `link` ❌ **Para ações que
+não são clicáveis** - considere usar um elemento de texto estilizado
+
+---
+
+## Variantes
+
+### Default
+
+Botão padrão com fundo slate-700 para ações primárias.
+
+<Canvas of={ButtonStories.DefaultVariant} />
+
+### Destructive
+
+Para ações destrutivas como deletar ou remover. Chama atenção para a natureza
+perigosa da ação.
+
+<Canvas of={ButtonStories.Destructive} />
+
+### Outline
+
+Para ações secundárias. Mantém destaque sem competir visualmente com ações
+primárias.
+
+<Canvas of={ButtonStories.Outline} />
+
+### Secondary
+
+Botão secundário com fundo cinza.
+
+<Canvas of={ButtonStories.Secondary} />
+
+### Ghost
+
+Botão sem fundo, apenas efeito hover. Ideal para ações terciárias ou em
+toolbars.
+
+<Canvas of={ButtonStories.Ghost} />
+
+### Gradient
+
+Botão com gradiente (requer className personalizada para o gradiente).
+
+<Canvas of={ButtonStories.Gradient} />
+
+### Link
+
+Estilizado como link com underline no hover.
+
+<Canvas of={ButtonStories.Link} />
+
+---
+
+## Tamanhos
+
+O componente Button oferece 4 tamanhos:
+
+<Canvas of={ButtonStories.Small} />
+<Canvas of={ButtonStories.DefaultSize} />
+<Canvas of={ButtonStories.Large} />
+<Canvas of={ButtonStories.Icon} />
+
+---
+
+## Estados
+
+### Disabled
+
+Estado desabilitado com opacity reduzida e sem interação.
+
+<Canvas of={ButtonStories.Disabled} />
+
+### Loading
+
+Use com ícone de loading (spinner) para indicar processamento.
+
+<Canvas of={ButtonStories.Loading} />
+
+---
+
+## Com Ícones
+
+### Ícone à Esquerda
+
+<Canvas of={ButtonStories.WithIconLeft} />
+
+### Ícone à Direita
+
+<Canvas of={ButtonStories.WithIconRight} />
+
+### Destructive Com Ícone
+
+<Canvas of={ButtonStories.DestructiveWithIcon} />
+
+### Outline Com Ícone
+
+<Canvas of={ButtonStories.OutlineWithIcon} />
+
+---
+
+## Receitas e Padrões Comuns
+
+### Grupo de Botões
+
+<Canvas of={ButtonStories.ButtonGroup} />
+
+### Botões de Ação
+
+<Canvas of={ButtonStories.ActionButtons} />
+
+### Form Actions
+
+<Canvas of={ButtonStories.FormActions} />
+
+### Icon Buttons
+
+<Canvas of={ButtonStories.IconButtons} />
+
+### Loading States
+
+<Canvas of={ButtonStories.LoadingStates} />
+
+---
+
+## Playground
+
+Experimente diferentes combinações de props:
+
+<Canvas of={ButtonStories.Playground} />
+<Controls of={ButtonStories.Playground} />
+
+---
+
+## Acessibilidade
+
+- ✅ **Navegação por teclado** - Focável com Tab, ativável com Enter ou Space
+- ✅ **Estados de foco visíveis** - Ring de foco destacado
+- ✅ **ARIA labels** - Use `aria-label` quando o botão contém apenas ícone
+- ✅ **Disabled acessível** - `disabled` previne interação e remove de tab order
+- ✅ **Contraste de cores** - Todas as variantes atendem WCAG 2.1 AA
+
+### Exemplo com ARIA
+
+```tsx
+<Button size="icon" aria-label="Adicionar item">
+  <Plus className="h-4 w-4" />
+</Button>
+```
+
+---
+
+## Design Tokens Utilizados
+
+### Cores
+
+- **Default**: `bg-slate-700` (#334155)
+- **Destructive**: `bg-destructive` (red-500)
+- **Primary**: `bg-orange-600` (#ea580c) quando customizado
+- **Secondary**: `bg-secondary`
+
+### Espaçamento
+
+- **Default**: `px-4 py-2` (16px x 8px)
+- **Small**: `px-3 py-1.5`
+- **Large**: `px-8 py-3` (32px x 12px)
+- **Icon**: `h-10 w-10` (40px x 40px)
+
+### Border Radius
+
+- `rounded-md` (6px) para todos os tamanhos
+
+### Transições
+
+- `transition-all duration-300` para animações suaves
+- `hover:scale-105` para efeito de elevação no hover
+- `hover:shadow-lg` para sombra aumentada
+
+### Tipografia
+
+- `text-sm` (14px) para tamanhos default e large
+- `font-medium` (500) para peso da fonte
+
+---
+
+## Exemplos de Código
+
+### Botão Básico
+
+```tsx
+import { Button } from '@/components/ui/button'
+;<Button>Click me</Button>
+```
+
+### Botão Destrutivo
+
+```tsx
+<Button variant="destructive">Delete</Button>
+```
+
+### Botão com Ícone
+
+```tsx
+import { Plus } from 'lucide-react'
+;<Button>
+  <Plus className="mr-2 h-4 w-4" />
+  Add Item
+</Button>
+```
+
+### Botão de Loading
+
+```tsx
+import { Loader2 } from 'lucide-react'
+;<Button disabled>
+  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+  Loading...
+</Button>
+```
+
+### Botão Como Link (asChild)
+
+```tsx
+import Link from 'next/link'
+;<Button asChild>
+  <Link href="/dashboard">Go to Dashboard</Link>
+</Button>
+```
+
+### Botão Full Width
+
+```tsx
+<Button className="w-full">Full Width Button</Button>
+```
+
+### Grupo de Ações
+
+```tsx
+<div className="flex justify-end gap-3">
+  <Button variant="outline">Cancel</Button>
+  <Button>Save Changes</Button>
+</div>
+```
+
+---
+
+## Integração com Formulários
+
+### React Hook Form
+
+```tsx
+import { useForm } from 'react-hook-form'
+
+function MyForm() {
+  const { handleSubmit } = useForm()
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {/* Campos do formulário */}
+
+      <div className="flex justify-end gap-3 mt-6">
+        <Button type="button" variant="outline">
+          Cancel
+        </Button>
+        <Button type="submit">Save</Button>
+      </div>
+    </form>
+  )
+}
+```
+
+---
+
+## Props
+
+<Controls />
+
+---
+
+## Variantes Técnicas
+
+O componente usa **class-variance-authority** para gerenciar variantes:
+
+```tsx
+const buttonVariants = cva('base-classes', {
+  variants: {
+    variant: {
+      default: 'bg-slate-700 text-white hover:bg-slate-600',
+      destructive: 'bg-destructive hover:bg-destructive/90',
+      // ... outras variantes
+    },
+    size: {
+      default: 'h-10 px-4 py-2',
+      sm: 'h-10 px-4',
+      lg: 'h-12 px-8',
+      icon: 'h-10 w-10',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'default',
+  },
+})
+```
+
+---
+
+## Dicas e Melhores Práticas
+
+### ✅ Sempre faça
+
+- Use ícones de **Lucide React** para consistência
+- Adicione `aria-label` quando o botão contém apenas ícone
+- Use `type="button"` em formulários para botões que não submetem
+- Mantenha textos de botão concisos (2-3 palavras)
+- Use loading state para ações assíncronas
+
+### ❌ Evite
+
+- Múltiplos botões primários na mesma tela
+- Botões muito longos (use tooltip para informações extras)
+- Ícones sem contexto (sempre tenha texto ou aria-label)
+- Botões sem hover/focus states claros
+
+---
+
+## Troubleshooting
+
+### Botão não está clicável
+
+✅ Verifique se `disabled` não está definido ✅ Verifique z-index se o botão
+está atrás de outro elemento ✅ Certifique-se que `pointer-events` não está
+desabilitado
+
+### Ícone não aparece
+
+✅ Importe o ícone correto de `lucide-react` ✅ Adicione classes de tamanho
+(`h-4 w-4`) no ícone ✅ Use espaçamento (`mr-2` ou `ml-2`) para separar do texto
+
+### Botão não funciona como link
+
+✅ Use `asChild` prop ✅ Envolva com componente de link (Next.js Link) ✅
+Exemplo: `<Button asChild><Link href="/">Home</Link></Button>`
+
+---
+
+**Última atualização**: Janeiro 2025 **Versão**: 1.0.0

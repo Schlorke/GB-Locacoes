@@ -1,0 +1,407 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as CardStories from './Card.stories'
+
+<Meta of={CardStories} />
+
+# Card
+
+Componente de card flexível e composável com subcomponentes para header,
+conteúdo e footer. Ideal para agrupar informações relacionadas e criar layouts
+organizados.
+
+## Quando Usar
+
+✅ **Para agrupar informações relacionadas** (perfil, produto, estatística) ✅
+**Para criar grids e listas** de itens similares ✅ **Para destacar conteúdo**
+importante na página ✅ **Para cards de produto** com imagem, título, descrição
+e preço ✅ **Para dashboards** com métricas e estatísticas
+
+## Quando NÃO Usar
+
+❌ **Para simples containers** - use `<div>` ao invés ❌ **Para navegação
+principal** - use componentes de navegação específicos ❌ **Para modais** - use
+`Dialog` ao invés ❌ **Para alertas** - use componente `Alert` ao invés
+
+---
+
+## Subcomponentes
+
+O Card é composto por 5 subcomponentes opcionais:
+
+- **Card** - Container principal
+- **CardHeader** - Cabeçalho (título e descrição)
+- **CardTitle** - Título do card
+- **CardDescription** - Descrição/subtítulo
+- **CardContent** - Conteúdo principal
+- **CardFooter** - Rodapé (geralmente com ações)
+
+---
+
+## Exemplos Básicos
+
+### Card Completo
+
+<Canvas of={CardStories.Default} />
+
+### Card Simples (sem subcomponentes)
+
+<Canvas of={CardStories.Simple} />
+
+### Apenas Header
+
+<Canvas of={CardStories.WithHeaderOnly} />
+
+### Apenas Content
+
+<Canvas of={CardStories.WithContentOnly} />
+
+---
+
+## Cards Especializados
+
+### Product Card
+
+<Canvas of={CardStories.ProductCard} />
+
+### User Profile Card
+
+<Canvas of={CardStories.UserProfileCard} />
+
+### Stats Card
+
+<Canvas of={CardStories.StatsCard} />
+
+### Review Card
+
+<Canvas of={CardStories.ReviewCard} />
+
+### Notification Card
+
+<Canvas of={CardStories.NotificationCard} />
+
+### Pricing Card
+
+<Canvas of={CardStories.PricingCard} />
+
+---
+
+## Interatividade
+
+### Cards com Hover
+
+<Canvas of={CardStories.HoverableCards} />
+
+---
+
+## Layout e Grid
+
+### Grid de Cards
+
+<Canvas of={CardStories.CardGrid} />
+
+---
+
+## Playground
+
+<Canvas of={CardStories.Playground} />
+<Controls of={CardStories.Playground} />
+
+---
+
+## Acessibilidade
+
+- ✅ **Estrutura semântica** - Use heading tags apropriadas (h2, h3) no
+  CardTitle
+- ✅ **Contraste adequado** - Garanta legibilidade do texto
+- ✅ **Cards clicáveis** - Se o card inteiro é clicável, use `<a>` ou
+  role="button"
+- ✅ **Foco visível** - Cards interativos devem ter estado de foco claro
+
+### Card Clicável Acessível
+
+```tsx
+<Card asChild className="hover:shadow-lg transition-shadow">
+  <a href="/produto/123">
+    <CardHeader>
+      <CardTitle>Produto</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p>Descrição do produto</p>
+    </CardContent>
+  </a>
+</Card>
+```
+
+---
+
+## Design Tokens Utilizados
+
+### Cores
+
+- **Background**: `bg-card` (branco)
+- **Border**: `border` (cinza claro)
+- **Text**: `text-card-foreground` (cinza escuro)
+
+### Espaçamento
+
+- **CardHeader**: `px-6 pt-6 pb-6`
+- **CardContent**: `p-6 pt-0`
+- **CardFooter**: `px-6 pb-6 pt-0`
+
+### Border
+
+- **Radius**: `rounded-lg` (8px)
+- **Width**: `border` (1px)
+
+### Sombra
+
+- **Default**: `shadow-sm` (sombra sutil)
+- **Hover**: `hover:shadow-lg` ou `hover:shadow-xl`
+
+---
+
+## Exemplos de Código
+
+### Card Básico
+
+```tsx
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+;<Card className="w-80">
+  <CardHeader>
+    <CardTitle>Título do Card</CardTitle>
+    <CardDescription>Descrição opcional</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>Conteúdo principal do card</p>
+  </CardContent>
+  <CardFooter>
+    <Button>Ação</Button>
+  </CardFooter>
+</Card>
+```
+
+### Card de Produto
+
+```tsx
+<Card className="w-80 overflow-hidden">
+  <img src="/produto.jpg" alt="Produto" className="w-full h-48 object-cover" />
+  <CardHeader>
+    <CardTitle>Nome do Produto</CardTitle>
+    <CardDescription>Categoria</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>Descrição do produto</p>
+  </CardContent>
+  <CardFooter className="flex justify-between items-center">
+    <span className="text-2xl font-bold">R$ 99</span>
+    <Button>Comprar</Button>
+  </CardFooter>
+</Card>
+```
+
+### Card de Estatística
+
+```tsx
+<Card>
+  <CardHeader className="flex flex-row items-center justify-between pb-2">
+    <CardTitle className="text-sm font-medium">Total de Vendas</CardTitle>
+    <DollarSign className="h-4 w-4 text-gray-500" />
+  </CardHeader>
+  <CardContent>
+    <div className="text-2xl font-bold">R$ 12.345</div>
+    <p className="text-xs text-green-600">+12% em relação ao mês passado</p>
+  </CardContent>
+</Card>
+```
+
+### Card Clicável
+
+```tsx
+<Card className="hover:shadow-lg transition-shadow cursor-pointer">
+  <CardHeader>
+    <CardTitle>Card Interativo</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <p>Clique para ver mais</p>
+  </CardContent>
+</Card>
+```
+
+### Grid de Cards Responsivo
+
+```tsx
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {items.map((item) => (
+    <Card key={item.id}>
+      <CardHeader>
+        <CardTitle>{item.title}</CardTitle>
+      </CardHeader>
+      <CardContent>{item.content}</CardContent>
+    </Card>
+  ))}
+</div>
+```
+
+---
+
+## Padrões Comuns
+
+### Card com Badge
+
+```tsx
+<Card>
+  <CardHeader>
+    <div className="flex items-start justify-between">
+      <CardTitle>Título</CardTitle>
+      <Badge>Novo</Badge>
+    </div>
+    <CardDescription>Descrição</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <p>Conteúdo</p>
+  </CardContent>
+</Card>
+```
+
+### Card com Avatar
+
+```tsx
+<Card>
+  <CardHeader className="flex flex-row items-center gap-4">
+    <Avatar>
+      <AvatarImage src="/avatar.jpg" />
+      <AvatarFallback>JD</AvatarFallback>
+    </Avatar>
+    <div>
+      <CardTitle>João da Silva</CardTitle>
+      <CardDescription>@joaosilva</CardDescription>
+    </div>
+  </CardHeader>
+</Card>
+```
+
+### Card com Lista
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Notificações</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <ul className="space-y-2">
+      <li className="text-sm">Notificação 1</li>
+      <li className="text-sm">Notificação 2</li>
+      <li className="text-sm">Notificação 3</li>
+    </ul>
+  </CardContent>
+  <CardFooter>
+    <Button variant="ghost" size="sm">
+      Ver todas
+    </Button>
+  </CardFooter>
+</Card>
+```
+
+---
+
+## Variações de Estilo
+
+### Border Colorida
+
+```tsx
+<Card className="border-l-4 border-l-orange-500">
+  <CardHeader>
+    <CardTitle>Destaque</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <p>Card com borda lateral colorida</p>
+  </CardContent>
+</Card>
+```
+
+### Background Colorido
+
+```tsx
+<Card className="bg-orange-50 border-orange-200">
+  <CardHeader>
+    <CardTitle className="text-orange-900">Aviso</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <p className="text-orange-700">Card com background colorido</p>
+  </CardContent>
+</Card>
+```
+
+### Sem Border
+
+```tsx
+<Card className="border-0 shadow-lg">
+  <CardHeader>
+    <CardTitle>Sem Borda</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <p>Card sem borda, apenas sombra</p>
+  </CardContent>
+</Card>
+```
+
+---
+
+## Dicas e Melhores Práticas
+
+### ✅ Sempre faça
+
+- Use subcomponentes para estrutura consistente
+- Mantenha CardHeader com título e descrição clara
+- Use CardFooter para ações principais
+- Adicione hover effects para cards interativos
+- Mantenha padding consistente usando os subcomponentes
+
+### ❌ Evite
+
+- Cards muito altos (divida em múltiplos cards)
+- Muita informação em um só card
+- Padding inconsistente (use os subcomponentes)
+- Cards sem título ou contexto claro
+- Cards clicáveis sem indicação visual
+
+---
+
+## Responsividade
+
+### Grid Responsivo Recomendado
+
+```tsx
+// 1 coluna mobile, 2 tablet, 3 desktop
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {cards}
+</div>
+
+// 1 coluna mobile, 2 tablet, 4 desktop
+<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+  {cards}
+</div>
+```
+
+### Padding Responsivo
+
+```tsx
+<Card className="p-4 md:p-6 lg:p-8">{/* Conteúdo */}</Card>
+```
+
+---
+
+## Props
+
+<Controls />
+
+---
+
+**Última atualização**: Janeiro 2025 **Versão**: 1.0.0

@@ -1,0 +1,132 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as SwitchStories from './Switch.stories'
+
+<Meta of={SwitchStories} />
+
+# Switch
+
+Componente de switch toggle acessível baseado em Radix UI. Para estados binários
+on/off com mudança de efeito imediato, ideal para configurações e preferências.
+
+## Quando Usar
+
+✅ **Para toggle on/off** - Estados binários com efeito imediato ✅ **Para
+configurações** - Ativar/desativar funcionalidades ✅ **Para preferências** -
+Opções que mudam o comportamento ✅ **Para controles de visibilidade** -
+Mostrar/ocultar elementos
+
+## Quando NÃO Usar
+
+❌ **Para seleção múltipla** - Use Checkbox ao invés ❌ **Para seleção única
+entre opções** - Use Radio Group ❌ **Para ações que precisam confirmação** -
+Use Button com Dialog
+
+---
+
+## Exemplos
+
+### Com Label
+
+<Canvas of={SwitchStories.WithLabel} />
+
+### Checked
+
+<Canvas of={SwitchStories.Checked} />
+
+### Disabled
+
+<Canvas of={SwitchStories.Disabled} />
+
+---
+
+## Casos de Uso
+
+### Configurações
+
+<Canvas of={SwitchStories.SettingsExample} />
+
+### Com Descrição
+
+<Canvas of={SwitchStories.WithDescription} />
+
+### Privacidade
+
+<Canvas of={SwitchStories.PrivacySettings} />
+
+---
+
+## Playground
+
+<Canvas of={SwitchStories.Playground} />
+<Controls of={SwitchStories.Playground} />
+
+---
+
+## Acessibilidade
+
+- ✅ **SEMPRE use com Label** - Associe com htmlFor e id
+- ✅ **Navegação por teclado** - Space para toggle
+- ✅ **Estados visíveis** - Animação clara de transição
+- ✅ **Disabled acessível** - Removido de tab order
+
+---
+
+## Design Tokens
+
+- **Width**: `w-11` (44px)
+- **Height**: `h-6` (24px)
+- **Checked**: `bg-primary`
+- **Unchecked**: `bg-input`
+- **Thumb**: `h-5 w-5` (20px x 20px)
+
+---
+
+## Exemplos de Código
+
+### Básico
+
+```tsx
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
+;<div className="flex items-center space-x-2">
+  <Switch id="notifications" />
+  <Label htmlFor="notifications">Notificações</Label>
+</div>
+```
+
+### Com React Hook Form
+
+```tsx
+import { useForm, Controller } from 'react-hook-form'
+
+function Settings() {
+  const { control } = useForm()
+
+  return (
+    <Controller
+      name="notifications"
+      control={control}
+      render={({ field }) => (
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="notifications"
+            checked={field.value}
+            onCheckedChange={field.onChange}
+          />
+          <Label htmlFor="notifications">Notificações</Label>
+        </div>
+      )}
+    />
+  )
+}
+```
+
+---
+
+## Props
+
+<Controls />
+
+---
+
+**Última atualização**: Janeiro 2025 **Versão**: 1.0.0
