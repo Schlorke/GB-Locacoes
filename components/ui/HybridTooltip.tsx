@@ -9,18 +9,18 @@ import * as React from 'react'
 
 // --- ESTILOS COMPARTILHADOS (FONTE DA VERDADE VISUAL) ---
 const contentClassName = cn(
-  'z-50 overflow-hidden rounded-md border border-gray-100',
-  'bg-gray-50 text-gray-700', // Cores claras similar ao toast info do Sonner
-  'px-3 py-1.5 text-[13px] shadow-lg', // text-[13px] para tamanho entre xs e sm
-  'animate-in fade-in-0 zoom-in-95',
+  'group',
+  'z-50 overflow-hidden rounded-md',
+  'bg-white text-gray-700', // Background branco com texto escuro
+  'px-4 py-2 text-[13px] shadow-lg', // text-xs = 12px (compacto)
+  'max-w-xs', // FORÇA quebra de linha
+  'transition-all duration-100 animate-in fade-in-0 zoom-in-95',
   'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
-  'data-[side=bottom]:slide-in-from-top-2',
-  'data-[side=left]:slide-in-from-right-2',
-  'data-[side=right]:slide-in-from-left-2',
-  'data-[side=top]:slide-in-from-bottom-2'
+  'data-[side=bottom]:slide-in-from-top-4',
+  'data-[side=left]:slide-in-from-right-4',
+  'data-[side=right]:slide-in-from-left-4',
+  'data-[side=top]:slide-in-from-bottom-4'
 )
-
-const arrowClassName = 'fill-gray-50'
 
 // --- INTERFACE ---
 interface HybridTooltipProps {
@@ -53,8 +53,8 @@ const HybridTooltip: React.FC<HybridTooltipProps> = ({
               className={contentClassName}
               {...props}
             >
-              <TooltipPrimitive.Arrow className={arrowClassName} />
               {content}
+              <TooltipPrimitive.Arrow className="fill-white" />
             </TooltipPrimitive.Content>
           </TooltipPrimitive.Portal>
         </TooltipPrimitive.Root>
@@ -74,8 +74,8 @@ const HybridTooltip: React.FC<HybridTooltipProps> = ({
           className={contentClassName}
           {...props}
         >
-          <PopoverPrimitive.Arrow className={arrowClassName} />
           {content}
+          <PopoverPrimitive.Arrow className="fill-white" />
         </PopoverPrimitive.Content>
       </PopoverPrimitive.Portal>
     </PopoverPrimitive.Root>

@@ -360,14 +360,14 @@ export function ImageUpload({
           {/* Header com indicador */}
           {images.length > 1 && (
             <div className="flex items-center justify-between mb-4 w-full">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <h3 className="text-sm font-semibold text-slate-700">
                   Preview do Equipamento
                 </h3>
                 {tooltipContent && (
                   <HybridTooltip content={tooltipContent}>
                     <Info
-                      className="size-5 !text-gray-700 cursor-help transition-colors hover:!text-orange-600"
+                      className="size-4 !text-gray-700 cursor-help transition-colors hover:!text-orange-600"
                       aria-hidden="true"
                     />
                   </HybridTooltip>

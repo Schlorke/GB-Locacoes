@@ -2,6 +2,7 @@
 
 import React from 'react'
 
+import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CurrencyInput } from '@/components/ui/currency-input'
@@ -11,8 +12,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
-import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
-import { toast } from 'sonner'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
@@ -27,6 +26,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 interface Category {
   id: string
@@ -1157,19 +1157,11 @@ export default function EditarEquipamento() {
                         prevImage={prevImage}
                         goToImage={goToImage}
                         tooltipContent={
-                          <div className="max-w-xs leading-relaxed">
-                            <span className="inline-flex items-start gap-1">
-                              <span>💡</span>
-                              <span>
-                                <strong className="font-semibold">
-                                  Editando Imagens:
-                                </strong>{' '}
-                                A primeira imagem será exibida como destaque na
-                                listagem de equipamentos. Arraste para
-                                reordenar.
-                              </span>
-                            </span>
-                          </div>
+                          <>
+                            💡 <strong>Editando Imagens:</strong> A primeira
+                            imagem será exibida como destaque na listagem de
+                            equipamentos. Arraste para reordenar.
+                          </>
                         }
                       />
                     </div>

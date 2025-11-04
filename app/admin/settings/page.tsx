@@ -1,9 +1,9 @@
 'use client'
 
 import { getSettings, updateSettings } from '@/app/api/admin/settings/actions'
+import { HeroCarouselPreview } from '@/components/admin/hero-carousel-preview'
 import { SettingsBlock } from '@/components/admin/settings-block'
 import { SettingsNavigationBar } from '@/components/admin/settings-navigation-bar'
-import { HeroCarouselPreview } from '@/components/admin/hero-carousel-preview'
 import {
   CompanyInfoPreview,
   CustomSettingsPreview,
@@ -18,8 +18,8 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { SettingsInput } from '@/schemas/settings.schema'
-import { motion } from 'framer-motion'
 import * as Tooltip from '@radix-ui/react-tooltip'
+import { motion } from 'framer-motion'
 import {
   Building2,
   Code,
@@ -856,19 +856,12 @@ export default function SettingsPage() {
                         currentImageIndex={heroCarouselIndex}
                         onImageIndexChange={setHeroCarouselIndex}
                         tooltipContent={
-                          <div className="max-w-xs leading-relaxed">
-                            <span className="inline-flex items-start gap-1">
-                              <span>💡</span>
-                              <span>
-                                <strong className="font-semibold">
-                                  Background Padrão:
-                                </strong>{' '}
-                                Quando nenhuma imagem estiver configurada, o
-                                fundo laranja atual será exibido automaticamente
-                                no carrossel da página inicial.
-                              </span>
-                            </span>
-                          </div>
+                          <>
+                            💡 <strong>Background Padrão:</strong> Quando
+                            nenhuma imagem estiver configurada, o fundo laranja
+                            atual será exibido automaticamente no carrossel da
+                            página inicial.
+                          </>
                         }
                       />
                     </div>

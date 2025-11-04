@@ -60,6 +60,12 @@ com o projeto.
   arquiteturais
 - **[tools.md](./internal/tools.md)** - Ferramentas e utilitários internos
 
+### 🐛 [issues/](./issues/) - Issues e Investigações
+
+- **[README.md](./issues/README.md)** - Índice de issues ativas
+- **[tooltip-arrow-loading-issue.md](./issues/tooltip-arrow-loading-issue.md)** -
+  Investigação sobre ordem de carregamento da seta do tooltip
+
 ## 🎯 Navegação Rápida
 
 ### Para Novos Desenvolvedores
