@@ -191,11 +191,28 @@ export function HeroCarouselPreview({
             {/* SVG ONDULADO - CÓDIGO REFEITO E FUNCIONAL */}
             {waveAnimation !== 'none' && (
               <div className="absolute bottom-0 left-0 z-20 w-full overflow-hidden leading-none">
-                <svg
+                <motion.svg
+                  key={`wave-${animationKey}`}
                   className="relative block h-12 w-full"
                   viewBox="0 0 1200 120"
                   preserveAspectRatio="none"
                   aria-hidden="true"
+                  // Animação de ENTRADA apenas no modo "animated"
+                  initial={
+                    waveAnimation === 'animated'
+                      ? { y: 20, opacity: 0 }
+                      : undefined
+                  }
+                  animate={
+                    waveAnimation === 'animated'
+                      ? { y: 0, opacity: 1 }
+                      : undefined
+                  }
+                  transition={
+                    waveAnimation === 'animated'
+                      ? { duration: 0.8, delay: 0.5 }
+                      : undefined
+                  }
                 >
                   {waveAnimation === 'animated' ? (
                     // ✨ MODO ANIMADO - motion.path com animações suaves
@@ -282,7 +299,7 @@ export function HeroCarouselPreview({
                       />
                     </>
                   )}
-                </svg>
+                </motion.svg>
               </div>
             )}
 

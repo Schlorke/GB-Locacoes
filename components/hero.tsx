@@ -165,11 +165,22 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
       {/* Efeito ondulado no final do carrossel - baseado em waveAnimation */}
       {waveAnimation !== 'none' && (
         <div className="absolute bottom-0 left-0 z-20 w-full overflow-hidden leading-none">
-          <svg
+          <motion.svg
             className="relative block h-12 w-full"
             viewBox="0 0 1200 120"
             preserveAspectRatio="none"
             aria-hidden="true"
+            initial={
+              waveAnimation === 'animated' ? { y: 20, opacity: 0 } : undefined
+            }
+            animate={
+              waveAnimation === 'animated' ? { y: 0, opacity: 1 } : undefined
+            }
+            transition={
+              waveAnimation === 'animated'
+                ? { duration: 1, delay: 1 }
+                : undefined
+            }
           >
             {waveAnimation === 'animated' ? (
               // Paths ANIMADOS com motion.path
@@ -246,7 +257,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
                 />
               </>
             )}
-          </svg>
+          </motion.svg>
         </div>
       )}
 
