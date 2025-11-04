@@ -19,6 +19,7 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { SettingsInput } from '@/schemas/settings.schema'
 import { motion } from 'framer-motion'
+import * as Tooltip from '@radix-ui/react-tooltip'
 import {
   Building2,
   Code,
@@ -545,686 +546,710 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-7xl mx-auto space-y-6 p-3 sm:p-4 lg:p-6 xl:p-8 pb-24 md:pb-12">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
+    <Tooltip.Provider delayDuration={150} skipDelayDuration={250}>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="max-w-7xl mx-auto space-y-6 p-3 sm:p-4 lg:p-6 xl:p-8 pb-24 md:pb-12">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
 
-            <div className="relative z-10">
-              <div className="mb-4">
-                <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
-                  Configurações do Sistema
-                </h1>
-                <p className="text-orange-50 font-medium">
-                  Gerencie as configurações gerais da plataforma com preview em
-                  tempo real
-                </p>
-              </div>
+              <div className="relative z-10">
+                <div className="mb-4">
+                  <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
+                    Configurações do Sistema
+                  </h1>
+                  <p className="text-orange-50 font-medium">
+                    Gerencie as configurações gerais da plataforma com preview
+                    em tempo real
+                  </p>
+                </div>
 
-              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
-                <Settings className="w-5 h-5 text-orange-50" />
-                <span className="font-semibold text-white">
-                  Configurações Globais
-                </span>
+                <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
+                  <Settings className="w-5 h-5 text-orange-50" />
+                  <span className="font-semibold text-white">
+                    Configurações Globais
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Barra de Navegação das Configurações */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-        >
-          <SettingsNavigationBar
-            onSectionSelect={handleSectionChange}
-            activeSection={activeSection}
-          />
-        </motion.div>
+          {/* Barra de Navegação das Configurações */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+          >
+            <SettingsNavigationBar
+              onSectionSelect={handleSectionChange}
+              activeSection={activeSection}
+            />
+          </motion.div>
 
-        {/* Conteúdo das configurações */}
-        <div id="settings-content-container" className="space-y-8">
-          {/* Renderização condicional das seções */}
-          {activeSection === 'company' && (
-            <motion.div
-              id="section-company"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <SettingsBlock
-                title="Informações da Empresa"
-                description="Dados básicos da empresa e informações de contato"
-                icon={Building2}
-                form={
-                  <div className="space-y-6">
-                    {/* Logo Upload - TOPO */}
-                    <div className="space-y-4">
-                      {/* Título no topo - CENTRALIZADO */}
-                      <Label className="text-base font-semibold block text-center">
-                        Logo da Empresa
-                      </Label>
-
-                      {/* Preview do Logo - CENTRALIZADO */}
-                      {formData.companyIconUrl && (
-                        <div className="flex justify-center">
-                          <div className="relative inline-block">
-                            <div className="relative w-32 h-32 border-2 border-gray-200 rounded-lg overflow-hidden bg-white">
-                              <Image
-                                src={formData.companyIconUrl}
-                                alt="Logo da empresa"
-                                fill
-                                className="object-contain p-2"
-                                unoptimized
-                              />
-                            </div>
-                            <button
-                              type="button"
-                              onClick={handleRemoveLogo}
-                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-md"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* URL Input - EM CIMA */}
-                      <div>
-                        <Label htmlFor="companyIconUrl" className="text-sm">
-                          URL do Logo
+          {/* Conteúdo das configurações */}
+          <div id="settings-content-container" className="space-y-8">
+            {/* Renderização condicional das seções */}
+            {activeSection === 'company' && (
+              <motion.div
+                id="section-company"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <SettingsBlock
+                  title="Informações da Empresa"
+                  description="Dados básicos da empresa e informações de contato"
+                  icon={Building2}
+                  form={
+                    <div className="space-y-6">
+                      {/* Logo Upload - TOPO */}
+                      <div className="space-y-4">
+                        {/* Título no topo - CENTRALIZADO */}
+                        <Label className="text-base font-semibold block text-center">
+                          Logo da Empresa
                         </Label>
+
+                        {/* Preview do Logo - CENTRALIZADO */}
+                        {formData.companyIconUrl && (
+                          <div className="flex justify-center">
+                            <div className="relative inline-block">
+                              <div className="relative w-32 h-32 border-2 border-gray-200 rounded-lg overflow-hidden bg-white">
+                                <Image
+                                  src={formData.companyIconUrl}
+                                  alt="Logo da empresa"
+                                  fill
+                                  className="object-contain p-2"
+                                  unoptimized
+                                />
+                              </div>
+                              <button
+                                type="button"
+                                onClick={handleRemoveLogo}
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-md"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* URL Input - EM CIMA */}
+                        <div>
+                          <Label htmlFor="companyIconUrl" className="text-sm">
+                            URL do Logo
+                          </Label>
+                          <Input
+                            id="companyIconUrl"
+                            value={formData.companyIconUrl || ''}
+                            onChange={(e) =>
+                              updateField('companyIconUrl', e.target.value)
+                            }
+                            placeholder="https://exemplo.com/logo.png"
+                            className="mt-1"
+                          />
+                          <p className="input-description mt-1">
+                            Cole a URL do logo ou faça upload de uma imagem
+                          </p>
+                        </div>
+
+                        {/* Separador "ou" */}
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1 h-px bg-gray-200"></div>
+                          <span className="text-sm text-gray-500">ou</span>
+                          <div className="flex-1 h-px bg-gray-200"></div>
+                        </div>
+
+                        {/* Upload Button - EMBAIXO */}
+                        <div>
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleLogoUpload}
+                            className="hidden"
+                          />
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={isUploadingLogo}
+                            className="w-full"
+                          >
+                            {isUploadingLogo ? (
+                              <>
+                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                Enviando...
+                              </>
+                            ) : (
+                              <>
+                                <Upload className="w-4 h-4 mr-2" />
+                                Fazer Upload de Imagem
+                              </>
+                            )}
+                          </Button>
+                          <p className="input-description mt-1">
+                            Tamanho recomendado: 512x512px • Formatos: PNG, JPG,
+                            SVG
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Demais campos */}
+                      <div>
+                        <Label htmlFor="companyPhone">Telefone Fixo</Label>
                         <Input
-                          id="companyIconUrl"
-                          value={formData.companyIconUrl || ''}
+                          id="companyPhone"
+                          value={formData.companyPhone || ''}
                           onChange={(e) =>
-                            updateField('companyIconUrl', e.target.value)
+                            handlePhoneChange('companyPhone', e.target.value)
                           }
-                          placeholder="https://exemplo.com/logo.png"
+                          placeholder="(51) 2313-6262"
                           className="mt-1"
                         />
                         <p className="input-description mt-1">
-                          Cole a URL do logo ou faça upload de uma imagem
+                          Telefone fixo da empresa exibido em todo o site
                         </p>
                       </div>
 
-                      {/* Separador "ou" */}
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 h-px bg-gray-200"></div>
-                        <span className="text-sm text-gray-500">ou</span>
-                        <div className="flex-1 h-px bg-gray-200"></div>
-                      </div>
-
-                      {/* Upload Button - EMBAIXO */}
                       <div>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          onChange={handleLogoUpload}
-                          className="hidden"
+                        <Label htmlFor="whatsappNumber">
+                          WhatsApp / Celular
+                        </Label>
+                        <Input
+                          id="whatsappNumber"
+                          value={formData.whatsappNumber || ''}
+                          onChange={(e) =>
+                            handlePhoneChange('whatsappNumber', e.target.value)
+                          }
+                          placeholder="(51) 99820-5163"
+                          className="mt-1"
                         />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={() => fileInputRef.current?.click()}
-                          disabled={isUploadingLogo}
-                          className="w-full"
-                        >
-                          {isUploadingLogo ? (
-                            <>
-                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                              Enviando...
-                            </>
-                          ) : (
-                            <>
-                              <Upload className="w-4 h-4 mr-2" />
-                              Fazer Upload de Imagem
-                            </>
-                          )}
-                        </Button>
                         <p className="input-description mt-1">
-                          Tamanho recomendado: 512x512px • Formatos: PNG, JPG,
-                          SVG
+                          Número WhatsApp/celular exibido em todo o site
+                        </p>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="contactEmail">E-mail de Contato</Label>
+                        <Input
+                          id="contactEmail"
+                          type="email"
+                          value={formData.contactEmail || ''}
+                          onChange={(e) =>
+                            updateField('contactEmail', e.target.value)
+                          }
+                          placeholder="contato@locacoesgb.com.br"
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="marketingEmail">
+                          E-mail Comercial / No-reply
+                        </Label>
+                        <Input
+                          id="marketingEmail"
+                          type="email"
+                          value={formData.marketingEmail || ''}
+                          onChange={(e) =>
+                            updateField('marketingEmail', e.target.value)
+                          }
+                          placeholder="comercial@locacoesgb.com.br"
+                          className="mt-1"
+                        />
+                        <p className="input-description mt-1">
+                          Endereço usado para disparos automáticos e
+                          comunicações comerciais.
+                        </p>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="companyAddress">Endereço</Label>
+                        <Textarea
+                          id="companyAddress"
+                          value={formData.companyAddress || ''}
+                          onChange={(e) =>
+                            updateField('companyAddress', e.target.value)
+                          }
+                          placeholder="Endereço completo da empresa"
+                          className="mt-1"
+                          rows={3}
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="aboutUsText">
+                          Sobre Nós / Descrição SEO
+                        </Label>
+                        <Textarea
+                          id="aboutUsText"
+                          value={formData.aboutUsText || ''}
+                          onChange={(e) =>
+                            updateField('aboutUsText', e.target.value)
+                          }
+                          placeholder="Ex: Locação de equipamentos para construção em Porto Alegre. Andaimes, betoneiras, compressores e muito mais. Qualidade e segurança garantidas."
+                          className="mt-1"
+                          rows={4}
+                        />
+                        <p className="input-description mt-1">
+                          Texto sobre sua empresa exibido no rodapé do site.
+                          Pode ser mais detalhado que a meta descrição.
                         </p>
                       </div>
                     </div>
-
-                    {/* Demais campos */}
-                    <div>
-                      <Label htmlFor="companyPhone">Telefone Fixo</Label>
-                      <Input
-                        id="companyPhone"
-                        value={formData.companyPhone || ''}
-                        onChange={(e) =>
-                          handlePhoneChange('companyPhone', e.target.value)
-                        }
-                        placeholder="(51) 2313-6262"
-                        className="mt-1"
-                      />
-                      <p className="input-description mt-1">
-                        Telefone fixo da empresa exibido em todo o site
-                      </p>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="whatsappNumber">WhatsApp / Celular</Label>
-                      <Input
-                        id="whatsappNumber"
-                        value={formData.whatsappNumber || ''}
-                        onChange={(e) =>
-                          handlePhoneChange('whatsappNumber', e.target.value)
-                        }
-                        placeholder="(51) 99820-5163"
-                        className="mt-1"
-                      />
-                      <p className="input-description mt-1">
-                        Número WhatsApp/celular exibido em todo o site
-                      </p>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="contactEmail">E-mail de Contato</Label>
-                      <Input
-                        id="contactEmail"
-                        type="email"
-                        value={formData.contactEmail || ''}
-                        onChange={(e) =>
-                          updateField('contactEmail', e.target.value)
-                        }
-                        placeholder="contato@locacoesgb.com.br"
-                        className="mt-1"
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="marketingEmail">
-                        E-mail Comercial / No-reply
-                      </Label>
-                      <Input
-                        id="marketingEmail"
-                        type="email"
-                        value={formData.marketingEmail || ''}
-                        onChange={(e) =>
-                          updateField('marketingEmail', e.target.value)
-                        }
-                        placeholder="comercial@locacoesgb.com.br"
-                        className="mt-1"
-                      />
-                      <p className="input-description mt-1">
-                        Endereço usado para disparos automáticos e comunicações
-                        comerciais.
-                      </p>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="companyAddress">Endereço</Label>
-                      <Textarea
-                        id="companyAddress"
-                        value={formData.companyAddress || ''}
-                        onChange={(e) =>
-                          updateField('companyAddress', e.target.value)
-                        }
-                        placeholder="Endereço completo da empresa"
-                        className="mt-1"
-                        rows={3}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="aboutUsText">
-                        Sobre Nós / Descrição SEO
-                      </Label>
-                      <Textarea
-                        id="aboutUsText"
-                        value={formData.aboutUsText || ''}
-                        onChange={(e) =>
-                          updateField('aboutUsText', e.target.value)
-                        }
-                        placeholder="Ex: Locação de equipamentos para construção em Porto Alegre. Andaimes, betoneiras, compressores e muito mais. Qualidade e segurança garantidas."
-                        className="mt-1"
-                        rows={4}
-                      />
-                      <p className="input-description mt-1">
-                        Texto sobre sua empresa exibido no rodapé do site. Pode
-                        ser mais detalhado que a meta descrição.
-                      </p>
-                    </div>
-                  </div>
-                }
-                preview={
-                  <CompanyInfoPreview
-                    data={{
-                      name: 'GB Locações',
-                      description: formData.aboutUsText,
-                      address: formData.companyAddress,
-                      phone: `${formData.companyPhone || '(51) 2313-6262'} | ${formData.whatsappNumber || '(51) 99820-5163'}`,
-                      email: formData.contactEmail,
-                      marketingEmail: formData.marketingEmail,
-                      logoUrl: formData.companyIconUrl,
-                    }}
-                  />
-                }
-                onSave={saveCompanySettings}
-                onReset={() => resetSection('company')}
-                isSaving={sectionLoading.company}
-                isResetting={sectionResetting.company}
-              />
-            </motion.div>
-          )}
-
-          {/* Hero Carousel */}
-          {activeSection === 'hero' && (
-            <motion.div
-              id="section-hero"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <SettingsBlock
-                title="Carousel Principal"
-                description="Configure as imagens e conteúdo do carousel da página inicial"
-                icon={Images}
-                form={
-                  <div className="space-y-6">
-                    {/* Reutilizar ImageUpload component */}
-                    <ImageUpload
-                      images={
-                        formData.heroCarousel?.map((item) =>
-                          typeof item === 'string' ? item : item.imageUrl
-                        ) || []
-                      }
-                      onImagesChange={(urls) => {
-                        updateField(
-                          'heroCarousel',
-                          urls.map((url) => ({ imageUrl: url }))
-                        )
+                  }
+                  preview={
+                    <CompanyInfoPreview
+                      data={{
+                        name: 'GB Locações',
+                        description: formData.aboutUsText,
+                        address: formData.companyAddress,
+                        phone: `${formData.companyPhone || '(51) 2313-6262'} | ${formData.whatsappNumber || '(51) 99820-5163'}`,
+                        email: formData.contactEmail,
+                        marketingEmail: formData.marketingEmail,
+                        logoUrl: formData.companyIconUrl,
                       }}
-                      maxImages={10}
-                      currentImageIndex={heroCarouselIndex}
-                      onImageIndexChange={setHeroCarouselIndex}
                     />
-                  </div>
-                }
-                preview={
-                  <>
-                    <HeroCarouselPreview
-                      images={
-                        formData.heroCarousel?.map((item) =>
-                          typeof item === 'string' ? item : item.imageUrl
-                        ) || []
-                      }
-                      waveAnimation={formData.waveAnimation}
-                    />
+                  }
+                  onSave={saveCompanySettings}
+                  onReset={() => resetSection('company')}
+                  isSaving={sectionLoading.company}
+                  isResetting={sectionResetting.company}
+                />
+              </motion.div>
+            )}
 
-                    {/* Controle de Animação da Onda - movido para baixo do preview */}
-                    <div className="mt-6 text-center">
-                      <Label className="text-center block">
-                        Animação da Onda
-                      </Label>
-                      <p className="text-xs text-gray-600 mb-2 text-center">
-                        Controle o efeito ondulado na parte inferior da seção
-                        Hero
-                      </p>
-                      <div className="flex gap-2 justify-center">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant={
-                            formData.waveAnimation === 'none'
-                              ? 'default'
-                              : 'outline'
+            {/* Hero Carousel */}
+            {activeSection === 'hero' && (
+              <motion.div
+                id="section-hero"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <SettingsBlock
+                  title="Carousel Principal"
+                  description="Configure as imagens e conteúdo do carousel da página inicial"
+                  icon={Images}
+                  form={
+                    <div className="space-y-6">
+                      {/* Reutilizar ImageUpload component */}
+                      <ImageUpload
+                        images={
+                          formData.heroCarousel?.map((item) =>
+                            typeof item === 'string' ? item : item.imageUrl
+                          ) || []
+                        }
+                        onImagesChange={(urls) => {
+                          updateField(
+                            'heroCarousel',
+                            urls.map((url) => ({ imageUrl: url }))
+                          )
+                        }}
+                        maxImages={10}
+                        currentImageIndex={heroCarouselIndex}
+                        onImageIndexChange={setHeroCarouselIndex}
+                        tooltipContent={
+                          <div className="max-w-xs leading-relaxed">
+                            <span className="inline-flex items-start gap-1">
+                              <span>💡</span>
+                              <span>
+                                <strong className="font-semibold">
+                                  Background Padrão:
+                                </strong>{' '}
+                                Quando nenhuma imagem estiver configurada, o
+                                fundo laranja atual será exibido automaticamente
+                                no carrossel da página inicial.
+                              </span>
+                            </span>
+                          </div>
+                        }
+                      />
+                    </div>
+                  }
+                  preview={
+                    <>
+                      <HeroCarouselPreview
+                        images={
+                          formData.heroCarousel?.map((item) =>
+                            typeof item === 'string' ? item : item.imageUrl
+                          ) || []
+                        }
+                        waveAnimation={formData.waveAnimation}
+                      />
+
+                      {/* Controle de Animação da Onda - movido para baixo do preview */}
+                      <div className="mt-6 text-center">
+                        <Label className="text-center block">
+                          Animação da Onda
+                        </Label>
+                        <p className="text-xs text-gray-600 mb-2 text-center">
+                          Controle o efeito ondulado na parte inferior da seção
+                          Hero
+                        </p>
+                        <div className="flex gap-2 justify-center">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant={
+                              formData.waveAnimation === 'none'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            onClick={() => updateField('waveAnimation', 'none')}
+                          >
+                            Sem Onda
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant={
+                              formData.waveAnimation === 'static'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            onClick={() =>
+                              updateField('waveAnimation', 'static')
+                            }
+                          >
+                            Estática
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant={
+                              formData.waveAnimation === 'animated'
+                                ? 'default'
+                                : 'outline'
+                            }
+                            onClick={() =>
+                              updateField('waveAnimation', 'animated')
+                            }
+                          >
+                            Animada
+                          </Button>
+                        </div>
+                      </div>
+                    </>
+                  }
+                  onSave={saveHeroSettings}
+                  onReset={() => resetSection('hero')}
+                  isSaving={sectionLoading.hero}
+                  isResetting={sectionResetting.hero}
+                />
+              </motion.div>
+            )}
+
+            {/* Redes Sociais */}
+            {activeSection === 'social' && (
+              <motion.div
+                id="section-social"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <SettingsBlock
+                  title="Redes Sociais"
+                  description="Configure os links das redes sociais da empresa"
+                  icon={Share2}
+                  form={
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="whatsappNumber">WhatsApp</Label>
+                        <Input
+                          id="whatsappNumber"
+                          value={formData.whatsappNumber || ''}
+                          onChange={(e) =>
+                            handlePhoneChange('whatsappNumber', e.target.value)
                           }
-                          onClick={() => updateField('waveAnimation', 'none')}
-                        >
-                          Sem Onda
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant={
-                            formData.waveAnimation === 'static'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          onClick={() => updateField('waveAnimation', 'static')}
-                        >
-                          Estática
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant={
-                            formData.waveAnimation === 'animated'
-                              ? 'default'
-                              : 'outline'
-                          }
-                          onClick={() =>
-                            updateField('waveAnimation', 'animated')
-                          }
-                        >
-                          Animada
-                        </Button>
+                          placeholder="(51) 99820-5163"
+                          className="mt-1"
+                        />
+                      </div>
+
+                      <div className="bg-gray-50 p-4 rounded-lg">
+                        <p className="text-sm text-gray-500">
+                          Campos para Instagram, Facebook, LinkedIn em
+                          desenvolvimento
+                        </p>
                       </div>
                     </div>
-                  </>
-                }
-                onSave={saveHeroSettings}
-                onReset={() => resetSection('hero')}
-                isSaving={sectionLoading.hero}
-                isResetting={sectionResetting.hero}
-              />
-            </motion.div>
-          )}
+                  }
+                  preview={<SocialLinksPreview data={{ socialLinks: [] }} />}
+                  onSave={saveSocialSettings}
+                  onReset={() => resetSection('social')}
+                  isSaving={sectionLoading.social}
+                  isResetting={sectionResetting.social}
+                />
+              </motion.div>
+            )}
 
-          {/* Redes Sociais */}
-          {activeSection === 'social' && (
-            <motion.div
-              id="section-social"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <SettingsBlock
-                title="Redes Sociais"
-                description="Configure os links das redes sociais da empresa"
-                icon={Share2}
-                form={
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="whatsappNumber">WhatsApp</Label>
-                      <Input
-                        id="whatsappNumber"
-                        value={formData.whatsappNumber || ''}
-                        onChange={(e) =>
-                          handlePhoneChange('whatsappNumber', e.target.value)
-                        }
-                        placeholder="(51) 99820-5163"
-                        className="mt-1"
-                      />
+            {/* SEO */}
+            {activeSection === 'seo' && (
+              <motion.div
+                id="section-seo"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <SettingsBlock
+                  title="SEO e Metadados"
+                  description="Configure informações para otimização de motores de busca"
+                  icon={Search}
+                  form={
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="seoTitle">Título SEO</Label>
+                        <Input
+                          id="seoTitle"
+                          value={formData.seoTitle || ''}
+                          onChange={(e) =>
+                            updateField('seoTitle', e.target.value)
+                          }
+                          placeholder="GB Locações - Equipamentos para Construção"
+                          className="mt-1"
+                        />
+                        <p className="input-description mt-1">
+                          Máximo 60 caracteres recomendado
+                        </p>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="seoDescription">Meta Descrição</Label>
+                          <span
+                            className={`text-xs font-medium ${
+                              (formData.seoDescription || '').length > 160
+                                ? 'text-red-600'
+                                : (formData.seoDescription || '').length > 150
+                                  ? 'text-orange-600'
+                                  : 'text-gray-500'
+                            }`}
+                          >
+                            {(formData.seoDescription || '').length}/160
+                          </span>
+                        </div>
+                        <Textarea
+                          id="seoDescription"
+                          value={formData.seoDescription || ''}
+                          onChange={(e) =>
+                            updateField('seoDescription', e.target.value)
+                          }
+                          placeholder="Descreva sua empresa em até 160 caracteres. Ex: Locação de equipamentos para construção em Porto Alegre com qualidade e segurança garantidas."
+                          className="mt-1"
+                          rows={3}
+                        />
+                        <p className="input-description mt-1">
+                          Máximo 160 caracteres. Aparece nos resultados do
+                          Google.
+                        </p>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="favicon">Favicon URL</Label>
+                        <Input
+                          id="favicon"
+                          value={formData.favicon || ''}
+                          onChange={(e) =>
+                            updateField('favicon', e.target.value)
+                          }
+                          placeholder="https://exemplo.com/favicon.ico"
+                          className="mt-1"
+                        />
+                      </div>
                     </div>
+                  }
+                  preview={
+                    <SeoPreview
+                      data={{
+                        seoTitle: formData.seoTitle,
+                        seoDescription: formData.seoDescription,
+                        favicon: formData.favicon,
+                      }}
+                    />
+                  }
+                  onSave={saveSeoSettings}
+                  onReset={() => resetSection('seo')}
+                  isSaving={sectionLoading.seo}
+                  isResetting={sectionResetting.seo}
+                />
+              </motion.div>
+            )}
 
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <p className="text-sm text-gray-500">
-                        Campos para Instagram, Facebook, LinkedIn em
-                        desenvolvimento
-                      </p>
-                    </div>
-                  </div>
-                }
-                preview={<SocialLinksPreview data={{ socialLinks: [] }} />}
-                onSave={saveSocialSettings}
-                onReset={() => resetSection('social')}
-                isSaving={sectionLoading.social}
-                isResetting={sectionResetting.social}
-              />
-            </motion.div>
-          )}
-
-          {/* SEO */}
-          {activeSection === 'seo' && (
-            <motion.div
-              id="section-seo"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <SettingsBlock
-                title="SEO e Metadados"
-                description="Configure informações para otimização de motores de busca"
-                icon={Search}
-                form={
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="seoTitle">Título SEO</Label>
-                      <Input
-                        id="seoTitle"
-                        value={formData.seoTitle || ''}
-                        onChange={(e) =>
-                          updateField('seoTitle', e.target.value)
-                        }
-                        placeholder="GB Locações - Equipamentos para Construção"
-                        className="mt-1"
-                      />
-                      <p className="input-description mt-1">
-                        Máximo 60 caracteres recomendado
-                      </p>
-                    </div>
-
-                    <div>
+            {/* Sistema */}
+            {activeSection === 'system' && (
+              <motion.div
+                id="section-system"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <SettingsBlock
+                  title="Configurações do Sistema"
+                  description="Configurações gerais de funcionamento da plataforma"
+                  icon={Settings}
+                  form={
+                    <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <Label htmlFor="seoDescription">Meta Descrição</Label>
-                        <span
-                          className={`text-xs font-medium ${
-                            (formData.seoDescription || '').length > 160
-                              ? 'text-red-600'
-                              : (formData.seoDescription || '').length > 150
-                                ? 'text-orange-600'
-                                : 'text-gray-500'
-                          }`}
-                        >
-                          {(formData.seoDescription || '').length}/160
-                        </span>
+                        <div>
+                          <Label>Modo Manutenção</Label>
+                          <p className="text-sm text-gray-500">
+                            Ativar para manutenção do sistema
+                          </p>
+                        </div>
+                        <Switch
+                          checked={formData.maintenanceMode}
+                          onCheckedChange={(checked) =>
+                            updateField('maintenanceMode', checked)
+                          }
+                        />
                       </div>
-                      <Textarea
-                        id="seoDescription"
-                        value={formData.seoDescription || ''}
-                        onChange={(e) =>
-                          updateField('seoDescription', e.target.value)
-                        }
-                        placeholder="Descreva sua empresa em até 160 caracteres. Ex: Locação de equipamentos para construção em Porto Alegre com qualidade e segurança garantidas."
-                        className="mt-1"
-                        rows={3}
-                      />
-                      <p className="input-description mt-1">
-                        Máximo 160 caracteres. Aparece nos resultados do Google.
-                      </p>
-                    </div>
 
-                    <div>
-                      <Label htmlFor="favicon">Favicon URL</Label>
-                      <Input
-                        id="favicon"
-                        value={formData.favicon || ''}
-                        onChange={(e) => updateField('favicon', e.target.value)}
-                        placeholder="https://exemplo.com/favicon.ico"
-                        className="mt-1"
-                      />
-                    </div>
-                  </div>
-                }
-                preview={
-                  <SeoPreview
-                    data={{
-                      seoTitle: formData.seoTitle,
-                      seoDescription: formData.seoDescription,
-                      favicon: formData.favicon,
-                    }}
-                  />
-                }
-                onSave={saveSeoSettings}
-                onReset={() => resetSection('seo')}
-                isSaving={sectionLoading.seo}
-                isResetting={sectionResetting.seo}
-              />
-            </motion.div>
-          )}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label>Chat de Suporte</Label>
+                          <p className="text-sm text-gray-500">
+                            Exibir widget de chat no site
+                          </p>
+                        </div>
+                        <Switch
+                          checked={formData.supportChat}
+                          onCheckedChange={(checked) =>
+                            updateField('supportChat', checked)
+                          }
+                        />
+                      </div>
 
-          {/* Sistema */}
-          {activeSection === 'system' && (
-            <motion.div
-              id="section-system"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <SettingsBlock
-                title="Configurações do Sistema"
-                description="Configurações gerais de funcionamento da plataforma"
-                icon={Settings}
-                form={
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
                       <div>
-                        <Label>Modo Manutenção</Label>
-                        <p className="text-sm text-gray-500">
-                          Ativar para manutenção do sistema
-                        </p>
+                        <Label htmlFor="defaultLanguage">Idioma Padrão</Label>
+                        <Input
+                          id="defaultLanguage"
+                          value={formData.defaultLanguage || ''}
+                          onChange={(e) =>
+                            updateField('defaultLanguage', e.target.value)
+                          }
+                          placeholder="pt-BR"
+                          className="mt-1"
+                        />
                       </div>
-                      <Switch
-                        checked={formData.maintenanceMode}
-                        onCheckedChange={(checked) =>
-                          updateField('maintenanceMode', checked)
-                        }
-                      />
-                    </div>
 
-                    <div className="flex items-center justify-between">
                       <div>
-                        <Label>Chat de Suporte</Label>
-                        <p className="text-sm text-gray-500">
-                          Exibir widget de chat no site
-                        </p>
+                        <Label htmlFor="baseCurrency">Moeda Base</Label>
+                        <Input
+                          id="baseCurrency"
+                          value={formData.baseCurrency || ''}
+                          onChange={(e) =>
+                            updateField('baseCurrency', e.target.value)
+                          }
+                          placeholder="BRL"
+                          className="mt-1"
+                        />
                       </div>
-                      <Switch
-                        checked={formData.supportChat}
-                        onCheckedChange={(checked) =>
-                          updateField('supportChat', checked)
-                        }
-                      />
                     </div>
+                  }
+                  preview={
+                    <SystemPreview
+                      data={{
+                        maintenanceMode: formData.maintenanceMode,
+                        defaultCurrency: formData.baseCurrency,
+                        timezone: 'America/Sao_Paulo',
+                        allowRegistration: true,
+                        requireEmailVerification: true,
+                        maxQuoteItems: 50,
+                      }}
+                    />
+                  }
+                  onSave={saveSystemSettings}
+                  onReset={() => resetSection('system')}
+                  isSaving={sectionLoading.system}
+                  isResetting={sectionResetting.system}
+                />
+              </motion.div>
+            )}
 
-                    <div>
-                      <Label htmlFor="defaultLanguage">Idioma Padrão</Label>
-                      <Input
-                        id="defaultLanguage"
-                        value={formData.defaultLanguage || ''}
-                        onChange={(e) =>
-                          updateField('defaultLanguage', e.target.value)
-                        }
-                        placeholder="pt-BR"
-                        className="mt-1"
-                      />
-                    </div>
+            {/* Configurações Avançadas */}
+            {activeSection === 'custom' && (
+              <motion.div
+                id="section-custom"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <SettingsBlock
+                  title="Configurações Avançadas"
+                  description="CSS/JS customizado e códigos de rastreamento"
+                  icon={Code}
+                  form={
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="analyticsTrackingId">
+                          Google Analytics ID
+                        </Label>
+                        <Input
+                          id="analyticsTrackingId"
+                          value={formData.analyticsTrackingId || ''}
+                          onChange={(e) =>
+                            updateField('analyticsTrackingId', e.target.value)
+                          }
+                          placeholder="GA_TRACKING_ID"
+                          className="mt-1"
+                        />
+                      </div>
 
-                    <div>
-                      <Label htmlFor="baseCurrency">Moeda Base</Label>
-                      <Input
-                        id="baseCurrency"
-                        value={formData.baseCurrency || ''}
-                        onChange={(e) =>
-                          updateField('baseCurrency', e.target.value)
-                        }
-                        placeholder="BRL"
-                        className="mt-1"
-                      />
-                    </div>
-                  </div>
-                }
-                preview={
-                  <SystemPreview
-                    data={{
-                      maintenanceMode: formData.maintenanceMode,
-                      defaultCurrency: formData.baseCurrency,
-                      timezone: 'America/Sao_Paulo',
-                      allowRegistration: true,
-                      requireEmailVerification: true,
-                      maxQuoteItems: 50,
-                    }}
-                  />
-                }
-                onSave={saveSystemSettings}
-                onReset={() => resetSection('system')}
-                isSaving={sectionLoading.system}
-                isResetting={sectionResetting.system}
-              />
-            </motion.div>
-          )}
+                      <div>
+                        <Label htmlFor="customCss">CSS Customizado</Label>
+                        <Textarea
+                          id="customCss"
+                          value={formData.customCss || ''}
+                          onChange={(e) =>
+                            updateField('customCss', e.target.value)
+                          }
+                          placeholder="/* CSS customizado */"
+                          className="mt-1 font-mono text-sm"
+                          rows={5}
+                        />
+                      </div>
 
-          {/* Configurações Avançadas */}
-          {activeSection === 'custom' && (
-            <motion.div
-              id="section-custom"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <SettingsBlock
-                title="Configurações Avançadas"
-                description="CSS/JS customizado e códigos de rastreamento"
-                icon={Code}
-                form={
-                  <div className="space-y-4">
-                    <div>
-                      <Label htmlFor="analyticsTrackingId">
-                        Google Analytics ID
-                      </Label>
-                      <Input
-                        id="analyticsTrackingId"
-                        value={formData.analyticsTrackingId || ''}
-                        onChange={(e) =>
-                          updateField('analyticsTrackingId', e.target.value)
-                        }
-                        placeholder="GA_TRACKING_ID"
-                        className="mt-1"
-                      />
+                      <div>
+                        <Label htmlFor="customJs">JavaScript Customizado</Label>
+                        <Textarea
+                          id="customJs"
+                          value={formData.customJs || ''}
+                          onChange={(e) =>
+                            updateField('customJs', e.target.value)
+                          }
+                          placeholder="// JavaScript customizado"
+                          className="mt-1 font-mono text-sm"
+                          rows={5}
+                        />
+                      </div>
                     </div>
-
-                    <div>
-                      <Label htmlFor="customCss">CSS Customizado</Label>
-                      <Textarea
-                        id="customCss"
-                        value={formData.customCss || ''}
-                        onChange={(e) =>
-                          updateField('customCss', e.target.value)
-                        }
-                        placeholder="/* CSS customizado */"
-                        className="mt-1 font-mono text-sm"
-                        rows={5}
-                      />
-                    </div>
-
-                    <div>
-                      <Label htmlFor="customJs">JavaScript Customizado</Label>
-                      <Textarea
-                        id="customJs"
-                        value={formData.customJs || ''}
-                        onChange={(e) =>
-                          updateField('customJs', e.target.value)
-                        }
-                        placeholder="// JavaScript customizado"
-                        className="mt-1 font-mono text-sm"
-                        rows={5}
-                      />
-                    </div>
-                  </div>
-                }
-                preview={
-                  <CustomSettingsPreview
-                    data={{
-                      customCss: formData.customCss,
-                      customJs: formData.customJs,
-                      gtmId: formData.analyticsTrackingId,
-                    }}
-                  />
-                }
-                onSave={saveCustomSettings}
-                onReset={() => resetSection('custom')}
-                isSaving={sectionLoading.custom}
-                isResetting={sectionResetting.custom}
-              />
-            </motion.div>
-          )}
+                  }
+                  preview={
+                    <CustomSettingsPreview
+                      data={{
+                        customCss: formData.customCss,
+                        customJs: formData.customJs,
+                        gtmId: formData.analyticsTrackingId,
+                      }}
+                    />
+                  }
+                  onSave={saveCustomSettings}
+                  onReset={() => resetSection('custom')}
+                  isSaving={sectionLoading.custom}
+                  isResetting={sectionResetting.custom}
+                />
+              </motion.div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </Tooltip.Provider>
   )
 }

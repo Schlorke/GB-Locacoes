@@ -11,10 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { HybridTooltip } from '@/components/ui/HybridTooltip'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { SmartPagination } from '@/components/ui/smart-pagination'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { toast } from 'sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
 import {
@@ -27,6 +27,7 @@ import {
   Edit,
   Eye,
   FileText,
+  Info,
   Loader2,
   Package,
   Plus,
@@ -38,6 +39,7 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 interface Equipment {
   id: string
@@ -653,7 +655,7 @@ export default function AdminEquipmentsPage() {
               maxHeight: '80vh',
             }}
           >
-            <DialogHeader className="p-6 border-b border-gray-100 bg-gradient-to-r from-slate-50 to-slate-100 rounded-t-lg flex-shrink-0">
+            <DialogHeader className="p-6 border-b border-gray-100 bg-white rounded-t-lg flex-shrink-0">
               <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
                 <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
                   <Eye className="w-4 h-4" />
@@ -670,11 +672,35 @@ export default function AdminEquipmentsPage() {
                 {selectedEquipment && (
                   <>
                     {/* Preview do Equipamento com Carrossel */}
-                    <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-3 xs:rounded-md">
+                    <div className="bg-white rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-3 xs:rounded-md">
                       <div className="flex items-center justify-between mb-4 w-full">
-                        <h3 className="text-sm font-semibold text-slate-700">
-                          Preview do Equipamento
-                        </h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-sm font-semibold text-slate-700">
+                            Preview do Equipamento
+                          </h3>
+                          <HybridTooltip
+                            content={
+                              <div className="max-w-xs leading-relaxed">
+                                <span className="inline-flex items-start gap-1">
+                                  <span>💡</span>
+                                  <span>
+                                    <strong className="font-semibold">
+                                      Background Padrão:
+                                    </strong>{' '}
+                                    Quando nenhuma imagem estiver configurada, o
+                                    fundo laranja atual será exibido
+                                    automaticamente.
+                                  </span>
+                                </span>
+                              </div>
+                            }
+                          >
+                            <Info
+                              className="size-5 !text-gray-700 cursor-help transition-colors hover:!text-orange-600"
+                              aria-hidden="true"
+                            />
+                          </HybridTooltip>
+                        </div>
                         {selectedEquipment.images &&
                           selectedEquipment.images.length > 1 && (
                             <div className="text-xs text-slate-500 bg-white/70 px-2 py-1 rounded-full">

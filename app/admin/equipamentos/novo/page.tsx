@@ -1081,6 +1081,20 @@ export default function NovoEquipamento() {
                       nextImage={nextImage}
                       prevImage={prevImage}
                       goToImage={goToImage}
+                      tooltipContent={
+                        <div className="max-w-xs leading-relaxed">
+                          <span className="inline-flex items-start gap-1">
+                            <span>💡</span>
+                            <span>
+                              <strong className="font-semibold">
+                                Novo Equipamento:
+                              </strong>{' '}
+                              Adicione até 5 imagens. A primeira será a imagem
+                              principal exibida nas listagens e buscas.
+                            </span>
+                          </span>
+                        </div>
+                      }
                     />
 
                     {/* Seção: Especificações Técnicas */}

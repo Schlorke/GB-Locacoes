@@ -6,6 +6,65 @@ O formato é baseado em
 [Keep a Changelog](HTTPS://keepachangelog.com/pt-BR/1.0.0/), e este projeto
 adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
+## [Unreleased] - Remoções e ajustes Tooltip
+
+### Fixed 🐛
+
+- Tooltip não respeitava camadas e ficava sob componentes adjacentes em telas
+  apertadas. O wrapper agora usa `Portal`, `z-[var(--z-tooltip)]` e
+  `avoidCollisions` com `collisionPadding`, garantindo sobreposição correta e
+  reposicionamento inteligente próximo às bordas.
+- Conteúdo de tooltip específico de "Background Padrão" aparecia em páginas de
+  edição/criação de equipamento. O `ImageUpload` agora não exibe tooltip por
+  padrão; o texto é injetado pela página de Settings via props.
+
+### Changed 🔄
+
+- `components/ui/tooltip.tsx`: defaults de posicionamento mais seguros
+  (`side='top'`, `align='center'`, `sideOffset=8`), remoção de `overflow-hidden`
+  e inclusão de `will-change` para animação suave.
+- `components/ui/image-upload.tsx`: adicionadas props opcionais `infoTooltip`,
+  `infoTooltipProps` e `infoAriaLabel` para permitir mensagens contextuais sem
+  acoplar o componente a um caso de uso específico.
+
+### Removed ❌
+
+- Removido o componente `components/ui/tooltip.tsx` do projeto (descontinuado do
+  design system)
+- `components/ui/sidebar.tsx`: removida a dependência de Tooltip; o botão de
+  menu retorna sem tooltip quando colapsado (prop `tooltip` passa a ser
+  ignorada)
+- `components/ui/image-upload.tsx`: migração do comportamento de ajuda para o
+  novo `HybridTooltip`, eliminando o componente legado do design system
+
+## [2025-11-03] - Documentação Tooltip Radix UI
+
+### Added ✨
+
+- `docs/features/radix-tooltip.md`: documentação completa do componente Tooltip
+  do Radix UI, com API detalhada, guia de implementação e prompt voltado para
+  assistentes de IA.
+- `docs/README.md`: índice atualizado para incluir o novo guia de Tooltip.
+- Revisão das fontes oficiais (Radix, shadcn/ui, issues públicas) consolidada na
+  documentação.
+- `components/ui/hybrid-tooltip.tsx` e `hooks/use-has-hover.ts`: criados para
+  disponibilizar o componente híbrido Tooltip/Popover com detecção automática de
+  device.
+
+### Changed 🔄
+
+- `docs/features/radix-tooltip.md`: atualizado para versão 2.0, com alertas
+  críticos sobre limitações mobile/touch, alternativas recomendadas (Popover,
+  toggletip, componente híbrido) e prompt de engenharia revisado.
+- `app/admin/settings/page.tsx`: tooltip informativo ao lado de "Preview do
+  Equipamento" agora utiliza `HybridTooltip` e o provider global do Tooltip foi
+  removido.
+- `components/ui/image-upload.tsx`: dicas contextuais passam a usar o
+  `HybridTooltip`, com posicionamento superior por padrão e layout responsivo.
+- `components/ui/hybrid-tooltip.tsx`: animação custom com keyframes próprios
+  replicando os efeitos originais do Radix (fade + slide/scale) para tooltip e
+  seta, garantindo sincronização em desktop e mobile.
+
 ## [2025-11-03] - Correção visual do Hero
 
 ### Fixed 🐛

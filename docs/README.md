@@ -30,6 +30,8 @@ com o projeto.
   equipamentos
 - **[quote-system.md](./features/quote-system.md)** - Sistema de orçamentos
 - **[design-system.md](./features/design-system.md)** - Sistema de design
+- **[radix-tooltip.md](./features/radix-tooltip.md)** - Documentação completa do
+  componente Tooltip (Radix UI)
 
 ### 📖 [guides/](./guides/) - Guias Específicos
 

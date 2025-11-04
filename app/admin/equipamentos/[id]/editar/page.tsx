@@ -1156,6 +1156,21 @@ export default function EditarEquipamento() {
                         nextImage={nextImage}
                         prevImage={prevImage}
                         goToImage={goToImage}
+                        tooltipContent={
+                          <div className="max-w-xs leading-relaxed">
+                            <span className="inline-flex items-start gap-1">
+                              <span>💡</span>
+                              <span>
+                                <strong className="font-semibold">
+                                  Editando Imagens:
+                                </strong>{' '}
+                                A primeira imagem será exibida como destaque na
+                                listagem de equipamentos. Arraste para
+                                reordenar.
+                              </span>
+                            </span>
+                          </div>
+                        }
                       />
                     </div>
 
