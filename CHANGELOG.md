@@ -8,6 +8,23 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [2025-11-05] - Correção Animação Ondinha Hero
+
+### Fixed 🐛
+
+- **Animação Hero Wave**: Corrigida repetição indesejada da animação da ondinha
+  - Ondinha agora integrada ao sistema de scroll reveal
+  - Anima apenas na primeira visita ou após refresh da página
+  - Permanece estática em navegações internas (equipamentos → home)
+  - Substituído `motion.svg` por `svg` normal com classe `.hero-wave`
+  - Adicionado controle via sistema de primeira visita do projeto
+  - Consistente com comportamento dos outros elementos do hero
+  - **Corrigido flash inicial**: SVG começa invisível (`opacity: 0`) no HTML
+  - Inicialização correta no `initializeElement` para evitar aparição prematura
+  - Tratamento especial em navegação interna para aparecer imediatamente
+  - Timing original mantido (1s duração, 1s delay)
+  - Zero bugs visuais - transição suave em todos os cenários
+
 ## [2025-11-05] - Tabs Móveis com Scroll Horizontal
 
 ### Fixed 🐛

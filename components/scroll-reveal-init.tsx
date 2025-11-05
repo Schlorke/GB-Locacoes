@@ -99,7 +99,7 @@ export default function ScrollRevealInit() {
        * Para adicionar novos elementos, inclua suas classes aqui.
        */
       const selectors =
-        '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
+        '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, .hero-wave, ' +
         '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
         '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate, ' +
         '[data-scroll-reveal], [data-fade-only]'
@@ -117,6 +117,11 @@ export default function ScrollRevealInit() {
           // Garantir que elementos CSS-only também sejam invisíveis inicialmente
           element.style.opacity = '0'
           element.style.transform = 'translateY(60px)'
+          element.style.transition = 'none'
+        } else if (element.classList.contains('hero-wave')) {
+          // Inicializar ondinha como invisível para animação de slide up
+          element.style.opacity = '0'
+          element.style.transform = 'translateY(20px)'
           element.style.transition = 'none'
         } else if (
           element.classList.contains('section-title') ||
@@ -164,6 +169,12 @@ export default function ScrollRevealInit() {
             htmlElement.classList.contains('category-card-animate')
           ) {
             htmlElement.classList.add('animate-in')
+          } else if (htmlElement.classList.contains('hero-wave')) {
+            // Ondinha - mostrar imediatamente na navegação interna
+            htmlElement.style.opacity = '1'
+            htmlElement.style.transform = 'translateY(0)'
+            htmlElement.style.animation = 'none'
+            htmlElement.style.transition = 'none'
           } else if (htmlElement.hasAttribute('data-scroll-reveal')) {
             // Elementos com data-scroll-reveal - mostrar imediatamente
             htmlElement.style.opacity = '1'
@@ -250,6 +261,9 @@ export default function ScrollRevealInit() {
               } else if (element.classList.contains('hero-image')) {
                 element.style.animation =
                   'slideInRight 1.2s ease-out 0.3s forwards'
+              } else if (element.classList.contains('hero-wave')) {
+                element.style.animation =
+                  'slideInUp 1.5s ease-in-out 0s forwards'
               }
 
               // Elementos com data-scroll-reveal
@@ -430,8 +444,14 @@ export default function ScrollRevealInit() {
                 const el = node as HTMLElement
                 if (el.matches(selectors)) {
                   // Mostrar elemento imediatamente
-                  el.style.opacity = '1'
-                  el.style.transform = 'translateY(0)'
+                  if (el.classList.contains('hero-wave')) {
+                    // Ondinha - garantir que apareça imediatamente
+                    el.style.opacity = '1'
+                    el.style.transform = 'translateY(0)'
+                  } else {
+                    el.style.opacity = '1'
+                    el.style.transform = 'translateY(0)'
+                  }
                   el.style.animation = 'none'
                   el.style.transition = 'none'
                 }
