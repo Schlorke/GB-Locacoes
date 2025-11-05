@@ -95,7 +95,11 @@ export function EquipmentInfiniteScroll({
   ]
 
   return (
-    <div className={`overflow-hidden ${className}`} data-scroll-reveal>
+    <div
+      className={`overflow-hidden ${className}`}
+      data-fade-only
+      style={{ opacity: 0 }}
+    >
       {/* Título */}
       <div className="mb-8 text-center">
         <h2 className="text-2xl font-bold text-slate-900 md:text-3xl">

@@ -102,7 +102,7 @@ export default function ScrollRevealInit() {
         '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, ' +
         '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
         '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate, ' +
-        '[data-scroll-reveal]'
+        '[data-scroll-reveal], [data-fade-only]'
 
       const initializeElement = (element: HTMLElement) => {
         // CORREÇÃO: Garantir que elementos sejam inicializados como invisíveis
@@ -133,6 +133,12 @@ export default function ScrollRevealInit() {
           element.style.transition = 'none'
           element.style.willChange = 'opacity, transform'
           element.style.backfaceVisibility = 'hidden'
+        } else if (element.hasAttribute('data-fade-only')) {
+          // Inicializar elementos que devem apenas fazer fade-in (sem slide)
+          element.style.opacity = '0'
+          element.style.transform = 'none'
+          element.style.transition = 'opacity 0.8s ease-out'
+          element.style.willChange = 'opacity'
         } else {
           // CORREÇÃO: Garantir que TODOS os elementos sejam invisíveis inicialmente
           element.style.opacity = '0'
@@ -162,6 +168,13 @@ export default function ScrollRevealInit() {
             // Elementos com data-scroll-reveal - mostrar imediatamente
             htmlElement.style.opacity = '1'
             htmlElement.style.transform = 'translate3d(0, 0, 0)'
+            htmlElement.style.animation = 'none'
+            htmlElement.style.transition = 'none'
+            htmlElement.style.willChange = 'auto'
+          } else if (htmlElement.hasAttribute('data-fade-only')) {
+            // Elementos com fade-only - mostrar imediatamente
+            htmlElement.style.opacity = '1'
+            htmlElement.style.transform = 'none'
             htmlElement.style.animation = 'none'
             htmlElement.style.transition = 'none'
             htmlElement.style.willChange = 'auto'
@@ -247,6 +260,17 @@ export default function ScrollRevealInit() {
                 setTimeout(() => {
                   element.style.willChange = 'auto'
                 }, 700)
+              } else if (element.hasAttribute('data-fade-only')) {
+                // Apenas opacidade, sem movimento
+                requestAnimationFrame(() => {
+                  element.style.transition = 'opacity 0.8s ease-out'
+                  requestAnimationFrame(() => {
+                    element.style.opacity = '1'
+                  })
+                })
+                setTimeout(() => {
+                  element.style.willChange = 'auto'
+                }, 800)
               }
 
               // Títulos de seção - legacy
