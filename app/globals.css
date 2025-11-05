@@ -1111,3 +1111,17 @@ body.min-h-screen {
   overflow: hidden;
   position: relative;
 }
+
+/* ================================ */
+/* 22. SCROLLBAR HIDE (TABS MOBILE) */
+/* ================================ */
+
+/* Classe para esconder scrollbar mas manter funcionalidade */
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}

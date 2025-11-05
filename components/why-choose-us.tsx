@@ -52,7 +52,7 @@ const benefits = [
 export default function WhyChooseUs() {
   const { settings } = usePublicSettings()
   return (
-    <section className="py-16 bg-gray-900 text-white relative overflow-hidden">
+    <section className="bg-gray-900 text-white relative overflow-hidden py-12 md:py-16 lg:py-20">
       {/* Animated background - constrain within bounds */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl animate-float"></div>

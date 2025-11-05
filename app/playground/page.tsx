@@ -78,9 +78,9 @@ export default function PlaygroundPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <section className="min-h-screen bg-gray-50 py-12 md:py-16 lg:py-20">
       {/* Container com max-width padrão do projeto */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Layout de duas colunas responsivo */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Coluna Esquerda (Desktop) / Embaixo (Mobile): Scroll Infinito */}
@@ -115,6 +115,6 @@ export default function PlaygroundPage() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

@@ -8,6 +8,26 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [2025-11-05] - Tabs Móveis com Scroll Horizontal
+
+### Fixed 🐛
+
+- **Tabs Mobile Responsivas**: Implementado scroll horizontal para tabs no
+  mobile
+  - Removido `flex-1` no mobile com `flex-shrink-0` + `md:flex-1`
+  - Adicionado `overflow-x-auto` com classe `scrollbar-hide` para esconder
+    scrollbar
+  - Gradientes visuais indicando scroll disponível (esquerda/direita)
+  - Mantém layout original em desktop (divisão igualitária com `flex-1`)
+  - Solução aplicada em `TabbedCategoryGrid` componente
+
+### Added ✨
+
+- **CSS Scrollbar Hide**: Nova classe utilitária `.scrollbar-hide`
+  - Esconde scrollbar em Chrome, Safari, Firefox, Edge
+  - Mantém funcionalidade de scroll touch/mouse
+  - Cross-browser compatible
+
 ## [2025-11-05] - Layout Duas Colunas no Playground e Homepage
 
 ### Added ✨

@@ -141,7 +141,7 @@ export default function CategoriesWithAnimation() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="py-16 bg-gray-50">
+    <section ref={sectionRef} className="bg-gray-50 py-12 md:py-16 lg:py-20">
       {/* Container com largura consistente */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">

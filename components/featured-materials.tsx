@@ -88,7 +88,7 @@ export default function FeaturedMaterials() {
 
   if (isLoading) {
     return (
-      <section className="py-16 bg-white">
+      <section className="bg-white py-12 md:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
@@ -116,7 +116,10 @@ export default function FeaturedMaterials() {
   }
 
   return (
-    <section id="equipamentos-destaque" className="py-16 bg-gray-50">
+    <section
+      id="equipamentos-destaque"
+      className="bg-gray-50 py-12 md:py-16 lg:py-20"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2

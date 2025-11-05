@@ -72,8 +72,12 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
     return (
       <section
         className={cn(
-          'relative min-h-[70vh] text-white overflow-hidden',
-          waveAnimation !== 'none' ? 'pb-12' : 'pb-0',
+          'relative text-white overflow-hidden',
+          // padding-bottom para compensar altura da onda (h-12 = 48px)
+          // Faz a onda "empurrar" conteúdo sem afetar animações
+          waveAnimation !== 'none' ? 'pb-12 md:pb-16 lg:pb-20' : 'pb-0',
+          // Background BRANCO quando há imagens (efeito "abrindo os olhos")
+          // Background LARANJA quando NÃO há imagens (fallback padrão)
           loadingShouldShowWhite
             ? 'bg-slate-50'
             : 'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
@@ -90,7 +94,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
         'relative text-white overflow-hidden',
         // padding-bottom para compensar altura da onda (h-12 = 48px)
         // Faz a onda "empurrar" conteúdo sem afetar animações
-        waveAnimation !== 'none' ? 'pb-12' : 'pb-0',
+        waveAnimation !== 'none' ? 'pb-12 md:pb-16 lg:pb-20' : 'pb-0',
         // Background BRANCO quando há imagens (efeito "abrindo os olhos")
         // Background LARANJA quando NÃO há imagens (fallback padrão)
         shouldShowWhite
@@ -141,7 +145,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
 
           {/* Indicadores do carrossel */}
           {carouselImages.length > 1 && (
-            <div className="absolute bottom-12 left-1/2 z-20 flex -translate-x-1/2 transform space-x-3">
+            <div className="absolute bottom-12 md:bottom-20 left-1/2 z-20 flex -translate-x-1/2 transform space-x-3">
               {carouselImages.map((_, index) => (
                 <motion.button
                   key={index}
@@ -166,7 +170,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
       {waveAnimation !== 'none' && (
         <div className="absolute bottom-0 left-0 z-20 w-full overflow-hidden leading-none">
           <motion.svg
-            className="relative block h-12 w-full"
+            className="relative block md:h-20 w-full"
             viewBox="0 0 1200 120"
             preserveAspectRatio="none"
             aria-hidden="true"

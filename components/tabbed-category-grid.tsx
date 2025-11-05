@@ -98,25 +98,33 @@ export function TabbedCategoryGrid({
         onValueChange={handleTabChange}
         className="w-full"
       >
-        {/* Lista de Abas - Estilo Fichário */}
-        <TabsList className="w-full bg-transparent border-slate-200 p-0 h-auto">
-          {tabs.map((tab) => (
-            <TabsTrigger
-              key={tab.value}
-              value={tab.value}
-              className="relative rounded-none bg-transparent px-6 py-3 text-base font-medium transition-all duration-200 group flex-1 data-[state=active]:bg-transparent data-[state=active]:text-orange-600 data-[state=active]:font-bold data-[state=inactive]:text-slate-700 data-[state=inactive]:hover:text-orange-600"
-            >
-              {tab.label}
-              <span
-                className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 transition-transform duration-300 origin-center ${
-                  activeTab === tab.value
-                    ? 'transform scale-x-100'
-                    : 'transform scale-x-0 group-hover:scale-x-100'
-                }`}
-              />
-            </TabsTrigger>
-          ))}
-        </TabsList>
+        {/* Lista de Abas - Estilo Fichário com scroll horizontal no mobile */}
+        <div className="relative w-full">
+          {/* Gradiente indicador de scroll à esquerda (mobile) */}
+          <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none z-10 md:hidden" />
+
+          {/* Gradiente indicador de scroll à direita (mobile) */}
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 md:hidden" />
+
+          <TabsList className="w-full bg-transparent border-slate-200 p-0 h-auto overflow-x-auto md:overflow-x-visible scrollbar-hide">
+            {tabs.map((tab) => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="relative rounded-none bg-transparent px-6 py-3 text-base font-medium transition-all duration-200 group flex-shrink-0 md:flex-1 data-[state=active]:bg-transparent data-[state=active]:text-orange-600 data-[state=active]:font-bold data-[state=inactive]:text-slate-700 data-[state=inactive]:hover:text-orange-600"
+              >
+                {tab.label}
+                <span
+                  className={`absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 transition-transform duration-300 origin-center ${
+                    activeTab === tab.value
+                      ? 'transform scale-x-100'
+                      : 'transform scale-x-0 group-hover:scale-x-100'
+                  }`}
+                />
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </div>
 
         {/* Conteúdo: Grid de Categorias */}
         <div className={`mt-8 ${gridClasses}`}>
