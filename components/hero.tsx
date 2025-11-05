@@ -120,7 +120,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 1.5, ease: 'easeInOut' }}
+                transition={{ duration: 1.8, ease: 'easeIn' }}
                 className="absolute inset-0"
               >
                 <Image
@@ -138,7 +138,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 1.5, ease: 'easeInOut' }}
+              transition={{ duration: 1.8, ease: 'easeIn' }}
               className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-900/30 to-black/20"
             />
           </div>

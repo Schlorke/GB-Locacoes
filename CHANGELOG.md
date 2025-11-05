@@ -8,7 +8,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
-## [2025-11-05] - Correção Animação Ondinha Hero
+## [2025-11-05] - Correção Animação Ondinha Hero e Sincronização
 
 ### Fixed 🐛
 
@@ -22,8 +22,16 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - **Corrigido flash inicial**: SVG começa invisível (`opacity: 0`) no HTML
   - Inicialização correta no `initializeElement` para evitar aparição prematura
   - Tratamento especial em navegação interna para aparecer imediatamente
-  - Timing original mantido (1s duração, 1s delay)
   - Zero bugs visuais - transição suave em todos os cenários
+
+### Changed 🔄
+
+- **Flash Inicial Sincronizado**: Ajustado timing do fade-in das imagens do hero
+  - Aumentado de 1.5s para 2.5s para melhor sincronização
+  - Overlay gradiente também ajustado para 2.5s
+  - Animação mais harmoniosa com os outros elementos do hero
+  - Curva `ease-in-out` mantida para suavidade
+  - Transição mais dramática e profissional
 
 ## [2025-11-05] - Tabs Móveis com Scroll Horizontal
 
