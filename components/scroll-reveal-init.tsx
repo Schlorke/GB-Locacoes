@@ -209,8 +209,8 @@ export default function ScrollRevealInit() {
       // Função para configurar o observer (para animações)
       const setupObserver = () => {
         const observerOptions = {
-          threshold: 0.2,
-          rootMargin: '0px 0px -300px 0px',
+          threshold: 0.1,
+          rootMargin: '0px 0px -150px 0px',
         }
 
         const observer = new IntersectionObserver((entries) => {

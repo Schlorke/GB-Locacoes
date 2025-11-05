@@ -25,7 +25,7 @@ export const isValidDecimalInput = (
     // Explicit instance checks first
     v instanceof Prisma.Decimal ||
     // If Decimal.js is present and imported by the generator, this symbol exists at runtime
-     
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore - Decimal may be undefined when not installed; codegen controls the import
     (typeof Decimal !== 'undefined' && v instanceof Decimal) ||
     (typeof v === 'object' &&
