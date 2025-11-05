@@ -362,7 +362,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
                 <div className="text-sm font-medium">Anos de Experiência</div>
               </div>
               {/* Decorative elements */}
-              <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-500"></div>
+              <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-600"></div>
             </div>
           </div>
         </div>
