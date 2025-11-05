@@ -8,6 +8,91 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [2025-11-05] - Componente EquipmentInfiniteScroll
+
+### Added ✨
+
+- **Componente EquipmentInfiniteScroll**: Scroll infinito horizontal de
+  equipamentos em duas linhas
+- **Página de Demonstração**: `/equipamentos-scroll` com integração completa
+- **Animação Bidirecional**: Linha 1 (direita→esquerda) e Linha 2
+  (esquerda→direita)
+- **Integração com API**: Busca automática de equipamentos do banco de dados
+- **Cards Customizados**: Design branco com imagem, título, descrição e preço
+- **Fade-out Lateral**: Overlays com gradiente nas laterais (15% de largura)
+  para efeito de aparecimento/desaparecimento
+
+### Features 🎯
+
+- **Scroll Infinito**: Movimento contínuo sem fim usando GSAP
+- **Duas Direções**: Linhas alternadas com movimento oposto
+- **Loop Seamless**: Equipamentos duplicados para transição perfeita
+- **Hover Effects**: Cards com scale na imagem e shadow aumentado
+- **Responsivo**: Cards com largura fixa de 320px
+- **Performance**: `willChange: 'transform'` para otimização GPU
+
+### Design 🎨
+
+- **Cores**: Branco (cards) + slate-50/blue-50 (background) seguindo identidade
+  visual
+- **Cards**: Background branco, shadow-lg, rounded-2xl
+- **Imagens**: Height 200px, hover scale 110%, otimizadas (quality 75, sizes
+  320px)
+- **Tipografia**: Título slate-900 bold, descrição slate-600, preço orange-600
+- **Espaçamento**: Gap 6 entre cards, padding interno 6
+- **Fade-out Lateral**: Gradiente 15% nas laterais com `pointer-events: none` e
+  z-index 10
+
+### Technical Details 🔧
+
+- **GSAP Animation**: `xPercent` com `repeat: -1` para loop infinito
+- **Duration**: 40s por ciclo completo (velocidade suave)
+- **Ease**: `none` para velocidade constante
+- **Duplicação**: Array duplicado (máximo 15 equipamentos x 2 = 30 cards) para
+  performance
+- **API Integration**: Fetch de `/api/equipments` ao montar componente
+- **Performance Optimizations**: Limit 15 equipamentos, `transition-shadow`
+  específica, imagens otimizadas
+- **Fade-out Overlays**: Divs absolutas com `inset-y-0` e `bg-gradient-to-r/l`
+
+## [2025-11-05] - Componente GridMotion Background Animado
+
+### Added ✨
+
+- **Componente GridMotion**: Background animado com grid que responde ao
+  movimento do mouse
+- **Integração GSAP**: Biblioteca GSAP adicionada para animações fluidas
+- **Página de Demonstração**: `/grid-motion` criada com exemplo usando ícones
+  SVG do projeto
+- **Animação Interativa**: Grid alinhado horizontalmente com movimento parallax
+  baseado na posição do mouse
+- **Customização Completa**: Suporta items customizados (strings, JSX, imagens)
+  e cor do gradiente
+
+### Features 🎯
+
+- **Mouse Tracking**: Grid responde em tempo real ao movimento do mouse
+- **Efeito Parallax**: Linhas alternadas se movem em direções opostas
+- **Inércia Progressiva**: Cada linha tem velocidade diferente (0.6, 0.4, 0.3,
+  0.2)
+- **Suporte a Conteúdo Misto**: Aceita texto, JSX customizado e URLs de imagens
+- **Grid 4x7**: 4 linhas com 7 colunas cada (28 items total)
+- **Performance Otimizada**: GSAP ticker com lagSmoothing(0)
+
+### Design 🎨
+
+- **Background**: Gradiente radial customizável (padrão slate-800)
+- **Cards**: Background `#111` com `rounded-[10px]`
+- **Layout**: Grid horizontal alinhado, tamanho adaptativo ao container
+- **Z-Index**: Sistema de camadas (overlay z-4, grid z-2)
+
+### Technical Details 🔧
+
+- **Biblioteca**: GSAP (GreenSock Animation Platform)
+- **Animation Loop**: `gsap.ticker.add()` para updates contínuos
+- **Cleanup**: Remove event listeners e animation loop no unmount
+- **SSR Safe**: Verificação `typeof window !== 'undefined'`
+
 ## [2025-11-05] - Componente TabbedCategoryGrid Implementado
 
 ### Added ✨
