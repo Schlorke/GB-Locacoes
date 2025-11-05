@@ -1,0 +1,230 @@
+# 🎯 EquipmentShowcaseSection Component
+
+> **Status**: ✅ Implementado e Funcional (Novembro 2025) **Localização**:
+> `components/equipment-showcase-section.tsx` **Tipo**: Seção Completa de
+> Homepage
+
+## 📋 Visão Geral
+
+O `EquipmentShowcaseSection` é uma seção completa que combina dois componentes
+poderosos em um layout responsivo de duas colunas: o scroll infinito de
+equipamentos (EquipmentInfiniteScroll) e o grid de categorias com tabs
+(TabbedCategoryGrid).
+
+## 🎯 Características Principais
+
+### **Design**
+
+- ✅ **Layout Responsivo**: 2 colunas em desktop, empilhado em mobile
+- ✅ **Scroll Infinito**: Equipamentos em movimento contínuo (esquerda)
+- ✅ **Grid de Categorias**: Sistema de tabs com categorias interativas
+  (direita)
+- ✅ **Sticky Positioning**: Scroll infinito fixo durante rolagem em desktop
+- ✅ **Identidade Visual**: Gradiente slate-50/blue-50 seguindo o projeto
+
+### **Funcionalidades**
+
+- ✅ **Navegação Automática**: Click em categoria redireciona para página de
+  equipamentos
+- ✅ **Dynamic Import**: Carregamento otimizado com lazy loading
+- ✅ **Loading State**: Skeleton screen durante carregamento
+- ✅ **3 Tabs Configuradas**: Categorias, Fases da Obra, Tipo de Trabalho
+
+## 🔧 Uso
+
+### **Homepage Integration**
+
+```tsx
+// components/home-page-client.tsx
+import dynamic from "next/dynamic"
+
+const EquipmentShowcaseSection = dynamic(
+  () => import("./equipment-showcase-section"),
+  { ssr: false }
+)
+
+export default function HomePageClient() {
+  return (
+    <>
+      <EquipmentShowcaseSection />
+      <Categories />
+      <FeaturedMaterials />
+    </>
+  )
+}
+```
+
+## 📐 Estrutura do Layout
+
+### **Desktop (≥1024px)**
+
+```
+┌──────────────────────────────────────┐
+│  max-w-7xl mx-auto px-4 sm:px-6...  │
+│  ┌────────────────┬────────────────┐ │
+│  │                │                │ │
+│  │  Scroll        │  Tabs +        │ │
+│  │  Infinito      │  Grid          │ │
+│  │  (sticky)      │  Categorias    │ │
+│  │                │                │ │
+│  └────────────────┴────────────────┘ │
+└──────────────────────────────────────┘
+    50%              50%
+```
+
+### **Mobile (<1024px)**
+
+```
+┌──────────────────┐
+│                  │
+│  Tabs +          │ ← Topo (order-1)
+│  Grid            │
+│  Categorias      │
+│                  │
+├──────────────────┤
+│                  │
+│  Scroll          │ ← Embaixo (order-2)
+│  Infinito        │
+│                  │
+└──────────────────┘
+```
+
+## 🎨 Configuração das Tabs
+
+### **Tab 1: Categorias**
+
+- Acesso e elevação
+- Andaimes
+- Compactação
+- Concretagem
+- Ferramentas elétricas
+- Furação e demolição
+- Jardinagem
+- Limpeza
+- Motores
+- Outros
+
+### **Tab 2: Fases da Obra**
+
+- Canteiro de obras
+- Cobertura
+- Fundação
+- Estrutura
+- Instalações
+- Acabamento
+- Pintura
+- Limpeza final
+- Paisagismo
+- Outros
+
+### **Tab 3: Tipo de Trabalho**
+
+- Limpar
+- Trabalho em altura
+- Trabalho em jardins
+- Cortar, furar ou demolir
+- Concretar, argamassa
+- Gerar energia elétrica
+- Escorar lajes ou vigas
+- Bombear água ou lama
+- Aplainar ou lixar
+- Compactar o solo
+
+## 🔄 Interações do Usuário
+
+### **Click em Categoria**
+
+```tsx
+const handleCategoryClick = (category: CategoryItem) => {
+  window.location.href = `/equipamentos?categoria=${category.id}`
+}
+```
+
+**Comportamento:**
+
+- Usuário clica em categoria
+- Redireciona para página de equipamentos
+- Filtro aplicado automaticamente via URL param
+
+## 📱 Responsividade
+
+### **Breakpoints**
+
+| Tamanho      | Layout    | Scroll Position | Grid Colunas |
+| ------------ | --------- | --------------- | ------------ |
+| Mobile       | Empilhado | Embaixo         | 2 colunas    |
+| Small (640)  | Empilhado | Embaixo         | 2 colunas    |
+| Medium (768) | Empilhado | Embaixo         | 3 colunas    |
+| Large (1024) | 2 colunas | Esquerda sticky | 4 colunas    |
+
+### **Ordem Visual**
+
+- **Mobile**: `order-1` (Tabs) → `order-2` (Scroll)
+- **Desktop**: `order-1` (Scroll esquerda) → `order-2` (Tabs direita)
+
+## 🎯 Casos de Uso
+
+### **1. Homepage Showcase (Atual)**
+
+Seção principal da homepage exibindo equipamentos e categorias de forma
+interativa.
+
+### **2. Landing Pages**
+
+Pode ser reutilizada em landing pages de categorias específicas.
+
+### **3. Páginas de Campanha**
+
+Ideal para campanhas promocionais mostrando equipamentos em destaque.
+
+## 🐛 Troubleshooting
+
+### **Problema: Seção não aparece**
+
+**Causa**: Dynamic import com SSR desabilitado **Solução**: Componente só
+renderiza no cliente, aguarde carregamento
+
+### **Problema: Scroll não inicia**
+
+**Causa**: API de equipamentos não respondendo **Solução**: Verifique
+`/api/equipments` e console para erros
+
+### **Problema: Click não redireciona**
+
+**Causa**: URL params não configurados na página de destino **Solução**:
+Verifique `app/equipamentos/page.tsx` aceita param `categoria`
+
+## 📊 Performance
+
+### **Otimizações Aplicadas**
+
+- ✅ **Dynamic Import**: Lazy loading da seção
+- ✅ **SSR Disabled**: Evita problemas de hidratação
+- ✅ **Limite de Equipamentos**: Máximo 12 (6 por linha)
+- ✅ **Imagens Otimizadas**: Next/Image com quality 75
+- ✅ **GSAP Timeline**: Animação GPU-accelerated
+
+### **Métricas Esperadas**
+
+- **First Contentful Paint**: +200ms (dynamic import)
+- **Time to Interactive**: Não afetado
+- **Layout Shift**: 0 (skeleton mantém espaço)
+- **Performance Score**: 90+
+
+## 🔗 Componentes Utilizados
+
+- **EquipmentInfiniteScroll**: Scroll horizontal infinito de equipamentos
+- **TabbedCategoryGrid**: Tabs com grid de categorias
+- **Custom SVG Icons**: 10 ícones customizados do projeto
+
+## 🔗 Arquivos Relacionados
+
+- **Componente**: `components/equipment-showcase-section.tsx`
+- **Homepage Client**: `components/home-page-client.tsx`
+- **Scroll Component**: `components/equipment-infinite-scroll.tsx`
+- **Grid Component**: `components/tabbed-category-grid.tsx`
+
+---
+
+**Última atualização**: Novembro 2025 **Versão**: 1.0.0 **Autor**: GB-Locações
+Team

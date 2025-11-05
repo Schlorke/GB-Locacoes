@@ -8,6 +8,77 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [2025-11-05] - Layout Duas Colunas no Playground e Homepage
+
+### Added ✨
+
+- **Nova Seção Homepage**: EquipmentShowcaseSection adicionada acima de
+  Categorias
+- **Layout Responsivo**: Grid de 2 colunas (desktop) com empilhamento vertical
+  (mobile)
+- **Integração de Componentes**: EquipmentInfiniteScroll (esquerda) +
+  TabbedCategoryGrid (direita)
+- **Sticky Scroll**: Scroll infinito fixo durante rolagem em desktop
+- **Dynamic Import**: Seção carregada dinamicamente com loading state
+
+### Changed 🔄
+
+- **EquipmentInfiniteScroll Otimizado**: Cards reduzidos e simplificados para
+  layout de coluna
+  - Largura: 320px → 280px → 220px → 240px → 270px (ajuste final)
+  - Altura imagem: 200px → 160px → 140px → 150px → 170px
+  - Padding interno: p-6 → p-4 → p-3 (mais eficiente)
+  - Título: text-xl → text-base
+  - Descrição: text-sm → text-xs
+  - Border radius: rounded-2xl → rounded-xl
+  - **Preço removido**: Cards focam em visualização rápida
+  - **Velocidade animação**: 40s → 25s (60% mais rápido)
+  - **Loop infinito verdadeiro**: Triplicação + GSAP timeline com repeat
+    infinito (sem travadas)
+  - **Array triplicado**: 15 → 12 itens x 3 = 36 cards totais
+  - **xPercent**: -50% → -33.333% (movimento perfeito com 3 cópias)
+  - Título seção: text-3xl/4xl → text-2xl/3xl
+  - Removido padding vertical externo (py-12 → py-0)
+- **TabbedCategoryGrid Otimizado**: Botões reduzidos para melhor densidade
+  - Padding: p-6 → p-4
+  - Gap: gap-3 → gap-2.5
+  - Ícone: h-16/w-16 → h-14/w-14
+  - Icon size: 32 → 28
+  - Texto: text-sm → text-xs
+  - Border radius: rounded-2xl → rounded-xl (card) e rounded-xl → rounded-lg
+    (ícone)
+  - **Altura consistente**: `min-h-[120px]` garante mesma altura para todos os
+    botões
+  - Grid máximo: 4 colunas (base:2, sm:2, md:3, lg:4)
+
+### UX Improvements 🎨
+
+- **Hierarquia Visual Mobile**: Tabs primeiro (ação), scroll depois (descoberta)
+- **Hierarquia Visual Desktop**: Scroll à esquerda (movimento), tabs à direita
+  (estrutura)
+- **Proporções**: 50/50 em desktop para equilíbrio visual
+- **Performance**: Mantém limite de 12 equipamentos (6 por linha) e otimizações
+  GPU
+- **Scroll Reveal Otimizado**: Elementos aparecem mais centralizados na tela
+  - Threshold: 0.1 → 0.2 (20% do elemento visível)
+  - Root margin: -50px → -300px (elemento 300px dentro da viewport)
+- **Background Consistente**: `bg-gray-50` para integração visual perfeita com
+  Categories
+- **Loading Invisível**: Componente retorna null durante loading (sem mensagem)
+- **Produtos Diferentes por Linha**: Linha 1 mostra equipamentos 1-6, Linha 2
+  mostra equipamentos 7-12
+- **Navegação Automática**: Click em categoria redireciona para
+  `/equipamentos?categoria={id}`
+
+### Files Modified 📁
+
+- `components/equipment-showcase-section.tsx` (novo)
+- `components/home-page-client.tsx` (adicionada nova seção)
+- `app/playground/page.tsx` (layout de 2 colunas implementado)
+- `components/equipment-infinite-scroll.tsx` (otimizações de tamanho e
+  performance)
+- `components/tabbed-category-grid.tsx` (altura fixa nos botões)
+
 ## [2025-11-05] - Componente EquipmentInfiniteScroll
 
 ### Added ✨

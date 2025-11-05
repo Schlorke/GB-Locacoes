@@ -47,15 +47,15 @@ function CategoryCard({
   return (
     <button
       onClick={() => onClick?.(category)}
-      className="group relative flex flex-col items-center justify-center gap-3 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl w-full"
+      className="group relative flex flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:shadow-2xl w-full h-[120px]"
     >
       {/* Ícone */}
-      <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 p-3 shadow-lg transition-all duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]">
-        <Icon size={32} color="white" className="h-8 w-8" />
+      <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg transition-all duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]">
+        <Icon size={28} color="white" className="h-7 w-7" />
       </div>
 
       {/* Nome da categoria */}
-      <span className="relative z-10 text-center text-sm font-semibold text-white transition-colors duration-300 group-hover:text-orange-400">
+      <span className="relative z-10 text-center text-xs font-semibold text-white transition-colors duration-300 group-hover:text-orange-400 line-clamp-2">
         {category.name}
       </span>
     </button>

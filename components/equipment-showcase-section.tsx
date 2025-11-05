@@ -1,6 +1,5 @@
 'use client'
 
-import { EquipmentInfiniteScroll } from '@/components/equipment-infinite-scroll'
 import {
   AndaimeSuspenso,
   AndaimeTubular,
@@ -13,6 +12,7 @@ import {
   TrabalhoEmAltura,
   Transporte,
 } from '@/components/icons/custom'
+import { EquipmentInfiniteScroll } from '@/components/equipment-infinite-scroll'
 import {
   TabbedCategoryGrid,
   type CategoryItem,
@@ -71,16 +71,15 @@ const tabsConfig: TabConfig[] = [
   },
 ]
 
-export default function PlaygroundPage() {
+export default function EquipmentShowcaseSection() {
   const handleCategoryClick = (category: CategoryItem) => {
-    console.log('Categoria clicada:', category)
-    // Aqui você pode adicionar navegação, modal, etc.
+    // Navegar para página de equipamentos filtrados por categoria
+    window.location.href = `/equipamentos?categoria=${category.id}`
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Container com max-width padrão do projeto */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <section className="bg-gray-50 py-12 md:py-16 lg:py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Layout de duas colunas responsivo */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Coluna Esquerda (Desktop) / Embaixo (Mobile): Scroll Infinito */}
@@ -92,9 +91,9 @@ export default function PlaygroundPage() {
           <div className="order-1 lg:order-2">
             {/* Header com título */}
             <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
                 Equipamentos e ferramentas para locação
-              </h1>
+              </h2>
               <p className="text-slate-600 text-base">
                 Escolha por categoria para encontrar o equipamento ideal
               </p>
@@ -115,6 +114,6 @@ export default function PlaygroundPage() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
