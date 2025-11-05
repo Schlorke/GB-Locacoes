@@ -23,6 +23,20 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
     initialData: initialSettings ?? undefined,
   })
   const [currentImage, setCurrentImage] = useState(0)
+  const [isScrollRevealReady, setIsScrollRevealReady] = useState(false)
+
+  // Aguardar scroll-reveal-init estar pronto antes de iniciar animações do flash
+  useEffect(() => {
+    const handleScrollRevealReady = () => {
+      setIsScrollRevealReady(true)
+    }
+
+    window.addEventListener('scrollRevealReady', handleScrollRevealReady)
+
+    return () => {
+      window.removeEventListener('scrollRevealReady', handleScrollRevealReady)
+    }
+  }, [])
 
   // Extrair imagens do carousel
   const carouselImages =
@@ -114,13 +128,13 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
               - Cria efeito de "abrindo os olhos" ao carregar a página
               - Uma imagem desaparece enquanto outra aparece (SEM flash branco)
             */}
-            <AnimatePresence initial={true}>
+            <AnimatePresence initial={false}>
               <motion.div
                 key={currentImage}
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 1.8, ease: 'easeIn' }}
+                transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
                 className="absolute inset-0"
               >
                 <Image
@@ -137,8 +151,8 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
             {/* Overlay gradiente - anima JUNTO com a primeira imagem (sem flash cinza) */}
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.8, ease: 'easeIn' }}
+              animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
               className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-900/30 to-black/20"
             />
           </div>

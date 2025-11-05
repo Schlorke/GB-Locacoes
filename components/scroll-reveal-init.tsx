@@ -37,6 +37,8 @@ export default function ScrollRevealInit() {
     let cleanup: () => void = () => {}
 
     const run = () => {
+      // Disparar evento para avisar que scroll-reveal está pronto
+      window.dispatchEvent(new Event('scrollRevealReady'))
       const getNavigationType = () => {
         // Verificar se existe performance.navigation (método mais antigo)
         if (performance.navigation) {
@@ -262,8 +264,7 @@ export default function ScrollRevealInit() {
                 element.style.animation =
                   'slideInRight 1.2s ease-out 0.3s forwards'
               } else if (element.classList.contains('hero-wave')) {
-                element.style.animation =
-                  'slideInUp 1.5s ease-in-out 0s forwards'
+                element.style.animation = 'slideInUp 1.2s ease-out 0s forwards'
               }
 
               // Elementos com data-scroll-reveal

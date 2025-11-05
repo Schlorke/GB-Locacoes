@@ -26,12 +26,21 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
-- **Flash Inicial Sincronizado**: Ajustado timing do fade-in das imagens do hero
-  - Aumentado de 1.5s para 2.5s para melhor sincronização
-  - Overlay gradiente também ajustado para 2.5s
-  - Animação mais harmoniosa com os outros elementos do hero
-  - Curva `ease-in-out` mantida para suavidade
-  - Transição mais dramática e profissional
+- **Flash Inicial Sincronizado com Scroll Reveal**: Sistema de evento para
+  sincronização real
+  - Duração ajustada para 1.2s com curva `easeInOut`
+  - **Delay reduzido para 0.2s** após scroll-reveal estar pronto
+  - **Evento customizado `scrollRevealReady`**: Flash aguarda scroll-reveal-init
+    disparar evento
+  - Estado `isScrollRevealReady` garante que flash só anima após conteúdo estar
+    pronto
+  - `AnimatePresence` com `initial={false}` previne animação prematura
+  - Overlay gradiente também sincronizado com evento
+  - Sincronização perfeita via comunicação entre componentes
+  - Animação perfeitamente sincronizada mesmo após reset de cache completo
+  - Zero flashes ou conteúdo aparecendo fora de ordem
+  - Flash sempre aguarda conteúdo estar animando antes de iniciar
+  - Transição mais harmoniosa e profissional
 
 ## [2025-11-05] - Tabs Móveis com Scroll Horizontal
 
