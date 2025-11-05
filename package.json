@@ -80,7 +80,8 @@
     "build-storybook": "storybook build",
     "storybook:doctor": "storybook doctor",
     "storybook:check": "storybook automigrate --dry-run",
-    "storybook:info": "storybook info"
+    "storybook:info": "storybook info",
+    "icon:convert": "node scripts/convert-svg-to-icon.cjs"
   },
   "dependencies": {
     "@auth/core": "0.41.1",

@@ -8,6 +8,178 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [2025-11-05] - Componente TabbedCategoryGrid Implementado
+
+### Added ✨
+
+- **Componente Reutilizável**: `components/tabbed-category-grid.tsx` criado como
+  componente standalone
+- **Documentação Completa**: `docs/features/tabbed-category-grid.md` com guia de
+  uso, API, exemplos e troubleshooting
+- **Componente TabbedCategoryGrid**: Sistema completo de navegação por abas com
+  grid de categorias
+- **Integração com Ícones SVG Customizados**: Utiliza todos os 10 ícones
+  customizados do projeto
+- **3 Abas de Navegação**: "Mais alugados", "Fases da obra" e "Tipo de trabalho"
+- **30 Categorias Configuradas**: 10 categorias por aba com ícones apropriados
+- **CategoryCard Component**: Card interativo com animações hover e tap
+- **Design Fiel ao Mockup**: Implementação seguindo exatamente o design
+  fornecido
+- **Estilo Header nas Tabs**: Underline gradiente laranja-amarelo com animação
+  scale-x seguindo padrão do header
+- **Design Fichário Moderno**: Container branco com `rounded-2xl` e `shadow-xl`,
+  visual limpo e contemporâneo
+- **Linha Divisória**: Border-bottom slate-200 nas tabs, sem aparência de botões
+- **Hover Text Orange**: Texto muda para laranja no hover, seguindo padrão do
+  header
+- **Focus Removido**: `focus-visible:outline-none` e `focus-visible:ring-0` para
+  visual mais limpo
+- **Protocolo de Documentação Proativa**: Adicionado em `AGENTS.md` e
+  `gb-locacoes.mdc` regras claras sobre documentar proativamente em `docs/`
+
+### Features 🎯
+
+- **Animações Framer Motion**: Fade in sequencial dos cards (delay incremental
+  de 0.05s)
+- **Hover Effects**: Scale 1.05 + translação Y(-4px) + shadow glow laranja
+- **Tap Feedback**: Scale 0.98 ao clicar
+- **Gradiente de Fundo**: From slate-800 to slate-900 nos cards
+- **Ícones com Gradiente**: From orange-400 to orange-600 com hover enhancement
+- **Transição de Abas**: Smooth transition entre diferentes grids de categorias
+- **Responsividade Completa**: Grid adaptativo (2 cols mobile → 5 cols desktop)
+
+### Design System 🎨
+
+- **Cores Principais**: Slate 800/900 (fundos), Orange 400/600 (ícones e
+  destaques)
+- **Espaçamento**: Segue padrões do projeto (`gap-4`, `p-6`, `rounded-2xl`)
+- **Tipografia**: Text-sm para labels, text-3xl/4xl para títulos
+- **Tabs Estilo Header**: Underline gradiente `from-orange-500 to-yellow-500`
+  com `h-0.5`, animação `scale-x-0` → `scale-x-100`, duration 300ms,
+  origin-center
+- **Consistência Visual**: Tabs seguem exatamente o mesmo padrão do header de
+  navegação principal
+
+### Technical Details 🔧
+
+- **TypeScript**: Tipos definidos para `Category` e props do `CategoryCard`
+- **Estado Controlado**: `useState` para gerenciar aba ativa
+- **Componentes Radix UI**: Utiliza `Tabs`, `TabsList`, `TabsTrigger`,
+  `TabsContent`
+- **10 Ícones SVG**: AndaimeSuspenso, AndaimeTubular, Betoneira,
+  CadeiraEletrica, Compressor, Lavagem, Rompedor, Terraplenagem,
+  TrabalhoEmAltura, Transporte
+
+## [2025-11-05] - Sistema de Ícones SVG Customizados
+
+### Added ✨
+
+- **Sistema de Ícones Customizados**: Infraestrutura completa para adicionar
+  ícones SVG personalizados ao projeto
+- **10 Ícones Customizados de Construção Civil**:
+  1. `AndaimeSuspenso` - Plataforma suspensa de construção
+  2. `AndaimeTubular` - Estrutura tubular de construção
+  3. `Transporte` - Caminhão de transporte de materiais
+  4. `Terraplenagem` - Escavadeira de movimentação de terra
+  5. `Rompedor` - Martelete rompedor
+  6. `Compressor` - Compressor de ar
+  7. `CadeiraEletrica` - Cadeira elétrica motorizada
+  8. `Betoneira` - Betoneira para concreto
+  9. `TrabalhoEmAltura` - Equipamento de segurança para trabalho em altura
+  10. `Lavagem` - Equipamento de limpeza de alta pressão
+- **Script de Conversão Automática**: `scripts/convert-svg-to-icon.cjs` converte
+  SVGs em componentes React automaticamente
+- **Comando NPM**: `pnpm icon:convert` para conversão rápida via terminal
+- **Sistema Unificado**: `lib/constants/all-icons.tsx` combina ícones Lucide +
+  customizados
+- **Função `renderIcon()`**: Renderiza qualquer ícone (Lucide ou customizado)
+  com API consistente
+- **Playground de Testes**: Página `/playground` exibe todos os 10 ícones
+  customizados com exemplos visuais
+- **Documentação Completa**:
+  - `components/icons/custom/README.md` - Guia técnico detalhado
+  - `components/icons/custom/EXEMPLO.md` - Exemplo passo a passo
+  - `docs/guides/custom-icons.md` - Documentação oficial
+  - `QUICK-GUIDE-ICONS.md` - Referência rápida (3 passos)
+
+### Changed 🔄
+
+- **Arquivo renomeado**: `lib/constants/all-icons.ts` →
+  `lib/constants/all-icons.tsx` (suporte JSX)
+- **Import React adicionado**: Necessário para renderização de componentes JSX
+- **Tipagem aprimorada**: Cast explícito para `React.ComponentType` em ícones
+  Lucide
+- **Script de conversão**: Renomeado para `.cjs` para compatibilidade com ES
+  modules
+
+### Technical Details 🔧
+
+- **Type-safe**: TypeScript detecta automaticamente novos ícones adicionados
+- **Props consistentes**: `size`, `color`, `className` em todos os ícones
+- **Integração automática**: Ícones customizados aparecem no seletor de
+  categorias (Admin → Categorias)
+- **Acessibilidade**: Suporte para `role`, `aria-label` e `title` em SVGs
+- **Reutilizável**: Use em qualquer lugar do projeto com API simples
+
+### Files Created 📄
+
+- `components/icons/custom/index.tsx` - Componentes de ícones customizados
+- `lib/constants/all-icons.tsx` - Sistema unificado de ícones
+- `scripts/convert-svg-to-icon.cjs` - Conversor automático SVG → React
+- `components/icons/custom/README.md` - Documentação técnica
+- `components/icons/custom/EXEMPLO.md` - Exemplo prático
+- `docs/guides/custom-icons.md` - Guia oficial
+- `QUICK-GUIDE-ICONS.md` - Referência rápida
+
+### Usage Example 💡
+
+```tsx
+// Importar ícone
+import { AndaimeSuspenso } from "@/components/icons/custom"
+
+// Usar no JSX
+;<AndaimeSuspenso size={120} color="#ea580c" className="hover:scale-110" />
+
+// Ou usar função universal
+import { renderIcon } from "@/lib/constants/all-icons"
+renderIcon("AndaimeSuspenso", 120, "#ea580c")
+```
+
+### Quick Start 🚀
+
+```bash
+# 1. Converter SVG
+pnpm icon:convert caminho/para/icone.svg NomeDoIcone
+
+# 2. Adicionar código em components/icons/custom/index.tsx
+
+# 3. Registrar em CUSTOM_ICONS
+
+# Pronto! Ícone disponível em todo o projeto
+```
+
+## [2025-11-04] - Página Playground para Desenvolvimento
+
+### Added ✨
+
+- **Página Playground**: Nova página `/playground` criada para desenvolvimento e
+  teste de componentes
+- **Estrutura de Layout**: Segue padrões estabelecidos do projeto com
+  `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
+- **Header com Gradiente**: Utiliza o padrão de header laranja consistente com
+  outras páginas
+- **Grid Responsivo**: Cards organizados em grid responsivo (1 coluna mobile, 2
+  tablet, 3 desktop)
+- **Área Full Width**: Seção dedicada para testar componentes que precisam de
+  mais espaço horizontal
+- **Animações Framer Motion**: Transições suaves seguindo os padrões do projeto
+
+### Purpose 🎯
+
+- Ambiente isolado para desenvolvimento de novos componentes
+- Facilita testes visuais sem impactar outras páginas
+- Mantém consistência com design system e padrões de responsividade
+
 ## [2025-11-04] - Aplicação de Migrações Automáticas do Storybook
 
 ### Fixed 🐛

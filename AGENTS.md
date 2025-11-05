@@ -11,12 +11,42 @@
 2. **📖 LEIA ANTES DE AGIR**: Consulte a documentação antes de implementar
 3. **🎯 SIGA OS PADRÕES**: Use apenas componentes e práticas documentadas
 4. **📝 DOCUMENTE MUDANÇAS**: SEMPRE atualize o `CHANGELOG.md` após alterações
-5. **🗓️ NUNCA INVENTE DATAS**: SEMPRE use datas reais dos commits Git para o
+5. **📚 DOCUMENTE PROATIVAMENTE**: SEMPRE crie/atualize documentação em `docs/`
+   nas respectivas pastas após implementar novas funcionalidades
+6. **🗓️ NUNCA INVENTE DATAS**: SEMPRE use datas reais dos commits Git para o
    CHANGELOG
    - Use `git log --pretty=format:"%h %ad %s" --date=short` para verificar datas
      reais
    - NUNCA invente datas como "2024-12-20" ou "2025-01-15" sem verificar commits
    - SEMPRE consulte o histórico Git antes de adicionar entradas ao CHANGELOG
+
+### **📝 PROTOCOLO DE DOCUMENTAÇÃO PROATIVA (OBRIGATÓRIO)**
+
+#### **🎯 REGRA FUNDAMENTAL**
+
+**TODA nova funcionalidade, componente ou mudança significativa DEVE ser
+documentada proativamente em `docs/` na pasta apropriada.**
+
+#### **📁 Onde Documentar**
+
+- **Novo Componente**: `docs/features/[nome-componente].md`
+- **Nova Funcionalidade**: `docs/features/[nome-feature].md`
+- **Guias e Tutoriais**: `docs/guides/[nome-guia].md`
+- **Decisões Técnicas**: `docs/internal/[nome-decisao].md`
+- **APIs e Integrações**: `docs/architecture/api.md` ou criar novo arquivo
+
+#### **❌ NUNCA FAÇA**
+
+- ❌ **NUNCA** crie arquivos `.md` na **raiz do projeto**
+- ❌ **NUNCA** deixe funcionalidade sem documentação
+- ❌ **NUNCA** documente apenas no código (JSDoc não substitui docs/)
+
+#### **✅ SEMPRE FAÇA**
+
+- ✅ **SEMPRE** documente em `docs/` nas pastas apropriadas
+- ✅ **SEMPRE** leia documentação existente antes de criar nova
+- ✅ **SEMPRE** atualize `CHANGELOG.md` + arquivo específico em `docs/`
+- ✅ **SEMPRE** siga o formato e estrutura existente em `docs/`
 
 ### **📁 ESTRUTURA DA DOCUMENTAÇÃO (ATUALIZADA - JAN 2025)**
 

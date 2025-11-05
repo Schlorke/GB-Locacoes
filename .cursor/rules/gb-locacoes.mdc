@@ -1,11 +1,13 @@
 ---
 alwaysApply: true
 ---
+
 # 🏗️ GB-LOCACOES - CURSOR RULES & DEVELOPMENT GUIDELINES
 
 ## 📚 **DOCUMENTAÇÃO COMO FONTE DE VERDADE**
 
-> ⚠️ **FUNDAMENTAL**: SEMPRE consulte a documentação em `docs/` antes de implementar qualquer funcionalidade
+> ⚠️ **FUNDAMENTAL**: SEMPRE consulte a documentação em `docs/` antes de
+> implementar qualquer funcionalidade
 
 ### **📁 Estrutura da Documentação Oficial**
 
@@ -56,11 +58,14 @@ alwaysApply: true
 
 ### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024 - JAN 2025) - NÃO REINTRODUZIR**
 
-> ⚠️ **ATENÇÃO CURSOR**: Este projeto passou por correções massivas em dezembro de 2024 e descoberta crítica em janeiro 2025. NÃO reintroduza problemas que foram resolvidos!
+> ⚠️ **ATENÇÃO CURSOR**: Este projeto passou por correções massivas em dezembro
+> de 2024 e descoberta crítica em janeiro 2025. NÃO reintroduza problemas que
+> foram resolvidos!
 
 #### **🏗️ Build Infrastructure - 100% ESTÁVEL**
 
-- **❌ NUNCA DELETE**: `scripts/post-prisma-generate.js` - arquivo CRÍTICO para build
+- **❌ NUNCA DELETE**: `scripts/post-prisma-generate.js` - arquivo CRÍTICO para
+  build
 - **❌ NUNCA MODIFIQUE**: Scripts em `package.json` sem entender dependências
 - **✅ FUNCIONANDO**: Build automation que recria `lib/validations/index.ts`
 - **🎯 STATUS**: Build time 6-8s, 100% success rate
@@ -75,7 +80,8 @@ alwaysApply: true
 #### **📦 Dependencies - MATRIX ESTÁVEL**
 
 - **❌ NÃO ATUALIZE**: Prisma para 6.14.0+ (quebra build completamente)
-- **🚨 PRISMA 6.15.0**: Variável `PRISMA_GENERATE_DATAPROXY="false"` força `engine=none` causando erro P6001
+- **🚨 PRISMA 6.15.0**: Variável `PRISMA_GENERATE_DATAPROXY="false"` força
+  `engine=none` causando erro P6001
 - **❌ NÃO USE**: swagger-ui-react (incompatível React 19)
 - **✅ IMPLEMENTAÇÃO CUSTOM**: `app/api-docs/page.tsx` para documentação API
 - **🎯 STATUS**: Zero conflitos de dependências
@@ -83,29 +89,66 @@ alwaysApply: true
 #### **🎯 ESLint - ZERO PROBLEMS ACHIEVED**
 
 - **❌ NÃO INCLUA**: Arquivos auto-gerados no linting
-- **✅ MANTENHA**: Exclusões em `tsconfig.json` para `lib/validations/schemas/**`
+- **✅ MANTENHA**: Exclusões em `tsconfig.json` para
+  `lib/validations/schemas/**`
 - **🎯 STATUS**: 31,469 → 0 problemas ESLint (100% resolvido)
 
 #### **📚 DOCUMENTAÇÃO CRÍTICA PARA CURSOR**
 
-- **📖 LEIA ANTES**: `docs/internal/critical-issues-resolved.md` - SOURCE OF TRUTH
-- **🔬 ANÁLISE CRÍTICA**: `docs/internal/prisma-6-15-engine-none-analysis.md` - Problema PRISMA_GENERATE_DATAPROXY
-- **📝 CONSULTE**: `docs/getting-started/troubleshooting.md` - problemas conhecidos
+- **📖 LEIA ANTES**: `docs/internal/critical-issues-resolved.md` - SOURCE OF
+  TRUTH
+- **🔬 ANÁLISE CRÍTICA**: `docs/internal/prisma-6-15-engine-none-analysis.md` -
+  Problema PRISMA_GENERATE_DATAPROXY
+- **📝 CONSULTE**: `docs/getting-started/troubleshooting.md` - problemas
+  conhecidos
 - **🧠 ENTENDA**: Todas as soluções são DEFINITIVAS e foram testadas
-- **⚡ MÉTRICAS**: TypeScript 0 errors, ESLint 0 problems, Build SUCCESS, Tests 30/30
+- **⚡ MÉTRICAS**: TypeScript 0 errors, ESLint 0 problems, Build SUCCESS, Tests
+  30/30
 
 ### **🚨 REGRAS CRÍTICAS DE DOCUMENTAÇÃO**
 
 1. **NÃO ALUCINE**: Se não souber algo, consulte `docs/` primeiro
 2. **NÃO INVENTE**: Use apenas componentes e padrões documentados
-3. **NÃO QUEBRE**: Siga as versões específicas em `docs/references/dependencies.md`
-4. **NÃO IGNORE**: Toda funcionalidade deve seguir os padrões em `docs/getting-started/development.md`
+3. **NÃO QUEBRE**: Siga as versões específicas em
+   `docs/references/dependencies.md`
+4. **NÃO IGNORE**: Toda funcionalidade deve seguir os padrões em
+   `docs/getting-started/development.md`
 5. **📝 DOCUMENTE SEMPRE**: Atualize o `CHANGELOG.md` após qualquer alteração
+6. **📚 DOCUMENTE PROATIVAMENTE**: SEMPRE crie/atualize documentação em `docs/`
+   nas respectivas pastas
+
+### **📝 PROTOCOLO DE DOCUMENTAÇÃO PROATIVA (OBRIGATÓRIO)**
+
+#### **🎯 REGRA FUNDAMENTAL**
+
+**TODA nova funcionalidade, componente ou mudança significativa DEVE ser
+documentada proativamente em `docs/` na pasta apropriada.**
+
+#### **📁 Onde Documentar**
+
+- **Novo Componente**: `docs/features/[nome-componente].md`
+- **Nova Funcionalidade**: `docs/features/[nome-feature].md`
+- **Guias e Tutoriais**: `docs/guides/[nome-guia].md`
+- **Decisões Técnicas**: `docs/internal/[nome-decisao].md`
+- **APIs e Integrações**: `docs/architecture/api.md` ou criar novo arquivo
+
+#### **❌ NUNCA FAÇA**
+
+- ❌ **NUNCA** crie arquivos `.md` na **raiz do projeto**
+- ❌ **NUNCA** deixe funcionalidade sem documentação
+- ❌ **NUNCA** documente apenas no código (JSDoc não substitui docs/)
+
+#### **✅ SEMPRE FAÇA**
+
+- ✅ **SEMPRE** documente em `docs/` nas pastas apropriadas
+- ✅ **SEMPRE** leia documentação existente antes de criar nova
+- ✅ **SEMPRE** atualize `CHANGELOG.md` + arquivo específico em `docs/`
+- ✅ **SEMPRE** siga o formato e estrutura existente em `docs/`
 
 ### **📖 Fluxo de Trabalho Obrigatório**
 
 ```
-1. 📚 LER docs relevantes
+1. 📚 LER docs relevantes para contexto
    ↓
 2. 🔍 VERIFICAR compatibilidade
    ↓
@@ -115,12 +158,45 @@ alwaysApply: true
    ↓
 5. 📝 ATUALIZAR CHANGELOG.md com mudanças
    ↓
-6. ✅ TESTAR com referência na documentação
+6. 📚 DOCUMENTAR em docs/ na pasta apropriada
+   ↓
+7. ✅ TESTAR com referência na documentação
 ```
+
+### **📝 PROTOCOLO DE DOCUMENTAÇÃO PROATIVA (OBRIGATÓRIO)**
+
+#### **🎯 REGRA FUNDAMENTAL**
+
+**TODA nova funcionalidade, componente ou mudança significativa DEVE ser
+documentada proativamente em `docs/` na pasta apropriada.**
+
+#### **📁 Onde Documentar**
+
+- **Novo Componente**: `docs/features/[nome-componente].md`
+- **Nova Funcionalidade**: `docs/features/[nome-feature].md`
+- **Guias e Tutoriais**: `docs/guides/[nome-guia].md`
+- **Decisões Técnicas**: `docs/internal/[nome-decisao].md`
+- **APIs e Integrações**: `docs/architecture/api.md` ou criar novo arquivo
+
+#### **❌ NUNCA FAÇA**
+
+- ❌ **NUNCA** crie arquivos `.md` na **raiz do projeto**
+- ❌ **NUNCA** deixe funcionalidade sem documentação
+- ❌ **NUNCA** documente apenas no código (JSDoc não substitui docs/)
+
+#### **✅ SEMPRE FAÇA**
+
+- ✅ **SEMPRE** documente em `docs/` nas pastas apropriadas
+- ✅ **SEMPRE** leia documentação existente antes de criar nova
+- ✅ **SEMPRE** atualize `CHANGELOG.md` + arquivo específico em `docs/`
+- ✅ **SEMPRE** siga o formato e estrutura existente em `docs/`
 
 ## 🎯 **VISÃO GERAL DO PROJETO**
 
-**GB-Locacoes** é uma plataforma moderna de locação de equipamentos para construção civil, desenvolvida com Next.js 15, TypeScript, Prisma, PostgreSQL e um design system robusto. O projeto segue princípios de arquitetura limpa, componentização inteligente e experiência do usuário excepcional.
+**GB-Locacoes** é uma plataforma moderna de locação de equipamentos para
+construção civil, desenvolvida com Next.js 15, TypeScript, Prisma, PostgreSQL e
+um design system robusto. O projeto segue princípios de arquitetura limpa,
+componentização inteligente e experiência do usuário excepcional.
 
 ## 🏛️ **ARQUITETURA & ESTRUTURA**
 
@@ -159,7 +235,8 @@ GB-Locacoes/
 
 ### **Princípios de Design**
 
-1. **Consistência**: Todos os componentes devem seguir o design system estabelecido
+1. **Consistência**: Todos os componentes devem seguir o design system
+   estabelecido
 2. **Acessibilidade**: WCAG 2.1 AA compliance obrigatório
 3. **Responsividade**: Mobile-first approach
 4. **Performance**: Otimização para Core Web Vitals
@@ -180,9 +257,11 @@ GB-Locacoes/
 
 ### **Componentes Base (Radix UI)**
 
-SEMPRE utilize os componentes do diretório `components/ui/` que são baseados em Radix UI:
+SEMPRE utilize os componentes do diretório `components/ui/` que são baseados em
+Radix UI:
 
-- `Button` - Botões com variantes: default, destructive, outline, secondary, ghost, reset, link
+- `Button` - Botões com variantes: default, destructive, outline, secondary,
+  ghost, reset, link
 - `Card` - Containers de conteúdo
 - `Dialog` - Modais e overlays
 - `Form` - Formulários com React Hook Form + Zod
@@ -269,7 +348,8 @@ export { Component, componentVariants }
 ### **TypeScript**
 
 - **Strict Mode**: Sempre habilitado
-- **Interfaces vs Types**: Use interfaces para objetos, types para unions/intersections
+- **Interfaces vs Types**: Use interfaces para objetos, types para
+  unions/intersections
 - **Generics**: Utilize quando apropriado para reutilização
 - **Utility Types**: Aproveite `Pick`, `Omit`, `Partial`, `Required`
 
@@ -363,12 +443,14 @@ const MyForm = () => {
 - **Sistema de Telemetria**: `lib/telemetry.ts` - Rastreamento simplificado
 - **Métricas de API**: `lib/metrics.ts` - Coleta automática de performance
 - **Security Monitoring**: `lib/security-monitoring.ts` - Detecção de ameaças
-- **API Instrumentation**: `lib/api-instrumentation.ts` - Instrumentação automática
+- **API Instrumentation**: `lib/api-instrumentation.ts` - Instrumentação
+  automática
 - **OpenAPI Documentation**: `/api-docs` - Documentação interativa da API
 
 ### **🔍 Autocomplete Search (NOVO - JAN 2025)**
 
-- **Componente**: `components/ui/autocomplete.tsx` - Busca inteligente reutilizável
+- **Componente**: `components/ui/autocomplete.tsx` - Busca inteligente
+  reutilizável
 - **API Endpoint**: `/api/equipamentos/search` - Busca otimizada no banco
 - **Funcionalidades**:
   - Debounce de 300ms para performance
@@ -419,7 +501,8 @@ const MyForm = () => {
 
 1. **Durante Desenvolvimento**:
    - Use `mcp_browser-tools_takeScreenshot` para documentar mudanças visuais
-   - Monitore `mcp_browser-tools_getConsoleErrors` para detectar bugs precocemente
+   - Monitore `mcp_browser-tools_getConsoleErrors` para detectar bugs
+     precocemente
    - Use `mcp_browser-tools_runPerformanceAudit` para otimizar performance
 
 2. **Durante Testing**:
@@ -458,29 +541,35 @@ const MyForm = () => {
 ## 📱 **RESPONSIVIDADE & MOBILE - DOUTRINA OBRIGATÓRIA**
 
 ### **🚨 REGRA FUNDAMENTAL**
-**TODA nova implementação DEVE seguir RIGOROSAMENTE os padrões de responsividade e espaçamento já estabelecidos no projeto.**
+
+**TODA nova implementação DEVE seguir RIGOROSAMENTE os padrões de responsividade
+e espaçamento já estabelecidos no projeto.**
 
 ### **📏 SISTEMA DE ESPAÇAMENTO OBRIGATÓRIO**
 
 #### **Containers Principais**
+
 - **Mobile**: `px-4` (16px lateral)
 - **Tablet**: `sm:px-6` (24px lateral)
 - **Desktop**: `lg:px-8` (32px lateral)
 - **Padrão Completo**: `px-4 sm:px-6 lg:px-8`
 
 #### **Espaçamento Vertical Entre Seções**
+
 - **Mobile**: `py-8` ou `py-12` (32px-48px)
 - **Tablet**: `md:py-12` ou `md:py-16` (48px-64px)
 - **Desktop**: `lg:py-16` ou `lg:py-20` (64px-80px)
 - **Padrão Completo**: `py-12 md:py-16 lg:py-20`
 
 #### **Gaps em Grids**
+
 - **Mobile**: `gap-4` ou `gap-6` (16px-24px)
 - **Tablet**: `md:gap-6` ou `md:gap-8` (24px-32px)
 - **Desktop**: `lg:gap-8` ou `lg:gap-12` (32px-48px)
 - **Padrão Completo**: `gap-6 md:gap-8 lg:gap-12`
 
 #### **Margens Entre Elementos**
+
 - **Pequena**: `mb-4 md:mb-6` (16px-24px)
 - **Média**: `mb-6 md:mb-8` (24px-32px)
 - **Grande**: `mb-8 md:mb-12` (32px-48px)
@@ -489,32 +578,36 @@ const MyForm = () => {
 ### **🏗️ PADRÕES DE GRID RESPONSIVO OBRIGATÓRIOS**
 
 #### **Grid de Cards/Produtos**
+
 ```typescript
 // PADRÃO OBRIGATÓRIO para listagem de itens
-className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+className =
+  'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8'
 
 // Para cards maiores (destaque)
-className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
+className = 'grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12'
 
 // Para estatísticas/métricas
-className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
+className = 'grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6'
 ```
 
 #### **Layout de Conteúdo**
+
 ```typescript
 // Sidebar + Conteúdo
-className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12"
+className = 'grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12'
 
 // Duas colunas equilibradas
-className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12"
+className = 'grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12'
 
 // Três colunas (features, benefícios)
-className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
+className = 'grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8'
 ```
 
 ### **🧩 PADRÕES DE COMPONENTES RESPONSIVOS**
 
 #### **Hero Sections**
+
 ```typescript
 // Estrutura obrigatória para hero sections
 <section className="relative py-12 md:py-16 lg:py-20">
@@ -532,6 +625,7 @@ className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
 ```
 
 #### **Cards Responsivos**
+
 ```typescript
 // Estrutura obrigatória para cards
 <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 hover:shadow-xl transition-shadow">
@@ -542,6 +636,7 @@ className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
 ```
 
 #### **Formulários Responsivos**
+
 ```typescript
 // Estrutura obrigatória para formulários
 <form className="space-y-6 md:space-y-8">
@@ -554,46 +649,51 @@ className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
 ### **📝 TIPOGRAFIA RESPONSIVA OBRIGATÓRIA**
 
 #### **Hierarquia de Títulos**
+
 ```typescript
 // H1 - Títulos principais
-className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold"
+className = 'text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold'
 
 // H2 - Títulos de seção
-className="text-2xl md:text-3xl lg:text-4xl font-bold"
+className = 'text-2xl md:text-3xl lg:text-4xl font-bold'
 
 // H3 - Subtítulos
-className="text-xl md:text-2xl lg:text-3xl font-semibold"
+className = 'text-xl md:text-2xl lg:text-3xl font-semibold'
 
 // H4 - Títulos menores
-className="text-lg md:text-xl lg:text-2xl font-semibold"
+className = 'text-lg md:text-xl lg:text-2xl font-semibold'
 ```
 
 #### **Texto Corpo**
+
 ```typescript
 // Texto principal
-className="text-base md:text-lg leading-relaxed"
+className = 'text-base md:text-lg leading-relaxed'
 
 // Texto secundário
-className="text-sm md:text-base text-gray-600"
+className = 'text-sm md:text-base text-gray-600'
 
 // Texto pequeno (legendas, etc.)
-className="text-xs md:text-sm text-gray-500"
+className = 'text-xs md:text-sm text-gray-500'
 ```
 
 ### **❌ ANTI-PADRÕES - NUNCA FAÇA**
 
 #### **Espaçamento Proibido**
+
 - ❌ NUNCA use valores fixos sem responsividade: `p-8` (sem `md:p-12`)
 - ❌ NUNCA ignore breakpoints: `px-4` sem `sm:px-6 lg:px-8`
 - ❌ NUNCA use espaçamentos inconsistentes com o projeto
 - ❌ NUNCA quebre a hierarquia de espaçamento estabelecida
 
 #### **Grid Proibido**
+
 - ❌ NUNCA use grids sem responsividade: `grid-cols-3` (sem `md:grid-cols-3`)
 - ❌ NUNCA ignore o padrão mobile-first
 - ❌ NUNCA use layouts que quebrem em mobile
 
 #### **Tipografia Proibida**
+
 - ❌ NUNCA use tamanhos fixos sem responsividade
 - ❌ NUNCA ignore a hierarquia estabelecida
 - ❌ NUNCA use fontes que não sejam do design system
@@ -603,18 +703,21 @@ className="text-xs md:text-sm text-gray-500"
 Antes de implementar QUALQUER componente novo, verifique:
 
 #### **Responsividade**
+
 - [ ] Testado em mobile (320px-767px)
 - [ ] Testado em tablet (768px-1023px)
 - [ ] Testado em desktop (1024px+)
 - [ ] Usa breakpoints consistentes com o projeto
 
 #### **Espaçamento**
+
 - [ ] Segue padrões de padding do projeto
 - [ ] Usa margens consistentes
 - [ ] Gaps em grids seguem o padrão
 - [ ] Espaçamento vertical entre seções correto
 
 #### **Componentes**
+
 - [ ] Usa componentes do design system existente
 - [ ] Mantém identidade visual do projeto
 - [ ] Animações consistentes com o projeto
@@ -738,15 +841,18 @@ Antes de implementar QUALQUER componente novo, verifique:
 
 #### **Build & Infrastructure**
 
-- ❌ **NUNCA DELETE**: `scripts/post-prisma-generate.js` - quebra build completamente
-- ❌ **NUNCA MODIFIQUE**: Scripts `prebuild`, `postinstall`, `db:generate` sem entender
+- ❌ **NUNCA DELETE**: `scripts/post-prisma-generate.js` - quebra build
+  completamente
+- ❌ **NUNCA MODIFIQUE**: Scripts `prebuild`, `postinstall`, `db:generate` sem
+  entender
 - ❌ **NUNCA IGNORE**: Arquivos auto-gerados - sempre exclua do linting
 
 #### **Dependencies & Compatibility**
 
 - ❌ **NUNCA ATUALIZE**: Prisma para 6.14.0+ - incompatível com Next.js 15
 - ❌ **NUNCA USE**: swagger-ui-react - incompatível com React 19
-- ❌ **NUNCA ASSUMA**: Compatibilidade de packages - sempre consulte `docs/references/dependencies.md`
+- ❌ **NUNCA ASSUMA**: Compatibilidade de packages - sempre consulte
+  `docs/references/dependencies.md`
 
 #### **Type Safety (CRÍTICO)**
 
@@ -763,9 +869,11 @@ Antes de implementar QUALQUER componente novo, verifique:
 #### **Environment Variables (CRÍTICO)**
 
 - ❌ **NUNCA DEFINA**: `PRISMA_GENERATE_DATAPROXY` (mesmo como "false")
-- ❌ **NUNCA DEFINA**: `PRISMA_GENERATE_ACCELERATE` ou `PRISMA_GENERATE_NO_ENGINE`
+- ❌ **NUNCA DEFINA**: `PRISMA_GENERATE_ACCELERATE` ou
+  `PRISMA_GENERATE_NO_ENGINE`
 - ✅ **SEMPRE VERIFIQUE**: `npx prisma generate` deve mostrar `engine=binary`
-- 📖 **CONSULTE**: `docs/internal/prisma-6-15-engine-none-analysis.md` para detalhes
+- 📖 **CONSULTE**: `docs/internal/prisma-6-15-engine-none-analysis.md` para
+  detalhes
 
 #### **Autocomplete Specific (NOVO)**
 
@@ -797,7 +905,8 @@ Antes de submeter qualquer código, verifique:
 
 ### **BrowserTools Validation**
 
-- [ ] **🚀 SERVIDOR INICIADO**: `pnpm dev:browsertools` (recomendado) ou `npx @agentdeskai/browser-tools-server@1.2.0`
+- [ ] **🚀 SERVIDOR INICIADO**: `pnpm dev:browsertools` (recomendado) ou
+      `npx @agentdeskai/browser-tools-server@1.2.0`
 - [ ] **Screenshot capturado** para documentar mudanças visuais
 - [ ] **Console errors verificados** (sem erros JavaScript)
 - [ ] **Performance audit executado** (Lighthouse score > 90)
@@ -884,7 +993,8 @@ Crie código que seja:
 - **Testável**: Coberto por testes adequados
 - **Documentado**: Bem explicado e exemplificado
 
-**Lembre-se**: Qualidade sobre velocidade. Um código bem escrito hoje economiza horas de debugging amanhã.
+**Lembre-se**: Qualidade sobre velocidade. Um código bem escrito hoje economiza
+horas de debugging amanhã.
 
 ---
 
@@ -918,8 +1028,13 @@ Crie código que seja:
 
 ---
 
-**🧠 MENSAGEM FINAL PARA CURSOR**: Este projeto alcançou um estado de excelência técnica. Todas as ferramentas, padrões e documentação estão alinhados. Use este documento como fonte de verdade e mantenha os altos padrões de qualidade estabelecidos.
+**🧠 MENSAGEM FINAL PARA CURSOR**: Este projeto alcançou um estado de excelência
+técnica. Todas as ferramentas, padrões e documentação estão alinhados. Use este
+documento como fonte de verdade e mantenha os altos padrões de qualidade
+estabelecidos.
 
 ---
 
-_Esta documentação foi atualizada em janeiro 2025 após implementação do sistema de autocomplete. Mantenha-a sempre atualizada e siga rigorosamente estas diretrizes para garantir consistência e qualidade em todo o projeto._
+_Esta documentação foi atualizada em janeiro 2025 após implementação do sistema
+de autocomplete. Mantenha-a sempre atualizada e siga rigorosamente estas
+diretrizes para garantir consistência e qualidade em todo o projeto._

@@ -274,6 +274,21 @@ button[aria-controls]:focus,
     0 0 0 3px rgba(59, 130, 246, 0.1) !important;
 }
 
+/* Remove box-shadow e outline dos Tabs (Radix UI) */
+button[role='tab'],
+button[data-state='active'],
+button[data-state='inactive'] {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+button[role='tab']:hover,
+button[role='tab']:focus,
+button[role='tab']:focus-visible {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
 /* Textarea específico (ShadCN UI) */
 textarea.flex,
 textarea[class*='border-input'],
