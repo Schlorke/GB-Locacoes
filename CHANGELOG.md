@@ -8,6 +8,77 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added ✨
+
+- **Swipe Navigation no TabbedCategoryGrid**: Implementada navegação por gesto
+  de arrastar/deslizar nas tabs
+  - Swipe horizontal para navegar entre tabs (Categorias, Fases da Obra, Tipo)
+  - Arraste da esquerda para direita navega para tab anterior
+  - Arraste da direita para esquerda avança para próxima tab
+  - Threshold de distância: 50px de deslocamento para ativar navegação
+  - Threshold de velocidade: 500px/s para swipe rápido ("flick")
+  - Animações direcionais com slide horizontal (50px)
+  - Feedback visual durante o drag com elasticidade (0.2)
+  - Movimento isolado no eixo X (previne conflito com scroll vertical)
+  - Validação de limites (não navega além da primeira/última tab)
+  - Usa handlers `onPanEnd` do Framer Motion para detecção de gestos
+  - UX mobile-first otimizada para touch devices
+  - **Arquivo modificado**: `components/tabbed-category-grid.tsx`
+
+## [2025-11-06] - Interactive Infinite Carousel
+
+### Changed 🔄
+
+- **Carrossel de Equipamentos com Interatividade**: Aprimorado o carrossel
+  infinito de equipamentos com suporte a arrastar/deslizar
+  - Substituídas animações GSAP timeline por classe `InfiniteCarousel`
+    customizada com física de inércia
+  - Implementado loop verdadeiramente infinito sem reset visual (conceito de
+    "roda gigante retangular")
+  - Sistema de animação baseado em `requestAnimationFrame` para performance
+    consistente
+
+### Added ✨
+
+- **Interatividade Touch e Mouse**: Sistema completo de drag com física natural
+  - Suporte a touch events para dispositivos móveis (iOS/Android)
+  - Suporte a mouse events para desktop com feedback visual
+  - Cálculo dinâmico de velocidade baseado em deltaX/deltaTime
+  - Cursor `grab` e `grabbing` para melhor UX
+- **Física de Inércia**: Mecânica natural de desaceleração e retorno ao fluxo
+  - Constante FRICTION (0.95) para desaceleração gradual após soltar
+  - Constante RETURN_FORCE (0.02) para retorno suave ao fluxo original
+  - Constante MIN_SPEED (0.1) como threshold para ativar retorno
+  - Velocidade de inércia mantida após "flick" rápido
+- **Showcase Expandido**: Aumentado limite de equipamentos de 12 para 18 itens
+  - Melhor aproveitamento do espaço disponível
+  - Maior diversidade de produtos em exibição
+
+### Fixed 🐛
+
+- **Eliminado "Salto" Visual**: Removido reset visual do loop infinito
+  - Reposicionamento contínuo usando aritmética modular (containerWidth / 3)
+  - Transição seamless entre ciclos de equipamentos
+  - Zero "pulo" ou "flash" durante o loop
+- **Experiência Mobile Aprimorada**: Tratamento adequado de eventos touch
+  - Prevenção de scroll acidental durante drag
+  - Identificação correta de touch em multi-touch scenarios
+  - Cleanup adequado de event listeners
+
+### Technical Details 📋
+
+- **Classe InfiniteCarousel**: Implementação completa de carrossel interativo
+  - Gerenciamento de estado: posição, velocidade, inércia, drag
+  - Event handlers para touch (mobile) e mouse (desktop)
+  - Sistema de física com fricção e força de retorno
+  - Loop infinito verdadeiro via reposicionamento posicional
+  - Cleanup adequado de recursos no método `destroy()`
+- **Compatibilidade**: Testado em iOS Safari, Chrome Mobile,
+  Chrome/Firefox/Safari Desktop
+- **Performance**: requestAnimationFrame para 60fps consistentes
+- **Arquivos modificados**: `components/equipment-infinite-scroll.tsx`
+  (reescrita completa)
+
 ## [2025-11-06] - Correção Bug de Scroll no iOS Safari
 
 ### Fixed 🐛

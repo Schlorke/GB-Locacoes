@@ -77,10 +77,23 @@ export function TabbedCategoryGrid({
 }: TabbedCategoryGridProps) {
   const [activeTab, setActiveTab] = useState(defaultTab || tabs[0]?.value || '')
   const [filterKey, setFilterKey] = useState(0)
+  const [direction, setDirection] = useState(0)
 
   const handleTabChange = (value: string) => {
     setActiveTab(value)
     setFilterKey((prev) => prev + 1)
+  }
+
+  // Função para navegar entre tabs
+  const navigateTab = (swipeDirection: number) => {
+    const currentIndex = tabs.findIndex((t) => t.value === activeTab)
+    const newIndex = currentIndex + swipeDirection
+    const newTab = tabs[newIndex]
+
+    if (newTab) {
+      setDirection(swipeDirection)
+      handleTabChange(newTab.value)
+    }
   }
 
   // Grid classes baseadas nas props
@@ -126,17 +139,41 @@ export function TabbedCategoryGrid({
           </TabsList>
         </div>
 
-        {/* Conteúdo: Grid de Categorias */}
-        <div className={`mt-8 ${gridClasses}`}>
+        {/* Conteúdo: Grid de Categorias com Swipe Navigation */}
+        <motion.div
+          className={`mt-8 ${gridClasses}`}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          dragElastic={0.2}
+          onPanEnd={(_event, info) => {
+            const swipeThreshold = 50
+            const swipeVelocityThreshold = 500
+
+            // Swipe left (próxima tab)
+            if (
+              info.offset.x < -swipeThreshold ||
+              info.velocity.x < -swipeVelocityThreshold
+            ) {
+              navigateTab(1)
+            }
+            // Swipe right (tab anterior)
+            else if (
+              info.offset.x > swipeThreshold ||
+              info.velocity.x > swipeVelocityThreshold
+            ) {
+              navigateTab(-1)
+            }
+          }}
+        >
           <AnimatePresence mode="wait">
             {tabs
               .find((tab) => tab.value === activeTab)
               ?.categories.map((category, index) => (
                 <motion.div
                   key={`${category.id}-${filterKey}`}
-                  initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                  initial={{ opacity: 0, x: direction * 50, scale: 0.95 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  exit={{ opacity: 0, x: -direction * 50, scale: 0.95 }}
                   transition={{
                     delay: index * 0.08,
                     duration: 0.3,
@@ -151,7 +188,7 @@ export function TabbedCategoryGrid({
                 </motion.div>
               ))}
           </AnimatePresence>
-        </div>
+        </motion.div>
       </Tabs>
     </div>
   )
