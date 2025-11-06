@@ -27,6 +27,20 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [2025-11-06] - Interactive Infinite Carousel
 
+### Fixed 🐛
+
+- **TabbedCategoryGrid Animation Bugs**: Corrigidos problemas de UX e animação
+  - Removida opacidade indesejada em seções inativas (apenas seção ativa
+    renderizada)
+  - Preservada animação original dos botões com aparecimento escalonado
+    (0.08s \* index)
+  - Implementado auto-scroll de tabs no mobile para centralizar tab ativa
+  - Adicionado feedback visual durante arrasto usando `useMotionValue`
+  - Container agora retorna ao centro com animação spring após swipe
+  - Adicionados atributos `data-value` nas tabs para identificação
+  - Melhorada sincronização entre swipe e mudança de tab
+  - **Arquivo modificado**: `components/tabbed-category-grid.tsx`
+
 ### Changed 🔄
 
 - **Carrossel de Equipamentos com Interatividade**: Aprimorado o carrossel

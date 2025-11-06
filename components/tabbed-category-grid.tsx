@@ -1,8 +1,8 @@
 'use client'
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { animate, AnimatePresence, motion, useMotionValue } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 
 // Tipos
 export type CategoryItem = {
@@ -79,9 +79,39 @@ export function TabbedCategoryGrid({
   const [filterKey, setFilterKey] = useState(0)
   const [direction, setDirection] = useState(0)
 
+  // Motion value para controlar o movimento visual durante o arrasto
+  const dragX = useMotionValue(0)
+
+  // Ref para o container das tabs
+  const tabsListRef = useRef<HTMLDivElement>(null)
+
+  // Função para rolar a tab ativa para o centro (mobile)
+  const scrollTabIntoView = (tabValue: string) => {
+    if (!tabsListRef.current) return
+
+    // Encontrar o elemento da tab ativa
+    const tabElement = tabsListRef.current.querySelector(
+      `[data-value="${tabValue}"]`
+    ) as HTMLElement
+
+    if (tabElement) {
+      // Rolar para centralizar horizontalmente
+      tabElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      })
+    }
+  }
+
   const handleTabChange = (value: string) => {
     setActiveTab(value)
     setFilterKey((prev) => prev + 1)
+
+    // Centralizar a tab ativa no mobile
+    setTimeout(() => {
+      scrollTabIntoView(value)
+    }, 50)
   }
 
   // Função para navegar entre tabs
@@ -95,6 +125,11 @@ export function TabbedCategoryGrid({
       handleTabChange(newTab.value)
     }
   }
+
+  // Centralizar tab ativa ao montar o componente
+  useEffect(() => {
+    scrollTabIntoView(activeTab)
+  }, [activeTab])
 
   // Grid classes baseadas nas props
   const baseClass = `grid-cols-${gridCols.base || 2}`
@@ -119,11 +154,15 @@ export function TabbedCategoryGrid({
           {/* Gradiente indicador de scroll à direita (mobile) */}
           <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none z-10 md:hidden" />
 
-          <TabsList className="w-full bg-transparent border-slate-200 p-0 h-auto overflow-x-auto md:overflow-x-visible scrollbar-hide">
+          <TabsList
+            ref={tabsListRef}
+            className="w-full bg-transparent border-slate-200 p-0 h-auto overflow-x-auto md:overflow-x-visible scrollbar-hide"
+          >
             {tabs.map((tab) => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
+                data-value={tab.value}
                 className="relative rounded-none bg-transparent px-6 py-3 text-base font-medium transition-all duration-200 group flex-shrink-0 md:flex-1 data-[state=active]:bg-transparent data-[state=active]:text-orange-600 data-[state=active]:font-bold data-[state=inactive]:text-slate-700 data-[state=inactive]:hover:text-orange-600"
               >
                 {tab.label}
@@ -142,10 +181,11 @@ export function TabbedCategoryGrid({
         {/* Conteúdo: Grid de Categorias com Swipe Navigation */}
         <motion.div
           className={`mt-8 ${gridClasses}`}
+          style={{ x: dragX }}
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.2}
-          onPanEnd={(_event, info) => {
+          onDragEnd={(_event, info) => {
             const swipeThreshold = 50
             const swipeVelocityThreshold = 500
 
@@ -163,8 +203,16 @@ export function TabbedCategoryGrid({
             ) {
               navigateTab(-1)
             }
+
+            // Voltar o container ao centro após o arrasto
+            animate(dragX, 0, {
+              type: 'spring',
+              stiffness: 300,
+              damping: 30,
+            })
           }}
         >
+          {/* Mantém a animação original com AnimatePresence */}
           <AnimatePresence mode="wait">
             {tabs
               .find((tab) => tab.value === activeTab)
