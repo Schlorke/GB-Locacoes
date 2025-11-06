@@ -19,6 +19,11 @@
      reais
    - NUNCA invente datas como "2024-12-20" ou "2025-01-15" sem verificar commits
    - SEMPRE consulte o histórico Git antes de adicionar entradas ao CHANGELOG
+7. **🐛 CONSULTE PROBLEMAS CONHECIDOS**: Antes de investigar um bug, verifique
+   `docs/issues/known-issues.md`
+   - Evita re-investigar problemas já resolvidos
+   - Economiza tempo e mantém soluções consistentes
+   - Documente novos bugs resolvidos neste arquivo
 
 ### **📝 PROTOCOLO DE DOCUMENTAÇÃO PROATIVA (OBRIGATÓRIO)**
 
@@ -72,6 +77,8 @@ documentada proativamente em `docs/` na pasta apropriada.**
 │   └── 📄 scroll-reveal.md      # Sistema scroll reveal
 ├── 📁 references/                # Referências técnicas
 │   └── 📄 dependencies.md       # Compatibilidade dependências CRÍTICA
+├── 📁 issues/                    # Issues e problemas
+│   └── 📄 known-issues.md       # 🆕 Problemas conhecidos e soluções
 └── 📁 internal/                  # Documentação interna
     ├── 📄 cursor-setup.md       # Setup específico Cursor
     ├── 📄 project-decisions.md  # Decisões arquiteturais
@@ -101,6 +108,9 @@ design system robusto.
 
 > **OBRIGATÓRIO**: Consulte `docs/references/dependencies.md` antes de atualizar
 > dependências
+>
+> **🐛 CONSULTAR SEMPRE**: `docs/issues/known-issues.md` antes de investigar
+> bugs
 
 #### **🚨 PROBLEMAS CRÍTICOS RESOLVIDOS (DEZ 2024 - JAN 2025)**
 
@@ -119,6 +129,10 @@ design system robusto.
   implementação custom
 - **node-domexception deprecated**: Override com `npm:@types/node@*`
   implementado
+- **Dessincronização de Animações Hero (NOV 2025)**: Flash de imagem aparecia
+  antes do conteúdo após reset de cache. Resolvido com evento customizado
+  `scrollRevealReady` para sincronizar Framer Motion com scroll-reveal-init.
+  Detalhes completos em `docs/issues/known-issues.md`
 
 ---
 

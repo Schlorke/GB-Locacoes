@@ -52,6 +52,14 @@ com o projeto.
   compatibilidade
 - **[environment.md](./references/environment.md)** - Variáveis de ambiente
 
+### 🐛 [issues/](./issues/) - Issues e Investigações
+
+- **[known-issues.md](./issues/known-issues.md)** - 🐛 Problemas conhecidos e
+  soluções (resolvidos)
+- **[README.md](./issues/README.md)** - Índice de issues ativas
+- **[tooltip-arrow-loading-issue.md](./issues/tooltip-arrow-loading-issue.md)** -
+  Investigação sobre ordem de carregamento da seta do tooltip
+
 ### 🔧 [internal/](./internal/) - Documentação Interna
 
 - **[cursor-setup.md](./internal/cursor-setup.md)** - Setup específico do Cursor
@@ -59,12 +67,6 @@ com o projeto.
 - **[project-decisions.md](./internal/project-decisions.md)** - Decisões
   arquiteturais
 - **[tools.md](./internal/tools.md)** - Ferramentas e utilitários internos
-
-### 🐛 [issues/](./issues/) - Issues e Investigações
-
-- **[README.md](./issues/README.md)** - Índice de issues ativas
-- **[tooltip-arrow-loading-issue.md](./issues/tooltip-arrow-loading-issue.md)** -
-  Investigação sobre ordem de carregamento da seta do tooltip
 
 ## 🎯 Navegação Rápida
 

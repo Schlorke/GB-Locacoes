@@ -24,6 +24,16 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Tratamento especial em navegação interna para aparecer imediatamente
   - Zero bugs visuais - transição suave em todos os cenários
 
+### Added ✨
+
+- **Documentação de Problemas Conhecidos**: Criado `docs/issues/known-issues.md`
+  - Sistema para documentar bugs já resolvidos e suas soluções
+  - Previne re-investigação de problemas já conhecidos
+  - Template para documentar novos problemas
+  - Integrado ao `AGENTS.md` para consulta automática por IAs
+  - Primeiro problema documentado: Dessincronização de Animações Hero
+  - Arquivo movido para `issues/` (localização mais semântica que `internal/`)
+
 ### Changed 🔄
 
 - **Flash Inicial Sincronizado com Scroll Reveal**: Sistema de evento para
