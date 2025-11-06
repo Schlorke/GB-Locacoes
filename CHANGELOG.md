@@ -25,6 +25,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - UX mobile-first otimizada para touch devices
   - **Arquivo modificado**: `components/tabbed-category-grid.tsx`
 
+### Fixed 🐛
+
+- Corrigido scroll involuntário na Home ao carregar a página inicial; a lógica
+  de centralização das tabs agora usa `scrollTo` apenas no eixo horizontal sem
+  disparar `scrollIntoView`, preservando o posicionamento vertical do layout.
+  - Ajustes aplicados em `components/tabbed-category-grid.tsx`
+
 ## [2025-11-06] - Interactive Infinite Carousel
 
 ### Fixed 🐛
@@ -39,6 +46,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Container agora retorna ao centro com animação spring após swipe
   - Adicionados atributos `data-value` nas tabs para identificação
   - Melhorada sincronização entre swipe e mudança de tab
+  - **Corrigida direção das animações EXIT**: Botões agora desaparecem seguindo
+    o gesto do usuário (não mais na direção oposta)
+    - Separada lógica de navegação no array (`navDirection`) da lógica de gesto
+      visual (`gestureDirection`)
+    - Invertidas fórmulas: `initial: x: -direction * 50`,
+      `exit: x: direction * 50`
+    - Swipe LEFT → botões saem pela ESQUERDA ✅
+    - Swipe RIGHT → botões saem pela DIREITA ✅
   - **Arquivo modificado**: `components/tabbed-category-grid.tsx`
 
 ### Changed 🔄

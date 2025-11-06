@@ -390,6 +390,71 @@ Durante a investigação, foram testadas (sem sucesso):
 
 ---
 
+## 3. Scroll Involuntário na Home
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-06 **Severidade**: Média (UX impactada)
+**Status**: ✅ Resolvido
+
+#### Descrição
+
+Ao carregar ou recarregar a página inicial (Home), a viewport deslocava alguns
+pixels para baixo sem nenhuma interação do usuário. O comportamento não era
+reproduzido em outras rotas.
+
+#### Sintomas
+
+- ❌ Scroll vertical automático assim que a Home carregava
+- ❌ Layout “pulava” para baixo antes de qualquer interação
+- ✅ Outras páginas permaneciam estáticas
+- ✅ Reproduzido em desktop e mobile
+
+#### Causa Raiz
+
+O componente `TabbedCategoryGrid` centralizava a tab ativa com
+`scrollIntoView({ block: 'nearest', inline: 'center' })`. Apesar de indicar
+somente alinhamento horizontal, alguns navegadores ajustavam também o eixo
+vertical, provocando o scroll involuntário da página inicial (única rota que usa
+o componente).
+
+### ✅ Solução Implementada
+
+#### Arquivos Modificados
+
+1. `components/tabbed-category-grid.tsx`
+
+#### Implementação
+
+- Substituído `scrollIntoView` por lógica manual usando `element.scrollTo`
+  limitada ao eixo horizontal.
+- Checagem de overflow garante que o ajuste só ocorra quando realmente
+  necessário (evita alterações em desktop).
+- Guarda que verifica se a tab já está totalmente visível antes de ajustar o
+  scroll, prevenindo movimentos desnecessários.
+- Adicionada flag `hasMountedRef` para evitar animação na primeira renderização.
+
+### 🎯 Resultado
+
+- ✅ Home permanece fixa no topo após carregar.
+- ✅ Centralização das tabs continua funcional em telas menores.
+- ✅ Nenhum impacto em outras páginas ou animações.
+
+### 📝 Lições Aprendidas
+
+- `scrollIntoView` pode alterar o eixo vertical mesmo com `block: 'nearest'`.
+- Para controlar apenas um eixo, prefira cálculos manuais com `scrollLeft` /
+  `scrollTo`.
+
+### ⚠️ Armadilhas a Evitar
+
+- ❌ Não reutilizar `scrollIntoView` para centralizar tabs horizontais.
+- ❌ Evitar animação de scroll no primeiro render (previne jank visual).
+- ✅ Priorizar lógica customizada quando o deslocamento deve ser restrito a um
+  único eixo.
+
+---
+
 ## Como Usar Este Documento
 
 ### Para Desenvolvedores

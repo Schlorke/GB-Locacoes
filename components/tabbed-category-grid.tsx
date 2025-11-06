@@ -85,50 +85,79 @@ export function TabbedCategoryGrid({
   // Ref para o container das tabs
   const tabsListRef = useRef<HTMLDivElement>(null)
 
-  // Função para rolar a tab ativa para o centro (mobile)
-  const scrollTabIntoView = (tabValue: string) => {
-    if (!tabsListRef.current) return
+  // Flag para evitar animação na primeira renderização
+  const hasMountedRef = useRef(false)
 
-    // Encontrar o elemento da tab ativa
-    const tabElement = tabsListRef.current.querySelector(
+  // Função para rolar a tab ativa para o centro (somente eixo horizontal)
+  const scrollTabIntoView = (
+    tabValue: string,
+    options: { smooth?: boolean } = {}
+  ) => {
+    const container = tabsListRef.current
+    if (!container) return
+
+    const tabElement = container.querySelector(
       `[data-value="${tabValue}"]`
-    ) as HTMLElement
+    ) as HTMLElement | null
 
-    if (tabElement) {
-      // Rolar para centralizar horizontalmente
-      tabElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center',
-      })
-    }
+    if (!tabElement) return
+
+    const totalScrollableWidth = container.scrollWidth - container.clientWidth
+    const hasHorizontalOverflow = totalScrollableWidth > 0
+
+    if (!hasHorizontalOverflow) return
+
+    const containerRect = container.getBoundingClientRect()
+    const tabRect = tabElement.getBoundingClientRect()
+
+    const isFullyVisible =
+      tabRect.left >= containerRect.left && tabRect.right <= containerRect.right
+
+    // Se já estiver visível, não movimenta para evitar jitter
+    if (isFullyVisible) return
+
+    const currentScrollLeft = container.scrollLeft
+    const centerOffset =
+      tabRect.left -
+      containerRect.left -
+      (container.clientWidth - tabRect.width) / 2
+
+    const targetScrollLeft = currentScrollLeft + centerOffset
+    const clampedScrollLeft = Math.min(
+      Math.max(targetScrollLeft, 0),
+      totalScrollableWidth
+    )
+
+    container.scrollTo({
+      left: clampedScrollLeft,
+      behavior: options.smooth ? 'smooth' : 'auto',
+    })
   }
 
   const handleTabChange = (value: string) => {
     setActiveTab(value)
     setFilterKey((prev) => prev + 1)
-
-    // Centralizar a tab ativa no mobile
-    setTimeout(() => {
-      scrollTabIntoView(value)
-    }, 50)
   }
 
   // Função para navegar entre tabs
-  const navigateTab = (swipeDirection: number) => {
+  // Agora aceita dois parâmetros:
+  // - navDirection: direção da navegação no array (+1 = próxima, -1 = anterior)
+  // - gestureDirection: direção do gesto físico (-1 = esquerda, +1 = direita)
+  const navigateTab = (navDirection: number, gestureDirection: number) => {
     const currentIndex = tabs.findIndex((t) => t.value === activeTab)
-    const newIndex = currentIndex + swipeDirection
+    const newIndex = currentIndex + navDirection
     const newTab = tabs[newIndex]
 
     if (newTab) {
-      setDirection(swipeDirection)
+      setDirection(gestureDirection) // Usa direção do GESTO para animação
       handleTabChange(newTab.value)
     }
   }
 
-  // Centralizar tab ativa ao montar o componente
+  // Centralizar tab ativa ao montar o componente (sem animação no primeiro render)
   useEffect(() => {
-    scrollTabIntoView(activeTab)
+    scrollTabIntoView(activeTab, { smooth: hasMountedRef.current })
+    hasMountedRef.current = true
   }, [activeTab])
 
   // Grid classes baseadas nas props
@@ -189,19 +218,19 @@ export function TabbedCategoryGrid({
             const swipeThreshold = 50
             const swipeVelocityThreshold = 500
 
-            // Swipe left (próxima tab)
+            // Swipe left (arrasta para esquerda, gesto negativo)
             if (
               info.offset.x < -swipeThreshold ||
               info.velocity.x < -swipeVelocityThreshold
             ) {
-              navigateTab(1)
+              navigateTab(1, -1) // nav: +1 (próxima), gesto: -1 (esquerda)
             }
-            // Swipe right (tab anterior)
+            // Swipe right (arrasta para direita, gesto positivo)
             else if (
               info.offset.x > swipeThreshold ||
               info.velocity.x > swipeVelocityThreshold
             ) {
-              navigateTab(-1)
+              navigateTab(-1, 1) // nav: -1 (anterior), gesto: +1 (direita)
             }
 
             // Voltar o container ao centro após o arrasto
@@ -219,9 +248,12 @@ export function TabbedCategoryGrid({
               ?.categories.map((category, index) => (
                 <motion.div
                   key={`${category.id}-${filterKey}`}
-                  initial={{ opacity: 0, x: direction * 50, scale: 0.95 }}
+                  // CORREÇÃO: Invertemos os sinais para que a animação siga o gesto
+                  // - INITIAL: entra do lado oposto ao gesto (sinal negativo)
+                  // - EXIT: sai seguindo o gesto (sinal positivo)
+                  initial={{ opacity: 0, x: -direction * 50, scale: 0.95 }}
                   animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: -direction * 50, scale: 0.95 }}
+                  exit={{ opacity: 0, x: direction * 50, scale: 0.95 }}
                   transition={{
                     delay: index * 0.08,
                     duration: 0.3,
