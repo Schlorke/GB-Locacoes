@@ -235,25 +235,24 @@ especialmente quando combinado com:
 
 ### ✅ Solução Implementada
 
-**Remoção simples do `position: sticky`:**
+**Duas mudanças necessárias:**
 
 #### Arquivos Modificados
 
-1. `components/equipment-showcase-section.tsx`
+1. `components/equipment-showcase-section.tsx` (linha 87)
+2. `components/categories.tsx` (linha 158)
 
 #### Implementação
 
-**Antes (com bug):**
+**1. Remover `position: sticky` da seção de equipamentos:**
 
 ```tsx
-<div className="order-2 lg:order-1">
+// ANTES (com bug):
+;<div className="order-2 lg:order-1">
   <EquipmentInfiniteScroll className="lg:sticky lg:top-8" />
 </div>
-```
 
-**Depois (corrigido):**
-
-```tsx
+// DEPOIS (corrigido):
 {
   /* Sticky removido: causava bug de scroll vertical no iOS Safari */
 }
@@ -264,11 +263,39 @@ especialmente quando combinado com:
 
 **Localização**: Linhas 86-89 em `equipment-showcase-section.tsx`
 
+**2. Adicionar `overflow-hidden` na seção de categorias:**
+
+```tsx
+// ANTES:
+<section
+  id="categorias"
+  ref={sectionRef}
+  className="bg-gray-50 py-12 md:py-16 lg:py-20"
+>
+
+// DEPOIS (corrigido):
+<section
+  id="categorias"
+  ref={sectionRef}
+  className="bg-gray-50 py-12 md:py-16 lg:py-20 overflow-hidden"
+>
+```
+
+**Localização**: Linha 158 em `components/categories.tsx`
+
+**Por que ambas as mudanças foram necessárias:**
+
+- Remover sticky eliminou a captura de eventos
+- Adicionar `overflow-hidden` na seção seguinte preveniu que o conteúdo
+  "vazasse" e criasse scroll horizontal indesejado que interferia com o scroll
+  vertical
+
 ### 🎯 Resultado
 
 - ✅ Scroll vertical funciona perfeitamente no iOS Safari
 - ✅ Todas as animações GSAP continuam funcionando
 - ✅ Comportamento consistente entre iOS, Android e Desktop
+- ✅ `overflow-hidden` na seção de categorias previne vazamento horizontal
 - ⚠️ Trade-off: Elemento não fixa mais no desktop durante scroll (comportamento
   sticky removido)
 
@@ -279,8 +306,11 @@ especialmente quando combinado com:
 2. **Sticky + scroll horizontal = problema no iOS** - evitar essa combinação
 3. **Touch events no iOS são capturados por sticky** mesmo com `touch-action`
    configurado
-4. **Simples é melhor**: remover sticky resolveu instantaneamente o problema
-5. **Bug conhecido do WebKit**:
+4. **Remover sticky NÃO foi suficiente sozinho** - precisou adicionar
+   `overflow-hidden` na seção seguinte
+5. **`overflow-hidden` em sections adjacentes** ajuda a isolar contextos de
+   scroll e prevenir interferências
+6. **Bug conhecido do WebKit**:
    [WebKit Bug #179178](https://bugs.webkit.org/show_bug.cgi?id=179178)
 
 ### ⚠️ Armadilhas a Evitar
