@@ -1,5 +1,6 @@
 'use client'
 
+import { EquipmentInfiniteScroll } from '@/components/equipment-infinite-scroll'
 import {
   AndaimeSuspenso,
   AndaimeTubular,
@@ -12,7 +13,6 @@ import {
   TrabalhoEmAltura,
   Transporte,
 } from '@/components/icons/custom'
-import { EquipmentInfiniteScroll } from '@/components/equipment-infinite-scroll'
 import {
   TabbedCategoryGrid,
   type CategoryItem,
@@ -83,8 +83,9 @@ export default function EquipmentShowcaseSection() {
         {/* Layout de duas colunas responsivo */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Coluna Esquerda (Desktop) / Embaixo (Mobile): Scroll Infinito */}
+          {/* Sticky removido: causava bug de scroll vertical no iOS Safari */}
           <div className="order-2 lg:order-1">
-            <EquipmentInfiniteScroll className="lg:sticky lg:top-8" />
+            <EquipmentInfiniteScroll />
           </div>
 
           {/* Coluna Direita (Desktop) / Topo (Mobile): Tabs */}

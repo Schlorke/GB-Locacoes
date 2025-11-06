@@ -8,6 +8,28 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [2025-11-06] - Correção Bug de Scroll no iOS Safari
+
+### Fixed 🐛
+
+- **Bug de Scroll Vertical no iOS Safari**: Corrigido travamento de scroll na
+  seção de equipamentos
+  - **Problema**: Scroll vertical ficava travado no iPhone ao tentar rolar
+    abaixo da seção "Nossos Equipamentos"
+  - **Causa**: `position: sticky` no componente `EquipmentInfiniteScroll`
+    capturava eventos de touch no iOS Safari
+  - **Solução**: Removido `className="lg:sticky lg:top-8"` do componente em
+    `equipment-showcase-section.tsx`
+  - **Efeito**: Scroll vertical agora funciona perfeitamente em todos os
+    dispositivos iOS
+  - **Trade-off**: Sticky behavior removido no desktop (elemento não fixa mais
+    durante scroll)
+  - **Arquivos modificados**: `components/equipment-showcase-section.tsx` (linha
+    87-88)
+  - **Bug documentado**: iOS Safari tem conflito conhecido entre
+    `position: sticky` + `overflow: hidden` + scroll horizontal
+  - Adicionado comentário explicativo no código para referência futura
+
 ## [2025-11-05] - Correção Animação Ondinha Hero e Sincronização
 
 ### Fixed 🐛

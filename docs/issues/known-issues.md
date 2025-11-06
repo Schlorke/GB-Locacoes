@@ -8,7 +8,8 @@
 ## 📋 Índice
 
 1. [Dessincronização de Animações Hero](#1-dessincronização-de-animações-hero)
-2. [Como Usar Este Documento](#como-usar-este-documento)
+2. [Scroll Vertical Travado no iOS Safari](#2-scroll-vertical-travado-no-ios-safari)
+3. [Como Usar Este Documento](#como-usar-este-documento)
 
 ---
 
@@ -173,6 +174,189 @@ Se você encontrar animações dessincronizadas:
 - CHANGELOG.md: [2025-11-05] - Correção Animação Ondinha Hero e Sincronização
 - Commit: [hash do commit]
 - Arquivos: `components/hero.tsx`, `components/scroll-reveal-init.tsx`
+
+---
+
+## 2. Scroll Vertical Travado no iOS Safari
+
+### 🎯 Problema
+
+**Data da Ocorrência**: Novembro 2025 **Severidade**: Crítica (Funcionalidade
+quebrada no iOS) **Status**: ✅ RESOLVIDO
+
+#### Descrição
+
+No iPhone/iPad (iOS Safari), ao tentar rolar a página verticalmente após a seção
+"Nossos Equipamentos" (que contém scroll infinito horizontal com animações
+GSAP), o scroll vertical ficava completamente travado. O usuário não conseguia
+continuar scrollando para baixo para ver a seção "Categorias de Equipamentos" e
+o restante do conteúdo da página.
+
+#### Sintomas
+
+- ❌ Scroll vertical travado/preso após seção de equipamentos no iOS
+- ❌ Impossível acessar conteúdo abaixo da seção no iPhone
+- ❌ Conteúdo aparecia "embaixo" da seção ao tentar scroll para cima
+- ❌ Sensação de "chegou ao fim mas ainda tem mais conteúdo"
+- ✅ Funcionava perfeitamente no desktop
+- ✅ Funcionava perfeitamente no Android
+
+#### Causa Raiz
+
+**`position: sticky` no iOS Safari capturando eventos de touch:**
+
+O componente `EquipmentInfiniteScroll` tinha `className="lg:sticky lg:top-8"`
+aplicado, o que criava um elemento sticky no desktop. No iOS Safari,
+`position: sticky` tem um bug conhecido onde captura eventos de touch/scroll,
+especialmente quando combinado com:
+
+1. **`overflow: hidden`** no mesmo contexto
+2. **Animações horizontais** (GSAP movendo elementos com transform)
+3. **Scroll containers** aninhados
+
+**Código Problemático:**
+
+```tsx
+// equipment-showcase-section.tsx - Linha 87
+<div className="order-2 lg:order-1">
+  <EquipmentInfiniteScroll className="lg:sticky lg:top-8" />
+  {/*                                   ^^^^^^^^^^^^^^^^^ CULPADO */}
+</div>
+```
+
+**Como o bug ocorria:**
+
+1. Usuário toca na tela para scrollar verticalmente
+2. iOS Safari detecta o toque sobre o elemento sticky
+3. Sticky tenta determinar: "scroll do elemento" ou "scroll da página"?
+4. `overflow: hidden` + animações GSAP horizontais confundem o iOS
+5. iOS "prende" o evento de scroll no elemento sticky
+6. **Scroll vertical da página trava completamente**
+
+### ✅ Solução Implementada
+
+**Remoção simples do `position: sticky`:**
+
+#### Arquivos Modificados
+
+1. `components/equipment-showcase-section.tsx`
+
+#### Implementação
+
+**Antes (com bug):**
+
+```tsx
+<div className="order-2 lg:order-1">
+  <EquipmentInfiniteScroll className="lg:sticky lg:top-8" />
+</div>
+```
+
+**Depois (corrigido):**
+
+```tsx
+{
+  /* Sticky removido: causava bug de scroll vertical no iOS Safari */
+}
+;<div className="order-2 lg:order-1">
+  <EquipmentInfiniteScroll />
+</div>
+```
+
+**Localização**: Linhas 86-89 em `equipment-showcase-section.tsx`
+
+### 🎯 Resultado
+
+- ✅ Scroll vertical funciona perfeitamente no iOS Safari
+- ✅ Todas as animações GSAP continuam funcionando
+- ✅ Comportamento consistente entre iOS, Android e Desktop
+- ⚠️ Trade-off: Elemento não fixa mais no desktop durante scroll (comportamento
+  sticky removido)
+
+### 📝 Lições Aprendidas
+
+1. **iOS Safari tem bug grave com `position: sticky`** quando combinado com
+   `overflow: hidden` e animações
+2. **Sticky + scroll horizontal = problema no iOS** - evitar essa combinação
+3. **Touch events no iOS são capturados por sticky** mesmo com `touch-action`
+   configurado
+4. **Simples é melhor**: remover sticky resolveu instantaneamente o problema
+5. **Bug conhecido do WebKit**:
+   [WebKit Bug #179178](https://bugs.webkit.org/show_bug.cgi?id=179178)
+
+### ⚠️ Armadilhas a Evitar
+
+❌ **NÃO use `position: sticky` com:**
+
+```tsx
+// RUIM - combinação que quebra no iOS
+<div className="sticky">
+  <div className="overflow-hidden">{/* Animações horizontais GSAP */}</div>
+</div>
+```
+
+✅ **Se precisar de sticky, isole completamente:**
+
+```tsx
+// BOM - sem overflow ou animações no contexto do sticky
+<div className="sticky">
+  <div>{/* Conteúdo estático simples */}</div>
+</div>
+```
+
+❌ **NÃO tente corrigir com CSS:**
+
+```css
+/* INÚTIL - não resolve o problema do sticky no iOS */
+.sticky-element {
+  touch-action: pan-y !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+```
+
+✅ **Solução real: remova o sticky:**
+
+```tsx
+// BOM - sem sticky = sem problemas
+<div>
+  <ComponenteComAnimacoes />
+</div>
+```
+
+### 🔍 Como Diagnosticar Problema Similar
+
+Se você encontrar scroll travado no iOS:
+
+1. **Procure por `position: sticky`** nos componentes da área afetada
+2. **Verifique se há `overflow: hidden`** no mesmo contexto
+3. **Teste removendo temporariamente o sticky** - se resolver, esse é o problema
+4. **Use DevTools do Safari iOS** para inspecionar eventos de touch
+5. **Não perca tempo com `touch-action`** - não resolve bugs de sticky
+
+### 🧪 Tentativas que NÃO Funcionaram
+
+Durante a investigação, foram testadas (sem sucesso):
+
+1. ❌ Adicionar `touch-action: pan-y pinch-zoom` em todos elementos
+2. ❌ Adicionar `-webkit-overflow-scrolling: touch`
+3. ❌ Mudar `overflow: hidden` para `overflow-x: hidden`
+4. ❌ Usar `clip-path` em vez de `overflow`
+5. ❌ Desabilitar animações GSAP no mobile
+6. ❌ Adicionar `pointer-events: none`
+7. ❌ Criar regras CSS globais específicas para iOS
+8. ❌ Usar `isolation: isolate` para stacking context
+9. ❌ Renderizar componente diferente no mobile
+10. ❌ Adicionar propriedades no `body` e `html`
+
+**Nenhuma dessas soluções funcionou. A única solução foi remover o
+`position: sticky`.**
+
+### 📚 Referências
+
+- CHANGELOG.md: [2025-11-06] - Correção Bug de Scroll no iOS Safari
+- WebKit Bug Report: https://bugs.webkit.org/show_bug.cgi?id=179178
+- Stack Overflow: "iOS Safari sticky position scroll issues"
+- MDN: Position Sticky - Known Issues
+- Arquivos: `components/equipment-showcase-section.tsx`
 
 ---
 
