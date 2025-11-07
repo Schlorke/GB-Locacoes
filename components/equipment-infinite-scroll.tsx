@@ -108,7 +108,7 @@ export function EquipmentInfiniteScroll({
       </div>
 
       {/* Container unificado para ambas as linhas */}
-      <div className="relative overflow-hidden pt-8 pb-16">
+      <div className="relative z-0 overflow-hidden pt-8 pb-16">
         {/* Fade-out overlays laterais */}
         <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-[15%] bg-gradient-to-r from-gray-50 via-gray-50/80 to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-[15%] bg-gradient-to-l from-gray-50 via-gray-50/80 to-transparent" />

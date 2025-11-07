@@ -100,6 +100,11 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- Resolvida sobreposição do gradiente do carrossel de equipamentos sobre o grid
+  de categorias; a coluna das tabs agora possui contexto próprio de empilhamento
+  e o carrossel mantém o fade dentro do seu container.
+  - Ajustes aplicados em `components/equipment-showcase-section.tsx`
+  - Ajustes aplicados em `components/equipment-infinite-scroll.tsx`
 - Corrigido scroll involuntário na Home ao carregar a página inicial; a lógica
   de centralização das tabs agora usa `scrollTo` apenas no eixo horizontal sem
   disparar `scrollIntoView`, preservando o posicionamento vertical do layout.

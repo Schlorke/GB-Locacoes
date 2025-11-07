@@ -89,7 +89,7 @@ export default function EquipmentShowcaseSection() {
           </div>
 
           {/* Coluna Direita (Desktop) / Topo (Mobile): Tabs */}
-          <div className="order-1 lg:order-2">
+          <div className="order-1 lg:order-2 relative z-20">
             {/* Header com título */}
             <div className="mb-8">
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">

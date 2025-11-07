@@ -9,7 +9,11 @@
 
 1. [Dessincronização de Animações Hero](#1-dessincronização-de-animações-hero)
 2. [Scroll Vertical Travado no iOS Safari](#2-scroll-vertical-travado-no-ios-safari)
-3. [Como Usar Este Documento](#como-usar-este-documento)
+3. [Scroll Involuntário na Home](#3-scroll-involuntário-na-home)
+4. [Flick no Category Showcase após swipe](#4-flick-no-category-showcase-após-swipe)
+5. [Hover e sombras cortados no Category Showcase](#5-hover-e-sombras-cortados-no-category-showcase)
+6. [Gradiente do Carrossel Sobreposto às Categorias](#6-gradiente-do-carrossel-sobreposto-às-categorias)
+7. [Como Usar Este Documento](#como-usar-este-documento)
 
 ---
 
@@ -605,6 +609,73 @@ base, então bastava isolar o `overflow-hidden` apenas no overlay.
 
 - ❌ Aplicar `overflow-hidden` diretamente no grid principal; isso corta hovers.
 - ✅ Manter overlays auxiliares em wrappers dedicados com clipping específico.
+
+---
+
+## 6. Gradiente do Carrossel Sobreposto às Categorias
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-07 **Severidade**: Média (impacto visual claro)
+**Status**: ✅ Resolvido
+
+#### Descrição
+
+O gradiente de fade do `EquipmentInfiniteScroll` (coluna esquerda da seção
+`EquipmentShowcaseSection`) avançava sobre o grid de categorias na coluna
+direita. Os botões das tabs e das categorias ficavam visivelmente desbotados, já
+que o overlay com `z-index: 10` era renderizado acima deles.
+
+#### Sintomas
+
+- ❌ Aba ativa e cards das categorias apareciam esbranquiçados na borda esquerda
+  da coluna direita
+- ❌ Hover/focus dos botões ficava encoberto pelo gradiente
+- ✅ Overlay funcionava normalmente sobre os cards do carrossel
+
+#### Causa Raiz
+
+O wrapper do carrossel não criava um contexto próprio de empilhamento, então o
+overlay com `z-10` competia diretamente com os elementos da coluna vizinha. Como
+o grid de categorias não possuía `z-index` definido, o gradiente vencia a
+disputa e ficava “por cima” dos botões, mesmo estando em outra coluna do grid.
+
+### ✅ Solução Implementada
+
+#### Arquivos Modificados
+
+1. `components/equipment-infinite-scroll.tsx`
+2. `components/equipment-showcase-section.tsx`
+
+#### Implementação
+
+- Adicionado `z-0` ao container relativo do carrossel para criar stacking
+  context isolado para os overlays do fade.
+- Coluna das categorias passou a ser `relative z-20`, garantindo que tabs e
+  cards fiquem sempre acima de elementos adjacentes.
+- Mantido `pointer-events-none` nos overlays para preservar acessibilidade e
+  interação do carrossel.
+
+### 🎯 Resultado
+
+- ✅ Gradiente permanece limitado ao carrossel, sem interferir no grid de
+  categorias.
+- ✅ Hover e foco dos botões voltam a ser exibidos com cores originais.
+- ✅ Layout mantém o efeito de fade lateral desejado no carrossel.
+
+### 📝 Lições Aprendidas
+
+- Sempre que um overlay precisar de `z-index` elevado, isole o stacking context
+  do componente para evitar interferência em colunas irmãs.
+- Ajustar o `z-index` da coluna vizinha é uma solução rápida quando os elementos
+  precisam permanecer acima visualmente.
+
+### ⚠️ Armadilhas a Evitar
+
+- ❌ Deixar overlays globais sem stacking context próprio em layouts de
+  múltiplas colunas.
+- ❌ Depender apenas de `pointer-events: none` quando o problema é ordem de
+  empilhamento.
 
 ---
 
