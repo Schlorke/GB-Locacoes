@@ -14,10 +14,10 @@ import {
   Transporte,
 } from '@/components/icons/custom'
 import {
-  TabbedCategoryGrid,
+  CategoryShowcase,
   type CategoryItem,
   type TabConfig,
-} from '@/components/tabbed-category-grid'
+} from '@/components/category-showcase'
 
 // Configuração das tabs e categorias
 const tabsConfig: TabConfig[] = [
@@ -100,8 +100,8 @@ export default function EquipmentShowcaseSection() {
               </p>
             </div>
 
-            {/* Componente TabbedCategoryGrid */}
-            <TabbedCategoryGrid
+            {/* Componente CategoryShowcase */}
+            <CategoryShowcase
               tabs={tabsConfig}
               defaultTab="mais-alugados"
               onCategoryClickAction={handleCategoryClick}

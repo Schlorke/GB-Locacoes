@@ -9,7 +9,7 @@
 O `EquipmentShowcaseSection` é uma seção completa que combina dois componentes
 poderosos em um layout responsivo de duas colunas: o scroll infinito de
 equipamentos (EquipmentInfiniteScroll) e o grid de categorias com tabs
-(TabbedCategoryGrid).
+-(TabbedCategoryGrid). +(CategoryShowcase).
 
 ## 🎯 Características Principais
 
@@ -17,8 +17,8 @@ equipamentos (EquipmentInfiniteScroll) e o grid de categorias com tabs
 
 - ✅ **Layout Responsivo**: 2 colunas em desktop, empilhado em mobile
 - ✅ **Scroll Infinito**: Equipamentos em movimento contínuo (esquerda)
-- ✅ **Grid de Categorias**: Sistema de tabs com categorias interativas
-  (direita)
+- ✅ **Grid de Categorias**: Sistema `CategoryShowcase` com animações premium e
+  swipe horizontal (direita)
 - ✅ **Sticky Positioning**: Scroll infinito fixo durante rolagem em desktop
 - ✅ **Identidade Visual**: Gradiente slate-50/blue-50 seguindo o projeto
 
@@ -29,6 +29,8 @@ equipamentos (EquipmentInfiniteScroll) e o grid de categorias com tabs
 - ✅ **Dynamic Import**: Carregamento otimizado com lazy loading
 - ✅ **Loading State**: Skeleton screen durante carregamento
 - ✅ **3 Tabs Configuradas**: Categorias, Fases da Obra, Tipo de Trabalho
+- ✅ **Swipe Navigation**: Gesto horizontal em dispositivos touch suportado
+  nativamente
 
 ## 🔧 Uso
 

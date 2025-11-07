@@ -31,6 +31,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Usa handlers `onPanEnd` do Framer Motion para detecção de gestos
   - UX mobile-first otimizada para touch devices
   - **Arquivo modificado**: `components/tabbed-category-grid.tsx`
+- **CategoryShowcase substitui TabbedCategoryGrid**: novo componente unificado
+  (`components/category-showcase.tsx`) responsável por tabs, swipe e grid de
+  categorias, eliminando `components/tabbed-category-grid.tsx` e o wrapper
+  `components/ui/tabs.tsx`.
+  - Ajustes aplicados em `components/equipment-showcase-section.tsx`
+  - Ajustes aplicados em `app/playground/page.tsx`
+  - Ajustes aplicados em `app/test-components/page.tsx`
 
 ### Changed 🔄
 
@@ -88,6 +95,8 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 - Componente estático legado `CategoryShowcaseStatic` e documentação associada,
   consolidando os testes apenas em `CategoryShowcaseShell`.
+- Rota experimental `/test-components` e pasta auxiliar, centralizando os testes
+  de componentes no playground oficial (`app/playground/page.tsx`).
 
 ### Fixed 🐛
 

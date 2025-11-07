@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Dialog,
   DialogContent,
@@ -12,6 +11,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog'
 import { Search, Smile } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface EmojiPickerProps {
   isOpen: boolean
@@ -166,19 +166,27 @@ export function EmojiPicker({
 
           {/* Categorias */}
           {!searchTerm && (
-            <Tabs value={selectedCategory} onValueChange={setSelectedCategory}>
-              <TabsList className="grid w-full grid-cols-5">
-                {Object.keys(EMOJI_CATEGORIES).map((category) => (
-                  <TabsTrigger
+            <div className="grid w-full grid-cols-5 gap-2">
+              {Object.keys(EMOJI_CATEGORIES).map((category) => {
+                const isActive = category === selectedCategory
+
+                return (
+                  <button
                     key={category}
-                    value={category}
-                    className="text-xs"
+                    type="button"
+                    onClick={() => setSelectedCategory(category)}
+                    className={cn(
+                      'rounded-md px-2 py-2 text-xs font-semibold transition-colors duration-200',
+                      isActive
+                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md'
+                        : 'bg-white text-slate-500 hover:text-orange-600 hover:shadow-sm'
+                    )}
                   >
                     {CATEGORY_LABELS[category as keyof typeof CATEGORY_LABELS]}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+                  </button>
+                )
+              })}
+            </div>
           )}
 
           {/* Grid de Emojis */}

@@ -418,11 +418,16 @@ somente alinhamento horizontal, alguns navegadores ajustavam também o eixo
 vertical, provocando o scroll involuntário da página inicial (única rota que usa
 o componente).
 
+> **Atualização 2025-11-07**: O componente foi substituído por
+> `CategoryShowcase`, que mantém a correção e elimina a dependência do wrapper
+> de tabs anterior.
+
 ### ✅ Solução Implementada
 
 #### Arquivos Modificados
 
-1. `components/tabbed-category-grid.tsx`
+1. `components/tabbed-category-grid.tsx` (REMOVIDO)
+2. `components/category-showcase.tsx`
 
 #### Implementação
 
@@ -464,15 +469,16 @@ o componente).
 
 #### Descrição
 
-No showcase de categorias disponível em `/test-components`, ao concluir o gesto
-de swipe as novas categorias surgiam imediatamente em estado final, sem as
-animações escalonadas previstas. O usuário percebia um “piscar” rápido no
-instante em que soltava o dedo/mouse, porque o grid da nova aba aparecia em
-opacidade plena antes que os fades individuais começassem.
+No showcase de categorias (atualmente disponível em `/playground`, antigo
+`/test-components`), ao concluir o gesto de swipe as novas categorias surgiam
+imediatamente em estado final, sem as animações escalonadas previstas. O usuário
+percebia um “piscar” rápido no instante em que soltava o dedo/mouse, porque o
+grid da nova aba aparecia em opacidade plena antes que os fades individuais
+começassem.
 
 #### Como Reproduzir
 
-1. Abrir `/test-components` e iniciar um swipe horizontal nas tabs.
+1. Abrir `/playground` e iniciar um swipe horizontal nas tabs.
 2. Soltar o dedo/mouse antes do overlay terminar de deslizar.
 3. Observar o frame logo após o release: dois conjuntos de botões aparecem
    simultaneamente (grid novo e overlay antigo), causando flick perceptível.
@@ -496,7 +502,7 @@ os cards já haviam atingido `opacity: 1`, causando o flash sem fade.
 
 #### Arquivos Modificados
 
-1. `app/test-components/page.tsx`
+1. `components/category-showcase.tsx`
 
 #### Implementação
 
@@ -519,7 +525,7 @@ os cards já haviam atingido `opacity: 1`, causando o flash sem fade.
 
 #### Como Validar
 
-1. Abrir `/test-components` e repetir os swipes rápidos em ambas direções.
+1. Abrir `/playground` e repetir os swipes rápidos em ambas direções.
 2. Usar DevTools → “Slow 4x” opcionalmente para inspecionar frames: nenhum card
    deve aparecer antes do fade-in.
 3. Confirmar que `swipePhase` retorna para `"idle"` enquanto o grid volta para
@@ -546,12 +552,11 @@ os cards já haviam atingido `opacity: 1`, causando o flash sem fade.
 ### 🎯 Problema
 
 **Data da Ocorrência**: 2025-11-06 **Severidade**: Baixa/Média (perda de
-polimento visual)  
-**Status**: ✅ Resolvido
+polimento visual) **Status**: ✅ Resolvido
 
 #### Descrição
 
-Os botões do showcase em `/test-components` eram renderizados dentro de um
+Os botões do showcase do CategoryShowcase eram renderizados dentro de um
 container com `overflow-hidden`. Quando o usuário fazia hover (ou focus) os
 cards cresciam `hover:-translate-y-1` e aplicavam sombra. Porém, as bordas do
 container cortavam tanto o deslocamento quanto o blur, deixando o efeito com
@@ -575,7 +580,7 @@ base, então bastava isolar o `overflow-hidden` apenas no overlay.
 
 #### Arquivos Modificados
 
-1. `app/test-components/page.tsx`
+1. `components/category-showcase.tsx`
 
 #### Implementação
 

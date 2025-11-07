@@ -1,30 +1,33 @@
 # Category Showcase Shell
 
-## Visão geral
+## Status Atual
 
-Componente interativo criado para experimentos dentro de `/test-components`. Ele
-reproduz o layout público de categorias, mas agora oferece abas funcionais e um
-conjunto de botões mock específicos para cada sessão.
+> **Nov 2025**: O sandbox `/test-components` foi removido. Os testes visuais do
+> `CategoryShowcase` agora acontecem diretamente em `app/playground/page.tsx`,
+> que reutiliza o mesmo dataset e animações da homepage.
 
-## Objetivo
+Este documento é mantido apenas como referência histórica do shell criado para
+prototipagem. Caso você precise reativar um ambiente dedicado, use o playground
+como base ou crie uma rota temporária seguindo as diretrizes abaixo.
 
-- Facilitar prototipagem de comportamento de abas sem depender do
-  `TabbedCategoryGrid` original.
-- Permitir testes rápidos de conteúdo e micro-interações antes da migração para
-  o design system oficial.
-- Fornecer um playground isolado para validar cópias e agrupamentos de
+## Objetivo Original
+
+- Facilitar prototipagem de comportamento de abas sem depender do componente em
+  produção.
+- Permitir testes rápidos de conteúdo e micro-interações antes de consolidar no
+  design system.
+- Oferecer um playground isolado para validar nomenclaturas e agrupamentos de
   categorias.
 
-## Estrutura
+## Estrutura Recomendada (se recriado)
 
 - **Guia de abas**: `role="tablist"`, estados ativos visuais e suporte a
   teclado.
 - **Grid responsivo**: 10 itens por sessão, distribuídos em `grid-cols-2` →
   `md:grid-cols-4` → `lg:grid-cols-5`.
-- **Botões mock**: cada sessão exibe rótulos distintos com ícones do
-  `lucide-react`, permitindo avaliar nomenclaturas e agrupamentos.
+- **Botões mock**: labels específicos por sessão com ícones customizados.
 
-## Comportamento
+## Comportamento Esperado
 
 - **Categorias**: replica as categorias públicas principais (andaimes,
   compactação etc.).
@@ -32,60 +35,34 @@ conjunto de botões mock específicos para cada sessão.
   fundação, acabamento...).
 - **Tipo de trabalho**: lista tipos de atividade para validar combinações
   alternativas (demolição, limpeza pós-obra, energia temporária...).
-- **Animações duplas**: cliques nas abas mantêm a animação original de
-  fade/slide por botão, enquanto gestos de swipe movem o painel inteiro e exibem
-  somente a animação de entrada da nova sessão (sem reaparecimento dos botões
-  antigos).
+- **Animações**: manter fade/slide por botão e suporte a swipe com overlay.
 
-## Localização
+## Localização Atual
 
-- Página sandbox: `app/test-components/page.tsx`
-- Rota espelho: `app/test-components/category-showcase/page.tsx` (reexporta a
-  mesma página para manter URLs históricas)
+- Página playground oficial: `app/playground/page.tsx`
+- Componentização central: `components/category-showcase.tsx`
 
-## Como usar
-
-O componente `CategoryShowcase` agora vive dentro da própria página sandbox.
-Para reutilizar em outro contexto, duplique o trecho dentro de
-`app/test-components/page.tsx` ou extraia-o para um componente dedicado conforme
-necessário.
-
-```tsx
-export default function TestComponentsPage() {
-  return (
-    <div className="min-h-screen bg-slate-100 py-12 md:py-16 lg:py-20">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        {/* CategoryShowcase definido neste arquivo */}
-        <CategoryShowcase />
-      </div>
-    </div>
-  )
-}
-```
-
-> O componente continua sem props. Para testes adicionais, ajuste os arrays
-> internos de cada aba conforme necessário.
+Para ajustes locais, trabalhe diretamente com esses arquivos. Caso um sandbox
+adicional seja necessário, duplique a configuração do playground e documente a
+nova rota em `CHANGELOG.md` + `docs/features/`.
 
 ## Customização
 
-- Atualize `TAB_SECTIONS` para alterar rótulos, itens mock ou ícones.
-- Ajuste `ACCENT_STYLES` para modificar gradientes, shadows e cores de foco.
-- Utilize as classes utilitárias existentes como referência para manter
-  consistência com o design system.
+- Ajuste o array `tabs` para alterar rótulos, itens mock ou ícones.
+- As classes Tailwind presentes no componente principal servem como referência
+  de cores, gradientes e espaçamentos.
 
 ## Acessibilidade
 
 - Abas com `role="tab"`, `aria-controls` e `aria-selected` garantem navegação
-  compatível com teclado.
+  por teclado.
 - Ícones permanecem decorativos (`aria-hidden="true"`).
-- Botões recebem `focus-visible:ring` com cores alinhadas ao padrão GB, evitando
-  o focus azul padrão.
+- Botões podem utilizar `focus-visible` conforme padrão do design system.
 
-## Próximos passos sugeridos
+## Próximos Passos
 
-- Validar essas interações com o time de design antes de migrar comportamento
-  similar para produção.
-- Avaliar se alguma das combinações mock deve ser promovida ao
-  `TabbedCategoryGrid`.
+- Validar interações junto ao time de design utilizando o playground oficial.
+- Caso o shell precise retornar, reutilize o componente `CategoryShowcase` para
+  evitar divergências de comportamento.
 
-**Última atualização:** 2025-11-06
+**Última atualização:** 2025-11-07

@@ -1,5 +1,10 @@
 'use client'
 
+import {
+  CategoryShowcase,
+  type CategoryItem,
+  type TabConfig,
+} from '@/components/category-showcase'
 import { EquipmentInfiniteScroll } from '@/components/equipment-infinite-scroll'
 import {
   AndaimeSuspenso,
@@ -13,11 +18,6 @@ import {
   TrabalhoEmAltura,
   Transporte,
 } from '@/components/icons/custom'
-import {
-  TabbedCategoryGrid,
-  type CategoryItem,
-  type TabConfig,
-} from '@/components/tabbed-category-grid'
 
 // Configuração das tabs e categorias
 const tabsConfig: TabConfig[] = [
@@ -100,8 +100,8 @@ export default function PlaygroundPage() {
               </p>
             </div>
 
-            {/* Componente TabbedCategoryGrid */}
-            <TabbedCategoryGrid
+            {/* Componente CategoryShowcase */}
+            <CategoryShowcase
               tabs={tabsConfig}
               defaultTab="mais-alugados"
               onCategoryClickAction={handleCategoryClick}
