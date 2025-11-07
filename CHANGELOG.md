@@ -48,6 +48,28 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     como um carrossel.
   - Corrigido o bleed visual após swipe: os botões antigos não aparecem mais na
     nova sessão; somente a animação de entrada é exibida após o painel deslizar.
+- **Arquitetura do swipe overlay**: Camada de overlay extraída para componente
+  dedicado e classes de grid compartilhadas por constantes, reduzindo
+  duplicações e facilitando evoluções futuras do showcase.
+  - Ajustes aplicados em `app/test-components/page.tsx`
+- **Container da página de testes**: Atualizado o wrapper principal para usar o
+  layout padrão `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`, garantindo que o
+  showcase reflita o espaçamento aplicado na seção Hero.
+  - Ajustes aplicados em `app/test-components/page.tsx`
+- **Tabs mobile do Category Showcase**: Conteúdo das abas não quebra mais linha
+  no mobile e a aba ativa se desloca levemente para cima para preservar o
+  espaçamento entre os rótulos, agora movendo apenas o texto para manter o
+  alinhamento da linha base e removendo o `hover` persistente em dispositivos
+  touch.
+  - Ajustes aplicados em `app/test-components/page.tsx`
+- **Sublinhado das tabs**: A linha gradiente permanece alinhada ao divisor
+  inferior mesmo quando a aba está ativa, com offset fino que acompanha a
+  `border-b` padrão sem criar degrau visual.
+  - Ajustes aplicados em `app/test-components/page.tsx`
+- **Scroll do showcase**: Container do componente agora utiliza
+  `overflow-hidden`, removendo qualquer scroll vertical residual durante as
+  animações de swipe.
+  - Ajustes aplicados em `app/test-components/page.tsx`
 
 ### Removed ❌
 

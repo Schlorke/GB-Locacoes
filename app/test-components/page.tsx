@@ -17,6 +17,7 @@ import { useRef, useState } from 'react'
 
 import { AnimatePresence, animate, motion, useMotionValue } from 'framer-motion'
 
+import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 
 type CategoryItem = {
@@ -116,6 +117,72 @@ const ACCENT_STYLES: Record<
 
 const baseCardClasses =
   'group flex w-full h-full min-h-[168px] flex-col items-center justify-center gap-3 rounded-2xl px-4 py-6 text-center transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent hover:-translate-y-1 hover:shadow-lg'
+const gridLayoutClasses =
+  'grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5'
+
+type SwipeOverlaySnapshot = {
+  items: CategoryItem[]
+  accent: TabSection['accent']
+  direction: -1 | 1
+  startX: number
+  width: number
+}
+
+type SwipeOverlayLayerProps = {
+  overlay: SwipeOverlaySnapshot
+  onComplete: () => void
+}
+
+function SwipeOverlayLayer({ overlay, onComplete }: SwipeOverlayLayerProps) {
+  const accentStyles = ACCENT_STYLES[overlay.accent]
+
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      aria-hidden="true"
+    >
+      <motion.div
+        className={gridLayoutClasses}
+        initial={{ x: overlay.startX }}
+        animate={{
+          x: overlay.direction === 1 ? -overlay.width : overlay.width,
+        }}
+        transition={{ duration: 0.28, ease: 'easeInOut' }}
+        onAnimationComplete={onComplete}
+      >
+        {overlay.items.map((item) => {
+          const Icon = item.icon
+
+          return (
+            <div key={`overlay-${item.label}`} className="h-full">
+              <div className={cn(baseCardClasses, accentStyles.card)}>
+                <span
+                  className={cn(
+                    'flex h-14 w-14 items-center justify-center rounded-2xl transition-transform duration-300',
+                    accentStyles.icon
+                  )}
+                >
+                  <Icon
+                    className={cn('h-7 w-7', accentStyles.iconContent)}
+                    aria-hidden="true"
+                  />
+                </span>
+                <span
+                  className={cn(
+                    'text-sm font-medium leading-tight md:text-base',
+                    accentStyles.text
+                  )}
+                >
+                  {item.label}
+                </span>
+              </div>
+            </div>
+          )
+        })}
+      </motion.div>
+    </div>
+  )
+}
 
 function CategoryShowcase() {
   const [activeTab, setActiveTab] = useState(TAB_SECTIONS[0]?.id ?? '')
@@ -125,18 +192,15 @@ function CategoryShowcase() {
     'click'
   )
   const [pendingTab, setPendingTab] = useState<string | null>(null)
-  const [swipeOverlay, setSwipeOverlay] = useState<{
-    items: CategoryItem[]
-    accent: TabSection['accent']
-    direction: -1 | 1
-    startX: number
-    width: number
-  } | null>(null)
+  const [swipeOverlay, setSwipeOverlay] = useState<SwipeOverlaySnapshot | null>(
+    null
+  )
   const [swipePhase, setSwipePhase] = useState<
     'idle' | 'animating' | 'settling'
   >('idle')
   const dragX = useMotionValue(0)
   const panelRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
   const activeSectionCandidate = TAB_SECTIONS.find(
     (section) => section.id === activeTab
   )
@@ -228,8 +292,8 @@ function CategoryShowcase() {
   }
 
   return (
-    <section className="rounded-3xl bg-transparent shadow-sm">
-      <div className="px-6 pb-8 pt-8 md:px-8 md:pt-10 lg:px-12 lg:pt-12">
+    <section className="rounded-3xl bg-transparent shadow-sm overflow-hidden">
+      <div>
         <nav
           className="flex border-b border-slate-200"
           role="tablist"
@@ -249,20 +313,28 @@ function CategoryShowcase() {
                     aria-controls={`${section.id}-panel`}
                     onClick={() => handleTabClick(section.id)}
                     className={cn(
-                      'group relative flex w-full items-center justify-center px-4 py-3 text-center text-sm font-semibold transition-all duration-200 md:text-base',
-                      isActive
-                        ? 'text-orange-600'
-                        : 'text-slate-500 hover:text-orange-600'
+                      'group relative flex w-full items-center justify-center px-2 py-3 text-center text-sm font-semibold transition-all duration-200 md:text-base',
+                      isActive ? 'text-orange-600' : 'text-slate-500',
+                      !isActive && !isMobile && 'hover:text-orange-600'
                     )}
                   >
-                    <span>{section.label}</span>
+                    <span
+                      className={cn(
+                        'whitespace-nowrap leading-none transition-transform duration-200',
+                        isMobile && isActive
+                          ? '-translate-y-1'
+                          : 'translate-y-0',
+                        'md:translate-y-0'
+                      )}
+                    >
+                      {section.label}
+                    </span>
                     <span
                       aria-hidden="true"
                       className={cn(
-                        'pointer-events-none absolute bottom-0 left-0 h-0.5 w-full origin-center transform rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 transition-transform duration-300',
-                        isActive
-                          ? 'scale-x-100'
-                          : 'scale-x-0 group-hover:scale-x-100'
+                        'pointer-events-none absolute left-0 right-0 -bottom-px h-[2px] origin-center transform bg-gradient-to-r from-orange-500 to-yellow-500 transition-transform duration-300',
+                        isActive ? 'scale-x-100' : 'scale-x-0',
+                        !isActive && !isMobile && 'group-hover:scale-x-100'
                       )}
                     />
                   </button>
@@ -280,7 +352,8 @@ function CategoryShowcase() {
             role="tabpanel"
             aria-labelledby={`${activeSection.id}-tab`}
             className={cn(
-              'grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5 transition-opacity',
+              gridLayoutClasses,
+              'transition-opacity',
               swipePhase === 'idle'
                 ? 'opacity-100 duration-150'
                 : 'opacity-0 pointer-events-none duration-0'
@@ -377,54 +450,10 @@ function CategoryShowcase() {
           </motion.div>
 
           {swipeOverlay && (
-            <div
-              className="pointer-events-none absolute inset-0 overflow-hidden"
-              aria-hidden="true"
-            >
-              <motion.div
-                className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5"
-                initial={{ x: swipeOverlay.startX }}
-                animate={{
-                  x:
-                    swipeOverlay.direction === 1
-                      ? -swipeOverlay.width
-                      : swipeOverlay.width,
-                }}
-                transition={{ duration: 0.28, ease: 'easeInOut' }}
-                onAnimationComplete={completeSwipeTransition}
-              >
-                {swipeOverlay.items.map((item) => {
-                  const Icon = item.icon
-                  const accentStyles = ACCENT_STYLES[swipeOverlay.accent]
-
-                  return (
-                    <div key={`overlay-${item.label}`} className="h-full">
-                      <div className={cn(baseCardClasses, accentStyles.card)}>
-                        <span
-                          className={cn(
-                            'flex h-14 w-14 items-center justify-center rounded-2xl transition-transform duration-300',
-                            accentStyles.icon
-                          )}
-                        >
-                          <Icon
-                            className={cn('h-7 w-7', accentStyles.iconContent)}
-                            aria-hidden="true"
-                          />
-                        </span>
-                        <span
-                          className={cn(
-                            'text-sm font-medium leading-tight md:text-base',
-                            accentStyles.text
-                          )}
-                        >
-                          {item.label}
-                        </span>
-                      </div>
-                    </div>
-                  )
-                })}
-              </motion.div>
-            </div>
+            <SwipeOverlayLayer
+              overlay={swipeOverlay}
+              onComplete={completeSwipeTransition}
+            />
           )}
         </div>
       </div>
@@ -435,7 +464,7 @@ function CategoryShowcase() {
 export default function TestComponentsPage() {
   return (
     <div className="min-h-screen bg-slate-100 py-12 md:py-16 lg:py-20">
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <CategoryShowcase />
       </div>
     </div>
