@@ -70,16 +70,17 @@ function SwipeOverlayLayer({
 }: SwipeOverlayLayerProps) {
   return (
     <div
-      className="pointer-events-none absolute inset-0 overflow-hidden"
+      className="pointer-events-none absolute inset-0 overflow-visible"
       aria-hidden="true"
     >
       <motion.div
         className={gridClasses}
-        initial={{ x: overlay.startX }}
+        initial={{ x: overlay.startX, opacity: 1 }}
         animate={{
           x: overlay.direction === 1 ? -overlay.width : overlay.width,
+          opacity: 0,
         }}
-        transition={{ duration: 0.28, ease: 'easeInOut' }}
+        transition={{ duration: 0.36, ease: 'easeInOut' }}
         onAnimationComplete={onComplete}
       >
         {overlay.items.map((item) => {
@@ -321,8 +322,8 @@ export function CategoryShowcase({
 
               animate(dragX, 0, {
                 type: 'spring',
-                stiffness: 300,
-                damping: 30,
+                stiffness: 220,
+                damping: 32,
               })
             }}
           >

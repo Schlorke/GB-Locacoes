@@ -55,6 +55,11 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     como um carrossel.
   - Corrigido o bleed visual após swipe: os botões antigos não aparecem mais na
     nova sessão; somente a animação de entrada é exibida após o painel deslizar.
+- **Category showcase swipe speed**: Desacelerada a transição do overlay e o
+  retorno do painel após gestos de arrastar, além de aplicar fade-out gradual ao
+  bloco em movimento para proporcionar experiência de navegação mais suave e
+  fluida entre as abas.
+  - Ajustes aplicados em `components/category-showcase.tsx`
 - **Arquitetura do swipe overlay**: Camada de overlay extraída para componente
   dedicado e classes de grid compartilhadas por constantes, reduzindo
   duplicações e facilitando evoluções futuras do showcase.
