@@ -10,6 +10,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Página de Teste de Componentes**: Criada rota isolada `/test-components`
+  para experimentos de UI
+  - Inclui novo layout `CategoryShowcaseShell` sem animações para validar
+    estrutura de categorias (sem header original)
+  - Mantém testes separados do restante do site
+  - **Arquivos criados**: `app/test-components/page.tsx`,
+    `components/test/category-showcase-shell.tsx`
 - **Swipe Navigation no TabbedCategoryGrid**: Implementada navegação por gesto
   de arrastar/deslizar nas tabs
   - Swipe horizontal para navegar entre tabs (Categorias, Fases da Obra, Tipo)
@@ -25,12 +32,43 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - UX mobile-first otimizada para touch devices
   - **Arquivo modificado**: `components/tabbed-category-grid.tsx`
 
+### Changed 🔄
+
+- **Category showcase tabs**: Abas agora preenchem toda a largura do fichário e
+  replicam o hover com sublinhado gradiente do header para manter consistência
+  visual.
+  - Ajustes aplicados em `app/test-components/page.tsx`
+- **Category showcase animações**: Itens das categorias agora entram e saem com
+  animações idênticas às utilizadas em `app/equipamentos/page.tsx`, garantindo
+  transições consistentes ao alternar entre abas.
+  - Ajustes aplicados em `app/test-components/page.tsx`
+  - Botões agora mantêm largura e altura uniformes independentemente do
+    conteúdo, garantindo alinhamento consistente em todas as abas.
+  - Suporte a swipe horizontal no mobile: permitir arrastar para mudar de aba
+    como um carrossel.
+  - Corrigido o bleed visual após swipe: os botões antigos não aparecem mais na
+    nova sessão; somente a animação de entrada é exibida após o painel deslizar.
+
+### Removed ❌
+
+- Componente estático legado `CategoryShowcaseStatic` e documentação associada,
+  consolidando os testes apenas em `CategoryShowcaseShell`.
+
 ### Fixed 🐛
 
 - Corrigido scroll involuntário na Home ao carregar a página inicial; a lógica
   de centralização das tabs agora usa `scrollTo` apenas no eixo horizontal sem
   disparar `scrollIntoView`, preservando o posicionamento vertical do layout.
   - Ajustes aplicados em `components/tabbed-category-grid.tsx`
+- Eliminado o flick no showcase de categorias após gestos de swipe: o grid só
+  volta a ser exibido quando a animação do overlay finaliza, garantindo que os
+  cards entrem com o fade escalonado previsto e removendo o ghost dos botões ao
+  desativar instantaneamente o grid base durante a transição.
+  - Ajustes aplicados em `app/test-components/page.tsx`
+- Hover e sombras dos botões do showcase deixam de ser cortados: o `overlay`
+  agora possui um wrapper dedicado com `overflow-hidden`, permitindo que os
+  cards reais mantenham `overflow-visible` durante animações de foco/hover.
+  - Ajustes aplicados em `app/test-components/page.tsx`
 
 ## [2025-11-06] - Interactive Infinite Carousel
 
@@ -2941,3 +2979,9 @@ pnpm icon:convert caminho/para/icone.svg NomeDoIcone
 - **AdminMobileHeader**: Adicionada área de status bar com cor consistente
 - **Layout principal**: Incluídas meta tags para controle do status bar em
   dispositivos móveis
+
+### Changed 🔄
+
+- Atualizado o `CategoryShowcaseShell` para remover o fundo branco, manter o
+  contêiner transparente e habilitar abas funcionais com botões mock exclusivos
+  por sessão, facilitando testes isolados do layout.

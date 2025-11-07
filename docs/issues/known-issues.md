@@ -455,6 +455,154 @@ o componente).
 
 ---
 
+## 4. Flick no Category Showcase após swipe
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-06 **Severidade**: Média (UX impactada)
+**Status**: ✅ Resolvido
+
+#### Descrição
+
+No showcase de categorias disponível em `/test-components`, ao concluir o gesto
+de swipe as novas categorias surgiam imediatamente em estado final, sem as
+animações escalonadas previstas. O usuário percebia um “piscar” rápido no
+instante em que soltava o dedo/mouse, porque o grid da nova aba aparecia em
+opacidade plena antes que os fades individuais começassem.
+
+#### Como Reproduzir
+
+1. Abrir `/test-components` e iniciar um swipe horizontal nas tabs.
+2. Soltar o dedo/mouse antes do overlay terminar de deslizar.
+3. Observar o frame logo após o release: dois conjuntos de botões aparecem
+   simultaneamente (grid novo e overlay antigo), causando flick perceptível.
+
+#### Sintomas
+
+- Conteúdo das tabs carregava instantaneamente assim que o swipe terminava.
+- Os botões ainda executavam animações com delay após o flick, gerando efeito
+  duplo (flash + fade).
+- Problema ocorria apenas em navegação por swipe; clique nas tabs funcionava.
+
+#### Causa Raiz
+
+Durante a animação de swipe, o estado `displayedTabId` era atualizado no mesmo
+frame em que o overlay concluía a transição. Isso fazia com que as animações dos
+cards fossem disparadas enquanto o grid ainda estava oculto
+(`swipePhase === "animating"`). Quando o container voltava para `opacity-100`,
+os cards já haviam atingido `opacity: 1`, causando o flash sem fade.
+
+### ✅ Solução Implementada
+
+#### Arquivos Modificados
+
+1. `app/test-components/page.tsx`
+
+#### Implementação
+
+- Adicionada função `clearSwipeOverlay` e ajustado `commitTabChange` para
+  diferenciar cliques de swipes.
+- Para swipes, o update do grid (estado `displayedTabId` + `transitionKey`)
+  agora acontece apenas no próximo `requestAnimationFrame`, garantindo que o
+  container volte a ser visível no mesmo frame em que os cards são montados.
+- O grid permanece oculto tanto em `"animating"` quanto em `"settling"`,
+  evitando que o novo conteúdo apareça antes do overlay finalizar.
+- A opacidade do grid deixa de utilizar transição durante o swipe, sumindo
+  imediatamente e impedindo que o usuário veja o conteúdo “por trás” dos gaps do
+  overlay.
+
+### 🎯 Resultado
+
+- Zero flick: o grid só reaparece quando o fade-in escalonado está pronto.
+- Navegação por clique mantém comportamento original.
+- Overlay cobre toda a transição, mantendo continuidade visual.
+
+#### Como Validar
+
+1. Abrir `/test-components` e repetir os swipes rápidos em ambas direções.
+2. Usar DevTools → “Slow 4x” opcionalmente para inspecionar frames: nenhum card
+   deve aparecer antes do fade-in.
+3. Confirmar que `swipePhase` retorna para `"idle"` enquanto o grid volta para
+   `opacity-100` sem conteúdos duplicados.
+
+### 📝 Lições Aprendidas
+
+- Ao combinar overlay + grid animado, sincronize montagem dos itens com o frame
+  em que o container volta a ser visível.
+- Usar `requestAnimationFrame` é uma forma simples de alinhar estados visuais
+  quando não há timeline compartilhada.
+
+### ⚠️ Armadilhas a Evitar
+
+- ❌ Não atualizar `displayedTabId` imediatamente em animações baseadas em
+  overlay.
+- ❌ Não limpar o overlay antes do grid estar pronto; isso expõe o frame sem
+  animação.
+
+---
+
+## 5. Hover e sombras cortados no Category Showcase
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-06 **Severidade**: Baixa/Média (perda de
+polimento visual)  
+**Status**: ✅ Resolvido
+
+#### Descrição
+
+Os botões do showcase em `/test-components` eram renderizados dentro de um
+container com `overflow-hidden`. Quando o usuário fazia hover (ou focus) os
+cards cresciam `hover:-translate-y-1` e aplicavam sombra. Porém, as bordas do
+container cortavam tanto o deslocamento quanto o blur, deixando o efeito com
+aparência truncada — principalmente nas colunas externas.
+
+#### Sintomas
+
+- Hover/active não exibiam sombra completa nos cards laterais.
+- Bordas superiores/inferiores também “cortavam” o movimento vertical dos
+  botões.
+- Mais perceptível em `Fases da obra`, quando os cartões têm sombra azul.
+
+#### Causa Raiz
+
+O wrapper que também controla o swipe overlay precisava de `overflow-hidden`
+para evitar que o overlay animado escapasse visualmente. O grid principal,
+entretanto, não precisava dessa restrição. Cada hover é executado dentro do grid
+base, então bastava isolar o `overflow-hidden` apenas no overlay.
+
+### ✅ Solução Implementada
+
+#### Arquivos Modificados
+
+1. `app/test-components/page.tsx`
+
+#### Implementação
+
+- Removido `overflow-hidden` do wrapper do grid.
+- Overlay passou a ficar dentro de um container absoluto (`pointer-events-none`)
+  dedicado, com `overflow-hidden` apenas para ele.
+- Componentes reais permanecem com `overflow-visible`, liberando animações de
+  hover/sombra.
+
+### 🎯 Resultado
+
+- Sombras e deslocamentos funcionam totalmente, inclusive nas extremidades.
+- Overlay continua limitado ao container durante o swipe, sem vazar para fora.
+
+### 📝 Lições Aprendidas
+
+- Ao precisar de `overflow-hidden` por causa de animações temporárias, isole a
+  restrição no elemento animado em vez de aplicá-la ao container que contém o
+  conteúdo interativo.
+
+### ⚠️ Armadilhas a Evitar
+
+- ❌ Aplicar `overflow-hidden` diretamente no grid principal; isso corta hovers.
+- ✅ Manter overlays auxiliares em wrappers dedicados com clipping específico.
+
+---
+
 ## Como Usar Este Documento
 
 ### Para Desenvolvedores
