@@ -61,6 +61,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   espaçamento entre os rótulos, agora movendo apenas o texto para manter o
   alinhamento da linha base e removendo o `hover` persistente em dispositivos
   touch.
+- **Visual do Category Showcase (Hero-ready)**: Cartões e abas adotam o mesmo
+  visual premium do componente da hero, com fundo escuro nos cards, ícones em
+  gradiente laranja com glow apenas em hover, transições focadas em cores/escala
+  e container transparente sem bordas, padding ou clipping das sombras (overflow
+  liberado).
+  - Botões seguem exatamente o set de classes `bg-gradient-to-br`, `h-[120px]`,
+    `rounded-xl`, `shadow-lg`, `hover:shadow-2xl`, `transition-all`, `p-4`,
+    garantindo alinhamento com o layout de referência.
+  - Ajustes aplicados em `app/test-components/page.tsx`
   - Ajustes aplicados em `app/test-components/page.tsx`
 - **Sublinhado das tabs**: A linha gradiente permanece alinhada ao divisor
   inferior mesmo quando a aba está ativa, com offset fino que acompanha a

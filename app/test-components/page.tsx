@@ -96,27 +96,27 @@ const ACCENT_STYLES: Record<
   }
 > = {
   orange: {
-    card: 'bg-white text-slate-900 border border-slate-200 shadow-sm focus-visible:ring-orange-500/60',
-    icon: 'bg-gradient-to-b from-orange-400 to-orange-500 text-white group-hover:scale-105',
+    card: '',
+    icon: '',
     iconContent: 'text-white',
-    text: 'text-slate-900 group-hover:text-orange-600',
+    text: '',
   },
   sky: {
-    card: 'bg-white text-slate-900 border border-slate-200 shadow-sm focus-visible:ring-sky-500/60',
-    icon: 'bg-gradient-to-b from-sky-400 to-sky-500 text-white group-hover:scale-105',
+    card: '',
+    icon: '',
     iconContent: 'text-white',
-    text: 'text-slate-900 group-hover:text-sky-600',
+    text: '',
   },
   emerald: {
-    card: 'bg-white text-slate-900 border border-slate-200 shadow-sm focus-visible:ring-emerald-500/60',
-    icon: 'bg-gradient-to-b from-emerald-400 to-emerald-500 text-white group-hover:scale-105',
+    card: '',
+    icon: '',
     iconContent: 'text-white',
-    text: 'text-slate-900 group-hover:text-emerald-600',
+    text: '',
   },
 }
 
 const baseCardClasses =
-  'group flex w-full h-full min-h-[168px] flex-col items-center justify-center gap-3 rounded-2xl px-4 py-6 text-center transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent hover:-translate-y-1 hover:shadow-lg'
+  'group relative flex flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:shadow-2xl w-full h-[120px]'
 const gridLayoutClasses =
   'grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 lg:grid-cols-5'
 
@@ -158,7 +158,7 @@ function SwipeOverlayLayer({ overlay, onComplete }: SwipeOverlayLayerProps) {
               <div className={cn(baseCardClasses, accentStyles.card)}>
                 <span
                   className={cn(
-                    'flex h-14 w-14 items-center justify-center rounded-2xl transition-transform duration-300',
+                    'relative z-10 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg transition-all duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]',
                     accentStyles.icon
                   )}
                 >
@@ -169,7 +169,7 @@ function SwipeOverlayLayer({ overlay, onComplete }: SwipeOverlayLayerProps) {
                 </span>
                 <span
                   className={cn(
-                    'text-sm font-medium leading-tight md:text-base',
+                    'relative z-10 text-center text-xs font-semibold text-white transition-colors duration-300 group-hover:text-orange-400 line-clamp-2',
                     accentStyles.text
                   )}
                 >
@@ -215,7 +215,6 @@ function CategoryShowcase() {
   if (!displayedSection) {
     return null
   }
-  const accent = ACCENT_STYLES[displayedSection.accent]
 
   const clearSwipeOverlay = () => {
     setSwipeOverlay(null)
@@ -292,14 +291,14 @@ function CategoryShowcase() {
   }
 
   return (
-    <section className="rounded-3xl bg-transparent shadow-sm overflow-hidden">
-      <div>
+    <section className="overflow-visible">
+      <div className="max-w-7xl mx-auto overflow-visible">
         <nav
-          className="flex border-b border-slate-200"
+          className="flex border-b border-slate-200/70"
           role="tablist"
           aria-label="Sessões de categorias de equipamentos"
         >
-          <ul className="flex w-full items-stretch text-sm font-medium text-slate-500 md:text-base">
+          <ul className="flex w-full items-stretch text-sm font-semibold text-slate-500/90 md:text-base">
             {TAB_SECTIONS.map((section) => {
               const isActive = section.id === activeTab
 
@@ -313,9 +312,10 @@ function CategoryShowcase() {
                     aria-controls={`${section.id}-panel`}
                     onClick={() => handleTabClick(section.id)}
                     className={cn(
-                      'group relative flex w-full items-center justify-center px-2 py-3 text-center text-sm font-semibold transition-all duration-200 md:text-base',
-                      isActive ? 'text-orange-600' : 'text-slate-500',
-                      !isActive && !isMobile && 'hover:text-orange-600'
+                      'group relative flex w-full items-center justify-center px-3 py-3 text-center text-sm font-semibold tracking-tight transition-colors duration-200 md:text-base',
+                      isActive
+                        ? 'text-orange-600'
+                        : 'text-slate-500 md:hover:text-orange-600'
                     )}
                   >
                     <span
@@ -344,7 +344,7 @@ function CategoryShowcase() {
           </ul>
         </nav>
 
-        <div className="relative mt-8">
+        <div className="relative mt-8 overflow-visible">
           {/* Mantém o grid oculto até a animação de swipe finalizar para evitar flick */}
           <motion.div
             ref={panelRef}
@@ -419,27 +419,11 @@ function CategoryShowcase() {
                     }}
                     className="h-full"
                   >
-                    <button
-                      type="button"
-                      className={cn(baseCardClasses, accent.card)}
-                    >
-                      <span
-                        className={cn(
-                          'flex h-14 w-14 items-center justify-center rounded-2xl transition-transform duration-300',
-                          accent.icon
-                        )}
-                      >
-                        <Icon
-                          className={cn('h-7 w-7', accent.iconContent)}
-                          aria-hidden="true"
-                        />
-                      </span>
-                      <span
-                        className={cn(
-                          'text-sm font-medium leading-tight md:text-base',
-                          accent.text
-                        )}
-                      >
+                    <button type="button" className={baseCardClasses}>
+                      <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg transition-all duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]">
+                        <Icon size={28} color="white" className="h-7 w-7" />
+                      </div>
+                      <span className="relative z-10 text-center text-xs font-semibold text-white transition-colors duration-300 group-hover:text-orange-400 line-clamp-2">
                         {item.label}
                       </span>
                     </button>
