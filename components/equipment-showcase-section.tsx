@@ -1,5 +1,12 @@
 'use client'
 
+import {
+  CategoryShowcase,
+  type CategoryItem,
+  type TabConfig,
+} from '@/components/category-showcase'
+import { LayoutGroup, motion } from 'framer-motion'
+
 import { EquipmentInfiniteScroll } from '@/components/equipment-infinite-scroll'
 import {
   AndaimeSuspenso,
@@ -13,11 +20,7 @@ import {
   TrabalhoEmAltura,
   Transporte,
 } from '@/components/icons/custom'
-import {
-  CategoryShowcase,
-  type CategoryItem,
-  type TabConfig,
-} from '@/components/category-showcase'
+import RotatingText from '@/components/rotating-text'
 
 // Configuração das tabs e categorias
 const tabsConfig: TabConfig[] = [
@@ -92,8 +95,53 @@ export default function EquipmentShowcaseSection() {
           <div className="order-1 lg:order-2 relative z-20">
             {/* Header com título */}
             <div className="mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
-                Equipamentos e ferramentas para locação
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 leading-tight">
+                <LayoutGroup>
+                  <motion.span className="flex flex-col gap-1" layout>
+                    <motion.span
+                      layout
+                      transition={{
+                        type: 'spring',
+                        damping: 30,
+                        stiffness: 400,
+                      }}
+                      className="flex flex-wrap items-center gap-2"
+                    >
+                      <motion.span
+                        layout
+                        transition={{
+                          type: 'spring',
+                          damping: 30,
+                          stiffness: 400,
+                        }}
+                        className="leading-tight"
+                      >
+                        Tecnologia
+                      </motion.span>
+                      <RotatingText
+                        texts={['sob medida', 'certa', 'eficiente']}
+                        mainClassName="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-orange-500/70 px-2 py-1 text-white md:px-3 md:py-1.5"
+                        splitLevelClassName="inline-flex items-center"
+                        elementLevelClassName="inline-block"
+                        initial={{ y: '100%', opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: '-120%', opacity: 0 }}
+                        staggerDuration={0.05}
+                        staggerFrom="last"
+                        rotationInterval={3200}
+                        transition={{
+                          type: 'spring',
+                          damping: 30,
+                          stiffness: 400,
+                        }}
+                        aria-label="Palavras que descrevem a tecnologia da GB Locações"
+                      />
+                    </motion.span>
+                    <span className="block leading-tight text-slate-900">
+                      para cada fase da sua obra
+                    </span>
+                  </motion.span>
+                </LayoutGroup>
               </h2>
               <p className="text-slate-600 text-base">
                 Escolha por categoria para encontrar o equipamento ideal

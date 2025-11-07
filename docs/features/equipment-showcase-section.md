@@ -21,6 +21,8 @@ equipamentos (EquipmentInfiniteScroll) e o grid de categorias com tabs
   swipe horizontal (direita)
 - ✅ **Sticky Positioning**: Scroll infinito fixo durante rolagem em desktop
 - ✅ **Identidade Visual**: Gradiente slate-50/blue-50 seguindo o projeto
+- ✅ **Título Dinâmico**: Headline com animação `RotatingText` destacando o
+  valor da tecnologia da GB Locações
 
 ### **Funcionalidades**
 
@@ -171,11 +173,58 @@ const handleCategoryClick = (category: CategoryItem) => {
 Seção principal da homepage exibindo equipamentos e categorias de forma
 interativa.
 
-### **2. Landing Pages**
+### **2. Headline com Texto Rotativo**
+
+- Destaque visual com cápsula azul variando entre _sob medida_, _certa_ e
+  _eficiente_.
+- Reforça a proposta de valor “Tecnologia [palavra] para cada fase da sua obra”.
+- Implementação no arquivo `components/equipment-showcase-section.tsx`
+  utilizando o componente `RotatingText`.
+
+```tsx
+import { LayoutGroup, motion } from "framer-motion"
+;<h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 leading-tight">
+  <LayoutGroup>
+    <motion.span className="flex flex-col gap-1" layout>
+      <motion.span
+        layout
+        transition={{ type: "spring", damping: 30, stiffness: 400 }}
+        className="flex flex-wrap items-center gap-2"
+      >
+        <motion.span
+          layout
+          transition={{ type: "spring", damping: 30, stiffness: 400 }}
+          className="leading-tight"
+        >
+          Tecnologia
+        </motion.span>
+        <RotatingText
+          texts={["sob medida", "certa", "eficiente"]}
+          mainClassName="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-orange-500/70 px-2 py-1 text-white md:px-3 md:py-1.5"
+          splitLevelClassName="inline-flex items-center"
+          staggerDuration={0.05}
+          staggerFrom="last"
+          rotationInterval={3200}
+          transition={{ type: "spring", damping: 30, stiffness: 400 }}
+        />
+      </motion.span>
+      <span className="block leading-tight text-slate-900">
+        para cada fase da sua obra
+      </span>
+    </motion.span>
+  </LayoutGroup>
+</h2>
+```
+
+> ℹ️ O componente `RotatingText` fica disponível em
+> `components/rotating-text.tsx` e pode ser reutilizado em outras seções com as
+> mesmas propriedades.
+
+### **3. Landing Pages**
 
 Pode ser reutilizada em landing pages de categorias específicas.
 
-### **3. Páginas de Campanha**
+### **4. Páginas de Campanha**
 
 Ideal para campanhas promocionais mostrando equipamentos em destaque.
 
@@ -230,3 +279,7 @@ Verifique `app/equipamentos/page.tsx` aceita param `categoria`
 
 **Última atualização**: Novembro 2025 **Versão**: 1.0.0 **Autor**: GB-Locações
 Team
+
+```
+
+```

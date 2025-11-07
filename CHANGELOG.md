@@ -10,6 +10,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Componente RotatingText**: Implementado texto rotativo reutilizável com
+  animações do Framer Motion para destacar mensagens principais sem dependências
+  de CSS externo.
+  - Suporte a divisão por caracteres, palavras ou linhas com atraso escalonado.
+  - Métodos imperativos `next`, `previous`, `jumpTo` e `reset` expostos via ref.
+  - Classe utilitária compartilhada (`components/rotating-text.tsx`) pronta para
+    reutilização em outras seções.
 - **Página de Teste de Componentes**: Criada rota isolada `/test-components`
   para experimentos de UI
   - Inclui novo layout `CategoryShowcaseShell` sem animações para validar
@@ -41,6 +48,18 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Equipment showcase headline**: Título principal da seção agora alterna entre
+  “sob medida”, “certa” e “eficiente” utilizando o novo `RotatingText`,
+  replicando o visual referenciado pelo usuário.
+  - Mantém classes responsivas `text-2xl md:text-3xl` com `leading-tight`.
+  - Destaca a palavra dinâmica com cápsula em gradiente refinado
+    (`bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-orange-500/70`) e
+    texto branco (`text-white`) para reforçar a identidade visual. animação
+    suave com `staggerDuration` de 0.05s.
+  - Documentação atualizada em `docs/features/equipment-showcase-section.md`
+    descrevendo o uso do headline animado.
+  - `LayoutGroup` e animações de layout do Framer Motion aplicadas para que o
+    fundo azul se adapte suavemente à largura de cada palavra.
 - **Category showcase tabs**: Abas agora preenchem toda a largura do fichário e
   replicam o hover com sublinhado gradiente do header para manter consistência
   visual.
