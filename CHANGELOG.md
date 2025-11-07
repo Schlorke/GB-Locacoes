@@ -52,10 +52,9 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   “sob medida”, “certa” e “eficiente” utilizando o novo `RotatingText`,
   replicando o visual referenciado pelo usuário.
   - Mantém classes responsivas `text-2xl md:text-3xl` com `leading-tight`.
-  - Destaca a palavra dinâmica com cápsula em gradiente refinado
-    (`bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-orange-500/70`) e
-    texto branco (`text-white`) para reforçar a identidade visual. animação
-    suave com `staggerDuration` de 0.05s.
+  - Destaca a palavra dinâmica com cápsula sólida na cor da paleta
+    (`bg-[#334155]`) e texto branco (`text-white`) para reforçar a identidade
+    visual. animação suave com `staggerDuration` de 0.05s.
   - Documentação atualizada em `docs/features/equipment-showcase-section.md`
     descrevendo o uso do headline animado.
   - `LayoutGroup` e animações de layout do Framer Motion aplicadas para que o

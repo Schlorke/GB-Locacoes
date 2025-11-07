@@ -120,7 +120,7 @@ export default function EquipmentShowcaseSection() {
                       </motion.span>
                       <RotatingText
                         texts={['sob medida', 'certa', 'eficiente']}
-                        mainClassName="inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-slate-900/90 via-slate-800/80 to-orange-500/70 px-2 py-1 text-white md:px-3 md:py-1.5"
+                        mainClassName="inline-flex items-center justify-center rounded-lg bg-[#334155] px-2 py-1 text-white md:px-3 md:py-1.5"
                         splitLevelClassName="inline-flex items-center"
                         elementLevelClassName="inline-block"
                         initial={{ y: '100%', opacity: 0 }}
