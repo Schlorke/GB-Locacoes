@@ -71,6 +71,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     garantindo alinhamento com o layout de referência.
   - Ajustes aplicados em `app/test-components/page.tsx`
   - Ajustes aplicados em `app/test-components/page.tsx`
+- **Category Showcase ícones customizados**: os cards do showcase reutilizam os
+  mesmos SVGs proprietários (`components/icons/custom`) empregados na homepage,
+  eliminando discrepâncias entre o ambiente de teste e o componente oficial.
+  - Ajustes aplicados em `app/test-components/page.tsx`
 - **Sublinhado das tabs**: A linha gradiente permanece alinhada ao divisor
   inferior mesmo quando a aba está ativa, com offset fino que acompanha a
   `border-b` padrão sem criar degrau visual.

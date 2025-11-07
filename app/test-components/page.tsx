@@ -1,19 +1,19 @@
 'use client'
 
 import {
-  Bolt,
-  Building2,
-  Factory,
-  Hammer,
-  Leaf,
-  Package,
-  Plug,
-  Sparkles,
-  Truck,
-  Wrench,
-  type LucideIcon,
-} from 'lucide-react'
-import { useRef, useState } from 'react'
+  AndaimeSuspenso,
+  AndaimeTubular,
+  Betoneira,
+  CadeiraEletrica,
+  Compressor,
+  Lavagem,
+  Rompedor,
+  Terraplenagem,
+  TrabalhoEmAltura,
+  Transporte,
+  type CustomIconProps,
+} from '@/components/icons/custom'
+import { useRef, useState, type ComponentType } from 'react'
 
 import { AnimatePresence, animate, motion, useMotionValue } from 'framer-motion'
 
@@ -21,7 +21,7 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 
 type CategoryItem = {
-  icon: LucideIcon
+  icon: ComponentType<CustomIconProps>
   label: string
 }
 
@@ -38,16 +38,16 @@ const TAB_SECTIONS: TabSection[] = [
     label: 'Categorias',
     accent: 'orange',
     items: [
-      { icon: Package, label: 'Acesso e elevação' },
-      { icon: Building2, label: 'Andaimes' },
-      { icon: Truck, label: 'Compactação' },
-      { icon: Factory, label: 'Concretagem' },
-      { icon: Bolt, label: 'Ferramentas elétricas' },
-      { icon: Hammer, label: 'Furação e demolição' },
-      { icon: Leaf, label: 'Jardinagem' },
-      { icon: Sparkles, label: 'Limpeza' },
-      { icon: Plug, label: 'Motores' },
-      { icon: Wrench, label: 'Outros' },
+      { icon: CadeiraEletrica, label: 'Acesso e elevação' },
+      { icon: AndaimeTubular, label: 'Andaimes' },
+      { icon: Compressor, label: 'Compactação' },
+      { icon: Betoneira, label: 'Concretagem' },
+      { icon: Rompedor, label: 'Ferramentas elétricas' },
+      { icon: Rompedor, label: 'Furação e demolição' },
+      { icon: Lavagem, label: 'Jardinagem' },
+      { icon: Lavagem, label: 'Limpeza' },
+      { icon: Compressor, label: 'Motores' },
+      { icon: Transporte, label: 'Outros' },
     ],
   },
   {
@@ -55,16 +55,16 @@ const TAB_SECTIONS: TabSection[] = [
     label: 'Fases da obra',
     accent: 'sky',
     items: [
-      { icon: Truck, label: 'Pré-obra nivelamento' },
-      { icon: Factory, label: 'Fundação profunda' },
-      { icon: Building2, label: 'Estrutura e formas' },
-      { icon: Hammer, label: 'Alvenaria estrutural' },
-      { icon: Plug, label: 'Instalações elétricas' },
-      { icon: Package, label: 'Instalações hidráulicas' },
-      { icon: Sparkles, label: 'Acabamento fino' },
-      { icon: Leaf, label: 'Paisagismo e entorno' },
-      { icon: Bolt, label: 'Energia temporária' },
-      { icon: Wrench, label: 'Entrega e ajustes finais' },
+      { icon: Terraplenagem, label: 'Pré-obra nivelamento' },
+      { icon: Terraplenagem, label: 'Fundação profunda' },
+      { icon: AndaimeSuspenso, label: 'Estrutura e formas' },
+      { icon: AndaimeTubular, label: 'Alvenaria estrutural' },
+      { icon: Compressor, label: 'Instalações elétricas' },
+      { icon: Lavagem, label: 'Instalações hidráulicas' },
+      { icon: Rompedor, label: 'Acabamento fino' },
+      { icon: Lavagem, label: 'Paisagismo e entorno' },
+      { icon: Compressor, label: 'Energia temporária' },
+      { icon: Transporte, label: 'Entrega e ajustes finais' },
     ],
   },
   {
@@ -72,16 +72,16 @@ const TAB_SECTIONS: TabSection[] = [
     label: 'Tipo de trabalho',
     accent: 'emerald',
     items: [
-      { icon: Hammer, label: 'Demolição controlada' },
-      { icon: Wrench, label: 'Montagem industrial' },
-      { icon: Leaf, label: 'Jardinagem urbana' },
-      { icon: Sparkles, label: 'Limpeza pós-obra' },
-      { icon: Bolt, label: 'Energia emergencial' },
-      { icon: Plug, label: 'Bombas e drenagem' },
-      { icon: Truck, label: 'Transporte interno' },
-      { icon: Package, label: 'Escoramento técnico' },
-      { icon: Factory, label: 'Concretagem contínua' },
-      { icon: Building2, label: 'Reformas estruturais' },
+      { icon: Rompedor, label: 'Demolição controlada' },
+      { icon: AndaimeTubular, label: 'Montagem industrial' },
+      { icon: Lavagem, label: 'Jardinagem urbana' },
+      { icon: Lavagem, label: 'Limpeza pós-obra' },
+      { icon: Compressor, label: 'Energia emergencial' },
+      { icon: Lavagem, label: 'Bombas e drenagem' },
+      { icon: Transporte, label: 'Transporte interno' },
+      { icon: AndaimeSuspenso, label: 'Escoramento técnico' },
+      { icon: Betoneira, label: 'Concretagem contínua' },
+      { icon: TrabalhoEmAltura, label: 'Reformas estruturais' },
     ],
   },
 ]
@@ -163,6 +163,8 @@ function SwipeOverlayLayer({ overlay, onComplete }: SwipeOverlayLayerProps) {
                   )}
                 >
                   <Icon
+                    size={28}
+                    color="white"
                     className={cn('h-7 w-7', accentStyles.iconContent)}
                     aria-hidden="true"
                   />
