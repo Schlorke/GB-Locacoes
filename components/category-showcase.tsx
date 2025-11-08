@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatePresence, animate, motion, useMotionValue } from 'framer-motion'
-import { useMemo, useRef, useState, type ComponentType } from 'react'
+import { useEffect, useMemo, useRef, useState, type ComponentType } from 'react'
 
 import type { CustomIconProps } from '@/components/icons/custom'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -139,7 +139,9 @@ export function CategoryShowcase({
 
   const dragX = useMotionValue(0)
   const panelRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement | null>(null)
   const isMobile = useIsMobile()
+  const [hasRevealed, setHasRevealed] = useState(false)
 
   const gridClasses = useMemo(() => buildGridClasses(gridCols), [gridCols])
 
@@ -147,6 +149,86 @@ export function CategoryShowcase({
     safeTabs.find((tab) => tab.value === activeTab) ?? safeTabs[0]
   const displayedSection =
     safeTabs.find((tab) => tab.value === displayedTabId) ?? activeSection
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const getNavigationType = (): PerformanceNavigationTiming['type'] => {
+      const navigationEntries = performance.getEntriesByType(
+        'navigation'
+      ) as PerformanceNavigationTiming[]
+
+      if (navigationEntries.length > 0 && navigationEntries[0]) {
+        return navigationEntries[0].type
+      }
+
+      const legacyNavigation = performance.navigation
+
+      if (legacyNavigation) {
+        switch (legacyNavigation.type) {
+          case legacyNavigation.TYPE_RELOAD:
+            return 'reload'
+          case legacyNavigation.TYPE_BACK_FORWARD:
+            return 'back_forward'
+          case legacyNavigation.TYPE_RESERVED:
+            return 'navigate'
+          default:
+            return 'navigate'
+        }
+      }
+
+      return 'navigate'
+    }
+
+    const wasInternalClick =
+      window.sessionStorage.getItem('internalNavigation') === 'true'
+    const hasVisitedSite =
+      window.sessionStorage.getItem('hasVisitedSite') === 'true'
+    const navigationType = getNavigationType()
+
+    const isInternalNavigation =
+      wasInternalClick || (navigationType === 'navigate' && hasVisitedSite)
+
+    if (isInternalNavigation) {
+      setHasRevealed(true)
+      return
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      setHasRevealed(true)
+      return
+    }
+
+    const target = sectionRef.current
+
+    if (!target) {
+      setHasRevealed(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setHasRevealed(true)
+            observer.disconnect()
+          }
+        })
+      },
+      {
+        threshold: 0.25,
+        rootMargin: '0px 0px -120px 0px',
+      }
+    )
+
+    observer.observe(target)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   if (!activeSection || !displayedSection) {
     return null
@@ -223,7 +305,7 @@ export function CategoryShowcase({
   }
 
   return (
-    <section className={cn('overflow-visible', className)}>
+    <section ref={sectionRef} className={cn('overflow-visible', className)}>
       <div className="overflow-visible">
         <nav
           className="flex border-b-2 border-slate-200/70"
@@ -289,7 +371,12 @@ export function CategoryShowcase({
                 ? 'opacity-100 duration-150'
                 : 'opacity-0 pointer-events-none duration-0'
             )}
-            style={{ x: dragX }}
+            style={{
+              x: dragX,
+              opacity: hasRevealed && swipePhase === 'idle' ? 1 : 0,
+              pointerEvents:
+                hasRevealed && swipePhase === 'idle' ? 'auto' : 'none',
+            }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.2}
@@ -334,18 +421,25 @@ export function CategoryShowcase({
                   interactionMode === 'click'
                     ? { opacity: 0, y: -20, scale: 0.95 }
                     : { opacity: 0, transition: { duration: 0 } }
+                const entryTransition = hasRevealed
+                  ? {
+                      delay: index * 0.08,
+                      duration: 0.3,
+                      ease: [0.16, 1, 0.3, 1] as const,
+                    }
+                  : { duration: 0 }
 
                 return (
                   <motion.div
                     key={`${displayedSection.value}-${item.id}-${transitionKey}`}
                     initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    animate={
+                      hasRevealed
+                        ? { opacity: 1, y: 0, scale: 1 }
+                        : { opacity: 0, y: 20, scale: 0.95 }
+                    }
                     exit={exitAnimation}
-                    transition={{
-                      delay: index * 0.08,
-                      duration: 0.3,
-                      ease: 'easeOut',
-                    }}
+                    transition={entryTransition}
                     className="h-full"
                   >
                     <button

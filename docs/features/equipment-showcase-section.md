@@ -8,8 +8,8 @@
 
 O `EquipmentShowcaseSection` é uma seção completa que combina dois componentes
 poderosos em um layout responsivo de duas colunas: o scroll infinito de
-equipamentos (EquipmentInfiniteScroll) e o grid de categorias com tabs
--(TabbedCategoryGrid). +(CategoryShowcase).
+equipamentos (`EquipmentInfiniteScroll`) e o grid de categorias com tabs
+(`CategoryShowcase`).
 
 ## 🎯 Características Principais
 
@@ -33,6 +33,12 @@ equipamentos (EquipmentInfiniteScroll) e o grid de categorias com tabs
 - ✅ **3 Tabs Configuradas**: Categorias, Fases da Obra, Tipo de Trabalho
 - ✅ **Swipe Navigation**: Gesto horizontal em dispositivos touch suportado
   nativamente
+- ✅ **Scroll Reveal Inteligente**: Grid de categorias inicia a animação
+  escalonada apenas quando a seção entra em viewport, sincronizando com o
+  sistema global de scroll reveal
+- ✅ **Controle Anti-Flicker**: O painel principal permanece oculto durante as
+  transições (`swipePhase !== 'idle'`), evitando reaparecimento do grid antigo
+  enquanto o overlay em movimento finaliza a troca de sessão
 
 ## 🔧 Uso
 
@@ -150,6 +156,21 @@ const handleCategoryClick = (category: CategoryItem) => {
 - Redireciona para página de equipamentos
 - Filtro aplicado automaticamente via URL param
 
+### **Swipe Navigation e Estados**
+
+- Gestos horizontais são capturados via `drag="x"` no `motion.div`, com limites
+  elásticos (`dragElastic: 0.2`) e thresholds de deslocamento/velocidade
+  (`50px`/`500px`) para troca de sessão.
+- Ao detectar um swipe válido, o componente muda para `swipePhase: 'animating'`,
+  inicia o overlay (`SwipeOverlayLayer`) e força o painel principal a permanecer
+  invisível (`opacity: 0`, `pointer-events: none`) até o término da transição.
+- A função `completeSwipeTransition` restaura `swipePhase: 'idle'`, atualiza o
+  conteúdo exibido (`displayedTabId`) e dispara a animação escalonada dos novos
+  botões apenas após o overlay sair de cena.
+- Esse fluxo evita o bug de “grid duplicado”, garantindo que o painel anterior
+  não reapareça durante a troca de abas, mesmo em dispositivos com animações
+  aceleradas.
+
 ## 📱 Responsividade
 
 ### **Breakpoints**
@@ -265,7 +286,8 @@ Verifique `app/equipamentos/page.tsx` aceita param `categoria`
 ## 🔗 Componentes Utilizados
 
 - **EquipmentInfiniteScroll**: Scroll horizontal infinito de equipamentos
-- **TabbedCategoryGrid**: Tabs com grid de categorias
+- **CategoryShowcase**: Tabs com grid de categorias, swipe, overlay e controle
+  de animações
 - **Custom SVG Icons**: 10 ícones customizados do projeto
 
 ## 🔗 Arquivos Relacionados
@@ -273,7 +295,7 @@ Verifique `app/equipamentos/page.tsx` aceita param `categoria`
 - **Componente**: `components/equipment-showcase-section.tsx`
 - **Homepage Client**: `components/home-page-client.tsx`
 - **Scroll Component**: `components/equipment-infinite-scroll.tsx`
-- **Grid Component**: `components/tabbed-category-grid.tsx`
+- **Grid Component**: `components/category-showcase.tsx`
 
 ---
 

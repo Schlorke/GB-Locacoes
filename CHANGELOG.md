@@ -10,6 +10,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Paginação categorias admin**: Implementada paginação inteligente na página
+  `app/admin/categorias/page.tsx` usando o componente `SmartPagination`,
+  limitando a exibição a 9 categorias por página.
+  - Sincronização automática do estado `currentPage` ao aplicar filtros de
+    busca.
+  - Mantidas as animações `AnimatePresence` e interações mobile com ações
+    contextuais.
+  - Documentação atualizada descrevendo o fluxo completo em
+    `docs/features/admin-system.md` (seção “Gerenciamento de Categorias”).
 - **Componente RotatingText**: Implementado texto rotativo reutilizável com
   animações do Framer Motion para destacar mensagens principais sem dependências
   de CSS externo.
@@ -48,6 +57,8 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Admin system docs**: Seção “Gerenciamento de Categorias” detalha a paginação
+  padrão (9 itens por página) e o uso do `SmartPagination` no painel.
 - **Equipment showcase headline**: Título principal da seção agora alterna entre
   “sob medida”, “certa” e “eficiente” utilizando o novo `RotatingText`,
   replicando o visual referenciado pelo usuário.
@@ -73,6 +84,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     como um carrossel.
   - Corrigido o bleed visual após swipe: os botões antigos não aparecem mais na
     nova sessão; somente a animação de entrada é exibida após o painel deslizar.
+- **Category showcase scroll reveal**: Animação inicial do grid de categorias
+  agora é disparada somente após o usuário visualizar a seção, alinhando o
+  componente com o comportamento global de scroll reveal.
+  - IntersectionObserver interno garante que as animações só iniciem quando o
+    bloco entra em viewport.
+  - Mantida a animação escalonada ao trocar de abas e durante gestos de swipe.
+  - Documentação atualizada em `docs/features/equipment-showcase-section.md`
+    descrevendo o comportamento.
 - **Category showcase swipe speed**: Desacelerada a transição do overlay e o
   retorno do painel após gestos de arrastar, além de aplicar fade-out gradual ao
   bloco em movimento para proporcionar experiência de navegação mais suave e

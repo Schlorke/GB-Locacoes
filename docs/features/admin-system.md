@@ -444,6 +444,57 @@ export function AdminFilterCard({
 
 ---
 
+## 🗂️ Gerenciamento de Categorias
+
+### **Página Admin de Categorias**
+
+A página `app/admin/categorias/page.tsx` segue os padrões de identidade visual
+do painel e agora inclui um fluxo completo para gerenciamento das categorias:
+
+- ✅ **Busca instantânea** com input destacado e ícone `Search`
+- ✅ **Grade responsiva** em
+  `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`
+- ✅ **Ações contextuais** (visualizar, editar, excluir) com botões `ghost`
+- ✅ **Modal moderno** `ModernCategoryModal` para criação e edição
+- ✅ **Visualização detalhada** via `ViewCategoryModal` com preview oficial do
+  badge
+
+### **Paginação Inteligente**
+
+- 📦 Itens por página: `9` (constante `ITEMS_PER_PAGE`)
+- 🔁 Estado controlado com `currentPage` e `SmartPagination`
+- ♿ Controles anteriores/próximos com rótulos acessíveis PT-BR
+- ⚡ Paginador oculta automaticamente quando existe apenas uma página
+
+```tsx
+const ITEMS_PER_PAGE = 9
+const totalPages = Math.ceil(filteredCategories.length / ITEMS_PER_PAGE)
+const effectiveCurrentPage =
+  totalPages > 0 ? Math.min(currentPage, totalPages) : 1
+const paginatedCategories = filteredCategories.slice(
+  (effectiveCurrentPage - 1) * ITEMS_PER_PAGE,
+  effectiveCurrentPage * ITEMS_PER_PAGE
+)
+
+return (
+  <>
+    {/* Grade de categorias */}
+    <SmartPagination
+      currentPage={effectiveCurrentPage}
+      totalPages={totalPages}
+      onPageChange={setCurrentPage}
+    />
+  </>
+)
+```
+
+> ℹ️ O componente `SmartPagination` está disponível em
+> `components/ui/smart-pagination.tsx` e utiliza internamente o sistema de
+> paginação padronizado (`components/ui/pagination.tsx`), garantindo estilos
+> consistentes com hover, foco e labels em português.
+
+---
+
 ## ⚙️ Configurações e Settings
 
 ### **Sistema de Settings**
@@ -701,4 +752,4 @@ export async function requireAdmin(request: NextRequest) {
 
 ---
 
-_Última atualização: dezembro 2024_
+_Última atualização: novembro 2025_

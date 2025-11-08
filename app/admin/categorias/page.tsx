@@ -7,6 +7,7 @@ import {
   type CategoryData,
 } from '@/components/ui/category-modal'
 import { Input } from '@/components/ui/input'
+import { SmartPagination } from '@/components/ui/smart-pagination'
 import { ViewCategoryModal } from '@/components/ui/view-category-modal'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { toast } from 'sonner'
@@ -32,6 +33,8 @@ interface Category {
   bgColor?: string
 }
 
+const ITEMS_PER_PAGE = 9
+
 export default function AdminCategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([])
@@ -42,6 +45,7 @@ export default function AdminCategoriesPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [activeCardId, setActiveCardId] = useState<string | null>(null)
+  const [currentPage, setCurrentPage] = useState(1)
 
   // Novo estado para o ModernCategoryModal
   const [isModernModalOpen, setIsModernModalOpen] = useState(false)
@@ -122,6 +126,24 @@ export default function AdminCategoriesPage() {
     document.addEventListener('click', handleClickOutside)
     return () => document.removeEventListener('click', handleClickOutside)
   }, [isMobile, activeCardId])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchTerm])
+
+  const totalPages = Math.ceil(filteredCategories.length / ITEMS_PER_PAGE)
+  const effectiveCurrentPage =
+    totalPages > 0 ? Math.min(currentPage, totalPages) : 1
+  const startIndex = (effectiveCurrentPage - 1) * ITEMS_PER_PAGE
+  const paginatedCategories = Array.isArray(filteredCategories)
+    ? filteredCategories.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+    : []
+
+  useEffect(() => {
+    if (currentPage !== effectiveCurrentPage) {
+      setCurrentPage(effectiveCurrentPage)
+    }
+  }, [currentPage, effectiveCurrentPage])
 
   // Novas funções para o ModernCategoryModal
   const openNewCategoryModal = () => {
@@ -328,111 +350,118 @@ export default function AdminCategoriesPage() {
               </CardContent>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <AnimatePresence>
-                {filteredCategories.map((category, index) => (
-                  <motion.div
-                    key={category.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="group"
-                    onClick={() => {
-                      if (isMobile) {
-                        setActiveCardId(
-                          activeCardId === category.id ? null : category.id
-                        )
-                      }
-                    }}
-                  >
-                    <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] h-[280px] flex flex-col">
-                      {/* Clean depth layers for category card */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-                      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <AnimatePresence>
+                  {paginatedCategories.map((category, index) => (
+                    <motion.div
+                      key={category.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="group"
+                      onClick={() => {
+                        if (isMobile) {
+                          setActiveCardId(
+                            activeCardId === category.id ? null : category.id
+                          )
+                        }
+                      }}
+                    >
+                      <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] h-[280px] flex flex-col">
+                        {/* Clean depth layers for category card */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
-                      <CardHeader className="relative z-10 pb-3 flex-shrink-0">
-                        <div className="flex flex-col">
-                          <div className="w-full flex justify-center pb-4 pt-0">
-                            {getCategoryBadgePreview(category, 'md', true)}
+                        <CardHeader className="relative z-10 pb-3 flex-shrink-0">
+                          <div className="flex flex-col">
+                            <div className="w-full flex justify-center pb-4 pt-0">
+                              {getCategoryBadgePreview(category, 'md', true)}
+                            </div>
+                            <div className="text-left w-full">
+                              <h3 className="font-semibold text-lg text-gray-900 truncate">
+                                {category.name}
+                              </h3>
+                              <p
+                                className="text-sm text-gray-500 mt-1 line-clamp-4 cursor-default"
+                                title={category.description || 'Sem descrição'}
+                              >
+                                {category.description || 'Sem descrição'}
+                              </p>
+                            </div>
                           </div>
-                          <div className="text-left w-full">
-                            <h3 className="font-semibold text-lg text-gray-900 truncate">
-                              {category.name}
-                            </h3>
-                            <p
-                              className="text-sm text-gray-500 mt-1 line-clamp-4 cursor-default"
-                              title={category.description || 'Sem descrição'}
-                            >
-                              {category.description || 'Sem descrição'}
-                            </p>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="relative z-10 pt-0 flex-1 flex flex-col justify-end">
-                        <div className="space-y-3">
-                          {/* Linha 1: Equipamentos (sempre à esquerda) */}
-                          <div className="flex items-center gap-2 text-sm text-gray-500">
-                            <Package className="w-4 h-4 flex-shrink-0" />
-                            <span className="truncate">
-                              {category._count?.equipments || 0} equipamentos
-                            </span>
-                          </div>
+                        </CardHeader>
+                        <CardContent className="relative z-10 pt-0 flex-1 flex flex-col justify-end">
+                          <div className="space-y-3">
+                            {/* Linha 1: Equipamentos (sempre à esquerda) */}
+                            <div className="flex items-center gap-2 text-sm text-gray-500">
+                              <Package className="w-4 h-4 flex-shrink-0" />
+                              <span className="truncate">
+                                {category._count?.equipments || 0} equipamentos
+                              </span>
+                            </div>
 
-                          {/* Linha 2: Botões de ação (à direita em mobile, à direita em desktop) */}
-                          <div
-                            className={`flex items-center justify-end gap-1 transition-all duration-300 ${
-                              isMobile
-                                ? activeCardId === category.id
-                                  ? 'opacity-100'
-                                  : 'opacity-0'
-                                : 'opacity-0 group-hover:opacity-100'
-                            }`}
-                          >
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                setSelectedCategory(category)
-                              }}
-                              className="admin-action-button view-button flex-shrink-0"
+                            {/* Linha 2: Botões de ação (à direita em mobile, à direita em desktop) */}
+                            <div
+                              className={`flex items-center justify-end gap-1 transition-all duration-300 ${
+                                isMobile
+                                  ? activeCardId === category.id
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                  : 'opacity-0 group-hover:opacity-100'
+                              }`}
                             >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                openEditCategoryModal(category)
-                              }}
-                              className="admin-action-button edit-button flex-shrink-0"
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                deleteCategory(category.id)
-                              }}
-                              disabled={
-                                (category._count?.equipments || 0) > 0 ||
-                                isSubmitting
-                              }
-                              className="admin-action-button delete-button flex-shrink-0 disabled:opacity-50"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  setSelectedCategory(category)
+                                }}
+                                className="admin-action-button view-button flex-shrink-0"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  openEditCategoryModal(category)
+                                }}
+                                className="admin-action-button edit-button flex-shrink-0"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  deleteCategory(category.id)
+                                }}
+                                disabled={
+                                  (category._count?.equipments || 0) > 0 ||
+                                  isSubmitting
+                                }
+                                className="admin-action-button delete-button flex-shrink-0 disabled:opacity-50"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+              <SmartPagination
+                currentPage={effectiveCurrentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
           )}
         </motion.div>
