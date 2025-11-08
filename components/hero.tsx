@@ -82,7 +82,12 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
     router.push(`/equipamentos?search=${encodeURIComponent(query)}`)
   }
 
-  const waveOffsetClasses =
+  const paddingBottomClasses =
+    waveAnimation !== 'none'
+      ? 'pb-12 md:pb-16 lg:pb-20'
+      : 'pb-12 md:pb-16 lg:pb-20'
+
+  const overlayOffsetClasses =
     waveAnimation !== 'none'
       ? 'bottom-12 md:bottom-16 lg:bottom-20'
       : 'bottom-0'
@@ -94,14 +99,14 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
         className={cn(
           'relative text-white overflow-hidden bg-slate-50',
           // padding-bottom para compensar altura da onda
-          waveAnimation !== 'none' ? 'pb-12 md:pb-16 lg:pb-20' : 'pb-0'
+          paddingBottomClasses
         )}
       >
         {!loadingShouldShowWhite && (
           <div
             className={cn(
               'absolute inset-x-0 top-0 pointer-events-none bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800',
-              waveOffsetClasses
+              overlayOffsetClasses
             )}
           />
         )}
@@ -115,7 +120,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
     <section
       className={cn(
         'relative text-white overflow-hidden bg-slate-50',
-        waveAnimation !== 'none' ? 'pb-12 md:pb-16 lg:pb-20' : 'pb-0'
+        paddingBottomClasses
       )}
       role="region"
       aria-roledescription={hasImages ? 'carousel' : undefined}
@@ -127,7 +132,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
           transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
           className={cn(
             'absolute inset-x-0 top-0 pointer-events-none z-0 bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800',
-            waveOffsetClasses
+            overlayOffsetClasses
           )}
         />
       )}
@@ -136,7 +141,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
         <div
           className={cn(
             'absolute inset-x-0 top-0 z-0 pointer-events-none',
-            waveOffsetClasses
+            overlayOffsetClasses
           )}
         >
           <div className="relative h-full overflow-hidden">

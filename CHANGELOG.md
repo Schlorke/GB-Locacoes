@@ -65,6 +65,8 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Fallback laranja agora é renderizado como camada absoluta independente,
     preservando o padding inferior em `bg-slate-50` após o reset das
     configurações e eliminando o flash branco na primeira renderização.
+  - Modo “Sem onda” mantém o mesmo espaçamento inferior das demais variantes,
+    garantindo que os indicadores do carrossel não encostem na seção seguinte.
   - Documentação atualizada em `docs/features/hero-section.md`
   - Indicadores e onda reposicionados para seguir a base do container interno,
     mantendo o wave alinhado ao grid principal.
