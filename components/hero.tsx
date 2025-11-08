@@ -245,32 +245,32 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
             </div>
           </div>
         </div>
+
+        {hasImages && carouselImages.length > 1 && (
+          <div className="absolute bottom-0 -translate-x-1/2 left-1/2 z-10">
+            <div className="flex justify-center space-x-3">
+              {carouselImages.map((_, index) => (
+                <motion.button
+                  key={index}
+                  className={cn(
+                    'h-3 w-3 rounded-full transition-all duration-500',
+                    currentImage === index
+                      ? 'scale-125 bg-orange-500 shadow-lg'
+                      : 'bg-white/60 hover:bg-white/80'
+                  )}
+                  onClick={() => setCurrentImage(index)}
+                  aria-label={`Ir para imagem ${index + 1}`}
+                  whileHover={{ scale: 1.2 }}
+                  whileTap={{ scale: 0.9 }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      {hasImages && carouselImages.length > 1 && (
-        <div className="relative z-10">
-          <div className="flex justify-center space-x-3">
-            {carouselImages.map((_, index) => (
-              <motion.button
-                key={index}
-                className={cn(
-                  'h-3 w-3 rounded-full transition-all duration-500',
-                  currentImage === index
-                    ? 'scale-125 bg-orange-500 shadow-lg'
-                    : 'bg-white/60 hover:bg-white/80'
-                )}
-                onClick={() => setCurrentImage(index)}
-                aria-label={`Ir para imagem ${index + 1}`}
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.9 }}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-
       {waveAnimation !== 'none' && (
-        <div className="pointer-events-none relative z-10 mt-8 md:mt-10 lg:mt-12">
+        <div className="pointer-events-none relative z-10 pt-3">
           <svg
             className="hero-wave relative block md:h-20 w-full"
             viewBox="0 0 1200 120"
