@@ -10,12 +10,12 @@ import { Input } from '@/components/ui/input'
 import { SmartPagination } from '@/components/ui/smart-pagination'
 import { ViewCategoryModal } from '@/components/ui/view-category-modal'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { toast } from 'sonner'
 import { getCategoryBadgePreview } from '@/lib/utils/category-helpers'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
 import { Edit, Eye, Package, Plus, Search, Tag, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 interface Category {
   id: string
