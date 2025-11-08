@@ -57,6 +57,16 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Hero container layout**: Carrossel de fundo, gradiente, indicadores e onda
+  da seção Hero agora respeitam o container padrão
+  `mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8`, eliminando discrepâncias de
+  padding entre as sessões iniciais.
+  - Ajustes aplicados em `components/hero.tsx`
+  - Documentação atualizada em `docs/features/hero-section.md`
+  - Indicadores e onda reposicionados para seguir a base do container interno,
+    mantendo o wave alinhado ao grid principal.
+  - Camada de imagens e overlays agora ocupam 100% da largura da seção, com
+    wrapper `overflow-hidden` para impedir bleed lateral mesmo em tela cheia.
 - **Admin system docs**: Seção “Gerenciamento de Categorias” detalha a paginação
   padrão (9 itens por página) e o uso do `SmartPagination` no painel.
 - **Equipment showcase headline**: Título principal da seção agora alterna entre

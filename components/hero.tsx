@@ -24,6 +24,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
   })
   const [currentImage, setCurrentImage] = useState(0)
   const [isScrollRevealReady, setIsScrollRevealReady] = useState(false)
+  const containerClasses = 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'
 
   // Aguardar scroll-reveal-init estar pronto antes de iniciar animações do flash
   useEffect(() => {
@@ -106,11 +107,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
     <section
       className={cn(
         'relative text-white overflow-hidden',
-        // padding-bottom para compensar altura da onda (h-12 = 48px)
-        // Faz a onda "empurrar" conteúdo sem afetar animações
         waveAnimation !== 'none' ? 'pb-12 md:pb-16 lg:pb-20' : 'pb-0',
-        // Background BRANCO quando há imagens (efeito "abrindo os olhos")
-        // Background LARANJA quando NÃO há imagens (fallback padrão)
         shouldShowWhite
           ? 'bg-slate-50'
           : 'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
@@ -118,16 +115,9 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
       role="region"
       aria-roledescription={hasImages ? 'carousel' : undefined}
     >
-      {/* CONDICIONAL: Carrossel de fundo - só renderiza se houver imagens */}
       {hasImages && (
-        <>
-          <div className="absolute inset-0 z-0">
-            {/*
-              Transição SUAVE com animação inicial
-              - initial={true} permite fade-in no primeiro carregamento
-              - Cria efeito de "abrindo os olhos" ao carregar a página
-              - Uma imagem desaparece enquanto outra aparece (SEM flash branco)
-            */}
+        <div className="absolute inset-x-0 top-0 bottom-12 md:bottom-16 lg:bottom-20 z-0 pointer-events-none">
+          <div className="relative h-full overflow-hidden">
             <AnimatePresence initial={false}>
               <motion.div
                 key={currentImage}
@@ -148,7 +138,6 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
               </motion.div>
             </AnimatePresence>
 
-            {/* Overlay gradiente - anima JUNTO com a primeira imagem (sem flash cinza) */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
@@ -156,33 +145,132 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
               className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-900/30 to-black/20"
             />
           </div>
-
-          {/* Indicadores do carrossel */}
-          {carouselImages.length > 1 && (
-            <div className="absolute bottom-12 md:bottom-20 left-1/2 z-20 flex -translate-x-1/2 transform space-x-3">
-              {carouselImages.map((_, index) => (
-                <motion.button
-                  key={index}
-                  className={cn(
-                    'h-3 w-3 rounded-full transition-all duration-500',
-                    currentImage === index
-                      ? 'scale-125 bg-orange-500 shadow-lg'
-                      : 'bg-white/60 hover:bg-white/80'
-                  )}
-                  onClick={() => setCurrentImage(index)}
-                  aria-label={`Ir para imagem ${index + 1}`}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                />
-              ))}
-            </div>
-          )}
-        </>
+        </div>
       )}
 
-      {/* Efeito ondulado no final do carrossel - baseado em waveAnimation */}
+      <div className={cn(containerClasses, 'relative z-10 w-full py-14')}>
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+          <div className="space-y-6">
+            <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold leading-tight opacity-0">
+              Locação de Equipamentos para{' '}
+              <span className="text-yellow-300 relative">
+                Construção Civil
+                <div className="absolute -bottom-2 left-0 w-full h-1 bg-yellow-300 rounded-full transform scale-x-0 animate-scale-x"></div>
+              </span>
+            </h1>
+            <p className="hero-subtitle text-lg md:text-xl leading-relaxed opacity-0">
+              {settings.aboutUsText ||
+                'Há 10 anos oferecendo soluções em locação de equipamentos para obras e serviços em altura. Segurança, qualidade e manutenção constante.'}
+            </p>
+            <div className="hero-search bg-white rounded-2xl p-2 max-w-md border border-white/20 transition-all duration-300 relative z-[9998] opacity-0">
+              <Autocomplete
+                placeholder="Buscar equipamentos (ex: andaime, betoneira)"
+                onSelect={handleEquipmentSelect}
+                onSearch={handleSearch}
+                className="w-full"
+              />
+            </div>
+            <div className="hero-buttons flex flex-col sm:flex-row gap-4 opacity-0">
+              <Link
+                href="/equipamentos"
+                className="inline-flex items-center justify-center hover:bg-yellow-600 gap-2 px-6 h-12 bg-yellow-500 hover:text-white text-gray-900 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group text-sm"
+              >
+                Ver Catálogo de Equipamentos
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                href="/orcamento"
+                className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-white text-sm"
+              >
+                <Play className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                Solicitar Orçamento
+              </Link>
+            </div>
+            <div className="hero-contact flex flex-col sm:flex-row gap-4 pt-4 text-orange-100 opacity-0">
+              <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
+                <Phone className="h-5 w-5 group-hover:animate-bounce" />
+                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                  <div className="sm:hidden">
+                    <a
+                      href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
+                      className="hover:underline"
+                    >
+                      {settings.whatsappNumber}
+                    </a>
+                  </div>
+                  <div className="hidden sm:flex sm:items-center sm:gap-2">
+                    <a
+                      href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
+                      className="hover:underline"
+                    >
+                      {settings.companyPhone}
+                    </a>
+                    <span>|</span>
+                    <a
+                      href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
+                      className="hover:underline"
+                    >
+                      {settings.whatsappNumber}
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
+                <MapPin className="h-5 w-5 group-hover:animate-pulse" />
+                <span>Entregamos em toda região</span>
+              </div>
+            </div>
+          </div>
+          <div className="hero-image relative opacity-0 px-4">
+            <div className="relative group bg-transparent">
+              <Image
+                src="/placeholder.svg?height=500&width=600"
+                alt="Equipamentos de construção civil para locação - andaimes suspensos e cadeiras elétricas"
+                width={600}
+                height={500}
+                priority
+                className="rounded-2xl shadow-2xl w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="text-2xl font-bold animate-count-up">+200</div>
+                <div className="text-sm font-medium">
+                  Equipamentos Disponíveis
+                </div>
+              </div>
+              <div className="hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+                <div className="text-2xl font-bold">10+</div>
+                <div className="text-sm font-medium">Anos de Experiência</div>
+              </div>
+              <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-600"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {hasImages && carouselImages.length > 1 && (
+        <div className="relative z-10">
+          <div className="flex justify-center space-x-3">
+            {carouselImages.map((_, index) => (
+              <motion.button
+                key={index}
+                className={cn(
+                  'h-3 w-3 rounded-full transition-all duration-500',
+                  currentImage === index
+                    ? 'scale-125 bg-orange-500 shadow-lg'
+                    : 'bg-white/60 hover:bg-white/80'
+                )}
+                onClick={() => setCurrentImage(index)}
+                aria-label={`Ir para imagem ${index + 1}`}
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       {waveAnimation !== 'none' && (
-        <div className="absolute bottom-0 left-0 z-20 w-full overflow-hidden leading-none">
+        <div className="pointer-events-none relative z-10 mt-8 md:mt-10 lg:mt-12">
           <svg
             className="hero-wave relative block md:h-20 w-full"
             viewBox="0 0 1200 120"
@@ -191,7 +279,6 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
             style={{ opacity: 0, transform: 'translateY(20px)' }}
           >
             {waveAnimation === 'animated' ? (
-              // Paths ANIMADOS com motion.path
               <>
                 <motion.path
                   d="M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z"
@@ -247,7 +334,6 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
                 />
               </>
             ) : (
-              // Paths ESTÁTICOS sem animação
               <>
                 <path
                   d="M0,120V73.71c47.79,-22.2,103.59,-32.17,158,-28,70.36,5.37,136.33,33.31,206.8,37.5C438.64,87.57,512.34,66.33,583,47.95c69.27,-18,138.3,-24.88,209.4,-13.08,36.15,6,69.85,17.84,104.45,29.34C989.49,95,1113,134.29,1200,67.53V120Z"
@@ -268,113 +354,6 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
           </svg>
         </div>
       )}
-
-      {/* Container de conteúdo - MANTIDO INTACTO */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 relative z-10 w-full">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
-          <div className="space-y-6">
-            <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold leading-tight opacity-0">
-              Locação de Equipamentos para{' '}
-              <span className="text-yellow-300 relative">
-                Construção Civil
-                <div className="absolute -bottom-2 left-0 w-full h-1 bg-yellow-300 rounded-full transform scale-x-0 animate-scale-x"></div>
-              </span>
-            </h1>
-            <p className="hero-subtitle text-lg md:text-xl leading-relaxed opacity-0">
-              {settings.aboutUsText ||
-                'Há 10 anos oferecendo soluções em locação de equipamentos para obras e serviços em altura. Segurança, qualidade e manutenção constante.'}
-            </p>
-            {/* Animated Search Bar with Autocomplete */}
-            <div className="hero-search bg-white rounded-2xl p-2 max-w-md border border-white/20 transition-all duration-300 relative z-[9998] opacity-0">
-              <Autocomplete
-                placeholder="Buscar equipamentos (ex: andaime, betoneira)"
-                onSelect={handleEquipmentSelect}
-                onSearch={handleSearch}
-                className="w-full"
-              />
-            </div>
-            {/* Hero Buttons - Tamanho reduzido */}
-            <div className="hero-buttons flex flex-col sm:flex-row gap-4 opacity-0">
-              {/* Botão Ver Catálogo - Altura padronizada */}
-              <Link
-                href="/equipamentos"
-                className="inline-flex items-center justify-center hover:bg-yellow-600 gap-2 px-6 h-12 bg-yellow-500 hover:text-white text-gray-900 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group text-sm"
-              >
-                Ver Catálogo de Equipamentos
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              {/* Botão Solicitar Orçamento - Altura padronizada */}
-              <Link
-                href="/orcamento"
-                className="inline-flex items-center justify-center gap-2 px-6 h-12 bg-white hover:bg-gray-50 text-gray-900 hover:text-orange-600 font-semibold rounded-xl hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl group border-2 border-white text-sm"
-              >
-                <Play className="h-4 w-4 group-hover:scale-110 transition-transform" />
-                Solicitar Orçamento
-              </Link>
-            </div>
-            {/* Contact Info with animations */}
-            <div className="hero-contact flex flex-col sm:flex-row gap-4 pt-4 text-orange-100 opacity-0">
-              <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
-                <Phone className="h-5 w-5 group-hover:animate-bounce" />
-                <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                  <div className="sm:hidden">
-                    <a
-                      href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
-                      className="hover:underline"
-                    >
-                      {settings.whatsappNumber}
-                    </a>
-                  </div>
-                  <div className="hidden sm:flex sm:items-center sm:gap-2">
-                    <a
-                      href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
-                      className="hover:underline"
-                    >
-                      {settings.companyPhone}
-                    </a>
-                    <span>|</span>
-                    <a
-                      href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
-                      className="hover:underline"
-                    >
-                      {settings.whatsappNumber}
-                    </a>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
-                <MapPin className="h-5 w-5 group-hover:animate-pulse" />
-                <span>Entregamos em toda região</span>
-              </div>
-            </div>
-          </div>
-          <div className="hero-image relative opacity-0 px-4">
-            <div className="relative group bg-transparent">
-              <Image
-                src="/placeholder.svg?height=500&width=600"
-                alt="Equipamentos de construção civil para locação - andaimes suspensos e cadeiras elétricas"
-                width={600}
-                height={500}
-                priority
-                className="rounded-2xl shadow-2xl w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
-              />
-              {/* Floating Stats - Ocultos no mobile */}
-              <div className="hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div className="text-2xl font-bold animate-count-up">+200</div>
-                <div className="text-sm font-medium">
-                  Equipamentos Disponíveis
-                </div>
-              </div>
-              <div className="hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div className="text-2xl font-bold">10+</div>
-                <div className="text-sm font-medium">Anos de Experiência</div>
-              </div>
-              {/* Decorative elements */}
-              <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-600"></div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
   )
 }
