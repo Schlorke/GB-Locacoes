@@ -82,22 +82,30 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
     router.push(`/equipamentos?search=${encodeURIComponent(query)}`)
   }
 
+  const waveOffsetClasses =
+    waveAnimation !== 'none'
+      ? 'bottom-12 md:bottom-16 lg:bottom-20'
+      : 'bottom-0'
+
   // Durante loading, usa background previsto a partir de dados iniciais
   if (isLoading) {
     return (
       <section
         className={cn(
-          'relative text-white overflow-hidden',
-          // padding-bottom para compensar altura da onda (h-12 = 48px)
-          // Faz a onda "empurrar" conteúdo sem afetar animações
-          waveAnimation !== 'none' ? 'pb-12 md:pb-16 lg:pb-20' : 'pb-0',
-          // Background BRANCO quando há imagens (efeito "abrindo os olhos")
-          // Background LARANJA quando NÃO há imagens (fallback padrão)
-          loadingShouldShowWhite
-            ? 'bg-slate-50'
-            : 'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
+          'relative text-white overflow-hidden bg-slate-50',
+          // padding-bottom para compensar altura da onda
+          waveAnimation !== 'none' ? 'pb-12 md:pb-16 lg:pb-20' : 'pb-0'
         )}
       >
+        {!loadingShouldShowWhite && (
+          <div
+            className={cn(
+              'absolute inset-x-0 top-0 pointer-events-none bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800',
+              waveOffsetClasses
+            )}
+          />
+        )}
+
         {/* Loading silencioso - aguarda settings carregarem */}
       </section>
     )
@@ -106,17 +114,31 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
   return (
     <section
       className={cn(
-        'relative text-white overflow-hidden',
-        waveAnimation !== 'none' ? 'pb-12 md:pb-16 lg:pb-20' : 'pb-0',
-        shouldShowWhite
-          ? 'bg-slate-50'
-          : 'bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800'
+        'relative text-white overflow-hidden bg-slate-50',
+        waveAnimation !== 'none' ? 'pb-12 md:pb-16 lg:pb-20' : 'pb-0'
       )}
       role="region"
       aria-roledescription={hasImages ? 'carousel' : undefined}
     >
+      {!shouldShowWhite && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
+          className={cn(
+            'absolute inset-x-0 top-0 pointer-events-none z-0 bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800',
+            waveOffsetClasses
+          )}
+        />
+      )}
+
       {hasImages && (
-        <div className="absolute inset-x-0 top-0 bottom-12 md:bottom-16 lg:bottom-20 z-0 pointer-events-none">
+        <div
+          className={cn(
+            'absolute inset-x-0 top-0 z-0 pointer-events-none',
+            waveOffsetClasses
+          )}
+        >
           <div className="relative h-full overflow-hidden">
             <AnimatePresence initial={false}>
               <motion.div

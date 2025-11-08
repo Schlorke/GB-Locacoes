@@ -62,6 +62,9 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   `mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8`, eliminando discrepâncias de
   padding entre as sessões iniciais.
   - Ajustes aplicados em `components/hero.tsx`
+  - Fallback laranja agora é renderizado como camada absoluta independente,
+    preservando o padding inferior em `bg-slate-50` após o reset das
+    configurações e eliminando o flash branco na primeira renderização.
   - Documentação atualizada em `docs/features/hero-section.md`
   - Indicadores e onda reposicionados para seguir a base do container interno,
     mantendo o wave alinhado ao grid principal.
