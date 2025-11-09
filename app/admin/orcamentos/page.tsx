@@ -10,12 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
@@ -492,22 +486,38 @@ function AdminQuotesPage() {
         </motion.div>
 
         {/* Modal de Detalhes */}
-        <Dialog
-          open={!!selectedQuote}
-          onOpenChange={() => setSelectedQuote(null)}
-        >
-          <DialogContent className="max-w-4xl max-h-[90vh] p-0 overflow-hidden">
-            <DialogHeader className="p-6 border-b border-gray-100 flex-shrink-0">
-              <DialogTitle className="flex items-center gap-3 text-xl">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-semibold text-sm">
-                  {selectedQuote?.name?.charAt(0).toUpperCase()}
+        {selectedQuote && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center px-2 py-6 sm:px-6"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Detalhes do orçamento ${selectedQuote.name}`}
+          >
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setSelectedQuote(null)}
+              aria-hidden="true"
+            />
+            <Card className="relative z-10 flex max-h-[90vh] w-full max-w-4xl flex-col">
+              <CardHeader className="flex items-center gap-3 border-b border-gray-100 p-6">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white text-sm font-semibold">
+                  {selectedQuote.name?.charAt(0).toUpperCase()}
                 </div>
-                Detalhes do Orçamento - {selectedQuote?.name}
-              </DialogTitle>
-            </DialogHeader>
+                <CardTitle className="text-xl font-semibold text-gray-800">
+                  Detalhes do Orçamento - {selectedQuote.name}
+                </CardTitle>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="ml-auto rounded-full text-gray-500 hover:text-gray-700"
+                  onClick={() => setSelectedQuote(null)}
+                  aria-label="Fechar detalhes do orçamento"
+                >
+                  <XCircle className="h-5 w-5" />
+                </Button>
+              </CardHeader>
 
-            <ScrollArea className="flex-1 min-h-0 p-6">
-              {selectedQuote && (
+              <ScrollArea className="flex-1 min-h-0 p-6">
                 <div className="space-y-6">
                   {/* Informações do Cliente */}
                   <Card className="border-l-4 border-l-blue-500">
@@ -634,7 +644,7 @@ function AdminQuotesPage() {
                                   {equipment.name}
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                  Quantidade: {equipment.quantity} ÔÇó{' '}
+                                  Quantidade: {equipment.quantity} -{' '}
                                   {formatCurrency(equipment.dailyPrice)}/dia
                                 </div>
                               </div>
@@ -715,10 +725,10 @@ function AdminQuotesPage() {
                     </Card>
                   )}
                 </div>
-              )}
-            </ScrollArea>
-          </DialogContent>
-        </Dialog>
+              </ScrollArea>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   )

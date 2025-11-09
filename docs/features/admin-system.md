@@ -448,19 +448,12 @@ export function AdminFilterCard({
 
 ### **Página Admin de Categorias**
 
-A página `app/admin/categorias/page.tsx` segue os padrões de identidade visual
-do painel e agora inclui um fluxo completo para gerenciamento das categorias:
-
-- ✅ **Busca instantânea** com input destacado e ícone `Search`
-- ✅ **Grade responsiva** em
-  `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`
-- ✅ **Ações contextuais** (visualizar, editar, excluir) com botões `ghost`
-- ✅ **Modal moderno** `ModernCategoryModal` para criação e edição
-- ✅ **Preview com tabs reais**: dentro do `ModernCategoryModal`, a seção de
-  preview usa o `CategoryShowcase` com as abas "Fases da obra" e "Tipo de
-  trabalho", mantendo os botões "Editar" e "Resetar" lado a lado e agora com
-  largura controlada via `cardClassName="!w-auto"` para respeitar apenas o
-  padding interno do card.
+O fluxo legado de categorias foi temporariamente desativado enquanto o novo
+componente de dialog unificado é desenvolvido. A página
+`app/admin/categorias/page.tsx` permanece acessível, mas exibe um aviso de
+manutenção até que o novo modal entre em produção. Quando o componente estiver
+estável, esta seção voltará a oferecer busca, grade responsiva e ações
+contextuais construídas sobre a nova base.
 
 ### **Paginação Inteligente**
 

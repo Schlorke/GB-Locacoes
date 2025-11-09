@@ -1,8 +1,12 @@
 # 📋 Análise de Erros - Implementação de Scroll em Modais
 
-> **Data**: Janeiro 2025  
-> **Contexto**: Correção de problemas de scroll em modais administrativos  
-> **Arquivos Afetados**: `app/admin/equipamentos/page.tsx`,
+> **Atualização (nov/2025)**: Os modais administrativos descritos neste
+> relatório foram removidos. O novo componente baseado em Base UI está sendo
+> desenvolvido em `app/playground/page.tsx` (ver `docs/features/dialog-lab.md`).
+> Este documento permanece como histórico das dores que motivaram a migração.
+
+> **Data**: Janeiro 2025 **Contexto**: Correção de problemas de scroll em modais
+> administrativos **Arquivos Afetados**: `app/admin/equipamentos/page.tsx`,
 > `app/admin/categorias/page.tsx`
 
 ## 🚨 **Erros Cometidos e Lições Aprendidas**
@@ -197,6 +201,5 @@ describe("Modal Scroll Behavior", () => {
 
 ---
 
-**📝 Documentado em**: Janeiro 2025  
-**🔗 Relacionado**: Modal scroll implementation, Radix UI limitations, CSS
-overflow behavior
+**📝 Documentado em**: Janeiro 2025 **🔗 Relacionado**: Modal scroll
+implementation, Radix UI limitations, CSS overflow behavior

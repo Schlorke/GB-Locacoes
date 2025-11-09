@@ -25,6 +25,24 @@
    - Economiza tempo e mantém soluções consistentes
    - Documente novos bugs resolvidos neste arquivo
 
+### 🟠 Dialogs aninhadas (Base UI)
+
+- Sempre que um botão interno de uma dialog precisar abrir outra dialog (ex.:
+  **Editar**, **Customizar**, **Configurar**), utilize o padrão oficial
+  documentado em `docs/features/dialog-lab.md` e implementado em
+  `app/playground/page.tsx`.
+- Reaproveite as classes globais:
+  - `BACKDROP_CLASSES`:
+    `"fixed inset-0 z-[9998] min-h-dvh bg-black/60 transition-all duration-150 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 supports-[-webkit-touch-callout:none]:absolute dark:bg-black/70"`
+  - `POPUP_CLASSES`:
+    `"fixed top-[calc(50%+1.25rem*var(--nested-dialogs))] left-1/2 z-[9999] -mt-8 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))] rounded-lg bg-gray-50 p-6 text-gray-900 outline outline-1 outline-gray-200 transition-all duração-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[nested-dialog-open]:after:absolute data-[nested-dialog-open]:after:inset-0 data-[nested-dialog-open]:after:rounded-[inherit] data-[nested-dialog-open]:after:bg-black/5"`
+- Esses utilitários dependem dos atributos `data-nested` e `--nested-dialogs`
+  gerados pelo Base UI para animar a sobreposição corretamente; não modifique as
+  classes sem validar contra o playground.
+- Mantenha o bloqueio de scroll global (`overflow-hidden` em `<html>` e
+  `<body>`) enquanto qualquer dialog estiver aberta, garantindo que camadas
+  adicionais não quebrem a experiência.
+
 ### **📝 PROTOCOLO DE DOCUMENTAÇÃO PROATIVA (OBRIGATÓRIO)**
 
 #### **🎯 REGRA FUNDAMENTAL**

@@ -10,6 +10,16 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Dialog Lab (Base UI)**: Instalado laboratório dedicado em
+  `app/playground/page.tsx` com demonstrações (`EquipmentDialogDemo`,
+  `NestedDialogDemo`) utilizando `@base-ui-components/react/dialog` para validar
+  backdrop, popup, scroll controlado e CTAs padronizados. Detalhes completos em
+  `docs/features/dialog-lab.md`.
+- **Category Dialog**: Criado componente reutilizável em
+  `components/admin/category-dialog.tsx` suportando modos de criação e edição,
+  com preview, conteúdo scrollável e footer padronizado. Playground atualizado
+  (`app/playground/page.tsx`) e página admin de categorias exibindo ambos os
+  fluxos para validação visual.
 - **Paginação categorias admin**: Implementada paginação inteligente na página
   `app/admin/categorias/page.tsx` usando o componente `SmartPagination`,
   limitando a exibição a 9 categorias por página.
@@ -57,6 +67,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Admin Equipments preview**: Substituído o modal Radix por overlay temporário
+  alinhado ao layout do Dialog Lab, mantendo scroll controlado, animações e CTAs
+  enquanto o novo componente compartilhado não entra em produção
+  (`app/admin/equipamentos/page.tsx`).
+- **Admin Categorias**: Página exibe aviso de manutenção até que o novo dialog
+  seja integrado; fluxo permanece documentado para reintegração futura
+  (`app/admin/categorias/page.tsx`, `docs/features/admin-system.md`).
 - **Equipment showcase spacing**: A seção `EquipmentShowcaseSection` agora usa
   variáveis CSS para compensar o `pb-16` exigido pelo componente interno de
   scroll infinito, preservando o ritmo vertical padrão das demais seções
@@ -166,6 +183,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Removed ❌
 
+- **Componentes de modal legados**: Eliminados o wrapper custom de dialog,
+  modais especializados de categorias/visualização, command palette e
+  `components/ui/popover.tsx`, abrindo espaço para o novo componente único
+  baseado em Base UI.
 - Componente estático legado `CategoryShowcaseStatic` e documentação associada,
   consolidando os testes apenas em `CategoryShowcaseShell`.
 - Rota experimental `/test-components` e pasta auxiliar, centralizando os testes
@@ -173,6 +194,21 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- Ajustado o cabeçalho do fluxo "Nova Categoria" no Dialog Lab para impedir o
+  bleed lateral dentro do popup, reaplicar o layout responsivo da modal original
+  (`w-[calc(100vw-0.8rem)] max-w-lg max-h-[90dvh] md:max-h-[85dvh] top-[calc(54%+2.25rem*var(--nested-dialogs))] md:top-[calc(50%+1.25rem*var(--nested-dialogs))]`)
+  e o espaçamento padrão (`px-4 sm:px-6 lg:px-8`), garantindo header/footer
+  isolados e fixos com área central scrollável e alinhando o botão de fechar ao
+  padrão oficial sem aninhar `<button>` (evitando erros de hidratação) em
+  `app/playground/page.tsx`.
+- **Dialog Lab form fields**: Inputs e textarea do fluxo "Criar/Editar
+  Categoria" deixam de ser cortados nas laterais do popup; as seções internas
+  agora usam `overflow-visible` para sobrescrever o estilo global que aplica
+  `overflow-x: hidden` a `<section>`, preservando bordas e focus rings durante
+  as animações de scale (`app/playground/page.tsx`).
+- Corrigido o import do hook `useMemo` em
+  `components/admin/category-dialog.tsx`, eliminando o erro `no-undef` apontado
+  pelo ESLint ao preparar o diálogo padrão de categorias.
 - Resolvida sobreposição do gradiente do carrossel de equipamentos sobre o grid
   de categorias; a coluna das tabs agora possui contexto próprio de empilhamento
   e o carrossel mantém o fade dentro do seu container.

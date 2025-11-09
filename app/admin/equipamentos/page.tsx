@@ -4,13 +4,6 @@ import { AdminFilterCard } from '@/components/admin/admin-filter-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import { HybridTooltip } from '@/components/ui/HybridTooltip'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { SmartPagination } from '@/components/ui/smart-pagination'
@@ -642,374 +635,369 @@ export default function AdminEquipmentsPage() {
           </motion.div>
         )}
 
-        {/* Modal de Preview do Equipamento */}
-        <Dialog
-          open={!!selectedEquipment}
-          onOpenChange={() => setSelectedEquipment(null)}
-        >
-          <DialogContent
-            closeButtonClassName="hover:bg-white"
-            className="w-[calc(100vw-0.8rem)] max-w-lg p-0 gap-0 bg-white border-0 shadow-2xl rounded-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed !left-[50%] !top-[54%] md:!top-[50%] z-50 flex flex-col !translate-x-[-50%] !translate-y-[-50%] h-[80vh] max-h-[80vh] md:h-[71vh] md:max-h-[71vh] overflow-hiddenpn"
-            style={{
-              height: '80vh',
-              maxHeight: '80vh',
-            }}
+        {/* Overlay de Preview do Equipamento */}
+        {selectedEquipment && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center px-2 py-6 sm:px-6"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Visualizar equipamento selecionado"
           >
-            <DialogHeader className="p-6 border-b border-gray-100 bg-white rounded-t-lg flex-shrink-0">
-              <DialogTitle className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 rounded-lg flex items-center justify-center text-white shadow-sm">
-                  <Eye className="w-4 h-4" />
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setSelectedEquipment(null)}
+              aria-hidden="true"
+            />
+            <div className="relative z-10 flex w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+              <header className="flex items-center gap-3 border-b border-gray-100 bg-white px-6 py-5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-slate-600 to-slate-700 text-white shadow-sm">
+                  <Eye className="h-4 w-4" />
                 </div>
-                Visualizar Equipamento
-              </DialogTitle>
-            </DialogHeader>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Visualizar Equipamento
+                </h2>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="ml-auto rounded-full text-gray-500 hover:text-gray-700"
+                  onClick={() => setSelectedEquipment(null)}
+                  aria-label="Fechar visualização"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </header>
 
-            <ScrollArea
-              className="flex-1 min-h-0"
-              style={{ maxHeight: 'calc(80vh - 120px)' }}
-            >
-              <div className="p-6 space-y-6 xs:p-4 xs:space-y-4 w-full max-w-full">
-                {selectedEquipment && (
-                  <>
-                    {/* Preview do Equipamento com Carrossel */}
-                    <div className="bg-white rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-3 xs:rounded-md">
-                      <div className="flex items-center justify-between mb-4 w-full">
-                        <div className="flex items-center gap-2">
-                          <h3 className="text-sm font-semibold text-slate-700">
-                            Preview do Equipamento
-                          </h3>
-                          <HybridTooltip
-                            content={
-                              <div className="max-w-xs leading-relaxed">
-                                <span className="inline-flex items-start gap-1">
-                                  <span>💡</span>
-                                  <span>
-                                    <strong className="font-semibold">
-                                      Background Padrão:
-                                    </strong>{' '}
-                                    Quando nenhuma imagem estiver configurada, o
-                                    fundo laranja atual será exibido
-                                    automaticamente.
-                                  </span>
+              <ScrollArea
+                className="flex-1 min-h-0"
+                style={{ maxHeight: 'calc(80vh - 120px)' }}
+              >
+                <div className="w-full max-w-full space-y-6 p-6 xs:space-y-4 xs:p-4">
+                  {/* Preview do Equipamento com Carrossel */}
+                  <div className="bg-white rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-3 xs:rounded-md">
+                    <div className="flex items-center justify-between mb-4 w-full">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-sm font-semibold text-slate-700">
+                          Preview do Equipamento
+                        </h3>
+                        <HybridTooltip
+                          content={
+                            <div className="max-w-xs leading-relaxed">
+                              <span className="inline-flex items-start gap-1">
+                                <span>💡</span>
+                                <span>
+                                  <strong className="font-semibold">
+                                    Background Padrão:
+                                  </strong>{' '}
+                                  Quando nenhuma imagem estiver configurada, o
+                                  fundo laranja atual será exibido
+                                  automaticamente.
                                 </span>
-                              </div>
-                            }
-                          >
-                            <Info
-                              className="size-5 !text-gray-700 cursor-help transition-colors hover:!text-orange-600"
-                              aria-hidden="true"
-                            />
-                          </HybridTooltip>
-                        </div>
-                        {selectedEquipment.images &&
-                          selectedEquipment.images.length > 1 && (
-                            <div className="text-xs text-slate-500 bg-white/70 px-2 py-1 rounded-full">
-                              {currentImageIndex + 1} de{' '}
-                              {selectedEquipment.images.length}
+                              </span>
                             </div>
-                          )}
+                          }
+                        >
+                          <Info
+                            className="size-5 !text-gray-700 cursor-help transition-colors hover:!text-orange-600"
+                            aria-hidden="true"
+                          />
+                        </HybridTooltip>
                       </div>
-
-                      {/* Carrossel de Imagens */}
                       {selectedEquipment.images &&
-                      selectedEquipment.images.length > 0 ? (
-                        <div className="relative group">
-                          {/* Imagem Principal */}
-                          <div
-                            className={`w-full h-64 mb-4 bg-gray-100 rounded-lg overflow-hidden relative cursor-pointer transition-all duration-300 ${
-                              isImageZoomed ? 'transform scale-105' : ''
-                            }`}
-                            onClick={() => setIsImageZoomed(!isImageZoomed)}
-                          >
-                            <motion.div
-                              key={currentImageIndex}
-                              initial={{ opacity: 0, scale: 0.95 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ duration: 0.4, ease: 'easeOut' }}
-                              className="w-full h-full"
-                            >
-                              <Image
-                                src={
-                                  selectedEquipment.images[currentImageIndex] ||
-                                  ''
-                                }
-                                alt={`${selectedEquipment.name} - Imagem ${currentImageIndex + 1}`}
-                                width={500}
-                                height={300}
-                                className={`max-w-full max-h-full object-contain transition-all duration-500 ${
-                                  isImageZoomed
-                                    ? 'object-contain bg-black/90'
-                                    : ''
-                                }`}
-                              />
-                            </motion.div>
-
-                            {/* Navegação - Setas */}
-                            {selectedEquipment.images.length > 1 && (
-                              <>
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    prevImage()
-                                  }}
-                                  aria-label="Imagem anterior"
-                                  className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
-                                >
-                                  <ChevronLeft className="w-5 h-5 text-gray-700" />
-                                </button>
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    nextImage()
-                                  }}
-                                  aria-label="Próxima imagem"
-                                  className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
-                                >
-                                  <ChevronRight className="w-5 h-5 text-gray-700" />
-                                </button>
-                              </>
-                            )}
-
-                            {/* Indicadores de posição */}
-                            {selectedEquipment.images.length > 1 && (
-                              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-                                {selectedEquipment.images.map((_, index) => (
-                                  <motion.button
-                                    key={index}
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      goToImage(index)
-                                    }}
-                                    whileHover={{ scale: 1.2 }}
-                                    whileTap={{ scale: 0.9 }}
-                                    aria-label={`Ir para imagem ${index + 1}`}
-                                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                      index === currentImageIndex
-                                        ? 'bg-white shadow-lg scale-125'
-                                        : 'bg-white/60 hover:bg-white/80'
-                                    }`}
-                                  />
-                                ))}
-                              </div>
-                            )}
+                        selectedEquipment.images.length > 1 && (
+                          <div className="text-xs text-slate-500 bg-white/70 px-2 py-1 rounded-full">
+                            {currentImageIndex + 1} de{' '}
+                            {selectedEquipment.images.length}
                           </div>
+                        )}
+                    </div>
 
-                          {/* Thumbnails */}
+                    {selectedEquipment.images &&
+                    selectedEquipment.images.length > 0 ? (
+                      <div className="relative group">
+                        <div
+                          className={`w-full h-64 mb-4 bg-gray-100 rounded-lg overflow-hidden relative cursor-pointer transition-all duration-300 ${
+                            isImageZoomed ? 'transform scale-105' : ''
+                          }`}
+                          onClick={() => setIsImageZoomed(!isImageZoomed)}
+                        >
+                          <motion.div
+                            key={currentImageIndex}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.4, ease: 'easeOut' }}
+                            className="w-full h-full"
+                          >
+                            <Image
+                              src={
+                                selectedEquipment.images[currentImageIndex] ||
+                                ''
+                              }
+                              alt={`${selectedEquipment.name} - Imagem ${currentImageIndex + 1}`}
+                              width={500}
+                              height={300}
+                              className={`max-w-full max-h-full object-contain transition-all duration-500 ${
+                                isImageZoomed
+                                  ? 'object-contain bg-black/90'
+                                  : ''
+                              }`}
+                            />
+                          </motion.div>
+
                           {selectedEquipment.images.length > 1 && (
-                            <motion.div
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.2 }}
-                              className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
-                            >
-                              {selectedEquipment.images.map((image, index) => (
+                            <>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  prevImage()
+                                }}
+                                aria-label="Imagem anterior"
+                                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
+                              >
+                                <ChevronLeft className="w-5 h-5 text-gray-700" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  nextImage()
+                                }}
+                                aria-label="Próxima imagem"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
+                              >
+                                <ChevronRight className="w-5 h-5 text-gray-700" />
+                              </button>
+                            </>
+                          )}
+
+                          {selectedEquipment.images.length > 1 && (
+                            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                              {selectedEquipment.images.map((_, index) => (
                                 <motion.button
                                   key={index}
-                                  onClick={() => goToImage(index)}
-                                  whileHover={{ scale: 1.05 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  aria-label={`Selecionar imagem ${index + 1}`}
-                                  className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    goToImage(index)
+                                  }}
+                                  whileHover={{ scale: 1.2 }}
+                                  whileTap={{ scale: 0.9 }}
+                                  aria-label={`Ir para imagem ${index + 1}`}
+                                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
                                     index === currentImageIndex
-                                      ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
-                                      : 'border-gray-200 hover:border-gray-300'
+                                      ? 'bg-white shadow-lg scale-125'
+                                      : 'bg-white/60 hover:bg-white/80'
                                   }`}
-                                >
-                                  <Image
-                                    src={image}
-                                    alt={`Thumbnail ${index + 1}`}
-                                    width={64}
-                                    height={48}
-                                    className="max-w-full max-h-full object-contain"
-                                  />
-                                </motion.button>
+                                />
                               ))}
-                            </motion.div>
+                            </div>
                           )}
                         </div>
-                      ) : (
-                        <div className="w-full h-64 mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
-                          <div className="text-center">
-                            <Package className="w-16 h-16 text-gray-300 mx-auto mb-2" />
-                            <p className="text-sm text-gray-500">
-                              Sem imagens disponíveis
-                            </p>
-                          </div>
-                        </div>
-                      )}
 
-                      <div className="text-center">
-                        <h4 className="text-lg font-semibold text-slate-800 mb-2">
-                          {selectedEquipment.name}
-                        </h4>
-                        <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
-                          {selectedEquipment.description || 'Sem descrição'}
-                        </p>
+                        {selectedEquipment.images.length > 1 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
+                          >
+                            {selectedEquipment.images.map((image, index) => (
+                              <motion.button
+                                key={index}
+                                onClick={() => goToImage(index)}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                aria-label={`Selecionar imagem ${index + 1}`}
+                                className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                                  index === currentImageIndex
+                                    ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
+                                    : 'border-gray-200 hover:border-gray-300'
+                                }`}
+                              >
+                                <Image
+                                  src={image}
+                                  alt={`Thumbnail ${index + 1}`}
+                                  width={64}
+                                  height={48}
+                                  className="max-w-full max-h-full object-contain"
+                                />
+                              </motion.button>
+                            ))}
+                          </motion.div>
+                        )}
                       </div>
+                    ) : (
+                      <div className="w-full h-64 mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <div className="text-center">
+                          <Package className="w-16 h-16 text-gray-300 mx-auto mb-2" />
+                          <p className="text-sm text-gray-500">
+                            Sem imagens disponíveis
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="text-center">
+                      <h4 className="text-lg font-semibold text-slate-800 mb-2">
+                        {selectedEquipment.name}
+                      </h4>
+                      <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
+                        {selectedEquipment.description || 'Sem descrição'}
+                      </p>
                     </div>
+                  </div>
 
-                    {/* Informações Detalhadas */}
-                    <div className="space-y-4 w-full max-w-full">
-                      <div
-                        className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm relative"
-                        style={{
-                          borderLeft: `4px solid ${selectedEquipment.category?.bgColor || '#3b82f6'}`,
-                        }}
-                      >
-                        <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
-                          <Package className="w-4 h-4" />
-                          Informações do Equipamento
-                        </h3>
-                        <div className="grid grid-cols-2 gap-4 max-w-full">
-                          {/* Coluna Esquerda */}
-                          <div className="space-y-4 min-w-0 max-w-full">
-                            <div className="flex items-start gap-3">
-                              <Package className="w-4 h-4 text-gray-400 mt-0.5" />
-                              <div>
-                                <div className="text-xs text-gray-500">
-                                  Nome
-                                </div>
-                                <div className="font-medium text-sm">
-                                  {selectedEquipment.name}
-                                </div>
-                              </div>
-                            </div>
-
-                            {selectedEquipment.description && (
-                              <div className="flex items-start gap-3">
-                                <FileText className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                                <div className="flex-1 min-w-0 max-w-full">
-                                  <div className="text-xs text-gray-500">
-                                    Descrição
-                                  </div>
-                                  <div
-                                    className="font-medium text-sm break-words hyphens-auto leading-relaxed"
-                                    title={selectedEquipment.description}
-                                    style={{
-                                      wordBreak: 'break-word',
-                                      overflowWrap: 'break-word',
-                                      hyphens: 'auto',
-                                    }}
-                                  >
-                                    {selectedEquipment.description}
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-
-                            <div className="flex items-start gap-3">
-                              <Calendar className="w-4 h-4 text-gray-400 mt-0.5" />
-                              <div>
-                                <div className="text-xs text-gray-500">
-                                  Criado em
-                                </div>
-                                <div className="font-medium text-sm">
-                                  {formatDate(selectedEquipment.createdAt)}
-                                </div>
+                  {/* Informações Detalhadas */}
+                  <div className="space-y-4 w-full max-w-full">
+                    <div
+                      className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm relative"
+                      style={{
+                        borderLeft: `4px solid ${selectedEquipment.category?.bgColor || '#3b82f6'}`,
+                      }}
+                    >
+                      <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                        <Package className="w-4 h-4" />
+                        Informações do Equipamento
+                      </h3>
+                      <div className="grid grid-cols-2 gap-4 max-w-full">
+                        <div className="space-y-4 min-w-0 max-w-full">
+                          <div className="flex items-start gap-3">
+                            <Package className="w-4 h-4 text-gray-400 mt-0.5" />
+                            <div>
+                              <div className="text-xs text-gray-500">Nome</div>
+                              <div className="font-medium text-sm">
+                                {selectedEquipment.name}
                               </div>
                             </div>
                           </div>
 
-                          {/* Coluna Direita */}
-                          <div className="space-y-4 min-w-0 max-w-full">
-                            {selectedEquipment.category && (
-                              <div className="flex items-start gap-3">
-                                <Tag className="w-4 h-4 text-gray-400 mt-0.5" />
-                                <div>
-                                  <div className="text-xs text-gray-500">
-                                    Categoria
-                                  </div>
-                                  <Badge
-                                    style={{
-                                      backgroundColor:
-                                        selectedEquipment.category.bgColor ||
-                                        '#f0f9ff',
-                                      color:
-                                        selectedEquipment.category.fontColor ||
-                                        '#0c4a6e',
-                                    }}
-                                    className="text-xs inline-flex items-center gap-1 font-medium px-2.5 py-0.5 rounded-full border-0"
-                                  >
-                                    {selectedEquipment.category.icon &&
-                                      renderIcon(
-                                        selectedEquipment.category.icon,
-                                        selectedEquipment.category.iconColor
-                                      )}
-                                    {selectedEquipment.category.name}
-                                  </Badge>
-                                </div>
-                              </div>
-                            )}
-
+                          {selectedEquipment.description && (
                             <div className="flex items-start gap-3">
-                              <DollarSign className="w-4 h-4 text-gray-400 mt-0.5" />
-                              <div>
+                              <FileText className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                              <div className="flex-1 min-w-0 max-w-full">
                                 <div className="text-xs text-gray-500">
-                                  Preço por dia
-                                </div>
-                                <div className="font-medium text-sm text-green-600">
-                                  {formatPrice(selectedEquipment.pricePerDay)}
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex items-start gap-3">
-                              {selectedEquipment.isAvailable ? (
-                                <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                              ) : (
-                                <XCircle className="w-4 h-4 text-red-500 mt-0.5" />
-                              )}
-                              <div>
-                                <div className="text-xs text-gray-500">
-                                  Status
+                                  Descrição
                                 </div>
                                 <div
-                                  className={`font-medium text-sm ${selectedEquipment.isAvailable ? 'text-green-600' : 'text-red-600'}`}
+                                  className="font-medium text-sm break-words hyphens-auto leading-relaxed"
+                                  title={selectedEquipment.description}
+                                  style={{
+                                    wordBreak: 'break-word',
+                                    overflowWrap: 'break-word',
+                                    hyphens: 'auto',
+                                  }}
                                 >
-                                  {selectedEquipment.isAvailable
-                                    ? 'Disponível'
-                                    : 'Indisponível'}
+                                  {selectedEquipment.description}
                                 </div>
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="flex items-start gap-3">
+                            <Calendar className="w-4 h-4 text-gray-400 mt-0.5" />
+                            <div>
+                              <div className="text-xs text-gray-500">
+                                Criado em
+                              </div>
+                              <div className="font-medium text-sm">
+                                {formatDate(selectedEquipment.createdAt)}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="space-y-4 min-w-0 max-w-full">
+                          {selectedEquipment.category && (
+                            <div className="flex items-start gap-3">
+                              <Tag className="w-4 h-4 text-gray-400 mt-0.5" />
+                              <div>
+                                <div className="text-xs text-gray-500">
+                                  Categoria
+                                </div>
+                                <Badge
+                                  style={{
+                                    backgroundColor:
+                                      selectedEquipment.category.bgColor ||
+                                      '#f0f9ff',
+                                    color:
+                                      selectedEquipment.category.fontColor ||
+                                      '#0c4a6e',
+                                  }}
+                                  className="text-xs inline-flex items-center gap-1 font-medium px-2.5 py-0.5 rounded-full border-0"
+                                >
+                                  {selectedEquipment.category.icon &&
+                                    renderIcon(
+                                      selectedEquipment.category.icon,
+                                      selectedEquipment.category.iconColor
+                                    )}
+                                  {selectedEquipment.category.name}
+                                </Badge>
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="flex items-start gap-3">
+                            <DollarSign className="w-4 h-4 text-gray-400 mt-0.5" />
+                            <div>
+                              <div className="text-xs text-gray-500">
+                                Preço por dia
+                              </div>
+                              <div className="font-medium text-sm text-green-600">
+                                {formatPrice(selectedEquipment.pricePerDay)}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-start gap-3">
+                            {selectedEquipment.isAvailable ? (
+                              <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
+                            ) : (
+                              <XCircle className="w-4 h-4 text-red-500 mt-0.5" />
+                            )}
+                            <div>
+                              <div className="text-xs text-gray-500">
+                                Status
+                              </div>
+                              <div
+                                className={`font-medium text-sm ${selectedEquipment.isAvailable ? 'text-green-600' : 'text-red-600'}`}
+                              >
+                                {selectedEquipment.isAvailable
+                                  ? 'Disponível'
+                                  : 'Indisponível'}
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </>
-                )}
-              </div>
-            </ScrollArea>
+                  </div>
+                </div>
+              </ScrollArea>
 
-            <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 p-6 border-t bg-gray-50 rounded-b-lg xs:p-4 xs:rounded-b-md w-full max-w-full flex-shrink-0">
-              <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedEquipment(null)}
-                  className="flex-1 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Fechar
-                </Button>
-                <Button
-                  variant="default"
-                  onClick={() => {
-                    if (selectedEquipment) {
+              <footer className="w-full max-w-full flex-shrink-0 border-t bg-gray-50 px-6 py-5 xs:px-4">
+                <div className="flex w-full flex-wrap gap-4 xs:gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => setSelectedEquipment(null)}
+                    className="flex-1 h-10 rounded-lg border border-slate-200 bg-transparent shadow-md transition-all duration-300 hover:scale-105 hover:bg-slate-50 hover:shadow-lg"
+                  >
+                    <X className="mr-2 h-4 w-4" />
+                    Fechar
+                  </Button>
+                  <Button
+                    variant="default"
+                    onClick={() => {
+                      const equipmentId = selectedEquipment.id
                       setSelectedEquipment(null)
-                      window.location.href = `/admin/equipamentos/${selectedEquipment.id}/editar`
-                    }
-                  }}
-                  className="flex-1 shadow-md hover:shadow-lg transition-all duration-300"
-                >
-                  <Edit className="w-4 h-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
-                  <span className="group-hover:text-orange-500 transition-colors duration-200">
+                      window.location.href = `/admin/equipamentos/${equipmentId}/editar`
+                    }}
+                    className="flex-1 shadow-md transition-all duration-300 hover:shadow-lg"
+                  >
+                    <Edit className="mr-2 h-4 w-4 transition-colors duration-200" />
                     Editar Equipamento
-                  </span>
-                </Button>
-              </div>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+                  </Button>
+                </div>
+              </footer>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

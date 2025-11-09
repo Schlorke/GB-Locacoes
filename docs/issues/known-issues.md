@@ -13,7 +13,8 @@
 4. [Flick no Category Showcase após swipe](#4-flick-no-category-showcase-após-swipe)
 5. [Hover e sombras cortados no Category Showcase](#5-hover-e-sombras-cortados-no-category-showcase)
 6. [Gradiente do Carrossel Sobreposto às Categorias](#6-gradiente-do-carrossel-sobreposto-às-categorias)
-7. [Como Usar Este Documento](#como-usar-este-documento)
+7. [Inputs do Dialog Lab cortados nas laterais](#7-inputs-do-dialog-lab-cortados-nas-laterais)
+8. [Como Usar Este Documento](#como-usar-este-documento)
 
 ---
 
@@ -676,6 +677,66 @@ disputa e ficava “por cima” dos botões, mesmo estando em outra coluna do gr
   múltiplas colunas.
 - ❌ Depender apenas de `pointer-events: none` quando o problema é ordem de
   empilhamento.
+
+## 7. Inputs do Dialog Lab cortados nas laterais
+
+### 🐛 Problema
+
+**Data da Ocorrência**: 2025-11-09 **Severidade**: Média (UX interna)
+**Status**: ✅ Resolvido
+
+#### Descrição
+
+As seções do fluxo "Criar/Editar Categoria" no Dialog Lab utilizam elementos
+`<section>`, mas o estilo global definido em `app/globals.css` aplica
+`overflow-x: hidden` para todas as seções do site. Dentro do dialog Base UI,
+isso fazia os campos "Nome da Categoria" e "Descrição" perderem parte das bordas
+e dos focus rings nas laterais, causando aparência de conteúdo cortado.
+
+#### Sintomas
+
+- Inputs e textarea aparentando estar "aparados" nas bordas laterais do popup.
+- Estados de foco/hover não exibiam sombras completas em resoluções menores.
+
+#### Causa Raiz
+
+O CSS global (`section, .container { overflow-x: hidden; }`) é útil nas páginas
+públicas para evitar scroll horizontal, mas dentro de uma modal esse overflow
+impede que componentes com `box-shadow`/`outline` maiores que o container
+renderizem totalmente.
+
+### ✅ Solução Implementada
+
+#### Arquivos Modificados
+
+1. `app/playground/page.tsx`
+
+#### Implementação
+
+- Criado helper `DIALOG_FORM_SECTION` adicionando `overflow-visible` às seções
+  do formulário.
+- A seção que envolve inputs e textarea passou a usar o helper, sobrescrevendo o
+  estilo global e liberando os focus rings dos campos.
+
+### 🧪 Resultado
+
+- Inputs, textarea e contêineres internos exibem suas bordas completas, sem
+  cortes laterais.
+- O layout segue alinhado com o restante do dialog, inclusive em nested dialogs.
+
+### 🧠 Lições Aprendidas
+
+- Sempre revisar utilitários globais aplicados a tags semânticas antes de
+  reutilizá-las em modais/overlays.
+- Dialogs Base UI precisam declarar explicitamente `overflow-visible` quando
+  dependem de sombras externas ou animações de scale.
+
+### 🚫 Armadilhas a Evitar
+
+- Criar novas seções em dialogs sem sobrescrever `overflow-x: hidden` do
+  stylesheet global.
+- Confiar apenas em remover `overflow-hidden` de ancestrais; elementos sem
+  override continuam herdando o corte.
 
 ---
 
