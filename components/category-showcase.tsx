@@ -30,6 +30,7 @@ export type CategoryShowcaseProps = {
     md?: number
     lg?: number
   }
+  cardClassName?: string
 }
 
 const baseCardClasses =
@@ -61,12 +62,14 @@ type SwipeOverlayLayerProps = {
   overlay: SwipeOverlaySnapshot
   gridClasses: string
   onComplete: () => void
+  cardClassName?: string
 }
 
 function SwipeOverlayLayer({
   overlay,
   gridClasses,
   onComplete,
+  cardClassName,
 }: SwipeOverlayLayerProps) {
   return (
     <div
@@ -87,8 +90,11 @@ function SwipeOverlayLayer({
           const Icon = item.icon
 
           return (
-            <div key={`overlay-${item.id}`} className="h-full">
-              <div className={baseCardClasses}>
+            <div
+              key={`overlay-${item.id}`}
+              className="h-full flex justify-center"
+            >
+              <div className={cn(baseCardClasses, cardClassName)}>
                 <span className={iconWrapperClasses}>
                   <Icon size={28} color="white" className="h-7 w-7" />
                 </span>
@@ -108,6 +114,7 @@ export function CategoryShowcase({
   onCategoryClickAction,
   className,
   gridCols,
+  cardClassName,
 }: CategoryShowcaseProps) {
   const safeTabs = useMemo(() => tabs ?? [], [tabs])
 
@@ -440,11 +447,11 @@ export function CategoryShowcase({
                     }
                     exit={exitAnimation}
                     transition={entryTransition}
-                    className="h-full"
+                    className="h-full flex justify-center"
                   >
                     <button
                       type="button"
-                      className={baseCardClasses}
+                      className={cn(baseCardClasses, cardClassName)}
                       onClick={() => onCategoryClickAction?.(item)}
                     >
                       <div className={iconWrapperClasses}>
@@ -463,6 +470,7 @@ export function CategoryShowcase({
               overlay={swipeOverlay}
               gridClasses={gridClasses}
               onComplete={completeSwipeTransition}
+              cardClassName={cardClassName}
             />
           )}
         </div>

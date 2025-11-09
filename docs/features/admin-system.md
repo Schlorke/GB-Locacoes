@@ -456,8 +456,11 @@ do painel e agora inclui um fluxo completo para gerenciamento das categorias:
   `grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`
 - ✅ **Ações contextuais** (visualizar, editar, excluir) com botões `ghost`
 - ✅ **Modal moderno** `ModernCategoryModal` para criação e edição
-- ✅ **Visualização detalhada** via `ViewCategoryModal` com preview oficial do
-  badge
+- ✅ **Preview com tabs reais**: dentro do `ModernCategoryModal`, a seção de
+  preview usa o `CategoryShowcase` com as abas "Fases da obra" e "Tipo de
+  trabalho", mantendo os botões "Editar" e "Resetar" lado a lado e agora com
+  largura controlada via `cardClassName="!w-auto"` para respeitar apenas o
+  padding interno do card.
 
 ### **Paginação Inteligente**
 

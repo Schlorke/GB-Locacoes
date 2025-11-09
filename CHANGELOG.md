@@ -18,7 +18,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Mantidas as animações `AnimatePresence` e interações mobile com ações
     contextuais.
   - Documentação atualizada descrevendo o fluxo completo em
-    `docs/features/admin-system.md` (seção “Gerenciamento de Categorias”).
+    `docs/features/admin-system.md` (seção "Gerenciamento de Categorias").
 - **Componente RotatingText**: Implementado texto rotativo reutilizável com
   animações do Framer Motion para destacar mensagens principais sem dependências
   de CSS externo.
@@ -71,17 +71,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Fallback laranja agora é renderizado como camada absoluta independente,
     preservando o padding inferior em `bg-slate-50` após o reset das
     configurações e eliminando o flash branco na primeira renderização.
-  - Modo “Sem onda” mantém o mesmo espaçamento inferior das demais variantes,
+  - Modo "Sem onda" mantém o mesmo espaçamento inferior das demais variantes,
     garantindo que os indicadores do carrossel não encostem na seção seguinte.
   - Documentação atualizada em `docs/features/hero-section.md`
   - Indicadores e onda reposicionados para seguir a base do container interno,
     mantendo o wave alinhado ao grid principal.
   - Camada de imagens e overlays agora ocupam 100% da largura da seção, com
     wrapper `overflow-hidden` para impedir bleed lateral mesmo em tela cheia.
-- **Admin system docs**: Seção “Gerenciamento de Categorias” detalha a paginação
+- **Admin system docs**: Seção "Gerenciamento de Categorias" detalha a paginação
   padrão (9 itens por página) e o uso do `SmartPagination` no painel.
 - **Equipment showcase headline**: Título principal da seção agora alterna entre
-  “sob medida”, “certa” e “eficiente” utilizando o novo `RotatingText`,
+  "sob medida", "certa" e "eficiente" utilizando o novo `RotatingText`,
   replicando o visual referenciado pelo usuário.
   - Mantém classes responsivas `text-2xl md:text-3xl` com `leading-tight`.
   - Destaca a palavra dinâmica com cápsula sólida na cor da paleta
@@ -157,6 +157,12 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   `overflow-hidden`, removendo qualquer scroll vertical residual durante as
   animações de swipe.
   - Ajustes aplicados em `app/test-components/page.tsx`
+- **Preview do modal de categorias**: A pré-visualização passa a exibir o
+  `CategoryShowcase` com as abas "Fases da obra" e "Tipo de trabalho", limitado
+  a um único card focado na categoria em edição, mantendo o layout real do site.
+  - Cabeçalho de ações agora mantém apenas o botão "Editar", concentrando os
+    resets na área de personalização.
+  - Ajuste aplicado em `components/ui/category-modal.tsx`
 
 ### Removed ❌
 

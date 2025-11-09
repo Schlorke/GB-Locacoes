@@ -1,6 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
+import type { LucideProps } from 'lucide-react'
 import * as LucideIcons from 'lucide-react'
 import {
   AlertTriangle,
@@ -14,6 +15,12 @@ import {
 } from 'lucide-react'
 import React, { useState } from 'react'
 
+import {
+  CategoryShowcase,
+  type TabConfig,
+} from '@/components/category-showcase'
+import type { CustomIconProps } from '@/components/icons/custom'
+import { TrabalhoEmAltura } from '@/components/icons/custom'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
@@ -79,6 +86,12 @@ const IconGrid: React.FC<IconGridProps> = React.memo(
   }
 )
 IconGrid.displayName = 'IconGrid'
+
+const CATEGORY_PREVIEW_TAB_HEADERS: Array<Pick<TabConfig, 'value' | 'label'>> =
+  [
+    { value: 'fases-obra', label: 'Fases da obra' },
+    { value: 'tipo-trabalho', label: 'Tipo de trabalho' },
+  ]
 
 /**
  * MODAL DE CATEGORIA MODERNO
@@ -152,6 +165,45 @@ export function ModernCategoryModal({
   const [resetAnimation, setResetAnimation] = useState(false)
   const [resetVisualAnimation, setResetVisualAnimation] = useState(false)
 
+  const previewIconComponent = React.useMemo<React.FC<CustomIconProps>>(() => {
+    if (formData.icon && formData.icon in LucideIcons) {
+      const maybeIcon = LucideIcons[formData.icon]
+      if (typeof maybeIcon === 'function') {
+        const IconComponent = maybeIcon as React.ComponentType<LucideProps>
+        const PreviewIcon: React.FC<CustomIconProps> = ({
+          size = 28,
+          color = 'currentColor',
+          className = '',
+        }) => (
+          <IconComponent
+            size={size}
+            color={formData.iconColor || color}
+            className={className}
+          />
+        )
+        PreviewIcon.displayName = `PreviewIcon-${formData.icon}`
+        return PreviewIcon
+      }
+    }
+
+    return TrabalhoEmAltura
+  }, [formData.icon, formData.iconColor])
+
+  const categoryPreviewTabs = React.useMemo<TabConfig[]>(
+    () =>
+      CATEGORY_PREVIEW_TAB_HEADERS.map((tab) => ({
+        ...tab,
+        categories: [
+          {
+            id: `${tab.value}-preview`,
+            name: formData.name || 'Nome da Categoria',
+            icon: previewIconComponent,
+          },
+        ],
+      })),
+    [formData.name, previewIconComponent]
+  )
+
   // Evita timeouts pendurados se o componente for desmontado
   const resetTimeoutRef = React.useRef<number | null>(null)
   const resetVisualTimeoutRef = React.useRef<number | null>(null)
@@ -189,7 +241,6 @@ export function ModernCategoryModal({
 
   // Função para resetar todas as configurações para padrão
   const resetToDefaults = () => {
-    // Trigger animation
     setResetAnimation(true)
 
     setFormData({
@@ -199,7 +250,6 @@ export function ModernCategoryModal({
     })
     setErrors({})
 
-    // Remove animation class after animation completes
     resetTimeoutRef.current = window.setTimeout(() => {
       setResetAnimation(false)
     }, RESET_ANIMATION_MS)
@@ -274,7 +324,7 @@ export function ModernCategoryModal({
                         variant="outline"
                         size="sm"
                         onClick={() => setIsDesignOpen(true)}
-                        className="inline-flex bg-white items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border text-slate-900 shadow-md transition-all hover:bg-white hover:shadow-lg hover:scale-105 group xs:h-9 xs:px-4 xs:w-full"
+                        className="inline-flex bg-white items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border text-slate-900 shadow-md transition-all hover:bg-white hover:shadow-lg hover:scale-105 group xs:h-9 xs:px-4 xs:w-full sm:w-auto"
                       >
                         <Edit className="w-4 h-4 xs:w-3.5 xs:h-3.5 group-hover:text-orange-600 transition-colors duration-200" />
                         <span className="group-hover:text-orange-600 transition-colors duration-200">
@@ -285,16 +335,14 @@ export function ModernCategoryModal({
                         variant="reset"
                         size="sm"
                         onClick={resetToDefaults}
-                        className="inline-flex items-center justify-center gap-2 goo whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border bg-white text-slate-900 shadow-md transition-all hover:shadow-lg group"
+                        className="inline-flex items-center justify-center gap-2 whitespace-nowrap h-8 px-3 text-xs font-medium rounded-lg border bg-white text-slate-900 shadow-md transition-all hover:shadow-lg group xs:h-9 xs:px-4 xs:w-full sm:w-auto"
                         title="Resetar configurações"
                       >
                         <RotateCcw
                           className="w-4 h-4 group-hover:text-orange-600 transition-colors duration-200"
                           style={
                             resetAnimation
-                              ? {
-                                  animation: 'spin 0.6s ease-in-out reverse',
-                                }
+                              ? { animation: 'spin 0.6s ease-in-out reverse' }
                               : undefined
                           }
                         />
@@ -328,6 +376,15 @@ export function ModernCategoryModal({
                         {formData.name || 'Nome da Categoria'}
                       </span>
                     </Badge>
+                  </div>
+                  <div className="mt-5 w-full overflow-visible">
+                    <CategoryShowcase
+                      tabs={categoryPreviewTabs}
+                      defaultTab="fases-obra"
+                      gridCols={{ base: 1, sm: 1, md: 1 }}
+                      className="mt-0"
+                      cardClassName="!w-auto min-w-[11rem]"
+                    />
                   </div>
                   {formData.description && (
                     <div className="text-center w-full flex justify-center items-center">
