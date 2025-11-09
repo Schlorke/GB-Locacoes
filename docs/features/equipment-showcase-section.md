@@ -23,6 +23,10 @@ equipamentos (`EquipmentInfiniteScroll`) e o grid de categorias com tabs
 - ✅ **Identidade Visual**: Gradiente slate-50/blue-50 seguindo o projeto
 - ✅ **Título Dinâmico**: Headline com animação `RotatingText` destacando o
   valor da tecnologia da GB Locações
+- ✅ **Compensação de padding**: A seção injeta variáveis CSS para ajustar o
+  `padding-bottom` quando um conteúdo interno (como o scroll infinito) exige
+  `pb-16`, preservando o ritmo vertical padrão (`py-12 md:py-16 lg:py-20`)
+  estabelecido nas demais seções.
 
 ### **Funcionalidades**
 

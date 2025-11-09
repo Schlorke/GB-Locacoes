@@ -57,6 +57,12 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Equipment showcase spacing**: A seção `EquipmentShowcaseSection` agora usa
+  variáveis CSS para compensar o `pb-16` exigido pelo componente interno de
+  scroll infinito, preservando o ritmo vertical padrão das demais seções
+  públicas (`bg-gray-50 pt-12 md:pt-16 lg:pt-20`).
+  - Ajuste aplicado em `components/equipment-showcase-section.tsx`
+  - Documentação atualizada em `docs/features/equipment-showcase-section.md`
 - **Hero container layout**: Carrossel de fundo, gradiente, indicadores e onda
   da seção Hero agora respeitam o container padrão
   `mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8`, eliminando discrepâncias de
@@ -111,6 +117,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   retorno do painel após gestos de arrastar, além de aplicar fade-out gradual ao
   bloco em movimento para proporcionar experiência de navegação mais suave e
   fluida entre as abas.
+  - Ajustes aplicados em `components/category-showcase.tsx`
+- **Category showcase labels**: Textos dos botões agora usam `break-words`, os
+  cards adotam `min-h-[120px]` e os botões ocupam `h-full`, garantindo nomes
+  longos sem corte e altura consistente alinhada à grid.
   - Ajustes aplicados em `components/category-showcase.tsx`
 - **Arquitetura do swipe overlay**: Camada de overlay extraída para componente
   dedicado e classes de grid compartilhadas por constantes, reduzindo

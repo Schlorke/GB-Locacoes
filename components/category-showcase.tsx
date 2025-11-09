@@ -33,13 +33,13 @@ export type CategoryShowcaseProps = {
 }
 
 const baseCardClasses =
-  'group relative flex w-full h-[120px] flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:shadow-2xl'
+  'group relative flex h-full w-full min-h-[120px] flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:shadow-2xl'
 
 const iconWrapperClasses =
   'relative z-10 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg transition-transform duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]'
 
 const cardLabelClasses =
-  'relative z-10 text-center text-xs font-semibold leading-tight text-white transition-colors duration-300 group-hover:text-orange-400 line-clamp-2'
+  'relative z-10 text-center text-xs font-semibold leading-tight text-white transition-colors duration-300 group-hover:text-orange-400 whitespace-normal break-words'
 
 function buildGridClasses(gridCols: CategoryShowcaseProps['gridCols']): string {
   const base = gridCols?.base ? `grid-cols-${gridCols.base}` : 'grid-cols-2'

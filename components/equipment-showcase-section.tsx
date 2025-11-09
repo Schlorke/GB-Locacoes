@@ -81,7 +81,7 @@ export default function EquipmentShowcaseSection() {
   }
 
   return (
-    <section className="bg-gray-50 py-12 md:py-16 lg:py-20">
+    <section className="bg-gray-50 pt-12 md:pt-16 lg:pt-20 [--section-bottom:theme(spacing.12)] md:[--section-bottom:theme(spacing.16)] lg:[--section-bottom:theme(spacing.20)] [--shadow-offset:theme(spacing.16)] pb-[max(0px,calc(var(--section-bottom)-var(--shadow-offset)))]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Layout de duas colunas responsivo */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
