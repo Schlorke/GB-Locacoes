@@ -280,7 +280,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
       {/* Desktop Sidebar */}
       <aside
         className={cn(
-          'hidden md:flex md:flex-col text-white transition-all duration-300 ease-in-out relative admin-sidebar-dark z-[9999]',
+          'hidden md:flex md:flex-col text-white transition-all duration-300 ease-in-out relative admin-sidebar-dark z-[var(--layer-sticky)]',
           isSidebarCollapsed ? 'w-20' : 'w-56 lg:w-64'
         )}
         style={{
@@ -295,7 +295,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
               inset 1px 0 0 rgba(255, 255, 255, 0.08)
             `,
           position: 'relative',
-          zIndex: 9999,
+          zIndex: 'var(--layer-sticky)',
         }}
       >
         <SidebarContent />
@@ -303,7 +303,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
           variant="ghost"
           size="icon"
           onClick={toggleSidebarCollapse}
-          className="absolute top-1/2 -right-5 transform -translate-y-1/2 text-white hover:text-white rounded-full h-10 w-10 shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 z-[99999] overflow-hidden group"
+          className="absolute top-1/2 -right-5 transform -translate-y-1/2 text-white hover:text-white rounded-full h-10 w-10 shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 z-[var(--layer-fab)] overflow-hidden group"
           style={{
             background:
               'linear-gradient(145deg, rgba(51, 65, 85, 0.9), rgba(30, 41, 59, 0.8))',

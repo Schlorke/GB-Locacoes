@@ -10,7 +10,7 @@ import * as React from 'react'
 // --- ESTILOS COMPARTILHADOS (FONTE DA VERDADE VISUAL) ---
 const contentClassName = cn(
   'group',
-  'z-50 overflow-hidden rounded-md',
+  'z-[var(--layer-tooltip)] overflow-hidden rounded-md',
   'bg-white text-gray-700', // Background branco com texto escuro
   'px-4 py-2 text-[13px] shadow-lg', // text-xs = 12px (compacto)
   'max-w-xs', // FORÇA quebra de linha

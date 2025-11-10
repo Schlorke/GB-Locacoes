@@ -47,10 +47,22 @@
   --sidebar-ring: 217.2 91.2% 59.8%;
   --popover: 0 0% 100%;
   --popover-foreground: 222.2 84% 4.9%;
-  --z-dropdown: 9999;
-  --z-modal: 10000;
-  --z-popover: 10001;
-  --z-tooltip: 10002;
+  /* Camadas globais para sincronizar z-index em todos os overlays */
+  --layer-base: 0;
+  --layer-floating: 20;
+  --layer-sticky: 30;
+  --layer-fab: 40;
+  --layer-dropdown: 60;
+  --layer-popover: 70;
+  --layer-dialog-backdrop: 80;
+  --layer-dialog: 90;
+  --layer-tooltip: 100;
+  --layer-spotlight: 110;
+  /* Alias legados mantidos para compatibilidade */
+  --z-dropdown: var(--layer-dropdown);
+  --z-modal: var(--layer-dialog);
+  --z-popover: var(--layer-popover);
+  --z-tooltip: var(--layer-tooltip);
 }
 
 .dark {

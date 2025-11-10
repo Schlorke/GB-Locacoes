@@ -109,9 +109,9 @@ const equipments = await prisma.equipment.findMany({
 // Container principal
 <div className="relative w-full">
   // Container do search bar no Hero
-  <div className="relative z-[9998]">
+  <div className="relative z-[var(--layer-dropdown)]">
     // Dropdown de sugestões
-    <div className="absolute top-full z-[99999]">
+    <div className="absolute top-full z-[var(--layer-popover)]">
 ```
 
 ## 🐛 Problemas Conhecidos e Soluções
@@ -122,8 +122,8 @@ const equipments = await prisma.equipment.findMany({
 
 **Solução**:
 
-- Container com `z-[9998]`
-- Dropdown com `z-[99999]`
+- Container com `z-[var(--layer-dropdown)]`
+- Dropdown com `z-[var(--layer-popover)]`
 - Remover `overflow-hidden` de parents
 - Criar novo stacking context com `relative`
 

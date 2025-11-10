@@ -17,9 +17,9 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     terminadas em `.svg`.
   - Pré-visualização imediata do cartão e badge reaproveitando o helper
     `renderCategoryIcon`, mantendo o mesmo visual da homepage.
-- Visualização da aba pública (“Fases da obra” ou “Tipo de trabalho”) continua
+- Visualização da aba pública ("Fases da obra" ou "Tipo de trabalho") continua
   centralizada no preview principal; a dialog aninhada agora apenas espelha o
-  estado atual sem controles duplicados. A aba “Categorias” permanece automática
+  estado atual sem controles duplicados. A aba "Categorias" permanece automática
   na página real.
   - Documentação sincronizada em `docs/features/dialog-lab.md`.
 - **Dialog Lab (Base UI)**: Instalado laboratório dedicado em
@@ -76,19 +76,62 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Ajustes aplicados em `components/equipment-showcase-section.tsx`
   - Ajustes aplicados em `app/playground/page.tsx`
   - Ajustes aplicados em `app/test-components/page.tsx`
+- **Dialog universal (Base UI)**: criado wrapper `components/ui/dialog.tsx` para
+  centralizar backdrop, popup, header, body e footer do
+  `@base-ui-components/react/dialog`, disponibilizando variantes `default`,
+  `compact` e `unstyled`.
+  - Subcomponentes (`Content`, `Header`, `HeaderIcon`, `CloseButton`, `Body`,
+    `BodyViewport`, `BodyContent`, `Footer`, `Title`, `Description`) expostos
+    para composição consistente em todo o projeto.
+  - `dialogStyles` exportado para permitir ajustes finos sem duplicar classes em
+    cada página.
+  - Documentação sincronizada em `docs/features/dialog-lab.md` com instruções
+    atualizadas de uso e dialogs aninhadas.
+- **Category Dialog playground**: fluxo de criação/edição extraído para
+  `app/playground/category-dialog.tsx`, permitindo reutilização direta em outras
+  áreas antes da promoção para produção.
 
 ### Changed 🔄
 
-- **DesignDialog actions**: Botões “Editar” e “Resetar” do configurador de
+- **Category Dialog – Grade de ícones**: `app/playground/category-dialog.tsx`
+  agora reutiliza `ALL_AVAILABLE_ICONS` para exibir toda a biblioteca (Lucide +
+  custom) com busca normalizada, preservando ícones legados e fallback
+  automático para `Tag`. A ajuda ao lado de “Ícone” passou a usar tooltip com
+  `Lightbulb` e `--layer-tooltip`, explicando o comportamento de fallback
+  enquanto evita conflitos de z-index na dialog. Documentação sincronizada em
+  `docs/features/dialog-lab.md`.
+- **DesignDialog actions**: Botões "Editar" e "Resetar" do configurador de
   categoria foram padronizados com `buttonVariants` (`variant="outline"`,
   `size="compact"`), preservando responsividade e os estados de hover definidos
   no design system.
-- **Segmented icon source buttons**: As opções “Padrão”, “Upload” e “URL
-  externa” agora aproveitam o `Button` com tamanho `compact`, garantindo
+- **DesignDialog actions (mobile)**: Botões "Editar" e "Resetar" no preview de
+  categorias permanecem lado a lado em telas menores, agora com `flex-1` para
+  preencher a linha sem quebrar o layout e mantendo a coluna no desktop
+  (`app/playground/page.tsx`).
+- **Playground – seleção de ícones**: Removido o contêiner extra ao redor da
+  grade mantendo o `ScrollArea` como camada scrollável, e os estados continuam
+  com apenas o texto em laranja (sem fundo, borda ou ring coloridos) tanto no
+  hover quanto quando ativo.
+- **Segmented icon source buttons**: As opções "Padrão", "Upload" e "URL
+  externa" agora aproveitam o `Button` com tamanho `compact`, garantindo
   contraste ativo e feedback consistente no hover.
 - **DesignDialog controls**: As configurações de cores do badge e a seleção do
   ícone padrão foram consolidadas em um único painel responsivo dentro do fluxo
   de edição, reduzindo o ruído visual e melhorando a hierarquia das informações.
+- **Playground - seletor de cores**: Os blocos das amostras de cor foram
+  compactados (40 px) e a grade passou a permanecer em linha inclusive em telas
+  mobile, garantindo hierarquia consistente e mantendo a leitura das legendas
+  sem comprometer a área de toque em `app/playground/page.tsx`.
+- **Playground - seletor de cores**: Removido o texto informativo abaixo dos
+  seletores, já coberto pelo tooltip associado a cada botão, evitando
+  redundância na interface.
+- **Stack de camadas (z-index)**: `app/globals.css` ganhou tokens `--layer-*`
+  (com aliases legados) e dialogs/tooltips agora usam `var(--layer-…)`. Os
+  headers, sidebars e overlay mobile do admin passaram a respeitar essas camadas
+  para manter as dialogs acima da interface, e a documentação (`AGENTS.md`,
+  `docs/features/dialog-lab.md`, `docs/features/autocomplete-search.md` e
+  `docs/guides/safari-ios-autocomplete-positioning-fix.md`) foi atualizada com o
+  novo padrão.
 - **Design system buttons**: Adicionado o tamanho `compact` ao componente
   `Button` compartilhado e documentado a nova diretriz em
   `docs/features/design-system.md`.
@@ -98,8 +141,8 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 - **AGENTS.md**: reforçado o protocolo de dialogs aninhadas, mantendo o efeito
   padrão de animação do Base UI enquanto libera as dimensões para seguirem o
   layout específico de cada fluxo (sem copiar tamanhos fixos do playground).
-- **Playground – DesignDialog preview**: removido o bloco “Posicionamento nas
-  tabs públicas” do preview secundário para evitar redundância; o controle
+- **Playground – DesignDialog preview**: removido o bloco "Posicionamento nas
+  tabs públicas" do preview secundário para evitar redundância; o controle
   permanece apenas no preview principal que sincroniza o posicionamento real.
 - **Playground – Preview do destaque**: removido o fundo azul/escuro do preview
   principal e ajustada a tipografia para tons `slate`, mantendo foco no cartão
@@ -107,17 +150,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   preview secundário agora replica o mesmo tamanho/spacing do componente
   principal e usa o mesmo gradiente `from-slate-50 to-slate-100`, garantindo
   consistência visual entre os fluxos. Em mobile, o cabeçalho do preview
-  centraliza os títulos, aumenta o espaçamento vertical e quebra “Aba atual” em
-  duas linhas sem afetar o layout de desktop. O bloco de “Ícone personalizado
-  para o cartão principal” foi movido para logo após o preview, destacando a
+  centraliza os títulos, aumenta o espaçamento vertical e quebra "Aba atual" em
+  duas linhas sem afetar o layout de desktop. O bloco de "Ícone personalizado
+  para o cartão principal" foi movido para logo após o preview, destacando a
   etapa de personalização antes dos demais ajustes.
-- **Playground – DesignDialog**: alinhado o modal “Personalizar visual” às
+- **Playground – DesignDialog**: alinhado o modal "Personalizar visual" às
   dimensões/scroll do dialog principal usando `DESIGN_DIALOG_POPUP` e o
   cabeçalho/rodapé padronizados em `app/playground/page.tsx`.
 - **Category dialog preview**: tabs do preview principal agora sincronizam
   diretamente o posicionamento (remoção do `disablePlacementSync`), permitindo
-  alternar entre “Fases da obra” e “Tipo de trabalho” sem sumir com o card.
-- **DesignDialog trigger**: o botão “Editar” agora utiliza
+  alternar entre "Fases da obra" e "Tipo de trabalho" sem sumir com o card.
+- **DesignDialog trigger**: o botão "Editar" agora utiliza
   `Dialog.Trigger`/`Dialog.Root` internos (padrão oficial) sem nesting de
   `<button>`, garantindo que o dialog secundário receba `--nested-dialogs` e
   abra com o offset correto e sem warnings de hidratação.
@@ -248,13 +291,23 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Cabeçalho de ações agora mantém apenas o botão "Editar", concentrando os
     resets na área de personalização.
   - Ajuste aplicado em `components/ui/category-modal.tsx`
+- **Playground – fluxo Criar/Editar Categoria**: `app/playground/page.tsx` agora
+  consome o wrapper `Dialog` universal, removendo as constantes locais
+  (`BACKDROP_CLASSES`, `DIALOG_POPUP`, `SIMPLE_POPUP_CLASSES`) e delegando
+  estilos estruturais ao componente compartilhado.
+  - `DesignDialog`, `CustomizeDialog` e `NotificationsDialog` utilizam
+    `Dialog.Content`, `Dialog.Footer` e `Dialog.Popup variant="compact"`,
+    garantindo ajustes globais centralizados.
 
 ### Fixed 🐛
 
-- **Design dialog aninhado**: o modal “Personalizar visual” agora é renderizado
+- **Playground – encoding UTF-8**: restaurados todos os caracteres acentuados e
+  cedilhas corrompidos em `app/playground/page.tsx`, eliminando o erro de parse
+  do Next.js 16/Turbopack durante o build.
+- **Design dialog aninhado**: o modal "Personalizar visual" agora é renderizado
   dentro do `Dialog.Root` principal (em `app/playground/page.tsx`), garantindo
   que o Base UI aplique as animações e o offset de dialogs aninhados quando o
-  botão “Editar” é clicado.
+  botão "Editar" é clicado.
 - **Dialog Lab state tracker**: Corrigido o erro `Maximum update depth exceeded`
   que ocorria ao abrir qualquer dialog em `/playground` (Next.js 16 +
   Turbopack). O callback `handleStateChange` agora é memoizado com
@@ -264,7 +317,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 - **Category dialog preview loop**: corrigido ciclo infinito ao sincronizar a
   aba do preview com o estado de posicionamento da categoria. As atualizações de
   placement agora só disparam quando o valor realmente muda, evitando o erro
-  “Maximum update depth exceeded”.
+  "Maximum update depth exceeded".
 - **Dialog Lab preview actions**: No mobile, os botões "Editar" e "Resetar"
   permanecem lado a lado no preview de categorias, garantindo consistência com o
   layout documentado em `app/playground/page.tsx`, enquanto em desktop retornam
@@ -272,7 +325,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 - **Preview do CategoryShowcase no Dialog Lab**: o dialog de categorias em
   `app/playground/page.tsx` passou a reutilizar o `CategoryShowcase` real (com o
   dataset oficial), exibindo apenas o botão da categoria configurada para
-  eliminar o flick observado nas abas “Fases da obra” e “Tipo de trabalho”. A
+  eliminar o flick observado nas abas "Fases da obra" e "Tipo de trabalho". A
   variante `MiniCategoryShowcase` foi removida, o overlay deixou de ser
   duplicado e o preview injeta apenas o ícone/cor configurados. Documentação
   sincronizada em `docs/features/category-showcase-shell.md` e issue registrada

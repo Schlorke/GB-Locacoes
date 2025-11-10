@@ -32,10 +32,20 @@
   documentado em `docs/features/dialog-lab.md` e implementado em
   `app/playground/page.tsx`.
 - Reaproveite as classes globais:
-  - `BACKDROP_CLASSES`:
-    `"fixed inset-0 z-[9998] min-h-dvh bg-black/60 transition-all duration-150 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 supports-[-webkit-touch-callout:none]:absolute dark:bg-black/70"`
-  - `POPUP_CLASSES`:
-    `"fixed top-[calc(50%+1.25rem*var(--nested-dialogs))] left-1/2 z-[9999] -mt-8 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))] rounded-lg bg-gray-50 p-6 text-gray-900 outline outline-1 outline-gray-200 transition-all duração-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[nested-dialog-open]:after:absolute data-[nested-dialog-open]:after:inset-0 data-[nested-dialog-open]:after:rounded-[inherit] data-[nested-dialog-open]:after:bg-black/5"`
+  - `BACKDROP_CLASSES`: "fixed inset-0 z-[var(--layer-dialog-backdrop)]
+    min-h-dvh bg-black/60 transition-all duração-150
+    data-[starting-style]:opacity-0 data-[ending-style]:opacity-0
+    supports-[-webkit-touch-callout:none]:absolute dark:bg-black/70"
+  - `POPUP_CLASSES`: "fixed top-[calc(50%+1.25rem*var(--nested-dialogs))]
+    left-1/2 z-[var(--layer-dialog)] w-96 max-w-[calc(100vw-3rem)]
+    -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))]
+    rounded-lg bg-gray-50 p-6 text-gray-900 outline outline-1 outline-gray-200
+    transition-all duração-150 data-[starting-style]:scale-90
+    data-[starting-style]:opacity-0 data-[ending-style]:scale-90
+    data-[ending-style]:opacity-0 data-[nested-dialog-open]:after:absolute
+    data-[nested-dialog-open]:after:inset-0
+    data-[nested-dialog-open]:after:rounded-[inherit]
+    data-[nested-dialog-open]:after:bg-black/5"
 - Ao abrir uma dialog aninhada, o pai deve receber `data-nested-parent` (setado
   quando o filho estiver `open`) para deslocar-se levemente:
   `"-data-[nested-parent]:translate-y-[0.85rem] data-[nested-parent]:scale-[0.985]"`.
@@ -56,6 +66,19 @@
 - Mantenha o bloqueio de scroll global (`overflow-hidden` em `<html>` e
   `<body>`) enquanto qualquer dialog estiver aberta, garantindo que camadas
   adicionais não quebrem a experiência.
+
+### 🔢 Stack global de camadas (z-index)
+
+- `app/globals.css` define tokens `--layer-*` para TODA sobreposição (floating,
+  sticky, dropdown, popover, dialog, tooltip e spotlight). **Nunca** invente
+  novos valores numéricos; use os tokens.
+- Dialogs Base UI devem usar `z-[var(--layer-dialog-backdrop)]` no backdrop e
+  `z-[var(--layer-dialog)]` no popup. Tooltips/Popovers usam
+  `z-[var(--layer-tooltip)]` ou `z-[var(--layer-popover)]`.
+- Dropdowns/autocomplete mantêm `relative z-[var(--layer-dropdown)]` no campo e
+  `z-[var(--layer-popover)]` para o menu/flutuante (inclusive portais).
+- Os aliases legados `--z-dropdown`, `--z-popover`, `--z-modal` e `--z-tooltip`
+  continuam válidos e apontam para os mesmos tokens.
 
 ### **📝 PROTOCOLO DE DOCUMENTAÇÃO PROATIVA (OBRIGATÓRIO)**
 
@@ -837,8 +860,8 @@ primeiro:**
 #### **🚨 "Autocomplete dropdown atrás de outras seções"**
 
 - **Causa**: Z-index insuficiente ou stacking context incorreto
-- **Solução**: Container com `z-[9998]`, dropdown com `z-[99999]`, remover
-  `overflow-hidden`
+- **Solução**: Container com `z-[var(--layer-dropdown)]`, dropdown com
+  `z-[var(--layer-popover)]`, remover `overflow-hidden`
 - **Prevenção**: Sempre criar novo stacking context com `relative`
 - **Detalhes**: Consulte `docs/features/autocomplete-search.md`
 

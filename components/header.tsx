@@ -92,7 +92,7 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 w-screen z-50 bg-white/95 backdrop-blur-md shadow-lg border-b border-slate-200/50">
+    <header className="fixed top-0 left-0 w-screen !z-[var(--layer-sticky)] bg-white/95 backdrop-blur-md shadow-lg border-b border-slate-200/50">
       {/* Top Bar */}
       <div
         className="text-white py-2.5 w-full"

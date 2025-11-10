@@ -29,25 +29,70 @@
 
 ## 🏗️ Arquitetura do Playground
 
-| Seção                 | Descrição                                                                                                                       |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `EquipmentDialogDemo` | Demonstração principal com conteúdo rico: badges, resumo de locação, formulário rápido e CTA.                                   |
-| `ScrollContent`       | Conteúdo interno envolto por `ScrollArea`, respeitando `max-h-[60vh]` e mantendo o ritmo vertical padrão (`px-6/py-6 sm:px-8`). |
-| `NestedDialogDemo`    | Fluxo com dialogs aninhadas demonstrando `data-[nested-dialog-open]` e transições independentes.                                |
-| `backdropClassName`   | Overlay com blur, opacidade animada e fallback iOS (`supports-[-webkit-touch-callout:none]`).                                   |
-| `popupBaseClassName`  | Container base compartilhado (radius 2xl, sombra profunda, `ring-1 ring-slate-200/70`).                                         |
+| Seção                      | Descrição                                                                                                                       |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `EquipmentDialogDemo`      | Demonstração principal com conteúdo rico: badges, resumo de locação, formulário rápido e CTA.                                   |
+| `ScrollContent`            | Conteúdo interno envolto por `ScrollArea`, respeitando `max-h-[60vh]` e mantendo o ritmo vertical padrão (`px-6/py-6 sm:px-8`). |
+| `NestedDialogDemo`         | Fluxo com dialogs aninhadas demonstrando `data-[nested-dialog-open]` e transições independentes.                                |
+| `components/ui/dialog.tsx` | Wrapper universal para o Dialog do Base UI, com backdrop/popup padronizados e subcomponentes de layout.                         |
+
+## 🧱 Componente Universal `Dialog`
+
+- **Localização:** `components/ui/dialog.tsx`
+- **Propósito:** centralizar as classes e animações oficiais, evitando
+  duplicação de constantes (`BACKDROP_CLASSES`, `POPUP_CLASSES`, etc.).
+- **Subcomponentes incluídos:** `Root`, `Trigger`, `Portal`, `Backdrop`,
+  `Popup`, `Content`, `Header`, `HeaderIcon`, `CloseButton`, `Body`,
+  `BodyViewport`, `BodyContent`, `Footer`, `Title`, `Description` e `Close`.
+- **Variantes do popup:**
+  - `default` – altura controlada (`80vh`), usada em fluxos administrativos
+    completos.
+  - `compact` – `w-96` com padding interno, ideal para dialogs aninhadas ou
+    confirmações.
+  - `unstyled` – não aplica estilos, permitindo layout totalmente customizado.
+- **Estilos exportados:** `dialogStyles` expõe as classes base para ajustes
+  avançados sem duplicar strings.
+
+### Exemplo mínimo
+
+```tsx
+import { Dialog } from "@/components/ui/dialog"
+;<Dialog.Root open={open} onOpenChange={setOpen}>
+  <Dialog.Trigger asChild>…</Dialog.Trigger>
+  <Dialog.Portal>
+    <Dialog.Backdrop />
+    <Dialog.Popup>
+      <Dialog.Content>
+        <Dialog.Header>
+          <Dialog.HeaderIcon>…</Dialog.HeaderIcon>
+          <Dialog.Title>Título</Dialog.Title>
+          <Dialog.CloseButton aria-label="Fechar" />
+        </Dialog.Header>
+        <Dialog.Body>
+          <Dialog.BodyViewport>
+            <Dialog.BodyContent>{/* Conteúdo scrollável */}</Dialog.BodyContent>
+          </Dialog.BodyViewport>
+        </Dialog.Body>
+        <Dialog.Footer>{/* Ações */}</Dialog.Footer>
+      </Dialog.Content>
+    </Dialog.Popup>
+  </Dialog.Portal>
+</Dialog.Root>
+```
 
 ### Fluxo de Estados
 
 ```tsx
 const [open, setOpen] = useState(false)
 
-<Dialog.Root open={open} onOpenChange={setOpen} dismissible modal>
+<Dialog.Root open={open} onOpenChange={setOpen}>
   <Dialog.Trigger asChild>…</Dialog.Trigger>
   <Dialog.Portal>
-    <Dialog.Backdrop className={backdropClassName} />
-    <Dialog.Popup className={`${popupBaseClassName} …`}>
-      {/* Header, conteúdo e footer modulares */}
+    <Dialog.Backdrop />
+    <Dialog.Popup>
+      <Dialog.Content>
+        {/* Header, conteúdo e footer modulares */}
+      </Dialog.Content>
     </Dialog.Popup>
   </Dialog.Portal>
 </Dialog.Root>
@@ -62,6 +107,8 @@ const [open, setOpen] = useState(false)
 
 ## 🎨 Estilos Principais
 
+- **Camadas**: `z-[var(--layer-dialog-backdrop)]` para o backdrop e
+  `z-[var(--layer-dialog)]` para o popup; não use números mágicos.
 - **Backdrop**: `bg-slate-950/60 + backdrop-blur-sm` com animações
   `data-[starting-style]`/`data-[ending-style]`.
 - **Popup**: `rounded-2xl`, sombra elevada
@@ -100,17 +147,22 @@ const [open, setOpen] = useState(false)
 
 ## 🧩 Configurador de Categoria (Playground Atualizado)
 
-- **Localização**: `app/playground/page.tsx` (componentes `CategoryDialogDemo` +
-  `DesignDialog`).
+- **Localização**: `app/playground/category-dialog.tsx` (componentes
+  `CategoryDialog`, `DesignDialog` e helpers) consumidos por
+  `app/playground/page.tsx`.
 - **Nested dialog**: o botão “Editar” dentro do preview da categoria abre uma
-  segunda dialog que segue as classes `BACKDROP_CLASSES` e
-  `SIMPLE_POPUP_CLASSES` para animação de aninhamento correta.
+  segunda dialog reaproveitando `Dialog.Backdrop` e
+  `Dialog.Popup variant="compact"` para manter as animações e escalas oficiais
+  de dialogs encadeadas.
 - **Campos disponíveis**:
   - Cores do badge (fundo, texto, ícone) iguais ao design system legado.
-  - Ícone padrão (Lucide) utilizado como fallback e no badge.
+  - Grade completa de ícones (`ALL_AVAILABLE_ICONS` – Lucide + custom) com busca
+    normalizada, mantendo fallback automático para `Tag`.
   - Configuração do ícone do cartão principal via:
     - Upload de SVG (até 64kb) com sanitização automática;
     - URL externa `https://… .svg` validada antes de aplicar.
+- Tooltip contextual ao lado de “Ícone” com ícone `Lightbulb`, explicando o
+  fallback padrão e respeitando o token `--layer-tooltip`.
 - **Preview imediato**: o cartão grande e a badge são renderizados com o mesmo
   helper (`renderCategoryIcon`), garantindo que uploads/URLs apareçam no preview
   e nos cards simulados.
@@ -158,8 +210,8 @@ const [open, setOpen] = useState(false)
 
 ## 📂 Arquivos Relacionados
 
-- `app/playground/page.tsx` – laboratório principal com todos os exemplos
-  (incluindo classes reutilizáveis `BACKDROP_CLASSES` e `POPUP_CLASSES`).
+- `app/playground/page.tsx` – laboratório principal com todos os exemplos, agora
+  consumindo o wrapper `components/ui/dialog`.
 - `app/playground/page.tsx` – contém o protótipo oficial do fluxo “Criar/Editar
   Categoria” reutilizando o padrão de dialogs encadeadas.
 - `app/admin/equipamentos/page.tsx` – overlay temporário aguardando migração.
@@ -179,23 +231,36 @@ const [open, setOpen] = useState(false)
 ## 📘 Padrão de Dialogs Encadeadas
 
 Para qualquer botão interno que deva abrir outra dialog (ex.: “Editar”,
-“Customizar”), reutilize o padrão do playground:
+“Customizar”), utilize diretamente o wrapper universal:
 
 ```tsx
-const BACKDROP_CLASSES =
-  "fixed inset-0 z-[9998] min-h-dvh bg-black/60 transition-all duration-150 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 supports-[-webkit-touch-callout:none]:absolute dark:bg-black/70"
+import { Dialog } from '@/components/ui/dialog'
 
-const POPUP_CLASSES =
-  "fixed top-[calc(50%+1.25rem*var(--nested-dialogs))] left-1/2 z-[9999] -mt-8 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))] rounded-lg bg-gray-50 p-6 text-gray-900 outline outline-1 outline-gray-200 transition-all duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[nested-dialog-open]:after:absolute data-[nested-dialog-open]:after:inset-0 data-[nested-dialog-open]:after:rounded-[inherit] data-[nested-dialog-open]:after:bg-black/5"
+<Dialog.Root open={parentOpen} onOpenChange={setParentOpen}>
+  <Dialog.Portal>
+    <Dialog.Backdrop />
+    <Dialog.Popup data-nested-parent={childOpen ? '' : undefined}>
+      <Dialog.Content>{/* Conteúdo principal */}</Dialog.Content>
+    </Dialog.Popup>
+  </Dialog.Portal>
+</Dialog.Root>
+
+<Dialog.Root open={childOpen} onOpenChange={setChildOpen}>
+  <Dialog.Portal>
+    <Dialog.Backdrop />
+    <Dialog.Popup variant="compact">
+      {/* Dialog secundária */}
+    </Dialog.Popup>
+  </Dialog.Portal>
+</Dialog.Root>
 ```
 
 - **Comportamento:** o Base UI injeta atributos (`data-nested`,
-  `data-nested-dialog-open`) e a variável `--nested-dialogs`. As classes acima
-  utilizam esses valores para reposicionar e escalar a nova dialog, aplicando
-  overlay sutil sobre a anterior.
-- **Implementação:** basta renderizar outro `<Dialog.Root>` dentro da dialog
-  atual e aplicar os mesmos `BACKDROP_CLASSES` e `POPUP_CLASSES`. Todos os
-  fluxos “editar/customizar” deverão seguir esse modelo.
+  `data-nested-dialog-open`) e a variável `--nested-dialogs`. As variantes do
+  popup já aplicam deslocamento e escala automáticos.
+- **Implementação:** defina `variant="compact"` para a dialog filha e habilite
+  `data-nested-parent` no popup pai enquanto ela estiver aberta para reproduzir
+  o recuo visual.
 - **Controle global:** mantenha o bloqueio de scroll (`overflow-hidden` em
   `html` e `body`) enquanto qualquer dialog estiver aberta, como demonstrado em
   `app/playground/page.tsx`.

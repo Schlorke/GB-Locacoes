@@ -112,7 +112,7 @@ createPortal(
 
 ```html
 <div
-  class="absolute z-[99999] mt-1 w-full rounded-md border bg-white shadow-xl"
+  class="absolute z-[var(--layer-popover)] mt-1 w-full rounded-md border bg-white shadow-xl"
 >
   <!-- Conteúdo -->
 </div>
@@ -190,7 +190,7 @@ useEffect(() => {
     // ✅ MOBILE iOS: Absolute Positioning (sem portal)
     <div
       ref={dropdownRef}
-      className="absolute top-full left-0 right-0 h-auto bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[99999] mt-1"
+      className="absolute top-full left-0 right-0 h-auto bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[var(--layer-popover)] mt-1"
       style={{ maxHeight: '370px' }}
     >
       {/* Conteúdo da listbox */}
@@ -200,7 +200,7 @@ useEffect(() => {
     createPortal(
       <div
         ref={dropdownRef}
-        className="fixed h-auto bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[99999]"
+        className="fixed h-auto bg-white border border-gray-200 rounded-lg shadow-2xl overflow-hidden z-[var(--layer-popover)]"
         style={{
           top: `${dropdownPosition.top}px`,
           left: `${dropdownPosition.left}px`,
@@ -643,13 +643,13 @@ useEffect(() => {
 ```typescript
 {isMobileIOS ? (
   // Mobile iOS: position absolute, sem portal
-  <div className="absolute top-full left-0 right-0 mt-1 z-[99999]" suppressHydrationWarning>
+  <div className="absolute top-full left-0 right-0 mt-1 z-[var(--layer-popover)]" suppressHydrationWarning>
     {/* Conteúdo */}
   </div>
 ) : (
   // Desktop/outros: position fixed, com portal
   createPortal(
-    <div className="fixed z-[99999]" style={{ top, left, width }} suppressHydrationWarning>
+    <div className="fixed z-[var(--layer-popover)]" style={{ top, left, width }} suppressHydrationWarning>
       {/* Conteúdo */}
     </div>,
     document.body
@@ -681,7 +681,7 @@ useEffect(() => {
    - Já implementado no componente
    - Deve ser mantido em refatorações futuras
 
-3. **Z-index**: Ambas implementações usam `z-[99999]`
+3. **Z-index**: Ambas implementações usam `z-[var(--layer-popover)]`
    - Garante que listbox fique sempre no topo
    - Cuidado com outros elementos de z-index alto
 

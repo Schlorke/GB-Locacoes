@@ -33,7 +33,7 @@ export default function AdminMobileHeader() {
       />
 
       <header
-        className="admin-mobile-header sticky top-0 z-[9999] w-full md:hidden"
+        className="admin-mobile-header sticky top-0 z-[var(--layer-sticky)] w-full md:hidden"
         style={{
           backgroundColor: 'rgb(51, 65, 85) !important',
           background: 'rgb(51, 65, 85) !important',
@@ -56,7 +56,7 @@ export default function AdminMobileHeader() {
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen(true)}
-            className="h-10 w-10 text-white hover:text-white z-[9999] relative overflow-hidden group transition-all duration-300 ease-out hover:scale-105 active:scale-95 flex-shrink-0"
+            className="h-10 w-10 text-white hover:text-white z-[var(--layer-fab)] relative overflow-hidden group transition-all duration-300 ease-out hover:scale-105 active:scale-95 flex-shrink-0"
             style={{
               background:
                 'linear-gradient(145deg, rgba(51, 65, 85, 0.9), rgba(30, 41, 59, 0.8))',
