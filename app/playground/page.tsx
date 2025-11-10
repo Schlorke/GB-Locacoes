@@ -1,12 +1,33 @@
 'use client'
 
 import { Dialog } from '@base-ui-components/react/dialog'
-import { Pencil, Plus, RotateCcw, Tag as TagIcon, X } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import {
+  CategoryShowcase,
+  type TabConfig,
+} from '@/components/category-showcase'
+import {
+  Anchor,
+  Building,
+  Construction,
+  Drill,
+  Hammer,
+  HardHat,
+  Pencil,
+  Plus,
+  RotateCcw,
+  Tag as TagIcon,
+  TreePine,
+  Truck,
+  Wrench,
+  X,
+} from 'lucide-react'
+import { useEffect, useMemo, useRef, useState, type ComponentType } from 'react'
 
+import type { CustomIconProps } from '@/components/icons/custom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
 
 const BACKDROP_CLASSES =
   'fixed inset-0 z-[9998] min-h-dvh bg-black/60 transition-all duration-150 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 supports-[-webkit-touch-callout:none]:absolute dark:bg-black/70'
@@ -151,6 +172,90 @@ const EMPTY_CATEGORY: CategoryDetails = {
 
 const RESET_ANIMATION_DURATION = 600
 
+// Icon mapping for category showcase
+const CATEGORY_ICONS: Record<string, ComponentType<CustomIconProps>> = {
+  construction: Construction,
+  building: Building,
+  anchor: Anchor,
+  drill: Drill,
+  hammer: Hammer,
+  hardhat: HardHat,
+  tree: TreePine,
+  truck: Truck,
+  wrench: Wrench,
+  tag: TagIcon,
+}
+
+// Default design values
+const DEFAULT_DESIGN = {
+  backgroundColor: '#3b82f6',
+  fontColor: '#ffffff',
+  iconColor: '#ffffff',
+  icon: 'tag',
+}
+
+const CATEGORY_PREVIEW_TABS: Array<Pick<TabConfig, 'value' | 'label'>> = [
+  { value: 'phases', label: 'Fases da obra' },
+  { value: 'types', label: 'Tipo de trabalho' },
+]
+
+function buildPreviewTabs(
+  categoryName: string,
+  categoryIcon: string,
+  design: typeof DEFAULT_DESIGN
+): TabConfig[] {
+  const resolvedName =
+    categoryName.trim().length > 0 ? categoryName : 'Categoria sem nome'
+  const BaseIcon = CATEGORY_ICONS[categoryIcon] || TagIcon
+
+  const PreviewIcon: ComponentType<CustomIconProps> = (props) => (
+    <BaseIcon
+      {...props}
+      color={design.iconColor || props.color || 'currentColor'}
+    />
+  )
+
+  return CATEGORY_PREVIEW_TABS.map((tab) => ({
+    ...tab,
+    categories: [
+      {
+        id: `${tab.value}-preview`,
+        name: resolvedName,
+        icon: PreviewIcon,
+      },
+    ],
+  }))
+}
+
+function CategoryShowcasePreview({
+  categoryName,
+  categoryIcon,
+  design,
+}: {
+  categoryName: string
+  categoryIcon: string
+  design: typeof DEFAULT_DESIGN
+}) {
+  const previewTabs = useMemo(
+    () => buildPreviewTabs(categoryName, categoryIcon, design),
+    [categoryName, categoryIcon, design]
+  )
+
+  return (
+    <div className="w-full">
+      <CategoryShowcase
+        tabs={previewTabs}
+        defaultTab="phases"
+        gridCols={{ base: 1, sm: 1, md: 1, lg: 1 }}
+        cardClassName="p-6 w-auto h-auto min-h-0"
+        onCategoryClickAction={(category) =>
+          console.log('Preview category clicked:', category.name)
+        }
+      />
+    </div>
+  )
+}
+
 function CustomizeDialog({ onStateChange }: DialogStateUpdater) {
   const [open, setOpen] = useState(false)
 
@@ -222,14 +327,31 @@ function DesignDialog({
   open,
   onOpenChange,
   onStateChange,
+  design,
+  onDesignChange,
 }: {
   open: boolean
   onOpenChange: (_open: boolean) => void
   onStateChange: DialogStateUpdater['onStateChange']
+  design: typeof DEFAULT_DESIGN
+  onDesignChange: (_newDesign: typeof DEFAULT_DESIGN) => void
 }) {
+  const [localDesign, setLocalDesign] = useState(design)
+
+  useEffect(() => {
+    setLocalDesign(design)
+  }, [design])
+
   useEffect(() => {
     onStateChange('design', open)
   }, [open, onStateChange])
+
+  const handleSave = () => {
+    onDesignChange(localDesign)
+    onOpenChange(false)
+  }
+
+  const iconOptions = Object.keys(CATEGORY_ICONS)
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -239,13 +361,163 @@ function DesignDialog({
           <Dialog.Title className="-mt-1.5 mb-1 text-lg font-medium">
             Personalizar Design
           </Dialog.Title>
-          <Dialog.Description className="mb-6 text-base text-gray-600">
+          <Dialog.Description className="mb-4 text-base text-gray-600">
             Customize cores e ícone da categoria.
           </Dialog.Description>
-          <div className="flex items-center justify-end gap-4">
+
+          {/* Preview */}
+          <div className="mb-6 flex justify-center">
+            <div
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl shadow-md"
+              style={{
+                backgroundColor: localDesign.backgroundColor,
+                color: localDesign.fontColor,
+              }}
+            >
+              {(() => {
+                const Icon = CATEGORY_ICONS[localDesign.icon] || TagIcon
+                return <Icon size={20} color={localDesign.iconColor} />
+              })()}
+              <span className="font-medium text-sm">Preview</span>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {/* Icon Selector */}
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 block">
+                Ícone
+              </label>
+              <div className="grid grid-cols-5 gap-2">
+                {iconOptions.map((iconKey) => {
+                  const Icon = CATEGORY_ICONS[iconKey]
+                  if (!Icon) return null
+                  return (
+                    <button
+                      key={iconKey}
+                      type="button"
+                      onClick={() =>
+                        setLocalDesign({ ...localDesign, icon: iconKey })
+                      }
+                      className={cn(
+                        'p-2 rounded-lg border-2 transition-all',
+                        localDesign.icon === iconKey
+                          ? 'border-blue-500 bg-blue-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      )}
+                    >
+                      <Icon size={20} />
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Color Inputs */}
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">
+                Cor de Fundo
+              </label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="color"
+                  value={localDesign.backgroundColor}
+                  onChange={(e) =>
+                    setLocalDesign({
+                      ...localDesign,
+                      backgroundColor: e.target.value,
+                    })
+                  }
+                  className="h-10 w-14 cursor-pointer rounded border border-gray-200"
+                />
+                <input
+                  type="text"
+                  value={localDesign.backgroundColor}
+                  onChange={(e) =>
+                    setLocalDesign({
+                      ...localDesign,
+                      backgroundColor: e.target.value,
+                    })
+                  }
+                  className="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm"
+                  placeholder="#3b82f6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">
+                Cor do Texto
+              </label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="color"
+                  value={localDesign.fontColor}
+                  onChange={(e) =>
+                    setLocalDesign({
+                      ...localDesign,
+                      fontColor: e.target.value,
+                    })
+                  }
+                  className="h-10 w-14 cursor-pointer rounded border border-gray-200"
+                />
+                <input
+                  type="text"
+                  value={localDesign.fontColor}
+                  onChange={(e) =>
+                    setLocalDesign({
+                      ...localDesign,
+                      fontColor: e.target.value,
+                    })
+                  }
+                  className="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm"
+                  placeholder="#ffffff"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-1 block">
+                Cor do Ícone
+              </label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="color"
+                  value={localDesign.iconColor}
+                  onChange={(e) =>
+                    setLocalDesign({
+                      ...localDesign,
+                      iconColor: e.target.value,
+                    })
+                  }
+                  className="h-10 w-14 cursor-pointer rounded border border-gray-200"
+                />
+                <input
+                  type="text"
+                  value={localDesign.iconColor}
+                  onChange={(e) =>
+                    setLocalDesign({
+                      ...localDesign,
+                      iconColor: e.target.value,
+                    })
+                  }
+                  className="flex-1 px-3 py-2 border border-gray-200 rounded-md text-sm"
+                  placeholder="#ffffff"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-4 mt-6">
             <Dialog.Close className="flex h-10 items-center justify-center rounded-md border border-gray-200 bg-gray-50 px-3.5 text-base font-medium text-gray-900 select-none transition hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-blue-800 active:bg-gray-100">
-              Salvar
+              Cancelar
             </Dialog.Close>
+            <button
+              onClick={handleSave}
+              className="flex h-10 items-center justify-center rounded-md bg-blue-600 px-3.5 text-base font-medium text-white select-none transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-blue-800 active:bg-blue-700"
+            >
+              Salvar
+            </button>
           </div>
         </Dialog.Popup>
       </Dialog.Portal>
@@ -274,9 +546,16 @@ function CategoryDialogDemo({
     resolvedInitialCategory
   )
 
+  const resolvedInitialDesign = useMemo(() => {
+    return mode === 'edit' ? DEFAULT_DESIGN : DEFAULT_DESIGN
+  }, [mode])
+
+  const [design, setDesign] = useState(resolvedInitialDesign)
+
   useEffect(() => {
     setCategory(resolvedInitialCategory)
-  }, [resolvedInitialCategory])
+    setDesign(resolvedInitialDesign)
+  }, [resolvedInitialCategory, resolvedInitialDesign])
 
   const key = mode === 'edit' ? 'category-edit' : 'category-create'
 
@@ -308,6 +587,7 @@ function CategoryDialogDemo({
 
   const handleReset = () => {
     setCategory(mode === 'edit' ? resolvedInitialCategory : EMPTY_CATEGORY)
+    setDesign(mode === 'edit' ? resolvedInitialDesign : DEFAULT_DESIGN)
     setResetAnimation(true)
     resetTimeoutRef.current = window.setTimeout(() => {
       setResetAnimation(false)
@@ -359,7 +639,7 @@ function CategoryDialogDemo({
 
               <div className={DIALOG_SCROLL_WRAPPER}>
                 <div
-                  className="h-full w-full overflow-y-auto"
+                  className="h-full w-full overflow-y-auto overflow-x-hidden"
                   style={{ scrollbarGutter: 'stable' }}
                 >
                   <div className={DIALOG_SCROLL_CONTENT}>
@@ -415,16 +695,41 @@ function CategoryDialogDemo({
                         </div>
                       </div>
 
+                      {/* CategoryShowcase Preview */}
+                      <div className="mt-6 w-full">
+                        <CategoryShowcasePreview
+                          categoryName={category.name || 'Categoria sem nome'}
+                          categoryIcon={design.icon}
+                          design={design}
+                        />
+                      </div>
+
                       <div className="mt-10 flex flex-col items-center gap-4">
                         <div
                           className={DIALOG_PREVIEW_BADGE}
                           style={{
-                            backgroundColor: '#3b82f6',
-                            color: '#ffffff',
+                            backgroundColor: design.backgroundColor,
+                            color: design.fontColor,
                           }}
                         >
                           <span className="flex-shrink-0">
-                            <TagIcon className="h-4 w-4" />
+                            {design.icon ? (
+                              (() => {
+                                const Icon =
+                                  CATEGORY_ICONS[design.icon] || TagIcon
+                                return (
+                                  <Icon
+                                    className="h-4 w-4"
+                                    color={design.iconColor}
+                                  />
+                                )
+                              })()
+                            ) : (
+                              <div
+                                className="h-4 w-4 rounded"
+                                style={{ backgroundColor: design.iconColor }}
+                              />
+                            )}
                           </span>
                           <span className="truncate font-semibold text-sm min-w-0">
                             {previewName}
@@ -520,6 +825,8 @@ function CategoryDialogDemo({
         open={designDialogOpen}
         onOpenChange={setDesignDialogOpen}
         onStateChange={onStateChange}
+        design={design}
+        onDesignChange={setDesign}
       />
     </>
   )

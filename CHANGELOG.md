@@ -67,6 +67,9 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **VS Code workspace**: Habilitadas guias de indentação e destaque de pares de
+  colchetes no arquivo `.vscode/settings.json` para facilitar a leitura das
+  estruturas aninhadas.
 - **Admin Equipments preview**: Substituído o modal Radix por overlay temporário
   alinhado ao layout do Dialog Lab, mantendo scroll controlado, animações e CTAs
   enquanto o novo componente compartilhado não entra em produção
@@ -180,6 +183,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Cabeçalho de ações agora mantém apenas o botão "Editar", concentrando os
     resets na área de personalização.
   - Ajuste aplicado em `components/ui/category-modal.tsx`
+
+### Fixed 🐛
+
+- **Preview do CategoryShowcase no Dialog Lab**: o dialog de categorias em
+  `app/playground/page.tsx` passou a reutilizar o `CategoryShowcase` real (com o
+  dataset oficial), exibindo apenas o botão da categoria configurada para
+  eliminar o flick observado nas abas “Fases da obra” e “Tipo de trabalho”. A
+  variante `MiniCategoryShowcase` foi removida, o overlay deixou de ser
+  duplicado e o preview injeta apenas o ícone/cor configurados. Documentação
+  sincronizada em `docs/features/category-showcase-shell.md` e issue registrada
+  em `docs/issues/known-issues.md`.
 
 ### Removed ❌
 

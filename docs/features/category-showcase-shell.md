@@ -6,6 +6,13 @@
 > `CategoryShowcase` agora acontecem diretamente em `app/playground/page.tsx`,
 > que reutiliza o mesmo dataset e animações da homepage.
 
+- **Nov 2025**: O preview dentro do fluxo "Criar/Editar Categoria" passou a
+  instanciar o `CategoryShowcase` real (com o dataset oficial) em vez do
+  componente simplificado `MiniCategoryShowcase`. Isso elimina o flick/piscar
+  observado no Dialog Lab e garante que as animações e o swipe exibidos no
+  dialog administrativo sejam idênticos aos da home, exibindo apenas o botão da
+  categoria em edição para funcionar como preview fiel.
+
 Este documento é mantido apenas como referência histórica do shell criado para
 prototipagem. Caso você precise reativar um ambiente dedicado, use o playground
 como base ou crie uma rota temporária seguindo as diretrizes abaixo.

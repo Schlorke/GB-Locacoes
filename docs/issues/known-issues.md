@@ -807,3 +807,84 @@ renderizem totalmente.
 
 **Última atualização**: 05/11/2025 **Mantido por**: Equipe de Desenvolvimento GB
 Locações **Versão**: 1.0.0
+
+## 7. Flick no preview do Category Showcase no Dialog Lab
+
+### 🧠 Problema
+
+**Data da Ocorrência**: 2025-11-09 **Severidade**: Média (demonstração
+inconsistente) **Status**: ✅ Resolvido
+
+#### Descrição
+
+O preview exibido dentro do fluxo "Criar/Editar Categoria" (`app/playground`)
+usava um componente ad-hoc (`MiniCategoryShowcase`). As animações de swipe/fade
+eram implementadas de forma diferente do `CategoryShowcase` real, o que fazia o
+bloco "piscar" (overlay encerrava e, logo em seguida, o card único ainda
+executava um fade-out). O resultado não representava as animações da homepage e
+induzia teste errado dentro do Dialog Lab.
+
+#### Como Reproduzir
+
+1. Abrir `/playground`.
+2. Acionar o botão "Nova Categoria" ou "Editar Categoria".
+3. Alternar entre as tabs do preview ou realizar um swipe rápido.
+4. Observar o flash antes do novo card aparecer.
+
+#### Sintomas
+
+- Card do preview fica invisível por um frame entre cada troca.
+- Swipe overlay não cobre toda a animação (overlay some antes do novo conteúdo).
+- Tabs do dialog exibem comportamento diferente da home.
+
+#### Causa Raiz
+
+- O componente prévio recriava manualmente as animações, sem `displayedTabId` e
+  sem distinguir cliques de swipes.
+- A lógica de overlay era simplificada e o grid voltava a ficar visível antes do
+  fade-in iniciar, causando o flick conhecido.
+- Dataset reduzido (1 card) impedia validar o grid real.
+
+### ✅ Solução Implementada
+
+#### Arquivos Modificados
+
+1. `app/playground/page.tsx`
+2. `docs/features/category-showcase-shell.md`
+
+#### Implementação
+
+- Substituído `MiniCategoryShowcase` pelo próprio `CategoryShowcase`, mantendo
+  as animações oficiais e criando tabs com um único item (a própria categoria em
+  edição) para que o bloco funcione como preview fiel do botão.
+- Preview agora apenas injeta a cor/ícone selecionados (sem recriar animações
+  duplicadas).
+- Documentação do shell atualizada para registrar a mudança.
+
+### 📈 Resultado
+
+- Preview do dialog replica 100% das animações (fade + swipe + overlay).
+- Nenhum "piscar" ao trocar tabs ou ao fazer swipe rápido.
+- O botão exibido no dialog é exatamente o mesmo que aparece na home (mesmo
+  ícone, cores e comportamento), atendendo ao objetivo de servir como preview
+  único.
+
+#### Como Validar
+
+1. Abrir `/playground` e abrir qualquer dialog de categoria.
+2. Alternar tabs rapidamente e realizar swipes em dispositivos touch / trackpad.
+3. Confirmar que não há flash em branco entre overlay e novo grid.
+
+### 🧠 Lições Aprendidas
+
+- Pré-visualizações devem reutilizar exatamente o mesmo componente para evitar
+  divergências difíceis de rastrear.
+- Overlay + grid precisam compartilhar o mesmo lifecycle; duplicar animações
+  aumenta o risco de perda de sincronismo.
+
+### ⚠️ Armadilhas a Evitar
+
+- ⚠️ Recriar versões "mini" de componentes complexos apenas para previews.
+- ⚠️ Desacoplar dataset/testes do componente original sem documentar o motivo.
+
+---
