@@ -888,3 +888,77 @@ induzia teste errado dentro do Dialog Lab.
 - ⚠️ Desacoplar dataset/testes do componente original sem documentar o motivo.
 
 ---
+
+## 8. Loop de estado no Dialog Lab (Maximum update depth)
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-09 **Severidade**: Alta (bloqueia playground)
+**Status**: ✅ Resolvido
+
+#### Descrição
+
+Ao abrir qualquer dialog dentro de `/playground` (especialmente o fluxo "Nova
+Categoria"), o navegador exibia o erro `Maximum update depth exceeded` e o
+componente travava antes de renderizar. A exceção acontecia logo após o
+montagem, impedindo a validação dos nested dialogs documentados em
+`docs/features/dialog-lab.md`.
+
+#### Sintomas
+
+- Erro imediato no console apontando para `CategoryDialogDemo` (linha 1173).
+- Turbopack reiniciando constantemente enquanto `/playground` estava aberto.
+- Scroll global permanecia travado por conta da tentativa de abrir a dialog.
+
+#### Causa Raiz
+
+- O callback `handleStateChange` definido em `PlaygroundPage` era recriado a
+  cada renderização.
+- Todos os dialogs chamavam `onStateChange` dentro de um `useEffect` com a
+  dependência `[open, onStateChange]`.
+- Como a referência mudava a cada render, os efeitos disparavam continuamente,
+  cada um executando `setDialogStates`. Em Next.js 16 (React 19 + Strict + dev
+  loops do Turbopack), essa sequência nunca estabilizava, resultando no limite
+  de atualizações excedido.
+
+### ✅ Solução Implementada
+
+#### Arquivos Modificados
+
+1. `app/playground/page.tsx`
+
+#### Implementação
+
+- `handleStateChange` agora é memoizado via `useCallback`, garantindo que o
+  valor só mude quando realmente dependente (`setDialogStates`) se alterar (o
+  que não acontece).
+- Os efeitos dos dialogs passaram a reagir apenas a mudanças reais do `open`,
+  impedindo que `setDialogStates` seja chamado em loop.
+
+### 📈 Resultado
+
+- `/playground` abre sem erros em Next.js 16 + Turbopack.
+- Nested dialogs (Category / Design / Notifications) podem ser abertos e
+  fechados repetidamente sem travar o scroll global.
+
+#### Como Validar
+
+1. `pnpm dev`
+2. Navegar até `http://localhost:3000/playground`.
+3. Clicar em "Nova Categoria" e "Editar Categoria" várias vezes.
+4. Confirmar que não há erros `Maximum update depth exceeded` no console.
+
+### 🧠 Lições Aprendidas
+
+- Callbacks passados para efeitos em cascata devem ser memoizados para evitar
+  disparos desnecessários.
+- Em ambientes com Strict Mode duplicado (React 19 + Turbopack), loops que antes
+  estabilizavam podem falhar rapidamente.
+
+### ⚠️ Armadilhas a Evitar
+
+- Evitar passar funções inline para props consumidas em `useEffect`.
+- Não sincronizar bloqueio de scroll baseado em efeitos que disparam em todo
+  render sem uma guarda clara.
+
+---

@@ -98,6 +98,42 @@ const [open, setOpen] = useState(false)
 - **Dialogs encadeadas (Customize/Edit)**: padrão oficial para abrir uma segunda
   dialog a partir de ações como “Editar”, “Customizar” ou “Configurar”.
 
+## 🧩 Configurador de Categoria (Playground Atualizado)
+
+- **Localização**: `app/playground/page.tsx` (componentes `CategoryDialogDemo` +
+  `DesignDialog`).
+- **Nested dialog**: o botão “Editar” dentro do preview da categoria abre uma
+  segunda dialog que segue as classes `BACKDROP_CLASSES` e
+  `SIMPLE_POPUP_CLASSES` para animação de aninhamento correta.
+- **Campos disponíveis**:
+  - Cores do badge (fundo, texto, ícone) iguais ao design system legado.
+  - Ícone padrão (Lucide) utilizado como fallback e no badge.
+  - Configuração do ícone do cartão principal via:
+    - Upload de SVG (até 64kb) com sanitização automática;
+    - URL externa `https://… .svg` validada antes de aplicar.
+- **Preview imediato**: o cartão grande e a badge são renderizados com o mesmo
+  helper (`renderCategoryIcon`), garantindo que uploads/URLs apareçam no preview
+  e nos cards simulados.
+- **Fundo neutro**: o bloco “Preview do destaque” utiliza o mesmo gradiente
+  suave (`bg-gradient-to-br from-slate-50 to-slate-100`) adotado no preview
+  principal, com tipografia em tons `slate`, destacando o cartão escuro sem
+  introduzir contrastes desnecessários. Em mobile, o cabeçalho centraliza,
+  aumenta o espaçamento entre linhas e quebra “Aba atual” em duas linhas,
+  enquanto em desktop mantém o alinhamento horizontal.
+- **Ordem dos controles**: logo abaixo do preview, o primeiro card disponível é
+  “Ícone personalizado para o cartão principal”, permitindo definir uploads/URLs
+  antes de ajustar badge, ícone Lucide e demais cores. O cartão exibido dentro
+  da dialog aninhada replica o mesmo tamanho e espaçamento do componente
+  original utilizado nas tabs públicas.
+- **Posicionamento nas tabs públicas**:
+  - O preview principal (fora da dialog aninhada) continua sendo o ponto único
+    de controle para alternar entre “Fases da obra” e “Tipo de trabalho”; a aba
+    “Categorias” segue automática na aplicação real.
+  - A dialog aninhada apenas reflete o estado atual selecionado, evitando
+    controles duplicados e mantendo o foco na personalização de ícones e cores.
+- **Persistência**: ao salvar, o estado retorna para o dialog principal já com o
+  SVG customizado/URL, além da aba selecionada para o card.
+
 ## ♻️ Impacto nas Páginas
 
 - `app/admin/categorias/page.tsx` agora exibe mensagem de manutenção até que a

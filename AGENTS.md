@@ -36,6 +36,20 @@
     `"fixed inset-0 z-[9998] min-h-dvh bg-black/60 transition-all duration-150 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 supports-[-webkit-touch-callout:none]:absolute dark:bg-black/70"`
   - `POPUP_CLASSES`:
     `"fixed top-[calc(50%+1.25rem*var(--nested-dialogs))] left-1/2 z-[9999] -mt-8 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))] rounded-lg bg-gray-50 p-6 text-gray-900 outline outline-1 outline-gray-200 transition-all duração-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[nested-dialog-open]:after:absolute data-[nested-dialog-open]:after:inset-0 data-[nested-dialog-open]:after:rounded-[inherit] data-[nested-dialog-open]:after:bg-black/5"`
+- Ao abrir uma dialog aninhada, o pai deve receber `data-nested-parent` (setado
+  quando o filho estiver `open`) para deslocar-se levemente:
+  `"-data-[nested-parent]:translate-y-[0.85rem] data-[nested-parent]:scale-[0.985]"`.
+  Essa regra mantém o efeito visual do exemplo oficial da Base UI, com o dialog
+  pai recuando e a nova dialog em destaque.
+- O efeito de animação em camadas (`scale-[calc(1-0.1*var(--nested-dialogs))]` +
+  `data-[starting-style]`/`data-[ending-style]`) é obrigatório em **toda**
+  dialog aninhada; configure `data-nested`, `--nested-dialogs` e atributos do
+  Base UI exatamente como no playground para manter a fluidez, independentemente
+  das dimensões escolhidas.
+- Dimensões (largura, altura, `max-*`, padding etc.) devem seguir o layout e o
+  fluxo da tela em que a dialog está inserida; adapte medidas conforme o
+  contexto (ex.: criar categoria, editar equipamento, fluxo compacto) em vez de
+  replicar tamanhos fixos do playground.
 - Esses utilitários dependem dos atributos `data-nested` e `--nested-dialogs`
   gerados pelo Base UI para animar a sobreposição corretamente; não modifique as
   classes sem validar contra o playground.

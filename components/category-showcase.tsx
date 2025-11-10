@@ -23,6 +23,7 @@ export type CategoryShowcaseProps = {
   tabs: TabConfig[]
   defaultTab?: string
   onCategoryClickAction?: (_category: CategoryItem) => void
+  onTabChangeAction?: (_tabValue: string) => void
   className?: string
   gridCols?: {
     base?: number
@@ -112,6 +113,7 @@ export function CategoryShowcase({
   tabs,
   defaultTab,
   onCategoryClickAction,
+  onTabChangeAction,
   className,
   gridCols,
   cardClassName,
@@ -248,6 +250,7 @@ export function CategoryShowcase({
   const commitTabChange = (sectionId: string, mode: 'click' | 'swipe') => {
     setActiveTab(sectionId)
     setInteractionMode(mode)
+    onTabChangeAction?.(sectionId)
 
     const updateGridContent = () => {
       setDisplayedTabId(sectionId)

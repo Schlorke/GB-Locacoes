@@ -171,6 +171,16 @@ pnpm design-system:lint:fix        # Auto-fix
 
 ---
 
+## 🧩 Componentes Base
+
+- `Button` (`components/ui/button.tsx`) mantém variantes documentadas e agora
+  oferece o tamanho `compact` (`size="compact"`) para ações densas em dialogs e
+  grupos de opções. Utilize-o quando precisar de CTAs com 32 px de altura e
+  texto `text-xs` em mobile, preservando os mesmos estados de hover
+  padronizados.
+
+---
+
 ## 🚀 Workflow de Desenvolvimento
 
 ### **1. Desenvolvimento de Componentes**
@@ -302,6 +312,5 @@ O **Design System GB Locações 2025** está **100% implementado** com:
 - ✅ **Visual regression testing** para evitar regressões
 - ✅ **Linting rigoroso** para consistência
 
-**Status**: ✅ **IMPLEMENTAÇÃO CONCLUÍDA**  
-**Data**: Dezembro 2024  
-**Versão**: 1.0.0
+**Status**: ✅ **IMPLEMENTAÇÃO CONCLUÍDA** **Data**: Dezembro 2024 **Versão**:
+1.0.0
