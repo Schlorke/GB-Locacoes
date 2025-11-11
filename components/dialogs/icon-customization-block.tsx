@@ -19,6 +19,168 @@ import {
 } from '@/lib/constants/all-icons'
 import type { ChangeEvent, MutableRefObject } from 'react'
 
+type HeaderSearchConfig = {
+  value: string
+  onChange: (value: string) => void
+  placeholder: string
+}
+
+type IconCustomizationHeaderProps = {
+  iconTabs: Array<{ value: IconPickerTab; label: string }>
+  activeTab: IconPickerTab
+  onTabChange: (tab: IconPickerTab) => void
+  onRemoveIcon: () => void
+  searchConfig?: HeaderSearchConfig
+}
+
+const IconCustomizationHeader = ({
+  iconTabs,
+  activeTab,
+  onTabChange,
+  onRemoveIcon,
+  searchConfig,
+}: IconCustomizationHeaderProps) => {
+  return (
+    <div className="flex flex-col gap-3 border-b border-slate-200 pb-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-wrap items-center gap-2">
+          {iconTabs.map((tab) => {
+            const isActive = activeTab === tab.value
+            return (
+              <button
+                key={tab.value}
+                type="button"
+                onClick={() => onTabChange(tab.value)}
+                className={cn(
+                  'rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50',
+                  isActive
+                    ? 'bg-slate-900 text-white shadow'
+                    : 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-orange-600'
+                )}
+              >
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
+        <button
+          type="button"
+          onClick={onRemoveIcon}
+          className="text-sm font-medium text-rose-500 transition-colors duration-200 hover:text-rose-600"
+        >
+          Remover
+        </button>
+      </div>
+      {searchConfig ? (
+        <div className="w-full">
+          <Input
+            value={searchConfig.value}
+            onChange={(event) => searchConfig.onChange(event.target.value)}
+            placeholder={searchConfig.placeholder}
+            className="h-10 text-sm"
+          />
+        </div>
+      ) : null}
+    </div>
+  )
+}
+
+type IconCustomizationFooterProps = {
+  activeTab: IconPickerTab
+  onTabChange: (tab: IconPickerTab) => void
+  emojiGroups: EmojiGroup[]
+  emojiGroupRefs: MutableRefObject<Record<string, HTMLDivElement | null>>
+  iconLibraryFilters: Array<{ value: 'lucide' | 'custom'; label: string }>
+  iconLibraryFilter: 'lucide' | 'custom'
+  onIconLibraryFilterChange: (value: 'lucide' | 'custom') => void
+  iconGroups: IconGroup[]
+  iconGroupRefs: MutableRefObject<Record<string, HTMLDivElement | null>>
+}
+
+const IconCustomizationFooter = ({
+  activeTab,
+  onTabChange,
+  emojiGroups,
+  emojiGroupRefs,
+  iconLibraryFilters,
+  iconLibraryFilter,
+  onIconLibraryFilterChange,
+  iconGroups,
+  iconGroupRefs,
+}: IconCustomizationFooterProps) => {
+  if (activeTab === 'emoji' && emojiGroups.length > 0) {
+    return (
+      <div className="flex flex-col gap-3 pt-2">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+          {emojiGroups.map((group) => (
+            <button
+              key={group.id}
+              type="button"
+              onClick={() =>
+                emojiGroupRefs.current[group.id]?.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'start',
+                })
+              }
+              className="rounded-full border border-slate-200 px-3 py-1 font-medium transition-colors duration-200 hover:border-orange-400 hover:text-orange-600"
+            >
+              {group.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center justify-end">
+          <button
+            type="button"
+            onClick={() => onTabChange('custom')}
+            className="text-xs font-semibold text-orange-600 transition-colors duration-200 hover:text-orange-500"
+          >
+            Ir para Personalizado
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (activeTab === 'icons' && iconGroups.length > 0) {
+    return (
+      <div className="flex flex-wrap items-center gap-2 pt-4 text-xs text-slate-500">
+        {iconLibraryFilters.map((filter) => (
+          <button
+            key={filter.value}
+            type="button"
+            onClick={() => onIconLibraryFilterChange(filter.value)}
+            className={cn(
+              'rounded-full border border-slate-200 px-3 py-1 font-medium transition-colors duration-200 hover:border-orange-400 hover:text-orange-600',
+              iconLibraryFilter === filter.value
+                ? 'border-orange-400 text-orange-600 shadow-sm'
+                : 'text-slate-600'
+            )}
+          >
+            {filter.label}
+          </button>
+        ))}
+        {iconGroups.map((group) => (
+          <button
+            key={group.id}
+            type="button"
+            onClick={() =>
+              iconGroupRefs.current[group.id]?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              })
+            }
+            className="rounded-full border border-slate-200 px-3 py-1 font-medium transition-colors duration-200 hover:border-orange-400 hover:text-orange-600"
+          >
+            {group.label}
+          </button>
+        ))}
+      </div>
+    )
+  }
+
+  return null
+}
+
 export interface IconCustomizationBlockProps {
   className?: string
   iconTabs: Array<{ value: IconPickerTab; label: string }>
@@ -99,48 +261,33 @@ export function IconCustomizationBlock({
   formatIconLabel,
   defaultIconName,
 }: IconCustomizationBlockProps) {
+  const headerSearchConfig: HeaderSearchConfig | undefined =
+    activeTab === 'emoji'
+      ? {
+          value: emojiSearchTerm,
+          onChange: onEmojiSearchChange,
+          placeholder: 'Buscar emoji...',
+        }
+      : activeTab === 'icons'
+        ? {
+            value: iconSearchTerm,
+            onChange: onIconSearchChange,
+            placeholder: 'Buscar ícone...',
+          }
+        : undefined
+
   return (
     <div className={cn('flex flex-col gap-6 rounded-lg bg-white p-4', className)}>
-      <div className="flex flex-col gap-3 border-b border-slate-200 pb-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-2">
-          {iconTabs.map((tab) => {
-            const isActive = activeTab === tab.value
-            return (
-              <button
-                key={tab.value}
-                type="button"
-                onClick={() => onTabChange(tab.value)}
-                className={cn(
-                  'rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50',
-                  isActive
-                    ? 'bg-slate-900 text-white shadow'
-                    : 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-orange-600'
-                )}
-              >
-                {tab.label}
-              </button>
-            )
-          })}
-        </div>
-        <button
-          type="button"
-          onClick={onRemoveIcon}
-          className="text-sm font-medium text-rose-500 transition-colors duration-200 hover:text-rose-600"
-        >
-          Remover
-        </button>
-      </div>
+      <IconCustomizationHeader
+        iconTabs={iconTabs}
+        activeTab={activeTab}
+        onTabChange={onTabChange}
+        onRemoveIcon={onRemoveIcon}
+        searchConfig={headerSearchConfig}
+      />
 
       {activeTab === 'emoji' && (
         <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Input
-              value={emojiSearchTerm}
-              onChange={(event) => onEmojiSearchChange(event.target.value)}
-              placeholder="Buscar emoji..."
-              className="h-10 text-sm"
-            />
-          </div>
           <div className="max-h-[12.5rem] w-full overflow-auto rounded-xl border border-slate-200/70 bg-white/70 p-3 shadow-inner">
             {emojiGroups.length > 0 ? (
               <div className="space-y-5">
@@ -188,49 +335,11 @@ export function IconCustomizationBlock({
               </div>
             )}
           </div>
-          {emojiGroups.length > 0 && (
-            <div className="flex flex-col gap-3 pt-2">
-              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                {emojiGroups.map((group) => (
-                  <button
-                    key={group.id}
-                    type="button"
-                    onClick={() =>
-                      emojiGroupRefs.current[group.id]?.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start',
-                      })
-                    }
-                    className="rounded-full border border-slate-200 px-3 py-1 font-medium transition-colors duration-200 hover:border-orange-400 hover:text-orange-600"
-                  >
-                    {group.label}
-                  </button>
-                ))}
-              </div>
-              <div className="flex items-center justify-end">
-                <button
-                  type="button"
-                  onClick={() => onTabChange('custom')}
-                  className="text-xs font-semibold text-orange-600 transition-colors duration-200 hover:text-orange-500"
-                >
-                  Ir para Personalizado
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
       {activeTab === 'icons' && (
         <div className="space-y-4">
-          <div className="min-w-[220px]">
-            <Input
-              value={iconSearchTerm}
-              onChange={(event) => onIconSearchChange(event.target.value)}
-              placeholder="Buscar ícone..."
-              className="h-10 text-sm"
-            />
-          </div>
           <div className="max-h-[12.5rem] w-full overflow-auto rounded-xl border border-slate-200/70 bg-white/70 p-3 shadow-inner">
             {iconGroups.length > 0 ? (
               <div className="space-y-5">
@@ -287,40 +396,6 @@ export function IconCustomizationBlock({
               </div>
             )}
           </div>
-          {iconGroups.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 pt-4 text-xs text-slate-500">
-              {iconLibraryFilters.map((filter) => (
-                <button
-                  key={filter.value}
-                  type="button"
-                  onClick={() => onIconLibraryFilterChange(filter.value)}
-                  className={cn(
-                    'rounded-full border border-slate-200 px-3 py-1 font-medium transition-colors duration-200 hover:border-orange-400 hover:text-orange-600',
-                    iconLibraryFilter === filter.value
-                      ? 'border-orange-400 text-orange-600 shadow-sm'
-                      : 'text-slate-600'
-                  )}
-                >
-                  {filter.label}
-                </button>
-              ))}
-              {iconGroups.map((group) => (
-                <button
-                  key={group.id}
-                  type="button"
-                  onClick={() =>
-                    iconGroupRefs.current[group.id]?.scrollIntoView({
-                      behavior: 'smooth',
-                      block: 'start',
-                    })
-                  }
-                  className="rounded-full border border-slate-200 px-3 py-1 font-medium transition-colors duration-200 hover:border-orange-400 hover:text-orange-600"
-                >
-                  {group.label}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       )}
 
@@ -458,6 +533,18 @@ export function IconCustomizationBlock({
           )}
         </div>
       )}
+
+      <IconCustomizationFooter
+        activeTab={activeTab}
+        onTabChange={onTabChange}
+        emojiGroups={emojiGroups}
+        emojiGroupRefs={emojiGroupRefs}
+        iconLibraryFilters={iconLibraryFilters}
+        iconLibraryFilter={iconLibraryFilter}
+        onIconLibraryFilterChange={onIconLibraryFilterChange}
+        iconGroups={iconGroups}
+        iconGroupRefs={iconGroupRefs}
+      />
     </div>
   )
 }

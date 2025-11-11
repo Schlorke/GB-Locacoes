@@ -156,7 +156,7 @@ const [open, setOpen] = useState(false)
   de dialogs encadeadas.
 - **Campos disponíveis**:
   - Cores do badge (fundo, texto, ícone) iguais ao design system legado.
-  - Seletor de cores com amostras reduzidas (36px) e espaçamentos compactos,
+  - Seletor de cores com amostras reduzidas (~44px) e espaçamentos compactos,
     preservando a área de toque acessível alinhada ao layout legado.
   - Grade completa de ícones (`ALL_AVAILABLE_ICONS` – Lucide + custom) com busca
     normalizada, mantendo fallback automático para `Tag`.
@@ -168,12 +168,15 @@ const [open, setOpen] = useState(false)
 - Dentro do card, a seleção do ícone Lucide aparece antes da seção de cores, e o
   seletor de origem (Padrão / Upload / URL externa) foi deslocado para logo após
   o bloco de cores, mantendo o fluxo de personalização mais intuitivo.
-- **Seletor de cor ampliado**: as amostras agora têm 12x12px (`h-12 w-12`) com
-  `shadow-inner`, mantendo acessibilidade em telas touch e alinhamento com o
-  padrão de espaçamento adotado no restante do playground.
+- **Seletor de cor ampliado**: as amostras agora têm aproximadamente 44px
+  (`h-11 w-11`) com `shadow-inner`, mantendo acessibilidade em telas touch e
+  alinhamento com o padrão de espaçamento adotado no restante do playground.
 - **Preview imediato**: o cartão grande e a badge são renderizados com o mesmo
   helper (`renderCategoryIcon`), garantindo que uploads/URLs apareçam no preview
   e nos cards simulados.
+- **Playground isolado**: a rota `/playground/icon-customization` exibe apenas o
+  bloco `IconCustomizationBlock` com largura fixa de 404px (altura automática),
+  reproduzindo o layout do print de referência sem headers adicionais.
 - **Fundo neutro**: o bloco “Preview do destaque” utiliza o mesmo gradiente
   suave (`bg-gradient-to-br from-slate-50 to-slate-100`) adotado no preview
   principal, com tipografia em tons `slate`, destacando o cartão escuro sem
@@ -324,74 +327,4 @@ const [open, setOpen] = useState(false)
 - `app/admin/equipamentos/page.tsx` utiliza overlay custom (sem Base UI) como
   solução temporária. O próximo passo é substituir este overlay pelo componente
   `Dialog` do playground.
-- Todos os wrappers anteriores (`components/ui/dialog.tsx`,
-  `view-category-modal`, `modern-category-modal`, `command`, `emoji-picker`,
-  `icon-picker`, `popover`) foram removidos para evitar desvios.
-
-## 🚧 Próximos Passos
-
-1. Extrair o layout demonstrado em `EquipmentDialogDemo` para um componente
-   reutilizável (`components/dialogs/base-dialog.tsx` – nome provisório).
-2. Reintegrar previews de equipamentos, categorias e orçamentos usando o
-   componente Base UI.
-3. Aplicar o mesmo padrão nos fluxos administrativos (criação/edição) e em CTAs
-   públicos que dependiam de Radix Dialog.
-4. Documentar variantes (formulário curto, confirmação, wizard) diretamente no
-   Storybook quando a API estiver fechada.
-
-## 📂 Arquivos Relacionados
-
-- `app/playground/page.tsx` – laboratório principal com todos os exemplos, agora
-  consumindo o wrapper `components/ui/dialog`.
-- `app/playground/page.tsx` – contém o protótipo oficial do fluxo “Criar/Editar
-  Categoria” reutilizando o padrão de dialogs encadeadas.
-- `app/admin/equipamentos/page.tsx` – overlay temporário aguardando migração.
-- `docs/features/admin-system.md` – seção de categorias atualizada com aviso de
-  manutenção.
-- `docs/internal/modal-scroll-errors-analysis.md` – histórico dos problemas
-  resolvidos com modais antigos.
-
-## 🔗 Referências
-
-- Base UI – Dialog Component:
-  https://base-ui.com/react/components/dialog#open-from-a-menu
-- Diretrizes internas de design: `docs/features/design-system.md`
-- Histórico de problemas com modais antigos:
-  `docs/internal/modal-scroll-errors-analysis.md`
-
-## 📘 Padrão de Dialogs Encadeadas
-
-Para qualquer botão interno que deva abrir outra dialog (ex.: “Editar”,
-“Customizar”), utilize diretamente o wrapper universal:
-
-```tsx
-import { Dialog } from '@/components/ui/dialog'
-
-<Dialog.Root open={parentOpen} onOpenChange={setParentOpen}>
-  <Dialog.Portal>
-    <Dialog.Backdrop />
-    <Dialog.Popup data-nested-parent={childOpen ? '' : undefined}>
-      <Dialog.Content>{/* Conteúdo principal */}</Dialog.Content>
-    </Dialog.Popup>
-  </Dialog.Portal>
-</Dialog.Root>
-
-<Dialog.Root open={childOpen} onOpenChange={setChildOpen}>
-  <Dialog.Portal>
-    <Dialog.Backdrop />
-    <Dialog.Popup variant="compact">
-      {/* Dialog secundária */}
-    </Dialog.Popup>
-  </Dialog.Portal>
-</Dialog.Root>
-```
-
-- **Comportamento:** o Base UI injeta atributos (`data-nested`,
-  `data-nested-dialog-open`) e a variável `--nested-dialogs`. As variantes do
-  popup já aplicam deslocamento e escala automáticos.
-- **Implementação:** defina `variant="compact"` para a dialog filha e habilite
-  `data-nested-parent` no popup pai enquanto ela estiver aberta para reproduzir
-  o recuo visual.
-- **Controle global:** mantenha o bloqueio de scroll (`overflow-hidden` em
-  `html` e `body`) enquanto qualquer dialog estiver aberta, como demonstrado em
-  `app/playground/page.tsx`.
+- Todos os wrappers anteriores (`components/ui/dialog.tsx`, `

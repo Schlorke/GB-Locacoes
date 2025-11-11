@@ -568,13 +568,10 @@ function DesignDialog({
                         <span className="truncate">{resolvedCategoryName}</span>
                       </div>
                     </div>
-                    <div className="mt-6 space-y-3 border-t border-slate-200 pt-6">
-                      <h3 className="text-sm font-semibold text-slate-800">
-                        Cores
-                      </h3>
+                    <div className="mt-6 space-y-3">
                       <div className="grid grid-cols-3 gap-3 sm:gap-4">
                         <div className="flex flex-col items-center gap-1.5 text-center">
-                          <label className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                          <label className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
                             <span
                               className="absolute inset-1.5 shadow-inner"
                               style={{ backgroundColor: localDesign.iconColor }}
@@ -602,7 +599,7 @@ function DesignDialog({
                         </div>
 
                         <div className="flex flex-col items-center gap-1.5 text-center">
-                          <label className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                          <label className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
                             <span
                               className="absolute inset-1.5 shadow-inner"
                               style={{
@@ -632,7 +629,7 @@ function DesignDialog({
                         </div>
 
                         <div className="flex flex-col items-center gap-1.5 text-center">
-                          <label className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                          <label className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
                             <span
                               className="absolute inset-1.5 shadow-inner"
                               style={{ backgroundColor: localDesign.fontColor }}

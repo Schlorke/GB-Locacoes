@@ -800,6 +800,9 @@ primeiro:**
 8. **❌ NÃO** crie metadados manuais → Use `generateMetadata` pattern
 9. **❌ NÃO** modifique sitemap.xml → É gerado automaticamente
 10. **❌ NÃO** altere robots.txt → Já configurado otimamente
+11. **❌ NÃO** adicione headers/descrições extras em páginas de
+    playground/rascunho quando o pedido for apenas testar um componente;
+    renderize somente o bloco solicitado.
 
 #### **🚫 Técnicos (MANTER PADRÕES):**
 
