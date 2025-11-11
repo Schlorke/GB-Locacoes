@@ -90,17 +90,38 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 - **Category Dialog playground**: fluxo de criação/edição extraído para
   `app/playground/category-dialog.tsx`, permitindo reutilização direta em outras
   áreas antes da promoção para produção.
+- **IconCustomizationBlock**: Bloco de personalização extraído para
+  `components/dialogs/icon-customization-block.tsx`, com abas (Emoji, Ícones,
+  Personalizado), busca, filtros Lucide/Custom e upload prontos para
+  reutilização fora do playground principal. A seção de cores passou a ficar
+  logo abaixo do preview, fora do componente, para manter a hierarquia visual.
+- **Playground isolado de ícones**: Nova rota
+  `app/playground/icon-customization/page.tsx` dedicada a testar o
+  `IconCustomizationBlock` em modo sandbox, com preview simplificado e controles
+  independentes para experimentação rápida.
 
 ### Changed 🔄
 
 - **Category Dialog – Grade de ícones**: `app/playground/category-dialog.tsx`
   agora reutiliza `ALL_AVAILABLE_ICONS` para exibir toda a biblioteca (Lucide +
   custom) com busca normalizada, preservando ícones legados e fallback
-  automático para `Tag`. A ajuda ao lado de “Ícone” foi reescrita para
+  automático para `Tag`. A ajuda ao lado de "Ícone" foi reescrita para
   apresentar a mensagem em bloco único com emoji 💡 (sem ícone Lucide separado),
   tornando a tooltip mais legível enquanto mantém `--layer-tooltip` e evita
   conflitos de z-index na dialog. Documentação sincronizada em
   `docs/features/dialog-lab.md`.
+- **Category Dialog refatorado**: `app/playground/category-dialog.tsx` agora
+  consome o `IconCustomizationBlock`, reduzindo a complexidade do componente
+  principal, centralizando estados de busca/filtro e reaproveitando o helper
+  `renderCategoryIcon` movido para `lib/category-design.tsx`. Os controles de
+  cor foram reposicionados abaixo do preview, fora do bloco de ícones.
+- **Utilidades compartilhadas**: tipos, constantes e sanitização de SVG foram
+  promovidos para `lib/category-design.tsx`, enquanto normalização/labels de
+  ícones vivem em `lib/icon-utils.ts`, garantindo consistência entre playground,
+  sandbox e futuros fluxos admin.
+- **Documentação Dialog Lab**: seção "Configurador de Categoria" atualizada em
+  `docs/features/dialog-lab.md` detalhando o componente extraído e o novo
+  playground dedicado.
 - **DesignDialog actions**: Botões "Editar" e "Resetar" do configurador de
   categoria foram padronizados com `buttonVariants` (`variant="outline"`,
   `size="compact"`), preservando responsividade e os estados de hover definidos
@@ -313,6 +334,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   (`border-t` + `pt-6`), reduzindo ruído visual e mantendo o fluxo top-down de
   personalização sem cartões duplicados dentro do Dialog Lab.
   - Ajuste aplicado em `app/playground/category-dialog.tsx`
+  - Documentação sincronizada em `docs/features/dialog-lab.md`
+  - Navegação principal replica o comportamento do Notion com abas `Emoji`,
+    `Ícones`, `Personalizado` e ação `Remover`, incluindo biblioteca de emojis
+    agrupada, filtro (Lucide x Personalizados) e atalhos de rolagem nas grades.
   - Documentação sincronizada em `docs/features/dialog-lab.md`
 
 ### Fixed 🐛

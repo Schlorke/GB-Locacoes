@@ -1,23 +1,41 @@
 'use client'
 
+import type { TabConfig } from '@/components/category-showcase'
+import { CategoryShowcase } from '@/components/category-showcase'
+import { IconCustomizationBlock } from '@/components/dialogs/icon-customization-block'
 import {
-  CategoryShowcase,
-  type TabConfig,
-} from '@/components/category-showcase'
+  CUSTOM_ICON_GROUPS,
+  EMOJI_GROUPS,
+  ICON_LIBRARY_FILTERS,
+  ICON_PICKER_TABS,
+  LUCIDE_ICON_GROUPS,
+  type IconPickerTab,
+} from '@/components/dialogs/icon-customization-data'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
-import { HybridTooltip } from '@/components/ui/HybridTooltip'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import {
-  ALL_AVAILABLE_ICONS,
-  ALL_ICONS,
-  renderIcon as renderLibraryIcon,
-  type AllIconNames,
-} from '@/lib/constants/all-icons'
+  CATEGORY_PREVIEW_TABS,
+  DEFAULT_CUSTOM_ICON,
+  DEFAULT_DESIGN,
+  DEFAULT_ICON,
+  MAX_SVG_FILE_SIZE_KB,
+  cloneDesign,
+  isValidSvgFile,
+  isValidSvgUrl,
+  renderCategoryIcon,
+  sanitizeSvg,
+  svgToDataUrl,
+  type CategoryDesign,
+  type CategoryDetails,
+  type CategoryDialogMode,
+  type CategoryPlacement,
+  type CustomIconSource,
+} from '@/lib/category-design'
+import { isCustomIcon, type AllIconNames } from '@/lib/constants/all-icons'
 import { cn } from '@/lib/utils'
 import {
-  Info,
   Loader2,
   Pencil,
   Plus,
@@ -33,42 +51,18 @@ import {
   useState,
   type ChangeEvent,
   type ComponentType,
-  type ReactElement,
   type ReactNode,
 } from 'react'
 
-import type { CustomIconProps } from '@/components/icons/custom'
-
-type CategoryDialogMode = 'create' | 'edit'
+import { type CustomIconProps } from '@/components/icons/custom'
+import {
+  buildIconSearchIndex,
+  formatIconLabel,
+  normalizeIconName,
+} from '@/lib/icon-utils'
 
 interface DialogStateUpdater {
   onStateChange: (..._args: [key: string, isOpen: boolean]) => void
-}
-
-interface CategoryDetails {
-  name: string
-  description: string
-}
-
-type CategoryPlacement = 'phases' | 'types'
-
-type CustomIconSource = 'none' | 'upload' | 'url'
-
-type CustomIconConfig = {
-  source: CustomIconSource
-  svgContent?: string
-  dataUrl?: string
-  fileName?: string
-  url?: string
-}
-
-type CategoryDesign = {
-  backgroundColor: string
-  fontColor: string
-  iconColor: string
-  icon: AllIconNames
-  customIcon: CustomIconConfig
-  placement: CategoryPlacement
 }
 
 const SAMPLE_CATEGORY: CategoryDetails = {
@@ -82,83 +76,6 @@ const EMPTY_CATEGORY: CategoryDetails = {
 }
 
 const RESET_ANIMATION_DURATION = 600
-const MAX_SVG_FILE_SIZE_KB = 64
-
-const DEFAULT_CUSTOM_ICON: CustomIconConfig = {
-  source: 'none',
-}
-
-const DEFAULT_ICON: AllIconNames = 'Tag'
-
-const LEGACY_ICON_MAP: Record<string, AllIconNames> = {
-  construction: 'Construction',
-  building: 'Building',
-  anchor: 'Anchor',
-  drill: 'Drill',
-  hammer: 'Hammer',
-  hardhat: 'HardHat',
-  tree: 'TreePine',
-  truck: 'Truck',
-  wrench: 'Wrench',
-  tag: 'Tag',
-}
-
-const ICON_REGISTRY = new Set<string>(Object.keys(ALL_ICONS))
-
-function normalizeIconName(
-  name: string | null | undefined
-): AllIconNames | null {
-  if (!name) return null
-
-  if (ICON_REGISTRY.has(name)) {
-    return name as AllIconNames
-  }
-
-  const legacyMatch = LEGACY_ICON_MAP[name.toLowerCase()]
-  if (legacyMatch) {
-    return legacyMatch
-  }
-
-  const pascal = name
-    .replace(/[-_\s]+(.)/g, (_match, group: string) => group.toUpperCase())
-    .replace(/^(.)/, (_match, group: string) => group.toUpperCase())
-
-  if (ICON_REGISTRY.has(pascal)) {
-    return pascal as AllIconNames
-  }
-
-  return null
-}
-
-function formatIconLabel(name: string): string {
-  return name
-    .replace(/[-_]/g, ' ')
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .split(' ')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ')
-}
-
-function buildIconSearchIndex(name: string): string {
-  const label = formatIconLabel(name)
-  return `${name} ${label}`.toLowerCase()
-}
-
-const CATEGORY_PREVIEW_TABS: Array<Pick<TabConfig, 'value' | 'label'>> = [
-  { value: 'phases', label: 'Fases da obra' },
-  { value: 'types', label: 'Tipo de trabalho' },
-]
-
-const DEFAULT_DESIGN: CategoryDesign = {
-  backgroundColor: '#3b82f6',
-  fontColor: '#ffffff',
-  iconColor: '#ffffff',
-  icon: DEFAULT_ICON,
-  customIcon: { ...DEFAULT_CUSTOM_ICON },
-  placement: 'types',
-}
 
 const DIALOG_PREVIEW_CARD = [
   'bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 shadow-sm',
@@ -187,123 +104,6 @@ const DIALOG_PREVIEW_BADGE = [
 ].join(' ')
 
 const DIALOG_FORM_SECTION = ['space-y-4', 'overflow-visible'].join(' ')
-
-function cloneDesign(design: CategoryDesign): CategoryDesign {
-  return {
-    ...design,
-    icon: normalizeIconName(design.icon) ?? DEFAULT_ICON,
-    customIcon: { ...design.customIcon },
-  }
-}
-
-function sanitizeSvg(raw: string): string | null {
-  if (!raw) return null
-
-  const trimmed = raw.trim()
-  const svgIndex = trimmed.toLowerCase().indexOf('<svg')
-
-  if (svgIndex === -1) {
-    return null
-  }
-
-  const normalized = trimmed.slice(svgIndex)
-  const withoutScript = normalized.replace(
-    /<script[\s\S]*?>[\s\S]*?<\/script>/gi,
-    ''
-  )
-  const withoutForeignObject = withoutScript.replace(
-    /<foreignObject[\s\S]*?<\/foreignObject>/gi,
-    ''
-  )
-  const withoutEvents = withoutForeignObject
-    .replace(/\son\w+="[^"]*"/gi, '')
-    .replace(/\son\w+='[^']*'/gi, '')
-    .replace(/xlink:href="javascript:[^"]*"/gi, '')
-    .replace(/href="javascript:[^"]*"/gi, '')
-
-  return withoutEvents
-}
-
-function svgToDataUrl(svg: string): string {
-  if (!svg) return ''
-  if (typeof window === 'undefined' || typeof window.btoa !== 'function') {
-    return ''
-  }
-
-  const utf8Svg = encodeURIComponent(svg).replace(
-    /%([0-9A-F]{2})/g,
-    (_match, hex) => String.fromCharCode(Number.parseInt(hex, 16))
-  )
-
-  return `data:image/svg+xml;base64,${window.btoa(utf8Svg)}`
-}
-
-function isValidSvgFile(file: File) {
-  const isSvg =
-    file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg')
-  const isUnderLimit = file.size <= MAX_SVG_FILE_SIZE_KB * 1024
-  return isSvg && isUnderLimit
-}
-
-function isValidSvgUrl(value: string) {
-  try {
-    const parsed = new URL(value)
-    const isHttp = parsed.protocol === 'https:' || parsed.protocol === 'http:'
-    const endsWithSvg = parsed.pathname.toLowerCase().endsWith('.svg')
-    return isHttp && endsWithSvg
-  } catch (_error) {
-    return false
-  }
-}
-
-type RenderIconOptions = {
-  size?: number
-  className?: string
-  color?: string
-}
-
-function renderCategoryIcon(
-  design: CategoryDesign,
-  { size = 28, className, color }: RenderIconOptions = {}
-): ReactElement {
-  const { customIcon } = design
-
-  if (customIcon.source === 'upload' && customIcon.dataUrl) {
-    return (
-      <img
-        src={customIcon.dataUrl}
-        alt=""
-        className={cn('h-full w-full object-contain', className)}
-        style={{ width: size, height: size }}
-      />
-    )
-  }
-
-  if (customIcon.source === 'url' && customIcon.url) {
-    return (
-      <img
-        src={customIcon.url}
-        alt=""
-        className={cn('h-full w-full object-contain', className)}
-        style={{ width: size, height: size }}
-      />
-    )
-  }
-
-  const normalizedIcon = normalizeIconName(design.icon) ?? DEFAULT_ICON
-  const iconColor = color ?? design.iconColor ?? 'currentColor'
-  const renderedIcon =
-    renderLibraryIcon(normalizedIcon, size, iconColor, className) ??
-    renderLibraryIcon(DEFAULT_ICON, size, iconColor, className)
-
-  if (renderedIcon) {
-    return renderedIcon
-  }
-
-  return (
-    <TagIcon size={size} color={iconColor} className={className} aria-hidden />
-  )
-}
 
 function buildCategoryPreviewIcon(
   design: CategoryDesign
@@ -422,7 +222,14 @@ function DesignDialog({
     design.customIcon.source === 'url' ? (design.customIcon.url ?? '') : ''
   )
   const [iconSearchTerm, setIconSearchTerm] = useState('')
+  const [emojiSearchTerm, setEmojiSearchTerm] = useState('')
+  const [activeIconTab, setActiveIconTab] = useState<IconPickerTab>('icons')
+  const [iconLibraryFilter, setIconLibraryFilter] = useState<
+    'lucide' | 'custom'
+  >('lucide')
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const emojiGroupRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const iconGroupRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   useEffect(() => {
     setLocalDesign(cloneDesign(design))
@@ -432,101 +239,58 @@ function DesignDialog({
     setUploadError(null)
     setUrlError(null)
     setIconSearchTerm('')
-  }, [design])
+    setEmojiSearchTerm('')
 
-  const iconOptions = useMemo<AllIconNames[]>(() => {
-    const base = new Set<AllIconNames>(ALL_AVAILABLE_ICONS)
-    const currentIcon = normalizeIconName(localDesign.icon)
-    if (currentIcon) {
-      base.add(currentIcon)
+    const nextTab: IconPickerTab =
+      design.customIcon.source === 'emoji'
+        ? 'emoji'
+        : design.customIcon.source === 'upload' ||
+            design.customIcon.source === 'url'
+          ? 'custom'
+          : 'icons'
+    setActiveIconTab(nextTab)
+
+    if (
+      design.customIcon.source === 'upload' ||
+      design.customIcon.source === 'url'
+    ) {
+      setIconLibraryFilter('lucide')
     }
-    return Array.from(base)
-  }, [localDesign.icon])
-
-  const filteredIconOptions = useMemo(() => {
-    const term = iconSearchTerm.trim().toLowerCase()
-    if (!term) return iconOptions
-    return iconOptions.filter((iconName) =>
-      buildIconSearchIndex(iconName).includes(term)
-    )
-  }, [iconOptions, iconSearchTerm])
-
-  const iconOptionButtons = filteredIconOptions.map((iconName) => {
-    const isActive = localDesign.icon === iconName
-    const label = formatIconLabel(iconName)
-    const iconClassName =
-      'h-5 w-5 transition-colors duration-200 group-data-[state=active]:text-orange-600'
-    const renderedIcon = renderLibraryIcon(
-      iconName,
-      20,
-      'currentColor',
-      iconClassName
-    ) ??
-      renderLibraryIcon(DEFAULT_ICON, 20, 'currentColor', iconClassName) ?? (
-        <TagIcon className={iconClassName} size={20} aria-hidden />
-      )
-
-    return (
-      <button
-        key={iconName}
-        type="button"
-        onClick={() =>
-          setLocalDesign((prev) => ({
-            ...prev,
-            icon: iconName,
-          }))
-        }
-        className={cn(
-          'group flex aspect-square w-full items-center justify-center rounded-lg border border-slate-200 bg-white/80 text-slate-600 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
-          isActive
-            ? 'shadow-md hover:shadow-md'
-            : 'shadow-sm hover:text-orange-600 hover:shadow-lg'
-        )}
-        title={label}
-        aria-pressed={isActive}
-        data-state={isActive ? 'active' : undefined}
-      >
-        {renderedIcon}
-      </button>
-    )
-  })
-  const hasIconResults = iconOptionButtons.length > 0
+  }, [design])
 
   const handleSourceChange = (source: CustomIconSource) => {
     setUploadError(null)
     setUrlError(null)
 
-    setLocalDesign((prev) => {
-      if (source === 'none') {
-        return {
-          ...prev,
-          customIcon: { ...DEFAULT_CUSTOM_ICON },
-        }
-      }
+    if (source === 'none') {
+      setLocalDesign((prev) => ({
+        ...prev,
+        customIcon: { ...DEFAULT_CUSTOM_ICON },
+      }))
+      setActiveIconTab('icons')
+      return
+    }
 
-      if (source === prev.customIcon.source) {
-        return prev
-      }
+    if (source === 'upload') {
+      setLocalDesign((prev) => ({
+        ...prev,
+        customIcon: { source: 'upload' },
+      }))
+      setSvgUrlInput('')
+      setActiveIconTab('custom')
+      return
+    }
 
-      if (source === 'upload') {
-        return {
-          ...prev,
-          customIcon: { source: 'upload' },
-        }
-      }
-
-      return {
+    if (source === 'url') {
+      setLocalDesign((prev) => ({
         ...prev,
         customIcon: {
           source: 'url',
           url:
             prev.customIcon.source === 'url' ? prev.customIcon.url : undefined,
         },
-      }
-    })
-
-    if (source !== 'url') {
-      setSvgUrlInput('')
+      }))
+      setActiveIconTab('custom')
     }
   }
 
@@ -588,6 +352,7 @@ function DesignDialog({
       setUploadError(null)
       setUrlError(null)
       setIsProcessingUpload(false)
+      setActiveIconTab('custom')
     }
     reader.onerror = () => {
       setUploadError('Erro ao processar o arquivo SVG.')
@@ -619,6 +384,7 @@ function DesignDialog({
 
     setUploadError(null)
     setUrlError(null)
+    setActiveIconTab('custom')
   }
 
   const handleClearCustomIcon = () => {
@@ -629,6 +395,46 @@ function DesignDialog({
     setSvgUrlInput('')
     setUploadError(null)
     setUrlError(null)
+    setActiveIconTab('icons')
+    setIconLibraryFilter('lucide')
+    setEmojiSearchTerm('')
+    setIconSearchTerm('')
+  }
+
+  const handleEmojiSelect = (emoji: string) => {
+    setLocalDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        source: 'emoji',
+        emoji,
+      },
+    }))
+    setActiveIconTab('emoji')
+  }
+
+  const handleIconSelect = (iconName: AllIconNames) => {
+    const resolved = normalizeIconName(iconName) ?? iconName
+    setLocalDesign((prev) => ({
+      ...prev,
+      icon: resolved,
+      customIcon: { ...DEFAULT_CUSTOM_ICON },
+    }))
+    setActiveIconTab('icons')
+  }
+
+  const handleRemoveIcon = () => {
+    setLocalDesign((prev) => ({
+      ...prev,
+      icon: DEFAULT_ICON,
+      customIcon: { ...DEFAULT_CUSTOM_ICON },
+    }))
+    setSvgUrlInput('')
+    setUploadError(null)
+    setUrlError(null)
+    setActiveIconTab('icons')
+    setIconLibraryFilter('lucide')
+    setEmojiSearchTerm('')
+    setIconSearchTerm('')
   }
 
   const handleSave = () => {
@@ -639,7 +445,51 @@ function DesignDialog({
   const placementLabel =
     localDesign.placement === 'phases' ? 'Fases da obra' : 'Tipo de trabalho'
 
-  const isCustomIconActive = localDesign.customIcon.source !== 'none'
+  const hasUploadedIcon =
+    localDesign.customIcon.source === 'upload' ||
+    localDesign.customIcon.source === 'url'
+
+  const selectedEmoji =
+    localDesign.customIcon.source === 'emoji'
+      ? (localDesign.customIcon.emoji ?? null)
+      : null
+
+  const activeIconName = normalizeIconName(localDesign.icon) ?? localDesign.icon
+
+  const resolvedEmojiGroups = useMemo(() => {
+    const term = emojiSearchTerm.trim().toLowerCase()
+
+    return EMOJI_GROUPS.map((group) => {
+      const emojis = term
+        ? group.emojis.filter((emoji) =>
+            emoji.toLowerCase().includes(term.toLowerCase())
+          )
+        : group.emojis
+      return { ...group, emojis }
+    }).filter((group) => group.emojis.length > 0)
+  }, [emojiSearchTerm])
+
+  const activeIconGroups = useMemo(() => {
+    const term = iconSearchTerm.trim().toLowerCase()
+    const baseGroups =
+      iconLibraryFilter === 'lucide' ? LUCIDE_ICON_GROUPS : CUSTOM_ICON_GROUPS
+
+    return baseGroups
+      .map((group) => {
+        const icons = group.icons
+          .map(
+            (iconName) =>
+              normalizeIconName(iconName) ??
+              (isCustomIcon(iconName) ? (iconName as AllIconNames) : null)
+          )
+          .filter((iconName): iconName is AllIconNames => Boolean(iconName))
+          .filter((iconName) =>
+            term ? buildIconSearchIndex(iconName).includes(term) : true
+          )
+        return { ...group, icons }
+      })
+      .filter((group) => group.icons.length > 0)
+  }, [iconLibraryFilter, iconSearchTerm])
 
   const resolvedCategoryName =
     categoryName.trim().length > 0 ? categoryName : 'Categoria sem nome'
@@ -718,315 +568,154 @@ function DesignDialog({
                         <span className="truncate">{resolvedCategoryName}</span>
                       </div>
                     </div>
-
-                    <div className="mt-6 space-y-6 border-t border-slate-200 pt-6">
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-1.5">
-                          <h3 className="text-sm font-semibold text-slate-800">
-                            Ícone
-                          </h3>
-                          <HybridTooltip
-                            content={
-                              <span className="block text-[13px] leading-snug">
-                                💡 O ícone selecionado aparece como fallback
-                                sempre que não houver um SVG personalizado
-                                aplicado.
-                              </span>
-                            }
-                            side="top"
-                            align="start"
-                            className="z-[var(--layer-tooltip)]"
-                          >
-                            <button
-                              type="button"
-                              aria-label="Ajuda sobre seleção de ícone"
-                              className="inline-flex h-5 w-5 items-center justify-center rounded-full text-slate-400 transition-colors duration-200 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-                            >
-                              <Info className="h-4 w-4" aria-hidden="true" />
-                            </button>
-                          </HybridTooltip>
-                        </div>
-                        <Input
-                          value={iconSearchTerm}
-                          onChange={(event) =>
-                            setIconSearchTerm(event.target.value)
-                          }
-                          placeholder="Buscar ícone..."
-                          className="h-10 text-sm"
-                        />
-                        <div className="max-h-[12.5rem] w-full overflow-auto rounded-xl border border-slate-200/70 bg-white/70 p-3 shadow-inner">
-                          <div className="grid grid-cols-4 gap-3 sm:grid-cols-5 md:grid-cols-6">
-                            {hasIconResults ? (
-                              iconOptionButtons
-                            ) : (
-                              <div className="col-span-4 flex h-24 items-center justify-center rounded-lg border border-dashed border-slate-200 bg-white text-xs text-slate-500 sm:col-span-5 md:col-span-6">
-                                Nenhum ícone encontrado.
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="space-y-4">
-                        <div className="space-y-1">
-                          <h3 className="text-sm font-semibold text-slate-800">
-                            Ícone personalizado para o cartão principal
-                          </h3>
-                          <p className="text-xs text-slate-500">
-                            As cores do botão permanecem fixas. Use um SVG
-                            customizado para representar melhor a categoria.
-                          </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2">
-                          {[
-                            { value: 'none', label: 'Padrão' },
-                            { value: 'upload', label: 'Upload' },
-                            { value: 'url', label: 'URL externa' },
-                          ].map((option) => (
-                            <Button
-                              key={option.value}
-                              type="button"
-                              variant="outline"
-                              size="compact"
-                              onClick={() =>
-                                handleSourceChange(
-                                  option.value as CustomIconSource
-                                )
+                    <div className="mt-6 space-y-3 border-t border-slate-200 pt-6">
+                      <h3 className="text-sm font-semibold text-slate-800">
+                        Cores
+                      </h3>
+                      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                        <div className="flex flex-col items-center gap-1.5 text-center">
+                          <label className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                            <span
+                              className="absolute inset-1.5 shadow-inner"
+                              style={{ backgroundColor: localDesign.iconColor }}
+                              aria-hidden="true"
+                            />
+                            <input
+                              type="color"
+                              value={localDesign.iconColor}
+                              onChange={(event) =>
+                                setLocalDesign((prev) => ({
+                                  ...prev,
+                                  iconColor: event.target.value,
+                                }))
                               }
-                              className={cn(
-                                'rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 shadow-sm transition-all duration-200 hover:from-white hover:to-white hover:shadow-md disabled:bg-gradient-to-br disabled:from-slate-50 disabled:to-slate-100 disabled:text-slate-500',
-                                localDesign.customIcon.source === option.value
-                                  ? 'text-orange-600 font-semibold bg-white from-white to-white'
-                                  : 'text-slate-600 hover:text-orange-600'
-                              )}
-                            >
-                              {option.label}
-                            </Button>
-                          ))}
+                              aria-label="Selecionar cor do ícone"
+                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                            />
+                          </label>
+                          <span className="text-[11px] font-semibold text-slate-600">
+                            Cor do ícone
+                          </span>
+                          <span className="text-[11px] uppercase tracking-wide text-slate-400">
+                            {localDesign.iconColor.toUpperCase()}
+                          </span>
                         </div>
 
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept=".svg,image/svg+xml"
-                          className="hidden"
-                          onChange={handleFileInputChange}
-                        />
+                        <div className="flex flex-col items-center gap-1.5 text-center">
+                          <label className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                            <span
+                              className="absolute inset-1.5 shadow-inner"
+                              style={{
+                                backgroundColor: localDesign.backgroundColor,
+                              }}
+                              aria-hidden="true"
+                            />
+                            <input
+                              type="color"
+                              value={localDesign.backgroundColor}
+                              onChange={(event) =>
+                                setLocalDesign((prev) => ({
+                                  ...prev,
+                                  backgroundColor: event.target.value,
+                                }))
+                              }
+                              aria-label="Selecionar cor de fundo"
+                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                            />
+                          </label>
+                          <span className="text-[11px] font-semibold text-slate-600">
+                            Cor de fundo
+                          </span>
+                          <span className="text-[11px] uppercase tracking-wide text-slate-400">
+                            {localDesign.backgroundColor.toUpperCase()}
+                          </span>
+                        </div>
 
-                        {localDesign.customIcon.source === 'upload' && (
-                          <div className="space-y-3">
-                            <div className="flex flex-wrap items-center gap-3">
-                              <Button
-                                type="button"
-                                variant="outline"
-                                onClick={() => fileInputRef.current?.click()}
-                                disabled={isProcessingUpload}
-                                className="h-9 border-dashed border-slate-300 text-sm font-medium text-slate-700 hover:border-orange-400 hover:text-orange-600"
-                              >
-                                Selecionar arquivo SVG
-                              </Button>
-                              {isProcessingUpload && (
-                                <Loader2 className="h-4 w-4 animate-spin text-slate-500" />
-                              )}
-                              {localDesign.customIcon.fileName &&
-                                !isProcessingUpload && (
-                                  <span className="truncate text-xs text-slate-500">
-                                    {localDesign.customIcon.fileName}
-                                  </span>
-                                )}
-                            </div>
-                            <p className="text-xs text-slate-500">
-                              Formato SVG até {MAX_SVG_FILE_SIZE_KB}kb. Scripts
-                              e elementos externos são removidos
-                              automaticamente.
-                            </p>
-                            {uploadError && (
-                              <p className="text-xs font-medium text-red-500">
-                                {uploadError}
-                              </p>
-                            )}
-                          </div>
-                        )}
-
-                        {localDesign.customIcon.source === 'url' && (
-                          <div className="space-y-3">
-                            <div className="flex gap-2">
-                              <Input
-                                value={svgUrlInput}
-                                onChange={(event) =>
-                                  setSvgUrlInput(event.target.value)
-                                }
-                                placeholder="https://exemplo.com/icone.svg"
-                                className="h-10 text-sm"
-                              />
-                              <Button
-                                type="button"
-                                variant="outline"
-                                onClick={handleUrlApply}
-                                className="h-10 whitespace-nowrap border-slate-300 text-sm font-medium text-slate-700 hover:border-slate-400 hover:text-orange-600"
-                              >
-                                Aplicar
-                              </Button>
-                            </div>
-                            <p className="text-xs text-slate-500">
-                              Aceitamos apenas URLs HTTPS públicas que terminem
-                              em <code>.svg</code>.
-                            </p>
-                            {urlError && (
-                              <p className="text-xs font-medium text-red-500">
-                                {urlError}
-                              </p>
-                            )}
-                          </div>
-                        )}
-
-                        {isCustomIconActive && (
-                          <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
-                            <div className="flex items-center gap-3">
-                              <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white">
-                                {renderCategoryIcon(localDesign, {
-                                  size: 28,
-                                  className: 'h-7 w-7 text-slate-700',
-                                })}
-                              </div>
-                              <div className="flex flex-col">
-                                <span className="text-xs font-semibold text-slate-700">
-                                  Pré-visualização
-                                </span>
-                                <span className="text-xs text-slate-500">
-                                  {localDesign.customIcon.source === 'upload'
-                                    ? (localDesign.customIcon.fileName ??
-                                      'SVG enviado')
-                                    : localDesign.customIcon.url}
-                                </span>
-                              </div>
-                            </div>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              onClick={handleClearCustomIcon}
-                              className="h-9 border-slate-300 text-xs font-medium text-slate-600 hover:border-red-400 hover:text-red-600"
-                            >
-                              Remover ícone personalizado
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="space-y-3 border-t border-slate-200 pt-6">
-                        <h3 className="text-sm font-semibold text-slate-800">
-                          Cores
-                        </h3>
-                        <div className="grid grid-cols-3 gap-2">
-                          <div className="flex flex-col items-center gap-1.5 text-center">
-                            <label className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-                              <span
-                                className="absolute inset-[3px] rounded-lg shadow-inner"
-                                style={{
-                                  backgroundColor: localDesign.iconColor,
-                                }}
-                                aria-hidden="true"
-                              />
-                              <input
-                                type="color"
-                                value={localDesign.iconColor}
-                                onChange={(event) =>
-                                  setLocalDesign((prev) => ({
-                                    ...prev,
-                                    iconColor: event.target.value,
-                                  }))
-                                }
-                                aria-label="Selecionar cor do ícone"
-                                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                              />
-                            </label>
-                            <span className="text-[11px] font-semibold text-slate-600">
-                              Cor do ícone
-                            </span>
-                            <span className="text-[11px] uppercase tracking-wide text-slate-400">
-                              {localDesign.iconColor.toUpperCase()}
-                            </span>
-                          </div>
-
-                          <div className="flex flex-col items-center gap-1.5 text-center">
-                            <label className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-                              <span
-                                className="absolute inset-[3px] rounded-lg shadow-inner"
-                                style={{
-                                  backgroundColor: localDesign.backgroundColor,
-                                }}
-                                aria-hidden="true"
-                              />
-                              <input
-                                type="color"
-                                value={localDesign.backgroundColor}
-                                onChange={(event) =>
-                                  setLocalDesign((prev) => ({
-                                    ...prev,
-                                    backgroundColor: event.target.value,
-                                  }))
-                                }
-                                aria-label="Selecionar cor de fundo"
-                                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                              />
-                            </label>
-                            <span className="text-[11px] font-semibold text-slate-600">
-                              Cor de fundo
-                            </span>
-                            <span className="text-[11px] uppercase tracking-wide text-slate-400">
-                              {localDesign.backgroundColor.toUpperCase()}
-                            </span>
-                          </div>
-
-                          <div className="flex flex-col items-center gap-1.5 text-center">
-                            <label className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-                              <span
-                                className="absolute inset-[3px] rounded-lg shadow-inner"
-                                style={{
-                                  backgroundColor: localDesign.fontColor,
-                                }}
-                                aria-hidden="true"
-                              />
-                              <input
-                                type="color"
-                                value={localDesign.fontColor}
-                                onChange={(event) =>
-                                  setLocalDesign((prev) => ({
-                                    ...prev,
-                                    fontColor: event.target.value,
-                                  }))
-                                }
-                                aria-label="Selecionar cor da fonte"
-                                className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                              />
-                            </label>
-                            <span className="text-[11px] font-semibold text-slate-600">
-                              Cor da fonte
-                            </span>
-                            <span className="text-[11px] uppercase tracking-wide text-slate-400">
-                              {localDesign.fontColor.toUpperCase()}
-                            </span>
-                          </div>
+                        <div className="flex flex-col items-center gap-1.5 text-center">
+                          <label className="relative flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                            <span
+                              className="absolute inset-1.5 shadow-inner"
+                              style={{ backgroundColor: localDesign.fontColor }}
+                              aria-hidden="true"
+                            />
+                            <input
+                              type="color"
+                              value={localDesign.fontColor}
+                              onChange={(event) =>
+                                setLocalDesign((prev) => ({
+                                  ...prev,
+                                  fontColor: event.target.value,
+                                }))
+                              }
+                              aria-label="Selecionar cor da fonte"
+                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                            />
+                          </label>
+                          <span className="text-[11px] font-semibold text-slate-600">
+                            Cor da fonte
+                          </span>
+                          <span className="text-[11px] uppercase tracking-wide text-slate-400">
+                            {localDesign.fontColor.toUpperCase()}
+                          </span>
                         </div>
                       </div>
                     </div>
+                    <IconCustomizationBlock
+                      className="mt-6"
+                      iconTabs={ICON_PICKER_TABS}
+                      activeTab={activeIconTab}
+                      onTabChange={setActiveIconTab}
+                      onRemoveIcon={handleRemoveIcon}
+                      emojiSearchTerm={emojiSearchTerm}
+                      onEmojiSearchChange={setEmojiSearchTerm}
+                      emojiGroups={resolvedEmojiGroups}
+                      emojiGroupRefs={emojiGroupRefs}
+                      onEmojiSelect={handleEmojiSelect}
+                      selectedEmoji={selectedEmoji}
+                      iconSearchTerm={iconSearchTerm}
+                      onIconSearchChange={setIconSearchTerm}
+                      iconGroups={activeIconGroups}
+                      iconGroupRefs={iconGroupRefs}
+                      iconLibraryFilter={iconLibraryFilter}
+                      onIconLibraryFilterChange={setIconLibraryFilter}
+                      iconLibraryFilters={ICON_LIBRARY_FILTERS}
+                      design={localDesign}
+                      activeIconName={activeIconName}
+                      onIconSelect={handleIconSelect}
+                      onSourceChange={handleSourceChange}
+                      fileInputRef={fileInputRef}
+                      isProcessingUpload={isProcessingUpload}
+                      svgUrlInput={svgUrlInput}
+                      onSvgUrlInputChange={setSvgUrlInput}
+                      onFileInputChange={handleFileInputChange}
+                      uploadError={uploadError}
+                      onUrlApply={handleUrlApply}
+                      urlError={urlError}
+                      hasUploadedIcon={hasUploadedIcon}
+                      onClearCustomIcon={handleClearCustomIcon}
+                      renderCategoryIcon={renderCategoryIcon}
+                      maxSvgFileSizeKb={MAX_SVG_FILE_SIZE_KB}
+                      formatIconLabel={formatIconLabel}
+                      defaultIconName={DEFAULT_ICON}
+                    />
                   </section>
                 </Dialog.BodyContent>
               </Dialog.BodyViewport>
             </Dialog.Body>
 
             <Dialog.Footer data-dialog-section="footer">
-              <div className="flex gap-3 w-full">
-                <Dialog.Close className="flex h-10 flex-1 items-center justify-center rounded-md border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-100">
+              <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
+                <Dialog.Close className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:text-orange-600 hover:scale-105 hover:shadow-lg px-4 py-2 flex-1 h-11 xs:h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md xs:text-sm text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white">
+                  <X className="w-4 h-4 mr-2" aria-hidden="true" />
                   Cancelar
                 </Dialog.Close>
                 <button
                   type="button"
                   onClick={handleSave}
                   disabled={isProcessingUpload}
-                  className="inline-flex h-10 flex-1 items-center justify-center rounded-md bg-slate-900 px-4 text-sm font-semibold text-white shadow-lg transition-all hover:bg-slate-800 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm xs:text-xs font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300 h-11 xs:h-10 px-4 flex-1"
                 >
+                  <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
                   Salvar
                 </button>
               </div>
@@ -1317,22 +1006,29 @@ function CategoryDialog({
               </Dialog.Body>
 
               <Dialog.Footer data-dialog-section="footer">
-                <div className="flex gap-3 w-full">
+                <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="flex items-center justify-center whitespace-nowrap h-11 px-4 text-sm font-medium rounded-lg border border-slate-200 bg-transparent text-slate-900 shadow-md transition-all hover:bg-slate-50 hover:text-orange-600 hover:scale-105 flex-1"
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:text-orange-600 hover:scale-105 hover:shadow-lg px-4 py-2 flex-1 h-11 xs:h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md xs:text-sm text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="w-4 h-4 mr-2" aria-hidden="true" />
                     Cancelar
                   </button>
                   <button
                     type="button"
                     onClick={handleSubmit}
                     disabled={!canSubmit}
-                    className="inline-flex items-center justify-center whitespace-nowrap h-11 px-4 text-sm font-medium rounded-lg border-0 bg-slate-900 text-white shadow-md transition-all hover:bg-slate-800 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none flex-1"
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm xs:text-xs font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 py-2 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 shadow-md hover:shadow-lg transition-all duration-300 h-11 xs:h-10 px-4 flex-1"
                   >
-                    <Plus className="h-4 w-4" />
+                    {isSubmitting ? (
+                      <Loader2
+                        className="w-4 h-4 mr-2 animate-spin"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
+                    )}
                     {isSubmitting ? 'Salvando...' : primaryLabel}
                   </button>
                 </div>
