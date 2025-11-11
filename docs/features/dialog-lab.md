@@ -156,13 +156,20 @@ const [open, setOpen] = useState(false)
   de dialogs encadeadas.
 - **Campos disponíveis**:
   - Cores do badge (fundo, texto, ícone) iguais ao design system legado.
+  - Seletor de cores com amostras reduzidas (36px) e espaçamentos compactos,
+    preservando a área de toque acessível alinhada ao layout legado.
   - Grade completa de ícones (`ALL_AVAILABLE_ICONS` – Lucide + custom) com busca
     normalizada, mantendo fallback automático para `Tag`.
   - Configuração do ícone do cartão principal via:
     - Upload de SVG (até 64kb) com sanitização automática;
     - URL externa `https://… .svg` validada antes de aplicar.
-- Tooltip contextual ao lado de “Ícone” com ícone `Lightbulb`, explicando o
-  fallback padrão e respeitando o token `--layer-tooltip`.
+- Tooltip contextual ao lado de “Ícone” exibe mensagem única prefixada com emoji
+  💡, explicando o fallback padrão e respeitando o token `--layer-tooltip`.
+- Dentro do card, a seleção do ícone Lucide aparece antes da seção de cores, e o
+  seletor de origem (Padrão / Upload / URL externa) foi deslocado para logo após
+  o bloco de cores, mantendo o fluxo de personalização mais intuitivo.
+- Os seletores de cor receberam amostras maiores (10x10) para facilitar a
+  visualização e o toque em telas sensíveis.
 - **Preview imediato**: o cartão grande e a badge são renderizados com o mesmo
   helper (`renderCategoryIcon`), garantindo que uploads/URLs apareçam no preview
   e nos cards simulados.
@@ -172,11 +179,15 @@ const [open, setOpen] = useState(false)
   introduzir contrastes desnecessários. Em mobile, o cabeçalho centraliza,
   aumenta o espaçamento entre linhas e quebra “Aba atual” em duas linhas,
   enquanto em desktop mantém o alinhamento horizontal.
-- **Ordem dos controles**: logo abaixo do preview, o primeiro card disponível é
-  “Ícone personalizado para o cartão principal”, permitindo definir uploads/URLs
-  antes de ajustar badge, ícone Lucide e demais cores. O cartão exibido dentro
-  da dialog aninhada replica o mesmo tamanho e espaçamento do componente
-  original utilizado nas tabs públicas.
+- **Card único de personalização**: preview, biblioteca de ícones e ajustes de
+  cores coexistem dentro da mesma moldura arredondada. Divisores internos
+  (`border-t`, `pt-6`) separam visualmente cada etapa sem quebrar o card,
+  reduzindo ruído visual e mantendo o foco no conteúdo principal.
+- **Ordem dos controles**: após o preview, o primeiro bloco apresenta a busca na
+  biblioteca de ícones Lucide/custom; em seguida, o seletor de origem
+  (Padrão/Upload/URL) para o ícone principal e, por fim, o bloco de cores do
+  badge. O fluxo top-down mantém o layout compacto e evita cartões aninhados
+  redundantes dentro da dialog.
 - **Posicionamento nas tabs públicas**:
   - O preview principal (fora da dialog aninhada) continua sendo o ponto único
     de controle para alternar entre “Fases da obra” e “Tipo de trabalho”; a aba

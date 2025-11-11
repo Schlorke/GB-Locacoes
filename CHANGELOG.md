@@ -96,9 +96,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 - **Category Dialog – Grade de ícones**: `app/playground/category-dialog.tsx`
   agora reutiliza `ALL_AVAILABLE_ICONS` para exibir toda a biblioteca (Lucide +
   custom) com busca normalizada, preservando ícones legados e fallback
-  automático para `Tag`. A ajuda ao lado de “Ícone” passou a usar tooltip com
-  `Lightbulb` e `--layer-tooltip`, explicando o comportamento de fallback
-  enquanto evita conflitos de z-index na dialog. Documentação sincronizada em
+  automático para `Tag`. A ajuda ao lado de “Ícone” foi reescrita para
+  apresentar a mensagem em bloco único com emoji 💡 (sem ícone Lucide separado),
+  tornando a tooltip mais legível enquanto mantém `--layer-tooltip` e evita
+  conflitos de z-index na dialog. Documentação sincronizada em
   `docs/features/dialog-lab.md`.
 - **DesignDialog actions**: Botões "Editar" e "Resetar" do configurador de
   categoria foram padronizados com `buttonVariants` (`variant="outline"`,
@@ -112,16 +113,25 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   grade mantendo o `ScrollArea` como camada scrollável, e os estados continuam
   com apenas o texto em laranja (sem fundo, borda ou ring coloridos) tanto no
   hover quanto quando ativo.
+- **Playground – sombras nos botões de ícones**: A grade de ícones em
+  `app/playground/category-dialog.tsx` agora mantém `shadow-sm` por padrão,
+  `hover:shadow-lg` no foco/hover e `shadow-md` quando o botão está ativo,
+  garantindo o mesmo feedback visual definido para CTAs interativos.
 - **Segmented icon source buttons**: As opções "Padrão", "Upload" e "URL
   externa" agora aproveitam o `Button` com tamanho `compact`, garantindo
   contraste ativo e feedback consistente no hover.
+- **Tabs vs. badges**: O reset global `button[data-state='active|inactive']` em
+  `app/globals.css` (herdado dos tabs Radix) estava zerando o `box-shadow` de
+  qualquer botão que usasse `data-state`, inclusive a grade de ícones em
+  `app/playground/category-dialog.tsx`. A regra agora é limitada a
+  `button[role='tab']`, preservando as sombras `shadow-md` dos ícones ativos.
 - **DesignDialog controls**: As configurações de cores do badge e a seleção do
   ícone padrão foram consolidadas em um único painel responsivo dentro do fluxo
   de edição, reduzindo o ruído visual e melhorando a hierarquia das informações.
 - **Playground - seletor de cores**: Os blocos das amostras de cor foram
-  compactados (40 px) e a grade passou a permanecer em linha inclusive em telas
-  mobile, garantindo hierarquia consistente e mantendo a leitura das legendas
-  sem comprometer a área de toque em `app/playground/page.tsx`.
+  compactados para 36 px (h-9/w-9) com espaçamento reduzido (`gap-2` e `gap-1.5`
+  nas legendas), preservando a leitura das legendas sem comprometer a área de
+  toque em `app/playground/page.tsx`.
 - **Playground - seletor de cores**: Removido o texto informativo abaixo dos
   seletores, já coberto pelo tooltip associado a cada botão, evitando
   redundância na interface.
@@ -298,9 +308,27 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - `DesignDialog`, `CustomizeDialog` e `NotificationsDialog` utilizam
     `Dialog.Content`, `Dialog.Footer` e `Dialog.Popup variant="compact"`,
     garantindo ajustes globais centralizados.
+- **Design dialog (Categoria)**: Preview e controles do `CategoryDesignDialog`
+  agora vivem no mesmo card gradiente, separados por divisores internos
+  (`border-t` + `pt-6`), reduzindo ruído visual e mantendo o fluxo top-down de
+  personalização sem cartões duplicados dentro do Dialog Lab.
+  - Ajuste aplicado em `app/playground/category-dialog.tsx`
+  - Documentação sincronizada em `docs/features/dialog-lab.md`
 
 ### Fixed 🐛
 
+- **Dialog Lab – markup do Category Dialog**: Adicionados os fechamentos de
+  contêiner ausentes e removido o fragmento residual em
+  `app/playground/category-dialog.tsx`, eliminando o erro de parse reportado
+  pelo ESLint/TypeScript ao executar `pnpm lint` e `pnpm type-check`.
+- **Category Dialog – scroll da grade de ícones**: Ajuste no layout em
+  `app/playground/category-dialog.tsx`, removendo o wrapper `ScrollArea`,
+  aplicando `overflow-auto` nativo e reconstruindo a grade para ocupar 100% do
+  container (`grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3 p-3`) com
+  botões que preenchem cada célula usando `w-full` + `aspect-square`, mantendo
+  espaçamento uniforme e sem o scrollbar adicional do Radix. Estado ativo dos
+  ícones agora mantém o esquema neutro (sem fundo/borda/texto laranja), usando
+  apenas `shadow-md` para indicar seleção.
 - **Playground – encoding UTF-8**: restaurados todos os caracteres acentuados e
   cedilhas corrompidos em `app/playground/page.tsx`, eliminando o erro de parse
   do Next.js 16/Turbopack durante o build.

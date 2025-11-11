@@ -8,18 +8,16 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
 import { HybridTooltip } from '@/components/ui/HybridTooltip'
 import { Input } from '@/components/ui/input'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Textarea } from '@/components/ui/textarea'
 import {
-  ALL_ICONS,
   ALL_AVAILABLE_ICONS,
-  type AllIconNames,
+  ALL_ICONS,
   renderIcon as renderLibraryIcon,
+  type AllIconNames,
 } from '@/lib/constants/all-icons'
 import { cn } from '@/lib/utils'
 import {
   Info,
-  Lightbulb,
   Loader2,
   Pencil,
   Plus,
@@ -479,10 +477,10 @@ function DesignDialog({
           }))
         }
         className={cn(
-          'group flex h-12 items-center justify-center rounded-lg border border-slate-200 bg-white/80 text-slate-600 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
+          'group flex aspect-square w-full items-center justify-center rounded-lg border border-slate-200 bg-white/80 text-slate-600 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
           isActive
-            ? 'border-orange-400/70 bg-orange-50 text-orange-600 shadow-md'
-            : 'hover:text-orange-600'
+            ? 'shadow-md hover:shadow-md'
+            : 'shadow-sm hover:text-orange-600 hover:shadow-lg'
         )}
         title={label}
         aria-pressed={isActive}
@@ -720,156 +718,8 @@ function DesignDialog({
                         <span className="truncate">{resolvedCategoryName}</span>
                       </div>
                     </div>
-                  </section>
 
-                  <section className="space-y-5">
-                    <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-5 shadow-sm">
-                      <div className="flex flex-col gap-1">
-                        <h3 className="text-sm font-semibold text-slate-800">
-                          Ícone personalizado para o cartão principal
-                        </h3>
-                        <p className="text-xs text-slate-500">
-                          As cores do botão permanecem fixas. Use um SVG
-                          customizado para representar melhor a categoria.
-                        </p>
-                      </div>
-
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {[
-                          { value: 'none', label: 'Padrão' },
-                          { value: 'upload', label: 'Upload' },
-                          { value: 'url', label: 'URL externa' },
-                        ].map((option) => (
-                          <Button
-                            key={option.value}
-                            type="button"
-                            variant="outline"
-                            size="compact"
-                            onClick={() =>
-                              handleSourceChange(
-                                option.value as CustomIconSource
-                              )
-                            }
-                            className={cn(
-                              'rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 shadow-sm transition-all duration-200 hover:from-white hover:to-white hover:shadow-md disabled:bg-gradient-to-br disabled:from-slate-50 disabled:to-slate-100 disabled:text-slate-500',
-                              localDesign.customIcon.source === option.value
-                                ? 'text-orange-600 font-semibold bg-white from-white to-white'
-                                : 'text-slate-600 hover:text-orange-600'
-                            )}
-                          >
-                            {option.label}
-                          </Button>
-                        ))}
-                      </div>
-
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept=".svg,image/svg+xml"
-                        className="hidden"
-                        onChange={handleFileInputChange}
-                      />
-
-                      {localDesign.customIcon.source === 'upload' && (
-                        <div className="mt-4 space-y-3">
-                          <div className="flex flex-wrap items-center gap-3">
-                            <Button
-                              type="button"
-                              variant="outline"
-                              onClick={() => fileInputRef.current?.click()}
-                              disabled={isProcessingUpload}
-                              className="h-9 border-dashed border-slate-300 text-sm font-medium text-slate-700 hover:border-orange-400 hover:text-orange-600"
-                            >
-                              Selecionar arquivo SVG
-                            </Button>
-                            {isProcessingUpload && (
-                              <Loader2 className="h-4 w-4 animate-spin text-slate-500" />
-                            )}
-                            {localDesign.customIcon.fileName &&
-                              !isProcessingUpload && (
-                                <span className="truncate text-xs text-slate-500">
-                                  {localDesign.customIcon.fileName}
-                                </span>
-                              )}
-                          </div>
-                          <p className="text-xs text-slate-500">
-                            Formato SVG até {MAX_SVG_FILE_SIZE_KB}kb. Scripts e
-                            elementos externos são removidos automaticamente.
-                          </p>
-                          {uploadError && (
-                            <p className="text-xs font-medium text-red-500">
-                              {uploadError}
-                            </p>
-                          )}
-                        </div>
-                      )}
-
-                      {localDesign.customIcon.source === 'url' && (
-                        <div className="mt-4 space-y-3">
-                          <div className="flex gap-2">
-                            <Input
-                              value={svgUrlInput}
-                              onChange={(event) =>
-                                setSvgUrlInput(event.target.value)
-                              }
-                              placeholder="https://exemplo.com/icone.svg"
-                              className="h-10 text-sm"
-                            />
-                            <Button
-                              type="button"
-                              variant="outline"
-                              onClick={handleUrlApply}
-                              className="h-10 whitespace-nowrap border-slate-300 text-sm font-medium text-slate-700 hover:border-slate-400 hover:text-orange-600"
-                            >
-                              Aplicar
-                            </Button>
-                          </div>
-                          <p className="text-xs text-slate-500">
-                            Aceitamos apenas URLs HTTPS públicas que terminem em{' '}
-                            <code>.svg</code>.
-                          </p>
-                          {urlError && (
-                            <p className="text-xs font-medium text-red-500">
-                              {urlError}
-                            </p>
-                          )}
-                        </div>
-                      )}
-
-                      {isCustomIconActive && (
-                        <div className="mt-4 flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white">
-                              {renderCategoryIcon(localDesign, {
-                                size: 28,
-                                className: 'h-7 w-7 text-slate-700',
-                              })}
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-xs font-semibold text-slate-700">
-                                Pré-visualização
-                              </span>
-                              <span className="text-xs text-slate-500">
-                                {localDesign.customIcon.source === 'upload'
-                                  ? (localDesign.customIcon.fileName ??
-                                    'SVG enviado')
-                                  : localDesign.customIcon.url}
-                              </span>
-                            </div>
-                          </div>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={handleClearCustomIcon}
-                            className="h-9 border-slate-300 text-xs font-medium text-slate-600 hover:border-red-400 hover:text-red-600"
-                          >
-                            Remover ícone personalizado
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-5 shadow-sm">
+                    <div className="mt-6 space-y-6 border-t border-slate-200 pt-6">
                       <div className="space-y-3">
                         <div className="flex items-center gap-1.5">
                           <h3 className="text-sm font-semibold text-slate-800">
@@ -877,17 +727,11 @@ function DesignDialog({
                           </h3>
                           <HybridTooltip
                             content={
-                              <div className="flex items-start gap-2 text-[13px] leading-snug">
-                                <Lightbulb
-                                  className="mt-[2px] h-4 w-4 flex-shrink-0 text-orange-400"
-                                  aria-hidden
-                                />
-                                <span>
-                                  O ícone selecionado aparece como fallback
-                                  sempre que não houver um SVG personalizado
-                                  aplicado.
-                                </span>
-                              </div>
+                              <span className="block text-[13px] leading-snug">
+                                💡 O ícone selecionado aparece como fallback
+                                sempre que não houver um SVG personalizado
+                                aplicado.
+                              </span>
                             }
                             side="top"
                             align="start"
@@ -910,11 +754,8 @@ function DesignDialog({
                           placeholder="Buscar ícone..."
                           className="h-10 text-sm"
                         />
-                        <ScrollArea
-                          className="max-h-[13.5rem] w-full rounded-xl border border-slate-200/70 bg-white/70 p-2 shadow-inner"
-                          type="always"
-                        >
-                          <div className="grid grid-cols-4 gap-2 pr-1 pb-1 sm:grid-cols-5 md:grid-cols-6">
+                        <div className="max-h-[12.5rem] w-full overflow-auto rounded-xl border border-slate-200/70 bg-white/70 p-3 shadow-inner">
+                          <div className="grid grid-cols-4 gap-3 sm:grid-cols-5 md:grid-cols-6">
                             {hasIconResults ? (
                               iconOptionButtons
                             ) : (
@@ -923,17 +764,165 @@ function DesignDialog({
                               </div>
                             )}
                           </div>
-                        </ScrollArea>
+                        </div>
                       </div>
-                      <div className="mt-6 space-y-3">
+
+                      <div className="space-y-4">
+                        <div className="space-y-1">
+                          <h3 className="text-sm font-semibold text-slate-800">
+                            Ícone personalizado para o cartão principal
+                          </h3>
+                          <p className="text-xs text-slate-500">
+                            As cores do botão permanecem fixas. Use um SVG
+                            customizado para representar melhor a categoria.
+                          </p>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2">
+                          {[
+                            { value: 'none', label: 'Padrão' },
+                            { value: 'upload', label: 'Upload' },
+                            { value: 'url', label: 'URL externa' },
+                          ].map((option) => (
+                            <Button
+                              key={option.value}
+                              type="button"
+                              variant="outline"
+                              size="compact"
+                              onClick={() =>
+                                handleSourceChange(
+                                  option.value as CustomIconSource
+                                )
+                              }
+                              className={cn(
+                                'rounded-lg bg-gradient-to-br from-slate-50 to-slate-100 shadow-sm transition-all duration-200 hover:from-white hover:to-white hover:shadow-md disabled:bg-gradient-to-br disabled:from-slate-50 disabled:to-slate-100 disabled:text-slate-500',
+                                localDesign.customIcon.source === option.value
+                                  ? 'text-orange-600 font-semibold bg-white from-white to-white'
+                                  : 'text-slate-600 hover:text-orange-600'
+                              )}
+                            >
+                              {option.label}
+                            </Button>
+                          ))}
+                        </div>
+
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept=".svg,image/svg+xml"
+                          className="hidden"
+                          onChange={handleFileInputChange}
+                        />
+
+                        {localDesign.customIcon.source === 'upload' && (
+                          <div className="space-y-3">
+                            <div className="flex flex-wrap items-center gap-3">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={isProcessingUpload}
+                                className="h-9 border-dashed border-slate-300 text-sm font-medium text-slate-700 hover:border-orange-400 hover:text-orange-600"
+                              >
+                                Selecionar arquivo SVG
+                              </Button>
+                              {isProcessingUpload && (
+                                <Loader2 className="h-4 w-4 animate-spin text-slate-500" />
+                              )}
+                              {localDesign.customIcon.fileName &&
+                                !isProcessingUpload && (
+                                  <span className="truncate text-xs text-slate-500">
+                                    {localDesign.customIcon.fileName}
+                                  </span>
+                                )}
+                            </div>
+                            <p className="text-xs text-slate-500">
+                              Formato SVG até {MAX_SVG_FILE_SIZE_KB}kb. Scripts
+                              e elementos externos são removidos
+                              automaticamente.
+                            </p>
+                            {uploadError && (
+                              <p className="text-xs font-medium text-red-500">
+                                {uploadError}
+                              </p>
+                            )}
+                          </div>
+                        )}
+
+                        {localDesign.customIcon.source === 'url' && (
+                          <div className="space-y-3">
+                            <div className="flex gap-2">
+                              <Input
+                                value={svgUrlInput}
+                                onChange={(event) =>
+                                  setSvgUrlInput(event.target.value)
+                                }
+                                placeholder="https://exemplo.com/icone.svg"
+                                className="h-10 text-sm"
+                              />
+                              <Button
+                                type="button"
+                                variant="outline"
+                                onClick={handleUrlApply}
+                                className="h-10 whitespace-nowrap border-slate-300 text-sm font-medium text-slate-700 hover:border-slate-400 hover:text-orange-600"
+                              >
+                                Aplicar
+                              </Button>
+                            </div>
+                            <p className="text-xs text-slate-500">
+                              Aceitamos apenas URLs HTTPS públicas que terminem
+                              em <code>.svg</code>.
+                            </p>
+                            {urlError && (
+                              <p className="text-xs font-medium text-red-500">
+                                {urlError}
+                              </p>
+                            )}
+                          </div>
+                        )}
+
+                        {isCustomIconActive && (
+                          <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white">
+                                {renderCategoryIcon(localDesign, {
+                                  size: 28,
+                                  className: 'h-7 w-7 text-slate-700',
+                                })}
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-xs font-semibold text-slate-700">
+                                  Pré-visualização
+                                </span>
+                                <span className="text-xs text-slate-500">
+                                  {localDesign.customIcon.source === 'upload'
+                                    ? (localDesign.customIcon.fileName ??
+                                      'SVG enviado')
+                                    : localDesign.customIcon.url}
+                                </span>
+                              </div>
+                            </div>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={handleClearCustomIcon}
+                              className="h-9 border-slate-300 text-xs font-medium text-slate-600 hover:border-red-400 hover:text-red-600"
+                            >
+                              Remover ícone personalizado
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="space-y-3 border-t border-slate-200 pt-6">
                         <h3 className="text-sm font-semibold text-slate-800">
                           Cores
                         </h3>
-                        <div className="grid grid-cols-3 gap-3">
-                          <div className="flex flex-col items-center gap-2 text-center">
+                        <div className="grid grid-cols-3 gap-2">
+                          <div className="flex flex-col items-center gap-1.5 text-center">
                             <label className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
                               <span
-                                className="absolute inset-[2px] rounded-lg shadow-inner"
+                                className="absolute inset-[3px] rounded-lg shadow-inner"
                                 style={{
                                   backgroundColor: localDesign.iconColor,
                                 }}
@@ -952,7 +941,7 @@ function DesignDialog({
                                 className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                               />
                             </label>
-                            <span className="text-xs font-semibold text-slate-600">
+                            <span className="text-[11px] font-semibold text-slate-600">
                               Cor do ícone
                             </span>
                             <span className="text-[11px] uppercase tracking-wide text-slate-400">
@@ -960,10 +949,10 @@ function DesignDialog({
                             </span>
                           </div>
 
-                          <div className="flex flex-col items-center gap-2 text-center">
+                          <div className="flex flex-col items-center gap-1.5 text-center">
                             <label className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
                               <span
-                                className="absolute inset-[2px] rounded-lg shadow-inner"
+                                className="absolute inset-[3px] rounded-lg shadow-inner"
                                 style={{
                                   backgroundColor: localDesign.backgroundColor,
                                 }}
@@ -982,7 +971,7 @@ function DesignDialog({
                                 className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                               />
                             </label>
-                            <span className="text-xs font-semibold text-slate-600">
+                            <span className="text-[11px] font-semibold text-slate-600">
                               Cor de fundo
                             </span>
                             <span className="text-[11px] uppercase tracking-wide text-slate-400">
@@ -990,10 +979,10 @@ function DesignDialog({
                             </span>
                           </div>
 
-                          <div className="flex flex-col items-center gap-2 text-center">
+                          <div className="flex flex-col items-center gap-1.5 text-center">
                             <label className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
                               <span
-                                className="absolute inset-[2px] rounded-lg shadow-inner"
+                                className="absolute inset-[3px] rounded-lg shadow-inner"
                                 style={{
                                   backgroundColor: localDesign.fontColor,
                                 }}
@@ -1012,7 +1001,7 @@ function DesignDialog({
                                 className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                               />
                             </label>
-                            <span className="text-xs font-semibold text-slate-600">
+                            <span className="text-[11px] font-semibold text-slate-600">
                               Cor da fonte
                             </span>
                             <span className="text-[11px] uppercase tracking-wide text-slate-400">
@@ -1174,14 +1163,14 @@ function CategoryDialog({
                           </span>
                         </div>
                         <div className={DIALOG_PREVIEW_ACTIONS}>
-                          <div className="flex flex-nowrap items-center gap-2 lg:flex-col lg:items-stretch">
+                          <div className="flex flex-wrap justify-center items-center gap-2 lg:flex-col lg:items-stretch">
                             <DesignDialog
                               triggerClassName={cn(
                                 buttonVariants({
                                   variant: 'outline',
                                   size: 'compact',
                                 }),
-                                'group rounded-lg text-slate-900 bg-white flex-1 min-w-[140px] lg:w-full'
+                                'group rounded-lg text-slate-900 bg-white  min-w-[140px] lg:w-full'
                               )}
                               triggerAriaLabel="Editar visual"
                               triggerChildren={
@@ -1204,7 +1193,7 @@ function CategoryDialog({
                               size="compact"
                               onClick={handleReset}
                               className={cn(
-                                'group rounded-lg text-slate-900 bg-white flex-1 min-w-[140px] lg:w-full'
+                                'group rounded-lg text-slate-900 bg-white min-w-[140px] lg:w-full'
                               )}
                               aria-label={
                                 mode === 'edit'
@@ -1332,7 +1321,7 @@ function CategoryDialog({
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap h-11 px-4 text-sm font-medium rounded-lg border border-slate-200 bg-transparent text-slate-900 shadow-md transition-all hover:bg-slate-50 hover:text-orange-600 hover:scale-105 flex-1"
+                    className="flex items-center justify-center whitespace-nowrap h-11 px-4 text-sm font-medium rounded-lg border border-slate-200 bg-transparent text-slate-900 shadow-md transition-all hover:bg-slate-50 hover:text-orange-600 hover:scale-105 flex-1"
                   >
                     <X className="h-4 w-4" />
                     Cancelar
@@ -1341,7 +1330,7 @@ function CategoryDialog({
                     type="button"
                     onClick={handleSubmit}
                     disabled={!canSubmit}
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap h-11 px-4 text-sm font-medium rounded-lg border-0 bg-slate-900 text-white shadow-md transition-all hover:bg-slate-800 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none flex-1"
+                    className="inline-flex items-center justify-center whitespace-nowrap h-11 px-4 text-sm font-medium rounded-lg border-0 bg-slate-900 text-white shadow-md transition-all hover:bg-slate-800 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:pointer-events-none flex-1"
                   >
                     <Plus className="h-4 w-4" />
                     {isSubmitting ? 'Salvando...' : primaryLabel}

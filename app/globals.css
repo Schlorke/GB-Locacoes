@@ -288,8 +288,8 @@ button[aria-controls]:focus,
 
 /* Remove box-shadow e outline dos Tabs (Radix UI) */
 button[role='tab'],
-button[data-state='active'],
-button[data-state='inactive'] {
+button[role='tab'][data-state='active'],
+button[role='tab'][data-state='inactive'] {
   box-shadow: none !important;
   outline: none !important;
 }

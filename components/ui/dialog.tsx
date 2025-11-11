@@ -12,12 +12,12 @@ const POPUP_CLASS_VARIANTS = {
   default:
     'fixed left-1/2 top-[calc(50%+1rem*var(--nested-dialogs))] z-[var(--layer-dialog)] w-[calc(100vw-0.8rem)] max-w-lg h-[80vh] max-h-[80vh] md:h-[71vh] md:max-h-[71vh] -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))] flex flex-col rounded-2xl bg-white p-0 text-slate-900 shadow-2xl ring-1 ring-slate-200 transition-all duration-200 ease-out data-[starting-style]:scale-95 data-[starting-style]:opacity-0 data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[nested-dialog-open]:after:absolute data-[nested-dialog-open]:after:inset-0 data-[nested-dialog-open]:after:rounded-[inherit] data-[nested-dialog-open]:after:bg-black/5 -data-[nested-parent]:translate-y-[0.85rem] data-[nested-parent]:scale-[0.985]',
   compact:
-    'fixed top-[calc(50%+1.25rem*var(--nested-dialogs))] left-1/2 z-[var(--layer-dialog)] -mt-8 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))] rounded-lg bg-gray-50 p-4 text-gray-900 outline outline-1 outline-gray-200 transition-all duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[nested-dialog-open]:after:absolute data-[nested-dialog-open]:after:inset-0 data-[nested-dialog-open]:after:rounded-[inherit] data-[nested-dialog-open]:after:bg-black/5 dark:outline-gray-300',
+    'fixed top-[calc(50%+1.25rem*var(--nested-dialogs))] left-1/2 z-[var(--layer-dialog)] -mt-8 w-96 max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))] rounded-lg bg-gray-50 p-4 md:p-6 text-gray-900 outline outline-1 outline-gray-200 transition-all duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[nested-dialog-open]:after:absolute data-[nested-dialog-open]:after:inset-0 data-[nested-dialog-open]:after:rounded-[inherit] data-[nested-dialog-open]:after:bg-black/5 dark:outline-gray-300',
 } as const
 
 const CONTENT_BASE_CLASSES = 'flex h-full flex-col'
 const HEADER_BASE_CLASSES =
-  'relative flex flex-shrink-0 items-center gap-3 p-4 border-b border-gray-100 rounded-t-2xl bg-gradient-to-r from-slate-50 to-slate-100'
+  'relative flex flex-shrink-0 items-center gap-3 p-4 md:p-6 border-b border-gray-100 rounded-t-2xl bg-gradient-to-r from-slate-50 to-slate-100'
 const HEADER_ICON_BASE_CLASSES =
   'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-slate-600 to-slate-700 text-white shadow-sm'
 const CLOSE_BUTTON_BASE_CLASSES =
@@ -26,9 +26,9 @@ const BODY_BASE_CLASSES = 'flex-1 min-h-0'
 const BODY_VIEWPORT_BASE_CLASSES =
   'h-full w-full overflow-y-auto overflow-x-hidden'
 const BODY_CONTENT_BASE_CLASSES =
-  'p-4 space-y-6 pb-2 xs:px-5 xs:py-3 xs:space-y-3 w-full max-w-full overflow-visible'
+  'p-4 md:p-6 space-y-6 pb-2 xs:px-5 xs:py-3 xs:space-y-3 w-full max-w-full overflow-visible'
 const FOOTER_BASE_CLASSES =
-  'p-4 border-t bg-gray-50 rounded-b-2xl flex-shrink-0 w-full max-w-full xs:p-3'
+  'p-4 md:p-6 border-t bg-gray-50 rounded-b-2xl flex-shrink-0 w-full max-w-full xs:p-3'
 
 type DialogPopupVariant = keyof typeof POPUP_CLASS_VARIANTS | 'unstyled'
 
