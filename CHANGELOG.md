@@ -223,6 +223,9 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 - **Emoji rendering**: Aplicado fallback de fonte (`emoji-font`) para preservar
   bandeiras multicódigo sem alterar o tamanho padrão dos emojis
   (`components/dialogs/icon-customization-block.tsx`, `app/globals.css`).
+- **Category reset**: A ação "Resetar" preserva a aba atual (Fases/Tipos) no
+  preview da categoria, evitando desaparecimento visual do botão destacado
+  (`app/playground/category-dialog.tsx`).
 - **Playground – seleção de ícones**: Removido o contêiner extra ao redor da
   grade mantendo o `ScrollArea` como camada scrollável, e os estados continuam
   com apenas o texto em laranja (sem fundo, borda ou ring coloridos) tanto no

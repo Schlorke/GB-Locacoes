@@ -584,7 +584,7 @@ function DesignDialog({
             <Dialog.Body>
               <Dialog.BodyViewport style={{ scrollbarGutter: 'stable' }}>
                 <Dialog.BodyContent>
-                  <section className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-6 text-slate-900 shadow-sm">
+                  <section className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-2 md:p-6 text-slate-900 shadow-sm">
                     <div className={DESIGN_DIALOG_META}>
                       <span>Preview do destaque</span>
                       <span className="max-w-[10rem] sm:max-w-none sm:text-right">
@@ -756,8 +756,12 @@ function CategoryDialog({
   }, [])
 
   const handleReset = () => {
+    const preservedPlacement = design.placement
     setCategory(mode === 'edit' ? resolvedInitialCategory : EMPTY_CATEGORY)
-    setDesign(cloneDesign(DEFAULT_DESIGN))
+    setDesign({
+      ...cloneDesign(DEFAULT_DESIGN),
+      placement: preservedPlacement,
+    })
     setResetAnimation(true)
     resetTimeoutRef.current = window.setTimeout(() => {
       setResetAnimation(false)
