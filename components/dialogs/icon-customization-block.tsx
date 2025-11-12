@@ -583,7 +583,7 @@ export function IconCustomizationBlock({
                         {group.label}
                       </span>
                     </div>
-                    <div className="grid sm:grid-cols-8 md:grid-cols-8">
+                    <div className="grid grid-cols-6 md:grid-cols-8">
                       {group.emojis.map((emoji) => {
                         const isActive = selectedEmoji === emoji
                         return (
