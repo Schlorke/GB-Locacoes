@@ -660,7 +660,7 @@ export function IconCustomizationBlock({
                         {group.label}
                       </span>
                     </div>
-                    <div className="grid grid-cols-4 gap-3 sm:grid-cols-5 md:grid-cols-6">
+                    <div className="grid grid-cols-6 gap-2 sm:grid-cols-7 md:grid-cols-8">
                       {group.icons.map((iconName) => {
                         const isActive =
                           design.customIcon.source === 'none' &&
@@ -685,16 +685,17 @@ export function IconCustomizationBlock({
                           )
 
                         return (
-                          <div key={iconName} className="">
+                          <div key={iconName} className="flex justify-center">
                             <button
                               type="button"
                               onClick={() => onIconSelect(iconName)}
                               aria-pressed={isActive}
                               className={cn(
-                                'group flex aspect-square w-full items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
+                                'group flex aspect-square items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
                                 isActive
                                   ? 'text-orange-600 shadow-md hover:shadow-md'
-                                  : 'text-slate-600 shadow-sm hover:text-orange-600 hover:shadow-lg'
+                                  : 'text-slate-600 shadow-sm hover:text-orange-600 hover:shadow-lg',
+                                'h-9 w-9'
                               )}
                               title={formatIconLabel(iconName)}
                             >

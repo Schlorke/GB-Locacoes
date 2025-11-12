@@ -226,6 +226,12 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 - **Category reset**: A ação "Resetar" preserva a aba atual (Fases/Tipos) no
   preview da categoria, evitando desaparecimento visual do botão destacado
   (`app/playground/category-dialog.tsx`).
+- **Icon buttons responsive**: Botões da grade de ícones ajustam dimensões em
+  mobile mantendo 36x36px no desktop, com padding interno dedicado para
+  preservar o grid (`components/dialogs/icon-customization-block.tsx`).
+- **Icon grid spacing**: A aba `Ícones` exibe 6 colunas no mobile e 8 no
+  desktop, enquanto a aba `Emoji` voltou ao layout original (`grid-cols-6/8/10`)
+  (`components/dialogs/icon-customization-block.tsx`).
 - **Playground – seleção de ícones**: Removido o contêiner extra ao redor da
   grade mantendo o `ScrollArea` como camada scrollável, e os estados continuam
   com apenas o texto em laranja (sem fundo, borda ou ring coloridos) tanto no
