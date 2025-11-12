@@ -21,6 +21,7 @@ export interface CustomIconConfig {
   fileName?: string
   url?: string
   emoji?: string | null
+  name?: string
 }
 
 export interface CategoryDetails {
@@ -48,6 +49,7 @@ export const DEFAULT_CUSTOM_ICON: CustomIconConfig = {
   fileName: undefined,
   url: undefined,
   emoji: null,
+  name: undefined,
 }
 
 export const DEFAULT_DESIGN: CategoryDesign = {

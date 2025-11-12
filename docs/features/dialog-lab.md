@@ -159,10 +159,21 @@ const [open, setOpen] = useState(false)
   - Seletor de cores com amostras reduzidas (~44px) e espaçamentos compactos,
     preservando a área de toque acessível alinhada ao layout legado.
   - Grade completa de ícones (`ALL_AVAILABLE_ICONS` – Lucide + custom) com busca
-    normalizada, mantendo fallback automático para `Tag`.
+    normalizada, mantendo fallback automático para `Tag`. Os grupos
+    pré-definidos de “Construção & Ferramentas”, “Transporte & Logística”,
+    “Pessoas & Status”, “Comunicação & Mídia”, “Indicadores & Métricas” e “Clima
+    & Ambiente” exibem coleções temáticas reais (ex.: `Hammer`, `Truck`,
+    `Users`, `PhoneCall`, `TrendingUp`, `Sunrise`) para acelerar a seleção sem
+    repetições artificiais.
   - Configuração do ícone do cartão principal via:
     - Upload de SVG (até 64kb) com sanitização automática;
     - URL externa `https://… .svg` validada antes de aplicar.
+    - Campo “Nome do ícone” com contador (máx. 50 caracteres) e validação
+      inline, exibindo erro quando o limite é ultrapassado e surgindo apenas
+      quando há pré-visualização válida (upload ou URL).
+    - Botões "Cancelar" e "Salvar" no rodapé do painel personalizado, com o
+      salvamento desabilitado até definir um nome válido e um ícone carregado,
+      além de toasts de feedback para sucesso ou falha.
 - Tooltip contextual ao lado de “Ícone” exibe mensagem única prefixada com emoji
   💡, explicando o fallback padrão e respeitando o token `--layer-tooltip`.
 - Dentro do card, a seleção do ícone Lucide aparece antes da seção de cores, e o
@@ -215,7 +226,9 @@ const [open, setOpen] = useState(false)
   sessões longas sem perder o contexto.
 - **Painel Personalizado**: mantém os botões "Padrão", "Upload" e "URL externa"
   na aba `Personalizado`, com feedback de upload, preview do SVG/URL e botão de
-  remoção alinhado ao padrão Notion.
+  remoção alinhado ao padrão Notion. O campo "Nome do ícone" fica sempre visível
+  ao selecionar Upload/URL, permitindo salvar somente quando o nome for
+  preenchido (≤ 50 caracteres), com botões dedicados de cancelar e salvar.
 - **Ordem dos controles**: após o preview, o primeiro bloco apresenta a busca na
   biblioteca de ícones Lucide/custom; em seguida, o seletor de origem
   (Padrão/Upload/URL) para o ícone principal e, por fim, o bloco de cores do

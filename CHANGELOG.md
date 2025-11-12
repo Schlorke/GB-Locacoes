@@ -87,6 +87,22 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     cada página.
   - Documentação sincronizada em `docs/features/dialog-lab.md` com instruções
     atualizadas de uso e dialogs aninhadas.
+
+### Changed 🔄
+
+- **Biblioteca de ícones do Dialog Lab**: substituímos os ícones duplicados
+  usados para testar o scroll por coleções temáticas reais em
+  `components/dialogs/icon-customization-data.ts`. Cada grupo (Construção,
+  Transporte, Pessoas, Comunicação, Métricas e Clima) agora exibe ícones
+  relacionados ao tema, mantendo a busca normalizada e o fallback padrão.
+  Documentação atualizada em `docs/features/dialog-lab.md`.
+- **IconCustomizationBlock – painel personalizado**: adicionamos o campo “Nome
+  do ícone” com contador e validação (máx. 50 caracteres), exibido somente após
+  pré-visualização válida (upload/URL), além dos botões Cancelar/Salvar no
+  rodapé com toasts de feedback (sucesso/erro). Arquivos atualizados:
+  `components/dialogs/icon-customization-block.tsx`,
+  `app/playground/icon-customization/page.tsx` e
+  `app/playground/category-dialog.tsx`.
 - **Category Dialog playground**: fluxo de criação/edição extraído para
   `app/playground/category-dialog.tsx`, permitindo reutilização direta em outras
   áreas antes da promoção para produção.
@@ -427,6 +443,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Biblioteca Lucide no Dialog Lab**: corrigimos `renderIcon` em
+  `lib/constants/all-icons.tsx` para aceitar componentes `forwardRef` do React
+  19, garantindo que os ícones temáticos apareçam corretamente na aba Ícones do
+  `IconCustomizationBlock`.
 - **IconCustomizationBlock (Playground)**: Removidos argumentos e refs não
   utilizados das props do footer e do bloco, eliminando os avisos do ESLint na
   rotina de personalização de ícones.

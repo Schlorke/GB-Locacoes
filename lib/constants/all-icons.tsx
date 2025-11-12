@@ -62,7 +62,7 @@ export function renderIcon(
     className?: string
   }>
 
-  if (!LucideIcon || typeof LucideIcon !== 'function') return null
+  if (!LucideIcon) return null
 
   return <LucideIcon size={size} color={color} className={className} />
 }

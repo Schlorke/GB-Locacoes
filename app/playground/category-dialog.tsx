@@ -55,7 +55,28 @@ import {
 import { type CustomIconProps } from '@/components/icons/custom'
 import { useEmojiRecents } from '@/hooks/use-emoji-recents'
 import { useIconRecents } from '@/hooks/use-icon-recents'
+import { toast } from '@/hooks/use-toast-sonner'
 import { formatIconLabel, normalizeIconName } from '@/lib/icon-utils'
+
+const MAX_ICON_NAME_LENGTH = 50
+
+const extractNameFromFile = (fileName: string): string => {
+  const base = fileName.replace(/\.[^/.]+$/, '')
+  return base.slice(0, MAX_ICON_NAME_LENGTH)
+}
+
+const extractNameFromUrl = (value: string): string => {
+  try {
+    const parsed = new URL(value)
+    const segments = parsed.pathname.split('/').filter(Boolean)
+    const candidate = segments.pop() ?? 'ícone personalizado'
+    const decoded = decodeURIComponent(candidate.replace(/\.svg$/i, ''))
+    const cleaned = decoded.trim() || 'ícone personalizado'
+    return cleaned.slice(0, MAX_ICON_NAME_LENGTH)
+  } catch (_error) {
+    return 'ícone personalizado'
+  }
+}
 
 interface DialogStateUpdater {
   onStateChange: (..._args: [key: string, isOpen: boolean]) => void
@@ -149,11 +170,13 @@ function CategoryShowcasePreview({
   design,
   onPlacementChange,
   disablePlacementSync,
+  className,
 }: {
   categoryName: string
   design: CategoryDesign
   onPlacementChange?: (_placement: CategoryPlacement) => void
   disablePlacementSync?: boolean
+  className?: string
 }) {
   const previewTabs = useMemo(
     () => buildPreviewTabs(categoryName, design),
@@ -179,6 +202,7 @@ function CategoryShowcasePreview({
         defaultTab={design.placement}
         gridCols={{ base: 1, sm: 1, md: 1, lg: 1 }}
         cardClassName="p-6 w-auto h-auto min-h-0"
+        className={className}
         onTabChangeAction={handleTabChange}
         onCategoryClickAction={(category) =>
           console.log('Preview category clicked:', category.name)
@@ -258,7 +282,13 @@ function DesignDialog({
     if (source === 'upload') {
       setLocalDesign((prev) => ({
         ...prev,
-        customIcon: { source: 'upload' },
+        customIcon: {
+          source: 'upload',
+          name:
+            prev.customIcon.source === 'upload'
+              ? (prev.customIcon.name ?? '')
+              : '',
+        },
       }))
       setSvgUrlInput('')
       setActiveIconTab('custom')
@@ -272,6 +302,10 @@ function DesignDialog({
           source: 'url',
           url:
             prev.customIcon.source === 'url' ? prev.customIcon.url : undefined,
+          name:
+            prev.customIcon.source === 'url'
+              ? (prev.customIcon.name ?? '')
+              : '',
         },
       }))
       setActiveIconTab('custom')
@@ -330,6 +364,7 @@ function DesignDialog({
           svgContent: sanitized,
           dataUrl,
           fileName: file.name,
+          name: extractNameFromFile(file.name),
         },
       }))
 
@@ -363,6 +398,7 @@ function DesignDialog({
       customIcon: {
         source: 'url',
         url: value,
+        name: extractNameFromUrl(value),
       },
     }))
 
@@ -379,7 +415,6 @@ function DesignDialog({
     setSvgUrlInput('')
     setUploadError(null)
     setUrlError(null)
-    setActiveIconTab('icons')
     setEmojiSearchTerm('')
     setIconSearchTerm('')
   }
@@ -426,12 +461,62 @@ function DesignDialog({
     setOpen(false)
   }
 
+  const customIconName = localDesign.customIcon.name ?? ''
+  const trimmedCustomIconName = customIconName.trim()
+  const customIconNameError =
+    trimmedCustomIconName.length > MAX_ICON_NAME_LENGTH
+      ? 'O nome precisa ter menos que 50 caracteres.'
+      : null
+  const hasUploadedIcon =
+    (localDesign.customIcon.source === 'upload' &&
+      Boolean(localDesign.customIcon.dataUrl)) ||
+    (localDesign.customIcon.source === 'url' &&
+      Boolean(localDesign.customIcon.url))
+  const canSaveCustomIcon =
+    hasUploadedIcon &&
+    (localDesign.customIcon.source === 'upload' ||
+      localDesign.customIcon.source === 'url') &&
+    trimmedCustomIconName.length > 0 &&
+    !customIconNameError
+
+  const handleCustomIconNameChange = (value: string) => {
+    setLocalDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        ...prev.customIcon,
+        name: value,
+      },
+    }))
+  }
+
+  const handleCancelCustomIcon = () => {
+    handleClearCustomIcon()
+  }
+
+  const handleSaveCustomIcon = () => {
+    if (!canSaveCustomIcon) {
+      toast.error('Finalize o upload antes de salvar.', {
+        description:
+          'Envie um SVG válido ou informe uma URL e defina um nome com até 50 caracteres.',
+      })
+      return
+    }
+    const sanitizedName = trimmedCustomIconName
+    setLocalDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        ...prev.customIcon,
+        name: sanitizedName,
+      },
+    }))
+    setActiveIconTab('icons')
+    toast.success('Ícone personalizado salvo!', {
+      description: sanitizedName,
+    })
+  }
+
   const placementLabel =
     localDesign.placement === 'phases' ? 'Fases da obra' : 'Tipo de trabalho'
-
-  const hasUploadedIcon =
-    localDesign.customIcon.source === 'upload' ||
-    localDesign.customIcon.source === 'url'
 
   const selectedEmoji =
     localDesign.customIcon.source === 'emoji'
@@ -509,21 +594,21 @@ function DesignDialog({
                         </span>
                       </span>
                     </div>
-                    <div className="mt-5 flex flex-col items-center gap-5">
-                      <div className="group relative flex flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-lg transition-all duration-300 w-auto h-auto min-h-0">
-                        <span className="relative z-10 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg">
+                    <div className="mt-5 flex w-full flex-col items-center gap-5">
+                      <div className="group relative flex min-h-[120px] w-auto flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl">
+                        <span className="relative z-10 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg transition-transform duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]">
                           {renderCategoryIcon(localDesign, {
                             size: 32,
                             className: 'h-8 w-8 text-white',
                           })}
                         </span>
-                        <span className="relative z-10 text-center text-xs font-semibold leading-tight text-white whitespace-normal break-words">
+                        <span className="relative z-10 text-center text-xs font-semibold leading-tight text-white whitespace-normal break-words transition-colors duration-300 group-hover:text-orange-400">
                           {resolvedCategoryName}
                         </span>
                       </div>
 
                       <div
-                        className="inline-flex items-center gap-2 rounded-xl border-0 px-4 py-2 text-xs font-medium shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)]"
+                        className={DIALOG_PREVIEW_BADGE}
                         style={{
                           backgroundColor: localDesign.backgroundColor,
                           color: localDesign.fontColor,
@@ -536,96 +621,9 @@ function DesignDialog({
                             color: localDesign.iconColor,
                           })}
                         </span>
-                        <span className="truncate">{resolvedCategoryName}</span>
-                      </div>
-                    </div>
-                    <div className="mt-6 space-y-3">
-                      <div className="grid grid-cols-3 gap-3 sm:gap-4">
-                        <div className="flex flex-col items-center gap-1.5 text-center">
-                          <label className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-                            <span
-                              className="absolute inset-1.5 shadow-inner"
-                              style={{ backgroundColor: localDesign.iconColor }}
-                              aria-hidden="true"
-                            />
-                            <input
-                              type="color"
-                              value={localDesign.iconColor}
-                              onChange={(event) =>
-                                setLocalDesign((prev) => ({
-                                  ...prev,
-                                  iconColor: event.target.value,
-                                }))
-                              }
-                              aria-label="Selecionar cor do ícone"
-                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                            />
-                          </label>
-                          <span className="text-[11px] font-semibold text-slate-600">
-                            Cor do ícone
-                          </span>
-                          <span className="text-[11px] uppercase tracking-wide text-slate-400">
-                            {localDesign.iconColor.toUpperCase()}
-                          </span>
-                        </div>
-
-                        <div className="flex flex-col items-center gap-1.5 text-center">
-                          <label className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-                            <span
-                              className="absolute inset-1.5 shadow-inner"
-                              style={{
-                                backgroundColor: localDesign.backgroundColor,
-                              }}
-                              aria-hidden="true"
-                            />
-                            <input
-                              type="color"
-                              value={localDesign.backgroundColor}
-                              onChange={(event) =>
-                                setLocalDesign((prev) => ({
-                                  ...prev,
-                                  backgroundColor: event.target.value,
-                                }))
-                              }
-                              aria-label="Selecionar cor de fundo"
-                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                            />
-                          </label>
-                          <span className="text-[11px] font-semibold text-slate-600">
-                            Cor de fundo
-                          </span>
-                          <span className="text-[11px] uppercase tracking-wide text-slate-400">
-                            {localDesign.backgroundColor.toUpperCase()}
-                          </span>
-                        </div>
-
-                        <div className="flex flex-col items-center gap-1.5 text-center">
-                          <label className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
-                            <span
-                              className="absolute inset-1.5 shadow-inner"
-                              style={{ backgroundColor: localDesign.fontColor }}
-                              aria-hidden="true"
-                            />
-                            <input
-                              type="color"
-                              value={localDesign.fontColor}
-                              onChange={(event) =>
-                                setLocalDesign((prev) => ({
-                                  ...prev,
-                                  fontColor: event.target.value,
-                                }))
-                              }
-                              aria-label="Selecionar cor da fonte"
-                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                            />
-                          </label>
-                          <span className="text-[11px] font-semibold text-slate-600">
-                            Cor da fonte
-                          </span>
-                          <span className="text-[11px] uppercase tracking-wide text-slate-400">
-                            {localDesign.fontColor.toUpperCase()}
-                          </span>
-                        </div>
+                        <span className="truncate font-semibold text-sm min-w-0">
+                          {resolvedCategoryName}
+                        </span>
                       </div>
                     </div>
                     <IconCustomizationBlock
@@ -661,6 +659,12 @@ function DesignDialog({
                       maxSvgFileSizeKb={MAX_SVG_FILE_SIZE_KB}
                       formatIconLabel={formatIconLabel}
                       defaultIconName={DEFAULT_ICON}
+                      customIconName={customIconName}
+                      onCustomIconNameChange={handleCustomIconNameChange}
+                      customIconNameError={customIconNameError}
+                      onCancelCustomIcon={handleCancelCustomIcon}
+                      onSaveCustomIcon={handleSaveCustomIcon}
+                      isSaveDisabled={!canSaveCustomIcon}
                     />
                   </section>
                 </Dialog.BodyContent>
@@ -821,9 +825,8 @@ function CategoryDialog({
                               triggerClassName={cn(
                                 buttonVariants({
                                   variant: 'outline',
-                                  size: 'compact',
                                 }),
-                                'group rounded-lg text-slate-900 bg-white  min-w-[140px] lg:w-full'
+                                'group rounded-lg text-slate-900 bg-white min-w-[140px] lg:w-full py-2'
                               )}
                               triggerAriaLabel="Editar visual"
                               triggerChildren={
@@ -843,10 +846,9 @@ function CategoryDialog({
                             <Button
                               type="button"
                               variant="outline"
-                              size="compact"
                               onClick={handleReset}
                               className={cn(
-                                'group rounded-lg text-slate-900 bg-white min-w-[140px] lg:w-full'
+                                'group rounded-lg text-slate-900 bg-white min-w-[140px] lg:w-full py-2'
                               )}
                               aria-label={
                                 mode === 'edit'
@@ -877,6 +879,7 @@ function CategoryDialog({
                         <CategoryShowcasePreview
                           categoryName={previewName}
                           design={design}
+                          className="md:text-[16px] [&_button]:text-[15px] md:[&_button]:text-[16px]"
                           onPlacementChange={(placement) =>
                             setDesign((prev) =>
                               prev.placement === placement
@@ -890,7 +893,7 @@ function CategoryDialog({
                         />
                       </div>
 
-                      <div className="mt-10 flex flex-col items-center gap-4">
+                      <div className="pt-5 flex flex-col items-center gap-4">
                         <div
                           className={DIALOG_PREVIEW_BADGE}
                           style={{
@@ -912,6 +915,94 @@ function CategoryDialog({
                         <p className="text-xs italic text-slate-500">
                           {previewDescription}
                         </p>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-8 w-full">
+                        <div className="flex flex-col items-center gap-1.5 text-center">
+                          <label className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                            <span
+                              className="absolute inset-1.5 shadow-inner"
+                              style={{ backgroundColor: design.iconColor }}
+                              aria-hidden="true"
+                            />
+                            <input
+                              type="color"
+                              value={design.iconColor}
+                              onChange={(event) =>
+                                setDesign((prev) => ({
+                                  ...prev,
+                                  iconColor: event.target.value,
+                                }))
+                              }
+                              aria-label="Selecionar cor do ícone"
+                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                            />
+                          </label>
+                          <span className="text-[11px] font-semibold text-slate-600">
+                            Cor do ícone
+                          </span>
+                          <span className="text-[11px] uppercase tracking-wide text-slate-400">
+                            {design.iconColor.toUpperCase()}
+                          </span>
+                        </div>
+
+                        <div className="flex flex-col items-center gap-1.5 text-center">
+                          <label className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                            <span
+                              className="absolute inset-1.5 shadow-inner"
+                              style={{
+                                backgroundColor: design.backgroundColor,
+                              }}
+                              aria-hidden="true"
+                            />
+                            <input
+                              type="color"
+                              value={design.backgroundColor}
+                              onChange={(event) =>
+                                setDesign((prev) => ({
+                                  ...prev,
+                                  backgroundColor: event.target.value,
+                                }))
+                              }
+                              aria-label="Selecionar cor de fundo"
+                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                            />
+                          </label>
+                          <span className="text-[11px] font-semibold text-slate-600">
+                            Cor de fundo
+                          </span>
+                          <span className="text-[11px] uppercase tracking-wide text-slate-400">
+                            {design.backgroundColor.toUpperCase()}
+                          </span>
+                        </div>
+
+                        <div className="flex flex-col items-center gap-1.5 text-center">
+                          <label className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm">
+                            <span
+                              className="absolute inset-1.5 shadow-inner"
+                              style={{ backgroundColor: design.fontColor }}
+                              aria-hidden="true"
+                            />
+                            <input
+                              type="color"
+                              value={design.fontColor}
+                              onChange={(event) =>
+                                setDesign((prev) => ({
+                                  ...prev,
+                                  fontColor: event.target.value,
+                                }))
+                              }
+                              aria-label="Selecionar cor da fonte"
+                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                            />
+                          </label>
+                          <span className="text-[11px] font-semibold text-slate-600">
+                            Cor da fonte
+                          </span>
+                          <span className="text-[11px] uppercase tracking-wide text-slate-400">
+                            {design.fontColor.toUpperCase()}
+                          </span>
+                        </div>
                       </div>
                     </section>
 

@@ -10,6 +10,7 @@ import {
 } from '@/components/dialogs/icon-customization-data'
 import { useEmojiRecents } from '@/hooks/use-emoji-recents'
 import { useIconRecents } from '@/hooks/use-icon-recents'
+import { toast } from '@/hooks/use-toast-sonner'
 import {
   DEFAULT_CUSTOM_ICON,
   DEFAULT_DESIGN,
@@ -26,6 +27,26 @@ import {
 } from '@/lib/category-design'
 import type { AllIconNames } from '@/lib/constants/all-icons'
 import { formatIconLabel, normalizeIconName } from '@/lib/icon-utils'
+
+const MAX_ICON_NAME_LENGTH = 50
+
+const extractNameFromFile = (fileName: string): string => {
+  const base = fileName.replace(/\.[^/.]+$/, '')
+  return base.slice(0, MAX_ICON_NAME_LENGTH)
+}
+
+const extractNameFromUrl = (value: string): string => {
+  try {
+    const parsed = new URL(value)
+    const segments = parsed.pathname.split('/').filter(Boolean)
+    const candidate = segments.pop() ?? 'ícone personalizado'
+    const decoded = decodeURIComponent(candidate.replace(/\.svg$/i, ''))
+    const cleaned = decoded.trim() || 'ícone personalizado'
+    return cleaned.slice(0, MAX_ICON_NAME_LENGTH)
+  } catch (_error) {
+    return 'ícone personalizado'
+  }
+}
 
 export default function IconCustomizationPlayground() {
   const [design, setDesign] = useState<CategoryDesign>(() =>
@@ -94,6 +115,7 @@ export default function IconCustomizationPlayground() {
             svgContent: sanitized,
             dataUrl,
             fileName: file.name,
+            name: extractNameFromFile(file.name),
           },
         }))
         setActiveIconTab('custom')
@@ -121,6 +143,7 @@ export default function IconCustomizationPlayground() {
       customIcon: {
         source: 'url',
         url: value,
+        name: extractNameFromUrl(value),
       },
     }))
 
@@ -137,7 +160,6 @@ export default function IconCustomizationPlayground() {
     setSvgUrlInput('')
     setUploadError(null)
     setUrlError(null)
-    setActiveIconTab('icons')
     setEmojiSearchTerm('')
     setIconSearchTerm('')
   }, [])
@@ -182,8 +204,58 @@ export default function IconCustomizationPlayground() {
     setIconSearchTerm('')
   }, [])
 
+  const customIconName = design.customIcon.name ?? ''
+  const trimmedCustomIconName = customIconName.trim()
+  const customIconNameError =
+    trimmedCustomIconName.length > MAX_ICON_NAME_LENGTH
+      ? 'O nome precisa ter menos que 50 caracteres.'
+      : null
   const hasUploadedIcon =
-    design.customIcon.source === 'upload' || design.customIcon.source === 'url'
+    (design.customIcon.source === 'upload' &&
+      Boolean(design.customIcon.dataUrl)) ||
+    (design.customIcon.source === 'url' && Boolean(design.customIcon.url))
+  const canSaveCustomIcon =
+    hasUploadedIcon &&
+    (design.customIcon.source === 'upload' ||
+      design.customIcon.source === 'url') &&
+    trimmedCustomIconName.length > 0 &&
+    !customIconNameError
+
+  const handleCustomIconNameChange = useCallback((value: string) => {
+    setDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        ...prev.customIcon,
+        name: value,
+      },
+    }))
+  }, [])
+
+  const handleCancelCustomIcon = useCallback(() => {
+    handleClearCustomIcon()
+  }, [handleClearCustomIcon])
+
+  const handleSaveCustomIcon = useCallback(() => {
+    if (!canSaveCustomIcon) {
+      toast.error('Finalize o upload antes de salvar.', {
+        description:
+          'Envie um SVG válido ou informe uma URL e defina um nome com até 50 caracteres.',
+      })
+      return
+    }
+    const sanitizedName = trimmedCustomIconName
+    setDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        ...prev.customIcon,
+        name: sanitizedName,
+      },
+    }))
+    setActiveIconTab('icons')
+    toast.success('Ícone personalizado salvo!', {
+      description: sanitizedName,
+    })
+  }, [canSaveCustomIcon, trimmedCustomIconName, setActiveIconTab])
 
   const selectedEmoji =
     design.customIcon.source === 'emoji'
@@ -247,6 +319,12 @@ export default function IconCustomizationPlayground() {
             maxSvgFileSizeKb={MAX_SVG_FILE_SIZE_KB}
             formatIconLabel={formatIconLabel}
             defaultIconName={DEFAULT_ICON}
+            customIconName={customIconName}
+            onCustomIconNameChange={handleCustomIconNameChange}
+            customIconNameError={customIconNameError}
+            onCancelCustomIcon={handleCancelCustomIcon}
+            onSaveCustomIcon={handleSaveCustomIcon}
+            isSaveDisabled={!canSaveCustomIcon}
           />
         </div>
       </div>

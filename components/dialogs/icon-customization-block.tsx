@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { FilterResetButton } from '@/components/ui/filter-reset-button'
 import { HybridTooltip } from '@/components/ui/HybridTooltip'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { toast } from '@/hooks/use-toast-sonner'
 import type {
   CategoryDesign,
@@ -389,6 +390,12 @@ export interface IconCustomizationBlockProps {
   ) => React.ReactElement
   maxSvgFileSizeKb: number
   iconNavigationOrder?: string[]
+  customIconName: string
+  onCustomIconNameChange: (_value: string) => void
+  customIconNameError: string | null
+  onCancelCustomIcon: () => void
+  onSaveCustomIcon: () => void
+  isSaveDisabled?: boolean
 }
 
 export function IconCustomizationBlock({
@@ -424,6 +431,12 @@ export function IconCustomizationBlock({
   renderCategoryIcon,
   maxSvgFileSizeKb,
   iconNavigationOrder,
+  customIconName,
+  onCustomIconNameChange,
+  customIconNameError,
+  onCancelCustomIcon,
+  onSaveCustomIcon,
+  isSaveDisabled = false,
 }: IconCustomizationBlockProps) {
   const headerSearchConfig: HeaderSearchConfig | undefined =
     activeTab === 'emoji'
@@ -447,6 +460,10 @@ export function IconCustomizationBlock({
   const [activeEmojiGroup, setActiveEmojiGroup] = useState<string | null>(null)
   const [activeIconGroup, setActiveIconGroup] = useState<string | null>(null)
   const isUrlApplyDisabled = svgUrlInput.trim().length === 0
+  const shouldShowCustomActions =
+    hasUploadedIcon &&
+    (design.customIcon.source === 'upload' ||
+      design.customIcon.source === 'url')
 
   const handleBadgeIconClear = () => {
     onSourceChange('none')
@@ -808,19 +825,19 @@ export function IconCustomizationBlock({
           )}
 
           {hasUploadedIcon && (
-            <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white">
+            <div className="flex w-full flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3 sm:min-w-0">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white">
                   {renderCategoryIcon(design, {
                     size: 28,
                     className: 'h-7 w-7 text-slate-700',
                   })}
                 </div>
-                <div className="flex flex-col">
+                <div className="flex min-w-0 flex-col">
                   <span className="text-xs font-semibold text-slate-700">
                     Pré-visualização
                   </span>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-slate-500 break-all">
                     {design.customIcon.source === 'upload'
                       ? (design.customIcon.fileName ?? 'SVG enviado')
                       : (design.customIcon.url ?? 'SVG enviado')}
@@ -833,18 +850,81 @@ export function IconCustomizationBlock({
                 size="icon"
                 onClick={onClearCustomIcon}
                 aria-label="Remover ícone personalizado"
-                className="filter-reset-button flex h-9 w-9 items-center justify-center border border-slate-300 text-slate-500 shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:text-rose-600"
+                className="filter-reset-button flex h-9 w-9 shrink-0 items-center justify-center border border-slate-300 text-slate-500 shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:text-rose-600"
               >
                 <Trash2 className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           )}
+
+          {shouldShowCustomActions ? (
+            <>
+              <div className="space-y-2 pt-1">
+                <div className="flex items-center justify-between">
+                  <Label
+                    htmlFor="custom-icon-name"
+                    className="text-xs font-semibold uppercase tracking-wide text-slate-500"
+                  >
+                    Nome do ícone
+                  </Label>
+                  <span className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
+                    {customIconName.length}/50
+                  </span>
+                </div>
+                <Input
+                  id="custom-icon-name"
+                  value={customIconName}
+                  onChange={(event) =>
+                    onCustomIconNameChange(event.target.value)
+                  }
+                  placeholder="Defina um nome descritivo"
+                  className={cn(
+                    'h-10 text-sm',
+                    customIconNameError
+                      ? 'border-rose-400 focus-visible:ring-rose-500'
+                      : undefined
+                  )}
+                  spellCheck={false}
+                />
+                {customIconNameError ? (
+                  <p className="text-xs font-medium text-rose-500">
+                    {customIconNameError}
+                  </p>
+                ) : (
+                  <p className="text-xs text-slate-500">
+                    Máximo de 50 caracteres. Use um nome que facilite buscas
+                    futuras.
+                  </p>
+                )}
+              </div>
+            </>
+          ) : null}
         </div>
       )}
 
       {footerContent ? (
         <div className="flex flex-col gap-3 rounded-b-2xl border-t border-slate-200/80 bg-white p-4">
           {footerContent}
+          {shouldShowCustomActions ? (
+            <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onCancelCustomIcon}
+                className="h-10 px-4 text-sm font-medium text-slate-600 shadow-sm transition-all duration-200 hover:text-orange-600 sm:h-9"
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                onClick={onSaveCustomIcon}
+                disabled={isSaveDisabled}
+                className="h-10 px-4 text-sm font-semibold sm:h-9 disabled:pointer-events-none disabled:opacity-60"
+              >
+                Salvar
+              </Button>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>
