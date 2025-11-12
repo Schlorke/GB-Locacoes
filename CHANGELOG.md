@@ -230,7 +230,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   mobile mantendo 36x36px no desktop, com padding interno dedicado para
   preservar o grid (`components/dialogs/icon-customization-block.tsx`).
 - **Icon grid spacing**: A aba `Ícones` exibe 6 colunas no mobile e 8 no
-  desktop, enquanto a aba `Emoji` voltou ao layout original (`grid-cols-6/8/10`)
+  desktop; a aba `Emoji` também passa a usar 8 colunas em desktop
   (`components/dialogs/icon-customization-block.tsx`).
 - **Playground – seleção de ícones**: Removido o contêiner extra ao redor da
   grade mantendo o `ScrollArea` como camada scrollável, e os estados continuam

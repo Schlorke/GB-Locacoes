@@ -583,7 +583,7 @@ export function IconCustomizationBlock({
                         {group.label}
                       </span>
                     </div>
-                    <div className="grid grid-cols-6 gap-3 sm:grid-cols-8 md:grid-cols-10">
+                    <div className="grid sm:grid-cols-8 md:grid-cols-8">
                       {group.emojis.map((emoji) => {
                         const isActive = selectedEmoji === emoji
                         return (
@@ -660,7 +660,7 @@ export function IconCustomizationBlock({
                         {group.label}
                       </span>
                     </div>
-                    <div className="grid grid-cols-6 gap-2 sm:grid-cols-7 md:grid-cols-8">
+                    <div className="grid gap-2 grid-cols-6 md:grid-cols-8">
                       {group.icons.map((iconName) => {
                         const isActive =
                           design.customIcon.source === 'none' &&
