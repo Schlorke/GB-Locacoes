@@ -108,6 +108,24 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   atalhos/filtragem no footer conforme o layout aprovado.
   - Tabs e campo de busca agora formam duas linhas distintas, mantendo o input
     imediatamente abaixo das tabs conforme especificação visual.
+  - Os botões de tab usam o mesmo estilo do nav de categorias (border inferior
+    com gradiente e estados `aria-selected`).
+  - Header e footer foram redesenhados para seguir o layout dos dialogs padrão
+    (bordas, cantos arredondados, padding equivalente), preservando o fundo
+    branco usado no componente original.
+  - O botão "Remover" foi substituído por controles de reset e limpeza da badge
+    ao lado do campo de busca, com o botão de remover em formato outline (mesmo
+    pattern do reset), apenas com ícone e estados habilitado/desabilitado,
+    replicando também as sombras padrão (`shadow-md` + `hover:shadow-lg`).
+  - Os atalhos de seções no rodapé são agora botões apenas com ícones e tooltip,
+    inspirados no Icon Picker do Notion para facilitar a navegação rápida.
+    - Os botões acompanham o scroll: a seção visível fica destacada com texto
+      laranja/sombra indicando o índice atual.
+  - O modo customizado mantém apenas as opções "Upload" e "URL externa" (botão
+    "Padrão" removido) já que a limpeza passa a ser feita pelo atalho de
+    exclusão.
+  - A ação de remover ícone na pré-visualização agora usa apenas o ícone de
+    lixeira (sem texto) e o mesmo tratamento de sombra/hover do botão reset.
 
 ### Changed 🔄
 
@@ -139,10 +157,64 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   categorias permanecem lado a lado em telas menores, agora com `flex-1` para
   preencher a linha sem quebrar o layout e mantendo a coluna no desktop
   (`app/playground/page.tsx`).
+- **IconCustomizationBlock**: Scroll da aba de emojis foi estilizado via classe
+  `icon-customization-scroll`, mantendo thumb e botões em laranja com trilha
+  branca sem impactar outros componentes
+  (`components/dialogs/icon-customization-block.tsx`, `app/globals.css`).
+- **Scroll sync Emoji/Icones**: Navegação rápida usa `getBoundingClientRect`
+  (threshold de 48px) e os botões agora atuam como atalhos de rolagem para as
+  seções correspondentes; o estilo de scroll customizado foi aplicado a todas as
+  sessões internas do `IconCustomizationBlock`
+  (`components/dialogs/icon-customization-block.tsx`).
+- **Emoji/Icon spacing**: Emojis e ícones ganharam padding interno dedicado,
+  evitando sobreposição de hovers/seleções e mantendo o grid consistente
+  (`components/dialogs/icon-customization-block.tsx`).
+- **Icon navigation order**: Botões da navegação rápida agora seguem o layout
+  Recentes → Recentes (Lucide) → Personalizados (label atualizado), mantendo os
+  personalizados como última opção e reorganizando as sessões correspondentes
+  (`components/dialogs/icon-customization-data.ts`,
+  `components/dialogs/icon-customization-block.tsx`).
+- **Icon lucide overview**: Removida a sessão agregada "Recentes" (Lucide) da
+  biblioteca, evitando duplicidade com "Ícones recentes" e simplificando a
+  navegação (`components/dialogs/icon-customization-data.ts`,
+  `components/dialogs/icon-customization-block.tsx`).
+- **Icon active state**: Ícones ativos na biblioteca exibem texto em laranja,
+  alinhando o feedback visual ao design system
+  (`components/dialogs/icon-customization-block.tsx`).
+- **Hydration mismatch fix**: Recents agora são carregados após o `mount`,
+  garantindo que o SSR e o CSR rendam a mesma ordem de grupos e eliminando o
+  erro de hidratação (`hooks/use-icon-recents.ts`).
+- **Emoji tab safeguards**: Botão de remover ícone da badge fica disponível
+  apenas para SVGs personalizados, abre toast de confirmação e permanece
+  desabilitado na tab de Emojis, permitindo apenas o reset completo
+  (`components/dialogs/icon-customization-block.tsx`).
+- **Reset completo**: A ação de reset agora limpa buscas, remove ícones
+  personalizados, reposiciona os atalhos e realça o ícone padrão selecionado
+  (`components/dialogs/icon-customization-block.tsx`).
+- **Recents limit**: Lista de ícones recentes limitada a até 12 itens para
+  manter o layout enxuto (`components/dialogs/icon-customization-data.ts`).
+- **Emoji recents**: A seção de emojis recentes passou a refletir o histórico do
+  usuário (máx. 12 itens), com persistência local e fallback SSR-safe
+  (`components/dialogs/icon-customization-data.ts`,
+  `hooks/use-emoji-recents.ts`, playgrounds).
+- **Custom URL guard**: Botão "Aplicar" permanece indisponível enquanto o campo
+  de URL estiver vazio, evitando submissões redundantes
+  (`components/dialogs/icon-customization-block.tsx`).
+- **Tab order tweak**: Abas do configurador reposicionadas para exibir `Ícones`
+  antes de `Emoji`, alinhando o fluxo esperado e mantendo `Fazer Upload` como
+  terceira opção (`components/dialogs/icon-customization-data.ts`,
+  documentação).
+- **Emoji rendering**: Aplicado fallback de fonte (`emoji-font`) para preservar
+  bandeiras multicódigo sem alterar o tamanho padrão dos emojis
+  (`components/dialogs/icon-customization-block.tsx`, `app/globals.css`).
 - **Playground – seleção de ícones**: Removido o contêiner extra ao redor da
   grade mantendo o `ScrollArea` como camada scrollável, e os estados continuam
   com apenas o texto em laranja (sem fundo, borda ou ring coloridos) tanto no
   hover quanto quando ativo.
+- **IconCustomizationBlock – emojis**: Eliminado o bloco com borda/fundo que
+  envolvia a grade de emojis em
+  `components/dialogs/icon-customization-block.tsx` para manter apenas a área de
+  scroll, alinhando o visual ao grid de ícones.
 - **Playground – sombras nos botões de ícones**: A grade de ícones em
   `app/playground/category-dialog.tsx` agora mantém `shadow-sm` por padrão,
   `hover:shadow-lg` no foco/hover e `shadow-md` quando o botão está ativo,
@@ -355,6 +427,9 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **IconCustomizationBlock (Playground)**: Removidos argumentos e refs não
+  utilizados das props do footer e do bloco, eliminando os avisos do ESLint na
+  rotina de personalização de ícones.
 - **Dialog Lab – markup do Category Dialog**: Adicionados os fechamentos de
   contêiner ausentes e removido o fragmento residual em
   `app/playground/category-dialog.tsx`, eliminando o erro de parse reportado
@@ -443,6 +518,18 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   agora possui um wrapper dedicado com `overflow-hidden`, permitindo que os
   cards reais mantenham `overflow-visible` durante animações de foco/hover.
   - Ajustes aplicados em `app/test-components/page.tsx`
+
+## [2025-11-12] - Compatibilidade de bandeiras no Dialog Lab
+
+### Fixed 🐛
+
+- Corrigido o seletor de emojis do `IconCustomizationBlock`, que no Windows
+  exibia apenas as siglas dos países. Agora a classe `.emoji-font` carrega a
+  fonte `Twemoji Country Flags` via `app/globals.css`, servida em
+  `public/fonts/twemoji-country-flags.woff2`, garantindo bandeiras coloridas sem
+  alterar o tamanho dos botões.
+- Atualizada a documentação em `docs/features/dialog-lab.md` explicando o novo
+  fallback obrigatório para bandeiras nas grades de emoji.
 
 ## [2025-11-06] - Interactive Infinite Carousel
 

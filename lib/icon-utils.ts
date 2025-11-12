@@ -1,8 +1,5 @@
 // lib/icon-utils.ts
-import {
-  ALL_ICONS,
-  type AllIconNames,
-} from '@/lib/constants/all-icons'
+import { ALL_ICONS, type AllIconNames } from '@/lib/constants/all-icons'
 
 const LEGACY_ICON_MAP: Record<string, AllIconNames> = {
   construction: 'Construction',

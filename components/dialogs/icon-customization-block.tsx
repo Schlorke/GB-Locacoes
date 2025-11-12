@@ -1,84 +1,207 @@
 // components/dialogs/icon-customization-block.tsx
+import {
+  type EmojiGroup,
+  type IconGroup,
+  type IconPickerTab,
+} from '@/components/dialogs/icon-customization-data'
 import { Button } from '@/components/ui/button'
+import { FilterResetButton } from '@/components/ui/filter-reset-button'
+import { HybridTooltip } from '@/components/ui/HybridTooltip'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
+import { toast } from '@/hooks/use-toast-sonner'
 import type {
   CategoryDesign,
   CustomIconSource,
   RenderIconOptions,
 } from '@/lib/category-design'
 import {
-  type EmojiGroup,
-  type IconGroup,
-  type IconPickerTab,
-} from '@/components/dialogs/icon-customization-data'
-import { Loader2, Tag as TagIcon } from 'lucide-react'
-import {
+  isCustomIcon,
   renderIcon as renderLibraryIcon,
   type AllIconNames,
 } from '@/lib/constants/all-icons'
-import type { ChangeEvent, MutableRefObject } from 'react'
+import { cn } from '@/lib/utils'
+import {
+  BarChart2,
+  Clock,
+  CloudSun,
+  Flag,
+  Hammer,
+  Leaf,
+  Lightbulb,
+  Loader2,
+  MessageCircle,
+  Plane,
+  Smile,
+  Sparkles,
+  Tag as TagIcon,
+  Trash2,
+  Users,
+} from 'lucide-react'
+import type { ChangeEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+const EMOJI_GROUP_ICON_MAP: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
+  recent: Clock,
+  people: Smile,
+  nature: Leaf,
+  objects: Lightbulb,
+  symbols: Sparkles,
+  flags: Flag,
+}
+
+const ICON_GROUP_ICON_MAP: Record<
+  string,
+  React.ComponentType<{ className?: string }>
+> = {
+  'recent-icons': Clock,
+  construction: Hammer,
+  transport: Plane,
+  'people-status': Users,
+  communication: MessageCircle,
+  analytics: BarChart2,
+  weather: CloudSun,
+  'custom-library': Sparkles,
+}
+
+const ICON_BUTTON_BASE_CLASSES =
+  'inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-500 shadow-sm transition-all duration-300 hover:scale-105 hover:text-orange-600 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white'
+
+const ICON_BUTTON_ACTIVE_CLASSES = 'text-orange-600 shadow-md'
+
+const SCROLL_SYNC_THRESHOLD = 48
 
 type HeaderSearchConfig = {
   value: string
-  onChange: (value: string) => void
+  onChange: (_value: string) => void
   placeholder: string
 }
 
 type IconCustomizationHeaderProps = {
   iconTabs: Array<{ value: IconPickerTab; label: string }>
   activeTab: IconPickerTab
-  onTabChange: (tab: IconPickerTab) => void
+  onTabChange: (_tab: IconPickerTab) => void
+  onBadgeIconClear: () => void
   onRemoveIcon: () => void
+  onResetAll: () => void
   searchConfig?: HeaderSearchConfig
+  design: CategoryDesign
 }
 
 const IconCustomizationHeader = ({
   iconTabs,
   activeTab,
   onTabChange,
+  onBadgeIconClear,
   onRemoveIcon,
+  onResetAll,
   searchConfig,
+  design,
 }: IconCustomizationHeaderProps) => {
+  const canRemoveCustomIcon =
+    design.customIcon.source === 'upload' ||
+    design.customIcon.source === 'url' ||
+    isCustomIcon(design.icon)
+
+  const handleBadgeIconRemovalRequest = () => {
+    if (!canRemoveCustomIcon || activeTab === 'emoji') return
+
+    toast.warning('Remover ícone personalizado?', {
+      description: 'Esta ação é permanente e removerá o SVG selecionado.',
+      action: {
+        label: 'Remover',
+        onClick: () => {
+          if (
+            design.customIcon.source === 'upload' ||
+            design.customIcon.source === 'url'
+          ) {
+            onBadgeIconClear()
+          } else if (isCustomIcon(design.icon)) {
+            onRemoveIcon()
+          }
+          toast.success('Ícone personalizado removido com sucesso.')
+        },
+      },
+    })
+  }
+
   return (
-    <div className="flex flex-col gap-3 border-b border-slate-200 pb-3">
+    <div className="relative flex flex-col gap-3 rounded-t-2xl bg-white p-4 pb-2">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-2">
-          {iconTabs.map((tab) => {
-            const isActive = activeTab === tab.value
-            return (
-              <button
-                key={tab.value}
-                type="button"
-                onClick={() => onTabChange(tab.value)}
-                className={cn(
-                  'rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-50',
-                  isActive
-                    ? 'bg-slate-900 text-white shadow'
-                    : 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-orange-600'
-                )}
-              >
-                {tab.label}
-              </button>
-            )
-          })}
-        </div>
-        <button
-          type="button"
-          onClick={onRemoveIcon}
-          className="text-sm font-medium text-rose-500 transition-colors duration-200 hover:text-rose-600"
+        <nav
+          className="flex w-full border-b-2 border-slate-200/70 sm:flex-1"
+          role="tablist"
+          aria-label="Modos de personalização de ícones"
         >
-          Remover
-        </button>
+          <ul className="flex w-full items-stretch text-xs font-semibold text-slate-500/90 sm:text-sm">
+            {iconTabs.map((tab) => {
+              const isActive = activeTab === tab.value
+              return (
+                <li key={tab.value} className="flex-1">
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    aria-controls={`${tab.value}-section`}
+                    onClick={() => onTabChange(tab.value)}
+                    className={cn(
+                      'group relative flex w-full items-center justify-center px-3 py-3 text-center text-xs font-semibold tracking-tight transition-colors duration-200 sm:text-sm',
+                      isActive
+                        ? 'text-orange-600'
+                        : 'text-slate-500 hover:text-orange-600'
+                    )}
+                  >
+                    <span className="whitespace-nowrap leading-none">
+                      {tab.label}
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className={cn(
+                        'pointer-events-none absolute left-0 right-0 -bottom-[1px] h-[2px] origin-center transform bg-gradient-to-r from-orange-500 to-yellow-500 transition-transform duration-300',
+                        isActive ? 'scale-x-100' : 'scale-x-0',
+                        !isActive && 'group-hover:scale-x-100'
+                      )}
+                    />
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
       </div>
       {searchConfig ? (
-        <div className="w-full">
+        <div className="flex w-full items-center gap-2">
           <Input
             value={searchConfig.value}
             onChange={(event) => searchConfig.onChange(event.target.value)}
             placeholder={searchConfig.placeholder}
-            className="h-10 text-sm"
+            className="h-10 flex-1 text-sm"
           />
+          <FilterResetButton
+            onClick={onResetAll}
+            size="md"
+            title="Resetar visual"
+            aria-label="Resetar todas as seleções"
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={handleBadgeIconRemovalRequest}
+            aria-label="Remover ícone da badge"
+            disabled={!canRemoveCustomIcon || activeTab === 'emoji'}
+            className={cn(
+              'flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border shadow-md hover:scale-105 hover:shadow-lg filter-reset-button rounded-md text-sm',
+              'text-rose-500 hover:text-rose-600 h-10 w-10'
+            )}
+          >
+            <Trash2
+              className="transition-all duration-300"
+              aria-hidden="true"
+            />
+          </Button>
         </div>
       ) : null}
     </div>
@@ -87,93 +210,142 @@ const IconCustomizationHeader = ({
 
 type IconCustomizationFooterProps = {
   activeTab: IconPickerTab
-  onTabChange: (tab: IconPickerTab) => void
+  onTabChange: (_tab: IconPickerTab) => void
   emojiGroups: EmojiGroup[]
-  emojiGroupRefs: MutableRefObject<Record<string, HTMLDivElement | null>>
-  iconLibraryFilters: Array<{ value: 'lucide' | 'custom'; label: string }>
-  iconLibraryFilter: 'lucide' | 'custom'
-  onIconLibraryFilterChange: (value: 'lucide' | 'custom') => void
+  activeEmojiGroup: string | null
+  onEmojiGroupClick: (_groupId: string) => void
   iconGroups: IconGroup[]
-  iconGroupRefs: MutableRefObject<Record<string, HTMLDivElement | null>>
+  activeIconGroup: string | null
+  onIconGroupClick: (_groupId: string) => void
+  iconNavigationOrder?: string[]
 }
 
 const IconCustomizationFooter = ({
   activeTab,
   onTabChange,
   emojiGroups,
-  emojiGroupRefs,
-  iconLibraryFilters,
-  iconLibraryFilter,
-  onIconLibraryFilterChange,
+  activeEmojiGroup,
+  onEmojiGroupClick,
   iconGroups,
-  iconGroupRefs,
+  activeIconGroup,
+  onIconGroupClick,
+  iconNavigationOrder,
 }: IconCustomizationFooterProps) => {
   if (activeTab === 'emoji' && emojiGroups.length > 0) {
     return (
-      <div className="flex flex-col gap-3 pt-2">
-        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-          {emojiGroups.map((group) => (
-            <button
-              key={group.id}
-              type="button"
-              onClick={() =>
-                emojiGroupRefs.current[group.id]?.scrollIntoView({
-                  behavior: 'smooth',
-                  block: 'start',
-                })
-              }
-              className="rounded-full border border-slate-200 px-3 py-1 font-medium transition-colors duration-200 hover:border-orange-400 hover:text-orange-600"
-            >
-              {group.label}
-            </button>
-          ))}
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {emojiGroups.map((group) => {
+            const IconComponent = EMOJI_GROUP_ICON_MAP[group.id]
+            const isActive = activeEmojiGroup === group.id
+            return (
+              <HybridTooltip
+                key={group.id}
+                content={
+                  <span className="text-sm font-medium text-slate-800">
+                    {group.label}
+                  </span>
+                }
+                side="bottom"
+              >
+                <button
+                  type="button"
+                  onClick={() => onEmojiGroupClick(group.id)}
+                  className={cn(
+                    ICON_BUTTON_BASE_CLASSES,
+                    isActive && ICON_BUTTON_ACTIVE_CLASSES
+                  )}
+                >
+                  {IconComponent ? (
+                    <IconComponent className="h-4 w-4" />
+                  ) : group.glyph ? (
+                    <span className="text-sm">{group.glyph}</span>
+                  ) : (
+                    <span className="text-xs font-semibold">
+                      {group.label[0]?.toUpperCase()}
+                    </span>
+                  )}
+                </button>
+              </HybridTooltip>
+            )
+          })}
         </div>
-        <div className="flex items-center justify-end">
+        <HybridTooltip
+          content={
+            <span className="text-sm font-medium text-slate-800">
+              Personalizado
+            </span>
+          }
+          side="bottom"
+        >
           <button
             type="button"
             onClick={() => onTabChange('custom')}
-            className="text-xs font-semibold text-orange-600 transition-colors duration-200 hover:text-orange-500"
+            className={cn(
+              ICON_BUTTON_BASE_CLASSES,
+              'text-orange-500 hover:text-orange-600'
+            )}
           >
-            Ir para Personalizado
+            <Sparkles className="h-4 w-4" aria-hidden="true" />
           </button>
-        </div>
+        </HybridTooltip>
       </div>
     )
   }
 
   if (activeTab === 'icons' && iconGroups.length > 0) {
+    const groupsById = new Map(iconGroups.map((group) => [group.id, group]))
+    const preferredOrder =
+      iconNavigationOrder?.filter((id) => groupsById.has(id)) ?? []
+    const fallbackOrder = iconGroups
+      .map((group) => group.id)
+      .filter((id) => !preferredOrder.includes(id))
+    const orderedIds = [...preferredOrder, ...fallbackOrder]
+
     return (
-      <div className="flex flex-wrap items-center gap-2 pt-4 text-xs text-slate-500">
-        {iconLibraryFilters.map((filter) => (
-          <button
-            key={filter.value}
-            type="button"
-            onClick={() => onIconLibraryFilterChange(filter.value)}
-            className={cn(
-              'rounded-full border border-slate-200 px-3 py-1 font-medium transition-colors duration-200 hover:border-orange-400 hover:text-orange-600',
-              iconLibraryFilter === filter.value
-                ? 'border-orange-400 text-orange-600 shadow-sm'
-                : 'text-slate-600'
-            )}
-          >
-            {filter.label}
-          </button>
-        ))}
-        {iconGroups.map((group) => (
-          <button
-            key={group.id}
-            type="button"
-            onClick={() =>
-              iconGroupRefs.current[group.id]?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start',
-              })
-            }
-            className="rounded-full border border-slate-200 px-3 py-1 font-medium transition-colors duration-200 hover:border-orange-400 hover:text-orange-600"
-          >
-            {group.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center gap-2">
+        {orderedIds.map((groupId) => {
+          const group = groupsById.get(groupId)
+          if (!group) return null
+          const IconComponent = ICON_GROUP_ICON_MAP[group.id]
+          const isActive = activeIconGroup === group.id
+          const isCustomLibrary = group.id === 'custom-library'
+          return (
+            <div
+              key={group.id}
+              className={cn('flex', isCustomLibrary && 'ml-auto')}
+            >
+              <HybridTooltip
+                content={
+                  <span className="text-sm font-medium text-slate-800">
+                    {group.label}
+                  </span>
+                }
+                side="bottom"
+              >
+                <button
+                  type="button"
+                  onClick={() => onIconGroupClick(group.id)}
+                  className={cn(
+                    ICON_BUTTON_BASE_CLASSES,
+                    isActive && ICON_BUTTON_ACTIVE_CLASSES
+                  )}
+                  data-state={isActive ? 'open' : 'closed'}
+                >
+                  {IconComponent ? (
+                    <IconComponent className="h-4 w-4" />
+                  ) : group.glyph ? (
+                    <span className="text-sm">{group.glyph}</span>
+                  ) : (
+                    <span className="text-xs font-semibold">
+                      {group.label[0]?.toUpperCase()}
+                    </span>
+                  )}
+                </button>
+              </HybridTooltip>
+            </div>
+          )
+        })}
       </div>
     )
   }
@@ -185,42 +357,38 @@ export interface IconCustomizationBlockProps {
   className?: string
   iconTabs: Array<{ value: IconPickerTab; label: string }>
   activeTab: IconPickerTab
-  onTabChange: (tab: IconPickerTab) => void
+  onTabChange: (_tab: IconPickerTab) => void
   onRemoveIcon: () => void
   emojiSearchTerm: string
-  onEmojiSearchChange: (value: string) => void
+  onEmojiSearchChange: (_value: string) => void
   emojiGroups: EmojiGroup[]
-  emojiGroupRefs: MutableRefObject<Record<string, HTMLDivElement | null>>
-  onEmojiSelect: (emoji: string) => void
+  onEmojiSelect: (_emoji: string) => void
   selectedEmoji: string | null
   iconSearchTerm: string
-  onIconSearchChange: (value: string) => void
+  onIconSearchChange: (_value: string) => void
   iconGroups: IconGroup[]
-  iconGroupRefs: MutableRefObject<Record<string, HTMLDivElement | null>>
-  iconLibraryFilter: 'lucide' | 'custom'
-  onIconLibraryFilterChange: (value: 'lucide' | 'custom') => void
-  iconLibraryFilters: Array<{ value: 'lucide' | 'custom'; label: string }>
   design: CategoryDesign
   activeIconName: AllIconNames
-  onIconSelect: (icon: AllIconNames) => void
-  onSourceChange: (source: CustomIconSource) => void
-  formatIconLabel: (icon: AllIconNames) => string
+  onIconSelect: (_icon: AllIconNames) => void
+  onSourceChange: (_source: CustomIconSource) => void
+  formatIconLabel: (_icon: AllIconNames) => string
   defaultIconName: AllIconNames
   fileInputRef: React.RefObject<HTMLInputElement | null>
   isProcessingUpload: boolean
   svgUrlInput: string
-  onSvgUrlInputChange: (value: string) => void
-  onFileInputChange: (event: ChangeEvent<HTMLInputElement>) => void
+  onSvgUrlInputChange: (_value: string) => void
+  onFileInputChange: (_event: ChangeEvent<HTMLInputElement>) => void
   uploadError: string | null
   onUrlApply: () => void
   urlError: string | null
   hasUploadedIcon: boolean
   onClearCustomIcon: () => void
   renderCategoryIcon: (
-    design: CategoryDesign,
-    options?: RenderIconOptions
+    _design: CategoryDesign,
+    _options?: RenderIconOptions
   ) => React.ReactElement
   maxSvgFileSizeKb: number
+  iconNavigationOrder?: string[]
 }
 
 export function IconCustomizationBlock({
@@ -232,20 +400,17 @@ export function IconCustomizationBlock({
   emojiSearchTerm,
   onEmojiSearchChange,
   emojiGroups,
-  emojiGroupRefs,
   onEmojiSelect,
   selectedEmoji,
   iconSearchTerm,
   onIconSearchChange,
   iconGroups,
-  iconGroupRefs,
-  iconLibraryFilter,
-  onIconLibraryFilterChange,
-  iconLibraryFilters,
   design,
   activeIconName,
   onIconSelect,
   onSourceChange,
+  formatIconLabel,
+  defaultIconName,
   fileInputRef,
   isProcessingUpload,
   svgUrlInput,
@@ -258,8 +423,7 @@ export function IconCustomizationBlock({
   onClearCustomIcon,
   renderCategoryIcon,
   maxSvgFileSizeKb,
-  formatIconLabel,
-  defaultIconName,
+  iconNavigationOrder,
 }: IconCustomizationBlockProps) {
   const headerSearchConfig: HeaderSearchConfig | undefined =
     activeTab === 'emoji'
@@ -276,21 +440,118 @@ export function IconCustomizationBlock({
           }
         : undefined
 
+  const emojiGroupRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const iconGroupRefs = useRef<Record<string, HTMLDivElement | null>>({})
+  const emojiScrollRef = useRef<HTMLDivElement | null>(null)
+  const iconScrollRef = useRef<HTMLDivElement | null>(null)
+  const [activeEmojiGroup, setActiveEmojiGroup] = useState<string | null>(null)
+  const [activeIconGroup, setActiveIconGroup] = useState<string | null>(null)
+  const isUrlApplyDisabled = svgUrlInput.trim().length === 0
+
+  const handleBadgeIconClear = () => {
+    onSourceChange('none')
+  }
+
+  const handleResetAll = () => {
+    onRemoveIcon()
+    onSourceChange('none')
+    onTabChange('icons')
+    onEmojiSearchChange('')
+    onIconSearchChange('')
+    setActiveEmojiGroup(emojiGroups[0]?.id ?? null)
+    setActiveIconGroup(iconGroups[0]?.id ?? null)
+  }
+
+  const scrollGroupIntoView = (
+    container: HTMLDivElement | null,
+    element: HTMLDivElement | null
+  ) => {
+    if (!container || !element) return
+    const containerRect = container.getBoundingClientRect()
+    const elementRect = element.getBoundingClientRect()
+    const offset = elementRect.top - containerRect.top + container.scrollTop
+    container.scrollTo({ top: offset, behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    setActiveEmojiGroup(emojiGroups[0]?.id ?? null)
+  }, [emojiGroups])
+
+  useEffect(() => {
+    setActiveIconGroup(iconGroups[0]?.id ?? null)
+  }, [iconGroups])
+
+  const footerContent = (
+    <IconCustomizationFooter
+      activeTab={activeTab}
+      onTabChange={onTabChange}
+      emojiGroups={emojiGroups}
+      activeEmojiGroup={activeEmojiGroup}
+      onEmojiGroupClick={(groupId) => {
+        setActiveEmojiGroup(groupId)
+        scrollGroupIntoView(
+          emojiScrollRef.current,
+          emojiGroupRefs.current[groupId] ?? null
+        )
+      }}
+      iconGroups={iconGroups}
+      activeIconGroup={activeIconGroup}
+      onIconGroupClick={(groupId) => {
+        setActiveIconGroup(groupId)
+        scrollGroupIntoView(
+          iconScrollRef.current,
+          iconGroupRefs.current[groupId] ?? null
+        )
+      }}
+      iconNavigationOrder={iconNavigationOrder}
+    />
+  )
+
   return (
-    <div className={cn('flex flex-col gap-6 rounded-lg bg-white p-4', className)}>
+    <div
+      className={cn(
+        'flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm',
+        className
+      )}
+    >
       <IconCustomizationHeader
         iconTabs={iconTabs}
         activeTab={activeTab}
         onTabChange={onTabChange}
+        onBadgeIconClear={handleBadgeIconClear}
         onRemoveIcon={onRemoveIcon}
+        onResetAll={handleResetAll}
         searchConfig={headerSearchConfig}
+        design={design}
       />
 
       {activeTab === 'emoji' && (
         <div className="space-y-4">
-          <div className="max-h-[12.5rem] w-full overflow-auto rounded-xl border border-slate-200/70 bg-white/70 p-3 shadow-inner">
+          <div
+            ref={emojiScrollRef}
+            onScroll={() => {
+              const container = emojiScrollRef.current
+              if (!container || emojiGroups.length === 0) return
+              const containerRect = container.getBoundingClientRect()
+              let currentId: string | null = emojiGroups[0]?.id ?? null
+              for (const group of emojiGroups) {
+                const el = emojiGroupRefs.current[group.id]
+                if (!el) continue
+                const elementTop = el.getBoundingClientRect().top
+                if (elementTop - containerRect.top <= SCROLL_SYNC_THRESHOLD) {
+                  currentId = group.id
+                } else {
+                  break
+                }
+              }
+              setActiveEmojiGroup((prev) =>
+                prev === currentId ? prev : currentId
+              )
+            }}
+            className="max-h-[12.5rem] w-full overflow-auto icon-customization-scroll"
+          >
             {emojiGroups.length > 0 ? (
-              <div className="space-y-5">
+              <div className="space-y-5 px-4 pb-3 pt-3">
                 {emojiGroups.map((group) => (
                   <div
                     key={group.id}
@@ -309,20 +570,21 @@ export function IconCustomizationBlock({
                       {group.emojis.map((emoji) => {
                         const isActive = selectedEmoji === emoji
                         return (
-                          <button
-                            key={emoji}
-                            type="button"
-                            onClick={() => onEmojiSelect(emoji)}
-                            aria-pressed={isActive}
-                            className={cn(
-                              'inline-flex h-10 w-10 items-center justify-center rounded-lg text-2xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
-                              isActive
-                                ? 'bg-orange-100 text-orange-600 shadow'
-                                : 'bg-white text-slate-700 hover:bg-slate-100 hover:scale-105'
-                            )}
-                          >
-                            {emoji}
-                          </button>
+                          <div key={emoji} className="p-1">
+                            <button
+                              type="button"
+                              onClick={() => onEmojiSelect(emoji)}
+                              aria-pressed={isActive}
+                              className={cn(
+                                'inline-flex h-9 w-9 items-center justify-center rounded-lg text-2xl emoji-font transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+                                isActive
+                                  ? 'bg-orange-100 text-orange-600 shadow'
+                                  : 'bg-white text-slate-700 hover:bg-slate-100 hover:scale-105'
+                              )}
+                            >
+                              {emoji}
+                            </button>
+                          </div>
                         )
                       })}
                     </div>
@@ -330,8 +592,10 @@ export function IconCustomizationBlock({
                 ))}
               </div>
             ) : (
-              <div className="flex h-24 items-center justify-center rounded-lg border border-dashed border-slate-200 bg-white text-xs text-slate-500">
-                Nenhum emoji encontrado.
+              <div className="px-3 pb-3 pt-3">
+                <div className="flex h-24 items-center justify-center rounded-lg border border-dashed border-slate-200 bg-white text-xs text-slate-500">
+                  Nenhum emoji encontrado.
+                </div>
               </div>
             )}
           </div>
@@ -340,9 +604,31 @@ export function IconCustomizationBlock({
 
       {activeTab === 'icons' && (
         <div className="space-y-4">
-          <div className="max-h-[12.5rem] w-full overflow-auto rounded-xl border border-slate-200/70 bg-white/70 p-3 shadow-inner">
+          <div
+            ref={iconScrollRef}
+            onScroll={() => {
+              const container = iconScrollRef.current
+              if (!container || iconGroups.length === 0) return
+              const containerRect = container.getBoundingClientRect()
+              let currentId: string | null = iconGroups[0]?.id ?? null
+              for (const group of iconGroups) {
+                const el = iconGroupRefs.current[group.id]
+                if (!el) continue
+                const elementTop = el.getBoundingClientRect().top
+                if (elementTop - containerRect.top <= SCROLL_SYNC_THRESHOLD) {
+                  currentId = group.id
+                } else {
+                  break
+                }
+              }
+              setActiveIconGroup((prev) =>
+                prev === currentId ? prev : currentId
+              )
+            }}
+            className="max-h-[12.5rem] w-full overflow-auto icon-customization-scroll"
+          >
             {iconGroups.length > 0 ? (
-              <div className="space-y-5">
+              <div className="space-y-5 px-4 pb-3 pt-3">
                 {iconGroups.map((group) => (
                   <div
                     key={group.id}
@@ -362,28 +648,42 @@ export function IconCustomizationBlock({
                         const isActive =
                           design.customIcon.source === 'none' &&
                           activeIconName === iconName
-                        const renderedIcon =
-                          renderLibraryIcon(iconName, 20, 'currentColor', 'h-5 w-5') ??
-                          renderLibraryIcon(defaultIconName, 20, 'currentColor', 'h-5 w-5') ?? (
-                            <TagIcon className="h-5 w-5" size={20} aria-hidden />
+                        const renderedIcon = renderLibraryIcon(
+                          iconName,
+                          20,
+                          'currentColor',
+                          'h-6 w-6'
+                        ) ??
+                          renderLibraryIcon(
+                            defaultIconName,
+                            20,
+                            'currentColor',
+                            'h-6 w-6'
+                          ) ?? (
+                            <TagIcon
+                              className="h-6 w-6"
+                              size={20}
+                              aria-hidden
+                            />
                           )
 
                         return (
-                          <button
-                            key={iconName}
-                            type="button"
-                            onClick={() => onIconSelect(iconName)}
-                            aria-pressed={isActive}
-                            className={cn(
-                              'group flex aspect-square w-full items-center justify-center rounded-lg border border-slate-200 bg-white/80 text-slate-600 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
-                              isActive
-                                ? 'shadow-md hover:shadow-md'
-                                : 'shadow-sm hover:text-orange-600 hover:shadow-lg'
-                            )}
-                            title={formatIconLabel(iconName)}
-                          >
-                            {renderedIcon}
-                          </button>
+                          <div key={iconName} className="">
+                            <button
+                              type="button"
+                              onClick={() => onIconSelect(iconName)}
+                              aria-pressed={isActive}
+                              className={cn(
+                                'group flex aspect-square w-full items-center justify-center rounded-lg border border-slate-200 bg-white/80 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500',
+                                isActive
+                                  ? 'text-orange-600 shadow-md hover:shadow-md'
+                                  : 'text-slate-600 shadow-sm hover:text-orange-600 hover:shadow-lg'
+                              )}
+                              title={formatIconLabel(iconName)}
+                            >
+                              {renderedIcon}
+                            </button>
+                          </div>
                         )
                       })}
                     </div>
@@ -400,7 +700,7 @@ export function IconCustomizationBlock({
       )}
 
       {activeTab === 'custom' && (
-        <div className="space-y-4">
+        <div className="space-y-4 p-4">
           <div className="space-y-1">
             <h3 className="text-sm font-semibold text-slate-800">
               Ícone personalizado para o cartão principal
@@ -413,7 +713,6 @@ export function IconCustomizationBlock({
 
           <div className="flex flex-wrap gap-2">
             {[
-              { value: 'none', label: 'Padrão' },
               { value: 'upload', label: 'Upload' },
               { value: 'url', label: 'URL externa' },
             ].map((option) => (
@@ -469,7 +768,9 @@ export function IconCustomizationBlock({
                 externos são removidos automaticamente.
               </p>
               {uploadError && (
-                <p className="text-xs font-medium text-red-500">{uploadError}</p>
+                <p className="text-xs font-medium text-red-500">
+                  {uploadError}
+                </p>
               )}
             </div>
           )}
@@ -487,13 +788,18 @@ export function IconCustomizationBlock({
                   type="button"
                   variant="outline"
                   onClick={onUrlApply}
-                  className="h-10 whitespace-nowrap border-slate-300 text-sm font-medium text-slate-700 hover:border-slate-400 hover:text-orange-600"
+                  disabled={isUrlApplyDisabled}
+                  className={cn(
+                    'h-10 whitespace-nowrap text-sm font-medium text-slate-700 transition-all duration-200 hover:text-orange-600',
+                    'disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400 disabled:hover:border-slate-200 disabled:hover:text-slate-400'
+                  )}
                 >
                   Aplicar
                 </Button>
               </div>
               <p className="text-xs text-slate-500">
-                Aceitamos apenas URLs HTTPS públicas que terminem em <code>.svg</code>.
+                Aceitamos apenas URLs HTTPS públicas que terminem em{' '}
+                <code>.svg</code>.
               </p>
               {urlError && (
                 <p className="text-xs font-medium text-red-500">{urlError}</p>
@@ -516,35 +822,31 @@ export function IconCustomizationBlock({
                   </span>
                   <span className="text-xs text-slate-500">
                     {design.customIcon.source === 'upload'
-                      ? design.customIcon.fileName ?? 'SVG enviado'
-                      : design.customIcon.url}
+                      ? (design.customIcon.fileName ?? 'SVG enviado')
+                      : (design.customIcon.url ?? 'SVG enviado')}
                   </span>
                 </div>
               </div>
               <Button
                 type="button"
                 variant="outline"
+                size="icon"
                 onClick={onClearCustomIcon}
-                className="h-9 border-slate-300 text-xs font-medium text-slate-600 hover:border-red-400 hover:text-red-600"
+                aria-label="Remover ícone personalizado"
+                className="filter-reset-button flex h-9 w-9 items-center justify-center border border-slate-300 text-slate-500 shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:text-rose-600"
               >
-                Remover ícone personalizado
+                <Trash2 className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           )}
         </div>
       )}
 
-      <IconCustomizationFooter
-        activeTab={activeTab}
-        onTabChange={onTabChange}
-        emojiGroups={emojiGroups}
-        emojiGroupRefs={emojiGroupRefs}
-        iconLibraryFilters={iconLibraryFilters}
-        iconLibraryFilter={iconLibraryFilter}
-        onIconLibraryFilterChange={onIconLibraryFilterChange}
-        iconGroups={iconGroups}
-        iconGroupRefs={iconGroupRefs}
-      />
+      {footerContent ? (
+        <div className="flex flex-col gap-3 rounded-b-2xl border-t border-slate-200/80 bg-white p-4">
+          {footerContent}
+        </div>
+      ) : null}
     </div>
   )
 }

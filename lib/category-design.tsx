@@ -143,11 +143,7 @@ export function isValidSvgUrl(value: string) {
 
 export function renderCategoryIcon(
   design: CategoryDesign,
-  {
-    size = 28,
-    className,
-    color,
-  }: RenderIconOptions = {}
+  { size = 28, className, color }: RenderIconOptions = {}
 ): ReactElement {
   const { customIcon } = design
 

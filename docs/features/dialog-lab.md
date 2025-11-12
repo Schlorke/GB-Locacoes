@@ -196,12 +196,20 @@ const [open, setOpen] = useState(false)
   carrega o componente em modo independente, com estado próprio e preview
   simplificado para testar rapidamente variantes de ícones/cores sem abrir a
   dialog principal.
-- **Seletor estilo Notion**: o cabeçalho exibe abas `Emoji`, `Ícones`,
-  `Personalizado` e a ação `Remover`, reproduzindo a UX das capturas enviadas
+- **Seletor estilo Notion**: o cabeçalho exibe abas `Ícones`, `Emoji`,
+  `Fazer Upload` e a ação `Remover`, reproduzindo a UX das capturas enviadas
   pelo usuário. O estado ativo é persistido ao reabrir a dialog.
 - **Biblioteca de emojis**: grade agrupada (Recentes, Pessoas, Natureza,
   Objetos, Símbolos, Bandeiras) com busca dedicada, botões de navegação rápida e
-  CTA "Ir para Personalizado" no rodapé para facilitar o fluxo de upload.
+  CTA "Ir para Personalizado" no rodapé; a seção Recentes agora reflete o
+  histórico real do usuário (persistido em `localStorage`) e surge apenas após a
+  primeira seleção.
+- **Fallback de bandeiras**: a classe `.emoji-font` usa a fonte
+  `Twemoji Country Flags` (`public/fonts/twemoji-country-flags.woff2`)
+  registrada em `app/globals.css` para garantir que os emojis de países apareçam
+  corretamente no Windows (onde o sistema converte `🇧🇷` em "BR"). Qualquer
+  grid/preview de emojis deve aplicar essa classe para manter consistência com o
+  playground.
 - **Biblioteca de ícones**: busca unificada com seletor lateral (Lucide x
   Personalizados) e grupos com atalhos no rodapé, permitindo saltar entre
   sessões longas sem perder o contexto.
@@ -307,7 +315,9 @@ const [open, setOpen] = useState(false)
   pelo usuário. O estado ativo é persistido ao reabrir a dialog.
 - **Biblioteca de emojis**: grade agrupada (Recentes, Pessoas, Natureza,
   Objetos, Símbolos, Bandeiras) com busca dedicada, botões de navegação rápida e
-  CTA "Ir para Personalizado" no rodapé para facilitar o fluxo de upload.
+  CTA "Ir para Personalizado" no rodapé; a lista de Recentes reflete o histórico
+  salvo do usuário e só aparece após a primeira seleção, evitando hidratação
+  divergente.
 - **Biblioteca de ícones**: busca unificada com seletor lateral (Lucide x
   Personalizados) e grupos com atalhos no rodapé, permitindo saltar entre
   sessões longas sem perder o contexto.

@@ -14,7 +14,8 @@
 5. [Hover e sombras cortados no Category Showcase](#5-hover-e-sombras-cortados-no-category-showcase)
 6. [Gradiente do Carrossel Sobreposto às Categorias](#6-gradiente-do-carrossel-sobreposto-às-categorias)
 7. [Inputs do Dialog Lab cortados nas laterais](#7-inputs-do-dialog-lab-cortados-nas-laterais)
-8. [Como Usar Este Documento](#como-usar-este-documento)
+8. [Hydration mismatch no IconCustomization](#8-hydration-mismatch-no-iconcustomization)
+9. [Como Usar Este Documento](#como-usar-este-documento)
 
 ---
 
@@ -737,6 +738,64 @@ renderizem totalmente.
   stylesheet global.
 - Confiar apenas em remover `overflow-hidden` de ancestrais; elementos sem
   override continuam herdando o corte.
+
+---
+
+## 8. Hydration mismatch no IconCustomization
+
+### 🐛 Problema
+
+**Data da Ocorrência**: 2025-11-13 **Severidade**: Alta (quebra UX) **Status**:
+✅ Resolvido
+
+#### Descrição
+
+Ao acessar `/playground/icon-customization`, o console do navegador exibia:
+
+> `Hydration failed because the server rendered text didn't match the client.`
+
+No HTML SSR, a primeira seção da biblioteca de ícones era "Construção &
+Ferramentas" (`🛠️`), mas logo após a hidratação o cliente substituía a seção por
+"Recentes" (`🕒`). O React detectava a divergência e forçava a re-renderização
+do bloco, quebrando animações e causando flick na navegação.
+
+#### Causa Raiz
+
+- `useIconRecents` lia `localStorage` durante a renderização inicial.
+- No SSR, a lista de recentes era vazia; no cliente, era preenchida
+  imediatamente.
+- A ordem das seções mudava entre SSR e CSR, disparando o erro de hidratação.
+
+#### Solução Implementada
+
+1. `useIconRecents` (e o novo `useEmojiRecents`) passaram a iniciar estado
+   vazio.
+2. Os dados persistidos são carregados somente após o `mount` (`useEffect`),
+   garantindo HTML idêntico no SSR e no cliente.
+3. A lista de recentes agora só é exibida quando existe histórico real.
+
+#### Arquivos Modificados
+
+- `hooks/use-icon-recents.ts`
+- `hooks/use-emoji-recents.ts`
+- `components/dialogs/icon-customization-data.ts`
+- `app/playground/icon-customization/page.tsx`
+- `app/playground/category-dialog.tsx`
+
+#### Como Validar
+
+```bash
+pnpm dev
+# Abrir http://localhost:3000/playground/icon-customization
+# Verificar console: nenhum hydration mismatch deve aparecer
+```
+
+#### Lições Aprendidas
+
+- Evite ler `localStorage` (ou `window`) durante o SSR.
+- Sempre garanta que dados "recentes" tenham fallback determinístico no SSR.
+- Prefira carregar preferências do usuário após o `mount` quando a UI depende de
+  browser APIs.
 
 ---
 

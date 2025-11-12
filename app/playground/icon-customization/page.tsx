@@ -4,12 +4,12 @@ import { useCallback, useMemo, useRef, useState, type ChangeEvent } from 'react'
 
 import { IconCustomizationBlock } from '@/components/dialogs/icon-customization-block'
 import {
-  CUSTOM_ICON_GROUPS,
-  EMOJI_GROUPS,
-  ICON_LIBRARY_FILTERS,
   ICON_PICKER_TABS,
-  LUCIDE_ICON_GROUPS,
+  buildEmojiGroups,
+  buildIconGroups,
 } from '@/components/dialogs/icon-customization-data'
+import { useEmojiRecents } from '@/hooks/use-emoji-recents'
+import { useIconRecents } from '@/hooks/use-icon-recents'
 import {
   DEFAULT_CUSTOM_ICON,
   DEFAULT_DESIGN,
@@ -24,12 +24,8 @@ import {
   type CategoryDesign,
   type CustomIconSource,
 } from '@/lib/category-design'
-import { isCustomIcon, type AllIconNames } from '@/lib/constants/all-icons'
-import {
-  buildIconSearchIndex,
-  formatIconLabel,
-  normalizeIconName,
-} from '@/lib/icon-utils'
+import type { AllIconNames } from '@/lib/constants/all-icons'
+import { formatIconLabel, normalizeIconName } from '@/lib/icon-utils'
 
 export default function IconCustomizationPlayground() {
   const [design, setDesign] = useState<CategoryDesign>(() =>
@@ -44,13 +40,10 @@ export default function IconCustomizationPlayground() {
   const [activeIconTab, setActiveIconTab] = useState<
     'emoji' | 'icons' | 'custom'
   >('icons')
-  const [iconLibraryFilter, setIconLibraryFilter] = useState<
-    'lucide' | 'custom'
-  >('lucide')
-
   const fileInputRef = useRef<HTMLInputElement | null>(null)
-  const emojiGroupRefs = useRef<Record<string, HTMLDivElement | null>>({})
-  const iconGroupRefs = useRef<Record<string, HTMLDivElement | null>>({})
+
+  const { recents: iconRecents, addRecentIcon } = useIconRecents()
+  const { recents: emojiRecents, addRecentEmoji } = useEmojiRecents()
 
   const handleSourceChange = useCallback((source: CustomIconSource) => {
     setDesign((prev) => ({
@@ -145,23 +138,26 @@ export default function IconCustomizationPlayground() {
     setUploadError(null)
     setUrlError(null)
     setActiveIconTab('icons')
-    setIconLibraryFilter('lucide')
     setEmojiSearchTerm('')
     setIconSearchTerm('')
   }, [])
 
-  const handleEmojiSelect = useCallback((emoji: string) => {
-    setDesign((prev) => ({
-      ...prev,
-      customIcon: {
-        source: 'emoji',
-        emoji,
-      },
-    }))
-    setActiveIconTab('emoji')
-  }, [])
+  const handleEmojiSelect = useCallback(
+    (emoji: string) => {
+      setDesign((prev) => ({
+        ...prev,
+        customIcon: {
+          source: 'emoji',
+          emoji,
+        },
+      }))
+      setActiveIconTab('emoji')
+      addRecentEmoji(emoji)
+    },
+    [addRecentEmoji]
+  )
 
-  const handleIconSelect = useCallback((iconName: AllIconNames) => {
+  const handleIconSelect = (iconName: AllIconNames) => {
     const resolved = normalizeIconName(iconName) ?? iconName
     setDesign((prev) => ({
       ...prev,
@@ -169,7 +165,8 @@ export default function IconCustomizationPlayground() {
       customIcon: { ...DEFAULT_CUSTOM_ICON },
     }))
     setActiveIconTab('icons')
-  }, [])
+    addRecentIcon(resolved)
+  }
 
   const handleRemoveIcon = useCallback(() => {
     setDesign((prev) => ({
@@ -181,7 +178,6 @@ export default function IconCustomizationPlayground() {
     setUploadError(null)
     setUrlError(null)
     setActiveIconTab('icons')
-    setIconLibraryFilter('lucide')
     setEmojiSearchTerm('')
     setIconSearchTerm('')
   }, [])
@@ -196,40 +192,24 @@ export default function IconCustomizationPlayground() {
 
   const activeIconName = normalizeIconName(design.icon) ?? design.icon
 
-  const resolvedEmojiGroups = useMemo(() => {
-    const term = emojiSearchTerm.trim().toLowerCase()
+  const { groups: resolvedEmojiGroups } = useMemo(
+    () =>
+      buildEmojiGroups({
+        searchTerm: emojiSearchTerm,
+        recentEmojis: emojiRecents,
+      }),
+    [emojiSearchTerm, emojiRecents]
+  )
 
-    return EMOJI_GROUPS.map((group) => {
-      const emojis = term
-        ? group.emojis.filter((emoji) =>
-            emoji.toLowerCase().includes(term.toLowerCase())
-          )
-        : group.emojis
-      return { ...group, emojis }
-    }).filter((group) => group.emojis.length > 0)
-  }, [emojiSearchTerm])
-
-  const activeIconGroups = useMemo(() => {
-    const term = iconSearchTerm.trim().toLowerCase()
-    const baseGroups =
-      iconLibraryFilter === 'lucide' ? LUCIDE_ICON_GROUPS : CUSTOM_ICON_GROUPS
-
-    return baseGroups
-      .map((group) => {
-        const icons = group.icons
-          .map(
-            (iconName) =>
-              normalizeIconName(iconName) ??
-              (isCustomIcon(iconName) ? (iconName as AllIconNames) : null)
-          )
-          .filter((iconName): iconName is AllIconNames => Boolean(iconName))
-          .filter((iconName) =>
-            term ? buildIconSearchIndex(iconName).includes(term) : true
-          )
-        return { ...group, icons }
-      })
-      .filter((group) => group.icons.length > 0)
-  }, [iconLibraryFilter, iconSearchTerm])
+  const { groups: activeIconGroups, navigationOrder: iconNavigationOrder } =
+    useMemo(
+      () =>
+        buildIconGroups({
+          searchTerm: iconSearchTerm,
+          recentIcons: iconRecents,
+        }),
+      [iconSearchTerm, iconRecents]
+    )
 
   return (
     <div className="min-h-screen bg-slate-100 py-10">
@@ -243,16 +223,12 @@ export default function IconCustomizationPlayground() {
             emojiSearchTerm={emojiSearchTerm}
             onEmojiSearchChange={setEmojiSearchTerm}
             emojiGroups={resolvedEmojiGroups}
-            emojiGroupRefs={emojiGroupRefs}
             onEmojiSelect={handleEmojiSelect}
             selectedEmoji={selectedEmoji}
             iconSearchTerm={iconSearchTerm}
             onIconSearchChange={setIconSearchTerm}
             iconGroups={activeIconGroups}
-            iconGroupRefs={iconGroupRefs}
-            iconLibraryFilter={iconLibraryFilter}
-            onIconLibraryFilterChange={setIconLibraryFilter}
-            iconLibraryFilters={ICON_LIBRARY_FILTERS}
+            iconNavigationOrder={iconNavigationOrder}
             design={design}
             activeIconName={activeIconName}
             onIconSelect={handleIconSelect}

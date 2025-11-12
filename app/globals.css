@@ -10,6 +10,17 @@
 @tailwind utilities;
 
 /* ================================ */
+/* 1.1 FONTES CUSTOMIZADAS (EMOJI)  */
+/* ================================ */
+@font-face {
+  font-family: 'Twemoji Country Flags';
+  src: url('/fonts/twemoji-country-flags.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ================================ */
 /* 2. VARIÁVEIS CSS (DESIGN TOKENS) */
 /* ================================ */
 :root {
@@ -538,6 +549,28 @@ aside.admin-sidebar-dark {
 
 .filter-dropdown-scroll::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
+}
+
+/* Scrollbar para personalização de ícones (aba de emojis) */
+.icon-customization-scroll {
+  scrollbar-color: #ea580c #ffffff;
+}
+
+.icon-customization-scroll::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+.icon-customization-scroll::-webkit-scrollbar-thumb {
+  background: #ea580c;
+  border-radius: 9999px;
+}
+
+.icon-customization-scroll::-webkit-scrollbar-thumb:hover {
+  background: #c2410c;
+}
+
+.icon-customization-scroll::-webkit-scrollbar-button {
+  background: #ea580c;
 }
 
 /* Scrollbar WhatsApp (verde) */
@@ -1115,6 +1148,12 @@ body.min-h-screen {
 
 .overflow-hidden {
   overflow: hidden !important;
+}
+
+.emoji-font {
+  font-family:
+    'Twemoji Country Flags', 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Noto Color Emoji', 'EmojiOne Color', sans-serif;
 }
 
 .material-card,

@@ -1,6 +1,7 @@
 // components/dialogs/icon-customization-data.ts
-import type { AllIconNames } from '@/lib/constants/all-icons'
 import { CUSTOM_ICONS } from '@/components/icons/custom'
+import { isCustomIcon, type AllIconNames } from '@/lib/constants/all-icons'
+import { buildIconSearchIndex, normalizeIconName } from '@/lib/icon-utils'
 
 export type IconPickerTab = 'emoji' | 'icons' | 'custom'
 
@@ -18,27 +19,19 @@ export interface IconGroup {
   icons: AllIconNames[]
 }
 
-export const ICON_PICKER_TABS: Array<{ value: IconPickerTab; label: string }> = [
-  { value: 'emoji', label: 'Emoji' },
-  { value: 'icons', label: 'Ícones' },
-  { value: 'custom', label: 'Personalizado' },
-]
+export const ICON_PICKER_TABS: Array<{ value: IconPickerTab; label: string }> =
+  [
+    { value: 'icons', label: 'Ícones' },
+    { value: 'emoji', label: 'Emoji' },
+    { value: 'custom', label: 'Fazer Upload' },
+  ]
 
-export const ICON_LIBRARY_FILTERS: Array<{
-  value: 'lucide' | 'custom'
-  label: string
-}> = [
-  { value: 'lucide', label: 'Lucide' },
-  { value: 'custom', label: 'Personalizados' },
-]
+export const RECENT_ICON_GROUP_ID = 'recent-icons'
+export const RECENT_EMOJI_GROUP_ID = 'recent'
+const MAX_RECENT_ICONS_DISPLAY = 12
+const MAX_RECENT_EMOJIS_DISPLAY = 12
 
-export const EMOJI_GROUPS: EmojiGroup[] = [
-  {
-    id: 'recent',
-    label: 'Recentes',
-    glyph: '🕒',
-    emojis: ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊'],
-  },
+const BASE_EMOJI_GROUPS: EmojiGroup[] = [
   {
     id: 'people',
     label: 'Pessoas',
@@ -219,6 +212,62 @@ export const EMOJI_GROUPS: EmojiGroup[] = [
   },
 ]
 
+export const EMOJI_GROUPS = BASE_EMOJI_GROUPS
+
+type BuildEmojiGroupsOptions = {
+  searchTerm: string
+  recentEmojis: string[]
+}
+
+const filterEmojiList = (emojis: readonly string[], term: string) => {
+  if (!term) {
+    return [...emojis]
+  }
+
+  const normalizedTerm = term.toLowerCase()
+  return emojis.filter((emoji) => emoji.toLowerCase().includes(normalizedTerm))
+}
+
+export function buildEmojiGroups({
+  searchTerm,
+  recentEmojis,
+}: BuildEmojiGroupsOptions): { groups: EmojiGroup[] } {
+  const term = searchTerm.trim().toLowerCase()
+  const uniqueRecentEmojis = Array.from(
+    new Set(
+      recentEmojis.filter(
+        (emoji): emoji is string =>
+          typeof emoji === 'string' && emoji.trim().length > 0
+      )
+    )
+  )
+  const recentFiltered = filterEmojiList(uniqueRecentEmojis, term).slice(
+    0,
+    MAX_RECENT_EMOJIS_DISPLAY
+  )
+
+  const recentsGroup =
+    recentFiltered.length > 0
+      ? {
+          id: RECENT_EMOJI_GROUP_ID,
+          label: 'Recentes',
+          glyph: '🕒',
+          emojis: recentFiltered,
+        }
+      : null
+
+  const filteredBaseGroups = BASE_EMOJI_GROUPS.map((group) => ({
+    ...group,
+    emojis: filterEmojiList(group.emojis, term),
+  })).filter((group) => group.emojis.length > 0)
+
+  const groups = recentsGroup
+    ? [recentsGroup, ...filteredBaseGroups]
+    : filteredBaseGroups
+
+  return { groups }
+}
+
 export const LUCIDE_ICON_GROUPS: IconGroup[] = [
   {
     id: 'construction',
@@ -338,8 +387,83 @@ export const LUCIDE_ICON_GROUPS: IconGroup[] = [
 export const CUSTOM_ICON_GROUPS: IconGroup[] = [
   {
     id: 'custom-library',
-    label: 'Ícones Personalizados',
+    label: 'Personalizados',
     glyph: '✨',
     icons: Object.keys(CUSTOM_ICONS) as AllIconNames[],
   },
 ]
+
+type BuildIconGroupsOptions = {
+  searchTerm: string
+  recentIcons: AllIconNames[]
+}
+
+const normalizeIcon = (icon: AllIconNames): AllIconNames | null => {
+  const normalized = normalizeIconName(icon)
+  if (normalized) return normalized
+  if (isCustomIcon(icon)) return icon
+  return null
+}
+
+const filterIcons = (icons: readonly AllIconNames[], term: string) => {
+  const normalized = icons
+    .map((icon) => normalizeIcon(icon))
+    .filter((icon): icon is AllIconNames => icon !== null)
+
+  const uniqueNormalized = Array.from(new Set(normalized))
+
+  if (!term) {
+    return uniqueNormalized
+  }
+
+  return uniqueNormalized.filter((iconName) =>
+    buildIconSearchIndex(iconName).includes(term)
+  )
+}
+
+export function buildIconGroups({
+  searchTerm,
+  recentIcons,
+}: BuildIconGroupsOptions): {
+  groups: IconGroup[]
+  navigationOrder: string[]
+} {
+  const term = searchTerm.trim().toLowerCase()
+
+  const recentIconsFiltered = filterIcons(recentIcons, term).slice(
+    0,
+    MAX_RECENT_ICONS_DISPLAY
+  )
+  const recentsGroup =
+    recentIconsFiltered.length > 0
+      ? {
+          id: RECENT_ICON_GROUP_ID,
+          label: 'Recentes',
+          glyph: '🕒',
+          icons: recentIconsFiltered,
+        }
+      : null
+
+  const lucideGroups = LUCIDE_ICON_GROUPS.map((group) => ({
+    ...group,
+    icons: filterIcons(group.icons, term),
+  })).filter((group) => group.icons.length > 0)
+
+  const customGroups = CUSTOM_ICON_GROUPS.map((group) => ({
+    ...group,
+    icons: filterIcons(group.icons, term),
+  })).filter((group) => group.icons.length > 0)
+
+  const groups: IconGroup[] = []
+  if (recentsGroup) groups.push(recentsGroup)
+  groups.push(...lucideGroups)
+  groups.push(...customGroups)
+
+  const navigationOrder: string[] = []
+  if (recentsGroup) navigationOrder.push(RECENT_ICON_GROUP_ID)
+
+  return {
+    groups,
+    navigationOrder,
+  }
+}

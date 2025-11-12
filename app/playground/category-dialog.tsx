@@ -4,11 +4,9 @@ import type { TabConfig } from '@/components/category-showcase'
 import { CategoryShowcase } from '@/components/category-showcase'
 import { IconCustomizationBlock } from '@/components/dialogs/icon-customization-block'
 import {
-  CUSTOM_ICON_GROUPS,
-  EMOJI_GROUPS,
-  ICON_LIBRARY_FILTERS,
   ICON_PICKER_TABS,
-  LUCIDE_ICON_GROUPS,
+  buildEmojiGroups,
+  buildIconGroups,
   type IconPickerTab,
 } from '@/components/dialogs/icon-customization-data'
 import { Button, buttonVariants } from '@/components/ui/button'
@@ -33,7 +31,7 @@ import {
   type CategoryPlacement,
   type CustomIconSource,
 } from '@/lib/category-design'
-import { isCustomIcon, type AllIconNames } from '@/lib/constants/all-icons'
+import type { AllIconNames } from '@/lib/constants/all-icons'
 import { cn } from '@/lib/utils'
 import {
   Loader2,
@@ -55,11 +53,9 @@ import {
 } from 'react'
 
 import { type CustomIconProps } from '@/components/icons/custom'
-import {
-  buildIconSearchIndex,
-  formatIconLabel,
-  normalizeIconName,
-} from '@/lib/icon-utils'
+import { useEmojiRecents } from '@/hooks/use-emoji-recents'
+import { useIconRecents } from '@/hooks/use-icon-recents'
+import { formatIconLabel, normalizeIconName } from '@/lib/icon-utils'
 
 interface DialogStateUpdater {
   onStateChange: (..._args: [key: string, isOpen: boolean]) => void
@@ -224,12 +220,7 @@ function DesignDialog({
   const [iconSearchTerm, setIconSearchTerm] = useState('')
   const [emojiSearchTerm, setEmojiSearchTerm] = useState('')
   const [activeIconTab, setActiveIconTab] = useState<IconPickerTab>('icons')
-  const [iconLibraryFilter, setIconLibraryFilter] = useState<
-    'lucide' | 'custom'
-  >('lucide')
   const fileInputRef = useRef<HTMLInputElement | null>(null)
-  const emojiGroupRefs = useRef<Record<string, HTMLDivElement | null>>({})
-  const iconGroupRefs = useRef<Record<string, HTMLDivElement | null>>({})
 
   useEffect(() => {
     setLocalDesign(cloneDesign(design))
@@ -249,13 +240,6 @@ function DesignDialog({
           ? 'custom'
           : 'icons'
     setActiveIconTab(nextTab)
-
-    if (
-      design.customIcon.source === 'upload' ||
-      design.customIcon.source === 'url'
-    ) {
-      setIconLibraryFilter('lucide')
-    }
   }, [design])
 
   const handleSourceChange = (source: CustomIconSource) => {
@@ -396,7 +380,6 @@ function DesignDialog({
     setUploadError(null)
     setUrlError(null)
     setActiveIconTab('icons')
-    setIconLibraryFilter('lucide')
     setEmojiSearchTerm('')
     setIconSearchTerm('')
   }
@@ -410,6 +393,7 @@ function DesignDialog({
       },
     }))
     setActiveIconTab('emoji')
+    addRecentEmoji(emoji)
   }
 
   const handleIconSelect = (iconName: AllIconNames) => {
@@ -420,6 +404,7 @@ function DesignDialog({
       customIcon: { ...DEFAULT_CUSTOM_ICON },
     }))
     setActiveIconTab('icons')
+    addRecentIcon(resolved)
   }
 
   const handleRemoveIcon = () => {
@@ -432,7 +417,6 @@ function DesignDialog({
     setUploadError(null)
     setUrlError(null)
     setActiveIconTab('icons')
-    setIconLibraryFilter('lucide')
     setEmojiSearchTerm('')
     setIconSearchTerm('')
   }
@@ -456,40 +440,27 @@ function DesignDialog({
 
   const activeIconName = normalizeIconName(localDesign.icon) ?? localDesign.icon
 
-  const resolvedEmojiGroups = useMemo(() => {
-    const term = emojiSearchTerm.trim().toLowerCase()
+  const { recents: iconRecents, addRecentIcon } = useIconRecents()
+  const { recents: emojiRecents, addRecentEmoji } = useEmojiRecents()
 
-    return EMOJI_GROUPS.map((group) => {
-      const emojis = term
-        ? group.emojis.filter((emoji) =>
-            emoji.toLowerCase().includes(term.toLowerCase())
-          )
-        : group.emojis
-      return { ...group, emojis }
-    }).filter((group) => group.emojis.length > 0)
-  }, [emojiSearchTerm])
+  const { groups: resolvedEmojiGroups } = useMemo(
+    () =>
+      buildEmojiGroups({
+        searchTerm: emojiSearchTerm,
+        recentEmojis: emojiRecents,
+      }),
+    [emojiSearchTerm, emojiRecents]
+  )
 
-  const activeIconGroups = useMemo(() => {
-    const term = iconSearchTerm.trim().toLowerCase()
-    const baseGroups =
-      iconLibraryFilter === 'lucide' ? LUCIDE_ICON_GROUPS : CUSTOM_ICON_GROUPS
-
-    return baseGroups
-      .map((group) => {
-        const icons = group.icons
-          .map(
-            (iconName) =>
-              normalizeIconName(iconName) ??
-              (isCustomIcon(iconName) ? (iconName as AllIconNames) : null)
-          )
-          .filter((iconName): iconName is AllIconNames => Boolean(iconName))
-          .filter((iconName) =>
-            term ? buildIconSearchIndex(iconName).includes(term) : true
-          )
-        return { ...group, icons }
-      })
-      .filter((group) => group.icons.length > 0)
-  }, [iconLibraryFilter, iconSearchTerm])
+  const { groups: activeIconGroups, navigationOrder: iconNavigationOrder } =
+    useMemo(
+      () =>
+        buildIconGroups({
+          searchTerm: iconSearchTerm,
+          recentIcons: iconRecents,
+        }),
+      [iconSearchTerm, iconRecents]
+    )
 
   const resolvedCategoryName =
     categoryName.trim().length > 0 ? categoryName : 'Categoria sem nome'
@@ -666,16 +637,12 @@ function DesignDialog({
                       emojiSearchTerm={emojiSearchTerm}
                       onEmojiSearchChange={setEmojiSearchTerm}
                       emojiGroups={resolvedEmojiGroups}
-                      emojiGroupRefs={emojiGroupRefs}
                       onEmojiSelect={handleEmojiSelect}
                       selectedEmoji={selectedEmoji}
                       iconSearchTerm={iconSearchTerm}
                       onIconSearchChange={setIconSearchTerm}
                       iconGroups={activeIconGroups}
-                      iconGroupRefs={iconGroupRefs}
-                      iconLibraryFilter={iconLibraryFilter}
-                      onIconLibraryFilterChange={setIconLibraryFilter}
-                      iconLibraryFilters={ICON_LIBRARY_FILTERS}
+                      iconNavigationOrder={iconNavigationOrder}
                       design={localDesign}
                       activeIconName={activeIconName}
                       onIconSelect={handleIconSelect}
