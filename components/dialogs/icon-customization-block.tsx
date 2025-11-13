@@ -906,7 +906,7 @@ export function IconCustomizationBlock({
       {footerContent ? (
         <div className="flex flex-col gap-3 rounded-b-2xl border-t border-slate-200/80 bg-white p-4">
           {footerContent}
-          {shouldShowCustomActions ? (
+          {activeTab === 'custom' && shouldShowCustomActions ? (
             <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
               <Button
                 type="button"
