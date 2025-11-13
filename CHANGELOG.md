@@ -102,13 +102,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   rodapé com toasts de feedback (sucesso/erro). Arquivos atualizados:
   `components/dialogs/icon-customization-block.tsx`,
   `app/playground/icon-customization/page.tsx` e
-  `app/playground/category-dialog.tsx`.
+  `components/dialogs/category-dialog.tsx`.
 - **Category Dialog centralizado**: o fluxo de criação/edição foi movido para
   `components/dialogs/category-dialog.tsx`, disponibilizando o
-  `CategoryDialogModal` reutilizável e o wrapper de playground. A rota
-  `app/playground/category-dialog.tsx` agora apenas reexporta o componente
-  compartilhado, garantindo que outras áreas consumam exatamente o mesmo layout
-  e estilização aprovada.
+  `CategoryDialogModal` reutilizável e o `CategoryDialog` demonstrativo. O
+  playground (`app/playground/page.tsx`) agora importa o componente diretamente,
+  garantindo que todas as instâncias usem exatamente o mesmo layout e
+  estilização aprovados (o wrapper antigo foi removido).
 - **IconCustomizationBlock**: Bloco de personalização extraído para
   `components/dialogs/icon-customization-block.tsx`, com abas (Emoji, Ícones,
   Personalizado), busca, filtros Lucide/Custom e upload prontos para
@@ -148,15 +148,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
-- **Category Dialog – Grade de ícones**: `app/playground/category-dialog.tsx`
-  agora reutiliza `ALL_AVAILABLE_ICONS` para exibir toda a biblioteca (Lucide +
-  custom) com busca normalizada, preservando ícones legados e fallback
-  automático para `Tag`. A ajuda ao lado de "Ícone" foi reescrita para
-  apresentar a mensagem em bloco único com emoji 💡 (sem ícone Lucide separado),
-  tornando a tooltip mais legível enquanto mantém `--layer-tooltip` e evita
-  conflitos de z-index na dialog. Documentação sincronizada em
-  `docs/features/dialog-lab.md`.
-- **Category Dialog refatorado**: `app/playground/category-dialog.tsx` agora
+- **Category Dialog – Grade de ícones**:
+  `components/dialogs/category-dialog.tsx` agora reutiliza `ALL_AVAILABLE_ICONS`
+  para exibir toda a biblioteca (Lucide + custom) com busca normalizada,
+  preservando ícones legados e fallback automático para `Tag`. A ajuda ao lado
+  de "Ícone" foi reescrita para apresentar a mensagem em bloco único com emoji
+  💡 (sem ícone Lucide separado), tornando a tooltip mais legível enquanto
+  mantém `--layer-tooltip` e evita conflitos de z-index na dialog. Documentação
+  sincronizada em `docs/features/dialog-lab.md`.
+- **Category Dialog refatorado**: `components/dialogs/category-dialog.tsx` agora
   consome o `IconCustomizationBlock`, reduzindo a complexidade do componente
   principal, centralizando estados de busca/filtro e reaproveitando o helper
   `renderCategoryIcon` movido para `lib/category-design.tsx`. Os controles de
@@ -228,7 +228,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   (`components/dialogs/icon-customization-block.tsx`, `app/globals.css`).
 - **Category reset**: A ação "Resetar" preserva a aba atual (Fases/Tipos) no
   preview da categoria, evitando desaparecimento visual do botão destacado
-  (`app/playground/category-dialog.tsx`).
+  (`components/dialogs/category-dialog.tsx`).
 - **Icon buttons responsive**: Botões da grade de ícones ajustam dimensões em
   mobile mantendo 36x36px no desktop, com padding interno dedicado para
   preservar o grid (`components/dialogs/icon-customization-block.tsx`).
@@ -244,7 +244,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   `components/dialogs/icon-customization-block.tsx` para manter apenas a área de
   scroll, alinhando o visual ao grid de ícones.
 - **Playground – sombras nos botões de ícones**: A grade de ícones em
-  `app/playground/category-dialog.tsx` agora mantém `shadow-sm` por padrão,
+  `components/dialogs/category-dialog.tsx` agora mantém `shadow-sm` por padrão,
   `hover:shadow-lg` no foco/hover e `shadow-md` quando o botão está ativo,
   garantindo o mesmo feedback visual definido para CTAs interativos.
 - **Segmented icon source buttons**: As opções "Padrão", "Upload" e "URL
@@ -253,7 +253,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 - **Tabs vs. badges**: O reset global `button[data-state='active|inactive']` em
   `app/globals.css` (herdado dos tabs Radix) estava zerando o `box-shadow` de
   qualquer botão que usasse `data-state`, inclusive a grade de ícones em
-  `app/playground/category-dialog.tsx`. A regra agora é limitada a
+  `components/dialogs/category-dialog.tsx`. A regra agora é limitada a
   `button[role='tab']`, preservando as sombras `shadow-md` dos ícones ativos.
 - **DesignDialog controls**: As configurações de cores do badge e a seleção do
   ícone padrão foram consolidadas em um único painel responsivo dentro do fluxo
@@ -267,7 +267,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   redundância na interface.
 - **Playgrounds de personalização**: Os blocos das amostras de cor em
   `app/playground/icon-customization/page.tsx` e
-  `app/playground/category-dialog.tsx` foram reduzidos para `h-11 w-11`,
+  `components/dialogs/category-dialog.tsx` foram reduzidos para `h-11 w-11`,
   mantendo o toque acessível enquanto compactam visualmente o painel de cores.
 - **Stack de camadas (z-index)**: `app/globals.css` ganhou tokens `--layer-*`
   (com aliases legados) e dialogs/tooltips agora usam `var(--layer-…)`. Os
@@ -446,7 +446,7 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   agora vivem no mesmo card gradiente, separados por divisores internos
   (`border-t` + `pt-6`), reduzindo ruído visual e mantendo o fluxo top-down de
   personalização sem cartões duplicados dentro do Dialog Lab.
-  - Ajuste aplicado em `app/playground/category-dialog.tsx`
+  - Ajuste aplicado em `components/dialogs/category-dialog.tsx`
   - Documentação sincronizada em `docs/features/dialog-lab.md`
   - Navegação principal replica o comportamento do Notion com abas `Emoji`,
     `Ícones`, `Personalizado` e ação `Remover`, incluindo biblioteca de emojis
@@ -464,10 +464,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   rotina de personalização de ícones.
 - **Dialog Lab – markup do Category Dialog**: Adicionados os fechamentos de
   contêiner ausentes e removido o fragmento residual em
-  `app/playground/category-dialog.tsx`, eliminando o erro de parse reportado
+  `components/dialogs/category-dialog.tsx`, eliminando o erro de parse reportado
   pelo ESLint/TypeScript ao executar `pnpm lint` e `pnpm type-check`.
 - **Category Dialog – scroll da grade de ícones**: Ajuste no layout em
-  `app/playground/category-dialog.tsx`, removendo o wrapper `ScrollArea`,
+  `components/dialogs/category-dialog.tsx`, removendo o wrapper `ScrollArea`,
   aplicando `overflow-auto` nativo e reconstruindo a grade para ocupar 100% do
   container (`grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3 p-3`) com
   botões que preenchem cada célula usando `w-full` + `aspect-square`, mantendo

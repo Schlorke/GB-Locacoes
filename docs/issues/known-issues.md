@@ -780,7 +780,7 @@ do bloco, quebrando animações e causando flick na navegação.
 - `hooks/use-emoji-recents.ts`
 - `components/dialogs/icon-customization-data.ts`
 - `app/playground/icon-customization/page.tsx`
-- `app/playground/category-dialog.tsx`
+- `components/dialogs/category-dialog.tsx`
 
 #### Como Validar
 
