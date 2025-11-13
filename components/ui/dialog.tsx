@@ -2,6 +2,7 @@
 
 import { Dialog as BaseDialog } from '@base-ui-components/react/dialog'
 import { forwardRef } from 'react'
+import { X } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -106,12 +107,14 @@ DialogHeaderIcon.displayName = 'DialogHeaderIcon'
 const DialogCloseButton = forwardRef<
   React.ElementRef<typeof BaseDialog.Close>,
   React.ComponentPropsWithoutRef<typeof BaseDialog.Close>
->(({ className, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
   <BaseDialog.Close
     ref={ref}
     className={cn(CLOSE_BUTTON_BASE_CLASSES, className)}
     {...props}
-  />
+  >
+    {children ?? <X />}
+  </BaseDialog.Close>
 ))
 DialogCloseButton.displayName = 'DialogCloseButton'
 

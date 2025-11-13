@@ -103,9 +103,12 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   `components/dialogs/icon-customization-block.tsx`,
   `app/playground/icon-customization/page.tsx` e
   `app/playground/category-dialog.tsx`.
-- **Category Dialog playground**: fluxo de criação/edição extraído para
-  `app/playground/category-dialog.tsx`, permitindo reutilização direta em outras
-  áreas antes da promoção para produção.
+- **Category Dialog centralizado**: o fluxo de criação/edição foi movido para
+  `components/dialogs/category-dialog.tsx`, disponibilizando o
+  `CategoryDialogModal` reutilizável e o wrapper de playground. A rota
+  `app/playground/category-dialog.tsx` agora apenas reexporta o componente
+  compartilhado, garantindo que outras áreas consumam exatamente o mesmo layout
+  e estilização aprovada.
 - **IconCustomizationBlock**: Bloco de personalização extraído para
   `components/dialogs/icon-customization-block.tsx`, com abas (Emoji, Ícones,
   Personalizado), busca, filtros Lucide/Custom e upload prontos para

@@ -4,8 +4,8 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { Dialog } from '@/components/ui/dialog'
 
-import type { DialogStateUpdater } from './category-dialog'
-import { CategoryDialog } from './category-dialog'
+import type { DialogStateUpdater } from '@/components/dialogs/category-dialog'
+import { CategoryDialog } from '@/components/dialogs/category-dialog'
 
 function CustomizeDialog({ onStateChange }: DialogStateUpdater) {
   const [open, setOpen] = useState(false)

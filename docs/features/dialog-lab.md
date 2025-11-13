@@ -147,9 +147,12 @@ const [open, setOpen] = useState(false)
 
 ## 🧩 Configurador de Categoria (Playground Atualizado)
 
-- **Localização**: `app/playground/category-dialog.tsx` (componentes
-  `CategoryDialog`, `DesignDialog` e helpers) consumidos por
-  `app/playground/page.tsx`.
+- **Localização principal**: `components/dialogs/category-dialog.tsx` expõe o
+  `CategoryDialogModal`, o `CategoryDialog` de demonstração e os helpers
+  utilizados nas dialogs aninhadas.
+- **Wrapper do playground**: `app/playground/category-dialog.tsx` apenas
+  reexporta os componentes compartilhados para manter o import relativo simples
+  em `app/playground/page.tsx`.
 - **Nested dialog**: o botão “Editar” dentro do preview da categoria abre uma
   segunda dialog reaproveitando `Dialog.Backdrop` e
   `Dialog.Popup variant="compact"` para manter as animações e escalas oficiais
