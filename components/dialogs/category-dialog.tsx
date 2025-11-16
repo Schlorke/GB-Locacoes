@@ -11,6 +11,7 @@ import {
 } from '@/components/dialogs/icon-customization-data'
 import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
+import { HoverActionMenu } from '@/components/ui/hover-action-menu'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import {
@@ -117,11 +118,6 @@ const DIALOG_PREVIEW_HEADER = [
   'gap-2 sm:gap-3 mb-4 sm:mb-3',
 ].join(' ')
 
-const DIALOG_PREVIEW_ACTIONS = [
-  'flex items-center justify-center sm:justify-end gap-2 sm:gap-2 flex-wrap',
-  'w-full sm:w-auto mt-1 sm:mt-0',
-].join(' ')
-
 const DIALOG_PREVIEW_BADGE = [
   'text-xs inline-flex items-center gap-2 font-medium px-4 py-2 rounded-xl border-0 max-w-full',
   'transition-all duration-300 shadow-[4px_8px_18px_2px_rgba(0,0,0,0.18)] hover:shadow-[8px_12px_20px_2px_rgba(0,0,0,0.22)] hover:scale-[1.07]',
@@ -176,19 +172,48 @@ function buildPreviewTabs(
   })
 }
 
+// Constante para o seletor do wrapper do menu de ações
+const MENU_WRAPPER_SELECTOR =
+  '[class*="absolute"][class*="left-1/2"][class*="top-[3.5rem"]'
+
 function CategoryShowcasePreview({
   categoryName,
   design,
   onPlacementChange,
   disablePlacementSync,
   className,
+  onReset,
+  onEdit,
 }: {
   categoryName: string
   design: CategoryDesign
   onPlacementChange?: (_placement: CategoryPlacement) => void
   disablePlacementSync?: boolean
   className?: string
+  onReset?: () => void
+  onEdit?: () => void
 }) {
+  const [isCardHovered, setIsCardHovered] = useState(false)
+  const [isMenuHovered, setIsMenuHovered] = useState(false)
+  const [resetAnimation, setResetAnimation] = useState(false)
+  const cardAreaRef = useRef<HTMLDivElement>(null)
+  const resetTimeoutRef = useRef<number | null>(null)
+
+  // Função helper para verificar se é o botão do card
+  const isCardButton = useCallback((element: HTMLElement | null): boolean => {
+    if (!element) return false
+
+    const button = element.closest('button')
+    if (!button) return false
+
+    const buttonClass = button.className || ''
+    return (
+      buttonClass.includes('from-slate-800') ||
+      buttonClass.includes('from-slate-900') ||
+      buttonClass.includes('bg-gradient-to-br')
+    )
+  }, [])
+
   const previewTabs = useMemo(
     () => buildPreviewTabs(categoryName, design),
     [categoryName, design]
@@ -206,19 +231,143 @@ function CategoryShowcasePreview({
     [disablePlacementSync, onPlacementChange]
   )
 
+  // Detecta hover no card usando event delegation
+  useEffect(() => {
+    const cardArea = cardAreaRef.current
+    if (!cardArea || (!onReset && !onEdit)) return
+
+    const handleMouseOver = (e: MouseEvent) => {
+      if (isCardButton(e.target as HTMLElement)) {
+        setIsCardHovered(true)
+      }
+    }
+
+    const handleMouseOut = (e: MouseEvent) => {
+      const relatedTarget = e.relatedTarget as HTMLElement
+      const isGoingToCard = isCardButton(relatedTarget)
+      const isGoingToMenu = relatedTarget?.closest(MENU_WRAPPER_SELECTOR)
+
+      // Se não está indo para o card nem para o menu, esconde tudo
+      if (!relatedTarget || (!isGoingToCard && !isGoingToMenu)) {
+        setIsCardHovered(false)
+        setIsMenuHovered(false)
+      }
+    }
+
+    // Usa capture phase para capturar eventos antes de qualquer coisa
+    cardArea.addEventListener('mouseover', handleMouseOver, true)
+    cardArea.addEventListener('mouseout', handleMouseOut, true)
+
+    return () => {
+      cardArea.removeEventListener('mouseover', handleMouseOver, true)
+      cardArea.removeEventListener('mouseout', handleMouseOut, true)
+    }
+  }, [onReset, onEdit, isCardButton])
+
+  const isVisible = isCardHovered || isMenuHovered
+
+  // Handler para reset com animação
+  const handleResetClick = useCallback(() => {
+    if (!onReset) return
+
+    // Ativa animação
+    setResetAnimation(true)
+
+    // Chama a função de reset
+    onReset()
+
+    // Reseta animação após duração
+    resetTimeoutRef.current = window.setTimeout(() => {
+      setResetAnimation(false)
+    }, RESET_ANIMATION_DURATION)
+  }, [onReset])
+
+  // Cleanup do timeout
+  useEffect(() => {
+    return () => {
+      if (resetTimeoutRef.current) {
+        clearTimeout(resetTimeoutRef.current)
+      }
+    }
+  }, [])
+
   return (
-    <div className="w-full">
-      <CategoryShowcase
-        tabs={previewTabs}
-        defaultTab={design.placement}
-        gridCols={{ base: 1, sm: 1, md: 1, lg: 1 }}
-        cardClassName="p-6 w-auto h-auto min-h-0"
-        className={className}
-        onTabChangeAction={handleTabChange}
-        onCategoryClickAction={(category) =>
-          console.log('Preview category clicked:', category.name)
-        }
-      />
+    <div className="w-full relative">
+      <div ref={cardAreaRef}>
+        <CategoryShowcase
+          tabs={previewTabs}
+          defaultTab={design.placement}
+          gridCols={{ base: 1, sm: 1, md: 1, lg: 1 }}
+          cardClassName="p-6 w-auto h-auto min-h-0"
+          className={className}
+          onTabChangeAction={handleTabChange}
+        />
+      </div>
+      {(onReset || onEdit) && (
+        <div
+          className={cn(
+            'absolute left-1/2 -translate-x-1/2 top-[3.5rem] z-10 flex items-center gap-2',
+            isVisible ? 'pointer-events-auto' : 'pointer-events-none'
+          )}
+          onMouseEnter={() => setIsMenuHovered(true)}
+          onMouseLeave={(e) => {
+            const relatedTarget = e.relatedTarget as HTMLElement
+
+            // Se não está indo para o card, esconde o menu
+            if (!relatedTarget || !isCardButton(relatedTarget)) {
+              setIsMenuHovered(false)
+              // Se também não está indo para outro elemento do menu, esconde tudo
+              if (!relatedTarget?.closest(MENU_WRAPPER_SELECTOR)) {
+                setIsCardHovered(false)
+              }
+            }
+          }}
+        >
+          {onEdit && (
+            <HoverActionMenu
+              onClick={onEdit}
+              aria-label="Editar visual desta categoria"
+              position="top-center"
+              offset="top-0"
+              wrapperClassName="!relative !left-0 !translate-x-0"
+              buttonClassName={
+                isVisible
+                  ? '!opacity-100 !translate-y-0'
+                  : 'opacity-0 translate-y-1'
+              }
+            >
+              <Pencil className="h-3.5 w-3.5" />
+              <span>Editar</span>
+            </HoverActionMenu>
+          )}
+          {onReset && (
+            <HoverActionMenu
+              onClick={handleResetClick}
+              aria-label="Resetar visual desta categoria"
+              position="top-center"
+              offset="top-0"
+              wrapperClassName="!relative !left-0 !translate-x-0"
+              buttonClassName={
+                isVisible
+                  ? '!opacity-100 !translate-y-0'
+                  : 'opacity-0 translate-y-1'
+              }
+            >
+              <RotateCcw
+                className="h-3.5 w-3.5"
+                style={
+                  resetAnimation
+                    ? {
+                        animation: 'spin 0.6s ease-in-out reverse',
+                      }
+                    : undefined
+                }
+              />
+              <span>Resetar</span>
+            </HoverActionMenu>
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -232,6 +381,8 @@ function DesignDialog({
   design,
   onDesignChange,
   categoryName,
+  open: controlledOpen,
+  onControlledOpenChange,
 }: {
   triggerClassName?: string
   triggerAriaLabel?: string
@@ -241,8 +392,12 @@ function DesignDialog({
   design: CategoryDesign
   onDesignChange: (_newDesign: CategoryDesign) => void
   categoryName: string
+  open?: boolean
+  onControlledOpenChange?: (_open: boolean) => void
 }) {
-  const [open, setOpen] = useState(false)
+  const [internalOpen, setInternalOpen] = useState(false)
+  const open = controlledOpen ?? internalOpen
+  const setOpen = onControlledOpenChange ?? setInternalOpen
   const [localDesign, setLocalDesign] = useState<CategoryDesign>(() =>
     cloneDesign(design)
   )
@@ -573,9 +728,14 @@ function DesignDialog({
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger className={triggerClasses} aria-label={triggerAriaLabel}>
-        {triggerChildren}
-      </Dialog.Trigger>
+      {triggerChildren && (
+        <Dialog.Trigger
+          className={triggerClasses}
+          aria-label={triggerAriaLabel}
+        >
+          {triggerChildren}
+        </Dialog.Trigger>
+      )}
       <Dialog.Portal>
         <Dialog.Backdrop />
         <Dialog.Popup>
@@ -724,9 +884,7 @@ function CategoryDialogModal({
   onStateChange: DialogStateUpdater['onStateChange']
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [resetAnimation, setResetAnimation] = useState(false)
   const [designDialogOpen, setDesignDialogOpen] = useState(false)
-  const resetTimeoutRef = useRef<number | null>(null)
 
   const initialCategory = useMemo<CategoryDetails>(() => {
     if (initialData) {
@@ -761,14 +919,6 @@ function CategoryDialogModal({
     setDesign(initialDesign)
   }, [initialCategory, initialDesign, initialData, mode])
 
-  useEffect(() => {
-    return () => {
-      if (resetTimeoutRef.current) {
-        clearTimeout(resetTimeoutRef.current)
-      }
-    }
-  }, [])
-
   const previewName =
     category.name.trim().length > 0 ? category.name : 'Categoria sem nome'
   const previewDescription =
@@ -785,10 +935,6 @@ function CategoryDialogModal({
       ...cloneDesign(DEFAULT_DESIGN),
       placement: preservedPlacement,
     })
-    setResetAnimation(true)
-    resetTimeoutRef.current = window.setTimeout(() => {
-      setResetAnimation(false)
-    }, RESET_ANIMATION_DURATION)
   }
 
   const handleSubmit = async () => {
@@ -846,51 +992,6 @@ function CategoryDialogModal({
                           Como esta categoria aparece nos cards públicos
                         </span>
                       </div>
-                      <div className={DIALOG_PREVIEW_ACTIONS}>
-                        <div className="flex flex-wrap justify-center items-center gap-2 lg:flex-col lg:items-stretch">
-                          <DesignDialog
-                            triggerAriaLabel="Editar visual"
-                            triggerChildren={
-                              <>
-                                <Pencil className="h-4 w-4 transition-colors duration-200 group-hover:text-orange-600" />
-                                <span className="transition-colors duration-200 group-hover:text-orange-600">
-                                  Editar
-                                </span>
-                              </>
-                            }
-                            onOpenChange={setDesignDialogOpen}
-                            onStateChange={onStateChange}
-                            design={design}
-                            onDesignChange={setDesign}
-                            categoryName={previewName}
-                          />
-                          <button
-                            type="button"
-                            onClick={handleReset}
-                            className={ACTION_BUTTON_CLASSES}
-                            aria-label={
-                              mode === 'edit'
-                                ? 'Resetar visual'
-                                : 'Limpar campos'
-                            }
-                          >
-                            <RotateCcw
-                              className="h-4 w-4 transition-colors duration-200 group-hover:text-orange-600"
-                              style={
-                                resetAnimation
-                                  ? {
-                                      animation:
-                                        'spin 0.6s ease-in-out reverse',
-                                    }
-                                  : undefined
-                              }
-                            />
-                            <span className="transition-colors duration-200 group-hover:text-orange-600">
-                              Resetar
-                            </span>
-                          </button>
-                        </div>
-                      </div>
                     </div>
 
                     <div className="mt-6 w-full">
@@ -908,8 +1009,23 @@ function CategoryDialogModal({
                                 }
                           )
                         }
+                        onReset={handleReset}
+                        onEdit={() => setDesignDialogOpen(true)}
                       />
                     </div>
+
+                    {/* DesignDialog renderizado sem trigger para ser aberto programaticamente */}
+                    <DesignDialog
+                      triggerAriaLabel="Editar visual"
+                      triggerChildren={null}
+                      open={designDialogOpen}
+                      onControlledOpenChange={setDesignDialogOpen}
+                      onOpenChange={setDesignDialogOpen}
+                      onStateChange={onStateChange}
+                      design={design}
+                      onDesignChange={setDesign}
+                      categoryName={previewName}
+                    />
 
                     <div className="pt-5 flex flex-col items-center gap-4">
                       <div

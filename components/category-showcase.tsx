@@ -336,7 +336,7 @@ export function CategoryShowcase({
                     aria-controls={`${section.value}-panel`}
                     onClick={() => handleTabClick(section.value)}
                     className={cn(
-                      'group relative flex w-full items-center justify-center px-3 py-3 text-center text-sm font-semibold tracking-tight transition-colors duration-200 md:text-base',
+                      'group/tab relative flex w-full items-center justify-center px-3 py-3 text-center text-sm font-semibold tracking-tight transition-colors duration-200 md:text-base',
                       isActive
                         ? 'text-orange-600'
                         : 'text-slate-500 md:hover:text-orange-600'
@@ -358,7 +358,7 @@ export function CategoryShowcase({
                       className={cn(
                         'pointer-events-none absolute left-0 right-0 -bottom-px h-[2px] origin-center transform bg-gradient-to-r from-orange-500 to-yellow-500 transition-transform duration-300',
                         isActive ? 'scale-x-100' : 'scale-x-0',
-                        !isActive && !isMobile && 'group-hover:scale-x-100'
+                        !isActive && !isMobile && 'group-hover/tab:scale-x-100'
                       )}
                     />
                   </button>
