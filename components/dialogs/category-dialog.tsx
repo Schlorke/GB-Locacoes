@@ -13,7 +13,11 @@ import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
 import { HoverActionMenu } from '@/components/ui/hover-action-menu'
 import { Input } from '@/components/ui/input'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
 import {
   CATEGORY_PREVIEW_TABS,
@@ -57,6 +61,7 @@ import {
 import { type CustomIconProps } from '@/components/icons/custom'
 import { useEmojiRecents } from '@/hooks/use-emoji-recents'
 import { useIconRecents } from '@/hooks/use-icon-recents'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { toast } from '@/hooks/use-toast-sonner'
 import { formatIconLabel, normalizeIconName } from '@/lib/icon-utils'
 
@@ -186,6 +191,7 @@ function CategoryShowcasePreview({
   onReset,
   onEdit,
   iconPopoverContent,
+  onIconBoxRequest,
 }: {
   categoryName: string
   design: CategoryDesign
@@ -195,6 +201,7 @@ function CategoryShowcasePreview({
   onReset?: () => void
   onEdit?: () => void
   iconPopoverContent?: React.ReactNode
+  onIconBoxRequest?: () => void
 }) {
   const [isCardHovered, setIsCardHovered] = useState(false)
   const [isMenuHovered, setIsMenuHovered] = useState(false)
@@ -306,6 +313,7 @@ function CategoryShowcasePreview({
           onTabChangeAction={handleTabChange}
           isDialogPreview={true}
           iconPopoverContent={iconPopoverContent}
+          onIconBoxRequest={onIconBoxRequest}
         />
       </div>
       {(onReset || onEdit) && (
@@ -801,7 +809,9 @@ function DesignDialog({
                               // Prevent closing when clicking inside the popover
                               const target = e.target as HTMLElement
                               if (
-                                target.closest('[data-radix-popper-content-wrapper]')
+                                target.closest(
+                                  '[data-radix-popper-content-wrapper]'
+                                )
                               ) {
                                 e.preventDefault()
                               }
@@ -814,45 +824,47 @@ function DesignDialog({
                               }}
                             >
                               <IconCustomizationBlock
-                              className="mt-0"
-                              iconTabs={ICON_PICKER_TABS}
-                              activeTab={activeIconTab}
-                              onTabChange={setActiveIconTab}
-                              onRemoveIcon={handleRemoveIcon}
-                              emojiSearchTerm={emojiSearchTerm}
-                              onEmojiSearchChange={setEmojiSearchTerm}
-                              emojiGroups={resolvedEmojiGroups}
-                              onEmojiSelect={handleEmojiSelect}
-                              selectedEmoji={selectedEmoji}
-                              iconSearchTerm={iconSearchTerm}
-                              onIconSearchChange={setIconSearchTerm}
-                              iconGroups={activeIconGroups}
-                              iconNavigationOrder={iconNavigationOrder}
-                              design={localDesign}
-                              activeIconName={activeIconName}
-                              onIconSelect={handleIconSelect}
-                              onSourceChange={handleSourceChange}
-                              fileInputRef={fileInputRef}
-                              isProcessingUpload={isProcessingUpload}
-                              svgUrlInput={svgUrlInput}
-                              onSvgUrlInputChange={setSvgUrlInput}
-                              onFileInputChange={handleFileInputChange}
-                              uploadError={uploadError}
-                              onUrlApply={handleUrlApply}
-                              urlError={urlError}
-                              hasUploadedIcon={hasUploadedIcon}
-                              onClearCustomIcon={handleClearCustomIcon}
-                              renderCategoryIcon={renderCategoryIcon}
-                              maxSvgFileSizeKb={MAX_SVG_FILE_SIZE_KB}
-                              formatIconLabel={formatIconLabel}
-                              defaultIconName={DEFAULT_ICON}
-                              customIconName={customIconName}
-                              onCustomIconNameChange={handleCustomIconNameChange}
-                              customIconNameError={customIconNameError}
-                              onCancelCustomIcon={handleCancelCustomIcon}
-                              onSaveCustomIcon={handleSaveCustomIcon}
-                              isSaveDisabled={!canSaveCustomIcon}
-                            />
+                                className="mt-0"
+                                iconTabs={ICON_PICKER_TABS}
+                                activeTab={activeIconTab}
+                                onTabChange={setActiveIconTab}
+                                onRemoveIcon={handleRemoveIcon}
+                                emojiSearchTerm={emojiSearchTerm}
+                                onEmojiSearchChange={setEmojiSearchTerm}
+                                emojiGroups={resolvedEmojiGroups}
+                                onEmojiSelect={handleEmojiSelect}
+                                selectedEmoji={selectedEmoji}
+                                iconSearchTerm={iconSearchTerm}
+                                onIconSearchChange={setIconSearchTerm}
+                                iconGroups={activeIconGroups}
+                                iconNavigationOrder={iconNavigationOrder}
+                                design={localDesign}
+                                activeIconName={activeIconName}
+                                onIconSelect={handleIconSelect}
+                                onSourceChange={handleSourceChange}
+                                fileInputRef={fileInputRef}
+                                isProcessingUpload={isProcessingUpload}
+                                svgUrlInput={svgUrlInput}
+                                onSvgUrlInputChange={setSvgUrlInput}
+                                onFileInputChange={handleFileInputChange}
+                                uploadError={uploadError}
+                                onUrlApply={handleUrlApply}
+                                urlError={urlError}
+                                hasUploadedIcon={hasUploadedIcon}
+                                onClearCustomIcon={handleClearCustomIcon}
+                                renderCategoryIcon={renderCategoryIcon}
+                                maxSvgFileSizeKb={MAX_SVG_FILE_SIZE_KB}
+                                formatIconLabel={formatIconLabel}
+                                defaultIconName={DEFAULT_ICON}
+                                customIconName={customIconName}
+                                onCustomIconNameChange={
+                                  handleCustomIconNameChange
+                                }
+                                customIconNameError={customIconNameError}
+                                onCancelCustomIcon={handleCancelCustomIcon}
+                                onSaveCustomIcon={handleSaveCustomIcon}
+                                isSaveDisabled={!canSaveCustomIcon}
+                              />
                             </div>
                           </PopoverContent>
                         </Popover>
@@ -966,6 +978,18 @@ function CategoryDialogModal({
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [designDialogOpen, setDesignDialogOpen] = useState(false)
+  const [iconDialogOpen, setIconDialogOpen] = useState(false)
+  const isMobile = useIsMobile()
+
+  useEffect(() => {
+    onStateChange('category-icon', iconDialogOpen)
+  }, [iconDialogOpen, onStateChange])
+
+  useEffect(() => {
+    if (!isMobile && iconDialogOpen) {
+      setIconDialogOpen(false)
+    }
+  }, [iconDialogOpen, isMobile])
 
   const initialCategory = useMemo<CategoryDetails>(() => {
     if (initialData) {
@@ -1276,7 +1300,11 @@ function CategoryDialogModal({
   }
 
   const handleSaveCustomIcon = () => {
-    if (!hasUploadedIcon || trimmedCustomIconName.length === 0 || customIconNameError) {
+    if (
+      !hasUploadedIcon ||
+      trimmedCustomIconName.length === 0 ||
+      customIconNameError
+    ) {
       toast.error('Finalize o upload antes de salvar.', {
         description:
           'Envie um SVG válido ou informe uma URL e defina um nome com até 50 caracteres.',
@@ -1359,6 +1387,57 @@ function CategoryDialogModal({
     }
   }
 
+  const iconCustomizationBlockProps = {
+    className: isMobile
+      ? 'mt-0'
+      : 'mt-0 w-[404px] max-w-[404px] sm:w-[404px] sm:max-w-[404px]',
+    iconTabs: ICON_PICKER_TABS,
+    activeTab: activeIconTab,
+    onTabChange: setActiveIconTab,
+    onRemoveIcon: handleRemoveIcon,
+    emojiSearchTerm,
+    onEmojiSearchChange: setEmojiSearchTerm,
+    emojiGroups: resolvedEmojiGroups,
+    onEmojiSelect: handleEmojiSelect,
+    selectedEmoji,
+    iconSearchTerm,
+    onIconSearchChange: setIconSearchTerm,
+    iconGroups: activeIconGroups,
+    iconNavigationOrder,
+    design: localDesign,
+    activeIconName,
+    onIconSelect: handleIconSelect,
+    onSourceChange: handleSourceChange,
+    fileInputRef,
+    isProcessingUpload,
+    svgUrlInput,
+    onSvgUrlInputChange: setSvgUrlInput,
+    onFileInputChange: handleFileInputChange,
+    uploadError,
+    onUrlApply: handleUrlApply,
+    urlError,
+    hasUploadedIcon,
+    onClearCustomIcon: handleClearCustomIcon,
+    renderCategoryIcon,
+    maxSvgFileSizeKb: MAX_SVG_FILE_SIZE_KB,
+    formatIconLabel,
+    defaultIconName: DEFAULT_ICON,
+    customIconName,
+    onCustomIconNameChange: handleCustomIconNameChange,
+    customIconNameError,
+    onCancelCustomIcon: handleCancelCustomIcon,
+    onSaveCustomIcon: handleSaveCustomIcon,
+    isSaveDisabled: !canSaveCustomIcon,
+  }
+
+  const iconPopoverContent = !isMobile ? (
+    <IconCustomizationBlock {...iconCustomizationBlockProps} />
+  ) : undefined
+
+  const mobileIconBoxRequest = isMobile
+    ? () => setIconDialogOpen(true)
+    : undefined
+
   return (
     <Dialog.Root
       open={isOpen}
@@ -1372,7 +1451,9 @@ function CategoryDialogModal({
         <Dialog.Backdrop />
         <Dialog.Popup
           variant="default"
-          data-nested-parent={designDialogOpen ? '' : undefined}
+          data-nested-parent={
+            designDialogOpen || iconDialogOpen ? '' : undefined
+          }
         >
           <Dialog.Content>
             <Dialog.Header data-dialog-section="header">
@@ -1417,48 +1498,8 @@ function CategoryDialogModal({
                         }
                         onReset={handleReset}
                         onEdit={() => setDesignDialogOpen(true)}
-                        iconPopoverContent={
-                          <IconCustomizationBlock
-                            className="mt-0"
-                            iconTabs={ICON_PICKER_TABS}
-                            activeTab={activeIconTab}
-                            onTabChange={setActiveIconTab}
-                            onRemoveIcon={handleRemoveIcon}
-                            emojiSearchTerm={emojiSearchTerm}
-                            onEmojiSearchChange={setEmojiSearchTerm}
-                            emojiGroups={resolvedEmojiGroups}
-                            onEmojiSelect={handleEmojiSelect}
-                            selectedEmoji={selectedEmoji}
-                            iconSearchTerm={iconSearchTerm}
-                            onIconSearchChange={setIconSearchTerm}
-                            iconGroups={activeIconGroups}
-                            iconNavigationOrder={iconNavigationOrder}
-                            design={localDesign}
-                            activeIconName={activeIconName}
-                            onIconSelect={handleIconSelect}
-                            onSourceChange={handleSourceChange}
-                            fileInputRef={fileInputRef}
-                            isProcessingUpload={isProcessingUpload}
-                            svgUrlInput={svgUrlInput}
-                            onSvgUrlInputChange={setSvgUrlInput}
-                            onFileInputChange={handleFileInputChange}
-                            uploadError={uploadError}
-                            onUrlApply={handleUrlApply}
-                            urlError={urlError}
-                            hasUploadedIcon={hasUploadedIcon}
-                            onClearCustomIcon={handleClearCustomIcon}
-                            renderCategoryIcon={renderCategoryIcon}
-                            maxSvgFileSizeKb={MAX_SVG_FILE_SIZE_KB}
-                            formatIconLabel={formatIconLabel}
-                            defaultIconName={DEFAULT_ICON}
-                            customIconName={customIconName}
-                            onCustomIconNameChange={handleCustomIconNameChange}
-                            customIconNameError={customIconNameError}
-                            onCancelCustomIcon={handleCancelCustomIcon}
-                            onSaveCustomIcon={handleSaveCustomIcon}
-                            isSaveDisabled={!canSaveCustomIcon}
-                          />
-                        }
+                        iconPopoverContent={iconPopoverContent}
+                        onIconBoxRequest={mobileIconBoxRequest}
                       />
                     </div>
 
@@ -1474,6 +1515,24 @@ function CategoryDialogModal({
                       onDesignChange={setDesign}
                       categoryName={previewName}
                     />
+                    {isMobile && (
+                      <Dialog.Root
+                        open={iconDialogOpen}
+                        onOpenChange={setIconDialogOpen}
+                      >
+                        <Dialog.Portal>
+                          <Dialog.Backdrop />
+                          <Dialog.Popup
+                            variant="default"
+                            className="p-0 h-auto max-h-[calc(100vh-0.75rem)] w-auto max-w-[min(470px,_calc(100vw-0.5rem))] bg-transparent shadow-none ring-0"
+                          >
+                            <IconCustomizationBlock
+                              {...iconCustomizationBlockProps}
+                            />
+                          </Dialog.Popup>
+                        </Dialog.Portal>
+                      </Dialog.Root>
+                    )}
 
                     <div className="pt-5 flex flex-col items-center gap-4">
                       <div

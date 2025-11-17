@@ -134,6 +134,41 @@ const [open, setOpen] = useState(false)
   apenas até a migração para o componente Base UI (garantindo compatibilidade
   temporária).
 
+## ?? Responsividade dos fluxos nested
+
+### Fallback do IconCustomizationBlock no mobile
+
+- O seletor de ícones (`IconCustomizationBlock`) passou a operar em modo
+  híbrido: em desktops ele continua dentro do `Popover` do preview da categoria,
+  mas em telas detectadas por `useIsMobile` (até 768px) ele abre um `Dialog`
+  aninhado dedicado.
+- `CategoryShowcase` expõe a prop `onIconBoxRequest`. Quando o usuário toca no
+  ícone dentro do preview e estamos no mobile, esse callback dispara
+  `setIconDialogOpen(true)` no `CategoryDialogModal`.
+- O dialog secundário reutiliza `Dialog.Root`, `Dialog.Backdrop` e
+  `Dialog.Popup` (variante `default`) para garantir o mesmo conjunto de tokens
+  (`--layer-dialog`, `--layer-dialog-backdrop`) e animações
+  (`scale-[calc(1-0.1*var(--nested-dialogs))]`) documentadas neste laboratório,
+  mas sobrescreve as utilitárias para deixá-lo `bg-transparent`, `shadow-none`,
+  `ring-0` e limitado a
+  `max-w-[min(470px,_calc(100vw-0.5rem))]/max-h-[calc(100vh-0.75rem)]`, evitando
+  uma “caixa dentro da caixa” quando abrimos o seletor em telas pequenas.
+- O `IconCustomizationBlock` concentra o guideline de largura
+  (`w-[min(440px,_calc(100vw-0.75rem))] sm:w-[460px]`); o dialog pai não injeta
+  mais `w-full`/`max-w-*`, evitando que os utilitários sejam sobrescritos. Para
+  o popover desktop, passamos `w-[404px]` / `max-w-[404px]` na prop `className`,
+  preservando o layout original enquanto o fallback mobile continua ocupando a
+  largura expandida.
+- Pontos de integração:
+  - `components/dialogs/category-dialog.tsx`: controla `iconDialogOpen`,
+    sincroniza `data-nested-parent` no popup pai e renderiza o
+    `IconCustomizationBlock` dentro do dialog mobile.
+  - `components/category-showcase.tsx`: decide dinamicamente entre montar o
+    `Popover` (desktop) ou delegar ao callback (mobile), mantendo a experiência
+    de hover/press.
+- Benefício: o seletor respeita as safe areas do Safari móvel, evitando overflow
+  sobre toolbars nativos sem sacrificar o popover rico em telas maiores.
+
 ## 🔬 Casos Cobertos
 
 - **Preview rico**: substituição planejada para previews de equipamentos,

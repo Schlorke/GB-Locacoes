@@ -527,7 +527,7 @@ export function IconCustomizationBlock({
   return (
     <div
       className={cn(
-        'flex w-[404px] max-w-[404px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm',
+        'flex w-[min(440px,_calc(100vw-0.75rem))] max-w-[min(440px,_calc(100vw-0.75rem))] sm:w-[460px] sm:max-w-[460px] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm',
         className
       )}
     >

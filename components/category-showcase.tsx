@@ -46,6 +46,7 @@ export type CategoryShowcaseProps = {
   cardClassName?: string
   isDialogPreview?: boolean
   iconPopoverContent?: ReactNode
+  onIconBoxRequest?: () => void
 }
 
 const baseCardClasses =
@@ -133,6 +134,7 @@ export function CategoryShowcase({
   cardClassName,
   isDialogPreview = false,
   iconPopoverContent,
+  onIconBoxRequest,
 }: CategoryShowcaseProps) {
   const safeTabs = useMemo(() => tabs ?? [], [tabs])
 
@@ -472,15 +474,26 @@ export function CategoryShowcase({
                       type="button"
                       className={cn(baseCardClasses, cardClassName)}
                       onClick={(e) => {
-                        // Se há Popover, não chama a ação padrão ao clicar no ícone
-                        if (isDialogPreview && iconPopoverContent) {
+                        const hasCustomIconAction =
+                          isDialogPreview &&
+                          Boolean(iconPopoverContent || onIconBoxRequest)
+                        const shouldOpenPopover =
+                          hasCustomIconAction &&
+                          Boolean(iconPopoverContent) &&
+                          !isMobile
+
+                        // Se há Popover ou fallback mobile, não chama a ação padrão ao clicar
+                        if (hasCustomIconAction) {
                           e.stopPropagation()
+                          if (!shouldOpenPopover) {
+                            onIconBoxRequest?.()
+                          }
                           return
                         }
                         onCategoryClickAction?.(item)
                       }}
                     >
-                      {isDialogPreview && iconPopoverContent ? (
+                      {isDialogPreview && iconPopoverContent && !isMobile ? (
                         <Popover>
                           <PopoverTrigger asChild>
                             <div
@@ -540,14 +553,7 @@ export function CategoryShowcase({
                               }
                             }}
                           >
-                            <div
-                              style={{
-                                contain: 'layout style paint',
-                                willChange: 'auto',
-                              }}
-                            >
-                              {iconPopoverContent}
-                            </div>
+                            {iconPopoverContent}
                           </PopoverContent>
                         </Popover>
                       ) : (

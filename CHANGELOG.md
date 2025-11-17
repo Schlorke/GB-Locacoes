@@ -10,6 +10,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Personalização de ícones em mobile (Playground)**: o seletor
+  `IconCustomizationBlock` agora abre como dialog aninhada quando `useIsMobile`
+  detecta telas pequenas, preservando o popover original no desktop e garantindo
+  que a experiência respeite as safe areas dos iPhones.
+  - O preview de categorias passa a reutilizar o mesmo callback e animações do
+    nested dialog para abrir o componente quando o popover não cabe na viewport.
+  - Documentação do fluxo atualizada em `docs/features/dialog-lab.md` para
+    registrar o fallback inteligente entre popover e dialog.
 - **Personalização avançada de categorias (Playground)**: o fluxo em
   `app/playground/page.tsx` recebeu uma dialog aninhada (`DesignDialog`) que
   permite configurar o badge e o cartão principal da categoria.
@@ -559,6 +567,28 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   agora possui um wrapper dedicado com `overflow-hidden`, permitindo que os
   cards reais mantenham `overflow-visible` durante animações de foco/hover.
   - Ajustes aplicados em `app/test-components/page.tsx`
+
+## [2025-11-17] - Fallback mobile do IconCustomizationBlock refinado
+
+### Changed 🔄
+
+- O dialog aninhado que exibe o `IconCustomizationBlock` quando `useIsMobile`
+  está ativo agora sobrescreve o `Dialog.Popup` (`bg-transparent`,
+  `shadow-none`, `ring-0`, `max-w-[min(470px,_calc(100vw-0.5rem))]`, `h-auto`)
+  para que apenas o próprio bloco apareça como superfície visível, preservando
+  as animações do Base UI sem “caixas” adicionais.
+- O seletor de ícones concentra o `className` responsivo no próprio componente
+  (`w-[min(440px,_calc(100vw-0.75rem))] sm:w-[460px]`), removendo o antigo
+  `w-full` herdado do dialog pai que limitava a largura real; quando exibido no
+  popover desktop, forçamos `w-[404px]` para preservar o layout original.
+- Documentação em `docs/features/dialog-lab.md` atualizada registrando o popup
+  transparente e o novo guideline de largura no mobile.
+
+### Fixed 🐛
+
+- Corrigido overflow horizontal e espaçamento inconsistente ao abrir o seletor
+  em telas estreitas: o dialog secundário limita largura/altura ao viewport e o
+  `IconCustomizationBlock` preenche apenas o espaço seguro disponível.
 
 ## [2025-11-12] - Compatibilidade de bandeiras no Dialog Lab
 

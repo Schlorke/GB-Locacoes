@@ -26,7 +26,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:phones": "tsx scripts/seed-company-phones.ts",
     "db:studio": "prisma studio",
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack --hostname 0.0.0.0",
     "dev:with-browsertools": "concurrently --kill-others --names \"NEXT,TOOLS\" \"pnpm dev\" \"npx @agentdeskai/browser-tools-server@1.2.0\"",
     "dev:browsertools": "concurrently --kill-others --names \"NEXT,TOOLS\" \"pnpm dev\" \"npx     @agentdeskai/browser-tools-server@1.2.0\"",
     "browsertools": "npx @agentdeskai/browser-tools-server@1.2.0",
