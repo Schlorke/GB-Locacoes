@@ -191,6 +191,16 @@ const [open, setOpen] = useState(false)
 - **Playground isolado**: a rota `/playground/icon-customization` exibe apenas o
   bloco `IconCustomizationBlock` com largura fixa de 404px (altura automática),
   reproduzindo o layout do print de referência sem headers adicionais.
+- **Popover estável no seletor**: o botão do ícone passou a ser envolvido por um
+  wrapper fixo (`h-14 w-14`) que não sofre `transform` em hover, mantendo o
+  anchor usado pelo Radix Popover estável e evitando o “tremor” observado quando
+  o mouse saía do cartão para o painel de personalização.
+  - Ajuste aplicado em `components/category-showcase.tsx` (cards do playground).
+  - Ajuste aplicado em `components/dialogs/category-dialog.tsx` (preview interno
+    da dialog).
+- Com o anchor estabilizado, removemos o seletor `[&_*]:!transform-none` que
+  estava aplicado ao portal do popover, permitindo que efeitos legítimos de
+  `transform` (como o sublinhado animado das tabs) funcionem normalmente.
 - **Fundo neutro**: o bloco “Preview do destaque” utiliza o mesmo gradiente
   suave (`bg-gradient-to-br from-slate-50 to-slate-100`) adotado no preview
   principal, com tipografia em tons `slate`, destacando o cartão escuro sem

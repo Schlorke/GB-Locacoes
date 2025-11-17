@@ -1,9 +1,21 @@
 'use client'
 
 import { AnimatePresence, animate, motion, useMotionValue } from 'framer-motion'
-import { useEffect, useMemo, useRef, useState, type ComponentType } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentType,
+  type ReactNode,
+} from 'react'
 
 import type { CustomIconProps } from '@/components/icons/custom'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 
@@ -33,6 +45,7 @@ export type CategoryShowcaseProps = {
   }
   cardClassName?: string
   isDialogPreview?: boolean
+  iconPopoverContent?: ReactNode
 }
 
 const baseCardClasses =
@@ -119,6 +132,7 @@ export function CategoryShowcase({
   gridCols,
   cardClassName,
   isDialogPreview = false,
+  iconPopoverContent,
 }: CategoryShowcaseProps) {
   const safeTabs = useMemo(() => tabs ?? [], [tabs])
 
@@ -457,51 +471,130 @@ export function CategoryShowcase({
                     <button
                       type="button"
                       className={cn(baseCardClasses, cardClassName)}
-                      onClick={() => onCategoryClickAction?.(item)}
+                      onClick={(e) => {
+                        // Se há Popover, não chama a ação padrão ao clicar no ícone
+                        if (isDialogPreview && iconPopoverContent) {
+                          e.stopPropagation()
+                          return
+                        }
+                        onCategoryClickAction?.(item)
+                      }}
                     >
-                      <div
-                        className={cn(
-                          iconWrapperClasses,
-                          isDialogPreview &&
-                            'border-none cursor-pointer transition-all duration-700 ease-in-out hover:bg-[length:280%_auto] active:scale-95 shadow-[0px_0px_20px_rgba(251,146,60,0.5),0px_5px_5px_-1px_rgba(234,88,12,0.25),inset_4px_4px_8px_rgba(255,237,213,0.5),inset_-4px_-4px_8px_rgba(234,88,12,0.35)]'
-                        )}
-                        style={
-                          isDialogPreview
-                            ? {
-                                backgroundImage:
-                                  'linear-gradient(325deg, rgb(255, 124, 31) 18%, rgb(255, 245, 235) 50%, rgb(255, 124, 31) 77%)',
-                                backgroundSize: '580% auto',
-                                backgroundPosition: 'initial',
-                                color: 'hsl(0 0% 100%)',
-                                transition: '0.8s',
+                      {isDialogPreview && iconPopoverContent ? (
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <div
+                              className="relative z-10 flex h-14 w-14 items-center justify-center"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <div
+                                className={cn(
+                                  iconWrapperClasses,
+                                  'border-none cursor-pointer transition-all duration-700 ease-in-out hover:bg-[length:280%_auto] active:scale-95 shadow-[0px_0px_20px_rgba(251,146,60,0.5),0px_5px_5px_-1px_rgba(234,88,12,0.25),inset_4px_4px_8px_rgba(255,237,213,0.5),inset_-4px_-4px_8px_rgba(234,88,12,0.35)]'
+                                )}
+                                style={{
+                                  backgroundImage:
+                                    'linear-gradient(325deg, rgb(255, 124, 31) 18%, rgb(255, 245, 235) 50%, rgb(255, 124, 31) 77%)',
+                                  backgroundSize: '580% auto',
+                                  backgroundPosition: 'initial',
+                                  color: 'hsl(0 0% 100%)',
+                                  transition: '0.8s',
+                                }}
+                                onMouseEnter={(e) => {
+                                  ;(
+                                    e.currentTarget as HTMLDivElement
+                                  ).style.backgroundPosition = 'right top'
+                                }}
+                                onMouseLeave={(e) => {
+                                  ;(
+                                    e.currentTarget as HTMLDivElement
+                                  ).style.backgroundPosition = 'initial'
+                                }}
+                              >
+                                <Icon
+                                  size={28}
+                                  color="white"
+                                  className="h-7 w-7 relative z-10"
+                                />
+                              </div>
+                            </div>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            side="bottom"
+                            align="center"
+                            sideOffset={12}
+                            avoidCollisions={false}
+                            onOpenAutoFocus={(e) => e.preventDefault()}
+                            onCloseAutoFocus={(e) => e.preventDefault()}
+                            className="w-auto max-w-[calc(100vw-2rem)] max-h-[80vh] overflow-y-auto border-0 bg-transparent p-0 shadow-none"
+                            onClick={(e) => e.stopPropagation()}
+                            onPointerDownOutside={(e) => {
+                              // Prevent closing when clicking inside the popover
+                              const target = e.target as HTMLElement
+                              if (
+                                target.closest(
+                                  '[data-radix-popper-content-wrapper]'
+                                )
+                              ) {
+                                e.preventDefault()
                               }
-                            : undefined
-                        }
-                        onMouseEnter={
-                          isDialogPreview
-                            ? (e) => {
-                                ;(
-                                  e.currentTarget as HTMLDivElement
-                                ).style.backgroundPosition = 'right top'
-                              }
-                            : undefined
-                        }
-                        onMouseLeave={
-                          isDialogPreview
-                            ? (e) => {
-                                ;(
-                                  e.currentTarget as HTMLDivElement
-                                ).style.backgroundPosition = 'initial'
-                              }
-                            : undefined
-                        }
-                      >
-                        <Icon
-                          size={28}
-                          color="white"
-                          className="h-7 w-7 relative z-10"
-                        />
-                      </div>
+                            }}
+                          >
+                            <div
+                              style={{
+                                contain: 'layout style paint',
+                                willChange: 'auto',
+                              }}
+                            >
+                              {iconPopoverContent}
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      ) : (
+                        <div
+                          className={cn(
+                            iconWrapperClasses,
+                            isDialogPreview &&
+                              'border-none cursor-pointer transition-all duration-700 ease-in-out hover:bg-[length:280%_auto] active:scale-95 shadow-[0px_0px_20px_rgba(251,146,60,0.5),0px_5px_5px_-1px_rgba(234,88,12,0.25),inset_4px_4px_8px_rgba(255,237,213,0.5),inset_-4px_-4px_8px_rgba(234,88,12,0.35)]'
+                          )}
+                          style={
+                            isDialogPreview
+                              ? {
+                                  backgroundImage:
+                                    'linear-gradient(325deg, rgb(255, 124, 31) 18%, rgb(255, 245, 235) 50%, rgb(255, 124, 31) 77%)',
+                                  backgroundSize: '580% auto',
+                                  backgroundPosition: 'initial',
+                                  color: 'hsl(0 0% 100%)',
+                                  transition: '0.8s',
+                                }
+                              : undefined
+                          }
+                          onMouseEnter={
+                            isDialogPreview
+                              ? (e) => {
+                                  ;(
+                                    e.currentTarget as HTMLDivElement
+                                  ).style.backgroundPosition = 'right top'
+                                }
+                              : undefined
+                          }
+                          onMouseLeave={
+                            isDialogPreview
+                              ? (e) => {
+                                  ;(
+                                    e.currentTarget as HTMLDivElement
+                                  ).style.backgroundPosition = 'initial'
+                                }
+                              : undefined
+                          }
+                        >
+                          <Icon
+                            size={28}
+                            color="white"
+                            className="h-7 w-7 relative z-10"
+                          />
+                        </div>
+                      )}
                       <span className={cardLabelClasses}>{item.name}</span>
                     </button>
                   </motion.div>

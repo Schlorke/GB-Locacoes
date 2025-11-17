@@ -455,6 +455,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Popover do CategoryShowcase**: eliminamos o “pula-pula” do painel de
+  personalização encapsulando o trigger em um wrapper fixo (`h-14 w-14`) que não
+  sofre `scale`, mantendo o anchor estável enquanto o mouse se move entre o
+  botão e a popover em `components/category-showcase.tsx` e
+  `components/dialogs/category-dialog.tsx`.
+- **Tabs do IconCustomizationBlock**: reabilitamos os efeitos de hover/scale das
+  abas ao remover o seletor global `[&_*]:!transform-none` dentro do portal do
+  popover, permitindo que o sublinhado animado funcione sem manter todas as tabs
+  em estado “ativo”.
 - **Biblioteca Lucide no Dialog Lab**: corrigimos `renderIcon` em
   `lib/constants/all-icons.tsx` para aceitar componentes `forwardRef` do React
   19, garantindo que os ícones temáticos apareçam corretamente na aba Ícones do

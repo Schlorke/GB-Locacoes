@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
 import { HoverActionMenu } from '@/components/ui/hover-action-menu'
 import { Input } from '@/components/ui/input'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
 import {
   CATEGORY_PREVIEW_TABS,
@@ -184,6 +185,7 @@ function CategoryShowcasePreview({
   className,
   onReset,
   onEdit,
+  iconPopoverContent,
 }: {
   categoryName: string
   design: CategoryDesign
@@ -192,6 +194,7 @@ function CategoryShowcasePreview({
   className?: string
   onReset?: () => void
   onEdit?: () => void
+  iconPopoverContent?: React.ReactNode
 }) {
   const [isCardHovered, setIsCardHovered] = useState(false)
   const [isMenuHovered, setIsMenuHovered] = useState(false)
@@ -302,6 +305,7 @@ function CategoryShowcasePreview({
           className={className}
           onTabChangeAction={handleTabChange}
           isDialogPreview={true}
+          iconPopoverContent={iconPopoverContent}
         />
       </div>
       {(onReset || onEdit) && (
@@ -770,12 +774,88 @@ function DesignDialog({
                     </div>
                     <div className="mt-5 flex w-full flex-col items-center gap-5">
                       <div className="group relative flex min-h-[120px] w-auto flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl">
-                        <span className="relative z-10 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg transition-transform duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]">
-                          {renderCategoryIcon(localDesign, {
-                            size: 32,
-                            className: 'h-8 w-8 text-white',
-                          })}
-                        </span>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <div
+                              className="relative z-10 flex h-14 w-14 items-center justify-center"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <span className="flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg transition-transform duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)] cursor-pointer">
+                                {renderCategoryIcon(localDesign, {
+                                  size: 32,
+                                  className: 'h-8 w-8 text-white',
+                                })}
+                              </span>
+                            </div>
+                          </PopoverTrigger>
+                          <PopoverContent
+                            side="bottom"
+                            align="center"
+                            sideOffset={12}
+                            avoidCollisions={false}
+                            onOpenAutoFocus={(e) => e.preventDefault()}
+                            onCloseAutoFocus={(e) => e.preventDefault()}
+                            className="w-auto max-w-[calc(100vw-2rem)] max-h-[80vh] overflow-y-auto border-0 bg-transparent p-0 shadow-none"
+                            onClick={(e) => e.stopPropagation()}
+                            onPointerDownOutside={(e) => {
+                              // Prevent closing when clicking inside the popover
+                              const target = e.target as HTMLElement
+                              if (
+                                target.closest('[data-radix-popper-content-wrapper]')
+                              ) {
+                                e.preventDefault()
+                              }
+                            }}
+                          >
+                            <div
+                              style={{
+                                contain: 'layout style paint',
+                                willChange: 'auto',
+                              }}
+                            >
+                              <IconCustomizationBlock
+                              className="mt-0"
+                              iconTabs={ICON_PICKER_TABS}
+                              activeTab={activeIconTab}
+                              onTabChange={setActiveIconTab}
+                              onRemoveIcon={handleRemoveIcon}
+                              emojiSearchTerm={emojiSearchTerm}
+                              onEmojiSearchChange={setEmojiSearchTerm}
+                              emojiGroups={resolvedEmojiGroups}
+                              onEmojiSelect={handleEmojiSelect}
+                              selectedEmoji={selectedEmoji}
+                              iconSearchTerm={iconSearchTerm}
+                              onIconSearchChange={setIconSearchTerm}
+                              iconGroups={activeIconGroups}
+                              iconNavigationOrder={iconNavigationOrder}
+                              design={localDesign}
+                              activeIconName={activeIconName}
+                              onIconSelect={handleIconSelect}
+                              onSourceChange={handleSourceChange}
+                              fileInputRef={fileInputRef}
+                              isProcessingUpload={isProcessingUpload}
+                              svgUrlInput={svgUrlInput}
+                              onSvgUrlInputChange={setSvgUrlInput}
+                              onFileInputChange={handleFileInputChange}
+                              uploadError={uploadError}
+                              onUrlApply={handleUrlApply}
+                              urlError={urlError}
+                              hasUploadedIcon={hasUploadedIcon}
+                              onClearCustomIcon={handleClearCustomIcon}
+                              renderCategoryIcon={renderCategoryIcon}
+                              maxSvgFileSizeKb={MAX_SVG_FILE_SIZE_KB}
+                              formatIconLabel={formatIconLabel}
+                              defaultIconName={DEFAULT_ICON}
+                              customIconName={customIconName}
+                              onCustomIconNameChange={handleCustomIconNameChange}
+                              customIconNameError={customIconNameError}
+                              onCancelCustomIcon={handleCancelCustomIcon}
+                              onSaveCustomIcon={handleSaveCustomIcon}
+                              isSaveDisabled={!canSaveCustomIcon}
+                            />
+                            </div>
+                          </PopoverContent>
+                        </Popover>
                         <span className="relative z-10 text-center text-xs font-semibold leading-tight text-white whitespace-normal break-words transition-colors duration-300 group-hover:text-orange-400">
                           {resolvedCategoryName}
                         </span>
@@ -907,6 +987,331 @@ function CategoryDialogModal({
   const [category, setCategory] = useState<CategoryDetails>(initialCategory)
   const [design, setDesign] = useState<CategoryDesign>(initialDesign)
 
+  // Estado para customização de ícones no Popover
+  const [localDesign, setLocalDesign] = useState<CategoryDesign>(() =>
+    cloneDesign(design)
+  )
+  const [isProcessingUpload, setIsProcessingUpload] = useState(false)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const [urlError, setUrlError] = useState<string | null>(null)
+  const [svgUrlInput, setSvgUrlInput] = useState(
+    design.customIcon.source === 'url' ? (design.customIcon.url ?? '') : ''
+  )
+  const [iconSearchTerm, setIconSearchTerm] = useState('')
+  const [emojiSearchTerm, setEmojiSearchTerm] = useState('')
+  const [activeIconTab, setActiveIconTab] = useState<IconPickerTab>('icons')
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  // Sincronizar localDesign com design quando design mudar
+  useEffect(() => {
+    setLocalDesign(cloneDesign(design))
+    setSvgUrlInput(
+      design.customIcon.source === 'url' ? (design.customIcon.url ?? '') : ''
+    )
+  }, [design])
+
+  const { recents: iconRecents, addRecentIcon } = useIconRecents()
+  const { recents: emojiRecents, addRecentEmoji } = useEmojiRecents()
+
+  const { groups: resolvedEmojiGroups } = useMemo(
+    () =>
+      buildEmojiGroups({
+        searchTerm: emojiSearchTerm,
+        recentEmojis: emojiRecents,
+      }),
+    [emojiSearchTerm, emojiRecents]
+  )
+
+  const { groups: activeIconGroups, navigationOrder: iconNavigationOrder } =
+    useMemo(
+      () =>
+        buildIconGroups({
+          searchTerm: iconSearchTerm,
+          recentIcons: iconRecents,
+        }),
+      [iconSearchTerm, iconRecents]
+    )
+
+  const selectedEmoji =
+    localDesign.customIcon.source === 'emoji'
+      ? (localDesign.customIcon.emoji ?? null)
+      : null
+
+  const activeIconName = normalizeIconName(localDesign.icon) ?? localDesign.icon
+
+  const handleSourceChange = (source: CustomIconSource) => {
+    setUploadError(null)
+    setUrlError(null)
+
+    if (source === 'none') {
+      setLocalDesign((prev) => ({
+        ...prev,
+        customIcon: { ...DEFAULT_CUSTOM_ICON },
+      }))
+      setActiveIconTab('icons')
+      return
+    }
+
+    if (source === 'upload') {
+      setLocalDesign((prev) => ({
+        ...prev,
+        customIcon: {
+          source: 'upload',
+          name:
+            prev.customIcon.source === 'upload'
+              ? (prev.customIcon.name ?? '')
+              : '',
+        },
+      }))
+      setSvgUrlInput('')
+      setActiveIconTab('custom')
+      return
+    }
+
+    if (source === 'url') {
+      setLocalDesign((prev) => ({
+        ...prev,
+        customIcon: {
+          source: 'url',
+          url:
+            prev.customIcon.source === 'url' ? prev.customIcon.url : undefined,
+          name:
+            prev.customIcon.source === 'url'
+              ? (prev.customIcon.name ?? '')
+              : '',
+        },
+      }))
+      setActiveIconTab('custom')
+    }
+  }
+
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+
+    if (!file) {
+      return
+    }
+
+    if (!isValidSvgFile(file)) {
+      setUploadError(
+        `Selecione um arquivo SVG válido com até ${MAX_SVG_FILE_SIZE_KB}kb.`
+      )
+      return
+    }
+
+    setIsProcessingUpload(true)
+
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = reader.result
+
+      if (typeof result !== 'string') {
+        setUploadError('Não foi possível ler o arquivo selecionado.')
+        setIsProcessingUpload(false)
+        return
+      }
+
+      const sanitized = sanitizeSvg(result)
+
+      if (!sanitized) {
+        setUploadError(
+          'Não foi possível validar este SVG. Remova scripts ou elementos externos e tente novamente.'
+        )
+        setIsProcessingUpload(false)
+        return
+      }
+
+      const dataUrl = svgToDataUrl(sanitized)
+
+      if (!dataUrl) {
+        setUploadError('Não foi possível gerar a pré-visualização do arquivo.')
+        setIsProcessingUpload(false)
+        return
+      }
+
+      setLocalDesign((prev) => ({
+        ...prev,
+        customIcon: {
+          source: 'upload',
+          svgContent: sanitized,
+          dataUrl,
+          fileName: file.name,
+          name: extractNameFromFile(file.name),
+        },
+      }))
+
+      setUploadError(null)
+      setUrlError(null)
+      setIsProcessingUpload(false)
+      setActiveIconTab('custom')
+    }
+    reader.onerror = () => {
+      setUploadError('Erro ao processar o arquivo SVG.')
+      setIsProcessingUpload(false)
+    }
+    reader.readAsText(file)
+  }
+
+  const handleUrlApply = () => {
+    const value = svgUrlInput.trim()
+
+    if (!value) {
+      setUrlError('Informe uma URL de SVG válida.')
+      return
+    }
+
+    if (!isValidSvgUrl(value)) {
+      setUrlError('Use uma URL https:// que termine em .svg.')
+      return
+    }
+
+    setLocalDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        source: 'url',
+        url: value,
+        name: extractNameFromUrl(value),
+      },
+    }))
+
+    setUploadError(null)
+    setUrlError(null)
+    setActiveIconTab('custom')
+  }
+
+  const handleClearCustomIcon = () => {
+    setLocalDesign((prev) => ({
+      ...prev,
+      customIcon: { ...DEFAULT_CUSTOM_ICON },
+    }))
+    setSvgUrlInput('')
+    setUploadError(null)
+    setUrlError(null)
+    setEmojiSearchTerm('')
+    setIconSearchTerm('')
+  }
+
+  const handleEmojiSelect = (emoji: string) => {
+    setLocalDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        source: 'emoji',
+        emoji,
+      },
+    }))
+    setActiveIconTab('emoji')
+    addRecentEmoji(emoji)
+    // Aplicar mudança imediatamente ao design
+    setDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        source: 'emoji',
+        emoji,
+      },
+    }))
+  }
+
+  const handleIconSelect = (iconName: AllIconNames) => {
+    const resolved = normalizeIconName(iconName) ?? iconName
+    setLocalDesign((prev) => ({
+      ...prev,
+      icon: resolved,
+      customIcon: { ...DEFAULT_CUSTOM_ICON },
+    }))
+    setActiveIconTab('icons')
+    addRecentIcon(resolved)
+    // Aplicar mudança imediatamente ao design
+    setDesign((prev) => ({
+      ...prev,
+      icon: resolved,
+      customIcon: { ...DEFAULT_CUSTOM_ICON },
+    }))
+  }
+
+  const handleRemoveIcon = () => {
+    setLocalDesign((prev) => ({
+      ...prev,
+      icon: DEFAULT_ICON,
+      customIcon: { ...DEFAULT_CUSTOM_ICON },
+    }))
+    setSvgUrlInput('')
+    setUploadError(null)
+    setUrlError(null)
+    setActiveIconTab('icons')
+    setEmojiSearchTerm('')
+    setIconSearchTerm('')
+    // Aplicar mudança imediatamente ao design
+    setDesign((prev) => ({
+      ...prev,
+      icon: DEFAULT_ICON,
+      customIcon: { ...DEFAULT_CUSTOM_ICON },
+    }))
+  }
+
+  const customIconName = localDesign.customIcon.name ?? ''
+  const trimmedCustomIconName = customIconName.trim()
+  const customIconNameError =
+    trimmedCustomIconName.length > MAX_ICON_NAME_LENGTH
+      ? 'O nome precisa ter menos que 50 caracteres.'
+      : null
+  const hasUploadedIcon =
+    (localDesign.customIcon.source === 'upload' &&
+      Boolean(localDesign.customIcon.dataUrl)) ||
+    (localDesign.customIcon.source === 'url' &&
+      Boolean(localDesign.customIcon.url))
+
+  const handleCustomIconNameChange = (value: string) => {
+    setLocalDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        ...prev.customIcon,
+        name: value,
+      },
+    }))
+  }
+
+  const handleCancelCustomIcon = () => {
+    handleClearCustomIcon()
+  }
+
+  const handleSaveCustomIcon = () => {
+    if (!hasUploadedIcon || trimmedCustomIconName.length === 0 || customIconNameError) {
+      toast.error('Finalize o upload antes de salvar.', {
+        description:
+          'Envie um SVG válido ou informe uma URL e defina um nome com até 50 caracteres.',
+      })
+      return
+    }
+    const sanitizedName = trimmedCustomIconName
+    setLocalDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        ...prev.customIcon,
+        name: sanitizedName,
+      },
+    }))
+    // Aplicar mudança ao design
+    setDesign((prev) => ({
+      ...prev,
+      customIcon: {
+        ...localDesign.customIcon,
+        name: sanitizedName,
+      },
+    }))
+    setActiveIconTab('icons')
+    toast.success('Ícone personalizado salvo!', {
+      description: sanitizedName,
+    })
+  }
+
+  const canSaveCustomIcon =
+    hasUploadedIcon &&
+    (localDesign.customIcon.source === 'upload' ||
+      localDesign.customIcon.source === 'url') &&
+    trimmedCustomIconName.length > 0 &&
+    !customIconNameError
+
   useEffect(() => {
     if (initialData) {
       setCategory({
@@ -1012,6 +1417,48 @@ function CategoryDialogModal({
                         }
                         onReset={handleReset}
                         onEdit={() => setDesignDialogOpen(true)}
+                        iconPopoverContent={
+                          <IconCustomizationBlock
+                            className="mt-0"
+                            iconTabs={ICON_PICKER_TABS}
+                            activeTab={activeIconTab}
+                            onTabChange={setActiveIconTab}
+                            onRemoveIcon={handleRemoveIcon}
+                            emojiSearchTerm={emojiSearchTerm}
+                            onEmojiSearchChange={setEmojiSearchTerm}
+                            emojiGroups={resolvedEmojiGroups}
+                            onEmojiSelect={handleEmojiSelect}
+                            selectedEmoji={selectedEmoji}
+                            iconSearchTerm={iconSearchTerm}
+                            onIconSearchChange={setIconSearchTerm}
+                            iconGroups={activeIconGroups}
+                            iconNavigationOrder={iconNavigationOrder}
+                            design={localDesign}
+                            activeIconName={activeIconName}
+                            onIconSelect={handleIconSelect}
+                            onSourceChange={handleSourceChange}
+                            fileInputRef={fileInputRef}
+                            isProcessingUpload={isProcessingUpload}
+                            svgUrlInput={svgUrlInput}
+                            onSvgUrlInputChange={setSvgUrlInput}
+                            onFileInputChange={handleFileInputChange}
+                            uploadError={uploadError}
+                            onUrlApply={handleUrlApply}
+                            urlError={urlError}
+                            hasUploadedIcon={hasUploadedIcon}
+                            onClearCustomIcon={handleClearCustomIcon}
+                            renderCategoryIcon={renderCategoryIcon}
+                            maxSvgFileSizeKb={MAX_SVG_FILE_SIZE_KB}
+                            formatIconLabel={formatIconLabel}
+                            defaultIconName={DEFAULT_ICON}
+                            customIconName={customIconName}
+                            onCustomIconNameChange={handleCustomIconNameChange}
+                            customIconNameError={customIconNameError}
+                            onCancelCustomIcon={handleCancelCustomIcon}
+                            onSaveCustomIcon={handleSaveCustomIcon}
+                            isSaveDisabled={!canSaveCustomIcon}
+                          />
+                        }
                       />
                     </div>
 
