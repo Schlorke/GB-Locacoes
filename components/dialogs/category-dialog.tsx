@@ -301,6 +301,7 @@ function CategoryShowcasePreview({
           cardClassName="p-6 w-auto h-auto min-h-0"
           className={className}
           onTabChangeAction={handleTabChange}
+          isDialogPreview={true}
         />
       </div>
       {(onReset || onEdit) && (

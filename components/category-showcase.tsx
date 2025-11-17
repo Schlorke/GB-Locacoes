@@ -32,6 +32,7 @@ export type CategoryShowcaseProps = {
     lg?: number
   }
   cardClassName?: string
+  isDialogPreview?: boolean
 }
 
 const baseCardClasses =
@@ -117,6 +118,7 @@ export function CategoryShowcase({
   className,
   gridCols,
   cardClassName,
+  isDialogPreview = false,
 }: CategoryShowcaseProps) {
   const safeTabs = useMemo(() => tabs ?? [], [tabs])
 
@@ -457,8 +459,48 @@ export function CategoryShowcase({
                       className={cn(baseCardClasses, cardClassName)}
                       onClick={() => onCategoryClickAction?.(item)}
                     >
-                      <div className={iconWrapperClasses}>
-                        <Icon size={28} color="white" className="h-7 w-7" />
+                      <div
+                        className={cn(
+                          iconWrapperClasses,
+                          isDialogPreview &&
+                            'border-none cursor-pointer transition-all duration-700 ease-in-out hover:bg-[length:280%_auto] active:scale-95 shadow-[0px_0px_20px_rgba(251,146,60,0.5),0px_5px_5px_-1px_rgba(234,88,12,0.25),inset_4px_4px_8px_rgba(255,237,213,0.5),inset_-4px_-4px_8px_rgba(234,88,12,0.35)]'
+                        )}
+                        style={
+                          isDialogPreview
+                            ? {
+                                backgroundImage:
+                                  'linear-gradient(325deg, rgb(255, 124, 31) 18%, rgb(255, 245, 235) 50%, rgb(255, 124, 31) 77%)',
+                                backgroundSize: '580% auto',
+                                backgroundPosition: 'initial',
+                                color: 'hsl(0 0% 100%)',
+                                transition: '0.8s',
+                              }
+                            : undefined
+                        }
+                        onMouseEnter={
+                          isDialogPreview
+                            ? (e) => {
+                                ;(
+                                  e.currentTarget as HTMLDivElement
+                                ).style.backgroundPosition = 'right top'
+                              }
+                            : undefined
+                        }
+                        onMouseLeave={
+                          isDialogPreview
+                            ? (e) => {
+                                ;(
+                                  e.currentTarget as HTMLDivElement
+                                ).style.backgroundPosition = 'initial'
+                              }
+                            : undefined
+                        }
+                      >
+                        <Icon
+                          size={28}
+                          color="white"
+                          className="h-7 w-7 relative z-10"
+                        />
                       </div>
                       <span className={cardLabelClasses}>{item.name}</span>
                     </button>
