@@ -340,7 +340,7 @@ function CategoryShowcasePreview({
           tabs={previewTabs}
           defaultTab={design.placement}
           gridCols={{ base: 1, sm: 1, md: 1, lg: 1 }}
-          cardClassName="p-6 w-auto h-auto min-h-0"
+          cardClassName="p-4 w-[136px] h-full min-h-[120px]"
           className={className}
           onTabChangeAction={handleTabChange}
           isDialogPreview={true}
@@ -836,7 +836,7 @@ function DesignDialog({
                       </span>
                     </div>
                     <div className="mt-5 flex w-full flex-col items-center gap-5">
-                      <div className="group relative flex min-h-[120px] w-auto flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl">
+                      <div className="group relative flex min-h-[120px] w-[180px] flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl">
                         <Popover
                           open={iconPopoverOpen}
                           onOpenChange={setIconPopoverOpen}
