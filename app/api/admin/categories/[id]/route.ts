@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
@@ -37,16 +38,27 @@ export async function PUT(
     }
     const { id } = params
     const body = await request.json()
-    const { name, description, icon, iconColor, bgColor, fontColor } = body
+    const {
+      name,
+      description,
+      icon,
+      iconColor,
+      bgColor,
+      fontColor,
+      placement,
+      customIcon,
+    } = body
 
     const data: {
       name?: string
       slug?: string
-      description?: string
-      icon?: string
+      description?: string | null
+      icon?: string | null
       iconColor?: string
       bgColor?: string
       fontColor?: string
+      placement?: string | null
+      customIcon?: Prisma.InputJsonValue | Prisma.JsonNullValueInput
     } = {}
     if (name) {
       data.name = name.trim()
@@ -58,6 +70,14 @@ export async function PUT(
     if (iconColor !== undefined) data.iconColor = iconColor?.trim() || '#000000'
     if (bgColor !== undefined) data.bgColor = bgColor?.trim() || '#e0e0e0'
     if (fontColor !== undefined) data.fontColor = fontColor?.trim() || '#000000'
+    if (placement !== undefined)
+      data.placement =
+        placement === 'phases' || placement === 'types' ? placement : null
+    if (customIcon !== undefined) {
+      data.customIcon = customIcon
+        ? (customIcon as Prisma.InputJsonValue)
+        : Prisma.JsonNull
+    }
 
     const category = await prisma.category.update({
       where: { id },

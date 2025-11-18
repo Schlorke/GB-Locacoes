@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import crypto from 'node:crypto'
@@ -26,6 +27,19 @@ const CategorySchema = z
     iconColor: z.string().min(1, 'Cor do ícone é obrigatória'),
     bgColor: z.string().min(1, 'Cor de fundo é obrigatória'),
     fontColor: z.string().min(1, 'Cor da fonte é obrigatória'),
+    placement: z.enum(['phases', 'types']).optional().nullable(),
+    customIcon: z
+      .object({
+        source: z.enum(['none', 'upload', 'url', 'emoji']),
+        svgContent: z.string().optional(),
+        dataUrl: z.string().optional(),
+        fileName: z.string().optional(),
+        url: z.string().optional(),
+        emoji: z.string().nullable().optional(),
+        name: z.string().optional(),
+      })
+      .optional()
+      .nullable(),
   })
   .strict()
 
@@ -109,7 +123,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 })
     }
 
-    const { name, description, icon, iconColor, bgColor, fontColor } = parsed
+    const {
+      name,
+      description,
+      icon,
+      iconColor,
+      bgColor,
+      fontColor,
+      placement,
+      customIcon,
+    } = parsed
 
     const slug = slugify(name)
 
@@ -136,6 +159,10 @@ export async function POST(request: NextRequest) {
         bgColor: bgColor?.trim() || '#e0e0e0',
         fontColor: fontColor?.trim() || '#000000',
         slug,
+        placement: placement || null,
+        customIcon: customIcon
+          ? (customIcon as Prisma.InputJsonValue)
+          : Prisma.JsonNull,
       },
     })
 

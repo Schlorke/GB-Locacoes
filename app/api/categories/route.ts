@@ -127,7 +127,19 @@ export async function GET() {
     // Conexão automática do Prisma
 
     const categories = await prisma.category.findMany({
-      include: {
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        icon: true,
+        iconColor: true,
+        bgColor: true,
+        fontColor: true,
+        slug: true,
+        placement: true, // Garantir que placement seja retornado
+        customIcon: true, // Ícone customizado (SVG, emoji, URL)
+        createdAt: true,
+        updatedAt: true,
         _count: {
           select: {
             equipments: true,
@@ -138,6 +150,13 @@ export async function GET() {
         name: 'asc',
       },
     })
+
+    // Debug: verificar se placement está sendo retornado
+    const withPhases = categories.filter((c) => c.placement === 'phases')
+    const withTypes = categories.filter((c) => c.placement === 'types')
+    console.log('[API /categories] Total:', categories.length)
+    console.log('[API /categories] Com phases:', withPhases.length)
+    console.log('[API /categories] Com types:', withTypes.length)
 
     return NextResponse.json(categories)
   } catch (error) {

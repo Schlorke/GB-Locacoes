@@ -12,6 +12,8 @@ const makeSchema = () => z.object({
   bgColor: SortOrderSchema.optional(),
   fontColor: SortOrderSchema.optional(),
   slug: SortOrderSchema.optional(),
+  placement: SortOrderSchema.optional(),
+  customIcon: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional()
 }).strict();

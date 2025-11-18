@@ -143,6 +143,8 @@ model Category {
   bgColor     String      @default("#EFF6FF")
   fontColor   String      @default("#1E40AF")
   slug        String      @unique
+  placement   String?     // 'phases' | 'types' | null - Tab onde a categoria aparece (filtro)
+  customIcon  Json?        // Ícone customizado (SVG, emoji, URL) como JSON
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   equipments  Equipment[]

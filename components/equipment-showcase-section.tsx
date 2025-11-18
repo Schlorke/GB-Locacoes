@@ -6,78 +6,212 @@ import {
   type TabConfig,
 } from '@/components/category-showcase'
 import { LayoutGroup, motion } from 'framer-motion'
+import { useEffect, useMemo, useState } from 'react'
 
 import { EquipmentInfiniteScroll } from '@/components/equipment-infinite-scroll'
-import {
-  AndaimeSuspenso,
-  AndaimeTubular,
-  Betoneira,
-  CadeiraEletrica,
-  Compressor,
-  Lavagem,
-  Rompedor,
-  Terraplenagem,
-  TrabalhoEmAltura,
-  Transporte,
-} from '@/components/icons/custom'
+import type { CustomIconProps } from '@/components/icons/custom'
+import { renderIcon } from '@/lib/constants/all-icons'
+import { normalizeIconName } from '@/lib/icon-utils'
 import RotatingText from '@/components/rotating-text'
 
-// Configuração das tabs e categorias
-const tabsConfig: TabConfig[] = [
-  {
-    value: 'mais-alugados',
-    label: 'Categorias',
-    categories: [
-      { id: '1', name: 'Acesso e elevação', icon: CadeiraEletrica },
-      { id: '2', name: 'Andaimes', icon: AndaimeTubular },
-      { id: '3', name: 'Compactação', icon: Compressor },
-      { id: '4', name: 'Concretagem', icon: Betoneira },
-      { id: '5', name: 'Ferramentas elétricas', icon: Rompedor },
-      { id: '6', name: 'Furação e demolição', icon: Rompedor },
-      { id: '7', name: 'Jardinagem', icon: Lavagem },
-      { id: '8', name: 'Limpeza', icon: Lavagem },
-      { id: '9', name: 'Motores', icon: Compressor },
-      { id: '10', name: 'Outros', icon: Transporte },
-    ],
-  },
-  {
-    value: 'fases-obra',
-    label: 'Fases da obra',
-    categories: [
-      { id: '11', name: 'Canteiro de obras', icon: AndaimeSuspenso },
-      { id: '12', name: 'Cobertura', icon: AndaimeTubular },
-      { id: '13', name: 'Fundação', icon: Terraplenagem },
-      { id: '14', name: 'Estrutura', icon: AndaimeSuspenso },
-      { id: '15', name: 'Instalações', icon: Compressor },
-      { id: '16', name: 'Acabamento', icon: Rompedor },
-      { id: '17', name: 'Pintura', icon: Lavagem },
-      { id: '18', name: 'Limpeza final', icon: Lavagem },
-      { id: '19', name: 'Paisagismo', icon: Lavagem },
-      { id: '20', name: 'Outros', icon: Transporte },
-    ],
-  },
-  {
-    value: 'tipo-trabalho',
-    label: 'Tipo de trabalho',
-    categories: [
-      { id: '21', name: 'Limpar', icon: Lavagem },
-      { id: '22', name: 'Trabalho em altura', icon: TrabalhoEmAltura },
-      { id: '23', name: 'Trabalho em jardins', icon: Lavagem },
-      { id: '24', name: 'Cortar, furar ou demolir', icon: Rompedor },
-      { id: '25', name: 'Concretar, argamassa', icon: Betoneira },
-      { id: '26', name: 'Gerar energia elétrica', icon: Compressor },
-      { id: '27', name: 'Escorar lajes ou vigas', icon: AndaimeSuspenso },
-      { id: '28', name: 'Bombear água ou lama', icon: Lavagem },
-      { id: '29', name: 'Aplainar ou lixar', icon: Rompedor },
-      { id: '30', name: 'Compactar o solo', icon: Compressor },
-    ],
-  },
-]
+interface ApiCategory {
+  id: string
+  name: string
+  description?: string | null
+  icon?: string | null
+  iconColor?: string
+  bgColor?: string
+  fontColor?: string
+  slug: string
+  placement?: 'phases' | 'types' | null
+  _count?: {
+    equipments: number
+  }
+}
+
+// Função para criar um componente de ícone a partir do nome
+function createIconComponent(
+  iconName: string | null | undefined
+): React.ComponentType<CustomIconProps> {
+  const normalized = normalizeIconName(iconName)
+  const defaultIcon = 'Tag'
+
+  return function CategoryIcon({ size = 28, color = 'white', className }) {
+    const iconToRender = normalized || defaultIcon
+    const rendered = renderIcon(iconToRender, size, color, className)
+    return (
+      rendered || (
+        <div className={className} style={{ width: size, height: size }} />
+      )
+    )
+  }
+}
+
+// Limite de categorias por tab
+const MAX_CATEGORIES_PER_TAB = 12
 
 export default function EquipmentShowcaseSection() {
+  const [categories, setCategories] = useState<ApiCategory[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Buscar categorias da API
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        setIsLoading(true)
+        const res = await fetch('/api/categories')
+        if (!res.ok) {
+          console.error('Erro ao buscar categorias:', res.statusText)
+          return
+        }
+        const data: ApiCategory[] = await res.json()
+        console.log('[CategoryShowcase] Dados recebidos da API:', {
+          total: data.length,
+          firstCategory: data[0]
+            ? {
+                name: data[0].name,
+                placement: data[0].placement,
+                placementType: typeof data[0].placement,
+              }
+            : null,
+          categoriesWithPhases: data.filter((c) => c.placement === 'phases')
+            .length,
+          categoriesWithTypes: data.filter((c) => c.placement === 'types')
+            .length,
+        })
+        setCategories(data)
+      } catch (err) {
+        console.error('Erro ao buscar categorias:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  // Construir tabs com filtros
+  const tabsConfig: TabConfig[] = useMemo(() => {
+    // Debug: verificar dados recebidos
+    console.log(
+      '[CategoryShowcase] Total categorias recebidas:',
+      categories.length
+    )
+    console.log(
+      '[CategoryShowcase] Exemplo de categoria:',
+      categories[0]
+        ? {
+            name: categories[0].name,
+            placement: categories[0].placement,
+            placementType: typeof categories[0].placement,
+          }
+        : 'nenhuma'
+    )
+
+    // Converter categorias da API para CategoryItem
+    const convertToCategoryItem = (cat: ApiCategory): CategoryItem => ({
+      id: cat.id,
+      name: cat.name,
+      icon: createIconComponent(cat.icon),
+    })
+
+    // Tab "Categorias" - mostra TODAS as categorias (limitado a 12)
+    const allCategories = categories
+      .map(convertToCategoryItem)
+      .slice(0, MAX_CATEGORIES_PER_TAB)
+
+    // Tab "Fases da Obra" - apenas categorias com placement='phases' (limitado a 12)
+    const phasesFiltered = categories.filter((cat) => {
+      // Verificação robusta: aceita string 'phases' ou comparação estrita
+      const placement = cat.placement
+      const matches = placement === 'phases' || String(placement) === 'phases'
+      if (matches) {
+        console.log(
+          '[CategoryShowcase] ✅ Categoria phases encontrada:',
+          cat.name,
+          'placement:',
+          placement,
+          'type:',
+          typeof placement
+        )
+      }
+      return matches
+    })
+    console.log(
+      '[CategoryShowcase] 📊 Total categorias phases filtradas:',
+      phasesFiltered.length
+    )
+    const phasesCategories = phasesFiltered
+      .map(convertToCategoryItem)
+      .slice(0, MAX_CATEGORIES_PER_TAB)
+    console.log(
+      '[CategoryShowcase] 📊 Categorias phases após slice:',
+      phasesCategories.length
+    )
+
+    // Tab "Tipo de Trabalho" - apenas categorias com placement='types' (limitado a 12)
+    const typesFiltered = categories.filter((cat) => {
+      // Verificação robusta: aceita string 'types' ou comparação estrita
+      const placement = cat.placement
+      const matches = placement === 'types' || String(placement) === 'types'
+      if (matches) {
+        console.log(
+          '[CategoryShowcase] ✅ Categoria types encontrada:',
+          cat.name,
+          'placement:',
+          placement,
+          'type:',
+          typeof placement
+        )
+      }
+      return matches
+    })
+    console.log(
+      '[CategoryShowcase] 📊 Total categorias types filtradas:',
+      typesFiltered.length
+    )
+    const typesCategories = typesFiltered
+      .map(convertToCategoryItem)
+      .slice(0, MAX_CATEGORIES_PER_TAB)
+    console.log(
+      '[CategoryShowcase] 📊 Categorias types após slice:',
+      typesCategories.length
+    )
+
+    return [
+      {
+        value: 'mais-alugados',
+        label: 'Categorias',
+        categories: allCategories,
+      },
+      {
+        value: 'fases-obra',
+        label: 'Fases da obra',
+        categories: phasesCategories,
+      },
+      {
+        value: 'tipo-trabalho',
+        label: 'Tipo de trabalho',
+        categories: typesCategories,
+      },
+    ]
+  }, [categories])
+
   const handleCategoryClick = (category: CategoryItem) => {
     // Navegar para página de equipamentos filtrados por categoria
     window.location.href = `/equipamentos?categoria=${category.id}`
+  }
+
+  // Não renderizar enquanto carrega (ou renderizar um loading state)
+  if (isLoading) {
+    return (
+      <section className="bg-gray-50 pt-12 md:pt-16 lg:pt-20 pb-12 md:pb-16 lg:pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <p className="text-slate-600">Carregando categorias...</p>
+          </div>
+        </div>
+      </section>
+    )
   }
 
   return (

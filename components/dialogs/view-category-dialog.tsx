@@ -37,7 +37,8 @@ export interface Category extends CategoryBadgeData {
     equipments: number
   }
   bgColor?: string // Compatibilidade com API
-  placement?: 'phases' | 'types' // Tab onde a categoria foi salva
+  placement?: 'phases' | 'types' | null // Tab onde a categoria foi salva
+  customIcon?: CategoryDesign['customIcon'] | null // Ícone customizado (SVG, emoji, URL)
 }
 
 /**
@@ -45,6 +46,22 @@ export interface Category extends CategoryBadgeData {
  * Similar ao que aparece nos cards da página principal
  */
 function renderCategoryCardPreview(category: Category): React.ReactElement {
+  // Converter customIcon do banco (JSON) para CustomIconConfig
+  let customIcon: CategoryDesign['customIcon'] = {
+    ...DEFAULT_DESIGN.customIcon,
+  }
+  if (category.customIcon) {
+    try {
+      const parsed =
+        typeof category.customIcon === 'string'
+          ? JSON.parse(category.customIcon)
+          : category.customIcon
+      customIcon = parsed as CategoryDesign['customIcon']
+    } catch {
+      customIcon = { ...DEFAULT_DESIGN.customIcon }
+    }
+  }
+
   const design: CategoryDesign = {
     backgroundColor:
       category.backgroundColor ||
@@ -53,8 +70,8 @@ function renderCategoryCardPreview(category: Category): React.ReactElement {
     fontColor: category.fontColor || DEFAULT_DESIGN.fontColor,
     iconColor: category.iconColor || DEFAULT_DESIGN.iconColor,
     icon: (category.icon as CategoryDesign['icon']) || DEFAULT_DESIGN.icon,
-    customIcon: { ...DEFAULT_DESIGN.customIcon },
-    placement: DEFAULT_DESIGN.placement,
+    customIcon,
+    placement: category.placement || DEFAULT_DESIGN.placement,
   }
 
   return (
@@ -132,7 +149,25 @@ export function ViewCategoryDialog({
                         {/* Preview da Badge */}
                         <div className="pt-5 flex flex-col items-center gap-4 w-full">
                           <div className="flex justify-center w-full">
-                            {getCategoryBadgePreview(category, 'md', true)}
+                            {getCategoryBadgePreview(
+                              {
+                                id: category.id,
+                                name: category.name,
+                                description: category.description,
+                                icon: category.icon || null,
+                                iconColor: category.iconColor,
+                                backgroundColor: category.backgroundColor,
+                                bgColor: category.bgColor,
+                                fontColor: category.fontColor,
+                                customIcon: category.customIcon
+                                  ? typeof category.customIcon === 'string'
+                                    ? JSON.parse(category.customIcon)
+                                    : category.customIcon
+                                  : null,
+                              },
+                              'md',
+                              true
+                            )}
                           </div>
                           <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed text-center">
                             {category.description || 'Sem descrição'}

@@ -4,6 +4,7 @@ import type { Prisma } from '@prisma/client';
 import { UuidFilterObjectSchema as UuidFilterObjectSchema } from './UuidFilter.schema';
 import { StringFilterObjectSchema as StringFilterObjectSchema } from './StringFilter.schema';
 import { StringNullableFilterObjectSchema as StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
+import { JsonNullableFilterObjectSchema as JsonNullableFilterObjectSchema } from './JsonNullableFilter.schema';
 import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { EquipmentListRelationFilterObjectSchema as EquipmentListRelationFilterObjectSchema } from './EquipmentListRelationFilter.schema'
 
@@ -19,6 +20,8 @@ const categorywhereinputSchema = z.object({
   bgColor: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   fontColor: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   slug: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
+  placement: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  customIcon: z.lazy(() => JsonNullableFilterObjectSchema).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   equipments: z.lazy(() => EquipmentListRelationFilterObjectSchema).optional()

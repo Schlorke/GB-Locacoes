@@ -30,6 +30,8 @@ interface Category {
   iconColor?: string
   backgroundColor?: string // Renomeado para compatibilidade com TagData
   fontColor?: string
+  placement?: 'phases' | 'types' | null
+  customIcon?: CategoryDesign['customIcon'] | null
   createdAt: string
   _count?: {
     equipments: number
@@ -45,6 +47,22 @@ const ITEMS_PER_PAGE = 9
  * Similar ao que aparece no dialog de visualização
  */
 function renderCategoryCardPreview(category: Category): React.ReactElement {
+  // Converter customIcon do banco (JSON) para CustomIconConfig
+  let customIcon: CategoryDesign['customIcon'] = {
+    ...DEFAULT_DESIGN.customIcon,
+  }
+  if (category.customIcon) {
+    try {
+      const parsed =
+        typeof category.customIcon === 'string'
+          ? JSON.parse(category.customIcon)
+          : category.customIcon
+      customIcon = parsed as CategoryDesign['customIcon']
+    } catch {
+      customIcon = { ...DEFAULT_DESIGN.customIcon }
+    }
+  }
+
   const design: CategoryDesign = {
     backgroundColor:
       category.backgroundColor ||
@@ -53,8 +71,8 @@ function renderCategoryCardPreview(category: Category): React.ReactElement {
     fontColor: category.fontColor || DEFAULT_DESIGN.fontColor,
     iconColor: category.iconColor || DEFAULT_DESIGN.iconColor,
     icon: (category.icon as CategoryDesign['icon']) || DEFAULT_DESIGN.icon,
-    customIcon: { ...DEFAULT_DESIGN.customIcon },
-    placement: DEFAULT_DESIGN.placement,
+    customIcon,
+    placement: category.placement || DEFAULT_DESIGN.placement,
   }
 
   return (
@@ -87,6 +105,7 @@ export default function AdminCategoriesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [activeCardId, setActiveCardId] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(1)
+  const [pageKey, setPageKey] = useState(0) // Key para forçar re-render com animação
 
   // Novo estado para o CategoryDialogModal
   const [isModernModalOpen, setIsModernModalOpen] = useState(false)
@@ -99,6 +118,24 @@ export default function AdminCategoriesPage() {
   const categoryToDialogCategoryData = (
     category: Category
   ): DialogCategoryData => {
+    // Converter customIcon do banco (JSON) para CustomIconConfig
+    let customIcon: CategoryDesign['customIcon'] = {
+      ...DEFAULT_DESIGN.customIcon,
+    }
+    if (category.customIcon) {
+      try {
+        // Se já é um objeto, usar diretamente; se é JSON string, fazer parse
+        const parsed =
+          typeof category.customIcon === 'string'
+            ? JSON.parse(category.customIcon)
+            : category.customIcon
+        customIcon = parsed as CategoryDesign['customIcon']
+      } catch {
+        // Se falhar, usar default
+        customIcon = { ...DEFAULT_DESIGN.customIcon }
+      }
+    }
+
     const design: CategoryDesign = {
       backgroundColor:
         category.backgroundColor ||
@@ -107,8 +144,8 @@ export default function AdminCategoriesPage() {
       fontColor: category.fontColor || DEFAULT_DESIGN.fontColor,
       iconColor: category.iconColor || DEFAULT_DESIGN.iconColor,
       icon: (category.icon as CategoryDesign['icon']) || DEFAULT_DESIGN.icon,
-      customIcon: { ...DEFAULT_DESIGN.customIcon },
-      placement: DEFAULT_DESIGN.placement,
+      customIcon,
+      placement: category.placement || DEFAULT_DESIGN.placement,
     }
 
     return {
@@ -130,6 +167,8 @@ export default function AdminCategoriesPage() {
     fontColor: string
     iconColor: string
     icon: keyof typeof LucideIcons | null
+    placement: 'phases' | 'types' | null
+    customIcon: CategoryDesign['customIcon'] | null
   } => {
     return {
       name: data.name,
@@ -141,6 +180,11 @@ export default function AdminCategoriesPage() {
       icon:
         data.design.customIcon.source === 'none'
           ? (data.design.icon as keyof typeof LucideIcons) || null
+          : null,
+      placement: data.design.placement || null,
+      customIcon:
+        data.design.customIcon.source !== 'none'
+          ? data.design.customIcon
           : null,
     }
   }
@@ -206,6 +250,7 @@ export default function AdminCategoriesPage() {
 
   useEffect(() => {
     setCurrentPage(1)
+    setPageKey((prev) => prev + 1) // Reset pageKey quando filtros mudam
   }, [searchTerm])
 
   const totalPages = Math.ceil(filteredCategories.length / ITEMS_PER_PAGE)
@@ -221,6 +266,15 @@ export default function AdminCategoriesPage() {
       setCurrentPage(effectiveCurrentPage)
     }
   }, [currentPage, effectiveCurrentPage])
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    setPageKey((prev) => prev + 1) // Incrementa para forçar re-render com animação
+    // Delay no scroll para permitir que a animação de saída termine
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 100)
+  }
 
   // Novas funções para o CategoryDialogModal
   const openNewCategoryModal = () => {
@@ -438,14 +492,18 @@ export default function AdminCategoriesPage() {
           ) : (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <AnimatePresence>
+                <AnimatePresence mode="wait">
                   {paginatedCategories.map((category, index) => (
                     <motion.div
-                      key={category.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ delay: index * 0.1 }}
+                      key={`${category.id}-${pageKey}`}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                      transition={{
+                        delay: index * 0.08,
+                        duration: 0.3,
+                        ease: 'easeOut',
+                      }}
                       className="group"
                       onClick={() => {
                         if (isMobile) {
@@ -470,7 +528,25 @@ export default function AdminCategoriesPage() {
                             </div>
                             {/* Preview da Badge */}
                             <div className="w-full flex justify-center pb-4">
-                              {getCategoryBadgePreview(category, 'md', true)}
+                              {getCategoryBadgePreview(
+                                {
+                                  id: category.id,
+                                  name: category.name,
+                                  description: category.description,
+                                  icon: category.icon || null,
+                                  iconColor: category.iconColor,
+                                  backgroundColor: category.backgroundColor,
+                                  bgColor: category.bgColor,
+                                  fontColor: category.fontColor,
+                                  customIcon: category.customIcon
+                                    ? typeof category.customIcon === 'string'
+                                      ? JSON.parse(category.customIcon)
+                                      : category.customIcon
+                                    : null,
+                                },
+                                'md',
+                                true
+                              )}
                             </div>
                             {/* Descrição centralizada */}
                             <div className="w-full text-center">
@@ -551,7 +627,7 @@ export default function AdminCategoriesPage() {
               <SmartPagination
                 currentPage={effectiveCurrentPage}
                 totalPages={totalPages}
-                onPageChange={setCurrentPage}
+                onPageChange={handlePageChange}
               />
             </div>
           )}

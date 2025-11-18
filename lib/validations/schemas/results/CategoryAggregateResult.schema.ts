@@ -9,6 +9,8 @@ export const CategoryAggregateResultSchema = z.object({  _count: z.object({
     bgColor: z.number(),
     fontColor: z.number(),
     slug: z.number(),
+    placement: z.number(),
+    customIcon: z.number(),
     createdAt: z.number(),
     updatedAt: z.number(),
     equipments: z.number()
@@ -22,6 +24,7 @@ export const CategoryAggregateResultSchema = z.object({  _count: z.object({
     bgColor: z.string().nullable(),
     fontColor: z.string().nullable(),
     slug: z.string().nullable(),
+    placement: z.string().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional(),
@@ -34,6 +37,7 @@ export const CategoryAggregateResultSchema = z.object({  _count: z.object({
     bgColor: z.string().nullable(),
     fontColor: z.string().nullable(),
     slug: z.string().nullable(),
+    placement: z.string().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional()});

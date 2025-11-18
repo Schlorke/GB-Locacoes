@@ -12,6 +12,7 @@ const makeSchema = () => z.object({
   bgColor: z.literal(true).optional(),
   fontColor: z.literal(true).optional(),
   slug: z.literal(true).optional(),
+  placement: z.literal(true).optional(),
   createdAt: z.literal(true).optional(),
   updatedAt: z.literal(true).optional()
 }).strict();

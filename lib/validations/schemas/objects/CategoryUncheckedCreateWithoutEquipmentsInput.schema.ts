@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
+import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema'
 
+import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
@@ -12,6 +14,8 @@ const makeSchema = () => z.object({
   bgColor: z.string().optional(),
   fontColor: z.string().optional(),
   slug: z.string(),
+  placement: z.string().optional().nullable(),
+  customIcon: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();

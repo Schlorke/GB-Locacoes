@@ -15,6 +15,8 @@ import React from 'react'
 
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
+import type { CategoryDesign, CustomIconConfig } from '@/lib/category-design'
+import { renderCategoryIcon as renderCategoryIconFromDesign } from '@/lib/category-design'
 
 /**
  * Interface para dados básicos de categoria
@@ -29,6 +31,7 @@ export interface CategoryBadgeData {
   backgroundColor?: string
   bgColor?: string // Compatibilidade com API
   fontColor?: string
+  customIcon?: CustomIconConfig | null // Ícone customizado (SVG, emoji, URL)
 }
 
 /**
@@ -145,6 +148,21 @@ export function getCategoryBadgePreview(
 ): React.ReactElement {
   const sizeConfig = BADGE_SIZES[size]
 
+  // Criar CategoryDesign para usar renderCategoryIcon que suporta custom icons
+  const design: CategoryDesign = {
+    backgroundColor: category.backgroundColor || category.bgColor || '#e0e7ff',
+    fontColor: category.fontColor || '#1e40af',
+    iconColor: category.iconColor || '#3b82f6',
+    icon: (category.icon as CategoryDesign['icon']) || 'Tag',
+    customIcon: category.customIcon || { source: 'none' },
+    placement: 'types',
+  }
+
+  // Verificar se há ícone para renderizar (Lucide ou custom)
+  const hasIcon =
+    category.icon ||
+    (category.customIcon && category.customIcon.source !== 'none')
+
   return (
     <Badge
       variant="outline"
@@ -166,18 +184,16 @@ export function getCategoryBadgePreview(
         ]
       )}
       style={{
-        backgroundColor:
-          category.backgroundColor || category.bgColor || '#e0e7ff',
-        color: category.fontColor || '#1e40af',
+        backgroundColor: design.backgroundColor,
+        color: design.fontColor,
       }}
     >
-      {category.icon && (
+      {hasIcon && (
         <span className="flex-shrink-0">
-          {renderCategoryIcon(
-            category.icon,
-            category.iconColor,
-            sizeConfig.icon
-          )}
+          {renderCategoryIconFromDesign(design, {
+            size: sizeConfig.icon,
+            color: design.iconColor,
+          })}
         </span>
       )}
       <span className="truncate font-semibold min-w-0">{category.name}</span>

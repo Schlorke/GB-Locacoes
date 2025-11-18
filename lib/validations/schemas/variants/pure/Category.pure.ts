@@ -10,6 +10,8 @@ export const CategoryModelSchema = z.object({
     bgColor: z.string(),
     fontColor: z.string(),
     slug: z.string(),
+    placement: z.string().nullable(),
+    customIcon: z.unknown().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
     equipments: z.array(z.unknown())

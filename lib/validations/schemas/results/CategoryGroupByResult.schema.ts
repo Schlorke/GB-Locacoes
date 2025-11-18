@@ -9,6 +9,8 @@ export const CategoryGroupByResultSchema = z.array(z.object({
   bgColor: z.string(),
   fontColor: z.string(),
   slug: z.string(),
+  placement: z.string(),
+  customIcon: z.unknown(),
   createdAt: z.date(),
   updatedAt: z.date(),
   _count: z.object({
@@ -20,6 +22,8 @@ export const CategoryGroupByResultSchema = z.array(z.object({
     bgColor: z.number(),
     fontColor: z.number(),
     slug: z.number(),
+    placement: z.number(),
+    customIcon: z.number(),
     createdAt: z.number(),
     updatedAt: z.number(),
     equipments: z.number()
@@ -33,6 +37,7 @@ export const CategoryGroupByResultSchema = z.array(z.object({
     bgColor: z.string().nullable(),
     fontColor: z.string().nullable(),
     slug: z.string().nullable(),
+    placement: z.string().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional(),
@@ -45,6 +50,7 @@ export const CategoryGroupByResultSchema = z.array(z.object({
     bgColor: z.string().nullable(),
     fontColor: z.string().nullable(),
     slug: z.string().nullable(),
+    placement: z.string().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional()

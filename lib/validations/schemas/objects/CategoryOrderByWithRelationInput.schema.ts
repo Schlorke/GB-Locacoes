@@ -14,6 +14,8 @@ const makeSchema = () => z.object({
   bgColor: SortOrderSchema.optional(),
   fontColor: SortOrderSchema.optional(),
   slug: SortOrderSchema.optional(),
+  placement: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  customIcon: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional(),
   equipments: z.lazy(() => EquipmentOrderByRelationAggregateInputObjectSchema).optional()
