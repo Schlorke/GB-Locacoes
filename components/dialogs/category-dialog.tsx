@@ -191,7 +191,7 @@ function CategoryShowcasePreview({
   onReset,
   onEdit,
   iconPopoverContent,
-  onIconBoxRequest,
+  onIconBoxRequestAction,
 }: {
   categoryName: string
   design: CategoryDesign
@@ -201,7 +201,7 @@ function CategoryShowcasePreview({
   onReset?: () => void
   onEdit?: () => void
   iconPopoverContent?: React.ReactNode
-  onIconBoxRequest?: () => void
+  onIconBoxRequestAction?: () => void
 }) {
   const [isCardHovered, setIsCardHovered] = useState(false)
   const [isMenuHovered, setIsMenuHovered] = useState(false)
@@ -313,7 +313,7 @@ function CategoryShowcasePreview({
           onTabChangeAction={handleTabChange}
           isDialogPreview={true}
           iconPopoverContent={iconPopoverContent}
-          onIconBoxRequest={onIconBoxRequest}
+          onIconBoxRequestAction={onIconBoxRequestAction}
         />
       </div>
       {(onReset || onEdit) && (
@@ -1476,7 +1476,7 @@ function CategoryDialogModal({
                       </div>
                     </div>
 
-                    <div className="mt-6 w-full">
+                    <div className="w-full">
                       <CategoryShowcasePreview
                         categoryName={previewName}
                         design={design}
@@ -1494,7 +1494,7 @@ function CategoryDialogModal({
                         onReset={handleReset}
                         onEdit={() => setDesignDialogOpen(true)}
                         iconPopoverContent={iconPopoverContent}
-                        onIconBoxRequest={mobileIconBoxRequest}
+                        onIconBoxRequestAction={mobileIconBoxRequest}
                       />
                     </div>
 

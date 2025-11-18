@@ -46,7 +46,7 @@ export type CategoryShowcaseProps = {
   cardClassName?: string
   isDialogPreview?: boolean
   iconPopoverContent?: ReactNode
-  onIconBoxRequest?: () => void
+  onIconBoxRequestAction?: () => void
 }
 
 const baseCardClasses =
@@ -134,7 +134,7 @@ export function CategoryShowcase({
   cardClassName,
   isDialogPreview = false,
   iconPopoverContent,
-  onIconBoxRequest,
+  onIconBoxRequestAction,
 }: CategoryShowcaseProps) {
   const safeTabs = useMemo(() => tabs ?? [], [tabs])
 
@@ -476,7 +476,7 @@ export function CategoryShowcase({
                       onClick={(e) => {
                         const hasCustomIconAction =
                           isDialogPreview &&
-                          Boolean(iconPopoverContent || onIconBoxRequest)
+                          Boolean(iconPopoverContent || onIconBoxRequestAction)
                         const shouldOpenPopover =
                           hasCustomIconAction &&
                           Boolean(iconPopoverContent) &&
@@ -486,7 +486,7 @@ export function CategoryShowcase({
                         if (hasCustomIconAction) {
                           e.stopPropagation()
                           if (!shouldOpenPopover) {
-                            onIconBoxRequest?.()
+                            onIconBoxRequestAction?.()
                           }
                           return
                         }
