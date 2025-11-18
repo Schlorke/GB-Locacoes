@@ -1032,9 +1032,45 @@ function CategoryDialogModal({
   const [iconDialogOpen, setIconDialogOpen] = useState(false)
   const isMobile = useIsMobile()
 
+  // Rastreamento de estados de dialogs aninhadas para gerenciar overflow-hidden
+  const [dialogStates, setDialogStates] = useState<Record<string, boolean>>({})
+
+  // Callback para atualizar estados de dialogs aninhadas
+  const handleNestedStateChange = useCallback(
+    (key: string, isOpen: boolean) => {
+      setDialogStates((prev) => {
+        if (prev[key] === isOpen) return prev
+        return { ...prev, [key]: isOpen }
+      })
+      // Também notifica o callback externo se fornecido
+      onStateChange(key, isOpen)
+    },
+    [onStateChange]
+  )
+
+  // Gerenciamento de overflow-hidden no body/html quando qualquer dialog está aberta
+  useEffect(() => {
+    const anyDialogOpen = isOpen || Object.values(dialogStates).some(Boolean)
+    const targets = [document.documentElement, document.body]
+
+    targets.forEach((target) => {
+      if (!target) return
+      if (anyDialogOpen) {
+        target.classList.add('overflow-hidden')
+      } else {
+        target.classList.remove('overflow-hidden')
+      }
+    })
+
+    return () => {
+      targets.forEach((target) => target?.classList.remove('overflow-hidden'))
+    }
+  }, [isOpen, dialogStates])
+
   useEffect(() => {
     onStateChange('category-icon', iconDialogOpen)
-  }, [iconDialogOpen, onStateChange])
+    handleNestedStateChange('category-icon', iconDialogOpen)
+  }, [iconDialogOpen, onStateChange, handleNestedStateChange])
 
   useEffect(() => {
     if (!isMobile && iconDialogOpen) {
