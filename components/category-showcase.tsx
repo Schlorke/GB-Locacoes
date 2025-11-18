@@ -47,6 +47,8 @@ export type CategoryShowcaseProps = {
   isDialogPreview?: boolean
   iconPopoverContent?: ReactNode
   onIconBoxRequestAction?: () => void
+  iconPopoverOpen?: boolean
+  onIconPopoverOpenChangeAction?: (_open: boolean) => void
 }
 
 const baseCardClasses =
@@ -135,6 +137,8 @@ export function CategoryShowcase({
   isDialogPreview = false,
   iconPopoverContent,
   onIconBoxRequestAction,
+  iconPopoverOpen,
+  onIconPopoverOpenChangeAction,
 }: CategoryShowcaseProps) {
   const safeTabs = useMemo(() => tabs ?? [], [tabs])
 
@@ -494,7 +498,10 @@ export function CategoryShowcase({
                       }}
                     >
                       {isDialogPreview && iconPopoverContent && !isMobile ? (
-                        <Popover>
+                        <Popover
+                          open={iconPopoverOpen}
+                          onOpenChange={onIconPopoverOpenChangeAction}
+                        >
                           <PopoverTrigger asChild>
                             <div
                               className="relative z-10 flex h-14 w-14 items-center justify-center"

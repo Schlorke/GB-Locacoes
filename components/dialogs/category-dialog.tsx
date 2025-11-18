@@ -13,11 +13,12 @@ import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
 import { HoverActionMenu } from '@/components/ui/hover-action-menu'
 import { Input } from '@/components/ui/input'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+// Imports comentados - para uso futuro com DesignDialog (dialog secundária)
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
 import {
   CATEGORY_PREVIEW_TABS,
@@ -55,7 +56,6 @@ import {
   useState,
   type ChangeEvent,
   type ComponentType,
-  type ReactNode,
 } from 'react'
 
 import { type CustomIconProps } from '@/components/icons/custom'
@@ -114,10 +114,11 @@ const DIALOG_PREVIEW_CARD = [
   'rounded-lg p-5 relative w-full max-w-full xs:p-4 xs:rounded-md overflow-visible',
 ].join(' ')
 
-const DESIGN_DIALOG_META = [
-  'flex flex-col items-center justify-center gap-2 text-center text-xs uppercase tracking-wide text-slate-500',
-  'sm:flex-row sm:items-center sm:justify-between sm:text-left sm:gap-0',
-].join(' ')
+// Constante comentada - para uso futuro com DesignDialog (dialog secundária)
+// const DESIGN_DIALOG_META = [
+//   'flex flex-col items-center justify-center gap-2 text-center text-xs uppercase tracking-wide text-slate-500',
+//   'sm:flex-row sm:items-center sm:justify-between sm:text-left sm:gap-0',
+// ].join(' ')
 
 const DIALOG_PREVIEW_HEADER = [
   'flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-between',
@@ -132,8 +133,9 @@ const DIALOG_PREVIEW_BADGE = [
 
 const DIALOG_FORM_SECTION = ['space-y-4', 'overflow-visible'].join(' ')
 
-const ACTION_BUTTON_CLASSES =
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border shadow-md hover:text-orange-600 hover:scale-105 hover:shadow-lg h-10 px-4 text-sm group rounded-lg text-slate-900 bg-white min-w-[140px] lg:w-full py-2'
+// Constante comentada - para uso futuro com DesignDialog (dialog secundária)
+// const ACTION_BUTTON_CLASSES =
+//   'inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border shadow-md hover:text-orange-600 hover:scale-105 hover:shadow-lg h-10 px-4 text-sm group rounded-lg text-slate-900 bg-white min-w-[140px] lg:w-full py-2'
 
 function buildCategoryPreviewIcon(
   design: CategoryDesign
@@ -206,12 +208,36 @@ function CategoryShowcasePreview({
   const [isCardHovered, setIsCardHovered] = useState(false)
   const [isMenuHovered, setIsMenuHovered] = useState(false)
   const [resetAnimation, setResetAnimation] = useState(false)
+  const [iconPopoverOpen, setIconPopoverOpen] = useState(false)
   const cardAreaRef = useRef<HTMLDivElement>(null)
   const resetTimeoutRef = useRef<number | null>(null)
+
+  // Função helper para chamar closest de forma segura
+  const safeClosest = useCallback(
+    (element: HTMLElement | null, selector: string): Element | null => {
+      if (!element) return null
+      if (
+        !(element instanceof Element) ||
+        typeof element.closest !== 'function'
+      ) {
+        return null
+      }
+      return element.closest(selector)
+    },
+    []
+  )
 
   // Função helper para verificar se é o botão do card
   const isCardButton = useCallback((element: HTMLElement | null): boolean => {
     if (!element) return false
+
+    // Verifica se element é um Element e tem o método closest
+    if (
+      !(element instanceof Element) ||
+      typeof element.closest !== 'function'
+    ) {
+      return false
+    }
 
     const button = element.closest('button')
     if (!button) return false
@@ -255,7 +281,7 @@ function CategoryShowcasePreview({
     const handleMouseOut = (e: MouseEvent) => {
       const relatedTarget = e.relatedTarget as HTMLElement
       const isGoingToCard = isCardButton(relatedTarget)
-      const isGoingToMenu = relatedTarget?.closest(MENU_WRAPPER_SELECTOR)
+      const isGoingToMenu = safeClosest(relatedTarget, MENU_WRAPPER_SELECTOR)
 
       // Se não está indo para o card nem para o menu, esconde tudo
       if (!relatedTarget || (!isGoingToCard && !isGoingToMenu)) {
@@ -272,7 +298,7 @@ function CategoryShowcasePreview({
       cardArea.removeEventListener('mouseover', handleMouseOver, true)
       cardArea.removeEventListener('mouseout', handleMouseOut, true)
     }
-  }, [onReset, onEdit, isCardButton])
+  }, [onReset, onEdit, isCardButton, safeClosest])
 
   const isVisible = isCardHovered || isMenuHovered
 
@@ -291,6 +317,12 @@ function CategoryShowcasePreview({
       setResetAnimation(false)
     }, RESET_ANIMATION_DURATION)
   }, [onReset])
+
+  const handleEditClick = useCallback(() => {
+    // Abre a popover do ícone quando clica em "Editar"
+    setIconPopoverOpen(true)
+    onEdit?.()
+  }, [onEdit])
 
   // Cleanup do timeout
   useEffect(() => {
@@ -314,6 +346,8 @@ function CategoryShowcasePreview({
           isDialogPreview={true}
           iconPopoverContent={iconPopoverContent}
           onIconBoxRequestAction={onIconBoxRequestAction}
+          iconPopoverOpen={iconPopoverOpen}
+          onIconPopoverOpenChangeAction={setIconPopoverOpen}
         />
       </div>
       {(onReset || onEdit) && (
@@ -330,7 +364,7 @@ function CategoryShowcasePreview({
             if (!relatedTarget || !isCardButton(relatedTarget)) {
               setIsMenuHovered(false)
               // Se também não está indo para outro elemento do menu, esconde tudo
-              if (!relatedTarget?.closest(MENU_WRAPPER_SELECTOR)) {
+              if (!safeClosest(relatedTarget, MENU_WRAPPER_SELECTOR)) {
                 setIsCardHovered(false)
               }
             }
@@ -338,7 +372,7 @@ function CategoryShowcasePreview({
         >
           {onEdit && (
             <HoverActionMenu
-              onClick={onEdit}
+              onClick={handleEditClick}
               aria-label="Editar visual desta categoria"
               position="top-center"
               offset="top-0"
@@ -385,6 +419,26 @@ function CategoryShowcasePreview({
   )
 }
 
+/*
+ * ============================================================================
+ * COMPONENTE DESIGNDIALOG - DIALOG SECUNDÁRIA "PERSONALIZAR VISUAL"
+ * ============================================================================
+ *
+ * Este componente está comentado para uso futuro.
+ * É a dialog secundária que aparece quando o usuário clica em "Editar"
+ * na preview da categoria. Permite personalizar o visual completo da categoria.
+ *
+ * Para reativar:
+ * 1. Descomente este componente (linhas 388-957)
+ * 2. Descomente o estado designDialogOpen (linha 975)
+ * 3. Descomente o onEdit handler (linha 1495)
+ * 4. Descomente a instância do DesignDialog (linhas 1502-1512)
+ *
+ * Data de comentário: Janeiro 2025
+ * ============================================================================
+ */
+
+/*
 function DesignDialog({
   triggerClassName,
   triggerAriaLabel = 'Abrir dialog',
@@ -955,6 +1009,7 @@ function DesignDialog({
     </Dialog.Root>
   )
 }
+*/
 
 function CategoryDialogModal({
   isOpen,
@@ -972,7 +1027,8 @@ function CategoryDialogModal({
   onStateChange: DialogStateUpdater['onStateChange']
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [designDialogOpen, setDesignDialogOpen] = useState(false)
+  // Estado comentado - relacionado ao DesignDialog (dialog secundária "Personalizar visual")
+  // const [designDialogOpen, setDesignDialogOpen] = useState(false)
   const [iconDialogOpen, setIconDialogOpen] = useState(false)
   const isMobile = useIsMobile()
 
@@ -1447,7 +1503,9 @@ function CategoryDialogModal({
         <Dialog.Popup
           variant="default"
           data-nested-parent={
-            designDialogOpen || iconDialogOpen ? '' : undefined
+            // designDialogOpen está comentado - dialog secundária desativada
+            // designDialogOpen ||
+            iconDialogOpen ? '' : undefined
           }
         >
           <Dialog.Content>
@@ -1492,13 +1550,21 @@ function CategoryDialogModal({
                           )
                         }
                         onReset={handleReset}
-                        onEdit={() => setDesignDialogOpen(true)}
+                        onEdit={() => {
+                          // Abre a popover do ícone (mesma que é aberta ao clicar no ícone)
+                          // O handleEditClick no CategoryShowcasePreview já faz isso
+                        }}
                         iconPopoverContent={iconPopoverContent}
                         onIconBoxRequestAction={mobileIconBoxRequest}
                       />
                     </div>
 
-                    {/* DesignDialog renderizado sem trigger para ser aberto programaticamente */}
+                    {/*
+                     * DesignDialog renderizado sem trigger para ser aberto programaticamente
+                     * COMENTADO para uso futuro - dialog secundária "Personalizar visual"
+                     * Para reativar: descomente este bloco e o estado designDialogOpen acima
+                     */}
+                    {/*
                     <DesignDialog
                       triggerAriaLabel="Editar visual"
                       triggerChildren={null}
@@ -1510,6 +1576,7 @@ function CategoryDialogModal({
                       onDesignChange={setDesign}
                       categoryName={previewName}
                     />
+                    */}
                     {isMobile && (
                       <Dialog.Root
                         open={iconDialogOpen}
