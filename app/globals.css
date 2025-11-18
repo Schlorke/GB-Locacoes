@@ -1150,6 +1150,12 @@ body.min-h-screen {
   overflow: hidden !important;
 }
 
+html.overflow-hidden,
+body.overflow-hidden {
+  overflow: hidden !important;
+  overscroll-behavior: contain;
+}
+
 .emoji-font {
   font-family:
     'Twemoji Country Flags', 'Apple Color Emoji', 'Segoe UI Emoji',

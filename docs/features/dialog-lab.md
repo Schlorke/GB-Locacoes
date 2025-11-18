@@ -110,7 +110,9 @@ const [open, setOpen] = useState(false)
 - **Camadas**: `z-[var(--layer-dialog-backdrop)]` para o backdrop e
   `z-[var(--layer-dialog)]` para o popup; não use números mágicos.
 - **Backdrop**: `bg-slate-950/60 + backdrop-blur-sm` com animações
-  `data-[starting-style]`/`data-[ending-style]`.
+  `data-[starting-style]`/`data-[ending-style]` e `position: fixed` em todos os
+  navegadores (incluindo iOS). Não aplique condicionais que troquem `fixed` por
+  `absolute`, pois isso permite que o fundo seja exibido ao rolar a página.
 - **Popup**: `rounded-2xl`, sombra elevada
   (`shadow-[0_25px_60px_-15px_rgba(15,23,42,0.35)]`) e `ring-1` para reforçar
   legibilidade em temas claros.

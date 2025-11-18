@@ -423,6 +423,7 @@ function DesignDialog({
   const [iconSearchTerm, setIconSearchTerm] = useState('')
   const [emojiSearchTerm, setEmojiSearchTerm] = useState('')
   const [activeIconTab, setActiveIconTab] = useState<IconPickerTab>('icons')
+  const [iconPopoverOpen, setIconPopoverOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
@@ -782,7 +783,10 @@ function DesignDialog({
                     </div>
                     <div className="mt-5 flex w-full flex-col items-center gap-5">
                       <div className="group relative flex min-h-[120px] w-auto flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-6 shadow-lg transition-all duration-300 hover:shadow-2xl">
-                        <Popover>
+                        <Popover
+                          open={iconPopoverOpen}
+                          onOpenChange={setIconPopoverOpen}
+                        >
                           <PopoverTrigger asChild>
                             <div
                               className="relative z-10 flex h-14 w-14 items-center justify-center"
@@ -805,17 +809,6 @@ function DesignDialog({
                             onCloseAutoFocus={(e) => e.preventDefault()}
                             className="w-auto max-w-[calc(100vw-2rem)] max-h-[80vh] overflow-y-auto border-0 bg-transparent p-0 shadow-none"
                             onClick={(e) => e.stopPropagation()}
-                            onPointerDownOutside={(e) => {
-                              // Prevent closing when clicking inside the popover
-                              const target = e.target as HTMLElement
-                              if (
-                                target.closest(
-                                  '[data-radix-popper-content-wrapper]'
-                                )
-                              ) {
-                                e.preventDefault()
-                              }
-                            }}
                           >
                             <div
                               style={{
@@ -864,6 +857,7 @@ function DesignDialog({
                                 onCancelCustomIcon={handleCancelCustomIcon}
                                 onSaveCustomIcon={handleSaveCustomIcon}
                                 isSaveDisabled={!canSaveCustomIcon}
+                                onClose={() => setIconPopoverOpen(false)}
                               />
                             </div>
                           </PopoverContent>
@@ -931,6 +925,7 @@ function DesignDialog({
                       onCancelCustomIcon={handleCancelCustomIcon}
                       onSaveCustomIcon={handleSaveCustomIcon}
                       isSaveDisabled={!canSaveCustomIcon}
+                      onClose={() => setOpen(false)}
                     />
                   </section>
                 </Dialog.BodyContent>
@@ -1521,13 +1516,16 @@ function CategoryDialogModal({
                         onOpenChange={setIconDialogOpen}
                       >
                         <Dialog.Portal>
-                          <Dialog.Backdrop />
+                          <Dialog.Backdrop
+                            onClick={() => setIconDialogOpen(false)}
+                          />
                           <Dialog.Popup
                             variant="default"
                             className="p-0 h-auto max-h-[calc(100vh-0.75rem)] w-auto max-w-[min(470px,_calc(100vw-0.5rem))] bg-transparent shadow-none ring-0"
                           >
                             <IconCustomizationBlock
                               {...iconCustomizationBlockProps}
+                              onClose={() => setIconDialogOpen(false)}
                             />
                           </Dialog.Popup>
                         </Dialog.Portal>

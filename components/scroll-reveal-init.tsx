@@ -93,8 +93,6 @@ export default function ScrollRevealInit() {
       const isAboutPage = pathname === '/sobre'
       const shouldExecuteAnimations = isAboutPage || !isInternalNavigation()
       const isOnMobile = isMobile()
-      let aboutScrollInterval: ReturnType<typeof setInterval> | null = null
-      let aboutScrollListener: (() => void) | null = null
 
       /**
        * 🎯 SELETORES DE ELEMENTOS ANIMADOS
@@ -574,7 +572,6 @@ export default function ScrollRevealInit() {
             clearInterval(periodicCheck)
           }
         }
-
       }
     }
 

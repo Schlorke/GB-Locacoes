@@ -7,7 +7,7 @@ import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const BACKDROP_BASE_CLASSES =
-  'fixed inset-0 z-[var(--layer-dialog-backdrop)] min-h-dvh bg-black/60 transition-all duration-150 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 supports-[-webkit-touch-callout:none]:absolute dark:bg-black/70'
+  'fixed inset-0 z-[var(--layer-dialog-backdrop)] min-h-dvh bg-black/60 transition-all duration-150 data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 dark:bg-black/70'
 
 const POPUP_CLASS_VARIANTS = {
   default:

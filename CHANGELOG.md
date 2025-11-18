@@ -463,11 +463,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
-- **Popover do CategoryShowcase**: eliminamos o “pula-pula” do painel de
+- **Popover do CategoryShowcase**: eliminamos o "pula-pula" do painel de
   personalização encapsulando o trigger em um wrapper fixo (`h-14 w-14`) que não
   sofre `scale`, mantendo o anchor estável enquanto o mouse se move entre o
   botão e a popover em `components/category-showcase.tsx` e
   `components/dialogs/category-dialog.tsx`.
+- **IconCustomizationBlock – click fora fecha**: o popover de ícones agora
+  respeita o comportamento padrão de dismiss ao interagir fora do cartão,
+  removendo o `onPointerDownOutside` que bloqueava o fechamento tanto no
+  `CategoryDialog` quanto no `CategoryShowcase`.
 - **Tabs do IconCustomizationBlock**: reabilitamos os efeitos de hover/scale das
   abas ao remover o seletor global `[&_*]:!transform-none` dentro do portal do
   popover, permitindo que o sublinhado animado funcione sem manter todas as tabs
@@ -508,6 +512,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   aba do preview com o estado de posicionamento da categoria. As atualizações de
   placement agora só disparam quando o valor realmente muda, evitando o erro
   "Maximum update depth exceeded".
+- **Backdrop do Dialog Lab**: removido o fallback
+  `supports-[-webkit-touch-callout:none]:absolute` em `components/ui/dialog.tsx`
+  e adicionadas regras específicas em `app/globals.css` para
+  `html.overflow-hidden`/`body.overflow-hidden`. O overlay permanece `fixed` no
+  iOS e o scroll global fica travado enquanto qualquer dialog estiver aberta.
+  Documentação do incidente adicionada em `docs/issues/known-issues.md`,
+  `docs/features/dialog-lab.md` e instruções atualizadas em `AGENTS.md`.
 - **Dialog Lab preview actions**: No mobile, os botões "Editar" e "Resetar"
   permanecem lado a lado no preview de categorias, garantindo consistência com o
   layout documentado em `app/playground/page.tsx`, enquanto em desktop retornam

@@ -541,17 +541,6 @@ export function CategoryShowcase({
                             onCloseAutoFocus={(e) => e.preventDefault()}
                             className="w-auto max-w-[calc(100vw-2rem)] max-h-[80vh] overflow-y-auto border-0 bg-transparent p-0 shadow-none"
                             onClick={(e) => e.stopPropagation()}
-                            onPointerDownOutside={(e) => {
-                              // Prevent closing when clicking inside the popover
-                              const target = e.target as HTMLElement
-                              if (
-                                target.closest(
-                                  '[data-radix-popper-content-wrapper]'
-                                )
-                              ) {
-                                e.preventDefault()
-                              }
-                            }}
                           >
                             {iconPopoverContent}
                           </PopoverContent>

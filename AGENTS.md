@@ -35,7 +35,7 @@
   - `BACKDROP_CLASSES`: "fixed inset-0 z-[var(--layer-dialog-backdrop)]
     min-h-dvh bg-black/60 transition-all duração-150
     data-[starting-style]:opacity-0 data-[ending-style]:opacity-0
-    supports-[-webkit-touch-callout:none]:absolute dark:bg-black/70"
+    dark:bg-black/70"
   - `POPUP_CLASSES`: "fixed top-[calc(50%+1.25rem*var(--nested-dialogs))]
     left-1/2 z-[var(--layer-dialog)] w-96 max-w-[calc(100vw-3rem)]
     -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))]
@@ -63,6 +63,10 @@
 - Esses utilitários dependem dos atributos `data-nested` e `--nested-dialogs`
   gerados pelo Base UI para animar a sobreposição corretamente; não modifique as
   classes sem validar contra o playground.
+- **Importante**: o backdrop precisa permanecer `position: fixed` em todos os
+  navegadores (inclusive iOS). Não utilize mais
+  `supports-[-webkit-touch-callout]` para trocar o posicionamento — isso libera
+  a rolagem do fundo.
 - Mantenha o bloqueio de scroll global (`overflow-hidden` em `<html>` e
   `<body>`) enquanto qualquer dialog estiver aberta, garantindo que camadas
   adicionais não quebrem a experiência.

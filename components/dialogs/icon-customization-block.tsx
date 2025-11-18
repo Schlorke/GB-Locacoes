@@ -37,6 +37,7 @@ import {
   Tag as TagIcon,
   Trash2,
   Users,
+  X,
 } from 'lucide-react'
 import type { ChangeEvent } from 'react'
 import { useEffect, useRef, useState } from 'react'
@@ -89,6 +90,7 @@ type IconCustomizationHeaderProps = {
   onResetAll: () => void
   searchConfig?: HeaderSearchConfig
   design: CategoryDesign
+  onClose?: () => void
 }
 
 const IconCustomizationHeader = ({
@@ -100,6 +102,7 @@ const IconCustomizationHeader = ({
   onResetAll,
   searchConfig,
   design,
+  onClose,
 }: IconCustomizationHeaderProps) => {
   const canRemoveCustomIcon =
     design.customIcon.source === 'upload' ||
@@ -130,7 +133,21 @@ const IconCustomizationHeader = ({
 
   return (
     <div className="relative flex flex-col gap-3 rounded-t-2xl bg-white p-4 pb-2">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      {onClose && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            onClose()
+          }}
+          className="absolute right-3 top-3 z-10 inline-flex h-5 w-5 items-center justify-center rounded-lg disabled:pointer-events-none disabled:opacity-50 transition-all duration-300 text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 [&>svg]:h-3.5 [&>svg]:w-3.5"
+          aria-label="Fechar dialog"
+        >
+          <X aria-hidden="true" />
+        </button>
+      )}
+      <div className="flex flex-col gap-3  p-2  sm:flex-row sm:items-center sm:justify-between">
         <nav
           className="flex w-full border-b-2 border-slate-200/70 sm:flex-1"
           role="tablist"
@@ -396,6 +413,7 @@ export interface IconCustomizationBlockProps {
   onCancelCustomIcon: () => void
   onSaveCustomIcon: () => void
   isSaveDisabled?: boolean
+  onClose?: () => void
 }
 
 export function IconCustomizationBlock({
@@ -437,6 +455,7 @@ export function IconCustomizationBlock({
   onCancelCustomIcon,
   onSaveCustomIcon,
   isSaveDisabled = false,
+  onClose,
 }: IconCustomizationBlockProps) {
   const headerSearchConfig: HeaderSearchConfig | undefined =
     activeTab === 'emoji'
@@ -540,6 +559,7 @@ export function IconCustomizationBlock({
         onResetAll={handleResetAll}
         searchConfig={headerSearchConfig}
         design={design}
+        onClose={onClose}
       />
 
       {activeTab === 'emoji' && (
@@ -583,7 +603,7 @@ export function IconCustomizationBlock({
                         {group.label}
                       </span>
                     </div>
-                    <div className="grid grid-cols-6 md:grid-cols-8">
+                    <div className="grid grid-cols-8">
                       {group.emojis.map((emoji) => {
                         const isActive = selectedEmoji === emoji
                         return (
@@ -660,7 +680,7 @@ export function IconCustomizationBlock({
                         {group.label}
                       </span>
                     </div>
-                    <div className="grid gap-2 grid-cols-6 md:grid-cols-8">
+                    <div className="grid gap-2 grid-cols-8">
                       {group.icons.map((iconName) => {
                         const isActive =
                           design.customIcon.source === 'none' &&

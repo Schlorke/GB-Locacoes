@@ -1021,3 +1021,87 @@ montagem, impedindo a validação dos nested dialogs documentados em
   render sem uma guarda clara.
 
 ---
+
+## 9. Backdrop incompleto e scroll liberado no Dialog Lab
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-17 **Severidade**: Média (Impacta playground)
+**Status**: ✅ Resolvido
+
+#### Descrição
+
+Ao abrir a dialog "Nova Categoria" em `/playground`, o backdrop preto exibido
+pela Base UI não cobria toda a viewport e a página continuava rolando ao fundo,
+quebrando o padrão descrito em `docs/features/dialog-lab.md`.
+
+#### Sintomas
+
+- Header e footer permaneciam visíveis fora da área escurecida.
+- O usuário conseguia usar a roda do mouse ou o touch para mover a página atrás
+  da dialog aberta.
+- No DevTools, `html` e `body` apareciam com `overflow-hidden`, mas nada mudava
+  no layout.
+
+#### Causa Raiz
+
+- As classes padrão do backdrop incluíam
+  `supports-[-webkit-touch-callout:none]:absolute`. Em navegadores iOS (que
+  suportam a propriedade), isso substituía `position: fixed` por `absolute`,
+  fazendo o overlay rolar junto com a página e expondo o fundo.
+- `app/globals.css` define `html { overflow-y: auto !important; }` e
+  `body.min-h-screen { overflow: visible !important; }`. A classe
+  `.overflow-hidden` adicionada dinamicamente não tinha especificidade
+  suficiente para vencer essas regras, mantendo o scroll global liberado.
+
+### ✅ Solução Implementada
+
+#### Arquivos Modificados
+
+1. `components/ui/dialog.tsx`
+2. `app/globals.css`
+
+#### Implementação
+
+- Removido o modificador `supports-[-webkit-touch-callout:none]:absolute` de
+  `BACKDROP_BASE_CLASSES`, garantindo que o backdrop permaneça `fixed` mesmo no
+  Safari/iOS.
+- Adicionadas regras específicas `html.overflow-hidden` e `body.overflow-hidden`
+  logo após o helper global, forçando `overflow: hidden !important` (além de
+  `overscroll-behavior: contain`) sempre que a classe for aplicada.
+- Mantidos os utilitários existentes de `min-h-screen`, apenas garantindo que a
+  trava de scroll tenha prioridade maior do que os resets globais.
+
+### 🎯 Resultado
+
+- O backdrop cobre 100% da viewport independentemente do tamanho da página.
+- Não é mais possível rolar o conteúdo de fundo enquanto qualquer dialog do
+  playground estiver aberta; somente o conteúdo interno do modal pode scrollar.
+- Comportamento consistente para dialogs aninhadas (`DesignDialog`,
+  `IconCustomizationBlock`) e para o fluxo "Editar Categoria".
+
+#### Como Validar
+
+1. `pnpm dev`
+2. Acessar `http://localhost:3000/playground`.
+3. Abrir "Nova Categoria" ou "Editar Categoria".
+4. Tentar rolar a página fora do modal — nada acontece; apenas o conteúdo do
+   dialog responde ao scroll.
+
+### 📝 Lições Aprendidas
+
+- Regras globais com `!important` devem considerar a especificidade das classes
+  utilitárias aplicadas dinamicamente.
+- Bloquear o scroll global exige tratar explicitamente `html` e `body` quando
+  esses elementos recebem helpers como `min-h-screen`.
+
+### ⚠️ Armadilhas a Evitar
+
+- Definir `overflow: visible !important` em helpers globais sem prever exceções
+  para dialogs/modal.
+- Confiar apenas na ordem de declaração dos seletores quando envolvem níveis de
+  especificidade diferentes.
+- Usar modificadores condicionais que alterem `position: fixed` do backdrop sem
+  validar o comportamento em navegadores mobile.
+
+---
