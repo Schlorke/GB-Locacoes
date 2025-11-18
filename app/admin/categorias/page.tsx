@@ -225,7 +225,14 @@ export default function AdminCategoriesPage() {
       return matchesSearch
     })
 
-    setFilteredCategories(filtered)
+    // Ordenar alfabeticamente por nome
+    const sorted = filtered.sort((a, b) => {
+      const nameA = (a.name || '').toLowerCase()
+      const nameB = (b.name || '').toLowerCase()
+      return nameA.localeCompare(nameB, 'pt-BR')
+    })
+
+    setFilteredCategories(sorted)
   }, [categories, searchTerm])
 
   useEffect(() => {
@@ -504,7 +511,7 @@ export default function AdminCategoriesPage() {
                         duration: 0.3,
                         ease: 'easeOut',
                       }}
-                      className="group"
+                      className="group h-full"
                       onClick={() => {
                         if (isMobile) {
                           setActiveCardId(
@@ -513,7 +520,7 @@ export default function AdminCategoriesPage() {
                         }
                       }}
                     >
-                      <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col">
+                      <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] flex flex-col h-full">
                         {/* Clean depth layers for category card */}
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
                         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
