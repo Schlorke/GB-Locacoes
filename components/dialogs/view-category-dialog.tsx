@@ -60,12 +60,12 @@ function renderCategoryCardPreview(category: Category): React.ReactElement {
   return (
     <button
       type="button"
-      className="group relative flex h-full w-full min-h-[120px] flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:shadow-2xl"
+      className="group relative flex h-full w-full min-h-[120px] max-h-[120px] flex-col items-center justify-center gap-2.5 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 p-4 shadow-lg transition-all duration-300 hover:shadow-2xl"
     >
-      <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg transition-transform duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]">
+      <div className="relative z-10 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 p-2.5 shadow-lg transition-transform duration-300 transform-gpu group-hover:scale-[1.04] group-hover:shadow-[0_0_20px_rgba(249,115,22,0.4)]">
         {renderCategoryIconWithDesign(design, {
           size: 28,
-          className: 'h-7 w-7 text-white',
+          className: 'h-7 w-7 flex-shrink-0 text-white',
           color: 'white',
         })}
       </div>
@@ -125,7 +125,7 @@ export function ViewCategoryDialog({
                         </div>
                         {/* Preview do Card Completo (botão com gradiente) */}
                         <div className="flex justify-center w-full">
-                          <div className="w-full max-w-[136px] h-[120px]">
+                          <div className="w-full max-w-[136px] h-[120px] flex-shrink-0">
                             {renderCategoryCardPreview(category)}
                           </div>
                         </div>
