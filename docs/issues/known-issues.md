@@ -1104,4 +1104,168 @@ quebrando o padrão descrito em `docs/features/dialog-lab.md`.
 - Usar modificadores condicionais que alterem `position: fixed` do backdrop sem
   validar o comportamento em navegadores mobile.
 
+## 10. Rotação do equipamento 3D travando durante a troca do carrossel principal
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-19 **Severidade**: Média (experiência visual)
+
+#### Descrição
+
+O `Equipment3DCarousel` exibido no hero estava travando a rotação automática
+sempre que o carrossel principal de imagens trocava o slide. Durante a transição
+do background, o componente 3D congelava por 1–2 segundos e só retomava o
+movimento após a nova imagem estabilizar, transmitindo a sensação de gargalo.
+
+#### Sintomas
+
+- A rotação do objeto 3D pausa exatamente no momento em que o background troca.
+- Ao trocar manualmente de modelo 3D, a animação volta, mas volta a travar no
+  próximo ciclo do carrossel do hero.
+- O comportamento independe do navegador e ocorre mesmo com FPS alto.
+
+#### Causa Raiz
+
+- `components/hero.tsx` armazenava `currentImage` no mesmo componente que
+  renderiza o `Equipment3DCarousel`. A cada 5s todo o hero era re-renderizado,
+  forçando o `Canvas` do `react-three/fiber` a resincronizar o loop enquanto o
+  Framer Motion animava a troca de imagem.
+- O array de modelos era recriado inline a cada render e o carrossel não era
+  memoizado, o que disparava novos cálculos de bounds/lights em cada ciclo.
+
+### ✅ Solução Implementada
+
+1. Extraímos o carrossel de imagens/bolinhas para um componente dedicado
+   (`HeroBackgroundCarousel`), isolando o estado de `currentImage` para que o
+   hero e o `ModelViewer` não sejam re-renderizados a cada 5 segundos.
+2. Promovemos os modelos padrões do hero para `HERO_EQUIPMENT_MODELS`, evitando
+   criar novos objetos em toda renderização.
+3. O `Equipment3DCarousel` passou a ser exportado memoizado (`React.memo`),
+   garantindo que mudanças no hero não reflitam em re-renderizações do canvas.
+
+### 📈 Resultado
+
+- As transições do carrossel principal não afetam mais o loop de rotação.
+- Os modelos 3D continuam suaves enquanto o background troca ou enquanto as dots
+  são clicadas.
+- Redução perceptível de jank na hero section.
+
+### 🔍 Como Validar
+
+1. `pnpm dev`
+2. Acesse `http://localhost:3000/`.
+3. Observe a rotação automática do equipamento por dois ciclos completos do
+   carrossel principal; não deve haver travamentos.
+4. Clique nas dots do carrossel e verifique que o `ModelViewer` mantém a rotação
+   durante o fade.
+
+### ⚠️ Armadilhas a Evitar
+
+- Reintroduzir estado global do carrossel dentro do hero principal.
+- Criar arrays inline ao passar `models` para o `Equipment3DCarousel`.
+- Desabilitar o memo do carrossel, o que voltaria a sincronizar renders com o
+  background.
+
+## 11. Altura do componente 3D destoando no mobile
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-19 **Severidade**: Baixa (UX visual)
+
+#### Descrição
+
+Após substituir a imagem estática (`Image` 500x500 apontando para
+`/equipment-static.jpg`) por um carrossel 3D, o bloco no hero ficou
+excessivamente alto no mobile, lembrando um retângulo vertical desconfortável
+comparado ao quadrado original.
+
+#### Sintomas
+
+- No desktop o layout permanecia correto, mas em telas < 640px o bloco passava
+  de 430px de altura.
+- A comparação com o ambiente de produção mostrava a imagem antiga ocupando
+  ~311px de altura dentro do mockup.
+
+#### Causa Raiz
+
+- O `Equipment3DCarousel` recebe um `height={500}` fixo e não respeitava o
+  contexto responsivo, mantendo 500px em qualquer breakpoint.
+
+- ### ✅ Solução Implementada
+
+- O contêiner do hero passou a usar classes responsivas
+  `h-[320px] sm:h-[360px] md:h-[544px]` (com `lg`/`xl` herdando 544px),
+  preservando o tamanho desktop e aproximando o mobile do quadrado anterior.
+- O carrossel passa agora `height="100%"`, preenchendo apenas a altura do
+  wrapper, permitindo futuros ajustes via CSS utilitário.
+
+### 📈 Resultado
+
+- Em telas pequenas o bloco ocupa ~320px (vizinho aos 311px da imagem antiga).
+- A partir de 768px o bloco volta a 544px, espelhando o asset estático antigo.
+
+### 🔍 Como Validar
+
+1. `pnpm dev`
+2. Ajuste o viewport do navegador para 360px ou use o emulador mobile.
+3. Confirme que o bloco 3D continua centralizado mas agora quadrado e alinhado à
+   altura original.
+
+### ⚠️ Armadilhas a Evitar
+
+- Reintroduzir alturas inline fixas em pixels sem breakpoints.
+- Remover as classes responsivas do wrapper ao ajustar animações futuras.
+
+## 12. Indicadores do carrossel do hero escondidos atrás da onda
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-19 **Severidade**: Baixa (navegação visual)
+
+#### Descrição
+
+Os dots do carrossel principal (`div.flex.justify-center.space-x-3`) foram
+movidos para dentro do componente `HeroBackgroundCarousel`, deixando de fazer
+parte da coluna do hero. Como a `div` do background não compartilha o mesmo
+contexto que o card 3D, os indicadores passaram a ficar depois das ondas, dando
+impressão de que estavam "perdidos" no final da página.
+
+#### Sintomas
+
+- Em desktop, os dots surgiam dentro da área branca das ondas.
+- Em mobile, os dots ficavam praticamente invisíveis, prejudicando a navegação
+  manual do carrossel.
+
+#### Causa Raiz
+
+- Os dots estavam ancorados em um container externo ao hero principal, herdando
+  o posicionamento das ondas em vez do wrapper do carrossel 3D.
+
+### ✅ Solução Implementada
+
+- Extraímos os dots do `HeroBackgroundCarousel` e os inserimos novamente dentro
+  da `div` principal do hero, mantendo `bottom-0 left-1/2 -translate-x-1/2`
+  exatamente como na versão em produção (`components/hero.tsx`).
+- O estado `currentImage` voltou a ser controlado pelo componente `Hero`,
+  garantindo que background e indicadores compartilhem a mesma fonte da verdade.
+
+### 📈 Resultado
+
+- Os dots agora permanecem alinhados ao card 3D, sem fugir para a área das
+  ondas.
+- O comportamento é idêntico ao ambiente em produção, tanto em mobile quanto em
+  desktop.
+
+### 🔍 Como Validar
+
+1. `pnpm dev`
+2. Visite `/` e role até o hero.
+3. Verifique que os dots estão visíveis logo abaixo do 3D carousel tanto em
+   mobile quanto desktop (não ficam escondidos pela onda).
+
+### ⚠️ Armadilhas a Evitar
+
+- Recolocar os indicadores dentro de `HeroBackgroundCarousel` ou criar novos
+  estados locais que desincronizem a navegação.
+
 ---

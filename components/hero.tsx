@@ -1,5 +1,8 @@
 'use client'
 
+import Equipment3DCarousel, {
+  type Equipment3DModel,
+} from '@/components/equipment-3d-carousel'
 import { Autocomplete } from '@/components/ui/autocomplete'
 import {
   usePublicSettings,
@@ -11,7 +14,28 @@ import { ArrowRight, MapPin, Phone, Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+const HERO_EQUIPMENT_MODELS: Equipment3DModel[] = [
+  {
+    id: 'compressor',
+    name: 'Compressor de Ar',
+    modelUrl: '/models/Compressor.glb',
+    description: 'Compressores de alta pressão para obras',
+  },
+  {
+    id: 'betoneira',
+    name: 'Betoneira',
+    modelUrl: '/models/Betoneira.glb',
+    description: 'Betoneiras para preparo de concreto',
+  },
+  {
+    id: 'andaime',
+    name: 'Andaime',
+    modelUrl: '/models/Andaime.glb',
+    description: 'Andaimes para trabalhos em altura',
+  },
+]
 
 type HeroProps = {
   initialSettings?: Partial<PublicSettings> | null
@@ -22,8 +46,8 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
   const { settings, isLoading } = usePublicSettings({
     initialData: initialSettings ?? undefined,
   })
-  const [currentImage, setCurrentImage] = useState(0)
   const [isScrollRevealReady, setIsScrollRevealReady] = useState(false)
+  const [currentImage, setCurrentImage] = useState(0)
   const containerClasses = 'mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8'
 
   // Aguardar scroll-reveal-init estar pronto antes de iniciar animações do flash
@@ -40,11 +64,19 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
   }, [])
 
   // Extrair imagens do carousel
-  const carouselImages =
-    (settings.heroCarousel as Array<{ imageUrl: string }> | undefined)?.map(
-      (item) => item.imageUrl
-    ) || []
+  const carouselImages = useMemo(() => {
+    const heroCarousel = settings?.heroCarousel
+
+    if (!Array.isArray(heroCarousel)) {
+      return []
+    }
+
+    return heroCarousel
+      .map((item) => item?.imageUrl)
+      .filter((image): image is string => Boolean(image))
+  }, [settings?.heroCarousel])
   const hasImages = carouselImages.length > 0
+  const showHeroDots = hasImages && carouselImages.length > 1
   const waveAnimation =
     (settings.waveAnimation as 'none' | 'static' | 'animated' | undefined) ||
     'animated'
@@ -56,17 +88,6 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
     Array.isArray(initialHeroCarousel) && initialHeroCarousel.length > 0
   const shouldShowWhite = hasImages
   const loadingShouldShowWhite = hasImages || hasInitialImages
-
-  // Auto-play carousel (HOOK SEMPRE chamado - Rules of Hooks)
-  useEffect(() => {
-    if (!hasImages || carouselImages.length <= 1) return
-
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % carouselImages.length)
-    }, 5000) // 5 segundos por imagem
-
-    return () => clearInterval(interval)
-  }, [hasImages, carouselImages.length])
 
   const handleEquipmentSelect = (equipment: { id: string; name: string }) => {
     // Sempre que onSelect for chamado (seja por seleção ou clique na lupa com item selecionado)
@@ -91,6 +112,27 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
     waveAnimation !== 'none'
       ? 'bottom-12 md:bottom-16 lg:bottom-20'
       : 'bottom-0'
+
+  useEffect(() => {
+    if (!showHeroDots) return
+
+    const interval = window.setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % carouselImages.length)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [showHeroDots, carouselImages.length])
+
+  useEffect(() => {
+    if (!hasImages && currentImage !== 0) {
+      setCurrentImage(0)
+      return
+    }
+
+    if (hasImages && currentImage >= carouselImages.length) {
+      setCurrentImage(0)
+    }
+  }, [hasImages, carouselImages.length, currentImage])
 
   // Durante loading, usa background previsto a partir de dados iniciais
   if (isLoading) {
@@ -125,55 +167,13 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
       role="region"
       aria-roledescription={hasImages ? 'carousel' : undefined}
     >
-      {!shouldShowWhite && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
-          className={cn(
-            'absolute inset-x-0 top-0 pointer-events-none z-0 bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800',
-            overlayOffsetClasses
-          )}
-        />
-      )}
-
-      {hasImages && (
-        <div
-          className={cn(
-            'absolute inset-x-0 top-0 z-0 pointer-events-none',
-            overlayOffsetClasses
-          )}
-        >
-          <div className="relative h-full overflow-hidden">
-            <AnimatePresence initial={false}>
-              <motion.div
-                key={currentImage}
-                initial={{ opacity: 0 }}
-                animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
-                className="absolute inset-0"
-              >
-                <Image
-                  src={carouselImages[currentImage] || '/placeholder.svg'}
-                  alt={`Slide ${currentImage + 1}`}
-                  fill
-                  className="object-cover"
-                  priority={currentImage < 2}
-                  sizes="100vw"
-                />
-              </motion.div>
-            </AnimatePresence>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
-              transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
-              className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-900/30 to-black/20"
-            />
-          </div>
-        </div>
-      )}
+      <HeroBackgroundCarousel
+        images={carouselImages}
+        overlayOffsetClasses={overlayOffsetClasses}
+        shouldShowWhite={shouldShowWhite}
+        isScrollRevealReady={isScrollRevealReady}
+        currentImage={currentImage}
+      />
 
       <div className={cn(containerClasses, 'relative z-10 w-full py-14')}>
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
@@ -249,36 +249,38 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
             </div>
           </div>
           <div className="hero-image relative opacity-0 px-4">
-            <div className="relative group bg-transparent">
-              <Image
-                src="/placeholder.svg?height=500&width=600"
-                alt="Equipamentos de construção civil para locação - andaimes suspensos e cadeiras elétricas"
-                width={600}
-                height={500}
-                priority
-                className="rounded-2xl shadow-2xl w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
-              />
-              <div className="hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div className="text-2xl font-bold animate-count-up">+200</div>
-                <div className="text-sm font-medium">
-                  Equipamentos Disponíveis
+            <div className="relative group bg-transparent w-full">
+              <div className="relative w-full h-[320px] sm:h-[360px] md:h-[544px] lg:h-[544px]">
+                <Equipment3DCarousel
+                  models={HERO_EQUIPMENT_MODELS}
+                  autoRotate={true}
+                  autoRotateInterval={6000}
+                  className="transform group-hover:scale-105 transition-transform duration-500"
+                  height="100%"
+                />
+                <div className="hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20">
+                  <div className="text-2xl font-bold animate-count-up">
+                    +200
+                  </div>
+                  <div className="text-sm font-medium">
+                    Equipamentos Disponíveis
+                  </div>
                 </div>
+                <div className="hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20">
+                  <div className="text-2xl font-bold">10+</div>
+                  <div className="text-sm font-medium">Anos de Experiência</div>
+                </div>
+                <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-600"></div>
               </div>
-              <div className="hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
-                <div className="text-2xl font-bold">10+</div>
-                <div className="text-sm font-medium">Anos de Experiência</div>
-              </div>
-              <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform group-hover:scale-105 transition-transform duration-600"></div>
             </div>
           </div>
         </div>
-
-        {hasImages && carouselImages.length > 1 && (
+        {showHeroDots && (
           <div className="absolute bottom-0 -translate-x-1/2 left-1/2 z-10">
             <div className="flex justify-center space-x-3">
               {carouselImages.map((_, index) => (
                 <motion.button
-                  key={index}
+                  key={`hero-carousel-dot-${index}`}
                   className={cn(
                     'h-3 w-3 rounded-full transition-all duration-500',
                     currentImage === index
@@ -382,5 +384,77 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
         </div>
       )}
     </section>
+  )
+}
+
+type HeroBackgroundCarouselProps = {
+  images: string[]
+  overlayOffsetClasses: string
+  shouldShowWhite: boolean
+  isScrollRevealReady: boolean
+  currentImage: number
+}
+
+function HeroBackgroundCarousel({
+  images,
+  overlayOffsetClasses,
+  shouldShowWhite,
+  isScrollRevealReady,
+  currentImage,
+}: HeroBackgroundCarouselProps) {
+  const hasImages = images.length > 0
+
+  return (
+    <>
+      {!shouldShowWhite && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
+          className={cn(
+            'absolute inset-x-0 top-0 pointer-events-none z-0 bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800',
+            overlayOffsetClasses
+          )}
+        />
+      )}
+
+      {hasImages && (
+        <div
+          className={cn(
+            'absolute inset-x-0 top-0 z-0 pointer-events-none',
+            overlayOffsetClasses
+          )}
+        >
+          <div className="relative h-full overflow-hidden">
+            <AnimatePresence initial={false}>
+              <motion.div
+                key={currentImage}
+                initial={{ opacity: 0 }}
+                animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={images[currentImage] || '/placeholder.svg'}
+                  alt={`Slide ${currentImage + 1}`}
+                  fill
+                  className="object-cover"
+                  priority={currentImage < 2}
+                  sizes="100vw"
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={isScrollRevealReady ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 1.2, delay: 0.2, ease: 'easeInOut' }}
+              className="absolute inset-0 bg-gradient-to-br from-black/40 via-gray-900/30 to-black/20"
+            />
+          </div>
+        </div>
+      )}
+    </>
   )
 }

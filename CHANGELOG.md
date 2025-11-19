@@ -463,6 +463,21 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Rotação 3D no Hero**: o carrossel de fundo foi extraído para um componente
+  dedicado (`HeroBackgroundCarousel`) e `Equipment3DCarousel` passou a ser
+  memoizado, garantindo que o `ModelViewer` siga rotacionando mesmo quando o
+  background troca de imagem. Os modelos padrão do hero agora vivem em
+  `HERO_EQUIPMENT_MODELS`, evitando recriação constante e reduzindo gargalos de
+  renderização (`components/hero.tsx`, `components/equipment-3d-carousel.tsx`).
+- **Altura do bloco 3D no mobile**: alinhamos o wrapper do hero para respeitar
+  `h-[320px] sm:h-[360px] md:h-[544px]` (mantendo `lg`/`xl` em 544px) e passamos
+  `height="100%"` para o `Equipment3DCarousel`, espelhando o quadrado 544x544 da
+  imagem antiga sem alterar o desktop (`components/hero.tsx`).
+- **Dots do carrossel principal visíveis**: os indicadores foram extraídos de
+  `HeroBackgroundCarousel` e reinseridos na `div` principal do hero, voltando a
+  herdar o mesmo contexto do card 3D e eliminando o deslocamento para baixo
+  (`components/hero.tsx`).
+
 - **Popover do CategoryShowcase**: eliminamos o "pula-pula" do painel de
   personalização encapsulando o trigger em um wrapper fixo (`h-14 w-14`) que não
   sofre `scale`, mantendo o anchor estável enquanto o mouse se move entre o
