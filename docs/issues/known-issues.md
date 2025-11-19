@@ -1268,4 +1268,56 @@ impressão de que estavam "perdidos" no final da página.
 - Recolocar os indicadores dentro de `HeroBackgroundCarousel` ou criar novos
   estados locais que desincronizem a navegação.
 
+## 13. Modelos 3D não rotacionam em dispositivos touch
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-11-19 **Severidade**: Baixa (UX visual)
+
+#### Descrição
+
+No iPhone (Safari) e em outros dispositivos com tela touch, os modelos GLB não
+executavam a rotação automática ao carregar o hero. A animação só acontecia em
+desktops.
+
+#### Sintomas
+
+- Em celulares, o objeto 3D permanecia estático mesmo após aguardar alguns
+  segundos.
+- Ao abrir a mesma página no desktop, a rotação automática funcionava como
+  esperado.
+
+#### Causa Raiz
+
+- `components/ui/model-viewer.tsx` desabilitava `OrbitControls.autoRotate`
+  quando `ontouchstart` estava disponível (`isTouch ? false : autoRotate`) para
+  evitar conflitos em devices móveis.
+- Com isso, toda a camada de auto rotação era desligada em iOS/Android.
+
+### ✅ Solução Implementada
+
+- Removemos o guard `isTouch ? false : autoRotate`, permitindo que a rotação
+  automática ocorra independentemente do tipo de dispositivo.
+
+### 📈 Resultado
+
+- Os modelos retomam a rotação suave tanto no Safari/iOS quanto em navegadores
+  desktop.
+- Usuários mobile voltam a perceber que o cartão é interativo sem depender de
+  gestos.
+
+### 🔍 Como Validar
+
+1. `pnpm dev`
+2. Abrir `http://localhost:3000` em um dispositivo touch (ou no emulador de
+   iPhone/Safari).
+3. Verificar que o modelo inicia a rotação automática após o carregamento.
+
+### ⚠️ Armadilhas a Evitar
+
+- Reintroduzir lógica condicional ligada a `ontouchstart`/`maxTouchPoints` sem
+  oferecer fallback.
+- Esquecer de ajustar `frameloop` caso futuras alterações dependam de estados
+  específicos.
+
 ---

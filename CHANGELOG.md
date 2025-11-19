@@ -477,6 +477,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   `HeroBackgroundCarousel` e reinseridos na `div` principal do hero, voltando a
   herdar o mesmo contexto do card 3D e eliminando o deslocamento para baixo
   (`components/hero.tsx`).
+- **Auto-rotação no mobile**: removemos o bloqueio que desativava
+  `OrbitControls.autoRotate` em devices touch, garantindo que a rotação
+  automática funcione igualmente no mobile e no desktop
+  (`components/ui/model-viewer.tsx`).
 
 - **Popover do CategoryShowcase**: eliminamos o "pula-pula" do painel de
   personalização encapsulando o trigger em um wrapper fixo (`h-14 w-14`) que não

@@ -54,10 +54,6 @@ export interface ModelViewerProps {
   onModelLoaded?: () => void
 }
 
-const isTouch =
-  typeof window !== 'undefined' &&
-  ('ontouchstart' in window || navigator.maxTouchPoints > 0)
-
 const deg2rad = (d: number) => (d * Math.PI) / 180
 
 // ---
@@ -279,7 +275,7 @@ const ModelViewer: FC<ModelViewerProps> = ({
           enableZoom={enableManualZoom}
           minDistance={minZoomDistance}
           maxDistance={maxZoomDistance}
-          autoRotate={isTouch ? false : autoRotate}
+          autoRotate={autoRotate}
           autoRotateSpeed={autoRotateSpeed}
         />
       </Canvas>
