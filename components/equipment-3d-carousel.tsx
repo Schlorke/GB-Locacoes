@@ -80,7 +80,7 @@ function Equipment3DCarouselComponent({
   return (
     <div
       className={cn(
-        'relative group bg-gray-900 rounded-2xl shadow-2xl overflow-hidden w-full',
+        'relative group bg-white/5 backdrop-blur-[80px] backdrop-saturate-150 rounded-2xl shadow-2xl overflow-hidden w-full',
         className
       )}
       style={{ height }}
