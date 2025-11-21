@@ -35,7 +35,7 @@ garantindo contexto sempre atualizado.
 
 ### **Stack Atual**
 
-- ✅ **Next.js 15.4.6** (App Router)
+- ✅ **Next.js 16.0.3** (App Router)
 - ✅ **TypeScript 5.9.2** (strict)
 - ✅ **Prisma ORM** (models definidos)
 - ✅ **Zod** (validação parcial)

@@ -186,7 +186,7 @@ pnpm db:studio
 
 ### 🔴 **Incompatibilidades BLOQUEADORAS**
 
-#### **❌ Prisma 6.14.0 + Next.js 15.4.6**
+#### **❌ Prisma 6.14.0 + Next.js 16.0.3**
 
 ```bash
 # ❌ ERRO que aparece:
@@ -208,7 +208,7 @@ npm install
 
 | Dependência      | Versão Estável | Status       | Notas                     |
 | ---------------- | -------------- | ------------ | ------------------------- |
-| **Next.js**      | 15.4.6         | ✅ Estável   | App Router funcionando    |
+| **Next.js**      | 16.0.3         | ✅ Estável   | App Router funcionando    |
 | **Prisma**       | **Estável**    | ✅ Funcional | ✅ Versão atual           |
 | **React**        | 19.1.1         | ✅ Estável   | Sem problemas conhecidos  |
 | **TypeScript**   | 5.9.2          | ✅ Estável   | Strict mode habilitado    |

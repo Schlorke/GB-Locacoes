@@ -744,7 +744,7 @@ npm run dev
 
 ### **External Resources**
 
-- [Next.js 15 Documentation](https://nextjs.org/docs)
+- [Next.js 16 Documentation](https://nextjs.org/docs)
 - [Tailwind CSS Classes](https://tailwindcss.com/docs)
 - [Prisma Documentation](https://www.prisma.io/docs)
 - [Framer Motion API](https://www.framer.com/motion/)

@@ -45,7 +45,7 @@
 
 ### **Technical Stack**
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript 5.9 (strict mode)
 - **UI**: React 19 + Tailwind CSS 3.4.17
 - **Database**: PostgreSQL + Prisma (versão estável)
@@ -536,7 +536,7 @@ const formatDate = (date: Date) => new Intl.DateTimeFormat("pt-BR").format(date)
 
 ### **External Resources**
 
-- Next.js 15 App Router documentation
+- Next.js 16 App Router documentation
 - Tailwind CSS utility classes
 - Framer Motion animations
 - Radix UI components
@@ -556,4 +556,4 @@ effectively, not to reinvent them.
 ---
 
 _Last updated: January 2025_  
-_Compatible with: Next.js 15, TypeScript 5.9, React 19_
+_Compatible with: Next.js 16, TypeScript 5.9, React 19_

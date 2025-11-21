@@ -57,7 +57,7 @@ pnpm run build
 - **Verificação**: `npx prisma generate` deve mostrar `engine=binary`, não
   `engine=none`
 
-### **❌ CRÍTICO: Prisma 6.14.0 + Next.js 15.4.6 Incompatibilidade**
+### **❌ CRÍTICO: Prisma 6.14.0 + Next.js 16.0.3 Incompatibilidade**
 
 #### **Problema:**
 

@@ -17,7 +17,7 @@
 
 ## 🎯 Visão Geral
 
-A API do GB-Locacoes é construída sobre **Next.js 15 App Router** com **API
+A API do GB-Locacoes é construída sobre **Next.js 16 App Router** com **API
 Routes** e **Server Actions**, fornecendo uma interface RESTful completa para
 gerenciamento de equipamentos, orçamentos, locações e usuários.
 

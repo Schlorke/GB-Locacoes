@@ -149,12 +149,12 @@ documentada proativamente em `docs/` na pasta apropriada.**
 ## 🎯 **CONTEXTO DO PROJETO GB-LOCAÇÕES**
 
 **GB-Locações** é uma plataforma moderna de locação de equipamentos para
-construção civil, desenvolvida com Next.js 15, TypeScript, Prisma, PostgreSQL e
+construção civil, desenvolvida com Next.js 16, TypeScript, Prisma, PostgreSQL e
 design system robusto.
 
 ### **🏛️ Stack Tecnológico Principal**
 
-- **Framework**: Next.js 15.4.6 (App Router)
+- **Framework**: Next.js 16.0.3 (App Router)
 - **Linguagem**: TypeScript 5.9.2
 - **UI**: React 19.1.1 + Tailwind CSS 3.4.17
 - **Database**: PostgreSQL + Prisma
@@ -359,7 +359,7 @@ className = "text-xs md:text-sm text-gray-500"
 
 ```
 GB-Locacoes/
-├── app/                    # App Router (Next.js 15)
+├── app/                    # App Router (Next.js 16)
 │   ├── admin/             # Área administrativa
 │   ├── api/               # API Routes
 │   └── (public)/          # Rotas públicas
@@ -854,7 +854,7 @@ primeiro:**
 
 #### **🚨 "Build failing com 'Did not initialize yet'"**
 
-- **Causa**: PNPM + Next.js 15 + Prisma incompatibilidade
+- **Causa**: PNPM + Next.js 16 + Prisma incompatibilidade
 - **Solução**: Use NPM para melhor compatibilidade
 - **Memória**: Usuário prefere não downgrade de dependências
 

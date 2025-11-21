@@ -1080,10 +1080,13 @@ body:has(.sobre-page) {
 .contact-form,
 .contact-card,
 .benefit-card,
-.category-card,
-.material-card {
+.category-card {
   transition: all 0.3s ease !important;
   overflow: hidden !important;
+}
+
+.material-card {
+  transition: all 0.3s ease !important;
 }
 
 .contact-form:hover {
@@ -1162,7 +1165,10 @@ body.overflow-hidden {
     'Noto Color Emoji', 'EmojiOne Color', sans-serif;
 }
 
-.material-card,
+.material-card {
+  position: relative;
+}
+
 .benefit-card,
 .cta-section {
   overflow: hidden;

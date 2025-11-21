@@ -194,7 +194,7 @@ documentada proativamente em `docs/` na pasta apropriada.**
 ## 🎯 **VISÃO GERAL DO PROJETO**
 
 **GB-Locacoes** é uma plataforma moderna de locação de equipamentos para
-construção civil, desenvolvida com Next.js 15, TypeScript, Prisma, PostgreSQL e
+construção civil, desenvolvida com Next.js 16, TypeScript, Prisma, PostgreSQL e
 um design system robusto. O projeto segue princípios de arquitetura limpa,
 componentização inteligente e experiência do usuário excepcional.
 
@@ -202,7 +202,7 @@ componentização inteligente e experiência do usuário excepcional.
 
 ### **Stack Principal**
 
-- **Framework**: Next.js 15.4.6 (App Router)
+- **Framework**: Next.js 16.0.3 (App Router)
 - **Linguagem**: TypeScript 5.9.2
 - **UI**: React 19.1.1 + Tailwind CSS 3.4.17
 - **Database**: PostgreSQL + Prisma 6.13.0
@@ -214,7 +214,7 @@ componentização inteligente e experiência do usuário excepcional.
 
 ```
 GB-Locacoes/
-├── app/                    # App Router (Next.js 13+)
+├── app/                    # App Router (Next.js 16)
 │   ├── admin/             # Área administrativa
 │   ├── api/               # API Routes
 │   └── (public)/          # Rotas públicas
@@ -849,7 +849,7 @@ Antes de implementar QUALQUER componente novo, verifique:
 
 #### **Dependencies & Compatibility**
 
-- ❌ **NUNCA ATUALIZE**: Prisma para 6.14.0+ - incompatível com Next.js 15
+- ❌ **NUNCA ATUALIZE**: Prisma para 6.14.0+ - incompatível com Next.js 16
 - ❌ **NUNCA USE**: swagger-ui-react - incompatível com React 19
 - ❌ **NUNCA ASSUMA**: Compatibilidade de packages - sempre consulte
   `docs/references/dependencies.md`

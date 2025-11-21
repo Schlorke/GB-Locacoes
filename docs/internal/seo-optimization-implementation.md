@@ -761,4 +761,4 @@ export async function generateMetadata({ params }) {
 
 _Documentação atualizada em: Janeiro 2025_  
 _Versão do documento: 1.0.0_  
-_Compatível com: Next.js 15, TypeScript 5.9, React 19_
+_Compatível com: Next.js 16, TypeScript 5.9, React 19_

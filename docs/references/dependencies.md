@@ -22,7 +22,7 @@ evitar quebras no sistema.
 
 ### ⚠️ Por que este guia existe?
 
-- **Prisma 6.14.0** quebra o build com Next.js 15.4.6
+- **Prisma 6.14.0** quebra o build com Next.js 16.0.3
 - **Tailwind CSS 4.x** quebra o design system
 - Atualizações "seguras" podem causar problemas inesperados
 - Time perdido debuggando problemas de compatibilidade
@@ -31,7 +31,7 @@ evitar quebras no sistema.
 
 ## 🚨 Incompatibilidades Críticas
 
-### **❌ Prisma 6.14.0 + Next.js 15.4.6**
+### **❌ Prisma 6.14.0 + Next.js 16.0.3**
 
 #### **Problema:**
 
@@ -84,7 +84,7 @@ pnpm update tailwindcss
 
 | Dependência    | Versão Estável | Status     | Notas                    |
 | -------------- | -------------- | ---------- | ------------------------ |
-| **Next.js**    | 15.4.6         | ✅ Estável | App Router funcionando   |
+| **Next.js**    | 16.0.3         | ✅ Estável | App Router funcionando   |
 | **React**      | 19.1.1         | ✅ Estável | Sem problemas conhecidos |
 | **TypeScript** | 5.9.2          | ✅ Estável | Strict mode habilitado   |
 
@@ -180,7 +180,7 @@ pnpm test
 # tailwindcss@3.4.17
 
 # ❌ Framework Core - APENAS com aprovação
-# next@15.4.6
+# next@16.0.3
 # react@19.1.1
 ```
 
@@ -256,7 +256,7 @@ pnpm outdated | grep -E "(prisma|tailwind|next)"
 
 - **Data**: Janeiro 2025
 - **Problema**: Build falha com erro "client did not initialize yet"
-- **Causa**: Mudanças internas no Prisma 6.14.0 incompatíveis com Next.js 15.4.6
+- **Causa**: Mudanças internas no Prisma 6.14.0 incompatíveis com Next.js 16.0.3
 - **Solução**: Configurar variáveis de ambiente corretamente
 - **Status**: 🔴 **BLOQUEADO** - Não atualizar Prisma
 

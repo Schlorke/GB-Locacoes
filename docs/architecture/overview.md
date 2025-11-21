@@ -38,7 +38,7 @@ desenvolvimento web.
 ```mermaid
 graph TB
     subgraph "🖥️ Frontend Layer"
-        A[Next.js 15.4.6<br/>App Router]
+        A[Next.js 16.0.3<br/>App Router]
         B[React 19.1.1<br/>Server Components]
         C[TypeScript 5.9.2<br/>Strict Mode]
         D[Tailwind CSS 3.4.17<br/>Design System]
@@ -225,7 +225,7 @@ await prisma.$transaction([
 
 | Categoria         | Tecnologia      | Versão      | Status       | Notas               |
 | ----------------- | --------------- | ----------- | ------------ | ------------------- |
-| **Framework**     | Next.js         | 15.4.6      | ✅ Estável   | App Router completo |
+| **Framework**     | Next.js         | 16.0.3      | ✅ Estável   | App Router completo |
 | **UI Library**    | React           | 19.1.1      | ✅ Estável   | Server Components   |
 | **Language**      | TypeScript      | 5.9.2       | ✅ Estável   | Strict mode         |
 | **Database**      | PostgreSQL      | 15+         | ✅ Estável   | JSON, Indexes       |

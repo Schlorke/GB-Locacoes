@@ -22,7 +22,7 @@ const makeSchema = () => z.object({
   status: z.string().optional().nullable(),
   createdat: z.coerce.date().optional().nullable(),
   updatedat: z.coerce.date().optional().nullable(),
-  rental_items: z.lazy(() => rental_itemsCreateNestedManyWithoutRentalsInputObjectSchema),
+  rental_items: z.lazy(() => rental_itemsCreateNestedManyWithoutRentalsInputObjectSchema).optional(),
   users: z.lazy(() => UserCreateNestedOneWithoutRentalsInputObjectSchema)
 }).strict();
 export const rentalsCreateInputObjectSchema: z.ZodType<Prisma.rentalsCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsCreateInput>;

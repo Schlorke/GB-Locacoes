@@ -20,7 +20,7 @@
 O sistema administrativo do GB-Locações é uma interface moderna e intuitiva
 construída com:
 
-- **Next.js 15** com App Router
+- **Next.js 16** com App Router
 - **React 19** com Server Components
 - **TypeScript** para type safety
 - **Tailwind CSS** para estilização

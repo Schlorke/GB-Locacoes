@@ -36,7 +36,7 @@ mensagem para evitar qualquer atraso visual.
 
 ### Stack Tecnológico
 
-- **Framework**: Next.js 15.4.6 (App Router)
+- **Framework**: Next.js 16.0.3 (App Router)
 - **React**: 19.2.0
 - **Radix UI Tooltip**: @radix-ui/react-tooltip@latest
 - **Radix UI Popover**: @radix-ui/react-popover@latest

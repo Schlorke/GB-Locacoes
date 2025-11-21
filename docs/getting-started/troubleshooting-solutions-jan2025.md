@@ -113,7 +113,7 @@ Please move it into a Client Component.
 #### **🧠 Causa Raiz**
 
 - Componente `SwaggerUI` sendo importado dinamicamente em Server Component
-- Next.js 15 tem regras mais rígidas sobre SSR em App Router
+- Next.js 16 tem regras mais rígidas sobre SSR em App Router
 - `swagger-ui-react` não é compatível com Server-Side Rendering
 
 #### **✅ Solução Implementada**

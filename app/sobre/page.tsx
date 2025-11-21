@@ -296,7 +296,7 @@ export default function SobrePage() {
                   </div>
 
                   {/* Content */}
-                  <Card className="flex-1 border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group">
+                  <Card className="flex-1 border-0 bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden rounded-lg">
                     <CardContent className="p-6">
                       <h3 className="text-xl font-semibold text-gray-900 mb-2">
                         {item.title}

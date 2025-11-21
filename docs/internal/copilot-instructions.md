@@ -1,6 +1,6 @@
 # 🤖 GitHub Copilot Instructions - GB Locações
 
-> **Project**: Next.js 15 Equipment Rental Platform  
+> **Project**: Next.js 16 Equipment Rental Platform  
 > **Stack**: TypeScript, Tailwind CSS, Prisma, Framer Motion  
 > **Updated**: January 2025
 

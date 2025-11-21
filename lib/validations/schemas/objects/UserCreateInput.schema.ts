@@ -21,11 +21,11 @@ const makeSchema = () => z.object({
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
-  accounts: z.lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema),
-  quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputObjectSchema),
-  rentals: z.lazy(() => rentalsCreateNestedManyWithoutUsersInputObjectSchema),
-  sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputObjectSchema),
-  addresses: z.lazy(() => AddressCreateNestedManyWithoutUserInputObjectSchema),
+  accounts: z.lazy(() => AccountCreateNestedManyWithoutUserInputObjectSchema).optional(),
+  quotes: z.lazy(() => QuoteCreateNestedManyWithoutUserInputObjectSchema).optional(),
+  rentals: z.lazy(() => rentalsCreateNestedManyWithoutUsersInputObjectSchema).optional(),
+  sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputObjectSchema).optional(),
+  addresses: z.lazy(() => AddressCreateNestedManyWithoutUserInputObjectSchema).optional(),
   cart: z.lazy(() => CartCreateNestedOneWithoutUserInputObjectSchema).optional()
 }).strict();
 export const UserCreateInputObjectSchema: z.ZodType<Prisma.UserCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateInput>;

@@ -1,8 +1,8 @@
 {
   "version": "1.0",
   "generatorVersion": "0.1.0",
-  "generatedAt": "2025-11-19T06:29:08.872Z",
-  "outputPath": "C:\\Projetos\\GB-Locacoes\\lib\\validations",
+  "generatedAt": "2025-11-21T02:36:30.652Z",
+  "outputPath": "C:\\Projects\\GB-Locacoes\\lib\\validations",
   "files": [
     "schemas\\enums\\TransactionIsolationLevel.schema.ts",
     "schemas\\enums\\UserScalarFieldEnum.schema.ts",

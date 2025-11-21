@@ -1,6 +1,6 @@
 # 🎯 Cursor AI Instructions - GB Locações
 
-> **Context**: Next.js 15 + TypeScript + Tailwind CSS project for equipment
+> **Context**: Next.js 16 + TypeScript + Tailwind CSS project for equipment
 > rental business  
 > **Updated**: January 2025  
 > **Critical**: Read this BEFORE any component creation
