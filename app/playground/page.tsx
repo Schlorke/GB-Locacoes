@@ -129,9 +129,21 @@ function Equipment3DCarouselComponent({
       onMouseEnter={() => setIsAutoRotating(false)}
       onMouseLeave={() => setIsAutoRotating(autoRotate)}
     >
-      {/* Noise Texture Layer - Glassmorphism effects */}
       <div
         className="absolute inset-0 pointer-events-none z-0"
+        aria-hidden
+        style={{
+          background:
+            'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.12) 0%, transparent 45%), rgba(255, 255, 255, 0.06)',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          maskImage:
+            'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.5) 35%, transparent 65%)',
+        }}
+      />
+      {/* Noise Texture Layer - Glassmorphism effects */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[1]"
         style={{
           opacity: 0.3,
           mixBlendMode: 'overlay',
@@ -241,85 +253,87 @@ function Equipment3DCarouselComponent({
               radial-gradient(circle at 75% 55%, rgba(128, 128, 128, 0.15) 0%, transparent 30%),
               radial-gradient(circle at 50% 75%, rgba(128, 128, 128, 0.12) 0%, transparent 25%)
             `,
-            mixBlendMode: 'soft-light',
-          }}
-        />
+          mixBlendMode: 'soft-light',
+        }}
+      />
       </div>
 
-      {/* Navigation Buttons */}
-      {models.length > 1 && (
-        <>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white backdrop-blur-sm shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto"
-            onClick={goToPrevious}
-            aria-label="Modelo anterior"
-          >
-            <ChevronLeft className="h-6 w-6 text-gray-900" />
-          </Button>
+      <div className="relative z-10 h-full">
+        {/* Navigation Buttons */}
+        {models.length > 1 && (
+          <>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white backdrop-blur-sm shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto"
+              onClick={goToPrevious}
+              aria-label="Modelo anterior"
+            >
+              <ChevronLeft className="h-6 w-6 text-gray-900" />
+            </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white backdrop-blur-sm shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto"
-            onClick={goToNext}
-            aria-label="Próximo modelo"
-          >
-            <ChevronRight className="h-6 w-6 text-gray-900" />
-          </Button>
-        </>
-      )}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white backdrop-blur-sm shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto"
+              onClick={goToNext}
+              aria-label="Próximo modelo"
+            >
+              <ChevronRight className="h-6 w-6 text-gray-900" />
+            </Button>
+          </>
+        )}
 
-      {/* Model Info Overlay */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-6 z-20">
-        <motion.div
-          key={currentIndex}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="flex flex-col items-end text-right"
-        >
-          <h3 className="text-2xl font-bold text-yellow-500 mb-1">
-            {currentModel.name}
-          </h3>
-          {currentModel.description && (
-            <p className="text-white/80 text-sm">{currentModel.description}</p>
-          )}
-        </motion.div>
-      </div>
-
-      {/* Dots Indicator */}
-      {models.length > 1 && (
-        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex gap-2 pointer-events-auto">
-          {models.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goToSlide(index)}
-              className={cn(
-                'w-2 h-2 rounded-full transition-all duration-300',
-                index === currentIndex
-                  ? 'bg-white w-8'
-                  : 'bg-white/50 hover:bg-white/75'
-              )}
-              aria-label={`Ir para modelo ${index + 1}`}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Progress Bar (for auto-rotate) */}
-      {isAutoRotating && models.length > 1 && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-white/20 z-20">
+        {/* Model Info Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-6 z-20">
           <motion.div
-            className="h-full bg-white"
-            initial={{ width: '0%' }}
-            animate={{ width: '100%' }}
-            transition={{ duration: autoRotateInterval / 1000, ease: 'linear' }}
             key={currentIndex}
-          />
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="flex flex-col items-end text-right"
+          >
+            <h3 className="text-2xl font-bold text-yellow-500 mb-1">
+              {currentModel.name}
+            </h3>
+            {currentModel.description && (
+              <p className="text-white/80 text-sm">{currentModel.description}</p>
+            )}
+          </motion.div>
         </div>
-      )}
+
+        {/* Dots Indicator */}
+        {models.length > 1 && (
+          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex gap-2 pointer-events-auto">
+            {models.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={cn(
+                  'w-2 h-2 rounded-full transition-all duration-300',
+                  index === currentIndex
+                    ? 'bg-white w-8'
+                    : 'bg-white/50 hover:bg-white/75'
+                )}
+                aria-label={`Ir para modelo ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Progress Bar (for auto-rotate) */}
+        {isAutoRotating && models.length > 1 && (
+          <div className="absolute top-0 left-0 right-0 h-1 bg-white/20 z-20">
+            <motion.div
+              className="h-full bg-white"
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: autoRotateInterval / 1000, ease: 'linear' }}
+              key={currentIndex}
+            />
+          </div>
+        )}
+      </div>
     </div>
   )
 }

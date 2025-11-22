@@ -138,6 +138,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Os botões de tab usam o mesmo estilo do nav de categorias (border inferior
     com gradiente e estados `aria-selected`).
   - Header e footer foram redesenhados para seguir o layout dos dialogs padrão
+    do design system.
+- **Glassmorphism do carousel (Playground)**: o `Equipment3DCarousel`
+  (`app/playground/page.tsx`) ganhou uma camada dedicada de backdrop-filter
+  (blur + saturação) com máscara radial e z-index ajustado para manter as
+  texturas e controles acima do efeito. Isso garante que o teste de
+  glassmorphism fique visível no Chrome/Edge sem impactar os componentes
+  oficiais.
     (bordas, cantos arredondados, padding equivalente), preservando o fundo
     branco usado no componente original.
   - O botão "Remover" foi substituído por controles de reset e limpeza da badge
