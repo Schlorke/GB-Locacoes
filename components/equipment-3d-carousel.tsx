@@ -111,7 +111,7 @@ function Equipment3DCarouselComponent({
               keyLightIntensity={1.5}
               fillLightIntensity={0.8}
               rimLightIntensity={1.0}
-              environmentPreset="none"
+              environmentPreset="forest"
               autoRotate={true}
               autoRotateSpeed={0.5}
             />
@@ -153,7 +153,7 @@ function Equipment3DCarouselComponent({
           transition={{ duration: 0.3 }}
           className="flex flex-col items-end text-right"
         >
-          <h3 className="text-2xl font-bold text-white mb-1">
+          <h3 className="text-2xl font-bold text-yellow-500 mb-1">
             {currentModel.name}
           </h3>
           {currentModel.description && (

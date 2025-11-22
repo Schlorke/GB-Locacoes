@@ -11,6 +11,7 @@
           "meta[name=theme-color]"
         ]
       }
-    ]
+    ],
+    "compat-api/css": "off"
   }
 }
