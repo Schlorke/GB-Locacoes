@@ -144,6 +144,58 @@ const ModelWrapper: FC<{
   return null
 }
 
+// Componente Environment com fallback para proxy local
+// Tenta usar preset normalmente, se falhar (429), usa proxy local com cache
+const EnvironmentWithProxy: FC<{
+  preset:
+    | 'city'
+    | 'sunset'
+    | 'night'
+    | 'dawn'
+    | 'studio'
+    | 'apartment'
+    | 'forest'
+    | 'park'
+}> = ({ preset }) => {
+  const [useProxy, setUseProxy] = useState(false)
+
+  // Mapeamento de presets para caminhos HDR no drei-assets
+  const presetToPath: Record<string, string> = {
+    forest: 'hdri/forest_slope_1k.hdr',
+    studio: 'hdri/studio_small_03_1k.hdr',
+    city: 'hdri/city.hdr',
+    sunset: 'hdri/sunset.hdr',
+    night: 'hdri/night.hdr',
+    dawn: 'hdri/dawn.hdr',
+    apartment: 'hdri/apartment.hdr',
+    park: 'hdri/park.hdr',
+  }
+
+  useEffect(() => {
+    // Listener para detectar erro 429
+    const handleError = (event: ErrorEvent) => {
+      if (
+        event.message?.includes('429') ||
+        event.message?.includes('drei-assets') ||
+        event.error?.message?.includes('429')
+      ) {
+        setUseProxy(true)
+      }
+    }
+
+    window.addEventListener('error', handleError)
+    return () => window.removeEventListener('error', handleError)
+  }, [])
+
+  // Se usar proxy, carregar via API route local (com cache)
+  if (useProxy && presetToPath[preset]) {
+    return <Environment files={`/api/drei-proxy/${presetToPath[preset]}`} />
+  }
+
+  // Tentar preset normal primeiro
+  return <Environment preset={preset} />
+}
+
 const SceneContent: FC<{
   url: string
   autoRotate?: boolean
@@ -358,7 +410,7 @@ const ModelViewer: FC<ModelViewerProps> = ({
 
           {environmentPreset !== 'none' && (
             <Suspense fallback={null}>
-              <Environment
+              <EnvironmentWithProxy
                 preset={
                   environmentPreset as
                     | 'city'

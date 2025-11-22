@@ -25,7 +25,7 @@ const makeSchema = () => z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'pricePerDay' must be a Decimal",
 }),
-  images: z.union([z.lazy(() => EquipmentCreateimagesInputObjectSchema), z.string().array()]).optional(),
+  images: z.union([z.lazy(() => EquipmentCreateimagesInputObjectSchema), z.string().array()]),
   available: z.boolean().optional(),
   specifications: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   maxStock: z.number().int().optional().nullable(),
@@ -76,9 +76,9 @@ const makeSchema = () => z.object({
   monthlyUseDirectValue: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   category: z.lazy(() => CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema),
-  quoteItems: z.lazy(() => QuoteItemCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
-  rental_items: z.lazy(() => rental_itemsCreateNestedManyWithoutEquipmentsInputObjectSchema).optional(),
-  cartItems: z.lazy(() => CartItemCreateNestedManyWithoutEquipmentInputObjectSchema).optional()
+  quoteItems: z.lazy(() => QuoteItemCreateNestedManyWithoutEquipmentInputObjectSchema),
+  rental_items: z.lazy(() => rental_itemsCreateNestedManyWithoutEquipmentsInputObjectSchema),
+  cartItems: z.lazy(() => CartItemCreateNestedManyWithoutEquipmentInputObjectSchema)
 }).strict();
 export const EquipmentCreateInputObjectSchema: z.ZodType<Prisma.EquipmentCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentCreateInput>;
 export const EquipmentCreateInputObjectZodSchema = makeSchema();

@@ -25,7 +25,7 @@ const makeSchema = () => z.object({
   status: QuoteStatusSchema.optional(),
   userId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
-  items: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutQuoteInputObjectSchema).optional()
+  items: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutQuoteInputObjectSchema)
 }).strict();
 export const QuoteUncheckedCreateInputObjectSchema: z.ZodType<Prisma.QuoteUncheckedCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteUncheckedCreateInput>;
 export const QuoteUncheckedCreateInputObjectZodSchema = makeSchema();

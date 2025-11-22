@@ -18,7 +18,7 @@ const makeSchema = () => z.object({
   placement: z.string().optional().nullable(),
   customIcon: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   createdAt: z.coerce.date().optional(),
-  equipments: z.lazy(() => EquipmentUncheckedCreateNestedManyWithoutCategoryInputObjectSchema).optional()
+  equipments: z.lazy(() => EquipmentUncheckedCreateNestedManyWithoutCategoryInputObjectSchema)
 }).strict();
 export const CategoryUncheckedCreateInputObjectSchema: z.ZodType<Prisma.CategoryUncheckedCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.CategoryUncheckedCreateInput>;
 export const CategoryUncheckedCreateInputObjectZodSchema = makeSchema();
