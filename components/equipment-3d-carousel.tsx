@@ -126,7 +126,7 @@ function Equipment3DCarouselComponent({
               keyLightIntensity={1.5}
               fillLightIntensity={0.8}
               rimLightIntensity={1.0}
-              environmentPreset="forest"
+              environmentPreset="park"
               autoRotate={true}
               autoRotateSpeed={0.5}
             />
