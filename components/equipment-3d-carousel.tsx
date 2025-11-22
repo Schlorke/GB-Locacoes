@@ -80,15 +80,30 @@ function Equipment3DCarouselComponent({
   return (
     <div
       className={cn(
-        'relative group bg-white/5 backdrop-blur-[80px] backdrop-saturate-150 rounded-2xl shadow-2xl overflow-hidden w-full',
+        'relative group rounded-2xl overflow-hidden w-full',
         className
       )}
-      style={{ height }}
+      style={{
+        height,
+        background: `
+          radial-gradient(circle at 20% 50%, rgba(128, 128, 128, 0.08) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(128, 128, 128, 0.06) 0%, transparent 50%),
+          linear-gradient(135deg, rgba(128, 128, 128, 0.04) 0%, rgba(128, 128, 128, 0.02) 100%)
+        `,
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        border: '1px solid rgba(128, 128, 128, 0.15)',
+        boxShadow: `
+          inset 0 1px 0 0 rgba(128, 128, 128, 0.2),
+          inset 0 -1px 0 0 rgba(128, 128, 128, 0.1),
+          0 8px 32px 0 rgba(0, 0, 0, 0.1)
+        `,
+      }}
       onMouseEnter={() => setIsAutoRotating(false)}
       onMouseLeave={() => setIsAutoRotating(autoRotate)}
     >
       {/* 3D Model Viewer */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -119,13 +134,130 @@ function Equipment3DCarouselComponent({
         </AnimatePresence>
       </div>
 
+      {/* Noise Texture Layer - Atrás do 3D mas visível através do glassmorphism */}
+      <div
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          opacity: 0.3,
+          mixBlendMode: 'overlay',
+        }}
+      >
+        {/* Noise Texture SVG */}
+        <svg
+          className="absolute inset-0 w-full h-full"
+          style={{
+            filter: 'contrast(1.5) brightness(1.2)',
+          }}
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <filter id="noiseFilter" x="0%" y="0%" width="100%" height="100%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.9"
+                numOctaves="4"
+                stitchTiles="stitch"
+                result="noise"
+              />
+              <feColorMatrix in="noise" type="saturate" values="0" />
+              <feComponentTransfer>
+                <feFuncA type="discrete" tableValues="0 0.2 0.4 0.6 0.8 1" />
+              </feComponentTransfer>
+            </filter>
+            <filter id="noiseFilter2" x="0%" y="0%" width="100%" height="100%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="1.3"
+                numOctaves="3"
+                stitchTiles="stitch"
+                result="noise2"
+              />
+              <feColorMatrix in="noise2" type="saturate" values="0" />
+            </filter>
+            <filter id="noiseFilter3" x="0%" y="0%" width="100%" height="100%">
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="2.5"
+                numOctaves="2"
+                stitchTiles="stitch"
+                result="noise3"
+              />
+              <feColorMatrix in="noise3" type="saturate" values="0" />
+            </filter>
+          </defs>
+          <rect
+            width="100%"
+            height="100%"
+            filter="url(#noiseFilter)"
+            opacity="0.6"
+          />
+          <rect
+            width="100%"
+            height="100%"
+            filter="url(#noiseFilter2)"
+            opacity="0.4"
+            style={{ mixBlendMode: 'multiply' }}
+          />
+          <rect
+            width="100%"
+            height="100%"
+            filter="url(#noiseFilter3)"
+            opacity="0.3"
+            style={{ mixBlendMode: 'screen' }}
+          />
+        </svg>
+        {/* Additional granular texture */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.03) 0px,
+                transparent 0.5px,
+                transparent 1px,
+                rgba(0, 0, 0, 0.03) 1.5px
+              ),
+              repeating-linear-gradient(
+                90deg,
+                rgba(0, 0, 0, 0.03) 0px,
+                transparent 0.5px,
+                transparent 1px,
+                rgba(0, 0, 0, 0.03) 1.5px
+              ),
+              repeating-linear-gradient(
+                45deg,
+                rgba(128, 128, 128, 0.02) 0px,
+                transparent 0.5px,
+                transparent 1px,
+                rgba(128, 128, 128, 0.02) 1.5px
+              )
+            `,
+            mixBlendMode: 'overlay',
+            backgroundSize: '1.5px 1.5px, 1.5px 1.5px, 2px 2px',
+          }}
+        />
+        {/* Condensation effect */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(circle at 25% 35%, rgba(128, 128, 128, 0.2) 0%, transparent 35%),
+              radial-gradient(circle at 75% 55%, rgba(128, 128, 128, 0.15) 0%, transparent 30%),
+              radial-gradient(circle at 50% 75%, rgba(128, 128, 128, 0.12) 0%, transparent 25%)
+            `,
+            mixBlendMode: 'soft-light',
+          }}
+        />
+      </div>
+
       {/* Navigation Buttons */}
       {models.length > 1 && (
         <>
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white backdrop-blur-sm shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white backdrop-blur-sm shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto"
             onClick={goToPrevious}
             aria-label="Modelo anterior"
           >
@@ -135,7 +267,7 @@ function Equipment3DCarouselComponent({
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white backdrop-blur-sm shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white backdrop-blur-sm shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-auto"
             onClick={goToNext}
             aria-label="Próximo modelo"
           >
@@ -145,7 +277,7 @@ function Equipment3DCarouselComponent({
       )}
 
       {/* Model Info Overlay */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-6 z-10">
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent p-6 z-20">
         <motion.div
           key={currentIndex}
           initial={{ opacity: 0, y: 20 }}
@@ -164,7 +296,7 @@ function Equipment3DCarouselComponent({
 
       {/* Dots Indicator */}
       {models.length > 1 && (
-        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-20 flex gap-2 pointer-events-auto">
           {models.map((_, index) => (
             <button
               key={index}
@@ -183,7 +315,7 @@ function Equipment3DCarouselComponent({
 
       {/* Progress Bar (for auto-rotate) */}
       {isAutoRotating && models.length > 1 && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-white/20 z-10">
+        <div className="absolute top-0 left-0 right-0 h-1 bg-white/20 z-20">
           <motion.div
             className="h-full bg-white"
             initial={{ width: '0%' }}
