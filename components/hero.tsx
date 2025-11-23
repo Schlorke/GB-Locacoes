@@ -21,7 +21,7 @@ const HERO_EQUIPMENT_MODELS: Equipment3DModel[] = [
     id: 'compressor',
     name: 'Compressor de Ar',
     modelUrl: '/models/Compressor.glb',
-    description: 'Compressores de alta pressão para obras',
+    description: 'Compressores de alta pressão',
   },
   {
     id: 'betoneira',

@@ -32,7 +32,8 @@ export async function GET(
     }
 
     // Obter conteúdo
-    const contentType = response.headers.get('content-type') || 'application/octet-stream'
+    const contentType =
+      response.headers.get('content-type') || 'application/octet-stream'
     const buffer = await response.arrayBuffer()
 
     // Retornar com headers de cache agressivo
@@ -47,10 +48,6 @@ export async function GET(
     })
   } catch (error) {
     console.error('Drei proxy error:', error)
-    return NextResponse.json(
-      { error: 'Proxy error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Proxy error' }, { status: 500 })
   }
 }
-
