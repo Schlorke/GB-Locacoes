@@ -213,7 +213,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
                 Solicitar Orçamento
               </Link>
             </div>
-            <div className="hero-contact flex flex-col sm:flex-row gap-4 pt-4 text-orange-100 opacity-0">
+            <div className="hero-contact flex flex-col sm:flex-row gap-4 pt-2 text-orange-100 opacity-0">
               <div className="flex items-center gap-2 hover:text-white transition-colors cursor-pointer group">
                 <Phone className="h-5 w-5 group-hover:animate-bounce" />
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
@@ -280,7 +280,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
                 ├── Badge 10+ (fora, não afetado)
                 └── Border animado (fora, não afetado)
           */}
-          <div className="hero-image group relative w-full h-[320px] sm:h-[360px] md:h-[544px] lg:h-[544px] rounded-2xl">
+          <div className="hero-image group relative w-full lg:w-[540px] aspect-square mx-auto rounded-2xl">
             {/* Wrapper interno com backdrop-filter, opacity e scale */}
             <div
               className="hero-image-inner relative h-full w-full rounded-2xl transition-transform duration-500 ease-out group-hover:scale-[1.04]"
