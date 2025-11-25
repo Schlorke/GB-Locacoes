@@ -1173,6 +1173,15 @@ body:has(.sobre-page) {
   }
 }
 
+/* Garantir transição/hover consistente no hero 3D (fallback caso inline esteja sujo) */
+.hero-image {
+  transition: transform 500ms ease !important;
+}
+
+.hero-image:hover {
+  transform: scale(1.05) !important;
+}
+
 /* ================================ */
 /* 21. UTILITIES E OVERRIDES        */
 /* ================================ */

@@ -249,37 +249,31 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
             </div>
           </div>
           <div
-            className="hero-image relative rounded-2xl mx-4"
+            className="hero-image relative w-full h-[320px] sm:h-[360px] md:h-[544px] lg:h-[544px] rounded-2xl hover:scale-105 transition-transform duration-500"
             style={{
               backdropFilter: 'blur(20px) saturate(180%)',
               WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               opacity: 0,
             }}
           >
-            <div className="relative group bg-transparent w-full">
-              <div className="relative w-full h-[320px] sm:h-[360px] md:h-[544px] lg:h-[544px]">
-                <Equipment3DCarousel
-                  models={HERO_EQUIPMENT_MODELS}
-                  autoRotate={true}
-                  autoRotateInterval={6000}
-                  className="transform transition-transform duration-500"
-                  height="100%"
-                />
-                <div className="hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20">
-                  <div className="text-2xl font-bold animate-count-up">
-                    +200
-                  </div>
-                  <div className="text-sm font-medium">
-                    Equipamentos Disponíveis
-                  </div>
-                </div>
-                <div className="hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20">
-                  <div className="text-2xl font-bold">10+</div>
-                  <div className="text-sm font-medium">Anos de Experiência</div>
-                </div>
-                <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none transform transition-transform duration-600"></div>
+            <Equipment3DCarousel
+              models={HERO_EQUIPMENT_MODELS}
+              autoRotate={true}
+              autoRotateInterval={6000}
+              className="transform transition-transform duration-500"
+              height="100%"
+            />
+            <div className="hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20">
+              <div className="text-2xl font-bold animate-count-up">+200</div>
+              <div className="text-sm font-medium">
+                Equipamentos Disponíveis
               </div>
             </div>
+            <div className="hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20">
+              <div className="text-2xl font-bold">10+</div>
+              <div className="text-sm font-medium">Anos de Experiência</div>
+            </div>
+            <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none group-hover:scale-105 transform transition-transform duration-600"></div>
           </div>
         </div>
         {showHeroDots && (

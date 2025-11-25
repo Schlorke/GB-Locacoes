@@ -463,6 +463,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Visibilidade do hero 3D (primeira visita)**: removemos `opacity-0` do
+  wrapper do carrossel 3D e confiamos no scroll-reveal para controlar a
+  opacidade, evitando que o bloco desapareça após a animação
+  (`components/hero.tsx`).
+- **Hover do hero após navegação interna**: `showAllElementsImmediately` deixava
+  `transform` inline na `.hero-image` quando o usuário voltava para a home,
+  bloqueando o `hover:scale-105`. Agora limpamos o transform/animation ao exibir
+  os elementos sem animação (`components/scroll-reveal-init.tsx`).
 - **Rotação 3D no Hero**: o carrossel de fundo foi extraído para um componente
   dedicado (`HeroBackgroundCarousel`) e `Equipment3DCarousel` passou a ser
   memoizado, garantindo que o `ModelViewer` siga rotacionando mesmo quando o

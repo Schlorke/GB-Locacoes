@@ -5,6 +5,46 @@
 
 ---
 
+## 14. Hover do hero 3D sem transição suave após navegar e voltar
+
+### 🧠 Problema
+
+**Data da Ocorrência**: 2025-11-24 **Severidade**: Baixa (UX) **Status**: ✅
+Resolvido
+
+#### Descrição
+
+Ao visitar a home pela primeira vez, o hover do bloco 3D funcionava. Depois de
+navegar para outra página e voltar, o `hover:scale-105` começava a pulsar ou
+parava de funcionar porque restavam estilos inline aplicados pelo
+`showAllElementsImmediately`.
+
+#### Causa Raiz
+
+No fluxo de navegação interna, o scroll-reveal aplicava `transform` e
+`transition: none` inline na `.hero-image` e não limpava o transform/animation,
+o que resetava continuamente o scale de hover ou o bloqueava.
+
+### ✅ Solução Implementada
+
+- Helpers `clearInlineTransition`/`clearInlineMotion` passaram a limpar
+  transform/animation da `.hero-image` também quando exibimos elementos sem
+  animação, e só executam uma vez por elemento.
+- Flags de limpeza (`data-inline-*`) são resetadas antes de cada rodada do
+  scroll-reveal.
+
+### 🎯 Resultado
+
+- Hover scale do card 3D permanece suave após sair e voltar para a home.
+- Sem pulsar/reiniciar o scale em navegações internas.
+
+### ⚠️ Armadilhas a Evitar
+
+- Reintroduzir `transform` inline na `.hero-image` sem limpar.
+- Ignorar o reset das flags ao reprocessar elementos em navegação interna.
+
+---
+
 ## 📋 Índice
 
 1. [Dessincronização de Animações Hero](#1-dessincronização-de-animações-hero)

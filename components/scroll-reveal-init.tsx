@@ -39,6 +39,49 @@ export default function ScrollRevealInit() {
     const run = () => {
       // Disparar evento para avisar que scroll-reveal está pronto
       window.dispatchEvent(new Event('scrollRevealReady'))
+
+      const resetInlineCleanupFlags = () => {
+        const flagged = document.querySelectorAll(
+          '[data-inline-transition-cleared],[data-inline-motion-cleared]'
+        )
+        flagged.forEach((el) => {
+          el.removeAttribute('data-inline-transition-cleared')
+          el.removeAttribute('data-inline-motion-cleared')
+        })
+      }
+
+      const clearInlineTransition = (element: HTMLElement, delay = 0) => {
+        if (element.dataset.inlineTransitionCleared === 'true') return
+        window.setTimeout(() => {
+          if (element.style.transition === 'none') {
+            element.style.removeProperty('transition')
+          }
+          element.dataset.inlineTransitionCleared = 'true'
+        }, delay)
+      }
+
+      const clearInlineMotion = (element: HTMLElement, delay = 0) => {
+        if (element.dataset.inlineMotionCleared === 'true') return
+        window.setTimeout(() => {
+          element.style.removeProperty('animation')
+          if (element.classList.contains('hero-image')) {
+            element.style.removeProperty('opacity')
+            element.style.removeProperty('transform')
+          }
+          element.dataset.inlineMotionCleared = 'true'
+        }, delay)
+      }
+
+      const resetHeroInlineStyles = () => {
+        document.querySelectorAll<HTMLElement>('.hero-image').forEach((el) => {
+          el.style.removeProperty('animation')
+          el.style.removeProperty('opacity')
+          el.style.removeProperty('transform')
+          el.style.removeProperty('transition')
+          delete el.dataset.inlineMotionCleared
+          delete el.dataset.inlineTransitionCleared
+        })
+      }
       const getNavigationType = () => {
         // Verificar se existe performance.navigation (método mais antigo)
         if (performance.navigation) {
@@ -198,6 +241,11 @@ export default function ScrollRevealInit() {
             htmlElement.style.animation = 'none'
             htmlElement.style.transition = 'none'
           }
+
+          clearInlineTransition(htmlElement, 150)
+          if (htmlElement.classList.contains('hero-image')) {
+            clearInlineMotion(htmlElement, 150)
+          }
         })
 
         // Também mostrar os contact-cards imediatamente
@@ -207,6 +255,7 @@ export default function ScrollRevealInit() {
           htmlCard.style.opacity = '1'
           htmlCard.style.transform = 'translateX(0)'
           htmlCard.style.animation = 'none'
+          clearInlineTransition(htmlCard, 150)
         })
       }
 
@@ -263,6 +312,7 @@ export default function ScrollRevealInit() {
               } else if (element.classList.contains('hero-image')) {
                 element.style.animation =
                   'slideInRight 1.2s ease-out 0.3s forwards'
+                clearInlineMotion(element, 1400)
               } else if (element.classList.contains('hero-wave')) {
                 element.style.animation = 'slideInUp 1.2s ease-out 0s forwards'
               }
@@ -358,6 +408,7 @@ export default function ScrollRevealInit() {
                   'fadeInUpSmooth 1.2s linear 0.3s forwards'
               }
 
+              clearInlineTransition(element, 1800)
               observer.unobserve(element)
             }
           })
@@ -385,6 +436,8 @@ export default function ScrollRevealInit() {
 
         // CORREÇÃO CRÍTICA: Inicializar elementos como invisíveis IMEDIATAMENTE
         // para evitar flash inicial
+        resetInlineCleanupFlags()
+        resetHeroInlineStyles()
         initializeElementsForAnimation()
 
         // Aguardar a hidratação antes de configurar observers
@@ -434,6 +487,8 @@ export default function ScrollRevealInit() {
          */
         // Delay maior para aguardar elementos carregados dinamicamente
         setTimeout(() => {
+          resetInlineCleanupFlags()
+          resetHeroInlineStyles()
           showAllElementsImmediately()
         }, 200)
 
@@ -455,6 +510,8 @@ export default function ScrollRevealInit() {
                   }
                   el.style.animation = 'none'
                   el.style.transition = 'none'
+                  clearInlineTransition(el, 150)
+                  clearInlineMotion(el, 150)
                 }
                 el.querySelectorAll(selectors).forEach((child) => {
                   const htmlChild = child as HTMLElement
@@ -462,11 +519,14 @@ export default function ScrollRevealInit() {
                   htmlChild.style.transform = 'translateY(0)'
                   htmlChild.style.animation = 'none'
                   htmlChild.style.transition = 'none'
+                  clearInlineTransition(htmlChild, 150)
+                  clearInlineMotion(htmlChild, 150)
                 })
               }
             })
           })
         })
+
         internalMutation.observe(document.body, {
           childList: true,
           subtree: true,
@@ -483,6 +543,8 @@ export default function ScrollRevealInit() {
             htmlElement.style.transform = 'translateY(0)'
             htmlElement.style.animation = 'none'
             htmlElement.style.transition = 'none'
+            clearInlineTransition(htmlElement, 150)
+            clearInlineMotion(htmlElement, 150)
           })
         }, 500)
       }
@@ -537,6 +599,7 @@ export default function ScrollRevealInit() {
             htmlElement.style.transform = 'translateY(0)'
             htmlElement.style.animation = 'none'
             htmlElement.style.transition = 'none'
+            clearInlineTransition(htmlElement, 150)
           })
         }
       }
