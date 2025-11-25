@@ -53,6 +53,12 @@ const containerClasses = "mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8"
   animação de entrada.
 - Indicadores do carrossel preservam `aria-label` individuais e animações do
   Framer Motion.
+- O hover de scale do bloco 3D fica isolado no wrapper `.hero-image-inner` (sem
+  `overflow-hidden`), permitindo que o `.hero-image` continue usando o
+  `transform` do scroll-reveal sem ser sobrescrito em interações do usuário e
+  evitando cortes nos overlays (badges, setas, dots). O `backdrop-filter`
+  (blur/saturate) também está aplicado no wrapper interno para acompanhar o
+  scale e evitar recortes do noise/blur ao ampliar.
 
 ## ✅ Checklist para alterações futuras
 

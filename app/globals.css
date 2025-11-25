@@ -1178,8 +1178,9 @@ body:has(.sobre-page) {
   transition: transform 500ms ease !important;
 }
 
-.hero-image:hover {
-  transform: scale(1.05) !important;
+.hero-image-inner {
+  transition: transform 500ms ease;
+  will-change: transform;
 }
 
 /* ================================ */

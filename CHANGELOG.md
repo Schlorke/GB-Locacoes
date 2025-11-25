@@ -98,6 +98,11 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Hero 3D hover**: Hover scale movido para o wrapper interno
+  `.hero-image-inner` (sem `overflow-hidden`), evitando sobrescrever o
+  `transform` do scroll-reveal e mantendo a animação de entrada enquanto o
+  efeito de escala continua suave; blur/noise (backdrop-filter) acompanha o
+  scale para não recortar bordas nem overlays.
 - **Biblioteca de ícones do Dialog Lab**: substituímos os ícones duplicados
   usados para testar o scroll por coleções temáticas reais em
   `components/dialogs/icon-customization-data.ts`. Cada grupo (Construção,

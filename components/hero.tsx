@@ -249,14 +249,19 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
             </div>
           </div>
           <div
-            className="hero-image relative w-full h-[320px] sm:h-[360px] md:h-[544px] lg:h-[544px] rounded-2xl hover:scale-105 transition-transform duration-500"
+            className="hero-image group relative w-full h-[320px] sm:h-[360px] md:h-[544px] lg:h-[544px] rounded-2xl transition-transform duration-500"
             style={{
-              backdropFilter: 'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               opacity: 0,
             }}
           >
-            <Equipment3DCarousel
+            <div
+              className="hero-image-inner relative h-full w-full rounded-2xl transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.04]"
+              style={{
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+              }}
+            >
+              <Equipment3DCarousel
               models={HERO_EQUIPMENT_MODELS}
               autoRotate={true}
               autoRotateInterval={6000}
@@ -274,6 +279,7 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
               <div className="text-sm font-medium">Anos de Experiência</div>
             </div>
             <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none group-hover:scale-105 transform transition-transform duration-600"></div>
+            </div>
           </div>
         </div>
         {showHeroDots && (
