@@ -90,8 +90,10 @@ function Equipment3DCarouselComponent({
           radial-gradient(circle at 80% 80%, rgba(128, 128, 128, 0.06) 0%, transparent 50%),
           linear-gradient(135deg, rgba(128, 128, 128, 0.04) 0%, rgba(128, 128, 128, 0.02) 100%)
         `,
-        backdropFilter: 'blur(20px) saturate(180%)',
-        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        // REMOVIDO: backdrop-filter daqui
+        // O backdrop-filter agora é aplicado no elemento pai (.hero-image em hero.tsx)
+        // Isso evita conflitos de renderização durante a animação de opacity do ScrollReveal
+        // Quando opacity < 1 no pai, o backdrop-filter em filhos não renderiza corretamente
         border: '1px solid rgba(128, 128, 128, 0.15)',
         boxShadow: `
           inset 0 1px 0 0 rgba(128, 128, 128, 0.2),

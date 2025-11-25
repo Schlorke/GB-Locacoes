@@ -248,38 +248,83 @@ export default function Hero({ initialSettings }: HeroProps = {}) {
               </div>
             </div>
           </div>
-          <div
-            className="hero-image group relative w-full h-[320px] sm:h-[360px] md:h-[544px] lg:h-[544px] rounded-2xl transition-transform duration-500"
-            style={{
-              opacity: 0,
-            }}
-          >
+          {/* ========================================
+              SOLUÇÃO DEFINITIVA - BACKDROP-FILTER + HOVER SCALE
+              ========================================
+
+              Problema resolvido:
+              - Backdrop-filter agora aumenta junto com o canvas no hover
+              - Não há mais bordas sem blur visíveis
+
+              Mudanças:
+              1. Container externo (.hero-image):
+                 - SEM backdrop-filter
+                 - SEM opacity inline
+                 - Apenas overflow-hidden para cantos arredondados
+
+              2. Wrapper interno (.hero-image-inner):
+                 - COM backdrop-filter (aumenta junto com scale)
+                 - COM opacity (para ScrollReveal funcionar)
+                 - COM group-hover:scale-[1.04]
+
+              3. Badges:
+                 - Fora do wrapper interno
+                 - Não são afetados pelo scale
+                 - Completamente visíveis
+
+              Estrutura:
+              .hero-image (overflow-hidden apenas)
+                ├── .hero-image-inner (backdrop + opacity + scale)
+                │     └── Equipment3DCarousel
+                ├── Badge +200 (fora, não afetado)
+                ├── Badge 10+ (fora, não afetado)
+                └── Border animado (fora, não afetado)
+          */}
+          <div className="hero-image group relative w-full h-[320px] sm:h-[360px] md:h-[544px] lg:h-[544px] rounded-2xl">
+            {/* Wrapper interno com backdrop-filter, opacity e scale */}
             <div
-              className="hero-image-inner relative h-full w-full rounded-2xl transition-transform duration-500 ease-out will-change-transform group-hover:scale-[1.04]"
+              className="hero-image-inner relative h-full w-full rounded-2xl transition-transform duration-500 ease-out group-hover:scale-[1.04]"
               style={{
+                opacity: 0,
+                // Backdrop-filter AQUI - aumenta junto com o scale
                 backdropFilter: 'blur(20px) saturate(180%)',
                 WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               }}
             >
               <Equipment3DCarousel
-              models={HERO_EQUIPMENT_MODELS}
-              autoRotate={true}
-              autoRotateInterval={6000}
-              className="transform transition-transform duration-500"
-              height="100%"
-            />
-            <div className="hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20">
+                models={HERO_EQUIPMENT_MODELS}
+                autoRotate={true}
+                autoRotateInterval={6000}
+                className="transform transition-transform duration-500"
+                height="100%"
+              />
+            </div>
+
+            {/* Badges e elementos decorativos - FORA do wrapper com scale */}
+            {/* Não são afetados pelo hover scale */}
+            {/* Adicionadas classes hero-badge-* e opacity: 0 para participar do ScrollReveal */}
+            <div
+              className="hero-badge-left hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20"
+              style={{ opacity: 0 }}
+            >
               <div className="text-2xl font-bold animate-count-up">+200</div>
               <div className="text-sm font-medium">
                 Equipamentos Disponíveis
               </div>
             </div>
-            <div className="hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20">
+
+            <div
+              className="hero-badge-right hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20"
+              style={{ opacity: 0 }}
+            >
               <div className="text-2xl font-bold">10+</div>
               <div className="text-sm font-medium">Anos de Experiência</div>
             </div>
-            <div className="absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none group-hover:scale-105 transform transition-transform duration-600"></div>
-            </div>
+
+            <div
+              className="hero-border absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none group-hover:scale-105 transform transition-transform duration-600"
+              style={{ opacity: 0 }}
+            ></div>
           </div>
         </div>
         {showHeroDots && (

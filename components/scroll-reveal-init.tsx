@@ -13,7 +13,7 @@
  * ✅ Dispositivos móveis
  *
  * @author GB Locações Development Team
- * @version 2.0
+ * @version 2.1 - Atualizado para suportar .hero-image-inner
  * @see docs/scroll-reveal-system.md
  */
 
@@ -64,7 +64,14 @@ export default function ScrollRevealInit() {
         if (element.dataset.inlineMotionCleared === 'true') return
         window.setTimeout(() => {
           element.style.removeProperty('animation')
-          if (element.classList.contains('hero-image')) {
+          // ATUALIZADO: Também limpar .hero-image-inner, badges e border
+          if (
+            element.classList.contains('hero-image') ||
+            element.classList.contains('hero-image-inner') ||
+            element.classList.contains('hero-badge-left') ||
+            element.classList.contains('hero-badge-right') ||
+            element.classList.contains('hero-border')
+          ) {
             element.style.removeProperty('opacity')
             element.style.removeProperty('transform')
           }
@@ -73,14 +80,19 @@ export default function ScrollRevealInit() {
       }
 
       const resetHeroInlineStyles = () => {
-        document.querySelectorAll<HTMLElement>('.hero-image').forEach((el) => {
-          el.style.removeProperty('animation')
-          el.style.removeProperty('opacity')
-          el.style.removeProperty('transform')
-          el.style.removeProperty('transition')
-          delete el.dataset.inlineMotionCleared
-          delete el.dataset.inlineTransitionCleared
-        })
+        // ATUALIZADO: Limpar .hero-image, .hero-image-inner, badges e border
+        document
+          .querySelectorAll<HTMLElement>(
+            '.hero-image, .hero-image-inner, .hero-badge-left, .hero-badge-right, .hero-border'
+          )
+          .forEach((el) => {
+            el.style.removeProperty('animation')
+            el.style.removeProperty('opacity')
+            el.style.removeProperty('transform')
+            el.style.removeProperty('transition')
+            delete el.dataset.inlineMotionCleared
+            delete el.dataset.inlineTransitionCleared
+          })
       }
       const getNavigationType = () => {
         // Verificar se existe performance.navigation (método mais antigo)
@@ -142,9 +154,15 @@ export default function ScrollRevealInit() {
        *
        * Todos os elementos que participam do sistema de scroll reveal.
        * Para adicionar novos elementos, inclua suas classes aqui.
+       *
+       * IMPORTANTE:
+       * - .hero-image: Container externo (não animado diretamente)
+       * - .hero-image-inner: Wrapper interno com backdrop-filter (ANIMADO)
+       * - .hero-badge-left, .hero-badge-right: Badges (+200 e 10+)
+       * - .hero-border: Border animado ao redor do carrossel
        */
       const selectors =
-        '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image, .hero-wave, ' +
+        '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image-inner, .hero-badge-left, .hero-badge-right, .hero-border, .hero-wave, ' +
         '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
         '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate, ' +
         '[data-scroll-reveal], [data-fade-only]'
@@ -243,7 +261,14 @@ export default function ScrollRevealInit() {
           }
 
           clearInlineTransition(htmlElement, 150)
-          if (htmlElement.classList.contains('hero-image')) {
+          // ATUALIZADO: Também limpar .hero-image-inner, badges e border
+          if (
+            htmlElement.classList.contains('hero-image') ||
+            htmlElement.classList.contains('hero-image-inner') ||
+            htmlElement.classList.contains('hero-badge-left') ||
+            htmlElement.classList.contains('hero-badge-right') ||
+            htmlElement.classList.contains('hero-border')
+          ) {
             clearInlineMotion(htmlElement, 150)
           }
         })
@@ -309,10 +334,26 @@ export default function ScrollRevealInit() {
               } else if (element.classList.contains('hero-contact')) {
                 element.style.animation =
                   'slideInLeft 0.6s ease-out 1s forwards'
-              } else if (element.classList.contains('hero-image')) {
+              } else if (element.classList.contains('hero-image-inner')) {
+                // ATUALIZADO: Aplicar animação no .hero-image-inner (não no .hero-image)
                 element.style.animation =
                   'slideInRight 1.2s ease-out 0.3s forwards'
-                clearInlineMotion(element, 1400)
+                clearInlineMotion(element, 1600)
+              } else if (element.classList.contains('hero-badge-left')) {
+                // Badge +200 - aparece da esquerda com delay
+                element.style.animation =
+                  'slideInLeft 0.6s ease-out 1s forwards'
+                clearInlineMotion(element, 1700)
+              } else if (element.classList.contains('hero-badge-right')) {
+                // Badge 10+ - aparece da direita com delay
+                element.style.animation =
+                  'slideInRight 0.6s ease-out 1.2s forwards'
+                clearInlineMotion(element, 1900)
+              } else if (element.classList.contains('hero-border')) {
+                // Border animado - vem junto com o bloco 3D, da direita para esquerda
+                element.style.animation =
+                  'slideInRight 1.2s ease-out 0.3s forwards'
+                clearInlineMotion(element, 1600)
               } else if (element.classList.contains('hero-wave')) {
                 element.style.animation = 'slideInUp 1.2s ease-out 0s forwards'
               }

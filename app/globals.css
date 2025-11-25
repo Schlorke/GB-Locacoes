@@ -741,6 +741,16 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   }
 }
 
+/* Fade in simples - para elementos que só precisam de opacity */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 @keyframes fadeInHeader {
   0% {
     opacity: 0;

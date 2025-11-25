@@ -274,8 +274,20 @@ const ModelViewer: FC<ModelViewerProps> = ({
 
   return (
     <div style={{ width, height }} className="relative group">
+      {/* ========================================
+          CORREÇÃO APLICADA: OVERFLOW-HIDDEN REMOVIDO
+          ========================================
+
+          ANTES: overflow-hidden
+          DEPOIS: overflow-visible
+
+          Isso permite que elementos posicionados fora
+          deste container (como os badges no hero.tsx)
+          sejam visíveis e não cortados.
+      */}
+
       {/* Background Lights - Luzes de fundo sutis e animadas */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl z-0">
+      <div className="pointer-events-none absolute inset-0 overflow-visible rounded-2xl z-0">
         {/* Luz superior direita - GRANDE */}
         <div className="animate-very-slow-pulse absolute -right-40 -top-40 z-0 h-80 w-80 rounded-full bg-gradient-to-br from-black/20 to-black/15 blur-3xl" />
 
@@ -304,7 +316,7 @@ const ModelViewer: FC<ModelViewerProps> = ({
               duration: 0.8,
               ease: [0.4, 0, 0.2, 1], // ease-out cubic
             }}
-            className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-[5]"
+            className="absolute inset-0 rounded-2xl overflow-visible pointer-events-none z-[5]"
             style={{
               background: `
                 radial-gradient(circle at 20% 50%, rgba(128, 128, 128, 0.12) 0%, transparent 50%),
