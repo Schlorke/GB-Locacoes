@@ -64,7 +64,10 @@ export default function ScrollRevealInit() {
         if (element.dataset.inlineMotionCleared === 'true') return
         window.setTimeout(() => {
           element.style.removeProperty('animation')
-          // ATUALIZADO: Também limpar .hero-image-inner, badges e border
+          // ATUALIZADO: Para hero-image-inner, badges e border
+          // IMPORTANTE: DEFINIR opacity: 1 em vez de REMOVER
+          // porque remover faz o elemento voltar ao valor do JSX (opacity: 0)
+          // o que causa o periodicCheck reaplicar transition: none
           if (
             element.classList.contains('hero-image') ||
             element.classList.contains('hero-image-inner') ||
@@ -72,8 +75,12 @@ export default function ScrollRevealInit() {
             element.classList.contains('hero-badge-right') ||
             element.classList.contains('hero-border')
           ) {
-            element.style.removeProperty('opacity')
+            // CORREÇÃO: Manter opacity: 1 para evitar ciclo de reaplicação
+            element.style.opacity = '1'
+            // Remover transform para permitir hover effects funcionarem
             element.style.removeProperty('transform')
+            // CRÍTICO: Também remover transition para não bloquear hover scale
+            element.style.removeProperty('transition')
           }
           element.dataset.inlineMotionCleared = 'true'
         }, delay)
@@ -225,6 +232,14 @@ export default function ScrollRevealInit() {
         animatedElements.forEach((element) => {
           const htmlElement = element as HTMLElement
 
+          // CORREÇÃO: Identificar elementos hero que precisam manter hover effects
+          const isHeroElement =
+            htmlElement.classList.contains('hero-image') ||
+            htmlElement.classList.contains('hero-image-inner') ||
+            htmlElement.classList.contains('hero-badge-left') ||
+            htmlElement.classList.contains('hero-badge-right') ||
+            htmlElement.classList.contains('hero-border')
+
           // For new CSS-only classes, just add the animate-in class
           if (
             htmlElement.classList.contains('animate-on-scroll') ||
@@ -238,6 +253,13 @@ export default function ScrollRevealInit() {
             htmlElement.style.transform = 'translateY(0)'
             htmlElement.style.animation = 'none'
             htmlElement.style.transition = 'none'
+          } else if (isHeroElement) {
+            // CORREÇÃO: Elementos hero - mostrar imediatamente MAS preservar transições
+            // para que hover effects (como scale) continuem funcionando
+            htmlElement.style.opacity = '1'
+            htmlElement.style.animation = 'none'
+            // NÃO aplicar transition: none aqui! Isso bloqueia hover scale
+            // Também não modificar transform para preservar hover effects
           } else if (htmlElement.hasAttribute('data-scroll-reveal')) {
             // Elementos com data-scroll-reveal - mostrar imediatamente
             htmlElement.style.opacity = '1'
@@ -260,15 +282,14 @@ export default function ScrollRevealInit() {
             htmlElement.style.transition = 'none'
           }
 
-          clearInlineTransition(htmlElement, 150)
-          // ATUALIZADO: Também limpar .hero-image-inner, badges e border
-          if (
-            htmlElement.classList.contains('hero-image') ||
-            htmlElement.classList.contains('hero-image-inner') ||
-            htmlElement.classList.contains('hero-badge-left') ||
-            htmlElement.classList.contains('hero-badge-right') ||
-            htmlElement.classList.contains('hero-border')
-          ) {
+          // CORREÇÃO: Não chamar clearInlineTransition para elementos hero
+          // pois isso pode interferir com hover effects
+          if (!isHeroElement) {
+            clearInlineTransition(htmlElement, 150)
+          }
+
+          // Chamar clearInlineMotion para elementos hero (agora corrigido para não remover opacity)
+          if (isHeroElement) {
             clearInlineMotion(htmlElement, 150)
           }
         })
@@ -539,29 +560,54 @@ export default function ScrollRevealInit() {
             record.addedNodes.forEach((node) => {
               if (node.nodeType === 1) {
                 const el = node as HTMLElement
+
+                // Helper para verificar se é elemento hero
+                const isHeroEl = (element: HTMLElement) =>
+                  element.classList.contains('hero-image') ||
+                  element.classList.contains('hero-image-inner') ||
+                  element.classList.contains('hero-badge-left') ||
+                  element.classList.contains('hero-badge-right') ||
+                  element.classList.contains('hero-border')
+
                 if (el.matches(selectors)) {
                   // Mostrar elemento imediatamente
                   if (el.classList.contains('hero-wave')) {
                     // Ondinha - garantir que apareça imediatamente
                     el.style.opacity = '1'
                     el.style.transform = 'translateY(0)'
+                    el.style.animation = 'none'
+                    el.style.transition = 'none'
+                    clearInlineTransition(el, 150)
+                  } else if (isHeroEl(el)) {
+                    // CORREÇÃO: Elementos hero - mostrar mas preservar transições
+                    el.style.opacity = '1'
+                    el.style.animation = 'none'
+                    // NÃO aplicar transition: none nem modificar transform!
+                    clearInlineMotion(el, 150)
                   } else {
                     el.style.opacity = '1'
                     el.style.transform = 'translateY(0)'
+                    el.style.animation = 'none'
+                    el.style.transition = 'none'
+                    clearInlineTransition(el, 150)
+                    clearInlineMotion(el, 150)
                   }
-                  el.style.animation = 'none'
-                  el.style.transition = 'none'
-                  clearInlineTransition(el, 150)
-                  clearInlineMotion(el, 150)
                 }
                 el.querySelectorAll(selectors).forEach((child) => {
                   const htmlChild = child as HTMLElement
-                  htmlChild.style.opacity = '1'
-                  htmlChild.style.transform = 'translateY(0)'
-                  htmlChild.style.animation = 'none'
-                  htmlChild.style.transition = 'none'
-                  clearInlineTransition(htmlChild, 150)
-                  clearInlineMotion(htmlChild, 150)
+                  if (isHeroEl(htmlChild)) {
+                    // CORREÇÃO: Elementos hero - mostrar mas preservar transições
+                    htmlChild.style.opacity = '1'
+                    htmlChild.style.animation = 'none'
+                    clearInlineMotion(htmlChild, 150)
+                  } else {
+                    htmlChild.style.opacity = '1'
+                    htmlChild.style.transform = 'translateY(0)'
+                    htmlChild.style.animation = 'none'
+                    htmlChild.style.transition = 'none'
+                    clearInlineTransition(htmlChild, 150)
+                    clearInlineMotion(htmlChild, 150)
+                  }
                 })
               }
             })
@@ -580,11 +626,32 @@ export default function ScrollRevealInit() {
           )
           hiddenElements.forEach((element) => {
             const htmlElement = element as HTMLElement
+
+            // CORREÇÃO: Verificar se elemento já foi processado para evitar loop
+            if (htmlElement.dataset.inlineMotionCleared === 'true') {
+              // Elemento já foi processado, apenas garantir opacity: 1
+              htmlElement.style.opacity = '1'
+              return
+            }
+
+            // CORREÇÃO: Para elementos hero, não aplicar transition: none
+            // pois isso bloqueia o hover scale effect
+            const isHeroElement =
+              htmlElement.classList.contains('hero-image') ||
+              htmlElement.classList.contains('hero-image-inner') ||
+              htmlElement.classList.contains('hero-badge-left') ||
+              htmlElement.classList.contains('hero-badge-right') ||
+              htmlElement.classList.contains('hero-border')
+
             htmlElement.style.opacity = '1'
             htmlElement.style.transform = 'translateY(0)'
             htmlElement.style.animation = 'none'
-            htmlElement.style.transition = 'none'
-            clearInlineTransition(htmlElement, 150)
+
+            // Só aplicar transition: none em elementos que não são hero
+            if (!isHeroElement) {
+              htmlElement.style.transition = 'none'
+              clearInlineTransition(htmlElement, 150)
+            }
             clearInlineMotion(htmlElement, 150)
           })
         }, 500)
