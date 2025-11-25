@@ -50,7 +50,7 @@ export default function ContactSection() {
   }
 
   return (
-    <section className="bg-gray-50 py-12 md:py-16 lg:py-20">
+    <section className="bg-gray-50 py-12 md:py-16 lg:py-20 overflow-hidden">
       {/* Container com largura consistente */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
