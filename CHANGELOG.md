@@ -109,13 +109,25 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   Transporte, Pessoas, Comunicação, Métricas e Clima) agora exibe ícones
   relacionados ao tema, mantendo a busca normalizada e o fallback padrão.
   Documentação atualizada em `docs/features/dialog-lab.md`.
-- **IconCustomizationBlock – painel personalizado**: adicionamos o campo “Nome
-  do ícone” com contador e validação (máx. 50 caracteres), exibido somente após
+- **ScrollStack (Playground)**: reduzida a altura total de rolagem
+  (`sectionHeightMultiplier` de 3.5 → 1.2 no playground e padrão 1.5 no
+  componente) para atravessar o bloco com menos scroll mantendo as animações de
+  sobreposição; componente reescrito seguindo o padrão do Lightswind (stack
+  scroll) sem lock global, cards centralizados no viewport, altura configurável
+  mínima de 1.5x viewport e documentação em `docs/features/scroll-stack.md`.
+- **IconCustomizationBlock – painel personalizado**: adicionamos o campo "Nome
+  do ícone" com contador e validação (máx. 50 caracteres), exibido somente após
   pré-visualização válida (upload/URL), além dos botões Cancelar/Salvar no
   rodapé com toasts de feedback (sucesso/erro). Arquivos atualizados:
   `components/dialogs/icon-customization-block.tsx`,
   `app/playground/icon-customization/page.tsx` e
   `components/dialogs/category-dialog.tsx`.
+
+### Removed ❌
+
+- **ScrollStack**: componente e documentação removidos
+  (`components/ui/scroll-stack.tsx`, `docs/features/scroll-stack.md`);
+  playground simplificado mantendo apenas header e CTA.
 - **Category Dialog centralizado**: o fluxo de criação/edição foi movido para
   `components/dialogs/category-dialog.tsx`, disponibilizando o
   `CategoryDialogModal` reutilizável e o `CategoryDialog` demonstrativo. O
@@ -494,6 +506,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   `OrbitControls.autoRotate` em devices touch, garantindo que a rotação
   automática funcione igualmente no mobile e no desktop
   (`components/ui/model-viewer.tsx`).
+- **ScrollStack (Playground)**: ajuste do lock/unlock para usar apenas
+  overflow/overscroll no `body`, evitando o salto do scroll da página ao
+  terminar o stack e liberando a transição suave para a próxima seção
+  (`components/ui/scroll-stack.tsx`).
 
 - **Popover do CategoryShowcase**: eliminamos o "pula-pula" do painel de
   personalização encapsulando o trigger em um wrapper fixo (`h-14 w-14`) que não

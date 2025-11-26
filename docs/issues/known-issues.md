@@ -5,6 +5,56 @@
 
 ---
 
+## 15. Salto do scroll ao sair do ScrollStack (Playground)
+
+### 🐛 Problema
+
+**Data da Ocorrência**: 2025-11-25 **Severidade**: Média (UX) **Status**: ✅
+Resolvido
+
+#### Descrição
+
+Ao concluir a rolagem do componente `scroll-stack` em `/playground`, o scroll
+principal da página dava um "estilingue": primeiro saltava para cima e logo em
+seguida voltava ao ponto esperado, criando um bounce perceptível antes de seguir
+para a próxima seção.
+
+#### Causa Raiz
+
+- O lock de scroll aplicava `position: fixed` + `top` no `body` para travar a
+  página enquanto o stack rolava.
+- Na liberação, o `body` retornava brevemente para o topo antes do
+  `window.scrollTo` suave empurrar para o final da seção, gerando o salto
+  visível.
+
+### ✅ Solução Implementada
+
+- Simplificamos o lock para usar apenas `overflow: hidden` e
+  `overscroll-behavior: contain`, eliminando o uso de `position: fixed`/`top` no
+  `body`.
+- O release para o final da seção ocorre somente após o desbloqueio, evitando o
+  deslocamento inicial que causava o bounce.
+
+#### Arquivos Modificados
+
+1. `components/ui/scroll-stack.tsx`
+
+#### Como Validar
+
+1. `pnpm dev`
+2. Acesse `http://localhost:3000/playground`.
+3. Role o `scroll-stack` até o final; o scroll deve seguir suave para a próxima
+   seção, sem saltar para cima antes.
+4. Role de volta para o topo da seção e repita para garantir que o bounce não
+   reaparece.
+
+### 🛑 Armadilhas a Evitar
+
+- Reintroduzir `position: fixed`/`top` no lock do `body`.
+- Disparar `window.scrollTo` antes de liberar o bloqueio do scroll global.
+
+---
+
 ## 14. Hover do hero 3D sem transição suave após navegar e voltar
 
 ### 🧠 Problema

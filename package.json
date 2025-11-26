@@ -157,6 +157,7 @@
     "input-otp": "latest",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.554.0",
+    "motion": "^12.23.24",
     "next": "16.0.3",
     "next-auth": "4.24.13",
     "next-themes": "latest",
