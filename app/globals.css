@@ -910,6 +910,17 @@ div[class*='text-xs'][class*='inline-flex'][class*='items-center'][class*='gap-2
   animation: very-slow-pulse 4s ease-in-out infinite;
 }
 
+/* Animação de pulso muito lenta e suave para luzes de fundo */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0.015;
+  }
+  50% {
+    opacity: 0.04;
+  }
+}
+
 /* ================================ */
 /* 16. CLASSES DE ANIMAÇÃO          */
 /* ================================ */

@@ -108,7 +108,7 @@ uchardet CHANGELOG.md
 | `├º`      | `ç`     | Cedilha            |
 | `├í`      | `á`     | A com acento agudo |
 | `├ó`      | `ã`     | A com til          |
-| `├®`     | `ê`     | E com circunflexo  |
+| `├®`      | `ê`     | E com circunflexo  |
 | `├║`      | `ú`     | U com acento agudo |
 | `├│`      | `ó`     | O com acento agudo |
 | `├¡`      | `í`     | I com acento agudo |

@@ -4,8 +4,7 @@ import { cn } from '@/lib/utils'
 import { X } from 'lucide-react'
 import React from 'react'
 
-interface CloseButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface CloseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg'
 
   variant?: 'default' | 'ghost' | 'ghostWhite' | 'outline'

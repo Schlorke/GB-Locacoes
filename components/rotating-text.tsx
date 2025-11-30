@@ -34,8 +34,10 @@ interface WordChunk {
   needsSpace: boolean
 }
 
-export interface RotatingTextProps
-  extends Omit<HTMLMotionProps<'span'>, 'children'> {
+export interface RotatingTextProps extends Omit<
+  HTMLMotionProps<'span'>,
+  'children'
+> {
   texts: string[]
   transition?: Transition
   initial?: TargetAndTransition

@@ -4,11 +4,10 @@ import type * as React from 'react'
 import { forwardRef, useCallback, useEffect, useState } from 'react'
 import { Input } from './input'
 
-interface CurrencyInputProps
-  extends Omit<
-    React.InputHTMLAttributes<HTMLInputElement>,
-    'onChange' | 'value'
-  > {
+interface CurrencyInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'onChange' | 'value'
+> {
   value?: number
   onValueChange?: (_value: number) => void
   currency?: string

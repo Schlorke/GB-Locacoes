@@ -3,11 +3,10 @@
 import { cn } from '@/lib/utils'
 import * as React from 'react'
 
-export interface HoverActionMenuProps
-  extends Omit<
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
-    'onMouseEnter' | 'onMouseLeave'
-  > {
+export interface HoverActionMenuProps extends Omit<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  'onMouseEnter' | 'onMouseLeave'
+> {
   /**
    * Conteúdo do botão (ícone, texto, etc.)
    */

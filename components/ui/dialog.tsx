@@ -52,8 +52,9 @@ const DialogBackdrop = forwardRef<
 ))
 DialogBackdrop.displayName = 'DialogBackdrop'
 
-interface DialogPopupProps
-  extends React.ComponentPropsWithoutRef<typeof BaseDialog.Popup> {
+interface DialogPopupProps extends React.ComponentPropsWithoutRef<
+  typeof BaseDialog.Popup
+> {
   variant?: DialogPopupVariant
 }
 

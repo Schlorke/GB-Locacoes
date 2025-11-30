@@ -202,9 +202,8 @@ export async function GET() {
 
   try {
     const { prisma, checkDatabaseConnection } = await import('@/lib/prisma')
-    const { startTrace, addSpan, finishSpan, finishTrace } = await import(
-      '@/lib/telemetry'
-    )
+    const { startTrace, addSpan, finishSpan, finishTrace } =
+      await import('@/lib/telemetry')
 
     // Iniciar tracing para monitoramento
     traceId = startTrace('GET /api/equipments', {

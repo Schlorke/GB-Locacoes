@@ -98,6 +98,8 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- Atualizado baseline-browser-mapping para `latest` a fim de reduzir os avisos
+  de Baseline desatualizado durante o build do Next.
 - **Hero 3D hover**: Hover scale movido para o wrapper interno
   `.hero-image-inner` (sem `overflow-hidden`), evitando sobrescrever o
   `transform` do scroll-reveal e mantendo a animação de entrada enquanto o
@@ -510,6 +512,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   overflow/overscroll no `body`, evitando o salto do scroll da página ao
   terminar o stack e liberando a transição suave para a próxima seção
   (`components/ui/scroll-stack.tsx`).
+- **ScrollStack visível**: cartas anteriores permanecem abaixo das atuais
+  (z-index corrigido) e o fim do stack usa o espaço real do contêiner mesmo com
+  scroll global, evitando que um card cubra o conteúdo do seguinte. Glows
+  pulsantes ficaram restritos aos cards (removidos do fundo/CTA) e as luzes
+  internas foram suavizadas, continuam circulares com overflow visível,
+  intensidade leve e agora ficam contidas dentro do card
+  (`components/ui/scroll-stack.tsx`, `app/playground/page.tsx`,
+  `components/ui/scroll-stack-benefit-card.tsx`).
 
 - **Popover do CategoryShowcase**: eliminamos o "pula-pula" do painel de
   personalização encapsulando o trigger em um wrapper fixo (`h-14 w-14`) que não
