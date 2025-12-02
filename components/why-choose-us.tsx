@@ -1,7 +1,11 @@
 'use client'
 
-import { Card, CardContent } from '@/components/ui/card'
+import BlurText from '@/components/ui/blur-text'
+import { ScrollStackBenefitCard } from '@/components/ui/scroll-stack-benefit-card'
+import ScrollStack, { ScrollStackItem } from '@/components/ui/scroll-stack'
+import ScrollRevealInit from '@/components/scroll-reveal-init'
 import { usePublicSettings } from '@/hooks/use-public-settings'
+import { useState } from 'react'
 import { Award, Clock, Headphones, Shield, Truck, Users } from 'lucide-react'
 
 const benefits = [
@@ -10,144 +14,164 @@ const benefits = [
     title: 'Equipamentos Certificados',
     description:
       'Todos os nossos equipamentos possuem certificação e passam por manutenção preventiva constante para garantir segurança total.',
-    color: 'from-blue-500 to-blue-600',
+    accentColor: 'from-blue-500 to-blue-600',
   },
   {
     icon: Truck,
     title: 'Entrega Rápida e Eficiente',
     description:
       'Entregamos em toda região de Porto Alegre com logística própria e rastreamento dos equipamentos em tempo real.',
-    color: 'from-green-500 to-green-600',
+    accentColor: 'from-green-500 to-green-600',
   },
   {
     icon: Clock,
     title: 'Atendimento Especializado',
     description:
       'Atendimento personalizado com profissionais experientes em equipamentos para obras e serviços em altura.',
-    color: 'from-purple-500 to-purple-600',
+    accentColor: 'from-purple-500 to-purple-600',
   },
   {
     icon: Users,
     title: 'Parceira de Grandes Construtoras',
     description:
       'Atendemos grandes construtoras como Melnick, Cyrela, Joal Teitelbaum, UMA Incorporadora, ABF Developments e outras.',
-    color: 'from-orange-500 to-orange-600',
+    accentColor: 'from-orange-500 to-orange-600',
   },
   {
     icon: Award,
     title: '10 Anos de Experiência',
     description:
       'Há 10 anos oferecendo soluções em locação de equipamentos com foco em segurança, qualidade e comprometimento.',
-    color: 'from-yellow-500 to-yellow-600',
+    accentColor: 'from-yellow-500 to-yellow-600',
   },
   {
     icon: Headphones,
     title: 'Rastreamento dos Equipamentos',
     description:
       'Sistema de rastreamento que identifica onde cada equipamento está e quando foi feita a última manutenção.',
-    color: 'from-red-500 to-red-600',
+    accentColor: 'from-red-500 to-red-600',
   },
 ]
 
 export default function WhyChooseUs() {
   const { settings } = usePublicSettings()
+  const [secondLineReady, setSecondLineReady] = useState(false)
+
   return (
-    <section className="bg-gray-900 text-white relative overflow-hidden py-12 md:py-16 lg:py-20">
-      {/* Animated background - constrain within bounds */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-float-delayed"></div>
-      </div>
-
-      {/* Container com largura consistente */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 overflow-hidden">
-        <div className="text-center mb-12">
-          <h2 className="section-title text-3xl md:text-4xl font-bold mb-4 opacity-0">
-            Por que Escolher a GB Locações?
-          </h2>
-          <p className="section-subtitle text-xl text-gray-300 max-w-2xl mx-auto opacity-0">
-            Especializada em locação de equipamentos para obras e serviços em
-            altura
-          </p>
+    <>
+      <ScrollRevealInit />
+      {/* Main container */}
+      <section className="bg-gray-900 text-white relative min-h-screen">
+        {/* Animated background elements */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-3xl" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {benefits.map((benefit) => {
-            const IconComponent = benefit.icon
-            return (
-              <Card
-                key={benefit.title}
-                className="benefit-card bg-gray-800/50 backdrop-blur-sm border-gray-700 hover:bg-gray-750 transition-all duration-500 hover:scale-105 hover:shadow-2xl group overflow-hidden relative opacity-0"
-              >
-                {/* Gradient overlay */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${benefit.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-                ></div>
+        {/* Title and stack */}
+        <div className="relative z-10 py-12 md:py-16 lg:py-20">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <BlurText
+              text="Por que Escolher a"
+              delay={150}
+              animateBy="words"
+              direction="top"
+              className="text-[1.25rem] md:text-[3rem] lg:text-[4rem] mb-1 text-white justify-center leading-tight"
+              style={{ fontWeight: 'bolder', lineHeight: '1.2' }}
+              onAnimationCompleteAction={() => setSecondLineReady(true)}
+            />
+            <BlurText
+              text="GB Locações?"
+              delay={150}
+              animateBy="words"
+              direction="top"
+              className="text-[1.25rem] md:text-[3rem] lg:text-[4rem] text-white justify-center leading-tight"
+              style={{ fontWeight: 'bolder', lineHeight: '1.2' }}
+              shouldStartAnimating={secondLineReady}
+            />
+          </div>
 
-                <CardContent className="p-6 text-center relative z-10">
-                  <div className="mb-4 inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-600 to-orange-700 rounded-full group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 relative">
-                    <IconComponent className="h-8 w-8 text-white group-hover:scale-110 transition-transform duration-300" />
+          <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ScrollStack
+              useWindowScroll={true}
+              itemDistance={300}
+              itemScale={0.025}
+              itemStackDistance={30}
+              stackPosition="20%"
+              scaleEndPosition="15%"
+              baseScale={0.85}
+              blurAmount={0}
+              onStackComplete={() => {
+                // Stack animation completed
+              }}
+            >
+              {benefits.map((benefit, index) => (
+                <ScrollStackItem
+                  key={benefit.title}
+                  itemClassName="bg-gradient-to-br from-gray-800/95 to-gray-900/98 backdrop-blur-xl border border-gray-700/50 shadow-[0_0_40px_rgba(234,88,12,0.12)]"
+                >
+                  <ScrollStackBenefitCard
+                    icon={benefit.icon}
+                    title={benefit.title}
+                    description={benefit.description}
+                    accentColor={benefit.accentColor}
+                    index={index}
+                  />
+                </ScrollStackItem>
+              ))}
+            </ScrollStack>
+          </div>
+        </div>
 
-                    {/* Pulse ring */}
-                    <div className="absolute inset-0 bg-orange-500 rounded-full animate-ping opacity-0 group-hover:opacity-30"></div>
+        {/* CTA Section - after scroll stack */}
+        <div className="relative z-20 py-16 md:py-20 bg-gradient-to-b from-transparent via-gray-900/55 to-gray-900">
+          {/* Gradient fade mask to blend with cards above - smooth transition */}
+          <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-gray-900/30 to-gray-900 pointer-events-none z-10 backdrop-blur-md" />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+            <div
+              className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden"
+              data-scroll-reveal="true"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+              <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full blur-xl" />
+
+              <div className="relative z-10">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                  Pronto para Começar seu Projeto?
+                </h3>
+                <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+                  Solicite um orçamento gratuito e receba nossa proposta
+                  personalizada. Atendimento com segurança, qualidade e
+                  manutenção constante dos equipamentos.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <div className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group gap-2">
+                    <a
+                      href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
+                      className="hidden sm:inline"
+                    >
+                      {settings.companyPhone}
+                    </a>
+                    <span className="hidden sm:inline text-orange-400">|</span>
+                    <a
+                      href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
+                      className=""
+                    >
+                      {settings.whatsappNumber}
+                    </a>
                   </div>
-
-                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-orange-300 transition-colors duration-300">
-                    {benefit.title}
-                  </h3>
-
-                  <p className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
-                    {benefit.description}
-                  </p>
-                </CardContent>
-
-                {/* Bottom accent line - sempre no fundo */}
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 to-yellow-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 z-0"></div>
-              </Card>
-            )
-          })}
-        </div>
-
-        <div className="cta-section mt-16 bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden opacity-0">
-          {/* Animated background elements */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-pulse"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full blur-xl animate-pulse delay-1000"></div>
-
-          <div className="relative z-10">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              Pronto para Começar seu Projeto?
-            </h3>
-            <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-              Solicite um orçamento gratuito e receba nossa proposta
-              personalizada. Atendimento com segurança, qualidade e manutenção
-              constante dos equipamentos.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <div className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group gap-2">
-                <a
-                  href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
-                  className="hidden sm:inline group-hover:animate-pulse"
-                >
-                  {settings.companyPhone}
-                </a>
-                <span className="hidden sm:inline text-orange-400">|</span>
-                <a
-                  href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
-                  className="group-hover:animate-pulse"
-                >
-                  {settings.whatsappNumber}
-                </a>
+                  <a
+                    href="/orcamento"
+                    className="inline-flex items-center justify-center px-8 h-12 bg-yellow-500 text-gray-900 font-semibold rounded-xl hover:bg-yellow-400 transition-all duration-300 hover:scale-105"
+                  >
+                    Solicitar Orçamento Online
+                  </a>
+                </div>
               </div>
-              <a
-                href="/orcamento"
-                className="inline-flex items-center justify-center px-8 h-12 bg-yellow-500 text-gray-900 font-semibold rounded-xl hover:bg-yellow-400 transition-all duration-300 hover:scale-105"
-              >
-                Solicitar Orçamento Online
-              </a>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }

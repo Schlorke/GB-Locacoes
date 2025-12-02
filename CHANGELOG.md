@@ -8,6 +8,19 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Changed 🔄
+
+- **WhyChooseUs Component - Migração para ScrollStack**: Substituído o
+  componente `WhyChooseUs` tradicional por nova implementação com efeito de
+  empilhamento em scroll (ScrollStack) e animações avançadas.
+  - Título agora usa `BlurText` com animação sequencial palavra por palavra
+  - Cards de benefícios substituídos por `ScrollStackBenefitCard` com efeito de
+    empilhamento progressivo durante o scroll
+  - Background fixo com elementos decorativos sutis em laranja e amarelo
+  - CTA section com gradiente de transição suave e melhor posicionamento z-index
+  - Mantida compatibilidade total com a estrutura existente na homepage
+  - Experiência visual moderna e dinâmica alinhada com a identidade do projeto
+
 ### Added ✨
 
 - **Personalização de ícones em mobile (Playground)**: o seletor
