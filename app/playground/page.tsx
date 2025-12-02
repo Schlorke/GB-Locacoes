@@ -128,7 +128,10 @@ export default function PlaygroundPage() {
           {/* Gradient fade mask to blend with cards above - smooth transition */}
           <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-gray-900/30 to-gray-900 pointer-events-none z-10 backdrop-blur-md" />
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
-            <div className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
+            <div
+              className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden"
+              data-scroll-reveal="true"
+            >
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full blur-xl" />
 

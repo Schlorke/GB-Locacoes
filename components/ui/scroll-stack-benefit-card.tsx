@@ -113,61 +113,68 @@ export function ScrollStackBenefitCard({
         >
           {/* Title with gradient accent */}
           <div className="relative inline-block mb-3">
-            <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-tight">
+            <h3 className="relative z-10 text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-tight">
               {title}
             </h3>
             {/* Pencil stroke effect - pressure-sensitive line */}
-            <div className="absolute -bottom-1 left-0 md:left-auto md:right-auto h-2 pointer-events-none" style={{ width: '100%', left: isReversed ? 'auto' : '0', right: isReversed ? '0' : 'auto' }}>
+            <div
+              className="absolute -bottom-1 left-0 md:left-auto md:right-auto h-2 pointer-events-none"
+              style={{
+                width: '100%',
+                left: isReversed ? 'auto' : '0',
+                right: isReversed ? '0' : 'auto',
+              }}
+            >
               {/* Main stroke with gradient opacity */}
               <div
                 className={cn(
                   'absolute inset-0 rounded-full',
-                  `bg-gradient-to-${isReversed ? 'l' : 'r'} ${accentColor}`
+                  `bg-gradient-to-r ${accentColor}`
                 )}
                 style={{
                   maskImage: isReversed
-                    ? 'linear-gradient(to left, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)'
-                    : 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)',
+                    ? 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 20%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.8) 100%)'
+                    : 'linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)',
                   WebkitMaskImage: isReversed
-                    ? 'linear-gradient(to left, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)'
-                    : 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)',
+                    ? 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 20%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.8) 100%)'
+                    : 'linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)',
                 }}
               />
               {/* Secondary glow layer for depth */}
               <div
                 className={cn(
                   'absolute inset-0 rounded-full blur-[1px]',
-                  `bg-gradient-to-${isReversed ? 'l' : 'r'} ${accentColor}`
+                  `bg-gradient-to-r ${accentColor}`
                 )}
                 style={{
                   opacity: 0.4,
                   maskImage: isReversed
-                    ? 'linear-gradient(to left, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)'
-                    : 'linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)',
+                    ? 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.6) 100%)'
+                    : 'linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)',
                   WebkitMaskImage: isReversed
-                    ? 'linear-gradient(to left, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)'
-                    : 'linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)',
+                    ? 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.6) 100%)'
+                    : 'linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)',
                 }}
               />
               {/* Height variation to simulate pressure */}
               <div
                 className={cn(
                   'absolute rounded-full',
-                  `bg-gradient-to-${isReversed ? 'l' : 'r'} ${accentColor}`
+                  `bg-gradient-to-r ${accentColor}`
                 )}
                 style={{
-                  left: isReversed ? 'auto' : '0',
-                  right: isReversed ? '0' : 'auto',
+                  left: '0',
+                  right: '0',
                   top: '50%',
                   transform: 'translateY(-50%)',
                   height: '100%',
                   width: '100%',
                   maskImage: isReversed
-                    ? 'linear-gradient(to left, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)'
-                    : 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)',
+                    ? 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.25) 70%, rgba(0,0,0,0.5) 100%)'
+                    : 'linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)',
                   WebkitMaskImage: isReversed
-                    ? 'linear-gradient(to left, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)'
-                    : 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)',
+                    ? 'linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.25) 70%, rgba(0,0,0,0.5) 100%)'
+                    : 'linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)',
                   filter: 'blur(0.5px)',
                 }}
               />
@@ -177,8 +184,8 @@ export function ScrollStackBenefitCard({
           {/* Description */}
           <p
             className={cn(
-              "text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-xl",
-              isReversed && "md:ml-auto"
+              'text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-xl',
+              isReversed && 'md:ml-auto'
             )}
           >
             {description}
