@@ -81,7 +81,7 @@ export default function PlaygroundPage() {
               onAnimationCompleteAction={() => setSecondLineReady(true)}
             />
             <BlurText
-              text="GB Locacoes?"
+              text="GB Locações?"
               delay={150}
               animateBy="words"
               direction="top"
@@ -94,13 +94,13 @@ export default function PlaygroundPage() {
           <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <ScrollStack
               useWindowScroll={true}
-              itemDistance={60}
+              itemDistance={300}
               itemScale={0.025}
-              itemStackDistance={25}
-              stackPosition="25%"
+              itemStackDistance={30}
+              stackPosition="20%"
               scaleEndPosition="15%"
-              baseScale={0.88}
-              blurAmount={2}
+              baseScale={0.85}
+              blurAmount={0}
               onStackComplete={() => {
                 // Stack animation completed
               }}

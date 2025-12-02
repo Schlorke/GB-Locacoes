@@ -107,8 +107,8 @@ export function ScrollStackBenefitCard({
         {/* Text content */}
         <div
           className={cn(
-            'flex-1 text-center md:text-left',
-            isReversed && 'md:text-right'
+            'flex-1 text-center',
+            isReversed ? 'md:text-right' : 'md:text-left'
           )}
         >
           {/* Title with gradient accent */}
@@ -116,30 +116,86 @@ export function ScrollStackBenefitCard({
             <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-tight">
               {title}
             </h3>
-            <div
-              className={cn(
-                'absolute -bottom-1 left-0 h-1 rounded-full',
-                `bg-gradient-to-r ${accentColor}`,
-                'opacity-60 blur-[0.5px]',
-                isReversed ? 'md:left-auto md:right-0' : ''
-              )}
-              style={{ width: '60%' }}
-            />
+            {/* Pencil stroke effect - pressure-sensitive line */}
+            <div className="absolute -bottom-1 left-0 md:left-auto md:right-auto h-2 pointer-events-none" style={{ width: '100%', left: isReversed ? 'auto' : '0', right: isReversed ? '0' : 'auto' }}>
+              {/* Main stroke with gradient opacity */}
+              <div
+                className={cn(
+                  'absolute inset-0 rounded-full',
+                  `bg-gradient-to-${isReversed ? 'l' : 'r'} ${accentColor}`
+                )}
+                style={{
+                  maskImage: isReversed
+                    ? 'linear-gradient(to left, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)'
+                    : 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)',
+                  WebkitMaskImage: isReversed
+                    ? 'linear-gradient(to left, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)'
+                    : 'linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.2) 80%, rgba(0,0,0,0) 100%)',
+                }}
+              />
+              {/* Secondary glow layer for depth */}
+              <div
+                className={cn(
+                  'absolute inset-0 rounded-full blur-[1px]',
+                  `bg-gradient-to-${isReversed ? 'l' : 'r'} ${accentColor}`
+                )}
+                style={{
+                  opacity: 0.4,
+                  maskImage: isReversed
+                    ? 'linear-gradient(to left, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)'
+                    : 'linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)',
+                  WebkitMaskImage: isReversed
+                    ? 'linear-gradient(to left, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)'
+                    : 'linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%)',
+                }}
+              />
+              {/* Height variation to simulate pressure */}
+              <div
+                className={cn(
+                  'absolute rounded-full',
+                  `bg-gradient-to-${isReversed ? 'l' : 'r'} ${accentColor}`
+                )}
+                style={{
+                  left: isReversed ? 'auto' : '0',
+                  right: isReversed ? '0' : 'auto',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  height: '100%',
+                  width: '100%',
+                  maskImage: isReversed
+                    ? 'linear-gradient(to left, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)'
+                    : 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)',
+                  WebkitMaskImage: isReversed
+                    ? 'linear-gradient(to left, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)'
+                    : 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0) 100%)',
+                  filter: 'blur(0.5px)',
+                }}
+              />
+            </div>
           </div>
 
           {/* Description */}
-          <p className="text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-xl">
+          <p
+            className={cn(
+              "text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-xl",
+              isReversed && "md:ml-auto"
+            )}
+          >
             {description}
           </p>
 
           {/* Stats or badge (optional visual element) */}
-          <div className="mt-4 flex items-center gap-3 justify-center md:justify-start">
+          <div
+            className={cn(
+              'mt-4 flex items-center gap-3 justify-center',
+              isReversed ? 'md:justify-end' : 'md:justify-start'
+            )}
+          >
             <div
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2 rounded-full',
                 'bg-gradient-to-r from-gray-700/50 to-gray-800/50',
-                'border border-gray-600/30',
-                isReversed && 'md:ml-auto'
+                'border border-gray-600/30'
               )}
             >
               <div
