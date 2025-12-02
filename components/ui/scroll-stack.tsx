@@ -36,6 +36,7 @@ interface ScrollStackProps {
   blurAmount?: number
   useWindowScroll?: boolean
   onStackComplete?: () => void
+  sectionHeightMultiplier?: number
 }
 
 const ScrollStack: React.FC<ScrollStackProps> = ({
@@ -51,6 +52,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   blurAmount = 0,
   useWindowScroll = true,
   onStackComplete,
+  sectionHeightMultiplier = 1.5,
 }) => {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const stackCompletedRef = useRef(false)
@@ -343,13 +345,20 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         WebkitOverflowScrolling: 'touch',
       }
 
+  const innerStyles: React.CSSProperties = {
+    minHeight: `calc(${Math.max(sectionHeightMultiplier, 1)} * 100vh)`,
+  }
+
   return (
     <div
       className={containerClassName}
       ref={scrollerRef}
       style={containerStyles}
     >
-      <div className="scroll-stack-inner pt-[4vh] pb-[6rem] min-h-screen overflow-visible">
+      <div
+        className="scroll-stack-inner pt-[4vh] pb-[6rem] min-h-screen overflow-visible"
+        style={innerStyles}
+      >
         {children}
         {/* Spacer so the last pin can release cleanly */}
         <div className="scroll-stack-end w-full h-px" />

@@ -109,6 +109,19 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - Documentação sincronizada em `docs/features/dialog-lab.md` com instruções
     atualizadas de uso e dialogs aninhadas.
 
+### Fixed 🐛
+
+- Removido `ScrollRevealInit` duplicado em `WhyChooseUs` e no playground para
+  eliminar tremores no ScrollStack mantendo o reveal do título e do CTA via
+  inicialização global (`app/ClientLayout.tsx`).
+- **ScrollStack**: Aumentada a altura minima padrao (multiplicador 1.5x) para
+  evitar o efeito de sobe-e-desce dos cards durante o scroll, mantendo o reveal
+  do titulo e do CTA intacto.
+
+- **WhyChooseUs background**: Orb laranja passou de fixed para absolute com
+  overflow-hidden no container, evitando que a luz fique presa no centro da
+  viewport quando o usuario rola para outras secoes (home e playground).
+
 ### Changed 🔄
 
 - Atualizado baseline-browser-mapping para `latest` a fim de reduzir os avisos

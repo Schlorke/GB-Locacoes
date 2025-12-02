@@ -35,6 +35,9 @@ ou `filter`.
 - `useWindowScroll`: usa o scroll global (true) ou um scroller interno (false).
 - `onStackComplete`: callback disparado quando o ultimo cartao permanece visivel
   no pin.
+- `sectionHeightMultiplier`: multiplica a altura minima do stack (padrao 1.5x a
+  viewport) para garantir pista suficiente e evitar efeito de sobe-e-desce
+  enquanto os cartoes empilham.
 
 ## Padrao de layout recomendado
 

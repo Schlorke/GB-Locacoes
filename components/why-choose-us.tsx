@@ -3,7 +3,6 @@
 import BlurText from '@/components/ui/blur-text'
 import { ScrollStackBenefitCard } from '@/components/ui/scroll-stack-benefit-card'
 import ScrollStack, { ScrollStackItem } from '@/components/ui/scroll-stack'
-import ScrollRevealInit from '@/components/scroll-reveal-init'
 import { usePublicSettings } from '@/hooks/use-public-settings'
 import { useState } from 'react'
 import { Award, Clock, Headphones, Shield, Truck, Users } from 'lucide-react'
@@ -58,120 +57,116 @@ export default function WhyChooseUs() {
   const [secondLineReady, setSecondLineReady] = useState(false)
 
   return (
-    <>
-      <ScrollRevealInit />
-      {/* Main container */}
-      <section className="bg-gray-900 text-white relative min-h-screen">
-        {/* Animated background elements */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-3xl" />
+    <section className="bg-gray-900 text-white relative min-h-screen overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-3xl" />
+      </div>
+
+      {/* Title and stack */}
+      <div className="relative z-10 py-12 md:py-16 lg:py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+          <BlurText
+            text="Por que Escolher a"
+            delay={150}
+            animateBy="words"
+            direction="top"
+            className="text-[1.25rem] md:text-[3rem] lg:text-[4rem] mb-1 text-white justify-center leading-tight"
+            style={{ fontWeight: 'bolder', lineHeight: '1.2' }}
+            onAnimationCompleteAction={() => setSecondLineReady(true)}
+          />
+          <BlurText
+            text="GB Locações?"
+            delay={150}
+            animateBy="words"
+            direction="top"
+            className="text-[1.25rem] md:text-[3rem] lg:text-[4rem] text-white justify-center leading-tight"
+            style={{ fontWeight: 'bolder', lineHeight: '1.2' }}
+            shouldStartAnimating={secondLineReady}
+          />
         </div>
 
-        {/* Title and stack */}
-        <div className="relative z-10 py-12 md:py-16 lg:py-20">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-            <BlurText
-              text="Por que Escolher a"
-              delay={150}
-              animateBy="words"
-              direction="top"
-              className="text-[1.25rem] md:text-[3rem] lg:text-[4rem] mb-1 text-white justify-center leading-tight"
-              style={{ fontWeight: 'bolder', lineHeight: '1.2' }}
-              onAnimationCompleteAction={() => setSecondLineReady(true)}
-            />
-            <BlurText
-              text="GB Locações?"
-              delay={150}
-              animateBy="words"
-              direction="top"
-              className="text-[1.25rem] md:text-[3rem] lg:text-[4rem] text-white justify-center leading-tight"
-              style={{ fontWeight: 'bolder', lineHeight: '1.2' }}
-              shouldStartAnimating={secondLineReady}
-            />
-          </div>
-
-          <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <ScrollStack
-              useWindowScroll={true}
-              itemDistance={300}
-              itemScale={0.025}
-              itemStackDistance={30}
-              stackPosition="20%"
-              scaleEndPosition="15%"
-              baseScale={0.85}
-              blurAmount={0}
-              onStackComplete={() => {
-                // Stack animation completed
-              }}
-            >
-              {benefits.map((benefit, index) => (
-                <ScrollStackItem
-                  key={benefit.title}
-                  itemClassName="bg-gradient-to-br from-gray-800/95 to-gray-900/98 backdrop-blur-xl border border-gray-700/50 shadow-[0_0_40px_rgba(234,88,12,0.12)]"
-                >
-                  <ScrollStackBenefitCard
-                    icon={benefit.icon}
-                    title={benefit.title}
-                    description={benefit.description}
-                    accentColor={benefit.accentColor}
-                    index={index}
-                  />
-                </ScrollStackItem>
-              ))}
-            </ScrollStack>
-          </div>
+        <div className="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollStack
+            useWindowScroll={true}
+            itemDistance={300}
+            itemScale={0.025}
+            itemStackDistance={30}
+            stackPosition="20%"
+            scaleEndPosition="15%"
+            baseScale={0.85}
+            blurAmount={0}
+            onStackComplete={() => {
+              // Stack animation completed
+            }}
+          >
+            {benefits.map((benefit, index) => (
+              <ScrollStackItem
+                key={benefit.title}
+                itemClassName="bg-gradient-to-br from-gray-800/95 to-gray-900/98 backdrop-blur-xl border border-gray-700/50 shadow-[0_0_40px_rgba(234,88,12,0.12)]"
+              >
+                <ScrollStackBenefitCard
+                  icon={benefit.icon}
+                  title={benefit.title}
+                  description={benefit.description}
+                  accentColor={benefit.accentColor}
+                  index={index}
+                />
+              </ScrollStackItem>
+            ))}
+          </ScrollStack>
         </div>
+      </div>
 
-        {/* CTA Section - after scroll stack */}
-        <div className="relative z-20 py-16 md:py-20 bg-gradient-to-b from-transparent via-gray-900/55 to-gray-900">
-          {/* Gradient fade mask to blend with cards above - smooth transition */}
-          <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-gray-900/30 to-gray-900 pointer-events-none z-10 backdrop-blur-md" />
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
-            <div
-              className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden"
-              data-scroll-reveal="true"
-            >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full blur-xl" />
+      {/* CTA Section - after scroll stack */}
+      <div className="relative z-20 py-16 md:py-20 bg-gradient-to-b from-transparent via-gray-900/55 to-gray-900">
+        {/* Gradient fade mask to blend with cards above - smooth transition */}
+        <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-gray-900/30 to-gray-900 pointer-events-none z-10 backdrop-blur-md" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+          <div
+            className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden"
+            data-scroll-reveal="true"
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full blur-xl" />
 
-              <div className="relative z-10">
-                <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                  Pronto para Começar seu Projeto?
-                </h3>
-                <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-                  Solicite um orçamento gratuito e receba nossa proposta
-                  personalizada. Atendimento com segurança, qualidade e
-                  manutenção constante dos equipamentos.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <div className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group gap-2">
-                    <a
-                      href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
-                      className="hidden sm:inline"
-                    >
-                      {settings.companyPhone}
-                    </a>
-                    <span className="hidden sm:inline text-orange-400">|</span>
-                    <a
-                      href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
-                      className=""
-                    >
-                      {settings.whatsappNumber}
-                    </a>
-                  </div>
+            <div className="relative z-10">
+              <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                Pronto para Começar seu Projeto?
+              </h3>
+              <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+                Solicite um orçamento gratuito e receba nossa proposta
+                personalizada. Atendimento com segurança, qualidade e manutenção
+                constante dos equipamentos.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <div className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group gap-2">
                   <a
-                    href="/orcamento"
-                    className="inline-flex items-center justify-center px-8 h-12 bg-yellow-500 text-gray-900 font-semibold rounded-xl hover:bg-yellow-400 transition-all duration-300 hover:scale-105"
+                    href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
+                    className="hidden sm:inline"
                   >
-                    Solicitar Orçamento Online
+                    {settings.companyPhone}
+                  </a>
+                  <span className="hidden sm:inline text-orange-400">|</span>
+                  <a
+                    href={`tel:+55${settings.whatsappNumber.replace(/\D/g, '')}`}
+                    className=""
+                  >
+                    {settings.whatsappNumber}
                   </a>
                 </div>
+                <a
+                  href="/orcamento"
+                  className="inline-flex items-center justify-center px-8 h-12 bg-yellow-500 text-gray-900 font-semibold rounded-xl hover:bg-yellow-400 transition-all duration-300 hover:scale-105"
+                >
+                  Solicitar Orçamento Online
+                </a>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }
