@@ -18,6 +18,7 @@ export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({
     style={{
       backfaceVisibility: 'hidden',
       transformStyle: 'preserve-3d',
+      transition: 'none', // ⭐ CRÍTICO: Desabilita transitions CSS que causam flicks
     }}
   >
     {children}
@@ -156,9 +157,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       ? getElementOffset(endElement, relativeRoot)
       : 0
 
-    // Threshold adaptativo: mais alto em mobile para reduzir updates
-    const translateThreshold = isMobile ? 2.0 : 0.1
-    const scaleThreshold = isMobile ? 0.01 : 0.001
+    // Threshold adaptativo: MUITO ALTO em mobile para eliminar flicks
+    const translateThreshold = isMobile ? 5.0 : 0.1
+    const scaleThreshold = isMobile ? 0.02 : 0.001
 
     cardsRef.current.forEach((card, i) => {
       if (!card) return
@@ -208,11 +209,13 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         translateY = pinEnd - cardTop + stackPositionPx + itemStackDistance * i
       }
 
-      // Arredondamento adaptativo: mais agressivo em mobile
+      // Arredondamento adaptativo: MUITO agressivo em mobile quando pinned
       const newTransform = {
         translateY: isMobile
-          ? Math.round(translateY)
-          : Math.round(translateY * 100) / 100,
+          ? isPinned
+            ? Math.round(translateY / 5) * 5 // Múltiplos de 5px quando pinned!
+            : Math.round(translateY) // Inteiro quando não pinned
+          : Math.round(translateY * 100) / 100, // Desktop: 2 decimais
         scale: Math.round(scale * 100) / 100,
         rotation: Math.round(rotation * 100) / 100,
         blur: Math.round(blur * 100) / 100,
@@ -379,6 +382,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       card.style.perspective = '1000px'
       card.style.webkitPerspective = '1000px'
       card.style.zIndex = String(i + 1)
+      // ⭐ CRÍTICO: Desabilita TODAS as transitions para evitar flicks/delays
+      card.style.transition = 'none'
+      card.style.webkitTransition = 'none'
     })
 
     // Inicializa o Lenis
