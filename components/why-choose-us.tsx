@@ -72,8 +72,7 @@ export default function WhyChooseUs() {
             delay={150}
             animateBy="words"
             direction="top"
-            className="text-[1.25rem] md:text-[3rem] lg:text-[4rem] mb-1 text-white justify-center leading-tight"
-            style={{ fontWeight: 'bolder', lineHeight: '1.2' }}
+            className="section-title text-3xl md:text-4xl font-bold text-white mb-4 justify-center"
             onAnimationCompleteAction={() => setSecondLineReady(true)}
           />
           <BlurText
@@ -81,8 +80,7 @@ export default function WhyChooseUs() {
             delay={150}
             animateBy="words"
             direction="top"
-            className="text-[1.25rem] md:text-[3rem] lg:text-[4rem] text-white justify-center leading-tight"
-            style={{ fontWeight: 'bolder', lineHeight: '1.2' }}
+            className="section-title text-3xl md:text-4xl font-bold text-white mb-4 justify-center"
             shouldStartAnimating={secondLineReady}
           />
         </div>
