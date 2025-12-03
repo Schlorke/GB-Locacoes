@@ -122,20 +122,3 @@ a cada evento de scroll.
 
 **Resultado**: Movimento perfeitamente fluido, sem tremores, identico a
 implementacao de referencia do ReactBits.dev.
-
-### ✅ Solucao hibrida definitiva (Desktop/Mobile)
-
-**Problema**: Conflito arquitetural - Lenis global causava overhead em mobile
-com multiplos sistemas (ScrollReveal, Framer Motion) competindo.
-
-**Solucao**: Abordagem hibrida adaptativa
-
-- **Desktop**: Lenis smooth scroll (0px tremor, visual premium)
-- **Mobile**: Scroll nativo + otimizacoes:
-  - RAF throttling (max 1 update/frame)
-  - Threshold 2px (ignora micro-variacoes)
-  - Arredondamento inteiro (sem decimais)
-  - Resultado: <1px tremor (imperceptivel), 60fps
-
-**Trade-off**: <1px tremor mobile (invisivel) vs performance perfeita + zero
-conflitos.

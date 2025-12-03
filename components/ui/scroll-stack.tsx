@@ -18,7 +18,6 @@ export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({
     style={{
       backfaceVisibility: 'hidden',
       transformStyle: 'preserve-3d',
-      transition: 'none', // ⭐ CRÍTICO: Desabilita transitions CSS que causam flicks
     }}
   >
     {children}
@@ -74,7 +73,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const rafRef = useRef<number | null>(null)
   const lenisRef = useRef<Lenis | null>(null)
 
-  // Detectar mobile apenas uma vez no mount (evita re-renders)
+  // Detectar mobile apenas uma vez no mount (sem re-renders)
   const isMobileRef = useRef(
     typeof window !== 'undefined' && window.innerWidth < 768
   )
@@ -157,9 +156,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       ? getElementOffset(endElement, relativeRoot)
       : 0
 
-    // Threshold adaptativo: MUITO ALTO em mobile para eliminar flicks
-    const translateThreshold = isMobile ? 5.0 : 0.1
-    const scaleThreshold = isMobile ? 0.02 : 0.001
+    // ⭐ Thresholds adaptativos por dispositivo
+    const translateThreshold = isMobile ? 2.0 : 0.1 // Mobile: 2px (imperceptível)
+    const scaleThreshold = isMobile ? 0.01 : 0.001 // Mobile: menos sensível
 
     cardsRef.current.forEach((card, i) => {
       if (!card) return
@@ -209,14 +208,12 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         translateY = pinEnd - cardTop + stackPositionPx + itemStackDistance * i
       }
 
-      // Arredondamento adaptativo: MUITO agressivo em mobile quando pinned
+      // ⭐ Arredondamento adaptativo (mobile = mais agressivo)
       const newTransform = {
         translateY: isMobile
-          ? isPinned
-            ? Math.round(translateY / 5) * 5 // Múltiplos de 5px quando pinned!
-            : Math.round(translateY) // Inteiro quando não pinned
+          ? Math.round(translateY) // Mobile: inteiro (0 decimais)
           : Math.round(translateY * 100) / 100, // Desktop: 2 decimais
-        scale: Math.round(scale * 100) / 100,
+        scale: Math.round(scale * 100) / 100, // 2 decimais (ambos)
         rotation: Math.round(rotation * 100) / 100,
         blur: Math.round(blur * 100) / 100,
       }
@@ -225,7 +222,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       const hasChanged =
         !lastTransform ||
         Math.abs(lastTransform.translateY - newTransform.translateY) >
-          translateThreshold ||
+          translateThreshold || // ⭐ Threshold adaptativo
         Math.abs(lastTransform.scale - newTransform.scale) > scaleThreshold ||
         Math.abs(lastTransform.rotation - newTransform.rotation) > 0.1 ||
         Math.abs(lastTransform.blur - newTransform.blur) > 0.1
@@ -276,7 +273,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const setupLenis = useCallback(() => {
     const isMobile = isMobileRef.current
 
-    // MOBILE: Scroll nativo com RAF throttling (performance otimizada)
+    // ⭐ MOBILE: Scroll NATIVO com RAF throttling (performance)
     if (isMobile) {
       const scrollTarget = useWindowScroll ? window : scrollerRef.current
       if (scrollTarget) {
@@ -297,7 +294,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       return
     }
 
-    // DESKTOP: Lenis smooth scroll (visual premium)
+    // ⭐ DESKTOP: Lenis smooth scroll (elimina tremor)
     if (useWindowScroll) {
       const lenis = new Lenis({
         duration: 1.2,
@@ -382,9 +379,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       card.style.perspective = '1000px'
       card.style.webkitPerspective = '1000px'
       card.style.zIndex = String(i + 1)
-      // ⭐ CRÍTICO: Desabilita TODAS as transitions para evitar flicks/delays
-      card.style.transition = 'none'
-      card.style.webkitTransition = 'none'
     })
 
     // Inicializa o Lenis

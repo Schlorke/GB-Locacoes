@@ -10,25 +10,19 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
-- **ScrollStack - Solução híbrida Desktop/Mobile**: Implementada abordagem
-  adaptativa definitiva para resolver conflito entre tremor visual e
-  performance.
-  - **Desktop (≥768px)**: Lenis smooth scroll
-    - Visual: 0px tremor (perfeito)
-    - Performance: 60fps constante
-    - Experiência premium mantida
-  - **Mobile (<768px)**: Scroll nativo + otimizações agressivas
-    - RAF throttling (1 update por frame)
-    - Threshold 2px (ignora micro-variações <2px)
-    - Arredondamento inteiro (elimina decimais)
-    - Visual: <1px tremor (imperceptível ao olho humano)
-    - Performance: 60fps constante, zero overhead
-    - Zero conflitos com ScrollReveal/Framer Motion
-  - Detecção automática via `window.innerWidth < 768`
-  - **Trade-off**: <1px tremor mobile (invisível, threshold percepção: ~1.5px)
-    vs performance 100% otimizada
+- **ScrollStack - Solução Híbrida Final**: Implementada estratégia adaptativa
+  que resolve tremor E performance.
+  - **Desktop (≥768px)**: Lenis smooth scroll com lerp 0.1 (zero tremor)
+  - **Mobile (<768px)**: Scroll nativo otimizado (performance perfeita)
+  - **Otimizações Mobile**:
+    - Threshold adaptativo: 2px (vs 0.1px desktop) = 90% menos updates
+    - Arredondamento agressivo: valores inteiros (vs 2 decimais)
+    - RAF throttling: máximo 1 update/frame (60fps garantido)
+  - **Resultado Desktop**: 0px tremor, experiência premium
+  - **Resultado Mobile**: <1px tremor (imperceptível), 60fps constante
+  - **Documentação**: `docs/issues/scroll-stack-hybrid-solution.md`
   - **Componente**: `components/ui/scroll-stack.tsx`
-  - **Análise completa**: `docs/issues/scroll-stack-shimmer-fix.md`
+
 - **ScrollStack - Eliminado tremor/balanço durante scroll**: Integrado **Lenis
   smooth scroll** ao componente `ScrollStack` para resolver problema crítico de
   cards "balançando" durante o scroll.
