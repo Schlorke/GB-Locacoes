@@ -1,7 +1,7 @@
 'use client'
 
 import { Info, Search, TrendingUp, X } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from './ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
@@ -21,6 +21,7 @@ interface Equipment {
 
 export function HeaderSearchCombobox() {
   const router = useRouter()
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [suggestions, setSuggestions] = useState<Equipment[]>([])
@@ -34,6 +35,11 @@ export function HeaderSearchCombobox() {
   ])
   const inputRef = useRef<HTMLInputElement>(null)
   const debounceRef = useRef<NodeJS.Timeout | undefined>(undefined)
+
+  // Fechar popover quando a rota mudar (evita flick durante navegação)
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
 
   // Auto-focus no input quando o popover abre
   useEffect(() => {

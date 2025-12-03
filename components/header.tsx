@@ -6,6 +6,7 @@ import { NotificationBadgeWrapper } from '@/components/ui/notification-badge'
 import { useCartNotifications } from '@/hooks/use-cart-notifications'
 import { useNotifications } from '@/hooks/use-notifications'
 import { usePublicSettings } from '@/hooks/use-public-settings'
+import { cn } from '@/lib/utils'
 import { Menu, Phone, ShoppingCart, User } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -226,14 +227,26 @@ export default function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-slate-700 hover:text-orange-600 transition-all duration-200 rounded-xl group header-action-button"
+                  className={cn(
+                    'transition-all duration-200 rounded-xl group header-action-button',
+                    pathname?.startsWith('/area-cliente')
+                      ? 'text-orange-600'
+                      : 'text-slate-700 hover:text-orange-600'
+                  )}
                   asChild
                 >
                   <Link
                     href="/area-cliente#dashboard-banner"
                     onClick={markAllAsRead}
                   >
-                    <User className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                    <User
+                      className={cn(
+                        'h-5 w-5 transition-transform',
+                        pathname?.startsWith('/area-cliente')
+                          ? 'scale-110'
+                          : 'group-hover:scale-110'
+                      )}
+                    />
                     <span className="sr-only">Minha conta</span>
                   </Link>
                 </Button>
@@ -242,11 +255,25 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-slate-700 hover:text-orange-600 transition-all duration-200 rounded-xl group header-action-button"
+                className={cn(
+                  'transition-all duration-200 rounded-xl group header-action-button',
+                  pathname?.startsWith('/login') ||
+                    pathname?.startsWith('/cadastro')
+                    ? 'text-orange-600'
+                    : 'text-slate-700 hover:text-orange-600'
+                )}
                 asChild
               >
                 <Link href="/login">
-                  <User className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                  <User
+                    className={cn(
+                      'h-5 w-5 transition-transform',
+                      pathname?.startsWith('/login') ||
+                        pathname?.startsWith('/cadastro')
+                        ? 'scale-110'
+                        : 'group-hover:scale-110'
+                    )}
+                  />
                   <span className="sr-only">Minha conta</span>
                 </Link>
               </Button>
@@ -257,11 +284,23 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-slate-700 hover:text-orange-600 transition-all duration-200 rounded-xl group header-action-button"
+                className={cn(
+                  'transition-all duration-200 rounded-xl group header-action-button',
+                  pathname?.startsWith('/orcamento')
+                    ? 'text-orange-600'
+                    : 'text-slate-700 hover:text-orange-600'
+                )}
                 asChild
               >
                 <Link href="/orcamento">
-                  <ShoppingCart className="h-5 w-5 group-hover:scale-110 transition-transform" />
+                  <ShoppingCart
+                    className={cn(
+                      'h-5 w-5 transition-transform',
+                      pathname?.startsWith('/orcamento')
+                        ? 'scale-110'
+                        : 'group-hover:scale-110'
+                    )}
+                  />
                   <span className="sr-only">Carrinho</span>
                 </Link>
               </Button>

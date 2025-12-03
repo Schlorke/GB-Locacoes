@@ -373,12 +373,15 @@ button[aria-controls].header-action-button {
   border: none !important;
 }
 
+/* Shadow no hover e quando botão está ativo (página atual ou popover aberto) */
 .header-action-button:hover,
 a.header-action-button:hover,
 button.header-action-button:hover,
 button[aria-controls].header-action-button:hover,
 button[data-state='open'].header-action-button,
-button[aria-expanded='true'].header-action-button {
+button[aria-expanded='true'].header-action-button,
+a.header-action-button.text-orange-600,
+.header-action-button.text-orange-600 {
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
