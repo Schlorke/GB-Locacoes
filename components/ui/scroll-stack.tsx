@@ -73,6 +73,11 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const rafRef = useRef<number | null>(null)
   const lenisRef = useRef<Lenis | null>(null)
 
+  // Detectar mobile apenas uma vez no mount (evita re-renders)
+  const isMobileRef = useRef(
+    typeof window !== 'undefined' && window.innerWidth < 768
+  )
+
   const calculateProgress = useCallback(
     (scrollTop: number, start: number, end: number) => {
       if (scrollTop < start) return 0
@@ -131,6 +136,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     if (!containerHeight) return
 
     const relativeRoot = useWindowScroll ? null : scrollerRef.current
+    const isMobile = isMobileRef.current
 
     isUpdatingRef.current = true
 
@@ -149,6 +155,10 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     const endElementTop = endElement
       ? getElementOffset(endElement, relativeRoot)
       : 0
+
+    // Threshold adaptativo: mais alto em mobile para reduzir updates
+    const translateThreshold = isMobile ? 2.0 : 0.1
+    const scaleThreshold = isMobile ? 0.01 : 0.001
 
     cardsRef.current.forEach((card, i) => {
       if (!card) return
@@ -198,9 +208,12 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         translateY = pinEnd - cardTop + stackPositionPx + itemStackDistance * i
       }
 
+      // Arredondamento adaptativo: mais agressivo em mobile
       const newTransform = {
-        translateY: Math.round(translateY * 100) / 100,
-        scale: Math.round(scale * 1000) / 1000,
+        translateY: isMobile
+          ? Math.round(translateY)
+          : Math.round(translateY * 100) / 100,
+        scale: Math.round(scale * 100) / 100,
         rotation: Math.round(rotation * 100) / 100,
         blur: Math.round(blur * 100) / 100,
       }
@@ -208,8 +221,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       const lastTransform = lastTransformsRef.current.get(i)
       const hasChanged =
         !lastTransform ||
-        Math.abs(lastTransform.translateY - newTransform.translateY) > 0.1 ||
-        Math.abs(lastTransform.scale - newTransform.scale) > 0.001 ||
+        Math.abs(lastTransform.translateY - newTransform.translateY) >
+          translateThreshold ||
+        Math.abs(lastTransform.scale - newTransform.scale) > scaleThreshold ||
         Math.abs(lastTransform.rotation - newTransform.rotation) > 0.1 ||
         Math.abs(lastTransform.blur - newTransform.blur) > 0.1
 
@@ -257,8 +271,31 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   }, [updateCardTransforms])
 
   const setupLenis = useCallback(() => {
+    const isMobile = isMobileRef.current
+
+    // MOBILE: Scroll nativo com RAF throttling (performance otimizada)
+    if (isMobile) {
+      const scrollTarget = useWindowScroll ? window : scrollerRef.current
+      if (scrollTarget) {
+        let ticking = false
+        const throttledScroll = () => {
+          if (!ticking) {
+            requestAnimationFrame(() => {
+              handleScroll()
+              ticking = false
+            })
+            ticking = true
+          }
+        }
+        scrollTarget.addEventListener('scroll', throttledScroll, {
+          passive: true,
+        })
+      }
+      return
+    }
+
+    // DESKTOP: Lenis smooth scroll (visual premium)
     if (useWindowScroll) {
-      // Modo: scroll da janela
       const lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -282,7 +319,6 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       lenisRef.current = lenis
       return lenis
     } else {
-      // Modo: scroll do container
       const scroller = scrollerRef.current
       if (!scroller) return
 
