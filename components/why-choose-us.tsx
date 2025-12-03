@@ -127,8 +127,8 @@ export default function WhyChooseUs() {
             data-scroll-reveal="true"
             style={{
               backgroundImage: 'url(/cta-background.jpg)',
-              backgroundSize: '100% 100%',
-              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              backgroundPosition: '100% 95%',
               backgroundRepeat: 'no-repeat',
             }}
           >
