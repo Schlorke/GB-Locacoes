@@ -35,7 +35,7 @@ declare module 'lenis' {
      * Easing function used for smooth scroll
      * @default (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
      */
-    easing?: (t: number) => number
+    easing?: (_t: number) => number
 
     /**
      * Direction of scroll
@@ -149,7 +149,7 @@ declare module 'lenis' {
     /**
      * Create a new Lenis instance
      */
-    constructor(options?: LenisOptions)
+    constructor(_options?: LenisOptions)
 
     /**
      * Destroy the Lenis instance
@@ -170,7 +170,7 @@ declare module 'lenis' {
      * Update the Lenis instance on each animation frame
      * @param time Current time in milliseconds
      */
-    raf(time: number): void
+    raf(_time: number): void
 
     /**
      * Scroll to a specific position
@@ -178,12 +178,12 @@ declare module 'lenis' {
      * @param options Scroll options
      */
     scrollTo(
-      target: number | string | HTMLElement,
-      options?: {
+      _target: number | string | HTMLElement,
+      _options?: {
         offset?: number
         lerp?: number
         duration?: number
-        easing?: (t: number) => number
+        easing?: (_t: number) => number
         immediate?: boolean
         lock?: boolean
         force?: boolean
@@ -196,20 +196,20 @@ declare module 'lenis' {
      * @param event Event name
      * @param callback Callback function
      */
-    on(event: 'scroll', callback: (e: Lenis) => void): void
+    on(_event: 'scroll', _callback: (_e: Lenis) => void): void
 
     /**
      * Remove event listener
      * @param event Event name
      * @param callback Callback function
      */
-    off(event: 'scroll', callback: (e: Lenis) => void): void
+    off(_event: 'scroll', _callback: (_e: Lenis) => void): void
 
     /**
      * Emit an event
      * @param event Event name
      */
-    emit(event: string): void
+    emit(_event: string): void
 
     /**
      * Resize the Lenis instance
@@ -217,4 +217,3 @@ declare module 'lenis' {
     resize(): void
   }
 }
-

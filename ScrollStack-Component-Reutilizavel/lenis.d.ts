@@ -8,54 +8,54 @@
 declare module 'lenis' {
   export interface LenisOptions {
     /** Duration of scroll animation in seconds */
-    duration?: number;
+    duration?: number
     /** Easing function */
-    easing?: (t: number) => number;
+    easing?: (t: number) => number
     /** Enable smooth wheel scrolling */
-    smoothWheel?: boolean;
+    smoothWheel?: boolean
     /** Touch scroll multiplier */
-    touchMultiplier?: number;
+    touchMultiplier?: number
     /** Enable infinite scrolling */
-    infinite?: boolean;
+    infinite?: boolean
     /** Wrapper element for custom container scroll */
-    wrapper?: HTMLElement;
+    wrapper?: HTMLElement
     /** Content element for custom container scroll */
-    content?: HTMLElement;
+    content?: HTMLElement
     /** Gesture orientation handler */
-    gestureOrientation?: 'vertical' | 'horizontal' | 'both';
+    gestureOrientation?: 'vertical' | 'horizontal' | 'both'
     /** Normalize wheel delta */
-    normalizeWheel?: boolean;
+    normalizeWheel?: boolean
     /** Wheel scroll multiplier */
-    wheelMultiplier?: number;
+    wheelMultiplier?: number
     /** Touch inertia multiplier */
-    touchInertiaMultiplier?: number;
+    touchInertiaMultiplier?: number
     /** Linear interpolation factor (0-1) */
-    lerp?: number;
+    lerp?: number
     /** Sync touch events */
-    syncTouch?: boolean;
+    syncTouch?: boolean
     /** Touch lerp factor */
-    syncTouchLerp?: number;
+    syncTouchLerp?: number
     /** Touch inertia factor */
-    touchInertia?: number;
+    touchInertia?: number
     /** Auto resize observer */
-    autoResize?: boolean;
+    autoResize?: boolean
     /** Prevent touch events */
-    prevent?: (node: HTMLElement) => boolean;
+    prevent?: (node: HTMLElement) => boolean
     /** Virtual scroll */
-    virtualScroll?: boolean;
+    virtualScroll?: boolean
   }
 
   export interface LenisScrollEvent {
     /** Current scroll position */
-    scroll: number;
+    scroll: number
     /** Scroll limit */
-    limit: number;
+    limit: number
     /** Scroll velocity */
-    velocity: number;
+    velocity: number
     /** Scroll direction: 1 for down, -1 for up */
-    direction: number;
+    direction: number
     /** Current progress (0-1) */
-    progress: number;
+    progress: number
   }
 
   export default class Lenis {
@@ -63,27 +63,27 @@ declare module 'lenis' {
      * Creates a new Lenis instance
      * @param options - Configuration options
      */
-    constructor(options?: LenisOptions);
+    constructor(options?: LenisOptions)
 
     /**
      * Register event listener
      * @param event - Event name ('scroll')
      * @param callback - Callback function
      */
-    on(event: 'scroll', callback: (e: LenisScrollEvent) => void): void;
+    on(event: 'scroll', callback: (e: LenisScrollEvent) => void): void
 
     /**
      * Unregister event listener
      * @param event - Event name
      * @param callback - Callback function
      */
-    off(event: string, callback: Function): void;
+    off(event: string, callback: Function): void
 
     /**
      * Request animation frame update
      * @param time - Current time
      */
-    raf(time: number): void;
+    raf(time: number): void
 
     /**
      * Scroll to a target position
@@ -93,92 +93,91 @@ declare module 'lenis' {
     scrollTo(
       target: number | string | HTMLElement,
       options?: {
-        offset?: number;
-        duration?: number;
-        easing?: (t: number) => number;
-        immediate?: boolean;
-        lock?: boolean;
-        force?: boolean;
-        onComplete?: () => void;
+        offset?: number
+        duration?: number
+        easing?: (t: number) => number
+        immediate?: boolean
+        lock?: boolean
+        force?: boolean
+        onComplete?: () => void
       }
-    ): void;
+    ): void
 
     /**
      * Start Lenis
      */
-    start(): void;
+    start(): void
 
     /**
      * Stop Lenis
      */
-    stop(): void;
+    stop(): void
 
     /**
      * Destroy Lenis instance
      */
-    destroy(): void;
+    destroy(): void
 
     /**
      * Current scroll position
      */
-    scroll: number;
+    scroll: number
 
     /**
      * Scroll limit
      */
-    limit: number;
+    limit: number
 
     /**
      * Target scroll position
      */
-    targetScroll: number;
+    targetScroll: number
 
     /**
      * Scroll velocity
      */
-    velocity: number;
+    velocity: number
 
     /**
      * Animation frame ID
      */
-    animatedScroll: number;
+    animatedScroll: number
 
     /**
      * Whether Lenis is stopped
      */
-    isStopped: boolean;
+    isStopped: boolean
 
     /**
      * Whether Lenis is scrolling
      */
-    isScrolling: boolean;
+    isScrolling: boolean
 
     /**
      * Whether Lenis is smooth
      */
-    isSmooth: boolean;
+    isSmooth: boolean
 
     /**
      * Scroll direction: 1 for down, -1 for up
      */
-    direction: number;
+    direction: number
 
     /**
      * Resize observer
      */
-    resize(): void;
+    resize(): void
 
     /**
      * Emit event
      */
-    emit(): void;
+    emit(): void
 
     /**
      * Set scroll position
      * @param scroll - Scroll position
      * @param options - Options
      */
-    setScroll(scroll: number, options?: { immediate?: boolean }): void;
+    setScroll(scroll: number, options?: { immediate?: boolean }): void
   }
 }
-

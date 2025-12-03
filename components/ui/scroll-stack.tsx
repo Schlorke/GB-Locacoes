@@ -406,7 +406,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       style={containerStyles}
     >
       <div
-        className="scroll-stack-inner pt-[4vh] pb-[50rem] min-h-screen overflow-visible"
+        className="scroll-stack-inner pt-[4vh] pb-[4rem] min-h-screen overflow-visible"
         style={innerStyles}
       >
         {children}

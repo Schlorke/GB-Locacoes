@@ -42,6 +42,7 @@ export default [
       '**/*.config.cjs',
       '**/*.config.mjs',
       '**/*.config.ts',
+      'ScrollStack-Component-Reutilizavel/**',
     ],
   }, // TypeScript files
   js.configs.recommended, // JavaScript files
