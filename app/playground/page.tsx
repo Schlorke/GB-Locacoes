@@ -125,23 +125,30 @@ export default function PlaygroundPage() {
         <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-gray-900/30 to-gray-900 pointer-events-none z-10 backdrop-blur-md" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
           <div
-            className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 text-center relative overflow-hidden"
+            className="bg-gradient-to-r from-orange-600 to-orange-700 rounded-3xl p-8 md:p-12 lg:p-16 relative overflow-hidden min-h-[400px] md:min-h-[450px] flex items-center"
             data-scroll-reveal="true"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-yellow-400/20 rounded-full blur-xl" />
 
-            <div className="relative z-10">
-              <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                Pronto para Comecar seu Projeto?
+            {/* Badge no canto superior direito - oculta em mobile */}
+            <div className="hidden md:inline-flex absolute top-6 right-6 items-center justify-center px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium">
+              Orcamento Gratis
+            </div>
+
+            <div className="relative z-10 max-w-3xl w-full">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight text-white drop-shadow-lg text-center md:text-left">
+                Pronto para Comecar
+                <br />
+                seu Projeto?
               </h3>
-              <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-white/90 mb-10 leading-relaxed max-w-2xl drop-shadow-md text-center md:text-left mx-auto md:mx-0">
                 Solicite um orcamento gratuito e receba nossa proposta
                 personalizada. Atendimento com seguranca, qualidade e manutencao
                 constante.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <div className="inline-flex items-center justify-center px-8 h-12 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group gap-2">
+              <div className="flex flex-col sm:flex-row gap-4 items-center md:items-start w-full">
+                <div className="w-full sm:w-auto inline-flex items-center justify-center px-8 h-14 bg-white text-orange-600 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-300 hover:scale-105 group gap-2 shadow-lg">
                   <a
                     href={`tel:+55${settings.companyPhone.replace(/\D/g, '')}`}
                     className="hidden sm:inline"
@@ -158,7 +165,7 @@ export default function PlaygroundPage() {
                 </div>
                 <a
                   href="/orcamento"
-                  className="inline-flex items-center justify-center px-8 h-12 bg-yellow-500 text-gray-900 font-semibold rounded-xl hover:bg-yellow-400 transition-all duration-300 hover:scale-105"
+                  className="w-full sm:w-auto inline-flex items-center justify-center px-8 h-14 bg-yellow-500 text-gray-900 font-semibold rounded-xl hover:bg-yellow-400 transition-all duration-300 hover:scale-105 shadow-lg"
                 >
                   Solicitar Orcamento Online
                 </a>
