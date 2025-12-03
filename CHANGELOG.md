@@ -8,6 +8,24 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Fixed 🐛
+
+- **ScrollStack - Eliminado tremor/balanço durante scroll**: Integrado **Lenis
+  smooth scroll** ao componente `ScrollStack` para resolver problema crítico de
+  cards "balançando" durante o scroll.
+  - Adicionada biblioteca Lenis (já instalada v1.3.15) com interpolação
+    (`lerp: 0.1`) que suaviza transições entre frames
+  - Configurado `duration: 1.2` e `easing` customizado para movimento fluido
+  - Loop `requestAnimationFrame` agora gerenciado internamente pelo Lenis
+  - Criado arquivo de tipos `types/lenis.d.ts` com definições completas
+  - Resultado: movimento perfeitamente suave, sem tremores, identico à
+    implementação de referência do ReactBits.dev
+  - Documentação atualizada em `docs/features/scroll-stack.md` com seção de
+    "Problemas resolvidos"
+  - **Impacto**: Eliminou desconforto visual e vertigem, especialmente em mobile
+  - **Componente**: `components/ui/scroll-stack.tsx`
+  - **Referência**: https://reactbits.dev/components/scroll-stack
+
 ### Changed 🔄
 
 - **WhyChooseUs Component - Migração para ScrollStack**: Substituído o

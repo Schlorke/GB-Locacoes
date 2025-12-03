@@ -3,9 +3,9 @@
 ## Visao geral
 
 O `ScrollStack` cria o efeito de cartoes que se sobrepoem enquanto o usuario
-rola a pagina. As transformacoes sao calculadas a partir de medidas estaveis
-(offsetTop) do layout, evitando flickers quando os cartoes recebem `transform`
-ou `filter`.
+rola a pagina, com **smooth scroll suavizado por Lenis**. As transformacoes sao
+calculadas a partir de medidas estaveis (offsetTop) do layout, evitando flickers
+quando os cartoes recebem `transform` ou `filter`.
 
 - Componente: `components/ui/scroll-stack.tsx`
 - Cartao base: `ScrollStackItem`
@@ -14,12 +14,14 @@ ou `filter`.
 ## Como funciona
 
 - O scroll eh lido pelo container configurado (janela ou scroller interno).
+- **Lenis smooth scroll** adiciona interpolacao (`lerp: 0.1`) que suaviza as
+  transicoes entre frames, eliminando tremores e balanco visual.
 - Cada cartao calcula `translateY` e `scale` com base no `stackPosition` e na
   distancia de empilhamento (`itemStackDistance`), mantendo o efeito nested.
 - As medidas usam apenas offsets do layout (nao `getBoundingClientRect`),
   evitando reposicionamento quando o transform muda.
-- Eventos de scroll e resize sao desacoplados por `requestAnimationFrame` para
-  manter a animacao fluida.
+- O Lenis gerencia o loop `requestAnimationFrame` internamente, garantindo 60fps
+  suaves sem trepidacoes.
 
 ## Props principais
 
@@ -99,3 +101,24 @@ ou `filter`.
   certifique-se de que o padding inferior (`pb`) do stack seja grande o
   suficiente para o ultimo pin soltar (o padrao `pb-[40rem]` cobre os casos do
   playground).
+
+## Problemas resolvidos (Jan 2025)
+
+### ✅ Cards "balancando" ou "tremendo" durante scroll
+
+**Problema**: Cards antigos (ja empilhados) tremiam/balancavam verticalmente
+durante o scroll, causando desconforto visual e vertigem, especialmente em
+mobile.
+
+**Causa**: Scroll nativo do browser sem suavizacao causava atualizacoes bruscas
+a cada evento de scroll.
+
+**Solucao**: Integracao do **Lenis smooth scroll** com:
+
+- `lerp: 0.1` - interpolacao que suaviza transicoes entre frames
+- `duration: 1.2` - duracao suave do scroll
+- `easing` customizado - curva de suavizacao otimizada
+- Loop RAF gerenciado internamente pelo Lenis
+
+**Resultado**: Movimento perfeitamente fluido, sem tremores, identico a
+implementacao de referencia do ReactBits.dev.

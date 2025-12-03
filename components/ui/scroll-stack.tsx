@@ -2,6 +2,7 @@
 
 import React, { Children, useCallback, useLayoutEffect, useRef } from 'react'
 import type { ReactNode } from 'react'
+import Lenis from 'lenis'
 
 export interface ScrollStackItemProps {
   itemClassName?: string
@@ -70,6 +71,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   )
   const isUpdatingRef = useRef(false)
   const rafRef = useRef<number | null>(null)
+  const lenisRef = useRef<Lenis | null>(null)
 
   const calculateProgress = useCallback(
     (scrollTop: number, start: number, end: number) => {
@@ -251,21 +253,78 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   ])
 
   const handleScroll = useCallback(() => {
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current)
-    }
-    rafRef.current = requestAnimationFrame(() => {
-      updateCardTransforms()
-    })
+    updateCardTransforms()
   }, [updateCardTransforms])
+
+  const setupLenis = useCallback(() => {
+    if (useWindowScroll) {
+      // Modo: scroll da janela
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        touchMultiplier: 2,
+        infinite: false,
+        wheelMultiplier: 1,
+        lerp: 0.1,
+        syncTouch: true,
+        syncTouchLerp: 0.075,
+      })
+
+      lenis.on('scroll', handleScroll)
+
+      const raf = (time: number) => {
+        lenis.raf(time)
+        rafRef.current = requestAnimationFrame(raf)
+      }
+      rafRef.current = requestAnimationFrame(raf)
+
+      lenisRef.current = lenis
+      return lenis
+    } else {
+      // Modo: scroll do container
+      const scroller = scrollerRef.current
+      if (!scroller) return
+
+      const lenis = new Lenis({
+        wrapper: scroller,
+        content: scroller.querySelector('.scroll-stack-inner') as HTMLElement,
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        touchMultiplier: 2,
+        infinite: false,
+        gestureOrientation: 'vertical',
+        wheelMultiplier: 1,
+        lerp: 0.1,
+        syncTouch: true,
+        syncTouchLerp: 0.075,
+      })
+
+      lenis.on('scroll', handleScroll)
+
+      const raf = (time: number) => {
+        lenis.raf(time)
+        rafRef.current = requestAnimationFrame(raf)
+      }
+      rafRef.current = requestAnimationFrame(raf)
+
+      lenisRef.current = lenis
+      return lenis
+    }
+  }, [handleScroll, useWindowScroll])
 
   const childrenCount = Children.count(children)
 
   useLayoutEffect(() => {
+    if (!useWindowScroll && !scrollerRef.current) return
+
     const scroller = scrollerRef.current
 
     const cards = Array.from(
-      scroller?.querySelectorAll('.scroll-stack-card') ?? []
+      useWindowScroll
+        ? document.querySelectorAll('.scroll-stack-card')
+        : (scroller?.querySelectorAll('.scroll-stack-card') ?? [])
     ) as HTMLElement[]
 
     cardsRef.current = cards
@@ -280,38 +339,25 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       card.style.transformOrigin = 'top center'
       card.style.backfaceVisibility = 'hidden'
       card.style.transform = 'translateZ(0)'
+      card.style.webkitTransform = 'translateZ(0)'
       card.style.perspective = '1000px'
+      card.style.webkitPerspective = '1000px'
       card.style.zIndex = String(i + 1)
     })
 
-    const scrollTarget = useWindowScroll ? window : scroller
-    const handleResize = () => {
-      transformsCache.clear()
-      updateCardTransforms()
-    }
+    // Inicializa o Lenis
+    setupLenis()
 
-    if (scrollTarget) {
-      scrollTarget.addEventListener('scroll', handleScroll, { passive: true })
-    }
-    window.addEventListener('resize', handleResize)
-
-    let resizeObserver: ResizeObserver | null = null
-    if (!useWindowScroll && scroller) {
-      resizeObserver = new ResizeObserver(handleResize)
-      resizeObserver.observe(scroller)
-    }
-
+    // Primeira atualização
     updateCardTransforms()
 
+    // Cleanup
     return () => {
-      if (scrollTarget) {
-        scrollTarget.removeEventListener('scroll', handleScroll)
-      }
-      window.removeEventListener('resize', handleResize)
-      resizeObserver?.disconnect()
-
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current)
+      }
+      if (lenisRef.current) {
+        lenisRef.current.destroy()
       }
       stackCompletedRef.current = false
       cardsRef.current = []
@@ -330,7 +376,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     blurAmount,
     useWindowScroll,
     onStackComplete,
-    handleScroll,
+    setupLenis,
     updateCardTransforms,
   ])
 
@@ -343,6 +389,10 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     : {
         overscrollBehavior: 'contain',
         WebkitOverflowScrolling: 'touch',
+        scrollBehavior: 'smooth',
+        WebkitTransform: 'translateZ(0)',
+        transform: 'translateZ(0)',
+        willChange: 'scroll-position',
       }
 
   const innerStyles: React.CSSProperties = {
@@ -356,7 +406,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       style={containerStyles}
     >
       <div
-        className="scroll-stack-inner pt-[4vh] pb-[6rem] min-h-screen overflow-visible"
+        className="scroll-stack-inner pt-[4vh] pb-[50rem] min-h-screen overflow-visible"
         style={innerStyles}
       >
         {children}
