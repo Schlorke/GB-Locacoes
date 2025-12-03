@@ -140,6 +140,50 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
     isUpdatingRef.current = true
 
+    // ⭐ MOBILE: Scroll Reveal em vez de Scroll Stack
+    if (isMobile) {
+      cardsRef.current.forEach((card) => {
+        if (!card) return
+
+        const cardTop = getElementOffset(card, relativeRoot)
+        const cardBottom = cardTop + card.offsetHeight
+        const viewportTop = scrollTop
+        const viewportBottom = scrollTop + containerHeight
+
+        // Card está visível na viewport?
+        const isInView = cardBottom > viewportTop && cardTop < viewportBottom
+
+        // Progresso de entrada (0 = fora, 1 = totalmente dentro)
+        const entryStart = cardTop - containerHeight * 0.8
+        const entryEnd = cardTop - containerHeight * 0.2
+        const entryProgress = Math.max(
+          0,
+          Math.min(1, (scrollTop - entryStart) / (entryEnd - entryStart))
+        )
+
+        if (isInView || entryProgress > 0) {
+          // Animação de scroll reveal: fade + slide up
+          const opacity = entryProgress
+          const translateY = (1 - entryProgress) * 30 // Slide up 30px
+          const scale = 0.95 + entryProgress * 0.05 // Escala de 0.95 para 1
+
+          card.style.opacity = String(opacity)
+          card.style.transform = `translate3d(0, ${translateY}px, 0) scale(${scale})`
+          card.style.filter = 'none'
+          card.style.transition =
+            'opacity 0.4s ease-out, transform 0.4s ease-out'
+        } else {
+          // Card ainda não entrou na viewport
+          card.style.opacity = '0'
+          card.style.transform = 'translate3d(0, 30px, 0) scale(0.95)'
+        }
+      })
+
+      isUpdatingRef.current = false
+      return
+    }
+
+    // ⭐ DESKTOP: Scroll Stack original
     const stackPositionPx = parsePercentage(stackPosition, containerHeight)
     const scaleEndPositionPx = parsePercentage(
       scaleEndPosition,
@@ -157,8 +201,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       : 0
 
     // ⭐ Thresholds adaptativos por dispositivo
-    const translateThreshold = isMobile ? 2.0 : 0.1 // Mobile: 2px (imperceptível)
-    const scaleThreshold = isMobile ? 0.01 : 0.001 // Mobile: menos sensível
+    const translateThreshold = 0.1 // Desktop apenas
+    const scaleThreshold = 0.001
 
     cardsRef.current.forEach((card, i) => {
       if (!card) return
@@ -208,12 +252,10 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         translateY = pinEnd - cardTop + stackPositionPx + itemStackDistance * i
       }
 
-      // ⭐ Arredondamento adaptativo (mobile = mais agressivo)
+      // ⭐ Arredondamento para performance (Desktop apenas)
       const newTransform = {
-        translateY: isMobile
-          ? Math.round(translateY) // Mobile: inteiro (0 decimais)
-          : Math.round(translateY * 100) / 100, // Desktop: 2 decimais
-        scale: Math.round(scale * 100) / 100, // 2 decimais (ambos)
+        translateY: Math.round(translateY * 100) / 100,
+        scale: Math.round(scale * 100) / 100,
         rotation: Math.round(rotation * 100) / 100,
         blur: Math.round(blur * 100) / 100,
       }
@@ -222,7 +264,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       const hasChanged =
         !lastTransform ||
         Math.abs(lastTransform.translateY - newTransform.translateY) >
-          translateThreshold || // ⭐ Threshold adaptativo
+          translateThreshold ||
         Math.abs(lastTransform.scale - newTransform.scale) > scaleThreshold ||
         Math.abs(lastTransform.rotation - newTransform.rotation) > 0.1 ||
         Math.abs(lastTransform.blur - newTransform.blur) > 0.1
@@ -273,7 +315,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const setupLenis = useCallback(() => {
     const isMobile = isMobileRef.current
 
-    // ⭐ MOBILE: Scroll NATIVO com RAF throttling (performance)
+    // ⭐ MOBILE: Scroll NATIVO com RAF throttling para scroll reveal
     if (isMobile) {
       const scrollTarget = useWindowScroll ? window : scrollerRef.current
       if (scrollTarget) {
@@ -368,17 +410,31 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     transformsCache.clear()
 
     cards.forEach((card, i) => {
+      // ⭐ MOBILE: Usar gap-6 (24px) igual aos cards de equipamento
+      // ⭐ DESKTOP: Usar itemDistance configurado (padrão 100-300px)
       if (i < cards.length - 1) {
-        card.style.marginBottom = `${itemDistance}px`
+        const mobileGap = 24 // gap-6 do Tailwind (1.5rem)
+        const spacing = isMobileRef.current ? mobileGap : itemDistance
+        card.style.marginBottom = `${spacing}px`
       }
-      card.style.willChange = 'transform, filter'
+
+      card.style.willChange = 'transform, filter, opacity'
       card.style.transformOrigin = 'top center'
       card.style.backfaceVisibility = 'hidden'
-      card.style.transform = 'translateZ(0)'
-      card.style.webkitTransform = 'translateZ(0)'
       card.style.perspective = '1000px'
       card.style.webkitPerspective = '1000px'
       card.style.zIndex = String(i + 1)
+
+      // ⭐ MOBILE: Inicializar com opacity 0 para scroll reveal
+      if (isMobileRef.current) {
+        card.style.opacity = '0'
+        card.style.transform = 'translate3d(0, 30px, 0) scale(0.95)'
+      } else {
+        // DESKTOP: Inicializar normalmente
+        card.style.transform = 'translateZ(0)'
+        card.style.webkitTransform = 'translateZ(0)'
+        card.style.opacity = '1'
+      }
     })
 
     // Inicializa o Lenis
@@ -442,7 +498,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       style={containerStyles}
     >
       <div
-        className="scroll-stack-inner pt-[4vh] pb-[4rem] min-h-screen overflow-visible"
+        className="scroll-stack-inner pt-[4vh] pb-0 md:pb-[4rem] min-h-screen overflow-visible"
         style={innerStyles}
       >
         {children}

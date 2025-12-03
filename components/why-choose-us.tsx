@@ -120,7 +120,7 @@ export default function WhyChooseUs() {
       </div>
 
       {/* CTA Section - after scroll stack */}
-      <div className="relative z-20 py-16 md:py-20 bg-gradient-to-b from-transparent via-gray-900/55 to-gray-900">
+      <div className="relative z-20 pt-0 pb-8 md:py-16 lg:py-20 bg-gradient-to-b from-transparent via-gray-900/55 to-gray-900">
         {/* Gradient fade mask to blend with cards above - smooth transition */}
         <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent via-gray-900/30 to-gray-900 pointer-events-none z-10 backdrop-blur-md" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
