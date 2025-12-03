@@ -128,7 +128,7 @@ export default function WhyChooseUs() {
             style={{
               backgroundImage: 'url(/cta-background.jpg)',
               backgroundSize: 'cover',
-              backgroundPosition: '100% 95%',
+              backgroundPosition: '100% 99%',
               backgroundRepeat: 'no-repeat',
             }}
           >
@@ -137,8 +137,8 @@ export default function WhyChooseUs() {
               Orçamento Grátis
             </div>
 
-            <div className="relative z-10 max-w-3xl w-full">
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight text-white drop-shadow-lg text-center md:text-left">
+            <div className="py-6 relative z-10 max-w-3xl w-full">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 leading-tight text-white/90 drop-shadow-lg text-center md:text-left">
                 Pronto para <br /> Começar seu Projeto?
               </h3>
               <p className="text-lg md:text-xl text-white/90 mb-10 leading-relaxed max-w-2xl drop-shadow-md text-center md:text-left mx-auto md:mx-0">
