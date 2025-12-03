@@ -364,6 +364,26 @@ button[role='combobox']:focus-visible,
 /* 8. BOTÕES E INTERAÇÕES          */
 /* ================================ */
 
+/* Botões do header - sem shadow no estado normal, com shadow no hover e active */
+.header-action-button,
+a.header-action-button,
+button.header-action-button,
+button[aria-controls].header-action-button {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.header-action-button:hover,
+a.header-action-button:hover,
+button.header-action-button:hover,
+button[aria-controls].header-action-button:hover,
+button[data-state='open'].header-action-button,
+button[aria-expanded='true'].header-action-button {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
 /* Botões de reset admin - sem foco azul */
 .admin-reset-button,
 .filter-reset-button {

@@ -6,12 +6,13 @@ import { NotificationBadgeWrapper } from '@/components/ui/notification-badge'
 import { useCartNotifications } from '@/hooks/use-cart-notifications'
 import { useNotifications } from '@/hooks/use-notifications'
 import { usePublicSettings } from '@/hooks/use-public-settings'
-import { Menu, Phone, Search, ShoppingCart, User } from 'lucide-react'
+import { Menu, Phone, ShoppingCart, User } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { HeaderSearchCombobox } from './header-search-combobox'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -217,14 +218,7 @@ export default function Header() {
 
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
-            >
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Buscar</span>
-            </Button>
+            <HeaderSearchCombobox />
 
             {/* Usuário com notificação */}
             {session ? (
@@ -232,14 +226,14 @@ export default function Header() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
+                  className="text-slate-700 hover:text-orange-600 transition-all duration-200 rounded-xl group header-action-button"
                   asChild
                 >
                   <Link
                     href="/area-cliente#dashboard-banner"
                     onClick={markAllAsRead}
                   >
-                    <User className="h-5 w-5" />
+                    <User className="h-5 w-5 group-hover:scale-110 transition-transform" />
                     <span className="sr-only">Minha conta</span>
                   </Link>
                 </Button>
@@ -248,11 +242,11 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
+                className="text-slate-700 hover:text-orange-600 transition-all duration-200 rounded-xl group header-action-button"
                 asChild
               >
                 <Link href="/login">
-                  <User className="h-5 w-5" />
+                  <User className="h-5 w-5 group-hover:scale-110 transition-transform" />
                   <span className="sr-only">Minha conta</span>
                 </Link>
               </Button>
@@ -263,11 +257,11 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-slate-700 hover:text-orange-600 hover:bg-orange-50 transition-all duration-200 rounded-xl"
+                className="text-slate-700 hover:text-orange-600 transition-all duration-200 rounded-xl group header-action-button"
                 asChild
               >
                 <Link href="/orcamento">
-                  <ShoppingCart className="h-5 w-5" />
+                  <ShoppingCart className="h-5 w-5 group-hover:scale-110 transition-transform" />
                   <span className="sr-only">Carrinho</span>
                 </Link>
               </Button>

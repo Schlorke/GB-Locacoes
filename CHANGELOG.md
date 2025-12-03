@@ -8,6 +8,49 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added ✨
+
+- **HeaderSearchCombobox - Componente de Busca Inteligente**: Implementado
+  combobox search autocomplete no header com popover elegante e funcionalidades
+  avançadas.
+  - **Componente**: `components/header-search-combobox.tsx`
+  - **Integração**: Substituiu botão de busca simples no header
+  - **Funcionalidades**:
+    - Busca em tempo real com debounce de 300ms
+    - Navegação completa por teclado (↑/↓/Enter/Escape)
+    - Buscas populares pré-definidas (Andaime, Betoneira, Escada, Guincho)
+    - Resultados elegantes com informações do equipamento
+    - Estado ativo visual quando popover está aberto
+    - Auto-focus no input ao abrir
+    - Loading state com spinner animado
+    - Feedback visual rico com gradientes e sombras
+  - **Design**:
+    - Header com gradiente orange (#ea580c) característico do projeto
+    - Popover responsivo (90vw mobile, 500px desktop)
+    - Resultados com tipografia otimizada (font-medium text-sm)
+    - Buscas populares com shadow-sm e hover:shadow-md
+    - Sem bordas, apenas sombras para profundidade
+    - Ícones com hover apenas na cor (sem background)
+  - **Documentação**:
+    - Stories completas em
+      `stories/02-Public/02-Molecules/HeaderSearchCombobox.stories.tsx`
+    - MDX detalhado em `stories/02-Public/02-Molecules/HeaderSearchCombobox.mdx`
+  - **UX**:
+    - Redirecionamento inteligente (equipamento → detalhes, texto → busca)
+    - Clear button para limpar rapidamente
+    - Scroll otimizado com `onWheel` propagation stop
+
+### Changed 🔄
+
+- **Header Action Buttons - Estilo Consistente**: Padronizados os botões de
+  Search, User e Cart no header.
+  - Classe CSS customizada `.header-action-button` em `app/globals.css`
+  - Estado normal: sem background, sem border, sem shadow
+  - Estado hover: ícone laranja + escala 110% + shadow sutil
+  - Estado ativo (popover aberto): mantém estilo hover
+  - Suporte para `<button>` e `<a>` tags
+  - Transições suaves em todos os estados
+
 ### Fixed 🐛
 
 - **ScrollStack - Solução Híbrida Final**: Implementada estratégia adaptativa
