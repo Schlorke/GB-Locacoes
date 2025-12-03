@@ -153,9 +153,10 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         // Card está visível na viewport?
         const isInView = cardBottom > viewportTop && cardTop < viewportBottom
 
-        // Progresso de entrada (0 = fora, 1 = totalmente dentro)
-        const entryStart = cardTop - containerHeight * 0.8
-        const entryEnd = cardTop - containerHeight * 0.2
+        // ⭐ MOBILE: Progresso de entrada centralizado na viewport
+        // Card atinge 100% de opacidade quando está no CENTRO da tela (50%)
+        const entryStart = cardTop - containerHeight * 0.7 // Começa 70% abaixo
+        const entryEnd = cardTop - containerHeight * 0.5 // Termina no CENTRO (50%)
         const entryProgress = Math.max(
           0,
           Math.min(1, (scrollTop - entryStart) / (entryEnd - entryStart))
