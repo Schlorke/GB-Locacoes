@@ -259,7 +259,7 @@
       "glob": "^11.0.3",
       "rimraf": "^6.0.1",
       "node-domexception": "npm:@types/node@*",
-      "baseline-browser-mapping": "^2.9.0"
+      "baseline-browser-mapping": "^2.9.2"
     },
     "onlyBuiltDependencies": [
       "@prisma/client",
