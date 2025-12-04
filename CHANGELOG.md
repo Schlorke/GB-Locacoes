@@ -8,7 +8,22 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Fixed 🐛
+
+- **Autocomplete Scroll Propagation**: Corrigido problema onde o scroll dentro
+  do dropdown do autocomplete propagava para a página inteira. Agora o scroll
+  fica contido dentro do componente, com tratamento adequado para mouse wheel e
+  touch events, prevenindo propagação para elementos pais.
+
 ### Changed 🔄
+
+- **Atualização de Dependências (Dezembro 2025)**: Atualizadas 3 dependências
+  para suas últimas versões estáveis
+  - `@supabase/supabase-js`: 2.86.0 → 2.86.2
+  - `baseline-browser-mapping` (dev): 2.9.0 → 2.9.2
+  - `@base-ui-components/react`: 1.0.0-beta.7 → 1.0.0-rc.0 (Release Candidate)
+  - **Não Atualizado**: Tailwind CSS mantido em 3.4.17 (v4.x incompatível com
+    Next.js 16 + Turbopack)
 
 - **Renomeação `middleware.ts` → `proxy.ts` (Next.js 16.0.7)**:
   - Alinhado à convenção oficial para evitar warnings de depreciação em build
