@@ -10,6 +10,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Dialog Search Scroll Propagation**: Corrigido problema onde o scroll dentro
+  do dialog de busca (header) propagava para a página inteira ao atingir o fim
+  da lista de resultados. Implementado tratamento robusto com:
+  - Handler `onWheel` que detecta bordas (topo/fim) e previne propagação
+  - Handler `onTouchMove` para dispositivos touch
+  - Classe `overscroll-contain` para prevenir elastic scroll
+  - Scroll agora fica contido dentro do dialog sem afetar a página
+
 - **Autocomplete Scroll Propagation**: Corrigido problema onde o scroll dentro
   do dropdown do autocomplete propagava para a página inteira. Agora o scroll
   fica contido dentro do componente, com tratamento adequado para mouse wheel e

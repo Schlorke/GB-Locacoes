@@ -279,8 +279,28 @@ export function HeaderSearchCombobox() {
 
         {/* Content Area */}
         <div
-          className="max-h-[400px] overflow-y-auto overflow-x-hidden"
-          onWheel={(e) => e.stopPropagation()}
+          className="max-h-[400px] overflow-y-auto overflow-x-hidden overscroll-contain"
+          onWheel={(e) => {
+            // Previne propagação do scroll para a página
+            const element = e.currentTarget
+            const { scrollTop, scrollHeight, clientHeight } = element
+            const delta = e.deltaY
+
+            // Se estiver no topo e tentando scrollar para cima
+            if (delta < 0 && scrollTop === 0) {
+              e.preventDefault()
+            }
+            // Se estiver no fim e tentando scrollar para baixo
+            else if (delta > 0 && scrollTop + clientHeight >= scrollHeight) {
+              e.preventDefault()
+            }
+            // Caso contrário, permite o scroll interno mas previne propagação
+            e.stopPropagation()
+          }}
+          onTouchMove={(e) => {
+            // Previne propagação do scroll em dispositivos touch
+            e.stopPropagation()
+          }}
         >
           {isLoading ? (
             <div className="p-8 flex flex-col items-center justify-center gap-3">
