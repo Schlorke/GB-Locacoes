@@ -403,9 +403,19 @@ function QuotePage() {
       })
 
       if (response.ok) {
-        toast.success('Sucesso!', {
+        // Limpar query parameters da URL
+        if (
+          typeof window !== 'undefined' &&
+          window.history &&
+          window.history.replaceState
+        ) {
+          window.history.replaceState({}, '', window.location.pathname)
+        }
+
+        toast.success('Orçamento Enviado com Sucesso! 🎉', {
           description:
-            'Orçamento enviado com sucesso. Entraremos em contato em breve.',
+            'Entraremos em contato em até 2 horas úteis. Você receberá uma cópia no seu email.',
+          duration: 8000,
         })
         clearCart()
         setFormData({

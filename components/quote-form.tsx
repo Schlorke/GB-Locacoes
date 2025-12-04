@@ -191,8 +191,19 @@ export default function QuoteForm({
       const result = await response.json()
 
       if (result.success) {
-        toast.success('Orçamento Solicitado! 🎉', {
-          description: 'Entraremos em contato em até 2 horas úteis.',
+        // Limpar query parameters da URL se houver
+        if (
+          typeof window !== 'undefined' &&
+          window.history &&
+          window.history.replaceState
+        ) {
+          window.history.replaceState({}, '', window.location.pathname)
+        }
+
+        toast.success('Orçamento Enviado com Sucesso! 🎉', {
+          description:
+            'Entraremos em contato em até 2 horas úteis. Você receberá uma cópia no seu email.',
+          duration: 8000,
         })
 
         if (onSuccess) {
