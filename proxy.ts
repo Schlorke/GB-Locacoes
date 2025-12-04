@@ -1,8 +1,8 @@
 import { withAuth } from 'next-auth/middleware'
 
 export default withAuth(
-  function middleware() {
-    // Middleware logic here if needed
+  function proxy() {
+    // Proxy logic here if needed
   },
   {
     callbacks: {

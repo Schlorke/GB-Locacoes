@@ -167,15 +167,15 @@ Content-Type: application/json
 | **ADMIN**  | Acesso total    | Todos os endpoints                         |
 | **CLIENT** | Acesso limitado | `/api/equipment`, `/api/quotes` (próprios) |
 
-### 🛡️ Middleware de Autenticação
+### 🛡️ Proxy de Autenticação
 
 ```typescript
-// middleware.ts
+// proxy.ts
 import { withAuth } from "next-auth/middleware"
 
 export default withAuth(
-  function middleware(req) {
-    // Lógica de middleware
+  function proxy(req) {
+    // Lógica de proxy (antes middleware)
   },
   {
     callbacks: {

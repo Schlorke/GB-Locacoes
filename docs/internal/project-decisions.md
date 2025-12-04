@@ -68,6 +68,16 @@
   - node-domexception: Override com `npm:@types/node@*`
 - **Status**: ✅ Dependency stability garantida
 
+#### **🧭 Proxy (substitui middleware)**
+
+- **Decisão**: Adotar o arquivo `proxy.ts` no lugar de `middleware.ts` seguindo
+  a renomeação oficial do Next.js 16.
+- **Implementação**: Arquivo raiz renomeado para `proxy.ts`, mantendo `withAuth`
+  e `config.matcher` para `/admin` e `/debug`.
+- **Motivação**: Remover warnings de build na Vercel e alinhar com a convenção
+  futura.
+- **Status**: ✅ Ativo e documentado
+
 Este documento orienta colaboradores humanos **e agentes automatizados** sobre
 como trabalhar neste repositório GB Locações.
 

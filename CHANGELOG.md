@@ -10,6 +10,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Renomeação `middleware.ts` → `proxy.ts` (Next.js 16.0.7)**:
+  - Alinhado à convenção oficial para evitar warnings de depreciação em build
+    (Vercel/Next 16).
+  - Mantida a proteção com `withAuth` e `config.matcher` para `/admin` e
+    `/debug`.
+  - Documentação atualizada: exemplos em `docs/architecture/api.md`,
+    `docs/getting-started/deployment.md` e decisão em
+    `docs/internal/project-decisions.md`.
+
 - **Prisma 7.1.0 com driver adapter pg**:
   - Atualizados `@prisma/client`/`prisma` (6.18.0 → 7.1.0) e
     `prisma-zod-generator` (1.32.1 → 2.1.2)

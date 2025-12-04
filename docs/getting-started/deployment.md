@@ -376,11 +376,11 @@ export async function GET() {
 ### **1. Headers de Segurança**
 
 ```typescript
-// middleware.ts
+// proxy.ts
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const response = NextResponse.next()
 
   // Security headers

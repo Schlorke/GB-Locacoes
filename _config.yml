@@ -43,7 +43,7 @@ exclude:
   - .prettierrc
   - .markdownlint.json
   - components.json
-  - middleware.ts
+  - proxy.ts
   - pnpm-workspace.yaml
   - next-env.d.ts
   - vitest.shims.d.ts
