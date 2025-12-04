@@ -201,9 +201,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       ? getElementOffset(endElement, relativeRoot)
       : 0
 
-    // ⭐ Thresholds otimizados para máxima velocidade (ainda imperceptível)
-    const translateThreshold = 0.5 // Update apenas se > 0.5px (invisível ao olho)
-    const scaleThreshold = 0.004 // Update apenas se > 0.004
+    // ⭐ Thresholds no LIMITE (máximo antes de ser visível)
+    const translateThreshold = 0.7 // LIMITE - acima pode ser perceptível
+    const scaleThreshold = 0.005 // LIMITE
 
     cardsRef.current.forEach((card, i) => {
       if (!card) return
@@ -337,18 +337,18 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       return
     }
 
-    // ⭐ DESKTOP: Lenis smooth scroll otimizado (velocidade máxima segura)
+    // ⭐ DESKTOP: Lenis - VALORES LIMITE ABSOLUTO (máximo possível)
     if (useWindowScroll) {
       const lenis = new Lenis({
-        duration: 0.8, // ↓ Próximo ao limite (0.7s seria mínimo)
+        duration: 0.7, // ↓ LIMITE MÍNIMO (abaixo disso = tremor)
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         touchMultiplier: 2,
         infinite: false,
-        wheelMultiplier: 1.4, // ↑ Quase no limite (1.5x seria máximo)
-        lerp: 0.15, // ↑ Mais responsivo (0.18 seria limite)
+        wheelMultiplier: 1.5, // ↑ LIMITE MÁXIMO (acima = brusco demais)
+        lerp: 0.17, // ↑ Quase no limite (0.18 = tremor provável)
         syncTouch: true,
-        syncTouchLerp: 0.11, // ↑ Touch mais responsivo
+        syncTouchLerp: 0.12, // ↑ Touch no limite
       })
 
       lenis.on('scroll', handleScroll)
@@ -368,16 +368,16 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       const lenis = new Lenis({
         wrapper: scroller,
         content: scroller.querySelector('.scroll-stack-inner') as HTMLElement,
-        duration: 0.8, // ↓ Próximo ao limite
+        duration: 0.7, // ↓ LIMITE MÍNIMO
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         touchMultiplier: 2,
         infinite: false,
         gestureOrientation: 'vertical',
-        wheelMultiplier: 1.4, // ↑ Quase no limite
-        lerp: 0.15, // ↑ Mais responsivo
+        wheelMultiplier: 1.5, // ↑ LIMITE MÁXIMO
+        lerp: 0.17, // ↑ Quase no limite
         syncTouch: true,
-        syncTouchLerp: 0.11, // ↑ Touch mais responsivo
+        syncTouchLerp: 0.12, // ↑ Touch no limite
       })
 
       lenis.on('scroll', handleScroll)
