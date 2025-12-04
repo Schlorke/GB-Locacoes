@@ -1,8 +1,6 @@
 /* eslint-env node */
 // Script de verificação dos equipamentos no banco
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from './prisma-client.js'
 
 async function verificarEquipamentos() {
   try {

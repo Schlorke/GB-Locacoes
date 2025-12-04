@@ -1147,6 +1147,19 @@ Criar código que seja:
 
 ---
 
+### 🔄 Prisma 7.1.0 (Dez 2025) - Regras Rápidas
+
+- Versão fixa: `@prisma/client`/`prisma` **7.1.0** + `@prisma/adapter-pg`, `pg`,
+  `postgres-array`.
+- `prisma.config.ts` centraliza `DATABASE_URL`/`DIRECT_URL`; o `schema.prisma`
+  não contém mais URLs.
+- Instancie `PrismaClient` sempre com adapter (`PrismaPg`) ou importe de
+  `lib/prisma` / `scripts/prisma-client.{js,cjs}` (scripts, seeds, rotas,
+  tests).
+- Regenerar cliente com `pnpm db:generate` (roda pós-generate para restaurar
+  validações).
+- Tailwind permanece em **3.4.17** (4.x incompatível com Next 16 + Turbopack).
+
 **🧠 LEMBRE-SE**: Este projeto tem padrões estabelecidos, documentação
 profissional e compatibilidades específicas. NUNCA alucine - sempre consulte a
 documentação primeiro!

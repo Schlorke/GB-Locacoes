@@ -31,7 +31,7 @@ evitar quebras no sistema.
 
 ## 🚨 Incompatibilidades Críticas
 
-### **❌ Prisma 6.14.0 + Next.js 16.0.3**
+### **❌ Prisma 6.14.0 + Next.js 16.0.3 (Histórico)**
 
 #### **Problema:**
 
@@ -40,19 +40,22 @@ Error: @prisma/client did not initialize yet.
 Please run "prisma generate" and try to import it again.
 ```
 
-#### **Solução:**
+#### **Solução (migração para Prisma 7):**
+
+- Adicionar `@prisma/adapter-pg`, `pg` e `postgres-array`
+- Criar `prisma.config.ts` com `datasource.url = env("DATABASE_URL")` (e
+  `shadowDatabaseUrl` opcional)
+- Instanciar `PrismaClient` sempre com adapter:
 
 ```bash
-# ❌ NÃO FAZER
-pnpm update @prisma/client prisma
+import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from '@prisma/client'
 
-# ✅ FAZER (manter versão estável)
-npm install
-pnpm db:generate
-pnpm run build  # Verificar se funciona
+const connectionString = process.env.DATABASE_URL
+const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) })
 ```
 
-#### **Status:** 🔴 **BLOQUEADOR** - Impede build de produção
+#### **Status:** ✅ **Migrado** - Projeto usa **Prisma 7.1.0** com driver adapter pg
 
 ---
 
@@ -90,10 +93,10 @@ pnpm update tailwindcss
 
 ### 🗄️ **Database & ORM**
 
-| Dependência        | Versão Estável | Status       | Notas           |
-| ------------------ | -------------- | ------------ | --------------- |
-| **@prisma/client** | **Estável**    | ✅ Funcional | ✅ Versão atual |
-| **prisma**         | **Estável**    | ✅ Funcional | ✅ Versão atual |
+| Dependência        | Versão Estável | Status       | Notas                                     |
+| ------------------ | -------------- | ------------ | ----------------------------------------- |
+| **@prisma/client** | **7.1.0**      | ✅ Funcional | ✅ Requer adapter pg + `prisma.config.ts` |
+| **prisma**         | **7.1.0**      | ✅ Funcional | ✅ CLI usando `prisma.config.ts`          |
 
 ### 🎨 **Styling & UI**
 
@@ -164,6 +167,10 @@ pnpm update zustand
 # Forms & Validation
 pnpm update react-hook-form zod
 
+# Database/ORM (Prisma 7.x)
+pnpm update @prisma/client prisma prisma-zod-generator
+# Necessário: @prisma/adapter-pg + prisma.config.ts + rebuild
+
 # SEMPRE testar após estas atualizações
 pnpm run build
 pnpm test
@@ -172,10 +179,6 @@ pnpm test
 #### **🔴 Categoria 3: BLOQUEADO (NÃO atualizar)**
 
 ```bash
-# ❌ Database/ORM - VERSÃO FIXA
-# @prisma/client@latest
-# prisma@latest
-
 # ❌ Styling - VERSÃO FIXA
 # tailwindcss@3.4.17
 
@@ -215,7 +218,7 @@ git commit -m "fix: lock dependency versions"
 # ✅ Usar versões exatas para dependências críticas
 # package.json:
 {
-  "@prisma/client": "latest",  // Versão estável
+  "@prisma/client": "7.1.0",  // Versão estável
   "tailwindcss": "3.4.17"     // Exata, não ^3.4.17
 }
 ```
@@ -257,8 +260,9 @@ pnpm outdated | grep -E "(prisma|tailwind|next)"
 - **Data**: Janeiro 2025
 - **Problema**: Build falha com erro "client did not initialize yet"
 - **Causa**: Mudanças internas no Prisma 6.14.0 incompatíveis com Next.js 16.0.3
-- **Solução**: Configurar variáveis de ambiente corretamente
-- **Status**: 🔴 **BLOQUEADO** - Não atualizar Prisma
+- **Solução**: Migração para Prisma 7.1.0 usando `@prisma/adapter-pg` +
+  `prisma.config.ts` (URLs saem do schema)
+- **Status**: ✅ **Migrado** - Driver adapter ativo (04/12/2025)
 
 #### **Tailwind CSS 4.x Breaking Changes**
 
@@ -301,7 +305,7 @@ const { execSync } = require("child_process")
 const fs = require("fs")
 
 const BLOCKED_UPDATES = {
-  "@prisma/client": "latest",
+  "@prisma/client": "7.1.0",
   prisma: "latest",
   tailwindcss: "3.4.17"
 }

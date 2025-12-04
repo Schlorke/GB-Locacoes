@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
-import { PrismaClient } from '@prisma/client'
+import { prisma } from './prisma-client.js'
 import crypto from 'node:crypto'
-
-const prisma = new PrismaClient()
 
 function slugify(text) {
   return text

@@ -1,18 +1,24 @@
+import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '@prisma/client'
 
 declare global {
+   
   var __prisma: PrismaClient | undefined
 }
 
-// Configuração explícita do Prisma Client - forçar URLs corretas
+const connectionString = process.env.DATABASE_URL
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL is not set')
+}
+
+const adapter = new PrismaPg({ connectionString })
+
+// Configuração explícita do Prisma Client com driver adapter pg
 const prisma =
   global.__prisma ||
   new PrismaClient({
-    datasources: {
-      db: {
-        url: process.env.DATABASE_URL,
-      },
-    },
+    adapter,
   })
 
 if (process.env.NODE_ENV !== 'production') {

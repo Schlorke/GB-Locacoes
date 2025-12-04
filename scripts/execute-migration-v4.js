@@ -7,15 +7,13 @@
  * para resolver os 23 warnings de performance identificados.
  */
 
-import { PrismaClient } from '@prisma/client'
 import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { prisma } from './prisma-client.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
-
-const prisma = new PrismaClient()
 
 // Cores para output
 const colors = {

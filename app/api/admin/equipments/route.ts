@@ -1,5 +1,5 @@
 import { adminApiRateLimit, checkRateLimit } from '@/lib/rate-limit'
-import type { Decimal } from '@prisma/client/runtime/library'
+import { Prisma } from '@prisma/client'
 import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
@@ -294,7 +294,7 @@ type EquipmentWithCategory = {
   id: string
   name: string
   description: string | null
-  pricePerDay: Decimal // Prisma Decimal
+  pricePerDay: Prisma.Decimal // Prisma Decimal
   images: string[]
   available: boolean
   categoryId: string

@@ -7,9 +7,7 @@
  * e recomenda quais podem ser removidos após período de observação
  */
 
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from './prisma-client.js'
 
 // Cores para output
 const colors = {

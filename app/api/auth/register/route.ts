@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 import getResend from '@/lib/resend'
-
-const prisma = new PrismaClient()
+import { prisma } from '@/lib/prisma'
 const resend = getResend()
 
 const registerSchema = z

@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-unused-vars, no-console */
 /* global require, console */
-const { PrismaClient } = require('@prisma/client')
-
-const prisma = new PrismaClient()
+const { prisma } = require('./prisma-client.cjs')
 
 async function checkDuplicateCategories() {
   try {

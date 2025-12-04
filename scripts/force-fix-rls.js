@@ -7,9 +7,7 @@
  * garantindo que todas usem o formato otimizado (SELECT auth.uid()::text)
  */
 
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from './prisma-client.js'
 
 // Cores para output
 const colors = {

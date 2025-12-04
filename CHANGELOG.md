@@ -10,14 +10,23 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Prisma 7.1.0 com driver adapter pg**:
+  - Atualizados `@prisma/client`/`prisma` (6.18.0 → 7.1.0) e
+    `prisma-zod-generator` (1.32.1 → 2.1.2)
+  - Adicionados `@prisma/adapter-pg`, `pg`, `postgres-array` e o novo
+    `prisma.config.ts` para mover `DATABASE_URL`/`DIRECT_URL` para fora do
+    schema
+  - `PrismaClient` agora usa adapter compartilhado (`lib/prisma.ts` +
+    `scripts/prisma-client.{js,cjs}`); seeds/scripts migrados para o helper
+  - Zod validations regeneradas (`lib/validations/**`)
+  - Testes: `pnpm test`, `pnpm type-check`, `pnpm build` (Turbopack)
+
 - **Atualização de Tipos React**: `@types/react` 19.2.6 → 19.2.7
   - Atualização segura de definições TypeScript para React
   - Zero breaking changes, apenas melhorias de tipos
   - ✅ Type-check validado com sucesso
   - **Não Atualizados (Decisão de Estabilidade)**:
     - ❌ Tailwind CSS mantido em 3.4.17 (v4.x tem breaking changes)
-    - ❌ Prisma mantido em 6.18.0 (v7.x é major update - aguardar estabilidade)
-    - ❌ prisma-zod-generator mantido em 1.32.1 (dependência do Prisma)
 
 - **Atualização de Dependências (Dezembro 2025)**: Atualizadas 27 dependências
   para versões mais recentes mantendo estabilidade do projeto
@@ -51,15 +60,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     - `@vercel/analytics`: 1.5.0 → 1.6.1
     - `@vercel/speed-insights`: latest → 1.3.1 (versionado)
     - `baseline-browser-mapping`: latest → 2.9.0 (versionado)
+    - `jsonwebtoken`: 9.0.2 → 9.0.3
     - `markdown-to-jsx`: 9.2.0 → 9.3.0
     - `markdownlint`: 0.39.0 → 0.40.0
     - `next-openapi-gen`: 0.8.8 → 0.8.9
   - **Mantidos Estáveis (Não Atualizados)**:
-    - ❌ Prisma: Permanece em 6.18.0 (não atualizado para 7.1.0 - preferência do
-      projeto)
     - ❌ Tailwind CSS: Permanece em 3.4.17 (não atualizado para 4.1.17 -
       preferência do projeto)
-    - ❌ prisma-zod-generator: Permanece em 1.32.1 (dependência do Prisma)
   - **Resultado**: ✅ Build testado e funcionando perfeitamente
   - **Compatibilidade**: Zero breaking changes, todas as atualizações são
     compatíveis

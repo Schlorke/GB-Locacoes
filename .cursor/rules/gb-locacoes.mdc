@@ -1026,6 +1026,17 @@ horas de debugging amanhã.
 3. **DOCUMENTAR MUDANÇAS**: Sempre atualizar CHANGELOG.md
 4. **TESTAR SEMPRE**: Build + TypeScript + ESLint antes de commit
 
+### 🔄 Prisma 7.1.0 (Dez 2025) - Regras Rápidas
+
+- Versão fixa: `@prisma/client`/`prisma` **7.1.0** + `@prisma/adapter-pg`, `pg`,
+  `postgres-array`.
+- `prisma.config.ts` centraliza `DATABASE_URL`/`DIRECT_URL`; o `schema.prisma`
+  não contém mais URLs.
+- Instancie `PrismaClient` sempre com adapter (`PrismaPg`) ou importe de
+  `lib/prisma` / `scripts/prisma-client.{js,cjs}` (scripts, seeds, rotas, tests).
+- Regenerar cliente com `pnpm db:generate` após atualizações de schema.
+- Tailwind permanece em **3.4.17** (4.x incompatível com Next 16 + Turbopack).
+
 ---
 
 **🧠 MENSAGEM FINAL PARA CURSOR**: Este projeto alcançou um estado de excelência

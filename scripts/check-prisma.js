@@ -12,6 +12,11 @@ import { join } from 'path'
 console.log('🔍 Verificando configuração do Prisma...')
 
 try {
+  const connectionString = process.env.DATABASE_URL
+
+  if (!connectionString) {
+    throw new Error('DATABASE_URL nÆo est  definido no ambiente')
+  }
   // Verificar se o schema existe
   const schemaPath = join(process.cwd(), 'prisma', 'schema.prisma')
   if (!existsSync(schemaPath)) {
@@ -40,7 +45,15 @@ try {
   // Criar um arquivo temporário para testar apenas o Prisma
   const testFile = `
 import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { PrismaPg } from '@prisma/adapter-pg';
+
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL is not set');
+}
+
+const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString }) });
 console.log('PrismaClient importado com sucesso');
   `
 

@@ -5,7 +5,7 @@
  * GB-Locações - Diagnóstico de Conexão
  */
 
-import { PrismaClient } from '@prisma/client'
+import { createPrismaClient } from './prisma-client.js'
 import { execSync } from 'child_process'
 
 console.log('🔍 DIAGNÓSTICO DE CONECTIVIDADE - GB LOCAÇÕES')
@@ -68,7 +68,7 @@ try {
 console.log('\n🌐 4. TESTE DE CONECTIVIDADE BÁSICA')
 console.log('-' * 40)
 
-const prisma = new PrismaClient({
+const prisma = createPrismaClient({
   log: ['error', 'warn', 'info'],
 })
 

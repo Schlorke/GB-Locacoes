@@ -7,9 +7,7 @@
  * sem precisar dropar e recriar
  */
 
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from './prisma-client.js'
 
 // Cores para output
 const colors = {

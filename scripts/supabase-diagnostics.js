@@ -10,11 +10,10 @@
  * - Status das otimizações
  */
 
-import { PrismaClient } from '@prisma/client'
 import { createClient } from '@supabase/supabase-js'
+import { prisma } from './prisma-client.js'
 
 // Configuração
-const prisma = new PrismaClient()
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY // Use service role key para admin access
 const supabase = createClient(supabaseUrl, supabaseKey)
