@@ -201,9 +201,9 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       ? getElementOffset(endElement, relativeRoot)
       : 0
 
-    // ⭐ Thresholds adaptativos por dispositivo
-    const translateThreshold = 0.1 // Desktop apenas
-    const scaleThreshold = 0.001
+    // ⭐ Thresholds adaptativos otimizados (valores conservadores)
+    const translateThreshold = 0.3 // Update apenas se > 0.3px (equilíbrio)
+    const scaleThreshold = 0.002 // Update apenas se > 0.002
 
     cardsRef.current.forEach((card, i) => {
       if (!card) return
@@ -253,12 +253,12 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         translateY = pinEnd - cardTop + stackPositionPx + itemStackDistance * i
       }
 
-      // ⭐ Arredondamento para performance (Desktop apenas)
+      // ⭐ Arredondamento otimizado (conservador para evitar tremor)
       const newTransform = {
-        translateY: Math.round(translateY * 100) / 100,
-        scale: Math.round(scale * 100) / 100,
-        rotation: Math.round(rotation * 100) / 100,
-        blur: Math.round(blur * 100) / 100,
+        translateY: Math.round(translateY * 10) / 10, // 1 decimal (suave)
+        scale: Math.round(scale * 1000) / 1000, // 3 decimais (necessário)
+        rotation: Math.round(rotation * 10) / 10, // 1 decimal
+        blur: Math.round(blur * 10) / 10, // 1 decimal
       }
 
       const lastTransform = lastTransformsRef.current.get(i)
@@ -337,18 +337,18 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       return
     }
 
-    // ⭐ DESKTOP: Lenis smooth scroll (elimina tremor)
+    // ⭐ DESKTOP: Lenis smooth scroll otimizado (valores conservadores)
     if (useWindowScroll) {
       const lenis = new Lenis({
-        duration: 1.2,
+        duration: 1.0, // ↓ Ligeiramente mais rápido (era 1.2)
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         touchMultiplier: 2,
         infinite: false,
-        wheelMultiplier: 1,
-        lerp: 0.1,
+        wheelMultiplier: 1.2, // ↑ Scroll um pouco mais rápido (era 1.0)
+        lerp: 0.12, // ↑ Mais responsivo mas não agressivo (era 0.1)
         syncTouch: true,
-        syncTouchLerp: 0.075,
+        syncTouchLerp: 0.09, // ↑ Touch ligeiramente mais responsivo (era 0.075)
       })
 
       lenis.on('scroll', handleScroll)
@@ -368,16 +368,16 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       const lenis = new Lenis({
         wrapper: scroller,
         content: scroller.querySelector('.scroll-stack-inner') as HTMLElement,
-        duration: 1.2,
+        duration: 1.0, // ↓ Ligeiramente mais rápido (era 1.2)
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         touchMultiplier: 2,
         infinite: false,
         gestureOrientation: 'vertical',
-        wheelMultiplier: 1,
-        lerp: 0.1,
+        wheelMultiplier: 1.2, // ↑ Scroll um pouco mais rápido (era 1.0)
+        lerp: 0.12, // ↑ Mais responsivo mas não agressivo (era 0.1)
         syncTouch: true,
-        syncTouchLerp: 0.075,
+        syncTouchLerp: 0.09, // ↑ Touch ligeiramente mais responsivo (era 0.075)
       })
 
       lenis.on('scroll', handleScroll)
@@ -424,6 +424,11 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       card.style.backfaceVisibility = 'hidden'
       card.style.perspective = '1000px'
       card.style.webkitPerspective = '1000px'
+
+      // 🆕 OTIMIZAÇÃO 5: GPU acceleration forçada
+      card.style.contain = 'layout style paint' // CSS containment - isola rendering
+      card.style.isolation = 'isolate' // Força stacking context próprio
+
       card.style.zIndex = String(i + 1)
 
       // ⭐ MOBILE: Inicializar com opacity 0 para scroll reveal
@@ -431,8 +436,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         card.style.opacity = '0'
         card.style.transform = 'translate3d(0, 30px, 0) scale(0.95)'
       } else {
-        // DESKTOP: Inicializar normalmente
-        card.style.transform = 'translateZ(0)'
+        // DESKTOP: Inicializar com GPU acceleration
+        card.style.transform = 'translateZ(0)' // ✅ Força layer composta
         card.style.webkitTransform = 'translateZ(0)'
         card.style.opacity = '1'
       }
