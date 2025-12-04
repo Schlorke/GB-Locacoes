@@ -4,7 +4,8 @@ import {
   withErrorHandling,
 } from '@/lib/api-response'
 import { checkRateLimit, strictRateLimit } from '@/lib/rate-limit'
-import { ContactSchema, type ValidatedContactData } from '@/lib/validations'
+import { ContactSchema } from '@/lib/validations'
+import { type ValidatedContactData } from '@/lib/validations/contact-types'
 import getResend from '@/lib/resend'
 import { type NextRequest } from 'next/server'
 
