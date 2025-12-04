@@ -8,6 +8,35 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added ✨
+
+- **Sistema Completo de E-mails para Orçamentos**: Implementado sistema
+  profissional de envio de e-mails para todos os formulários de orçamento do
+  site
+  - **Template Moderno**: Email HTML responsivo com identidade visual GB
+    Locações (gradiente laranja-vermelho, cards coloridos, ícones SVG)
+  - **Três Formulários Configurados**:
+    - `/contato`: Formulário simples com validação CPF/CNPJ
+    - Página Inicial: QuoteForm com cálculo de valores
+    - `/orcamento`: Orçamento completo com múltiplos equipamentos
+  - **Campos Capturados**: Nome, Email, Telefone, Empresa, Equipamento, CPF,
+    CNPJ, CEP, Mensagem
+  - **APIs Implementadas**:
+    - `/api/contact`: Contato simples
+    - `/api/orcamentos`: Orçamentos da homepage (nova rota)
+    - `/api/quotes`: Orçamentos completos (email adicionado)
+  - **Funcionalidades do Email**:
+    - Header premium com logo e gradiente
+    - Cards coloridos por categoria de informação
+    - Tabela de equipamentos com cálculo automático
+    - Valor total em destaque
+    - Links clicáveis (email, telefone)
+    - Footer profissional com instruções de resposta
+    - 100% responsivo para mobile
+  - **Integração Resend**: Domínio `locacoesgb.com.br` verificado com DNS
+    configurado (DKIM, SPF, DMARC)
+  - **Documentação**: Guia completo em `docs/features/quote-email-system.md`
+
 ### Fixed 🐛
 
 - **Dialog Search Scroll Propagation**: Corrigido problema onde o scroll dentro

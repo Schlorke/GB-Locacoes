@@ -203,7 +203,23 @@ describe('🔍 Zod Schema Validation', () => {
         phone: '(51) 99999-9999',
         email: 'maria@empresa.com.br',
         company: 'Construtora XYZ',
-        equipments: 'Escavadeiras e Compressores',
+        equipment: 'Escavadeiras e Compressores',
+        cpf: '123.456.789-00',
+        message: 'Gostaria de mais informações sobre locação',
+      }
+
+      const result = ContactSchema.safeParse(validContact)
+      expect(result.success).toBe(true)
+    })
+
+    test('should validate contact data with CNPJ instead of CPF', () => {
+      const validContact = {
+        name: 'Maria Silva',
+        phone: '(51) 99999-9999',
+        email: 'maria@empresa.com.br',
+        company: 'Construtora XYZ',
+        equipment: 'Escavadeiras e Compressores',
+        cnpj: '12.345.678/0001-00',
         message: 'Gostaria de mais informações sobre locação',
       }
 
