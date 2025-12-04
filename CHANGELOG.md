@@ -8,6 +8,89 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Changed 🔄
+
+- **Atualização de Tipos React**: `@types/react` 19.2.6 → 19.2.7
+  - Atualização segura de definições TypeScript para React
+  - Zero breaking changes, apenas melhorias de tipos
+  - ✅ Type-check validado com sucesso
+  - **Não Atualizados (Decisão de Estabilidade)**:
+    - ❌ Tailwind CSS mantido em 3.4.17 (v4.x tem breaking changes)
+    - ❌ Prisma mantido em 6.18.0 (v7.x é major update - aguardar estabilidade)
+    - ❌ prisma-zod-generator mantido em 1.32.1 (dependência do Prisma)
+
+- **Atualização de Dependências (Dezembro 2025)**: Atualizadas 27 dependências
+  para versões mais recentes mantendo estabilidade do projeto
+  - **Next.js Ecosystem**:
+    - `@next/bundle-analyzer`: 16.0.5 → 16.0.7
+    - `@next/eslint-plugin-next`: 16.0.5 → 16.0.7
+    - `eslint-config-next`: 16.0.5 → 16.0.7
+  - **Storybook Suite**: 10.1.2 → 10.1.4
+    - `@storybook/addon-a11y`, `@storybook/addon-docs`,
+      `@storybook/addon-onboarding`
+    - `@storybook/addon-vitest`, `@storybook/nextjs-vite`,
+      `eslint-plugin-storybook`
+    - `storybook` (core)
+  - **Testing & Development**:
+    - Vitest ecosystem: 4.0.14 → 4.0.15 (`@vitest/browser`,
+      `@vitest/browser-playwright`, `@vitest/coverage-v8`, `@vitest/ui`,
+      `vitest`)
+    - TypeScript ESLint: 8.48.0 → 8.48.1 (`@typescript-eslint/eslint-plugin`,
+      `@typescript-eslint/parser`, `typescript-eslint`)
+    - `tsx`: 4.20.6 → 4.21.0
+    - `prettier`: 3.7.3 → 3.7.4
+    - `prettier-plugin-tailwindcss`: 0.7.1 → 0.7.2
+  - **UI & Animations**:
+    - `framer-motion`: 12.23.24 → 12.23.25
+    - `motion`: 12.23.24 → 12.23.25
+    - `react-hook-form`: 7.67.0 → 7.68.0
+  - **Frameworks & Build Tools**:
+    - `@sveltejs/kit`: 2.49.0 → 2.49.1
+    - `svelte`: 5.45.2 → 5.45.5
+  - **Utilities**:
+    - `@vercel/analytics`: 1.5.0 → 1.6.1
+    - `@vercel/speed-insights`: latest → 1.3.1 (versionado)
+    - `baseline-browser-mapping`: latest → 2.9.0 (versionado)
+    - `markdown-to-jsx`: 9.2.0 → 9.3.0
+    - `markdownlint`: 0.39.0 → 0.40.0
+    - `next-openapi-gen`: 0.8.8 → 0.8.9
+  - **Mantidos Estáveis (Não Atualizados)**:
+    - ❌ Prisma: Permanece em 6.18.0 (não atualizado para 7.1.0 - preferência do
+      projeto)
+    - ❌ Tailwind CSS: Permanece em 3.4.17 (não atualizado para 4.1.17 -
+      preferência do projeto)
+    - ❌ prisma-zod-generator: Permanece em 1.32.1 (dependência do Prisma)
+  - **Resultado**: ✅ Build testado e funcionando perfeitamente
+  - **Compatibilidade**: Zero breaking changes, todas as atualizações são
+    compatíveis
+
+### Security 🔐
+
+- **CRÍTICO: Atualização de Segurança CVE-2025-55182 e CVE-2025-66478**
+  - **React**: Atualizado de 19.2.0 → 19.2.1 para correção de vulnerabilidade
+    crítica em React Server Components
+  - **Next.js**: Atualizado de 16.0.5 → 16.0.7 para correção de vulnerabilidade
+    crítica
+  - **CVE-2025-55182**: Vulnerabilidade crítica em React Server Components que
+    permitia execução remota de código sob certas condições
+  - **CVE-2025-66478**: Vulnerabilidade crítica no Next.js derivada do problema
+    do React
+  - **Impacto**: Aplicações usando versões afetadas podiam processar entrada não
+    confiável permitindo RCE (Remote Code Execution)
+  - **Pacotes Afetados**:
+    - react-server-dom-webpack, react-server-dom-turbopack,
+      react-server-dom-parcel
+  - **Ação Tomada**: Atualização imediata para versões corrigidas conforme
+    recomendação oficial
+  - **Status**: ✅ Build testado e funcionando corretamente
+  - **Referências**:
+    - [React GHSA](https://github.com/facebook/react/security/advisories)
+    - [Next.js GHSA](https://github.com/vercel/next.js/security/advisories)
+    - Vercel WAF implementou regras de proteção automática
+  - **Créditos**: Lachlan Davidson (descoberta), Meta Security e React Team
+  - **Documentação**: `docs/issues/known-issues.md` atualizado com detalhes
+    completos
+
 ### Added ✨
 
 - **HeaderSearchCombobox - Componente de Busca Inteligente**: Implementado

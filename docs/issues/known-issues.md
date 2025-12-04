@@ -5,6 +5,193 @@
 
 ---
 
+## 16. 🚨 CRÍTICO: Vulnerabilidade de Segurança CVE-2025-55182 e CVE-2025-66478
+
+### 🔐 Vulnerabilidade de Segurança
+
+**Data da Ocorrência**: 04/12/2025 **Severidade**: 🔴 CRÍTICA (CVSS Score: High)
+**Status**: ✅ RESOLVIDO
+
+#### Descrição
+
+Vulnerabilidade crítica de segurança em React Server Components (CVE-2025-55182)
+e Next.js (CVE-2025-66478) que poderia permitir **Remote Code Execution (RCE)**
+sob certas condições através de requisições especialmente criadas.
+
+**Versões Afetadas**:
+
+- React: 19.0, 19.1.0, 19.1.1, 19.2.0
+- Next.js: ≥14.3.0-canary.77, todas versões ≥15 e ≥16
+- Pacotes específicos:
+  - react-server-dom-parcel (19.0.0, 19.1.0, 19.1.1, 19.2.0)
+  - react-server-dom-webpack (19.0.0, 19.1.0, 19.1.1, 19.2.0)
+  - react-server-dom-turbopack (19.0.0, 19.1.0, 19.1.1, 19.2.0)
+
+**Versões Corrigidas**:
+
+- React: 19.0.1, 19.1.2, 19.2.1
+- Next.js: 15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.7, 16.0.7
+
+#### Causa Raiz
+
+A implementação do React Server Components processava entrada não confiável de
+forma inadequada, permitindo que um atacante executasse código remotamente
+através de requisições maliciosas especialmente criadas. A vulnerabilidade
+estava presente na serialização/deserialização de componentes do servidor.
+
+### ✅ Solução Implementada
+
+#### 1. Atualização Imediata de Dependências
+
+```json
+// package.json - Versões ANTERIORES (VULNERÁVEIS)
+{
+  "react": "19.2.0",        // ❌ VULNERÁVEL
+  "react-dom": "19.2.0",    // ❌ VULNERÁVEL
+  "next": "16.0.5"          // ❌ VULNERÁVEL
+}
+
+// package.json - Versões ATUALIZADAS (SEGURAS)
+{
+  "react": "19.2.1",        // ✅ SEGURO
+  "react-dom": "19.2.1",    // ✅ SEGURO
+  "next": "16.0.7"          // ✅ SEGURO
+}
+```
+
+#### 2. Processo de Atualização
+
+```bash
+# 1. Atualizar package.json
+pnpm install
+
+# 2. Testar build
+pnpm build
+
+# 3. Verificar funcionamento
+pnpm dev
+```
+
+#### 3. Proteção Adicional da Vercel
+
+A Vercel criou regras específicas no WAF (Web Application Firewall) para
+proteger automaticamente todos os projetos hospedados na plataforma, mesmo antes
+da atualização. No entanto, **a atualização das dependências ainda é
+obrigatória** para proteção completa.
+
+### 🎯 Resultado
+
+- ✅ React atualizado de 19.2.0 → 19.2.1
+- ✅ Next.js atualizado de 16.0.5 → 16.0.7
+- ✅ Build testado e funcionando corretamente
+- ✅ Projeto protegido contra CVE-2025-55182 e CVE-2025-66478
+- ✅ Vercel WAF fornece camada adicional de proteção
+
+### 📚 Documentação e Referências
+
+#### Avisos Oficiais de Segurança
+
+- [React GHSA](https://github.com/facebook/react/security/advisories)
+- [Next.js GHSA](https://github.com/vercel/next.js/security/advisories)
+- [Vercel Blog Post](https://vercel.com/blog/security-update-react-server-components)
+
+#### Arquivos Modificados
+
+1. `package.json` - Versões do React e Next.js atualizadas
+2. `pnpm-lock.yaml` - Lockfile atualizado (gerado automaticamente)
+3. `CHANGELOG.md` - Documentação da correção de segurança
+4. `docs/issues/known-issues.md` - Este documento
+
+#### Como Validar
+
+```bash
+# 1. Verificar versões instaladas
+pnpm list react react-dom next
+
+# Deve retornar:
+# react@19.2.1
+# react-dom@19.2.1
+# next@16.0.7
+
+# 2. Testar build
+pnpm build
+# ✅ Build deve completar com sucesso
+
+# 3. Testar aplicação
+pnpm dev
+# ✅ Aplicação deve funcionar normalmente
+```
+
+### 🛑 Armadilhas a Evitar
+
+- ❌ **NUNCA** fazer downgrade para versões anteriores vulneráveis
+- ❌ **NUNCA** ignorar avisos de segurança do GitHub/Vercel
+- ❌ **NUNCA** assumir que apenas a proteção WAF é suficiente
+- ⚠️ **SEMPRE** atualizar dependências quando houver vulnerabilidades críticas
+- ⚠️ **SEMPRE** testar após atualizações de segurança
+- ⚠️ **SEMPRE** documentar correções de segurança no CHANGELOG
+
+### 🔍 Detecção e Monitoramento
+
+#### Como Detectar se Você Está Vulnerável
+
+1. **Verificação Manual**:
+
+```bash
+# Verificar versão do React
+cat package.json | grep '"react"'
+
+# Verificar versão do Next.js
+cat package.json | grep '"next"'
+```
+
+2. **Ferramentas Automatizadas**:
+
+- GitHub Dependabot (ativo neste projeto)
+- Vercel Dashboard (avisos de segurança)
+- `pnpm audit` para vulnerabilidades conhecidas
+
+3. **Sinais de Alerta**:
+
+- Banner laranja na Vercel Dashboard
+- Email de segurança do GitHub/Vercel
+- Dependabot Pull Request automático
+
+### 🏆 Créditos
+
+- **Descoberta**: Lachlan Davidson (pesquisador de segurança)
+- **Correção**: Meta Security Team e React Core Team
+- **Coordenação**: Vercel Security Team
+- **Deploy de Proteção**: Vercel WAF implementou regras globalmente
+
+### 📊 Timeline
+
+- **Descoberta**: Lachlan Davidson identifica vulnerabilidade
+- **Disclosure**: Reporte responsável para Meta/React Team
+- **Patches Released**:
+  - React 19.0.1, 19.1.2, 19.2.1
+  - Next.js 15.0.5, 15.1.9, 15.2.6, 15.3.6, 15.4.8, 15.5.7, 16.0.7
+- **Vercel WAF**: Regras de proteção deployadas globalmente
+- **GB-Locações**: 04/12/2025 - Atualização aplicada e testada ✅
+
+### ⚠️ Nota Importante
+
+Esta vulnerabilidade afeta TODOS os projetos usando React 19 com Server
+Components, incluindo:
+
+- Next.js (todas versões recentes)
+- Vite com React Server Components
+- Parcel com React
+- React Router com SSR
+- RedwoodSDK
+- Waku
+- Qualquer framework que use `react-server-dom-*` packages
+
+**Recomendação**: Se você mantém outros projetos React, verifique e atualize
+IMEDIATAMENTE.
+
+---
+
 ## 15. Salto do scroll ao sair do ScrollStack (Playground)
 
 ### 🐛 Problema
@@ -97,15 +284,18 @@ o que resetava continuamente o scale de hover ou o bloqueava.
 
 ## 📋 Índice
 
-1. [Dessincronização de Animações Hero](#1-dessincronização-de-animações-hero)
-2. [Scroll Vertical Travado no iOS Safari](#2-scroll-vertical-travado-no-ios-safari)
-3. [Scroll Involuntário na Home](#3-scroll-involuntário-na-home)
-4. [Flick no Category Showcase após swipe](#4-flick-no-category-showcase-após-swipe)
-5. [Hover e sombras cortados no Category Showcase](#5-hover-e-sombras-cortados-no-category-showcase)
-6. [Gradiente do Carrossel Sobreposto às Categorias](#6-gradiente-do-carrossel-sobreposto-às-categorias)
-7. [Inputs do Dialog Lab cortados nas laterais](#7-inputs-do-dialog-lab-cortados-nas-laterais)
-8. [Hydration mismatch no IconCustomization](#8-hydration-mismatch-no-iconcustomization)
-9. [Como Usar Este Documento](#como-usar-este-documento)
+1. [🚨 CRÍTICO: Vulnerabilidade de Segurança CVE-2025-55182 e CVE-2025-66478](#16--crítico-vulnerabilidade-de-segurança-cve-2025-55182-e-cve-2025-66478)
+2. [Salto do scroll ao sair do ScrollStack (Playground)](#15-salto-do-scroll-ao-sair-do-scrollstack-playground)
+3. [Hover do hero 3D sem transição suave após navegar e voltar](#14-hover-do-hero-3d-sem-transição-suave-após-navegar-e-voltar)
+4. [Dessincronização de Animações Hero](#1-dessincronização-de-animações-hero)
+5. [Scroll Vertical Travado no iOS Safari](#2-scroll-vertical-travado-no-ios-safari)
+6. [Scroll Involuntário na Home](#3-scroll-involuntário-na-home)
+7. [Flick no Category Showcase após swipe](#4-flick-no-category-showcase-após-swipe)
+8. [Hover e sombras cortados no Category Showcase](#5-hover-e-sombras-cortados-no-category-showcase)
+9. [Gradiente do Carrossel Sobreposto às Categorias](#6-gradiente-do-carrossel-sobreposto-às-categorias)
+10. [Inputs do Dialog Lab cortados nas laterais](#7-inputs-do-dialog-lab-cortados-nas-laterais)
+11. [Hydration mismatch no IconCustomization](#8-hydration-mismatch-no-iconcustomization)
+12. [Como Usar Este Documento](#como-usar-este-documento)
 
 ---
 
