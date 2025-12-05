@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
+import { sanitizeCartItemPricing } from '@/lib/pricing'
+
 export interface CartItem {
   equipmentId: string
   equipmentName: string
@@ -20,10 +22,21 @@ export interface CartItem {
   description?: string
   category?: { name: string }
   images?: string[]
+  // Descontos percentuais
   dailyDiscount?: number
   weeklyDiscount?: number
   biweeklyDiscount?: number
   monthlyDiscount?: number
+  // Valores diretos
+  dailyDirectValue?: number
+  weeklyDirectValue?: number
+  biweeklyDirectValue?: number
+  monthlyDirectValue?: number
+  // Flags de uso de valor direto
+  dailyUseDirectValue?: boolean
+  weeklyUseDirectValue?: boolean
+  biweeklyUseDirectValue?: boolean
+  monthlyUseDirectValue?: boolean
 }
 
 interface CartState {
@@ -32,6 +45,7 @@ interface CartState {
   removeItem: (_equipmentId: string) => void
   updateItemQuantity: (_equipmentId: string, _quantity: number) => void
   updateItemDays: (_equipmentId: string, _days: number) => void
+  hydrateItems: (_items: CartItem[]) => void
   clearCart: () => void
   getItemCount: () => number
   getTotalPrice: () => number
@@ -44,8 +58,9 @@ export const useCartStore = create<CartState>()(
 
       addItem: (item) =>
         set((state) => {
+          const safeItem = sanitizeCartItemPricing(item)
           const existingItemIndex = state.items.findIndex(
-            (i) => i.equipmentId === item.equipmentId
+            (i) => i.equipmentId === safeItem.equipmentId
           )
 
           if (existingItemIndex >= 0) {
@@ -53,13 +68,13 @@ export const useCartStore = create<CartState>()(
             const updatedItems = [...state.items]
             updatedItems[existingItemIndex] = {
               ...updatedItems[existingItemIndex],
-              ...item,
-              quantity: item.quantity, // Substitui a quantidade pela nova
+              ...safeItem,
+              quantity: safeItem.quantity, // Substitui a quantidade pela nova
             }
             return { items: updatedItems }
           } else {
             // Adiciona novo item
-            return { items: [...state.items, item] }
+            return { items: [...state.items, safeItem] }
           }
         }),
 
@@ -81,6 +96,11 @@ export const useCartStore = create<CartState>()(
             i.equipmentId === equipmentId ? { ...i, days } : i
           ),
         })),
+
+      hydrateItems: (items) =>
+        set({
+          items: items.map((item) => sanitizeCartItemPricing(item)),
+        }),
 
       clearCart: () => set({ items: [] }),
 

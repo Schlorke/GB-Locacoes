@@ -42,13 +42,16 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     )
   }
 
+  // Gerar ID único para este contato
+  const contactId = `CTT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`
+
   // Enviar email
   try {
     const emailResult = await resend.emails.send({
       from: process.env.FROM_EMAIL,
       to: process.env.CONTACT_EMAIL || 'harryschlorke@gmail.com',
-      subject: `🎯 Novo Orçamento - ${validatedData.name}`,
-      html: generateContactEmailHTML(validatedData),
+      subject: `🎯 Novo Orçamento #${contactId.slice(-8).toUpperCase()} - ${validatedData.name}`,
+      html: generateContactEmailHTML(validatedData, contactId),
     })
 
     if (emailResult.error) {
@@ -56,7 +59,7 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     }
 
     return successResponse(
-      { messageId: `msg_${Date.now()}` },
+      { messageId: contactId },
       200,
       'Orçamento enviado com sucesso! Entraremos em contato em até 2 horas úteis.'
     )

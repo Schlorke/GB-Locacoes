@@ -10,7 +10,8 @@ import { type ValidatedContactData } from './validations/contact-types'
  * COMPATÍVEL com Outlook, Gmail, Apple Mail, Zoho, etc.
  */
 export function generateContactEmailHTML(
-  validatedData: ValidatedContactData
+  validatedData: ValidatedContactData,
+  contactId: string
 ): string {
   return `
     <!DOCTYPE html>
@@ -47,12 +48,16 @@ export function generateContactEmailHTML(
                           </table>
                         </td>
                         <td valign="top" width="40%" align="right">
-                          <!-- Badges -->
+                          <!-- Badges em linha -->
                           <table cellpadding="0" cellspacing="0" border="0" align="right">
                             <tr>
-                              <td>
-                                <div style="font-size: 9px; font-weight: 600; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Data e Hora:</div>
+                              <td style="padding-right: 12px;">
+                                <div style="font-size: 9px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-bottom: 6px;">Data e Hora:</div>
                                 <div style="background: rgba(255, 255, 255, 0.25); padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 600; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); white-space: nowrap;">⏰ ${new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</div>
+                              </td>
+                              <td>
+                                <div style="font-size: 9px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-bottom: 6px;">ID do Orçamento:</div>
+                                <div style="background: rgba(255, 255, 255, 0.25); padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); white-space: nowrap;">#${contactId.slice(-8).toUpperCase()}</div>
                               </td>
                             </tr>
                           </table>
@@ -107,6 +112,29 @@ export function generateContactEmailHTML(
                         </td>
                       </tr>
 
+                      ${
+                        validatedData.cpf
+                          ? `
+                      <!-- CPF -->
+                      <tr>
+                        <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9;">
+                          <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
+                                📄
+                              </td>
+                              <td style="padding-left: 16px; vertical-align: middle;">
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CPF</div>
+                                <div style="font-size: 15px; font-weight: 600; color: #1e293b; line-height: 1.5;">${validatedData.cpf}</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      `
+                          : ''
+                      }
+
                       <!-- Email -->
                       <tr>
                         <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9;">
@@ -128,7 +156,7 @@ export function generateContactEmailHTML(
 
                       <!-- Telefone -->
                       <tr>
-                        <td style="padding: 20px 24px; ${validatedData.cpf || validatedData.cnpj ? 'border-bottom: 1px solid #f1f5f9;' : ''}">
+                        <td style="padding: 20px 24px; ${validatedData.cep ? 'border-bottom: 1px solid #f1f5f9;' : ''}">
                           <table cellpadding="0" cellspacing="0" border="0">
                             <tr>
                               <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
@@ -146,42 +174,19 @@ export function generateContactEmailHTML(
                       </tr>
 
                       ${
-                        validatedData.cpf
+                        validatedData.cep
                           ? `
-                      <!-- CPF -->
-                      <tr>
-                        <td style="padding: 20px 24px; ${validatedData.cnpj ? 'border-bottom: 1px solid #f1f5f9;' : ''}">
-                          <table cellpadding="0" cellspacing="0" border="0">
-                            <tr>
-                              <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
-                                📄
-                              </td>
-                              <td style="padding-left: 16px; vertical-align: middle;">
-                                <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CPF</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1e293b; line-height: 1.5;">${validatedData.cpf}</div>
-                              </td>
-                            </tr>
-                          </table>
-                        </td>
-                      </tr>
-                      `
-                          : ''
-                      }
-
-                      ${
-                        validatedData.cnpj
-                          ? `
-                      <!-- CNPJ -->
+                      <!-- CEP -->
                       <tr>
                         <td style="padding: 20px 24px;">
                           <table cellpadding="0" cellspacing="0" border="0">
                             <tr>
                               <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
-                                📋
+                                📍
                               </td>
                               <td style="padding-left: 16px; vertical-align: middle;">
-                                <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CNPJ</div>
-                                <div style="font-size: 15px; font-weight: 600; color: #1e293b; line-height: 1.5;">${validatedData.cnpj}</div>
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CEP</div>
+                                <div style="font-size: 15px; font-weight: 600; color: #1e293b; line-height: 1.5;">${validatedData.cep}</div>
                               </td>
                             </tr>
                           </table>
@@ -193,7 +198,9 @@ export function generateContactEmailHTML(
                     </table>
 
                     ${
-                      validatedData.company || validatedData.equipment
+                      validatedData.company ||
+                      validatedData.cnpj ||
+                      validatedData.equipment
                         ? `
                     <!-- Divider -->
                     <div style="height: 1px; background: #e2e8f0; margin: 30px 0;"></div>
@@ -206,7 +213,7 @@ export function generateContactEmailHTML(
                         validatedData.company
                           ? `
                       <tr>
-                        <td style="padding: 20px 24px; ${validatedData.equipment ? 'border-bottom: 1px solid #f1f5f9;' : ''}">
+                        <td style="padding: 20px 24px; ${validatedData.cnpj || validatedData.equipment ? 'border-bottom: 1px solid #f1f5f9;' : ''}">
                           <table cellpadding="0" cellspacing="0" border="0">
                             <tr>
                               <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
@@ -215,6 +222,28 @@ export function generateContactEmailHTML(
                               <td style="padding-left: 16px; vertical-align: middle;">
                                 <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">Empresa / Construtora</div>
                                 <div style="font-size: 15px; font-weight: 600; color: #1e293b; line-height: 1.5;">${validatedData.company}</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      `
+                          : ''
+                      }
+
+                      ${
+                        validatedData.cnpj
+                          ? `
+                      <tr>
+                        <td style="padding: 20px 24px; ${validatedData.equipment ? 'border-bottom: 1px solid #f1f5f9;' : ''}">
+                          <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
+                                📋
+                              </td>
+                              <td style="padding-left: 16px; vertical-align: middle;">
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">CNPJ</div>
+                                <div style="font-size: 15px; font-weight: 600; color: #1e293b; line-height: 1.5;">${validatedData.cnpj}</div>
                               </td>
                             </tr>
                           </table>
@@ -276,7 +305,7 @@ export function generateContactEmailHTML(
                     </a>
                     <p style="font-size: 12px; color: #64748b; line-height: 1.8; margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
                       <strong>GB Locações</strong> - Equipamentos para Construção<br>
-                      © ${new Date().getFullYear()} Todos os direitos reservados
+                      Orçamento #${contactId.slice(-8).toUpperCase()} · © ${new Date().getFullYear()}
                     </p>
                   </td>
                 </tr>
@@ -308,6 +337,11 @@ export function generateQuoteEmailHTML(
     days: number
     pricePerDay: number
     total: number
+    appliedPeriod?: string
+    appliedDiscount?: number
+    useDirectValue?: boolean
+    directValue?: number
+    periodMultiplier?: number
   }>,
   totalAmount: number,
   quoteId: string
@@ -466,20 +500,40 @@ export function generateQuoteEmailHTML(
                     <div style="height: 1px; background: #e2e8f0; margin: 30px 0;"></div>
                     <div style="font-size: 14px; font-weight: 700; color: #1e293b; text-transform: uppercase; margin-bottom: 20px;">📦 Equipamentos Solicitados</div>
 
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 20px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0 12px; margin: 8px 0;">
                       ${equipments
                         .map(
                           (eq) => `
                         <tr>
-                          <td style="background: #f8fafc; border-left: 4px solid #f97316; border-radius: 8px; padding: 16px; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; margin-bottom: 12px;">
-                            <div style="font-weight: 600; color: #0f172a; margin-bottom: 4px;">${eq.name}</div>
-                            <div style="font-size: 12px; color: #64748b;">📂 ${eq.category}</div>
-                            <div style="font-size: 13px; color: #475569; margin-top: 4px;">
-                              ${eq.quantity}x · ${eq.days} dia(s) · ${formatCurrency(eq.pricePerDay)}/dia
-                            </div>
-                          </td>
-                          <td width="150" align="right" style="padding: 16px; vertical-align: top;">
-                            <div style="font-size: 18px; font-weight: 700; color: #ea580c;">${formatCurrency(eq.total)}</div>
+                          <td colspan="2" style="padding: 0;">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8fafc; border-left: 4px solid #f97316; border-radius: 8px; overflow: hidden;">
+                              <tr>
+                                <td style="padding: 16px;">
+                                  <div style="font-weight: 600; color: #0f172a; margin-bottom: 4px;">${eq.name}</div>
+                                  <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">📂 ${eq.category}</div>
+                                  <div style="font-size: 13px; color: #475569;">
+                                    ${eq.quantity}x · ${eq.days} dia(s) · ${formatCurrency(eq.pricePerDay)}/dia
+                                  </div>
+                                  ${
+                                    eq.appliedPeriod &&
+                                    (eq.appliedDiscount || eq.useDirectValue)
+                                      ? `
+                                  <div style="font-size: 12px; color: #059669; font-weight: 600; margin-top: 6px; padding: 4px 8px; background: #d1fae5; border-radius: 4px; display: inline-block;">
+                                    ${
+                                      eq.useDirectValue && eq.directValue
+                                        ? `💰 Valor ${eq.appliedPeriod}: ${formatCurrency(eq.directValue)} (${eq.periodMultiplier || 1} dias)`
+                                        : `🎯 Desc. ${eq.appliedPeriod.charAt(0).toUpperCase() + eq.appliedPeriod.slice(1)}: -${eq.appliedDiscount}%`
+                                    }
+                                  </div>
+                                  `
+                                      : ''
+                                  }
+                                </td>
+                                <td width="150" align="right" style="padding: 16px; vertical-align: top;">
+                                  <div style="font-size: 18px; font-weight: 700; color: #ea580c;">${formatCurrency(eq.total)}</div>
+                                </td>
+                              </tr>
+                            </table>
                           </td>
                         </tr>
                       `

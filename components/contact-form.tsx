@@ -261,13 +261,13 @@ export default function ContactForm() {
       <div className="pt-2">
         <Button
           type="submit"
-          className="block w-fit mx-auto hover:scale-105 transition-transform duration-200"
+          className="w-fit mx-auto hover:scale-105 transition-transform duration-200 flex items-center gap-2"
           size="lg"
           disabled={isSubmitting}
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="h-4 w-4 animate-spin" />
               Enviando...
             </>
           ) : (

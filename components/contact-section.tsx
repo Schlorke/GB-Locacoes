@@ -87,6 +87,7 @@ export default function ContactSection() {
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
+          cep: formData.cep || undefined,
           company: formData.company || undefined,
           equipment: formData.materials || undefined,
           cpf: formData.cpf || undefined,
@@ -356,11 +357,11 @@ export default function ContactSection() {
                   type="submit"
                   size="lg"
                   disabled={isSubmitting}
-                  className="w-full hover:scale-105 transition-all duration-300 hover:shadow-lg h-12"
+                  className="w-full hover:scale-105 transition-all duration-300 hover:shadow-lg h-12 flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                       Enviando...
                     </>
                   ) : (

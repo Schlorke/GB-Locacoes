@@ -7,6 +7,20 @@ import { generateQuoteEmailHTML } from '@/lib/email-templates'
 
 const resend = getResend()
 
+// Tipo estendido para itens que podem incluir campos de pricing
+type QuoteItemWithPricing = {
+  equipmentId: string
+  quantity: number
+  days: number
+  calculatedTotal?: number
+  calculatedPricePerDay?: number
+  appliedPeriod?: string
+  appliedDiscount?: number
+  useDirectValue?: boolean
+  directValue?: number
+  periodMultiplier?: number
+}
+
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -183,9 +197,14 @@ export async function POST(request: Request) {
 
     const prisma = await getPrisma()
 
+    const equipmentDetailsForEmail = []
+
     for (const item of items) {
       const equipment = await prisma.equipment.findUnique({
         where: { id: item.equipmentId },
+        include: {
+          category: { select: { name: true } },
+        },
       })
 
       if (!equipment) {
@@ -195,17 +214,38 @@ export async function POST(request: Request) {
         )
       }
 
-      const pricePerDay = Number(equipment.pricePerDay)
-      const itemTotal = pricePerDay * item.quantity * (item.days || 1)
+      // Usar valores calculados do frontend (com desconto/valor direto já aplicados)
+      const itemTotal =
+        (item as QuoteItemWithPricing).calculatedTotal ||
+        Number(equipment.pricePerDay) * item.quantity * (item.days || 1)
+      const pricePerDayToUse =
+        (item as QuoteItemWithPricing).calculatedPricePerDay ||
+        Number(equipment.pricePerDay)
+
       totalAmount += itemTotal
 
       quoteItems.push({
         equipmentId: item.equipmentId,
         quantity: item.quantity,
         days: item.days || 1,
-        pricePerDay: equipment.pricePerDay,
-        priceAtTime: equipment.pricePerDay,
+        pricePerDay: pricePerDayToUse,
         total: itemTotal,
+      })
+
+      // Preparar informações detalhadas para o email
+      equipmentDetailsForEmail.push({
+        name: equipment.name,
+        category: equipment.category?.name || 'Sem categoria',
+        quantity: item.quantity,
+        days: item.days || 1,
+        pricePerDay: pricePerDayToUse,
+        total: itemTotal,
+        // Informações de desconto/período
+        appliedPeriod: (item as QuoteItemWithPricing).appliedPeriod || 'diária',
+        appliedDiscount: (item as QuoteItemWithPricing).appliedDiscount || 0,
+        useDirectValue: (item as QuoteItemWithPricing).useDirectValue || false,
+        directValue: (item as QuoteItemWithPricing).directValue || 0,
+        periodMultiplier: (item as QuoteItemWithPricing).periodMultiplier || 1,
       })
     }
 
@@ -241,17 +281,7 @@ export async function POST(request: Request) {
       },
     })
 
-    // Preparar detalhes dos equipamentos para o email
-    const equipmentDetails = quote.items.map((item) => ({
-      name: item.equipment.name,
-      category: item.equipment.category?.name || 'Sem categoria',
-      quantity: item.quantity,
-      days: item.days,
-      pricePerDay: Number(item.pricePerDay),
-      total: Number(item.total), // Convert Decimal to number
-    }))
-
-    // Enviar email
+    // Enviar email com informações completas de desconto/período
     if (resend && process.env.FROM_EMAIL) {
       try {
         await resend.emails.send({
@@ -266,7 +296,7 @@ export async function POST(request: Request) {
               customerCompany,
               message,
             },
-            equipmentDetails,
+            equipmentDetailsForEmail,
             totalAmount,
             quote.id
           ),

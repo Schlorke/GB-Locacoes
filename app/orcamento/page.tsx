@@ -12,13 +12,26 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from 'sonner'
+import {
+  calculateIntelligentPrice,
+  getPricingConfig,
+  sanitizeCartItemPricing,
+} from '@/lib/pricing'
 import { formatCurrency } from '@/lib/utils'
 import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
 import { useCartStore, type CartItem } from '@/stores/useCartStore'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Minus, Package, Plus, ShoppingCart, Trash2, User } from 'lucide-react'
+import {
+  Loader2,
+  Minus,
+  Package,
+  Plus,
+  ShoppingCart,
+  Trash2,
+  User,
+} from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
-import { Suspense, useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 
 interface Equipment {
   id: string
@@ -66,6 +79,7 @@ function QuotePage() {
     removeItem,
     updateItemQuantity,
     updateItemDays,
+    hydrateItems,
     clearCart,
   } = useCartStore()
   const [displayedItems, setDisplayedItems] = useState<CartItem[]>([])
@@ -84,7 +98,8 @@ function QuotePage() {
     cep: '',
     message: '',
   })
-  // Removido: estado de isSubmitting não utilizado
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const hasSyncedCartPricing = useRef(false)
 
   // Função para formatar telefone brasileiro
   const formatPhoneNumber = (value: string) => {
@@ -202,8 +217,15 @@ function QuotePage() {
       )
 
       if (equipment) {
+        console.log('🔍 EQUIPMENT FROM API:', {
+          name: equipment.name,
+          weeklyDiscount: equipment.weeklyDiscount,
+          weeklyDirectValue: equipment.weeklyDirectValue,
+          weeklyUseDirectValue: equipment.weeklyUseDirectValue,
+        })
+
         const price = Number(equipment.pricePerDay) || 0
-        const equipmentToAdd = {
+        const equipmentToAdd = sanitizeCartItemPricing({
           equipmentId: equipment.id,
           equipmentName: equipment.name,
           pricePerDay: price,
@@ -213,11 +235,29 @@ function QuotePage() {
           category: equipment.category,
           images: equipment.images,
           maxStock: equipment.maxStock || 1,
+          // Descontos percentuais
           dailyDiscount: equipment.dailyDiscount || 0,
           weeklyDiscount: equipment.weeklyDiscount || 0,
           biweeklyDiscount: equipment.biweeklyDiscount || 0,
           monthlyDiscount: equipment.monthlyDiscount || 0,
-        }
+          // Valores diretos
+          dailyDirectValue: equipment.dailyDirectValue || 0,
+          weeklyDirectValue: equipment.weeklyDirectValue || 0,
+          biweeklyDirectValue: equipment.biweeklyDirectValue || 0,
+          monthlyDirectValue: equipment.monthlyDirectValue || 0,
+          // Flags de uso de valor direto
+          dailyUseDirectValue: equipment.dailyUseDirectValue || false,
+          weeklyUseDirectValue: equipment.weeklyUseDirectValue || false,
+          biweeklyUseDirectValue: equipment.biweeklyUseDirectValue || false,
+          monthlyUseDirectValue: equipment.monthlyUseDirectValue || false,
+        })
+
+        console.log('🔍 EQUIPMENT TO ADD TO CART:', {
+          name: equipmentToAdd.equipmentName,
+          weeklyDiscount: equipmentToAdd.weeklyDiscount,
+          weeklyDirectValue: equipmentToAdd.weeklyDirectValue,
+          weeklyUseDirectValue: equipmentToAdd.weeklyUseDirectValue,
+        })
 
         // Usar o store para adicionar o item
         useCartStore.getState().addItem(equipmentToAdd)
@@ -234,96 +274,87 @@ function QuotePage() {
     }
   }, [searchParams, fetchEquipmentAndAdd])
 
-  // Função inteligente para determinar preço baseado nas configurações do admin
-  const getIntelligentPricing = (equipment: CartItem, totalDays: number) => {
-    // Definir configurações de período em ordem de prioridade (maior para menor)
-    const periodConfigs = [
-      {
-        threshold: 30,
-        period: 'monthly',
-        multiplier: 30,
-        discount: equipment.monthlyDiscount || 0,
-        directValue: 0,
-        useDirectValue: false,
-      },
-      {
-        threshold: 15,
-        period: 'biweekly',
-        multiplier: 15,
-        discount: equipment.biweeklyDiscount || 0,
-        directValue: 0,
-        useDirectValue: false,
-      },
-      {
-        threshold: 7,
-        period: 'weekly',
-        multiplier: 7,
-        discount: equipment.weeklyDiscount || 0,
-        directValue: 0,
-        useDirectValue: false,
-      },
-      {
-        threshold: 1,
-        period: 'daily',
-        multiplier: 1,
-        discount: equipment.dailyDiscount || 0,
-        directValue: 0,
-        useDirectValue: false,
-      },
-    ]
-
-    // Encontrar a configuração apropriada baseada nos dias
-    const selectedConfig =
-      periodConfigs.find((config) => totalDays >= config.threshold) ||
-      periodConfigs[3] // fallback para daily
-
-    return {
-      ...selectedConfig,
-      days: selectedConfig?.threshold || 1,
-    }
-  }
-
-  // Função inteligente para calcular preço final
-  const calculateIntelligentPrice = (
-    equipment: CartItem,
-    totalDays: number
-  ) => {
-    const pricingConfig = getIntelligentPricing(equipment, totalDays)
-
-    // Se usar valor direto, calcular de forma proporcional
-    if (
-      pricingConfig.useDirectValue &&
-      pricingConfig.directValue !== undefined &&
-      pricingConfig.directValue !== null
-    ) {
-      if (pricingConfig.directValue === 0) {
-        // Se valor direto é 0, usar esse valor (equipamento gratuito no período)
-        return 0
-      }
-
-      // Calcular quantos períodos completos + dias restantes
-      const multiplier = pricingConfig.multiplier || 1
-      const completePeriods = Math.floor(totalDays / multiplier)
-      const remainingDays = totalDays % multiplier
-
-      let totalPrice = completePeriods * pricingConfig.directValue
-
-      // Para dias restantes, usar valor proporcional do período
-      if (remainingDays > 0) {
-        const proportionalValue =
-          (pricingConfig.directValue / multiplier) * remainingDays
-        totalPrice += proportionalValue
-      }
-
-      return totalPrice
+  // Sincroniza itens persistidos para garantir que descontos e valores diretos reflitam o estado atual do catálogo
+  useEffect(() => {
+    if (hasSyncedCartPricing.current || selectedEquipments.length === 0) {
+      return
     }
 
-    // Se usar desconto percentual, calcular com desconto
-    const basePrice = equipment.pricePerDay * totalDays
-    const discount = pricingConfig.discount || 0
-    const discountAmount = basePrice * (discount / 100)
-    return basePrice - discountAmount
-  }
+    hasSyncedCartPricing.current = true
+
+    const syncCartPricing = async () => {
+      try {
+        const response = await fetch('/api/equipments')
+        if (!response.ok) {
+          return
+        }
+
+        const equipments: Equipment[] = await response.json()
+        if (!Array.isArray(equipments) || equipments.length === 0) {
+          return
+        }
+
+        const equipmentMap = new Map<string, Equipment>(
+          equipments.map((equipment) => [equipment.id, equipment])
+        )
+
+        const updatedItems = selectedEquipments.map((item) => {
+          const equipment = equipmentMap.get(item.equipmentId)
+          if (!equipment) return sanitizeCartItemPricing(item)
+
+          return sanitizeCartItemPricing({
+            ...item,
+            pricePerDay: Number(equipment.pricePerDay) || item.pricePerDay,
+            dailyDiscount: equipment.dailyDiscount ?? item.dailyDiscount ?? 0,
+            weeklyDiscount:
+              equipment.weeklyDiscount ?? item.weeklyDiscount ?? 0,
+            biweeklyDiscount:
+              equipment.biweeklyDiscount ?? item.biweeklyDiscount ?? 0,
+            monthlyDiscount:
+              equipment.monthlyDiscount ?? item.monthlyDiscount ?? 0,
+            dailyDirectValue:
+              Number(
+                equipment.dailyDirectValue ?? item.dailyDirectValue ?? 0
+              ) || 0,
+            weeklyDirectValue:
+              Number(
+                equipment.weeklyDirectValue ?? item.weeklyDirectValue ?? 0
+              ) || 0,
+            biweeklyDirectValue:
+              Number(
+                equipment.biweeklyDirectValue ?? item.biweeklyDirectValue ?? 0
+              ) || 0,
+            monthlyDirectValue:
+              Number(
+                equipment.monthlyDirectValue ?? item.monthlyDirectValue ?? 0
+              ) || 0,
+            dailyUseDirectValue:
+              equipment.dailyUseDirectValue ??
+              item.dailyUseDirectValue ??
+              false,
+            weeklyUseDirectValue:
+              equipment.weeklyUseDirectValue ??
+              item.weeklyUseDirectValue ??
+              false,
+            biweeklyUseDirectValue:
+              equipment.biweeklyUseDirectValue ??
+              item.biweeklyUseDirectValue ??
+              false,
+            monthlyUseDirectValue:
+              equipment.monthlyUseDirectValue ??
+              item.monthlyUseDirectValue ??
+              false,
+          })
+        })
+
+        hydrateItems(updatedItems)
+      } catch (error) {
+        console.error('Failed to sync cart pricing', error)
+      }
+    }
+
+    void syncCartPricing()
+  }, [selectedEquipments, hydrateItems])
 
   const updateQuantity = (id: string, quantity: number) => {
     if (quantity < 1) return
@@ -385,20 +416,49 @@ function QuotePage() {
       return
     }
 
-    // início envio (estado visual não utilizado)
+    setIsSubmitting(true)
 
     try {
       const response = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          equipments: selectedEquipments.map((eq) => ({
-            equipmentId: eq.equipmentId,
-            quantity: eq.quantity,
-            days: eq.days,
-          })),
-          total: calculateTotal(),
+          customerName: formData.name,
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          customerCompany: undefined,
+          message: formData.message || undefined,
+          items: selectedEquipments.map((eq) => {
+            const days = Number(eq.days) || 1
+            const quantity = Number(eq.quantity) || 1
+            const intelligentPrice = calculateIntelligentPrice(eq, days)
+            const pricingConfig = getPricingConfig(eq, days)
+            const total = intelligentPrice * quantity
+
+            // Determinar nome do período em português
+            const periodNames = {
+              daily: 'diária',
+              weekly: 'semanal',
+              biweekly: 'quinzenal',
+              monthly: 'mensal',
+            }
+
+            return {
+              equipmentId: eq.equipmentId,
+              quantity: quantity,
+              days: days,
+              calculatedTotal: total,
+              calculatedPricePerDay: intelligentPrice / days,
+              // Informações de desconto/período
+              appliedPeriod:
+                periodNames[pricingConfig.period as keyof typeof periodNames] ||
+                'diária',
+              appliedDiscount: pricingConfig.discount || 0,
+              useDirectValue: pricingConfig.useDirectValue || false,
+              directValue: pricingConfig.directValue || 0,
+              periodMultiplier: pricingConfig.multiplier || 1,
+            }
+          }),
         }),
       })
 
@@ -435,11 +495,11 @@ function QuotePage() {
         description: 'Erro ao enviar orçamento. Tente novamente.',
       })
     } finally {
-      // fim envio (estado visual não utilizado)
+      setIsSubmitting(false)
     }
   }
 
-  const handleWhatsAppSubmit = () => {
+  const _handleWhatsAppSubmit = () => {
     // Validação: pelo menos um dos campos CPF ou CNPJ deve ser preenchido
     if (!formData.cpf.trim() && !formData.cnpj.trim()) {
       toast.error('Erro de Validação', {
@@ -472,7 +532,7 @@ function QuotePage() {
           finalPrice: calculateSubtotal(eq),
           id: eq.equipmentId,
           discount: (() => {
-            const pricingConfig = getIntelligentPricing(eq, eq.days)
+            const pricingConfig = getPricingConfig(eq, eq.days)
             if (pricingConfig.discount && pricingConfig.discount > 0) {
               return {
                 type: 'percentage' as const,
@@ -687,11 +747,10 @@ function QuotePage() {
                                         </Badge>
                                       )}
                                       {(() => {
-                                        const pricingConfig =
-                                          getIntelligentPricing(
-                                            equipment,
-                                            equipment.days
-                                          )
+                                        const pricingConfig = getPricingConfig(
+                                          equipment,
+                                          equipment.days
+                                        )
                                         const actualPeriodLabel =
                                           pricingConfig.period === 'daily'
                                             ? 'Diário'
@@ -726,69 +785,75 @@ function QuotePage() {
                                       })()}
                                     </div>
                                     <div className="text-sm text-gray-600 mb-3">
-                                      {equipment.finalPrice ? (
-                                        (() => {
-                                          const pricingConfig =
-                                            getIntelligentPricing(
-                                              equipment,
-                                              equipment.days
-                                            )
-                                          const originalPrice =
-                                            Number(equipment.pricePerDay) *
+                                      {(() => {
+                                        const pricingConfig = getPricingConfig(
+                                          equipment,
+                                          equipment.days
+                                        )
+                                        const calculatedPrice =
+                                          calculateIntelligentPrice(
+                                            equipment,
                                             equipment.days
-                                          const actualPeriodLabel =
-                                            pricingConfig.period === 'daily'
-                                              ? 'diário'
-                                              : pricingConfig.period ===
-                                                  'weekly'
-                                                ? 'semanal'
-                                                : pricingConfig.period ===
-                                                    'biweekly'
-                                                  ? 'quinzenal'
-                                                  : pricingConfig.period ===
-                                                      'monthly'
-                                                    ? 'mensal'
-                                                    : 'diário'
-
-                                          return (
-                                            <div>
-                                              {(pricingConfig.discount || 0) >
-                                                0 && (
-                                                <div className="text-sm text-gray-500 line-through">
-                                                  {formatCurrency(
-                                                    originalPrice
-                                                  )}
-                                                </div>
-                                              )}
-                                              <div>
-                                                <span className="font-semibold text-green-600 text-base">
-                                                  {formatCurrency(
-                                                    equipment.finalPrice
-                                                  )}
-                                                </span>
-                                                <span className="text-xs text-gray-500 ml-1">
-                                                  total ({equipment.days} dias)
-                                                </span>
-                                              </div>
-                                              {(pricingConfig.discount || 0) >
-                                                0 && (
-                                                <div className="text-xs text-green-600 font-medium">
-                                                  ✓ Desconto {actualPeriodLabel}{' '}
-                                                  aplicado: -
-                                                  {pricingConfig.discount}%
-                                                </div>
-                                              )}
-                                            </div>
                                           )
-                                        })()
-                                      ) : (
-                                        <span>
-                                          {formatCurrency(
-                                            Number(equipment.pricePerDay) || 0
-                                          )}
-                                          /dia
-                                        </span>
-                                      )}
+                                        const originalPrice =
+                                          Number(equipment.pricePerDay) *
+                                          equipment.days
+                                        const actualPeriodLabel =
+                                          pricingConfig.period === 'daily'
+                                            ? 'diário'
+                                            : pricingConfig.period === 'weekly'
+                                              ? 'semanal'
+                                              : pricingConfig.period ===
+                                                  'biweekly'
+                                                ? 'quinzenal'
+                                                : pricingConfig.period ===
+                                                    'monthly'
+                                                  ? 'mensal'
+                                                  : 'diário'
+                                        const showDiscount =
+                                          !pricingConfig.useDirectValue &&
+                                          (pricingConfig.discount || 0) > 0
+                                        const showDirect =
+                                          pricingConfig.useDirectValue && true
+
+                                        return (
+                                          <div>
+                                            {showDiscount && (
+                                              <div className="text-sm text-gray-500 line-through">
+                                                {formatCurrency(originalPrice)}
+                                              </div>
+                                            )}
+                                            <div>
+                                              <span className="font-semibold text-green-600 text-base">
+                                                {formatCurrency(
+                                                  calculatedPrice
+                                                )}
+                                              </span>
+                                              <span className="text-xs text-gray-500 ml-1">
+                                                total ({equipment.days} dias)
+                                              </span>
+                                            </div>
+                                            {showDirect ? (
+                                              <div className="text-xs text-orange-700 font-medium">
+                                                Valor direto {actualPeriodLabel}
+                                                :{' '}
+                                                {formatCurrency(
+                                                  pricingConfig.directValue || 0
+                                                )}
+                                                {pricingConfig.multiplier > 1
+                                                  ? ` / ${pricingConfig.multiplier} dias`
+                                                  : ''}
+                                              </div>
+                                            ) : showDiscount ? (
+                                              <div className="text-xs text-green-600 font-medium">
+                                                ✓ Desconto {actualPeriodLabel}{' '}
+                                                aplicado: -
+                                                {pricingConfig.discount}%
+                                              </div>
+                                            ) : null}
+                                          </div>
+                                        )
+                                      })()}
                                     </div>
                                   </div>
 
@@ -861,9 +926,7 @@ function QuotePage() {
                                     {/* Controle de Período */}
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                                       <Label className="text-sm font-medium text-gray-700 text-center sm:text-left">
-                                        {equipment.selectedPeriod
-                                          ? 'Períodos:'
-                                          : 'Dias:'}
+                                        Dias:
                                       </Label>
                                       <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-2">
                                         <div className="flex items-center justify-center gap-2">
@@ -872,23 +935,12 @@ function QuotePage() {
                                             size="sm"
                                             onClick={() => {
                                               const currentValue =
-                                                equipment.selectedPeriod
-                                                  ? Math.ceil(
-                                                      equipment.days /
-                                                        equipment.selectedPeriod
-                                                          .multiplier
-                                                    )
-                                                  : equipment.days
+                                                equipment.days
                                               const newValue = Math.max(
                                                 1,
                                                 currentValue - 1
                                               )
-                                              const days =
-                                                equipment.selectedPeriod
-                                                  ? newValue *
-                                                    equipment.selectedPeriod
-                                                      .multiplier
-                                                  : newValue
+                                              const days = newValue
                                               updateDays(
                                                 equipment.equipmentId,
                                                 days
@@ -900,26 +952,13 @@ function QuotePage() {
                                           </Button>
                                           <Input
                                             type="number"
-                                            value={
-                                              equipment.selectedPeriod
-                                                ? Math.ceil(
-                                                    equipment.days /
-                                                      equipment.selectedPeriod
-                                                        .multiplier
-                                                  )
-                                                : equipment.days
-                                            }
+                                            value={equipment.days}
                                             onChange={(e) => {
                                               const periods =
                                                 Number.parseInt(
                                                   e.target.value
                                                 ) || 1
-                                              const days =
-                                                equipment.selectedPeriod
-                                                  ? periods *
-                                                    equipment.selectedPeriod
-                                                      .multiplier
-                                                  : periods
+                                              const days = periods
                                               updateDays(
                                                 equipment.equipmentId,
                                                 days
@@ -933,20 +972,9 @@ function QuotePage() {
                                             size="sm"
                                             onClick={() => {
                                               const currentValue =
-                                                equipment.selectedPeriod
-                                                  ? Math.ceil(
-                                                      equipment.days /
-                                                        equipment.selectedPeriod
-                                                          .multiplier
-                                                    )
-                                                  : equipment.days
+                                                equipment.days
                                               const newValue = currentValue + 1
-                                              const days =
-                                                equipment.selectedPeriod
-                                                  ? newValue *
-                                                    equipment.selectedPeriod
-                                                      .multiplier
-                                                  : newValue
+                                              const days = newValue
                                               updateDays(
                                                 equipment.equipmentId,
                                                 days
@@ -957,11 +985,9 @@ function QuotePage() {
                                             <Plus className="h-3 w-3" />
                                           </Button>
                                         </div>
-                                        {equipment.selectedPeriod && (
-                                          <span className="text-sm font-medium text-gray-600 whitespace-nowrap sm:ml-2">
-                                            ({equipment.days} dias)
-                                          </span>
-                                        )}
+                                        <span className="text-sm font-medium text-gray-600 whitespace-nowrap sm:ml-2">
+                                          ({equipment.days} dias)
+                                        </span>
                                       </div>
                                     </div>
                                   </div>
@@ -1165,67 +1191,66 @@ function QuotePage() {
                               <span className="text-sm text-gray-600 font-medium">
                                 Qtd: {equipment.quantity}x
                               </span>
-                              {equipment.selectedPeriod ? (
-                                <>
-                                  <span className="text-sm text-gray-400">
-                                    •
-                                  </span>
-                                  <span className="text-sm text-orange-600 font-medium">
-                                    {Math.ceil(
-                                      equipment.days /
-                                        equipment.selectedPeriod.multiplier
-                                    )}{' '}
-                                    {equipment.selectedPeriod.label.toLowerCase()}
-                                  </span>
-                                  <span className="text-sm text-gray-400">
-                                    •
-                                  </span>
-                                  <span className="text-sm text-gray-600 font-medium">
-                                    {equipment.days} dias
-                                  </span>
-                                  {(() => {
-                                    const pricingConfig = getIntelligentPricing(
-                                      equipment,
-                                      equipment.days
-                                    )
-                                    const actualPeriodLabel =
-                                      pricingConfig.period === 'daily'
-                                        ? 'Diário'
-                                        : pricingConfig.period === 'weekly'
-                                          ? 'Semanal'
-                                          : pricingConfig.period === 'biweekly'
-                                            ? 'Quinzenal'
-                                            : pricingConfig.period === 'monthly'
-                                              ? 'Mensal'
-                                              : 'Diário'
+                              {(() => {
+                                const pricingConfig = getPricingConfig(
+                                  equipment,
+                                  equipment.days
+                                )
+                                const actualPeriodLabel =
+                                  pricingConfig.period === 'daily'
+                                    ? 'Diário'
+                                    : pricingConfig.period === 'weekly'
+                                      ? 'Semanal'
+                                      : pricingConfig.period === 'biweekly'
+                                        ? 'Quinzenal'
+                                        : pricingConfig.period === 'monthly'
+                                          ? 'Mensal'
+                                          : 'Diário'
+                                const showDiscount =
+                                  !pricingConfig.useDirectValue &&
+                                  (pricingConfig.discount || 0) > 0
+                                const showDirect =
+                                  pricingConfig.useDirectValue && true
 
-                                    return (
-                                      (pricingConfig.discount || 0) > 0 && (
-                                        <>
-                                          <span className="text-sm text-green-600 font-semibold">
-                                            Desc. {actualPeriodLabel}: -
-                                            {pricingConfig.discount}%
-                                          </span>
-                                        </>
-                                      )
-                                    )
-                                  })()}
-                                </>
-                              ) : (
-                                <>
-                                  <span className="text-sm text-gray-400">
-                                    •
-                                  </span>
-                                  <span className="text-sm text-gray-600 font-medium">
-                                    {equipment.days} dias
-                                  </span>
-                                </>
-                              )}
+                                return (
+                                  <>
+                                    <span className="text-sm text-gray-400">
+                                      •
+                                    </span>
+                                    <span className="text-sm text-orange-600 font-medium">
+                                      {actualPeriodLabel}
+                                      {showDirect ? ' · valor direto' : ''}
+                                    </span>
+                                    <span className="text-sm text-gray-400">
+                                      •
+                                    </span>
+                                    <span className="text-sm text-gray-600 font-medium">
+                                      {equipment.days} dias
+                                    </span>
+                                    {showDirect ? (
+                                      <span className="text-sm text-orange-700 font-semibold">
+                                        Valor direto:{' '}
+                                        {formatCurrency(
+                                          pricingConfig.directValue || 0
+                                        )}
+                                        {pricingConfig.multiplier > 1
+                                          ? ` / ${pricingConfig.multiplier} dias`
+                                          : ''}
+                                      </span>
+                                    ) : showDiscount ? (
+                                      <span className="text-sm text-green-600 font-semibold">
+                                        Desc. {actualPeriodLabel}: -
+                                        {pricingConfig.discount}%
+                                      </span>
+                                    ) : null}
+                                  </>
+                                )
+                              })()}
                             </div>
                           </div>
                           <div className="text-right">
                             {(() => {
-                              const pricingConfig = getIntelligentPricing(
+                              const pricingConfig = getPricingConfig(
                                 equipment,
                                 equipment.days
                               )
@@ -1234,10 +1259,13 @@ function QuotePage() {
                                 equipment.days *
                                 equipment.quantity
                               const finalPrice = calculateSubtotal(equipment)
+                              const showDiscount =
+                                !pricingConfig.useDirectValue &&
+                                (pricingConfig.discount || 0) > 0
 
                               return (
                                 <div>
-                                  {(pricingConfig.discount || 0) > 0 && (
+                                  {showDiscount && (
                                     <div className="text-sm text-gray-500 line-through">
                                       {formatCurrency(originalPrice)}
                                     </div>
@@ -1270,11 +1298,20 @@ function QuotePage() {
                     {/* Botão Principal - Solicitar Orçamento */}
                     <div className="pt-4">
                       <Button
-                        onClick={handleWhatsAppSubmit}
-                        className="w-full hover:scale-105 transition-all duration-300"
+                        type="submit"
+                        form="quote-form"
+                        className="w-full hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
                         size="lg"
+                        disabled={isSubmitting}
                       >
-                        Solicitar Orçamento
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Enviando...
+                          </>
+                        ) : (
+                          'Enviar Solicitação'
+                        )}
                       </Button>
                     </div>
                   </>

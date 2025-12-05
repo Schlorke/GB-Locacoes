@@ -100,6 +100,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   fica contido dentro do componente, com tratamento adequado para mouse wheel e
   touch events, prevenindo propagação para elementos pais.
 
+- **Orçamentos - cálculo inteligente corrigido**: Valor direto agora prorrateia
+  dias extras dentro do período ativo (ex.: semanal R$ 400 -> dia 10 = R$
+  571,43) e ignora descontos quando `*UseDirectValue` está habilitado. A página
+  `/orcamento` recalcula os valores ao mudar dias (sem reutilizar `finalPrice`
+  inicial) e exibe badges coerentes (valor direto x desconto) no item e no
+  resumo.
+
 ### Changed 🔄
 
 - **Atualização de Dependências (Dezembro 2025)**: Atualizadas 3 dependências
@@ -935,6 +942,34 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   agora possui um wrapper dedicado com `overflow-hidden`, permitindo que os
   cards reais mantenham `overflow-visible` durante animações de foco/hover.
   - Ajustes aplicados em `app/test-components/page.tsx`
+
+## [2025-12-04] - Sincroniza‡Æo de valores diretos no carrinho
+
+### Added ✨
+
+- A‡Æo `hydrateItems` no `useCartStore` para reidratar itens persistidos com os
+  dados mais recentes do cat logo ao carregar `/orcamento`.
+- Motor de pricing extraido para `lib/pricing.ts` com saneamento de campos
+  (numeros/booleanos) antes do c lculo.
+
+### Fixed 🐛
+
+- Carrinhos persistidos passam a sincronizar valores diretos e flags de uso
+  (`daily/weekly/biweekly/monthlyUseDirectValue`) a partir de `/api/equipments`,
+  evitando cair no desconto percentual quando um per¡odo usa valor direto.
+- Valor direto volta a ser aplicado por periodo completo, multiplicando por
+  quantidades (ex.: 2 semanas = 2 x valor semanal) e com proporcional para dias
+  excedentes. Ao cruzar o threshold, aplica-se o periodo seguinte. prorrata
+  dentro do mesmo per¡odo); ao cruzar o threshold, aplica-se o per¡odo seguinte.
+- C lculo inteligente agora aceita `directValue` igual a zero sem voltar ao modo
+  de desconto, preservando cen rios de valor gratuito ou promocional.
+
+### Documentation 📝
+
+- Novo guia `docs/features/cart-pricing-sync.md` descreve o fluxo de
+  sincroniza‡Æo, motiva‡Æo e passos de valida‡Æo.
+- Testes unit rios de pricing adicionados em `tests/pricing.intelligent.test.ts`
+  cobrindo valor direto, desconto, zero cost e saneamento de dados.
 
 ## [2025-11-17] - Fallback mobile do IconCustomizationBlock refinado
 

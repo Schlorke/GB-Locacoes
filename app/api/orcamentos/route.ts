@@ -12,6 +12,18 @@ import { type NextRequest } from 'next/server'
 
 const resend = getResend()
 
+// Tipo estendido para itens que podem incluir campos de pricing
+type QuoteItemWithPricing = {
+  equipmentId: string
+  quantity: number
+  days: number
+  appliedPeriod?: string
+  appliedDiscount?: number
+  useDirectValue?: boolean
+  directValue?: number
+  periodMultiplier?: number
+}
+
 export const POST = withErrorHandling(async (request: NextRequest) => {
   // Rate limiting
   const rateLimitResult = checkRateLimit(request, strictRateLimit)
@@ -51,7 +63,6 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
       quantity: item.quantity,
       days: item.days,
       pricePerDay: equipment.pricePerDay,
-      priceAtTime: equipment.pricePerDay,
       total: itemTotal,
     })
 
@@ -62,6 +73,15 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
       days: item.days,
       pricePerDay: pricePerDay,
       total: itemTotal,
+      // Informações de desconto/período do frontend
+      appliedPeriod: (item as QuoteItemWithPricing).appliedPeriod || undefined,
+      appliedDiscount:
+        (item as QuoteItemWithPricing).appliedDiscount || undefined,
+      useDirectValue:
+        (item as QuoteItemWithPricing).useDirectValue || undefined,
+      directValue: (item as QuoteItemWithPricing).directValue || undefined,
+      periodMultiplier:
+        (item as QuoteItemWithPricing).periodMultiplier || undefined,
     })
   }
 

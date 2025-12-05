@@ -5,6 +5,7 @@ export type ValidatedContactData = {
   name: string
   email: string
   phone: string
+  cep?: string
   company?: string
   equipment?: string
   cpf?: string
