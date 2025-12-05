@@ -49,7 +49,7 @@ const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
-  
+
   let equipment = null
   try {
     const prisma = await getPrisma()
