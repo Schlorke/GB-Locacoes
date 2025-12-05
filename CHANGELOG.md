@@ -87,6 +87,11 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **QuoteRequestSchema TypeScript Errors**: Adicionados campos `cpf`, `cnpj` e
+  `cep` ao `QuoteRequestSchema` para resolver 6 erros de TypeScript nos
+  endpoints `/api/orcamentos` e `/api/quotes`. Os campos eram usados no código
+  mas não estavam definidos no schema de validação Zod.
+
 - **Dialog Search Scroll Propagation**: Corrigido problema onde o scroll dentro
   do dialog de busca (header) propagava para a página inteira ao atingir o fim
   da lista de resultados. Implementado tratamento robusto com:
@@ -946,6 +951,9 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 ## [2025-12-05] - Precisao dos emails de orcamento
 
 ### Fixed ??
+
+- Formulário `/orcamento` volta a enviar CPF, CNPJ e CEP para `/api/quotes`,
+  garantindo que esses dados apareçam nos e-mails e registros do orçamento.
 
 - `/api/quotes` e `/api/orcamentos` recalculam cada item com o motor inteligente
   (descontos e valores diretos) antes de salvar no banco, mantendo total e
