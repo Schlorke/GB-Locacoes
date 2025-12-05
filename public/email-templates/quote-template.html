@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Novo Orçamento - GB Locações</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          sans-serif;
+        line-height: 1.6;
+        color: #1e293b;
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        padding: 20px;
+      }
+
+      .email-wrapper {
+        max-width: 680px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+      }
+
+      .header {
+        background: linear-gradient(135deg, #334155 0%, #475569 100%);
+        padding: 40px 30px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 300px;
+        height: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+
+      .header::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -5%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+      }
+
+      .header-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .header-top-row {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 30px;
+        align-items: start;
+      }
+
+      .logo-wrapper {
+        display: flex;
+        align-items: flex-end;
+        height: 100%;
+        padding-bottom: 18px;
+      }
+
+      .header-bottom-row {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+        gap: 0 8px;
+        align-items: start;
+      }
+
+      .header-icon {
+        font-size: 36px;
+        line-height: 1;
+        grid-row: 1;
+        grid-column: 1;
+        align-self: start;
+      }
+
+      .header-title {
+        grid-row: 1;
+        grid-column: 2;
+      }
+
+      .header-subtitle {
+        grid-row: 2;
+        grid-column: 2;
+        margin-top: 8px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+
+      .logo-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(to bottom right, #f97316, #ea580c, #c2410c);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .logo-icon::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom right,
+          transparent,
+          transparent,
+          rgba(0, 0, 0, 0.1)
+        );
+        border-radius: 8px;
+        pointer-events: none;
+      }
+
+      .logo-text {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .logo-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: white;
+        line-height: 1;
+        letter-spacing: 0.5px;
+      }
+
+      .logo-subtitle {
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1;
+      }
+
+      .header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .header h1 .highlight {
+        color: #ffd700;
+        text-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+      }
+
+      .header .subtitle {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+        margin: 0;
+      }
+
+      .badges-container {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .badge-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+      }
+
+      .badge-label {
+        font-size: 9px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .badge {
+        display: block;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        padding: 8px 16px;
+        border-radius: 24px;
+        font-size: 12px;
+        font-weight: 600;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        white-space: nowrap;
+      }
+
+      .quote-id {
+        display: block;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 700;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        letter-spacing: 1px;
+        white-space: nowrap;
+      }
+
+      .content {
+        padding: 40px 30px;
+        background: white;
+      }
+
+      .section-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1e293b;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+      }
+
+      .info-grid {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 30px;
+      }
+
+      .info-card {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 1px solid #fbbf24;
+        border-radius: 12px;
+        padding: 20px;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .info-card.primary {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        border-color: #fca5a5;
+      }
+
+      .info-card.secondary {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border-color: #7dd3fc;
+      }
+
+      .info-card.success {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-color: #86efac;
+      }
+
+      .info-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .info-value {
+        font-size: 16px;
+        font-weight: 600;
+        color: #0f172a;
+        word-break: break-word;
+      }
+
+      .info-value a {
+        color: #ea580c;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .info-value a:hover {
+        color: #c2410c;
+        text-decoration: underline;
+      }
+
+      /* Bloco de Informações Profissional */
+      .client-info-block {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-left: 3px solid #f97316;
+        border-radius: 12px;
+        padding: 0;
+        margin-bottom: 30px;
+        overflow: hidden;
+      }
+
+      .info-row {
+        padding: 20px 24px;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        transition: background 0.2s;
+      }
+
+      .info-row:last-child {
+        border-bottom: none;
+      }
+
+      .info-row:hover {
+        background: #f8fafc;
+      }
+
+      .info-icon {
+        flex-shrink: 0;
+        width: 40px;
+        height: 40px;
+        background: #fef3f2;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .info-icon svg {
+        width: 20px;
+        height: 20px;
+        color: #ea580c;
+      }
+
+      .info-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .info-field-label {
+        font-size: 11px;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+        display: block;
+      }
+
+      .info-field-value {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1e293b;
+        word-break: break-word;
+        line-height: 1.5;
+      }
+
+      .info-field-value a {
+        color: #ea580c;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .info-field-value a:hover {
+        color: #c2410c;
+        text-decoration: underline;
+      }
+
+      .equipment-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 12px;
+        margin: 20px 0;
+      }
+
+      .equipment-row {
+        background: #f8fafc;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .equipment-row td {
+        padding: 16px;
+        border-top: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .equipment-row td:first-child {
+        border-left: 4px solid #f97316;
+        border-radius: 8px 0 0 8px;
+      }
+
+      .equipment-row td:last-child {
+        border-right: 1px solid #e2e8f0;
+        border-radius: 0 8px 8px 0;
+        text-align: right;
+      }
+
+      .equipment-name {
+        font-weight: 600;
+        color: #0f172a;
+        margin-bottom: 4px;
+      }
+
+      .equipment-category {
+        font-size: 12px;
+        color: #64748b;
+      }
+
+      .equipment-details {
+        font-size: 13px;
+        color: #475569;
+        margin-top: 4px;
+      }
+
+      .equipment-price {
+        font-size: 18px;
+        font-weight: 700;
+        color: #ea580c;
+      }
+
+      .total-box {
+        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+        border-radius: 12px;
+        padding: 24px;
+        margin-top: 24px;
+        text-align: right;
+        box-shadow:
+          0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+
+      .total-label {
+        font-size: 14px;
+        color: #64748b;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .total-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #ea580c;
+        margin-top: 8px;
+      }
+
+      .message-box {
+        background: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 24px;
+        margin-top: 20px;
+      }
+
+      .message-label {
+        font-size: 12px;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+      }
+
+      .message-text {
+        font-size: 15px;
+        color: #1e293b;
+        line-height: 1.8;
+        white-space: pre-line;
+        word-break: break-word;
+      }
+
+      .divider {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          #e2e8f0 50%,
+          transparent 100%
+        );
+        margin: 30px 0;
+      }
+
+      .footer {
+        background: #f8fafc;
+        padding: 30px;
+        text-align: center;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      .footer-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #475569;
+        margin-bottom: 12px;
+      }
+
+      .footer-text {
+        font-size: 12px;
+        color: #64748b;
+        line-height: 1.8;
+      }
+
+      .footer-email {
+        display: inline-block;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 8px 16px;
+        margin-top: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #ea580c;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+
+      .footer-email:hover {
+        border-color: #cbd5e1;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .icon {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        vertical-align: middle;
+      }
+
+      @media only screen and (max-width: 600px) {
+        body {
+          padding: 10px;
+        }
+        .header {
+          padding: 30px 20px;
+        }
+        .header-content {
+          gap: 20px;
+        }
+        .header-top-row {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+        .header-bottom-row {
+          gap: 12px;
+        }
+        .header-icon {
+          font-size: 32px;
+        }
+        .logo-wrapper {
+          padding-bottom: 0;
+          align-items: center;
+        }
+        .logo {
+          justify-content: center;
+        }
+        .logo-icon {
+          width: 40px;
+          height: 40px;
+          font-size: 16px;
+        }
+        .logo-title {
+          font-size: 18px;
+        }
+        .logo-subtitle {
+          font-size: 10px;
+        }
+        .badges-container {
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+          width: 100%;
+        }
+        .badge-item {
+          align-items: center;
+          width: 100%;
+        }
+        .badge,
+        .quote-id {
+          font-size: 11px;
+          padding: 7px 14px;
+          width: 100%;
+          text-align: center;
+        }
+        .badge-label {
+          font-size: 9px;
+        }
+        .content {
+          padding: 30px 20px;
+        }
+        .footer {
+          padding: 20px;
+        }
+        .header h1 {
+          font-size: 24px;
+        }
+        .total-value {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-wrapper">
+      <!-- ============================================== -->
+      <!-- HEADER (Gradiente Laranja-Vermelho)          -->
+      <!-- ============================================== -->
+      <div class="header">
+        <div class="header-content">
+          <!-- Primeira Linha: Logo + Badges -->
+          <div class="header-top-row">
+            <div class="logo-wrapper">
+              <div class="logo">
+                <div class="logo-icon">GB</div>
+                <div class="logo-text">
+                  <span class="logo-title">GB Locações</span>
+                  <span class="logo-subtitle"
+                    >Equipamentos para Construção</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="badges-container">
+              <div class="badge-item">
+                <span class="badge-label">Data e Hora:</span>
+                <span class="badge">⏰ 04/12/2025, 19:30</span>
+              </div>
+              <div class="badge-item">
+                <span class="badge-label">ID do Orçamento:</span>
+                <div class="quote-id">#A1B2C3D4</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Segunda Linha: Título com Ícone -->
+          <div class="header-bottom-row">
+            <div class="header-icon">🎯</div>
+            <h1 class="header-title">
+              Nova Solicitação de <span class="highlight">Orçamento</span>
+            </h1>
+            <p class="subtitle header-subtitle">
+              Um cliente está interessado em seus equipamentos!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- CONTENT                                       -->
+      <!-- ============================================== -->
+      <div class="content">
+        <!-- Seção 1: Dados do Cliente -->
+        <div class="section-title">👤 Dados do Cliente</div>
+
+        <div class="client-info-block">
+          <div class="info-row">
+            <div class="info-icon">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+              </svg>
+            </div>
+            <div class="info-content">
+              <span class="info-field-label">Nome Completo</span>
+              <div class="info-field-value">João Silva Santos</div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                />
+                <path
+                  d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                />
+              </svg>
+            </div>
+            <div class="info-content">
+              <span class="info-field-label">Email</span>
+              <div class="info-field-value">
+                <a href="mailto:joao.silva@construtoraabc.com.br"
+                  >joao.silva@construtoraabc.com.br</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
+                />
+              </svg>
+            </div>
+            <div class="info-content">
+              <span class="info-field-label">Telefone</span>
+              <div class="info-field-value">
+                <a href="tel:5551999887766">(51) 99988-7766</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-icon">
+              <svg fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                />
+              </svg>
+            </div>
+            <div class="info-content">
+              <span class="info-field-label">CPF</span>
+              <div class="info-field-value">123.456.789-00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

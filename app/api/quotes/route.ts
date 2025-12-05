@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { ZodError } from 'zod'
 import getResend from '@/lib/resend'
+import { generateQuoteEmailHTML } from '@/lib/email-templates'
 
 const resend = getResend()
 
@@ -301,6 +302,10 @@ export async function POST(request: Request) {
   }
 }
 
+// Template HTML movido para lib/email-templates.ts (função generateQuoteEmailHTML)
+// Comentado para manter histórico:
+/*
+OLD CODE:
 function generateQuoteEmailHTML(
   data: {
     customerName: string
@@ -769,3 +774,4 @@ function generateQuoteEmailHTML(
     </html>
   `
 }
+*/

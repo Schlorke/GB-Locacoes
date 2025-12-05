@@ -10,11 +10,28 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Sistema de Templates de Email v2.0 - Máxima Compatibilidade**: Reescrito
+  completo do sistema de emails para garantir 100% de compatibilidade com todos
+  os clientes de email (Outlook, Gmail, Zoho, Apple Mail, Yahoo, ProtonMail)
+  - **Tables HTML Layout**: Substituído divs/flexbox/grid por tables HTML
+    antigas (padrão ouro de compatibilidade)
+  - **Emojis ao invés de SVGs**: Todos os ícones agora são emojis Unicode
+    (👤✉️📞📄📋🏢🛠️💬🎯) garantindo visualização em 100% dos clientes
+  - **Cores Sólidas**: Substituído `rgba()` por cores hexadecimais sólidas
+    (#ffffff) para evitar texto preto em Outlook/Zoho
+  - **Inline Styles**: 100% dos estilos inline (sem CSS externo ou `<style>`)
+  - **Sombra Sutil**: Card com sombra reduzida (`0 4px 12px rgba(0,0,0,0.05)`)
+    para visual mais clean e moderno
+  - **Glow Estratégico**: Efeito de brilho dourado aplicado APENAS na palavra
+    "Orçamento" (`text-shadow: 0 0 20px rgba(255, 215, 0, 0.8)`)
+  - **Documentação Completa**: Novo guia em `docs/features/email-templates.md`
+    com padrões, exemplos e troubleshooting
+
 - **Sistema Completo de E-mails para Orçamentos**: Implementado sistema
   profissional de envio de e-mails para todos os formulários de orçamento do
   site
   - **Template Moderno**: Email HTML responsivo com identidade visual GB
-    Locações (gradiente laranja-vermelho, cards coloridos, ícones SVG)
+    Locações (gradiente cinza slate, header em 2 colunas, logo laranja)
   - **Três Formulários Configurados**:
     - `/contato`: Formulário simples com validação CPF/CNPJ
     - Página Inicial: QuoteForm com cálculo de valores
@@ -26,16 +43,47 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     - `/api/orcamentos`: Orçamentos da homepage (nova rota)
     - `/api/quotes`: Orçamentos completos (email adicionado)
   - **Funcionalidades do Email**:
-    - Header premium com logo e gradiente
-    - Cards coloridos por categoria de informação
+    - Header premium com logo GB + badges (data/hora, ID)
+    - Blocos unificados com ícones emojis
     - Tabela de equipamentos com cálculo automático
-    - Valor total em destaque
+    - Valor total em destaque laranja
     - Links clicáveis (email, telefone)
     - Footer profissional com instruções de resposta
     - 100% responsivo para mobile
   - **Integração Resend**: Domínio `locacoesgb.com.br` verificado com DNS
     configurado (DKIM, SPF, DMARC)
-  - **Documentação**: Guia completo em `docs/features/quote-email-system.md`
+  - **Documentação**: Guias completos em `docs/features/quote-email-system.md` e
+    `docs/features/email-templates.md`
+
+### Changed 🔄
+
+- **Templates de Email - Otimização de Compatibilidade**: Múltiplas iterações
+  para alcançar compatibilidade universal
+  - **Migração SVG → Emoji**: Substituídos todos os ícones SVG por emojis para
+    compatibilidade com Outlook que não renderiza SVG inline
+  - **Migração Flexbox/Grid → Tables**: Reescrito layout completo usando tables
+    HTML ao invés de CSS moderno (flexbox/grid)
+  - **Cores RGBA → Hexadecimal**: Substituído `rgba(255,255,255,0.85)` por
+    `#ffffff` para evitar texto preto em Zoho/Outlook
+  - **Shadow Box Reduzida**: Alterado de `0 20px 60px rgba(0,0,0,0.08)` para
+    `0 4px 12px rgba(0,0,0,0.05)` para visual mais clean
+  - **Glow Refinado**: Removido glow do título completo, mantido apenas em
+    "Orçamento" com efeito dourado intenso
+  - **Header Redesenhado**: Logo GB sem efeitos, layout em 2 colunas (logo à
+    esquerda, badges à direita)
+
+- **Segurança de Dados em Formulários**: Implementado limpeza de URL após envio
+  de formulários
+  - **Limpeza Automática**: `window.history.replaceState()` remove dados
+    sensíveis da URL após envio
+  - **Proteção de Privacidade**: CPF, CNPJ, email e outros dados não ficam mais
+    expostos na barra de endereços
+  - **Aplicado em**: Homepage, `/orcamento`, `/contato`, botão WhatsApp
+
+- **UX Melhorada em Formulários**: Toasts informativos após envio
+  - **Duração**: 8 segundos (suficiente para leitura completa)
+  - **Mensagens Detalhadas**: Incluem próximos passos e tempo de resposta
+  - **Visual Consistente**: Design system GB Locações aplicado
 
 ### Fixed 🐛
 

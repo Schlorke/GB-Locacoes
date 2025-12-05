@@ -5,10 +5,24 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { usePublicSettings } from '@/hooks/use-public-settings'
-import { Clock, Mail, MapPin, Phone } from 'lucide-react'
+import { toast } from '@/hooks/use-toast'
+import { Clock, Mail, MapPin, Phone, Loader2 } from 'lucide-react'
+import { useState } from 'react'
 
 export default function ContactSection() {
   const { settings } = usePublicSettings()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    cep: '',
+    company: '',
+    materials: '',
+    cpf: '',
+    cnpj: '',
+    message: '',
+  })
 
   // Funções de formatação
   const formatCPF = (value: string) => {
@@ -38,15 +52,89 @@ export default function ContactSection() {
   }
 
   const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.value = formatCPF(e.target.value)
+    const formatted = formatCPF(e.target.value)
+    setFormData((prev) => ({ ...prev, cpf: formatted }))
   }
 
   const handleCNPJChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.value = formatCNPJ(e.target.value)
+    const formatted = formatCNPJ(e.target.value)
+    setFormData((prev) => ({ ...prev, cnpj: formatted }))
   }
 
   const handleCEPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.value = formatCEP(e.target.value)
+    const formatted = formatCEP(e.target.value)
+    setFormData((prev) => ({ ...prev, cep: formatted }))
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    // Validação: CPF ou CNPJ obrigatório
+    if (!formData.cpf.trim() && !formData.cnpj.trim()) {
+      toast.error('Erro de Validação', {
+        description: 'Por favor, preencha pelo menos o CPF ou CNPJ.',
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company || undefined,
+          equipment: formData.materials || undefined,
+          cpf: formData.cpf || undefined,
+          cnpj: formData.cnpj || undefined,
+          message: formData.message,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        // Limpar URL
+        if (typeof window !== 'undefined' && window.history) {
+          window.history.replaceState({}, '', window.location.pathname)
+        }
+
+        // Limpar formulário
+        setFormData({
+          name: '',
+          phone: '',
+          email: '',
+          cep: '',
+          company: '',
+          materials: '',
+          cpf: '',
+          cnpj: '',
+          message: '',
+        })
+
+        toast.success('Orçamento Enviado com Sucesso! 🎉', {
+          description:
+            'Entraremos em contato em até 2 horas úteis. Você receberá uma cópia no seu email.',
+          duration: 8000,
+        })
+      } else {
+        throw new Error(data.message || 'Erro ao enviar')
+      }
+    } catch (error) {
+      console.error('Erro:', error)
+      toast.error('Erro ao Enviar', {
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Tente novamente em alguns instantes.',
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -70,7 +158,11 @@ export default function ContactSection() {
               <h3 className="text-2xl font-semibold mb-6">
                 Solicite um Orçamento de Equipamentos
               </h3>
-              <form className="space-y-6" suppressHydrationWarning>
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-6"
+                suppressHydrationWarning
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="group">
                     <label
@@ -81,7 +173,13 @@ export default function ContactSection() {
                     </label>
                     <Input
                       id="name"
-                      name="name"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          name: e.target.value,
+                        }))
+                      }
                       required
                       placeholder="Seu nome completo"
                       className="transition-all duration-300 focus:scale-105 focus:shadow-md"
@@ -96,8 +194,14 @@ export default function ContactSection() {
                     </label>
                     <Input
                       id="phone"
-                      name="phone"
                       type="tel"
+                      value={formData.phone}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          phone: e.target.value,
+                        }))
+                      }
                       required
                       placeholder="(51) 99999-9999"
                       className="transition-all duration-300 focus:scale-105 focus:shadow-md"
@@ -115,8 +219,14 @@ export default function ContactSection() {
                     </label>
                     <Input
                       id="email"
-                      name="email"
                       type="email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          email: e.target.value,
+                        }))
+                      }
                       required
                       placeholder="seu@email.com"
                       className="transition-all duration-300 focus:scale-105 focus:shadow-md"
@@ -131,7 +241,7 @@ export default function ContactSection() {
                     </label>
                     <Input
                       id="cep"
-                      name="cep"
+                      value={formData.cep}
                       placeholder="00000-000"
                       maxLength={9}
                       onChange={handleCEPChange}
@@ -149,7 +259,13 @@ export default function ContactSection() {
                   </label>
                   <Input
                     id="company"
-                    name="company"
+                    value={formData.company}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        company: e.target.value,
+                      }))
+                    }
                     placeholder="Nome da sua empresa ou construtora"
                     className="transition-all duration-300 focus:scale-105 focus:shadow-md"
                   />
@@ -164,7 +280,13 @@ export default function ContactSection() {
                   </label>
                   <Input
                     id="materials"
-                    name="materials"
+                    value={formData.materials}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        materials: e.target.value,
+                      }))
+                    }
                     placeholder="Ex: andaime suspenso, cadeira elétrica, betoneira"
                     className="transition-all duration-300 focus:scale-105 focus:shadow-md"
                   />
@@ -180,7 +302,7 @@ export default function ContactSection() {
                     </label>
                     <Input
                       id="cpf"
-                      name="cpf"
+                      value={formData.cpf}
                       placeholder="000.000.000-00"
                       maxLength={14}
                       onChange={handleCPFChange}
@@ -196,7 +318,7 @@ export default function ContactSection() {
                     </label>
                     <Input
                       id="cnpj"
-                      name="cnpj"
+                      value={formData.cnpj}
                       placeholder="00.000.000/0000-00"
                       maxLength={18}
                       onChange={handleCNPJChange}
@@ -204,6 +326,9 @@ export default function ContactSection() {
                     />
                   </div>
                 </div>
+                <p className="text-sm text-gray-500 -mt-2">
+                  * Informe pelo menos o CPF ou CNPJ
+                </p>
 
                 <div className="group">
                   <label
@@ -214,7 +339,13 @@ export default function ContactSection() {
                   </label>
                   <Textarea
                     id="message"
-                    name="message"
+                    value={formData.message}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        message: e.target.value,
+                      }))
+                    }
                     rows={4}
                     placeholder="Descreva sua necessidade, período de locação, local da obra, altura necessária..."
                     className="transition-all duration-300 focus:scale-105 focus:shadow-md"
@@ -224,9 +355,17 @@ export default function ContactSection() {
                 <Button
                   type="submit"
                   size="lg"
+                  disabled={isSubmitting}
                   className="w-full hover:scale-105 transition-all duration-300 hover:shadow-lg h-12"
                 >
-                  Enviar Solicitação
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Enviando...
+                    </>
+                  ) : (
+                    'Enviar Solicitação'
+                  )}
                 </Button>
               </form>
             </CardContent>

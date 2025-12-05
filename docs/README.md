@@ -29,6 +29,12 @@ com o projeto.
 - **[equipment-management.md](./features/equipment-management.md)** - Gestão de
   equipamentos
 - **[quote-system.md](./features/quote-system.md)** - Sistema de orçamentos
+- **[email-templates.md](./features/email-templates.md)** - 📧 **Sistema de
+  Templates de Email v2.0** (Documentação Completa)
+- **[email-templates-quick-reference.md](./features/email-templates-quick-reference.md)** -
+  📧 **Referência Rápida de Email Templates**
+- **[quote-email-system.md](./features/quote-email-system.md)** - Sistema de
+  envio de emails para orçamentos
 - **[design-system.md](./features/design-system.md)** - Sistema de design
 - **[hero-section.md](./features/hero-section.md)** - Layout completo da seção
   Hero

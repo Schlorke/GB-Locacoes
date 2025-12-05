@@ -6,6 +6,7 @@ import {
 import { checkRateLimit, strictRateLimit } from '@/lib/rate-limit'
 import { QuoteRequestSchema } from '@/lib/validations'
 import getResend from '@/lib/resend'
+import { generateQuoteEmailHTML } from '@/lib/email-templates'
 import { prisma } from '@/lib/prisma'
 import { type NextRequest } from 'next/server'
 
@@ -80,7 +81,7 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     },
   })
 
-  // Enviar email
+  // Enviar email com template profissional
   if (resend && process.env.FROM_EMAIL) {
     try {
       await resend.emails.send({
@@ -88,7 +89,13 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
         to: process.env.CONTACT_EMAIL || 'harryschlorke@gmail.com',
         subject: `🎯 Novo Orçamento #${quote.id.slice(-8).toUpperCase()} - ${validatedData.customerName}`,
         html: generateQuoteEmailHTML(
-          validatedData,
+          {
+            customerName: validatedData.customerName,
+            customerEmail: validatedData.customerEmail,
+            customerPhone: validatedData.customerPhone,
+            customerCompany: validatedData.customerCompany,
+            message: validatedData.message,
+          },
           equipmentDetails,
           totalAmount,
           quote.id
@@ -111,6 +118,10 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   )
 })
 
+// Template HTML movido para lib/email-templates.ts (função generateQuoteEmailHTML)
+// Comentado para manter histórico:
+/*
+OLD CODE:
 function generateQuoteEmailHTML(
   data: {
     customerName: string
@@ -579,3 +590,4 @@ function generateQuoteEmailHTML(
     </html>
   `
 }
+*/
