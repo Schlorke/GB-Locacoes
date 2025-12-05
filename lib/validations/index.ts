@@ -56,6 +56,9 @@ export const QuoteRequestSchema = z.object({
   customerName: z.string().min(1, 'Nome é obrigatório').describe('Nome do cliente'),
   customerEmail: z.string().email('Email inválido').describe('Email do cliente'),
   customerPhone: z.string().describe('Telefone do cliente'),
+  cpf: z.string().optional().describe('CPF do cliente'),
+  cnpj: z.string().optional().describe('CNPJ da empresa'),
+  cep: z.string().optional().describe('CEP do cliente'),
   customerCompany: z.string().optional().describe('Empresa do cliente'),
   message: z.string().optional().describe('Mensagem adicional'),
   items: z.array(z.object({
