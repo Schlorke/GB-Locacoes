@@ -8,6 +8,27 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Fixed 🐛
+
+- **CI/CD Pipeline - pnpm install Failure Resolvido**: Corrigido erro crítico
+  que causava falha no step "Install dependencies" do GitHub Actions
+  - **Problema**: `pnpm install --frozen-lockfile` falhava com exit code 1
+  - **Causa Raiz**: Script `postinstall` executava `prisma generate` sem
+    `DATABASE_URL` disponível
+  - **Solução Aplicada**: Adicionadas variáveis de ambiente dummy no step de
+    install
+    - `DATABASE_URL`: postgresql://dummy:dummy@localhost:5432/dummy
+    - `NEXTAUTH_SECRET`: dummy-secret-for-ci
+    - `NEXTAUTH_URL`: http://localhost:3000
+  - **Arquivos Modificados**:
+    - `.github/workflows/ci.yml`: Env vars no step "Install dependencies"
+    - `.github/workflows/test.yml`: Env vars em ambos os jobs (test e
+      storybook-build)
+  - **Resultado**: CI/CD pipeline agora executa com sucesso, postinstall
+    funciona corretamente
+  - **Data**: 2025-12-05
+  - **Commit**: 9ddad8a4
+
 ### Added ✨
 
 - **Campos CPF, CNPJ e CEP no Modelo Quote**: Adicionados campos opcionais ao
