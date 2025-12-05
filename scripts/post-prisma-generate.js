@@ -51,6 +51,11 @@ export const ContactSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório').describe('Nome completo'),
   email: z.string().email('Email inválido').describe('Email para contato'),
   phone: z.string().optional().describe('Telefone para contato'),
+  cpf: z.string().optional().describe('CPF do cliente'),
+  cnpj: z.string().optional().describe('CNPJ da empresa'),
+  cep: z.string().optional().describe('CEP do cliente'),
+  company: z.string().optional().describe('Empresa/Construtora'),
+  equipment: z.string().optional().describe('Equipamento de interesse'),
   message: z.string().min(1, 'Mensagem é obrigatória').describe('Mensagem'),
 })
 
