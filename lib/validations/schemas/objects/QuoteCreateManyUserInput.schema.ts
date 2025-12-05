@@ -10,6 +10,9 @@ const makeSchema = () => z.object({
   name: z.string(),
   email: z.string(),
   phone: z.string(),
+  cpf: z.string().optional().nullable(),
+  cnpj: z.string().optional().nullable(),
+  cep: z.string().optional().nullable(),
   company: z.string().optional().nullable(),
   message: z.string().optional().nullable(),
   total: z.union([

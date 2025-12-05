@@ -10,6 +10,16 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Campos CPF, CNPJ e CEP no Modelo Quote**: Adicionados campos opcionais ao
+  modelo Quote do Prisma
+  - **Campos no Banco**: `cpf`, `cnpj`, `cep` agora persistem no banco de dados
+  - **Schema Prisma**: Modelo Quote atualizado com 3 novos campos opcionais
+  - **Validação Zod**: Campos adicionados ao `QuoteRequestSchema` com
+    regeneração automática
+  - **Persistência nas APIs**: `/api/orcamentos` e `/api/quotes` salvam os
+    campos no banco
+  - **Emails Completos**: Campos incluídos nos templates de email de orçamento
+
 - **Sistema de Templates de Email v2.0 - Máxima Compatibilidade**: Reescrito
   completo do sistema de emails para garantir 100% de compatibilidade com todos
   os clientes de email (Outlook, Gmail, Zoho, Apple Mail, Yahoo, ProtonMail)
@@ -56,6 +66,20 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     `docs/features/email-templates.md`
 
 ### Changed 🔄
+
+- **Script post-prisma-generate.js Atualizado**: Template do
+  `lib/validations/index.ts` agora inclui campos `cpf`, `cnpj`, `cep`
+  permanentemente
+  - **Problema Resolvido**: Campos não eram mais removidos durante `pnpm build`
+    ou `pnpm db:generate`
+  - **Solução**: Template hardcoded no script atualizado com novos campos
+  - **Resultado**: Regeneração automática dos schemas Zod preserva campos
+    customizados
+
+- **Prisma Shadow Database Desabilitado**: Configuração `shadowDatabaseUrl`
+  comentada em `prisma.config.ts`
+  - **Razão**: Supabase não suporta shadow database para `db push`
+  - **Impacto**: Migrations funcionam corretamente em produção
 
 - **Templates de Email - Otimização de Compatibilidade**: Múltiplas iterações
   para alcançar compatibilidade universal

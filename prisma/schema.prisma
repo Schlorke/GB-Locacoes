@@ -194,6 +194,9 @@ model Quote {
   name      String
   email     String
   phone     String
+  cpf       String?     // CPF do cliente (opcional)
+  cnpj      String?     // CNPJ da empresa (opcional)
+  cep       String?     // CEP do cliente (opcional)
   company   String?
   message   String?
   total     Decimal     @default(0)
