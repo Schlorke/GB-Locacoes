@@ -198,6 +198,7 @@
     "@storybook/addon-docs": "^10.1.4",
     "@storybook/addon-onboarding": "^10.1.4",
     "@storybook/addon-vitest": "^10.1.4",
+    "@storybook/blocks": "9.0.0-alpha.17",
     "@storybook/nextjs-vite": "^10.1.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",

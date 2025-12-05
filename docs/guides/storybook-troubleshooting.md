@@ -20,29 +20,27 @@ resolvidos
 
 ## ⚠️ **Avisos do Terminal - Análise Completa**
 
-### **1. Aviso: @storybook/blocks incompatível** ⚠️ INFORMATIVO
+### **1. Erro: @storybook/blocks ausente no build** 🚧 RESOLVIDO
 
 ```
-You are currently using Storybook 10.0.4 but you have packages which are incompatible with it:
-- @storybook/blocks@9.0.0-alpha.17 which depends on ^9.0.0-alpha.17
+[vite]: Rollup failed to resolve import "@storybook/blocks" from "./stories/...mdx"
 ```
 
 #### **Análise**:
 
-- ✅ Pacote NÃO está em `package.json`
-- ✅ Pacote NÃO está em `pnpm list`
-- ✅ Aviso é de cache antigo/referência obsoleta
+- ⚠️ Storybook 10.x não instala `@storybook/blocks` automaticamente
+- ⚠️ Stories MDX usam `Meta/Canvas/Controls` exportados pelo pacote
+- ❌ Sem a dependência o build aborta logo no início (preview não compila)
 
-#### **Status**: ✅ RESOLVIDO
+#### **Status**: ✅ RESOLVIDO (2025-12-05)
 
-- Cache do Storybook foi limpo
-- Aviso deve desaparecer no próximo start
+- Pacote adicionado como devDependency: `@storybook/blocks@9.0.0-alpha.17`
+- Build-storybook volta a rodar normalmente
 
 #### **Solução Aplicada**:
 
 ```bash
-# Cache limpo com sucesso
-node_modules\.cache removido
+pnpm add -D @storybook/blocks@9.0.0-alpha.17
 ```
 
 ---

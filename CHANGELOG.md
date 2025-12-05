@@ -10,6 +10,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Storybook build quebrando em `pnpm build-storybook`**: Resolvido erro
+  `Rollup failed to resolve import "@storybook/blocks"` que bloqueava o build do
+  Storybook 10.1.x
+  - **Causa Raiz**: pacote `@storybook/blocks` não vinha instalado por padrão,
+    mas é requerido pelos arquivos MDX (`Meta/Canvas/Controls`)
+  - **Solução**: Pinar devDependency `@storybook/blocks@9.0.0-alpha.17` e
+    atualizar guias `docs/guides/storybook*.md` com a dependência obrigatória
+  - **Resultado**: `pnpm build-storybook` finaliza com sucesso (avisos esperados
+    de `use client` gerados pelo Vite ao empacotar componentes Next)
+  - **Data**: 2025-12-05
+
 - **CI/CD Pipeline - pnpm install Failure Resolvido**: Corrigido erro crítico
   que causava falha no step "Install dependencies" do GitHub Actions
   - **Problema**: `pnpm install --frozen-lockfile` falhava com exit code 1

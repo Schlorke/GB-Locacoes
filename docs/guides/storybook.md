@@ -84,11 +84,14 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 ```
 
-### ✅ Problema 2: `@storybook/blocks` não encontrado
+### ✅ Problema 2: `@storybook/blocks` não encontrado no build
 
-**Causa**: @storybook/blocks v10.x não existe ainda (em alpha) **Sintoma**: MDX
-files não compilavam **Solução Aplicada**: Instalado `@storybook/blocks@next`
-(v9.0.0-alpha.17)
+**Causa**: `@storybook/blocks` não vinha instalado por padrão no Storybook 10.x,
+mas as páginas MDX dependem das primitives `Meta`, `Canvas` e `Controls` desse
+pacote **Sintoma**: `Rollup failed to resolve import "@storybook/blocks"` ao
+compilar stories `.mdx` **Solução Aplicada**: Incluída devDependency
+`@storybook/blocks@9.0.0-alpha.17` (compatível com React 19/Storybook 10.1.x), o
+que normalizou o build do Storybook
 
 ### ✅ Problema 3: Fontes não carregando
 

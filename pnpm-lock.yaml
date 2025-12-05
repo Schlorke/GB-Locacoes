@@ -350,6 +350,9 @@ importers:
       '@storybook/addon-vitest':
         specifier: ^10.1.4
         version: 10.1.4(@vitest/browser-playwright@4.0.15)(@vitest/browser@4.0.15(vite@7.2.4(@types/node@24.10.1)(jiti@2.6.1)(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))(vitest@4.0.15))(@vitest/runner@4.0.15)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(storybook@10.1.4(@testing-library/dom@10.4.1)(prettier@3.7.4)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(vitest@4.0.15)
+      '@storybook/blocks':
+        specifier: 9.0.0-alpha.17
+        version: 9.0.0-alpha.17(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(storybook@10.1.4(@testing-library/dom@10.4.1)(prettier@3.7.4)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))
       '@storybook/nextjs-vite':
         specifier: ^10.1.4
         version: 10.1.4(@babel/core@7.28.5)(esbuild@0.27.1)(next@16.0.7(@babel/core@7.28.5)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(rollup@4.53.3)(storybook@10.1.4(@testing-library/dom@10.4.1)(prettier@3.7.4)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(typescript@5.9.3)(vite@7.2.4(@types/node@24.10.1)(jiti@2.6.1)(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))(webpack@5.102.1(esbuild@0.27.1))
@@ -4014,6 +4017,21 @@ packages:
       vitest:
         optional: true
 
+  '@storybook/blocks@9.0.0-alpha.17':
+    resolution:
+      {
+        integrity: sha512-gP2aISvvl98K8B7T9qKWv0rUx3ZaT5oGlBDtfjtn4ZZtdj1XXLvdK1gOmjzTJX2GksOTUWMnwAumMHqbtvsFLQ==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      storybook: ^9.0.0-alpha.17
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+
   '@storybook/builder-vite@10.1.4':
     resolution:
       {
@@ -4049,6 +4067,16 @@ packages:
       {
         integrity: sha512-FcOqPAXACP0I3oJ/ws6/rrPT9WGhu915Cg8D02a9YxLo0DE9zI+a9A5gRGvmQ09fiWPukqI8ZAEoQEdWUKMQdQ==,
       }
+
+  '@storybook/icons@1.6.0':
+    resolution:
+      {
+        integrity: sha512-hcFZIjW8yQz8O8//2WTIXylm5Xsgc+lW9ISLgUk1xGmptIJQRdlhVIXCpSyLrQaaRiyhQRaVg7l3BD9S216BHw==,
+      }
+    engines: { node: '>=14.0.0' }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0-beta
 
   '@storybook/icons@2.0.1':
     resolution:
@@ -15717,6 +15745,15 @@ snapshots:
       - react
       - react-dom
 
+  '@storybook/blocks@9.0.0-alpha.17(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(storybook@10.1.4(@testing-library/dom@10.4.1)(prettier@3.7.4)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))':
+    dependencies:
+      '@storybook/icons': 1.6.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      storybook: 10.1.4(@testing-library/dom@10.4.1)(prettier@3.7.4)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      ts-dedent: 2.2.0
+    optionalDependencies:
+      react: 19.2.1
+      react-dom: 19.2.1(react@19.2.1)
+
   '@storybook/builder-vite@10.1.4(esbuild@0.27.1)(rollup@4.53.3)(storybook@10.1.4(@testing-library/dom@10.4.1)(prettier@3.7.4)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(vite@7.2.4(@types/node@24.10.1)(jiti@2.6.1)(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))(webpack@5.102.1(esbuild@0.27.1))':
     dependencies:
       '@storybook/csf-plugin': 10.1.4(esbuild@0.27.1)(rollup@4.53.3)(storybook@10.1.4(@testing-library/dom@10.4.1)(prettier@3.7.4)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(vite@7.2.4(@types/node@24.10.1)(jiti@2.6.1)(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))(webpack@5.102.1(esbuild@0.27.1))
@@ -15741,6 +15778,11 @@ snapshots:
       webpack: 5.102.1(esbuild@0.27.1)
 
   '@storybook/global@5.0.0': {}
+
+  '@storybook/icons@1.6.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+    dependencies:
+      react: 19.2.1
+      react-dom: 19.2.1(react@19.2.1)
 
   '@storybook/icons@2.0.1(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
     dependencies:
