@@ -427,6 +427,9 @@ function QuotePage() {
           customerEmail: formData.email,
           customerPhone: formData.phone,
           customerCompany: undefined,
+          cpf: formData.cpf || undefined,
+          cnpj: formData.cnpj || undefined,
+          cep: formData.cep || undefined,
           message: formData.message || undefined,
           items: selectedEquipments.map((eq) => {
             const days = Number(eq.days) || 1

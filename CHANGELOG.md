@@ -943,6 +943,23 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   cards reais mantenham `overflow-visible` durante animações de foco/hover.
   - Ajustes aplicados em `app/test-components/page.tsx`
 
+## [2025-12-05] - Precisao dos emails de orcamento
+
+### Fixed ??
+
+- `/api/quotes` e `/api/orcamentos` recalculam cada item com o motor inteligente
+  (descontos e valores diretos) antes de salvar no banco, mantendo total e
+  pricePerDay iguais ao resumo do `/orcamento`.
+- Emails de orcamento exibem o periodo aplicado, desconto ou valor direto e o
+  total multiplicado pela quantidade, alinhando o que chega por email com o que
+  o cliente configurou na pagina.
+- Badges de data/hora e ID no header do email de orcamento agora permanecem na
+  mesma linha (inline) para evitar quebra vertical em alguns clientes.
+- Cada item do email de orcamento inclui a miniatura do equipamento (primeira
+  imagem do catalogo) ao lado esquerdo dos detalhes.
+- Emails de orcamento voltam a exibir CPF, CNPJ e CEP (quando informados) na
+  seção de dados do cliente, junto com empresa.
+
 ## [2025-12-04] - Sincroniza‡Æo de valores diretos no carrinho
 
 ### Added ✨

@@ -7,22 +7,11 @@ import { checkRateLimit, strictRateLimit } from '@/lib/rate-limit'
 import { QuoteRequestSchema } from '@/lib/validations'
 import getResend from '@/lib/resend'
 import { generateQuoteEmailHTML } from '@/lib/email-templates'
+import { buildQuotePricing } from '@/lib/quote-pricing'
 import { prisma } from '@/lib/prisma'
 import { type NextRequest } from 'next/server'
 
 const resend = getResend()
-
-// Tipo estendido para itens que podem incluir campos de pricing
-type QuoteItemWithPricing = {
-  equipmentId: string
-  quantity: number
-  days: number
-  appliedPeriod?: string
-  appliedDiscount?: number
-  useDirectValue?: boolean
-  directValue?: number
-  periodMultiplier?: number
-}
 
 export const POST = withErrorHandling(async (request: NextRequest) => {
   // Rate limiting
@@ -54,38 +43,40 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
       )
     }
 
-    const pricePerDay = Number(equipment.pricePerDay)
-    const itemTotal = pricePerDay * item.quantity * item.days
-    totalAmount += itemTotal
+    const days = item.days || 1
+    const { pricePerDay, total, pricingConfig, appliedPeriod } =
+      buildQuotePricing(equipment, days, item.quantity)
+    totalAmount += total
 
     quoteItems.push({
       equipmentId: item.equipmentId,
       quantity: item.quantity,
-      days: item.days,
-      pricePerDay: equipment.pricePerDay,
-      total: itemTotal,
+      days,
+      pricePerDay,
+      total,
     })
 
     equipmentDetails.push({
       name: equipment.name,
       category: equipment.category?.name || 'Sem categoria',
       quantity: item.quantity,
-      days: item.days,
-      pricePerDay: pricePerDay,
-      total: itemTotal,
-      // Informações de desconto/período do frontend
-      appliedPeriod: (item as QuoteItemWithPricing).appliedPeriod || undefined,
-      appliedDiscount:
-        (item as QuoteItemWithPricing).appliedDiscount || undefined,
-      useDirectValue:
-        (item as QuoteItemWithPricing).useDirectValue || undefined,
-      directValue: (item as QuoteItemWithPricing).directValue || undefined,
-      periodMultiplier:
-        (item as QuoteItemWithPricing).periodMultiplier || undefined,
+      days,
+      pricePerDay,
+      total,
+      image: Array.isArray((equipment as { images?: string[] }).images)
+        ? (equipment as { images?: string[] }).images?.[0] || null
+        : null,
+      appliedPeriod,
+      appliedDiscount: pricingConfig.useDirectValue
+        ? 0
+        : pricingConfig.discount || 0,
+      useDirectValue: pricingConfig.useDirectValue || false,
+      directValue: pricingConfig.directValue || 0,
+      periodMultiplier: pricingConfig.multiplier || 1,
     })
   }
 
-  // Criar orçamento no banco
+  // Criar orcamento no banco
   const quote = await prisma.quote.create({
     data: {
       name: validatedData.customerName,
@@ -113,6 +104,9 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
             customerName: validatedData.customerName,
             customerEmail: validatedData.customerEmail,
             customerPhone: validatedData.customerPhone,
+            cpf: validatedData.cpf,
+            cnpj: validatedData.cnpj,
+            cep: validatedData.cep,
             customerCompany: validatedData.customerCompany,
             message: validatedData.message,
           },

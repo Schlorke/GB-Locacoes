@@ -4,22 +4,9 @@ import { prisma } from '@/lib/prisma'
 import { ZodError } from 'zod'
 import getResend from '@/lib/resend'
 import { generateQuoteEmailHTML } from '@/lib/email-templates'
+import { buildQuotePricing } from '@/lib/quote-pricing'
 
 const resend = getResend()
-
-// Tipo estendido para itens que podem incluir campos de pricing
-type QuoteItemWithPricing = {
-  equipmentId: string
-  quantity: number
-  days: number
-  calculatedTotal?: number
-  calculatedPricePerDay?: number
-  appliedPeriod?: string
-  appliedDiscount?: number
-  useDirectValue?: boolean
-  directValue?: number
-  periodMultiplier?: number
-}
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic'
@@ -186,6 +173,9 @@ export async function POST(request: Request) {
       customerName,
       customerEmail,
       customerPhone,
+      cpf,
+      cnpj,
+      cep,
       customerCompany,
       message,
       items,
@@ -209,47 +199,46 @@ export async function POST(request: Request) {
 
       if (!equipment) {
         return NextResponse.json(
-          { error: `Equipamento não encontrado: ${item.equipmentId}` },
+          { error: `Equipamento nao encontrado: ${item.equipmentId}` },
           { status: 400 }
         )
       }
 
-      // Usar valores calculados do frontend (com desconto/valor direto já aplicados)
-      const itemTotal =
-        (item as QuoteItemWithPricing).calculatedTotal ||
-        Number(equipment.pricePerDay) * item.quantity * (item.days || 1)
-      const pricePerDayToUse =
-        (item as QuoteItemWithPricing).calculatedPricePerDay ||
-        Number(equipment.pricePerDay)
+      const days = item.days || 1
+      const { pricePerDay, total, pricingConfig, appliedPeriod } =
+        buildQuotePricing(equipment, days, item.quantity)
 
-      totalAmount += itemTotal
+      totalAmount += total
 
       quoteItems.push({
         equipmentId: item.equipmentId,
         quantity: item.quantity,
-        days: item.days || 1,
-        pricePerDay: pricePerDayToUse,
-        total: itemTotal,
+        days,
+        pricePerDay,
+        total,
       })
 
-      // Preparar informações detalhadas para o email
+      // Preparar informacoes detalhadas para o email com base no calculo inteligente
       equipmentDetailsForEmail.push({
         name: equipment.name,
         category: equipment.category?.name || 'Sem categoria',
         quantity: item.quantity,
-        days: item.days || 1,
-        pricePerDay: pricePerDayToUse,
-        total: itemTotal,
-        // Informações de desconto/período
-        appliedPeriod: (item as QuoteItemWithPricing).appliedPeriod || 'diária',
-        appliedDiscount: (item as QuoteItemWithPricing).appliedDiscount || 0,
-        useDirectValue: (item as QuoteItemWithPricing).useDirectValue || false,
-        directValue: (item as QuoteItemWithPricing).directValue || 0,
-        periodMultiplier: (item as QuoteItemWithPricing).periodMultiplier || 1,
+        days,
+        pricePerDay,
+        total,
+        image: Array.isArray((equipment as { images?: string[] }).images)
+          ? (equipment as { images?: string[] }).images?.[0] || null
+          : null,
+        appliedPeriod,
+        appliedDiscount: pricingConfig.useDirectValue
+          ? 0
+          : pricingConfig.discount || 0,
+        useDirectValue: pricingConfig.useDirectValue || false,
+        directValue: pricingConfig.directValue || 0,
+        periodMultiplier: pricingConfig.multiplier || 1,
       })
     }
-
-    // Criar orçamento
+    // Criar orcamento
     const quote = await prisma.quote.create({
       data: {
         name: customerName,
@@ -293,6 +282,9 @@ export async function POST(request: Request) {
               customerName,
               customerEmail,
               customerPhone,
+              cpf,
+              cnpj,
+              cep,
               customerCompany,
               message,
             },

@@ -327,6 +327,9 @@ export function generateQuoteEmailHTML(
     customerName: string
     customerEmail: string
     customerPhone: string
+    cpf?: string | null
+    cnpj?: string | null
+    cep?: string | null
     customerCompany?: string | null
     message?: string | null
   },
@@ -337,6 +340,7 @@ export function generateQuoteEmailHTML(
     days: number
     pricePerDay: number
     total: number
+    image?: string | null
     appliedPeriod?: string
     appliedDiscount?: number
     useDirectValue?: boolean
@@ -383,14 +387,18 @@ export function generateQuoteEmailHTML(
                           </table>
                         </td>
                         <td valign="top" width="40%" align="right">
-                          <div style="margin-bottom: 12px;">
-                            <div style="font-size: 9px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-bottom: 6px;">Data e Hora:</div>
-                            <div style="background: rgba(255, 255, 255, 0.25); padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 600; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3);">⏰ ${new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</div>
-                          </div>
-                          <div>
-                            <div style="font-size: 9px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-bottom: 6px;">ID do Orçamento:</div>
-                            <div style="background: rgba(255, 255, 255, 0.25); padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3);">#${quoteId.slice(-8).toUpperCase()}</div>
-                          </div>
+                          <table cellpadding="0" cellspacing="0" border="0" align="right">
+                            <tr>
+                              <td style="padding-right: 12px;">
+                                <div style="font-size: 9px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-bottom: 6px;">Data e Hora:</div>
+                                <div style="background: rgba(255, 255, 255, 0.25); padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 600; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); white-space: nowrap;">⏰ ${new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</div>
+                              </td>
+                              <td>
+                                <div style="font-size: 9px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-bottom: 6px;">ID do Orçamento:</div>
+                                <div style="background: rgba(255, 255, 255, 0.25); padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); white-space: nowrap;">#${quoteId.slice(-8).toUpperCase()}</div>
+                              </td>
+                            </tr>
+                          </table>
                         </td>
                       </tr>
                       <tr>
@@ -435,6 +443,27 @@ export function generateQuoteEmailHTML(
                           </table>
                         </td>
                       </tr>
+                      ${
+                        data.cpf
+                          ? `
+                      <tr>
+                        <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9;">
+                          <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
+                                🪪
+                              </td>
+                              <td style="padding-left: 16px; vertical-align: middle;">
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px;">CPF</div>
+                                <div style="font-size: 15px; font-weight: 600; color: #1e293b;">${data.cpf}</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      `
+                          : ''
+                      }
                       <tr>
                         <td style="padding: 20px 24px; border-bottom: 1px solid #f1f5f9;">
                           <table cellpadding="0" cellspacing="0" border="0">
@@ -472,13 +501,16 @@ export function generateQuoteEmailHTML(
                     </table>
 
                     ${
-                      data.customerCompany
+                      data.customerCompany || data.cnpj || data.cep
                         ? `
                     <div style="height: 1px; background: #e2e8f0; margin: 30px 0;"></div>
                     <div style="font-size: 14px; font-weight: 700; color: #1e293b; text-transform: uppercase; margin-bottom: 20px;">🏢 Informações Adicionais</div>
                     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #ffffff; border: 1px solid #e2e8f0; border-left: 3px solid #f97316; border-radius: 12px; margin-bottom: 30px;">
+                      ${
+                        data.customerCompany
+                          ? `
                       <tr>
-                        <td style="padding: 20px 24px;">
+                        <td style="padding: 20px 24px; ${data.cnpj ? 'border-bottom: 1px solid #f1f5f9;' : ''}">
                           <table cellpadding="0" cellspacing="0" border="0">
                             <tr>
                               <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
@@ -492,6 +524,51 @@ export function generateQuoteEmailHTML(
                           </table>
                         </td>
                       </tr>
+                      `
+                          : ''
+                      }
+                      ${
+                        data.cnpj
+                          ? `
+                      <tr>
+                        <td style="padding: 20px 24px; ${data.cep ? 'border-bottom: 1px solid #f1f5f9;' : ''}">
+                          <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
+                                🧾
+                              </td>
+                              <td style="padding-left: 16px; vertical-align: middle;">
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px;">CNPJ</div>
+                                <div style="font-size: 15px; font-weight: 600; color: #1e293b;">${data.cnpj}</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      `
+                          : ''
+                      }
+                      ${
+                        data.cep
+                          ? `
+                      <tr>
+                        <td style="padding: 20px 24px;">
+                          <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td style="width: 40px; height: 40px; background: #fef3f2; border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px;">
+                                📍
+                              </td>
+                              <td style="padding-left: 16px; vertical-align: middle;">
+                                <div style="font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 6px;">CEP</div>
+                                <div style="font-size: 15px; font-weight: 600; color: #1e293b;">${data.cep}</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      `
+                          : ''
+                      }
                     </table>
                     `
                         : ''
@@ -500,7 +577,7 @@ export function generateQuoteEmailHTML(
                     <div style="height: 1px; background: #e2e8f0; margin: 30px 0;"></div>
                     <div style="font-size: 14px; font-weight: 700; color: #1e293b; text-transform: uppercase; margin-bottom: 20px;">📦 Equipamentos Solicitados</div>
 
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0 12px; margin: 8px 0;">
+                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0 12px; margin: 8px 0;">
                       ${equipments
                         .map(
                           (eq) => `
@@ -508,11 +585,18 @@ export function generateQuoteEmailHTML(
                           <td colspan="2" style="padding: 0;">
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f8fafc; border-left: 4px solid #f97316; border-radius: 8px; overflow: hidden;">
                               <tr>
-                                <td style="padding: 16px;">
+                                ${
+                                  eq.image
+                                    ? `<td width="90" style="padding: 9px; vertical-align: middle;">
+                                      <img src="${eq.image}" alt="${eq.name}" width="82" height="82" style="display: block; margin: 0 auto; border-radius: 12px; object-fit: cover;" />
+                                    </td>`
+                                    : ''
+                                }
+                                <td style="padding: 9px 16px 9px 9px;">
                                   <div style="font-weight: 600; color: #0f172a; margin-bottom: 4px;">${eq.name}</div>
                                   <div style="font-size: 12px; color: #64748b; margin-bottom: 4px;">📂 ${eq.category}</div>
                                   <div style="font-size: 13px; color: #475569;">
-                                    ${eq.quantity}x · ${eq.days} dia(s) · ${formatCurrency(eq.pricePerDay)}/dia
+                                    ${eq.quantity}x • ${eq.days} dia(s) • ${formatCurrency(eq.pricePerDay)}/dia
                                   </div>
                                   ${
                                     eq.appliedPeriod &&
@@ -522,7 +606,7 @@ export function generateQuoteEmailHTML(
                                     ${
                                       eq.useDirectValue && eq.directValue
                                         ? `💰 Valor ${eq.appliedPeriod}: ${formatCurrency(eq.directValue)} (${eq.periodMultiplier || 1} dias)`
-                                        : `🎯 Desc. ${eq.appliedPeriod.charAt(0).toUpperCase() + eq.appliedPeriod.slice(1)}: -${eq.appliedDiscount}%`
+                                        : `🏷️ Desc. ${eq.appliedPeriod.charAt(0).toUpperCase() + eq.appliedPeriod.slice(1)}: -${eq.appliedDiscount}%`
                                     }
                                   </div>
                                   `

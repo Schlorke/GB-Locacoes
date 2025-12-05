@@ -236,6 +236,23 @@ Cliente vê confirmação
 
 ---
 
+## ?? Precisao de precos (dez 2025)
+
+- `/api/quotes` e `/api/orcamentos` recalculam cada item no backend com
+  `lib/quote-pricing` (mesmo motor do `/orcamento`), garantindo que descontos e
+  valores diretos aparecam nos emails.
+- Os campos `pricePerDay` e `total` salvos no banco agora refletem o valor
+  realmente calculado (dias x quantidade), nao apenas o `pricePerDay` base do
+  equipamento.
+- Caso o frontend envie valores precalculados, o backend refaz o calculo para
+  evitar divergencias entre o resumo da pagina e o email recebido.
+- Badges de data/hora e ID do orcamento agora ficam na mesma linha (inline) para
+  evitar quebra estranha em alguns clientes de email.
+- Cada equipamento no email exibe a miniatura (primeira imagem do catalogo) ao
+  lado esquerdo do bloco de detalhes.
+
+---
+
 ## 📧 Tipos de Email por Formulário
 
 | Formulário     | API               | Calcula Valor? | Salva no Banco? | Campos Extras               |
