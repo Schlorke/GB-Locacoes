@@ -21,6 +21,12 @@ const nextConfig = {
     ],
   },
   env: {},
+  // Otimização: não gerar estaticamente rotas que precisam de autenticação
+  // ou que dependem muito do banco de dados durante build
+  experimental: {
+    // Reduzir timeouts de geração estática
+    staticGenerationTimeout: 30, // 30 segundos ao invés de 60
+  },
 }
 
 export default nextConfig
