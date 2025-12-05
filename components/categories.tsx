@@ -92,8 +92,16 @@ export default function Categories() {
       try {
         const res = await fetch('/api/categories')
         if (!res.ok) return
-        const data: ApiCategory[] = await res.json()
-        const mapped: Category[] = data.map((cat: ApiCategory) => ({
+        const data: unknown = await res.json()
+        const sanitized: ApiCategory[] = Array.isArray(data)
+          ? data.filter((cat): cat is ApiCategory =>
+              Boolean(
+                cat && (cat as ApiCategory).slug && (cat as ApiCategory).name
+              )
+            )
+          : []
+
+        const mapped: Category[] = sanitized.map((cat) => ({
           icon:
             (cat.icon &&
               (

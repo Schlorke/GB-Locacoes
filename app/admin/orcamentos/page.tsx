@@ -236,7 +236,13 @@ function AdminQuotesPage() {
   }
 
   const getStatusBadge = (status: Quote['status']) => {
-    const config = statusConfig[status]
+    const fallback = {
+      label: status || 'Desconhecido',
+      color: 'bg-gray-100 text-gray-700 border-gray-200',
+      icon: Clock,
+      gradient: 'from-gray-300 to-gray-400',
+    }
+    const config = statusConfig[status] ?? fallback
     const Icon = config.icon
 
     return (

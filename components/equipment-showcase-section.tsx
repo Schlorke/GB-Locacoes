@@ -91,21 +91,11 @@ export default function EquipmentShowcaseSection() {
 
   // Construir tabs com filtros
   const tabsConfig: TabConfig[] = useMemo(() => {
-    // Debug: verificar dados recebidos
-    console.log(
-      '[CategoryShowcase] Total categorias recebidas:',
-      categories.length
-    )
-    console.log(
-      '[CategoryShowcase] Exemplo de categoria:',
-      categories[0]
-        ? {
-            name: categories[0].name,
-            placement: categories[0].placement,
-            placementType: typeof categories[0].placement,
-          }
-        : 'nenhuma'
-    )
+    const safeCategories = Array.isArray(categories)
+      ? categories.filter((cat): cat is ApiCategory =>
+          Boolean(cat && cat.id && cat.name)
+        )
+      : []
 
     // Converter categorias da API para CategoryItem
     const convertToCategoryItem = (cat: ApiCategory): CategoryItem => ({
@@ -115,12 +105,12 @@ export default function EquipmentShowcaseSection() {
     })
 
     // Tab "Categorias" - mostra TODAS as categorias (limitado a 12)
-    const allCategories = categories
+    const allCategories = safeCategories
       .map(convertToCategoryItem)
       .slice(0, MAX_CATEGORIES_PER_TAB)
 
     // Tab "Fases da Obra" - apenas categorias com placement='phases' (limitado a 12)
-    const phasesFiltered = categories.filter((cat) => {
+    const phasesFiltered = safeCategories.filter((cat) => {
       // Verificação robusta: aceita string 'phases' ou comparação estrita
       const placement = cat.placement
       const matches = placement === 'phases' || String(placement) === 'phases'
@@ -149,7 +139,7 @@ export default function EquipmentShowcaseSection() {
     )
 
     // Tab "Tipo de Trabalho" - apenas categorias com placement='types' (limitado a 12)
-    const typesFiltered = categories.filter((cat) => {
+    const typesFiltered = safeCategories.filter((cat) => {
       // Verificação robusta: aceita string 'types' ou comparação estrita
       const placement = cat.placement
       const matches = placement === 'types' || String(placement) === 'types'

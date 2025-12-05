@@ -11,6 +11,23 @@ PostgreSQL no Supabase para resolver **35 warnings** do Performance Advisor.
 
 ---
 
+## Update 2025-12-05 — FK indexes + verificationtokens PK
+
+- Prisma schema agora inclui `@@index` para todos os FKs sinalizados pelo
+  Performance Advisor e `@@id([identifier, token])` em `verificationtokens`.
+- SQL helper:
+  `prisma/migrations/20251205_add_fk_indexes_and_verificationtokens_pk.sql` cria
+  os ¡ndices e a PK (usa `CREATE INDEX IF NOT EXISTS`).
+- Ambiente de produ‡Æo: se aplicar manualmente via psql/Supabase, prefira
+  `CREATE INDEX CONCURRENTLY` para evitar locks; rode fora do pico.
+- Depois de aplicar, reexecute o Performance Advisor para confirmar que os
+  warnings foram limpos.
+- Nota 2025-12-05 (duplicate index): a PK em `verificationtokens` substitui a
+  constraint `unique` antiga. Use
+  `prisma/migrations/20251205_drop_verificationtokens_unique.sql` para remover a
+  duplicata (`verificationtokens_identifier_token_key`) se o Performance Advisor
+  acusar índice duplicado.
+
 ## 🔍 Problemas Identificados pelo Supabase Performance Advisor
 
 ### 1. **Auth RLS Initialization Plan** (27 warnings) - CRÍTICO ⚠️

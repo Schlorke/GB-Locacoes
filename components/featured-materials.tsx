@@ -59,8 +59,21 @@ export default function FeaturedMaterials() {
       const response = await fetch('/api/equipments')
       if (response.ok) {
         const data = await response.json()
-        // Pegar apenas os primeiros 6 equipamentos para destaque
-        setEquipments(Array.isArray(data) ? data.slice(0, 6) : [])
+        // Pegar apenas os primeiros 6 equipamentos para destaque, filtrando registros inválidos
+        const safeEquipments = Array.isArray(data)
+          ? data.filter((eq): eq is Equipment =>
+              Boolean(
+                eq &&
+                eq.id &&
+                eq.name &&
+                Array.isArray(eq.images) &&
+                eq.category &&
+                typeof eq.category === 'object'
+              )
+            )
+          : []
+
+        setEquipments(safeEquipments.slice(0, 6))
       }
     } catch (error) {
       console.error('Erro ao carregar equipamentos em destaque:', error)
