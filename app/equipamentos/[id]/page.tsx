@@ -49,27 +49,17 @@ const renderIcon = (iconName?: keyof typeof LucideIcons, color?: string) => {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
-
-  let equipment = null
-  try {
-    const prisma = await getPrisma()
-    equipment = await prisma.equipment.findUnique({
-      where: { id: params.id },
-      include: {
-        category: {
-          select: {
-            name: true,
-          },
+  const prisma = await getPrisma()
+  const equipment = await prisma.equipment.findUnique({
+    where: { id: params.id },
+    include: {
+      category: {
+        select: {
+          name: true,
         },
       },
-    })
-  } catch (error) {
-    console.log('Database not available during build, using defaults')
-    return {
-      title: 'Equipamento | GB Locações',
-      description: 'Locação de equipamentos para construção civil em Porto Alegre.',
-    }
-  }
+    },
+  })
 
   if (!equipment) {
     return {

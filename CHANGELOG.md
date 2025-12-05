@@ -8,36 +8,6 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
-### Performance ⚡
-
-- **Build em Produção - Otimização de Geração Estática**: Redução significativa
-  no tempo de build do Vercel (4+ min → 1-2 min)
-  - **Problema Identificado**:
-    - Build demorando 4+ minutos com múltiplos timeouts de 60 segundos
-    - Páginas falhando: `admin/*`, `area-cliente/*`, `equipamentos/[id]`
-    - Mensagem: "Using default metadata (database not available)"
-    - Next.js 16 tentando gerar estaticamente TODAS as páginas durante build
-  - **Causa Raiz**:
-    - `generateMetadata` em `equipamentos/[id]` fazendo query sem try-catch
-    - Banco de dados inacessível ou muito lento durante static generation
-    - Timeout padrão de 60s muito alto para páginas dependentes de DB
-  - **Soluções Implementadas**:
-    - ✅ **Fallback em generateMetadata**: Try-catch na query do Prisma com
-      metadados padrão
-    - ✅ **Redução de timeout**: `staticGenerationTimeout: 30s` (antes: 60s)
-    - ✅ **Log informativo**: "Database not available during build, using
-      defaults"
-  - **Resultado Alcançado**:
-    - ⚡ Build time reduzido de 4+ minutos para 1-2 minutos
-    - ✅ Zero timeouts em páginas dinâmicas
-    - ✅ Metadados padrão durante build, dinâmicos em runtime
-    - ✅ Páginas admin/area-cliente continuam funcionando perfeitamente
-  - **Arquivos Modificados**:
-    - `app/equipamentos/[id]/page.tsx`: Try-catch + fallback em generateMetadata
-    - `next.config.mjs`: Configuração staticGenerationTimeout
-  - **Data**: 2025-12-05
-  - **Commit**: 4ddda98e
-
 ### Fixed 🐛
 
 - **CI/CD Pipeline - pnpm install Failure Resolvido**: Corrigido erro crítico
