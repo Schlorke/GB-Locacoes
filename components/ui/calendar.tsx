@@ -87,7 +87,10 @@ function Calendar({
       captionLayout="dropdown"
       className={cn('p-2 sm:p-3', className)}
       classNames={{
-        root: cn('rdp-root', includeWeekends ? 'rdp-include-weekends' : 'rdp-exclude-weekends'),
+        root: cn(
+          'rdp-root',
+          includeWeekends ? 'rdp-include-weekends' : 'rdp-exclude-weekends'
+        ),
         months: 'rdp-months flex flex-col gap-4',
         month: 'rdp-month',
         month_caption: 'rdp-month_caption',

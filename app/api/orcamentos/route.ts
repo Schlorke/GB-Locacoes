@@ -82,18 +82,30 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   let startDate: Date | undefined
   let endDate: Date | undefined
 
+  // Verificar se startDate e endDate estão no body (não estão no schema validado)
+  const bodyWithDates = body as {
+    startDate?: string | Date
+    endDate?: string | Date
+    items?: Array<{
+      startDate?: string | Date
+      endDate?: string | Date
+      [key: string]: unknown
+    }>
+    [key: string]: unknown
+  }
+
   // Se startDate e endDate vierem no body (do calendário)
-  if (validatedData.startDate && validatedData.endDate) {
-    startDate = new Date(validatedData.startDate)
-    endDate = new Date(validatedData.endDate)
+  if (bodyWithDates.startDate && bodyWithDates.endDate) {
+    startDate = new Date(bodyWithDates.startDate)
+    endDate = new Date(bodyWithDates.endDate)
   } else if (
     validatedData.items.length === 1 &&
-    validatedData.items[0]?.startDate &&
-    validatedData.items[0]?.endDate
+    bodyWithDates.items?.[0]?.startDate &&
+    bodyWithDates.items[0]?.endDate
   ) {
     // Se vierem nos itens (compatibilidade)
-    startDate = new Date(validatedData.items[0].startDate)
-    endDate = new Date(validatedData.items[0].endDate)
+    startDate = new Date(bodyWithDates.items[0].startDate)
+    endDate = new Date(bodyWithDates.items[0].endDate)
   }
 
   // Criar orcamento no banco

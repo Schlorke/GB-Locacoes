@@ -18,10 +18,11 @@ import {
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { DateRange } from 'react-day-picker'
-import { Calendar as CalendarIcon, X } from 'lucide-react'
+import { Calendar as CalendarIcon, X, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
+import { HybridTooltip } from '@/components/ui/HybridTooltip'
 
 export interface PricingOption {
   id: string
@@ -515,6 +516,13 @@ export function SmartEquipmentPricing({
           >
             Incluir finais de semana
           </Label>
+          <HybridTooltip
+            content="💡 Quando ativado, sábados e domingos são incluídos na contagem de dias da locação. Por padrão, apenas dias úteis (segunda a sexta) são considerados no cálculo do preço."
+            side="top"
+            align="center"
+          >
+            <Info className="size-4 text-gray-700 cursor-help transition-colors hover:text-orange-600" />
+          </HybridTooltip>
         </div>
 
         {/* Calendário inline - aparece quando isCalendarOpen é true */}
