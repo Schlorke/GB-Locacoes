@@ -7,7 +7,7 @@ import {
   getPricingConfig,
   sanitizeCartItemPricing,
 } from '@/lib/pricing'
-import { useCallback, useState, useEffect, useMemo } from 'react'
+import { useCallback, useState, useEffect, useMemo, useRef } from 'react'
 import { Calendar } from '@/components/ui/calendar'
 import {
   format,
@@ -23,6 +23,7 @@ import { cn } from '@/lib/utils'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { HybridTooltip } from '@/components/ui/HybridTooltip'
+import { toast } from '@/hooks/use-toast-sonner'
 
 export interface PricingOption {
   id: string
@@ -102,6 +103,23 @@ export function SmartEquipmentPricing({
   // Estado para incluir ou não finais de semana na locação
   // Por padrão, apenas dias úteis (seg-sex) são considerados
   const [includeWeekends, setIncludeWeekends] = useState(false)
+
+  // Refs para controlar exibição das toasts - resetam a cada reload da página (incluindo Ctrl+F5)
+  // Quando o usuário recarrega a página (F5, Ctrl+F5, ou fecha/abre a aba), as toasts podem aparecer novamente
+  const hasShownFirstClickToast = useRef(false)
+  const hasShownStartDateToast = useRef(false)
+  const hasShownSuccessToast = useRef(false)
+  const toastsCompleted = useRef(false) // Marca quando o ciclo completo de toasts foi exibido
+
+  // Verifica se deve mostrar toasts (ciclo não foi completado ainda)
+  const shouldShowToasts = useCallback(() => {
+    return !toastsCompleted.current
+  }, [])
+
+  // Marca o ciclo de toasts como completado (não mostra mais nesta sessão de página)
+  const markToastsAsShown = useCallback(() => {
+    toastsCompleted.current = true
+  }, [])
 
   /**
    * Conta o número de dias úteis (seg-sex) entre duas datas.
@@ -346,6 +364,42 @@ export function SmartEquipmentPricing({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [includeWeekends])
 
+  // Toast 2 e 3: Mostrar conforme o usuário seleciona datas
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (!shouldShowToasts()) return
+
+    // Toast 2: Quando data de início é selecionada (mas ainda não tem data final)
+    if (startDate && !endDate && !hasShownStartDateToast.current) {
+      console.log('[GB-Toasts] Mostrando toast 2: Selecione data final')
+      hasShownStartDateToast.current = true
+      toast.info('Agora selecione a data final', {
+        description:
+          'Clique novamente no calendário para escolher quando a locação termina',
+        position: 'top-right',
+        duration: 8000,
+      })
+    }
+
+    // Toast 3: Quando ambas as datas são selecionadas (sucesso)
+    if (
+      startDate &&
+      endDate &&
+      selectedDays > 0 &&
+      !hasShownSuccessToast.current
+    ) {
+      console.log('[GB-Toasts] Mostrando toast 3: Sucesso')
+      hasShownSuccessToast.current = true
+      toast.success('Datas selecionadas com sucesso!', {
+        description: `Período de ${selectedDays} ${selectedDays === 1 ? 'dia' : 'dias'} configurado. Agora você pode escolher o período de locação.`,
+        position: 'top-right',
+        duration: 8000,
+      })
+      markToastsAsShown()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [startDate, endDate, selectedDays, shouldShowToasts])
+
   // Handler para seleção no calendário
   const handleCalendarSelect = useCallback(
     (range: DateRange | undefined) => {
@@ -470,7 +524,28 @@ export function SmartEquipmentPricing({
         {/* Botão de seleção de datas */}
         <button
           type="button"
-          onClick={() => setIsCalendarOpen(!isCalendarOpen)}
+          onClick={() => {
+            setIsCalendarOpen(!isCalendarOpen)
+
+            // Toast 1: Mostrar ao clicar no botão pela primeira vez
+            if (
+              !startDate &&
+              !endDate &&
+              !hasShownFirstClickToast.current &&
+              shouldShowToasts()
+            ) {
+              console.log(
+                '[GB-Toasts] Mostrando toast 1: Selecione data de início'
+              )
+              hasShownFirstClickToast.current = true
+              toast.info('Selecione a data de início', {
+                description:
+                  'Clique no calendário para escolher quando a locação começa',
+                position: 'top-right',
+                duration: 8000,
+              })
+            }
+          }}
           className={cn(
             'flex h-10 w-full items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm transition-colors overflow-hidden',
             'hover:bg-gray-50',

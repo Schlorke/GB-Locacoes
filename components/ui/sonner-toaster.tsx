@@ -38,9 +38,14 @@ export function Toaster(props: ToasterProps) {
   return (
     <>
       {/* Mantém a altura natural das toasts mesmo com expand={false} */}
+      {/* Ajusta posição das toasts para aparecer abaixo do header (104px + 16px de espaçamento) */}
       <style jsx global>{`
         [data-sonner-toast] {
           height: auto !important;
+        }
+        /* Ajusta posição do container do toaster quando está no topo */
+        [data-sonner-toaster] {
+          top: 120px !important;
         }
       `}</style>
 

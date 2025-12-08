@@ -137,10 +137,16 @@ export function EquipmentPricingSelector({
   monthlyUseDirectValue = false,
   // Datas selecionadas no calendário
   selectedDays = 0,
-  startDate: _startDate,
+  startDate,
   endDate: _endDate,
   selectedPeriod: externalSelectedPeriod,
 }: EquipmentPricingSelectorProps) {
+  // Variável endDate ignorada pois só usamos startDate para determinar se há seleção
+  void _endDate
+
+  // Se alguma data está selecionada no calendário (mesmo que seja só startDate),
+  // os botões de período não podem ser clicados - o período é determinado pelas datas
+  const hasAnyDateSelected = startDate !== null && startDate !== undefined
   // Usar useMemo para evitar recriações desnecessárias
   const pricingOptions = useMemo(
     () =>
@@ -185,11 +191,21 @@ export function EquipmentPricingSelector({
       )
     })
 
-  // Determinar qual período usar: externo (se há datas) ou interno
+  // Período "Diário" para usar quando há apenas startDate selecionado
+  const dailyPeriod =
+    pricingOptions.find((opt) => opt.id === 'daily') || pricingOptions[0]!
+
+  // Determinar qual período usar:
+  // - Se há qualquer data selecionada no calendário (startDate existe) mas ainda não temos
+  //   o range completo (selectedDays === 0), mostrar "Diário" como padrão (1 dia selecionado)
+  // - Se há range completo (selectedDays > 0), usar período externo calculado
+  // - Se não há nenhuma data selecionada, usar período interno (selecionado pelo usuário)
   const selectedPeriod =
-    selectedDays > 0 && externalSelectedPeriod
-      ? externalSelectedPeriod
-      : internalSelectedPeriod
+    hasAnyDateSelected && selectedDays === 0
+      ? dailyPeriod // Mostrar "Diário" quando apenas startDate está selecionado
+      : selectedDays > 0 && externalSelectedPeriod
+        ? externalSelectedPeriod
+        : internalSelectedPeriod
 
   // Sincronizar período interno quando período externo mudar (se não há datas selecionadas)
   useEffect(() => {
@@ -273,12 +289,9 @@ export function EquipmentPricingSelector({
       event.stopPropagation()
     }
 
-    // Se há datas selecionadas, não permitir mudança direta - deve ser sincronizado
-    if (selectedDays > 0) {
-      // A lógica de sincronização está no componente pai
-      // Aqui apenas notificamos, mas o período correto será determinado pelos dias
-      const totalPrice = calculatePrice(option)
-      onPeriodChange?.(option, totalPrice)
+    // Se há qualquer data selecionada no calendário, não permitir mudança de período
+    // O período é determinado automaticamente pelas datas selecionadas
+    if (hasAnyDateSelected) {
       return
     }
 
