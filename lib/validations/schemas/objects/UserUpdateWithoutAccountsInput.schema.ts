@@ -11,7 +11,9 @@ import { QuoteUpdateManyWithoutUserNestedInputObjectSchema as QuoteUpdateManyWit
 import { rentalsUpdateManyWithoutUsersNestedInputObjectSchema as rentalsUpdateManyWithoutUsersNestedInputObjectSchema } from './rentalsUpdateManyWithoutUsersNestedInput.schema';
 import { SessionUpdateManyWithoutUserNestedInputObjectSchema as SessionUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUpdateManyWithoutUserNestedInput.schema';
 import { AddressUpdateManyWithoutUserNestedInputObjectSchema as AddressUpdateManyWithoutUserNestedInputObjectSchema } from './AddressUpdateManyWithoutUserNestedInput.schema';
-import { CartUpdateOneWithoutUserNestedInputObjectSchema as CartUpdateOneWithoutUserNestedInputObjectSchema } from './CartUpdateOneWithoutUserNestedInput.schema'
+import { CartUpdateOneWithoutUserNestedInputObjectSchema as CartUpdateOneWithoutUserNestedInputObjectSchema } from './CartUpdateOneWithoutUserNestedInput.schema';
+import { QuoteUpdateManyWithoutApprovedByUserNestedInputObjectSchema as QuoteUpdateManyWithoutApprovedByUserNestedInputObjectSchema } from './QuoteUpdateManyWithoutApprovedByUserNestedInput.schema';
+import { QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema as QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema } from './QuoteUpdateManyWithoutRejectedByUserNestedInput.schema'
 
 const makeSchema = () => z.object({
   id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -30,7 +32,9 @@ const makeSchema = () => z.object({
   rentals: z.lazy(() => rentalsUpdateManyWithoutUsersNestedInputObjectSchema).optional(),
   sessions: z.lazy(() => SessionUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   addresses: z.lazy(() => AddressUpdateManyWithoutUserNestedInputObjectSchema).optional(),
-  cart: z.lazy(() => CartUpdateOneWithoutUserNestedInputObjectSchema).optional()
+  cart: z.lazy(() => CartUpdateOneWithoutUserNestedInputObjectSchema).optional(),
+  approvedQuotes: z.lazy(() => QuoteUpdateManyWithoutApprovedByUserNestedInputObjectSchema).optional(),
+  rejectedQuotes: z.lazy(() => QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema).optional()
 }).strict();
 export const UserUpdateWithoutAccountsInputObjectSchema: z.ZodType<Prisma.UserUpdateWithoutAccountsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUpdateWithoutAccountsInput>;
 export const UserUpdateWithoutAccountsInputObjectZodSchema = makeSchema();

@@ -277,6 +277,37 @@ export async function GET(request: NextRequest) {
       },
     })
 
+    // Transformar dados para formato esperado pelo frontend
+    const transformedQuotes = quotes.map((quote) => ({
+      id: quote.id,
+      name: quote.name,
+      email: quote.email,
+      phone: quote.phone,
+      company: quote.company,
+      equipments: quote.items.map((item) => ({
+        id: item.equipment.id,
+        name: item.equipment.name,
+        quantity: item.quantity,
+        dailyPrice: Number(item.pricePerDay),
+      })),
+      startDate: quote.startDate?.toISOString() || null,
+      endDate: quote.endDate?.toISOString() || null,
+      totalPrice: Number(quote.total),
+      status: quote.status.toLowerCase() as 'pending' | 'approved' | 'rejected',
+      message: quote.message,
+      createdAt: quote.createdAt.toISOString(),
+      updatedAt: quote.updatedAt.toISOString(),
+      items: quote.items.map((item) => ({
+        id: item.id,
+        quantity: item.quantity,
+        days: item.days,
+        equipment: {
+          id: item.equipment.id,
+          name: item.equipment.name,
+        },
+      })),
+    }))
+
     const totalItems = await prisma.quote.count({ where })
     const totalPages = Math.ceil(totalItems / limit)
 
@@ -289,7 +320,7 @@ export async function GET(request: NextRequest) {
     ])
 
     const response = {
-      quotes,
+      quotes: transformedQuotes,
       pagination: { page, limit, totalItems, totalPages },
       stats: {
         total,

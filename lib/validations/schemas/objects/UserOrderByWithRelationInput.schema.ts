@@ -28,7 +28,9 @@ const makeSchema = () => z.object({
   rentals: z.lazy(() => rentalsOrderByRelationAggregateInputObjectSchema).optional(),
   sessions: z.lazy(() => SessionOrderByRelationAggregateInputObjectSchema).optional(),
   addresses: z.lazy(() => AddressOrderByRelationAggregateInputObjectSchema).optional(),
-  cart: z.lazy(() => CartOrderByWithRelationInputObjectSchema).optional()
+  cart: z.lazy(() => CartOrderByWithRelationInputObjectSchema).optional(),
+  approvedQuotes: z.lazy(() => QuoteOrderByRelationAggregateInputObjectSchema).optional(),
+  rejectedQuotes: z.lazy(() => QuoteOrderByRelationAggregateInputObjectSchema).optional()
 }).strict();
 export const UserOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.UserOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.UserOrderByWithRelationInput>;
 export const UserOrderByWithRelationInputObjectZodSchema = makeSchema();

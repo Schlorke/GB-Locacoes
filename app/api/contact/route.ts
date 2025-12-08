@@ -8,6 +8,7 @@ import { ContactSchema } from '@/lib/validations'
 import { type ValidatedContactData } from '@/lib/validations/contact-types'
 import { generateContactEmailHTML } from '@/lib/email-templates'
 import getResend from '@/lib/resend'
+import { prisma } from '@/lib/prisma'
 import { type NextRequest } from 'next/server'
 
 const resend = getResend()
@@ -42,10 +43,35 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     )
   }
 
-  // Gerar ID único para este contato
-  const contactId = `CTT-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`
+  // Criar registro no banco de dados antes de enviar e-mail
+  let quote
+  try {
+    quote = await prisma.quote.create({
+      data: {
+        name: validatedData.name,
+        email: validatedData.email,
+        phone: validatedData.phone || '', // Campo opcional no schema, obrigatório no model
+        cpf: validatedData.cpf,
+        cnpj: validatedData.cnpj,
+        cep: validatedData.cep,
+        company: validatedData.company,
+        message: validatedData.message,
+        total: 0, // Sem itens no formulário de contato
+        status: 'PENDING',
+      },
+    })
+  } catch (error) {
+    console.error('Failed to save quote to database:', error)
+    return errorResponse(
+      'Erro ao salvar orçamento. Por favor, tente novamente ou entre em contato via WhatsApp.',
+      500
+    )
+  }
 
-  // Enviar email
+  // Usar ID do banco em vez de contactId gerado manualmente
+  const contactId = quote.id
+
+  // Enviar email apenas após sucesso da gravação
   try {
     const emailResult = await resend.emails.send({
       from: process.env.FROM_EMAIL,
@@ -65,8 +91,9 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     )
   } catch (error) {
     console.error('Failed to send email:', error)
+    // Dados já salvos no banco, mas e-mail falhou
     return errorResponse(
-      'Erro ao enviar email. Por favor, entre em contato via WhatsApp.',
+      'Orçamento salvo, mas erro ao enviar email. Entraremos em contato em breve.',
       500
     )
   }

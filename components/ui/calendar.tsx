@@ -1,13 +1,46 @@
 'use client'
 
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import * as React from 'react'
-import { DayPicker } from 'react-day-picker'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { DayPicker, useDayPicker } from 'react-day-picker'
 
-import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
+
+// Componente customizado para MonthCaption - botões dentro da mesma div
+function CustomMonthCaption(props: React.ComponentProps<'div'>) {
+  const { goToMonth, previousMonth, nextMonth } = useDayPicker()
+
+  return (
+    <div className="rdp-month_caption">
+      <button
+        type="button"
+        onClick={() => previousMonth && goToMonth(previousMonth)}
+        disabled={!previousMonth}
+        className="rdp-button_previous"
+        aria-label="Mês anterior"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+      <div className="rdp-dropdowns">{props.children}</div>
+      <button
+        type="button"
+        onClick={() => nextMonth && goToMonth(nextMonth)}
+        disabled={!nextMonth}
+        className="rdp-button_next"
+        aria-label="Próximo mês"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </button>
+    </div>
+  )
+}
+
+// Componente customizado para Nav - retorna fragment vazio pois os botões estão no Caption
+function CustomNav() {
+  return <></>
+}
 
 function Calendar({
   className,
@@ -18,45 +51,42 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      className={cn('p-3', className)}
+      captionLayout="dropdown"
+      className={cn('p-2 sm:p-3', className)}
       classNames={{
-        months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
-        month: 'space-y-4',
-        caption: 'flex justify-center pt-1 relative items-center',
-        caption_label: 'text-sm font-medium',
-        nav: 'space-x-1 flex items-center',
-        nav_button: cn(
-          buttonVariants({ variant: 'outline' }),
-          'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100'
-        ),
-        nav_button_previous: 'absolute left-1',
-        nav_button_next: 'absolute right-1',
-        table: 'w-full border-collapse space-y-1',
-        head_row: 'flex',
-        head_cell:
-          'text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]',
-        row: 'flex w-full mt-2',
-        cell: 'h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
-        day: cn(
-          buttonVariants({ variant: 'ghost' }),
-          'h-9 w-9 p-0 font-normal aria-selected:opacity-100'
-        ),
-        day_range_end: 'day-range-end',
-        day_selected:
-          'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
-        day_today: 'bg-accent text-accent-foreground',
-        day_outside:
-          'day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground',
-        day_disabled: 'text-muted-foreground opacity-50',
-        day_range_middle:
-          'aria-selected:bg-accent aria-selected:text-accent-foreground',
-        day_hidden: 'invisible',
+        root: 'rdp-root',
+        months: 'rdp-months flex flex-col gap-4',
+        month: 'rdp-month',
+        month_caption: 'rdp-month_caption',
+        caption_label: 'rdp-caption_label',
+        nav: 'rdp-nav',
+        button_previous: 'rdp-button_previous',
+        button_next: 'rdp-button_next',
+        month_grid: 'rdp-month_grid',
+        weekdays: 'rdp-weekdays',
+        weekday: 'rdp-weekday',
+        week: 'rdp-week',
+        day: 'rdp-day',
+        day_button: 'rdp-day_button',
+        range_end: 'rdp-range_end',
+        selected: 'rdp-selected',
+        today: 'rdp-today',
+        outside: 'rdp-outside',
+        disabled: 'rdp-disabled',
+        range_middle: 'rdp-range_middle',
+        range_start: 'rdp-range_start',
+        hidden: 'rdp-hidden',
+        dropdowns: 'rdp-dropdowns',
+        dropdown: 'rdp-dropdown',
+        dropdown_root: 'rdp-dropdown_root',
         ...classNames,
       }}
       components={{
-        Chevron: ({ orientation, ...props }) => {
+        MonthCaption: CustomMonthCaption,
+        Nav: CustomNav,
+        Chevron: ({ orientation }) => {
           const Icon = orientation === 'left' ? ChevronLeft : ChevronRight
-          return <Icon className="h-4 w-4" {...props} />
+          return <Icon className="h-4 w-4" />
         },
       }}
       {...props}

@@ -21,6 +21,8 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
   }
 
   const body = await request.json()
+
+  // Validar schema - startDate e endDate são opcionais
   const validatedData = QuoteRequestSchema.parse(body)
 
   // Calcular total e validar equipamentos
@@ -76,6 +78,24 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
     })
   }
 
+  // Calcular startDate e endDate se fornecidos ou se houver apenas um item com datas
+  let startDate: Date | undefined
+  let endDate: Date | undefined
+
+  // Se startDate e endDate vierem no body (do calendário)
+  if (validatedData.startDate && validatedData.endDate) {
+    startDate = new Date(validatedData.startDate)
+    endDate = new Date(validatedData.endDate)
+  } else if (
+    validatedData.items.length === 1 &&
+    validatedData.items[0]?.startDate &&
+    validatedData.items[0]?.endDate
+  ) {
+    // Se vierem nos itens (compatibilidade)
+    startDate = new Date(validatedData.items[0].startDate)
+    endDate = new Date(validatedData.items[0].endDate)
+  }
+
   // Criar orcamento no banco
   const quote = await prisma.quote.create({
     data: {
@@ -89,6 +109,8 @@ export const POST = withErrorHandling(async (request: NextRequest) => {
       message: validatedData.message,
       total: totalAmount,
       status: 'PENDING',
+      startDate,
+      endDate,
       items: {
         create: quoteItems,
       },

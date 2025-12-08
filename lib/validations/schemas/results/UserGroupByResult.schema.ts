@@ -30,7 +30,9 @@ export const UserGroupByResultSchema = z.array(z.object({
     rentals: z.number(),
     sessions: z.number(),
     addresses: z.number(),
-    cart: z.number()
+    cart: z.number(),
+    approvedQuotes: z.number(),
+    rejectedQuotes: z.number()
   }).optional(),
   _min: z.object({
     id: z.string().nullable(),

@@ -22,6 +22,9 @@ export interface CartItem {
   description?: string
   category?: { name: string }
   images?: string[]
+  // Datas de locação
+  startDate?: Date
+  endDate?: Date
   // Descontos percentuais
   dailyDiscount?: number
   weeklyDiscount?: number

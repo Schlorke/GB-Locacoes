@@ -1280,3 +1280,433 @@ body.overflow-hidden {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari and Opera */
 }
+
+/* ================================ */
+/* 23. REACT-DAY-PICKER V9 STYLES  */
+/* ================================ */
+
+/* Root container */
+.rdp-root {
+  --rdp-accent-color: hsl(var(--primary));
+  --rdp-accent-background-color: hsl(var(--accent));
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Container do mês */
+.rdp-month {
+  width: 100%;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* Caption - layout flex centralizado com tudo junto */
+.rdp-month_caption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  overflow: visible;
+  flex-wrap: nowrap;
+}
+
+/* Em telas menores que 320px: botões na primeira linha, dropdowns na segunda */
+@media (max-width: 319px) {
+  .rdp-month_caption {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .rdp-button_previous {
+    order: 1;
+  }
+
+  .rdp-button_next {
+    order: 2;
+  }
+
+  .rdp-dropdowns {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    flex-basis: 100%;
+  }
+}
+
+/* Em telas 320px - 1023px: tudo na mesma linha */
+@media (min-width: 320px) and (max-width: 1023px) {
+  .rdp-month_caption {
+    flex-wrap: nowrap;
+  }
+
+  .rdp-button_previous,
+  .rdp-button_next {
+    order: 0;
+  }
+
+  .rdp-dropdowns {
+    order: 0;
+    width: auto;
+    flex-basis: auto;
+  }
+}
+
+/* Em telas 1024px - 1199px: botões na primeira linha, dropdowns na segunda */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .rdp-month_caption {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .rdp-button_previous {
+    order: 1;
+  }
+
+  .rdp-button_next {
+    order: 2;
+  }
+
+  .rdp-dropdowns {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    flex-basis: 100%;
+  }
+}
+
+/* Em telas 1200px+: tudo na mesma linha */
+@media (min-width: 1200px) {
+  .rdp-month_caption {
+    flex-wrap: nowrap;
+  }
+
+  .rdp-button_previous,
+  .rdp-button_next {
+    order: 0;
+  }
+
+  .rdp-dropdowns {
+    order: 0;
+    width: auto;
+    flex-basis: auto;
+  }
+}
+
+/* Esconde o label padrão quando usando dropdowns */
+.rdp-caption_label {
+  display: none !important;
+}
+
+/* Nav - posicionamento absoluto como shadcn */
+.rdp-nav {
+  display: flex !important;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Grid do calendário */
+.rdp-month_grid {
+  margin-top: 0.5rem;
+}
+
+/* Botões de navegação */
+.rdp-button_previous,
+.rdp-button_next {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 1px solid hsl(var(--input));
+  border-radius: 0.375rem;
+  background-color: white;
+  cursor: pointer;
+  opacity: 0.7;
+  transition:
+    opacity 0.15s,
+    background-color 0.15s;
+  pointer-events: auto !important;
+  flex-shrink: 0;
+  visibility: visible !important;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 640px) {
+  .rdp-button_previous,
+  .rdp-button_next {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+}
+
+.rdp-button_previous:hover,
+.rdp-button_next:hover {
+  opacity: 1;
+  background-color: hsl(var(--accent));
+}
+
+.rdp-button_previous:disabled,
+.rdp-button_next:disabled,
+.rdp-button_previous[aria-disabled='true'],
+.rdp-button_next[aria-disabled='true'] {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Dropdowns de mês e ano - centralizados entre os botões */
+.rdp-dropdowns {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+  width: auto;
+  justify-self: center;
+}
+
+@media (min-width: 640px) {
+  .rdp-dropdowns {
+    gap: 0.5rem;
+  }
+}
+
+/* Container do dropdown */
+.rdp-dropdown_root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Select do dropdown */
+.rdp-dropdown {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: transparent;
+  border: 1px solid hsl(var(--input));
+  border-radius: 0.375rem;
+  padding: 0.25rem 1.25rem 0.25rem 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.25rem center;
+  background-repeat: no-repeat;
+  background-size: 0.875rem 0.875rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .rdp-dropdown {
+    padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    background-size: 1rem 1rem;
+  }
+}
+
+.rdp-dropdown:hover {
+  background-color: hsl(var(--accent));
+}
+
+.rdp-dropdown:focus {
+  outline: none;
+  border-color: hsl(var(--ring));
+}
+
+/* Tabela do calendário */
+.rdp-month_grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  min-width: 100%;
+}
+
+/* Tbody com scroll horizontal */
+.rdp-weeks {
+  display: table-row-group;
+  width: 100%;
+}
+
+/* Cabeçalho dos dias da semana */
+.rdp-weekdays {
+  display: flex;
+  width: 100%;
+}
+
+.rdp-weekday {
+  flex: 1;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: hsl(var(--muted-foreground));
+  padding: 0.375rem 0;
+  min-width: 0;
+}
+
+@media (min-width: 640px) {
+  .rdp-weekday {
+    font-size: 0.8rem;
+    padding: 0.5rem 0;
+  }
+}
+
+/* Linhas de semana */
+.rdp-week {
+  display: flex;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+/* Células de dia */
+.rdp-day {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2rem;
+  padding: 0;
+  min-width: 0;
+}
+
+.rdp-day_button {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+@media (min-width: 640px) {
+  .rdp-day {
+    height: 2.25rem;
+  }
+
+  .rdp-day_button {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Hover para botões normais (não selecionados) */
+.rdp-day:not(.rdp-selected):not(.rdp-range_start):not(.rdp-range_end):not(
+    .rdp-range_middle
+  )
+  .rdp-day_button:hover:not(:disabled) {
+  color: #ea580c; /* orange-600 */
+  background-color: hsl(var(--accent));
+}
+
+/* Estados de seleção */
+.rdp-selected .rdp-day_button {
+  background-color: #ea580c; /* orange-600 */
+  color: white;
+}
+
+.rdp-selected .rdp-day_button:hover {
+  background-color: #ea580c; /* orange-600 */
+  color: white;
+}
+
+.rdp-today .rdp-day_button {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+
+.rdp-outside .rdp-day_button {
+  color: hsl(var(--muted-foreground));
+  opacity: 0.5;
+}
+
+.rdp-disabled .rdp-day_button {
+  color: hsl(var(--muted-foreground));
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Range selection */
+.rdp-range_start .rdp-day_button,
+.rdp-range_end .rdp-day_button {
+  background-color: #ea580c; /* orange-600 */
+  color: white;
+  border-radius: 0.375rem;
+}
+
+.rdp-range_middle .rdp-day_button {
+  background-color: #ffedd5; /* orange-100 - bem mais fraco ainda para o meio do range */
+  color: #1e293b; /* slate-800 - texto escuro para contraste com bg laranja claro */
+  border-radius: 0;
+}
+
+.rdp-range_start .rdp-day_button {
+  border-top-left-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.rdp-range_end .rdp-day_button {
+  border-top-right-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.rdp-range_start.rdp-range_end .rdp-day_button {
+  border-radius: 0.375rem;
+}
+
+/* Hover para botões de range - mantém texto branco */
+.rdp-range_start .rdp-day_button:hover,
+.rdp-range_end .rdp-day_button:hover,
+.rdp-range_middle .rdp-day_button:hover {
+  color: white;
+}
+
+.rdp-range_start .rdp-day_button:hover {
+  background-color: #ea580c; /* orange-600 */
+}
+
+.rdp-range_end .rdp-day_button:hover {
+  background-color: #ea580c; /* orange-600 */
+}
+
+.rdp-range_middle .rdp-day_button:hover {
+  background-color: #ffedd5; /* orange-100 - mantém o mesmo tom fraco */
+  color: #1e293b; /* slate-800 - mantém texto escuro */
+}
+
+/* Esconde elementos desnecessários */
+.rdp-hidden {
+  visibility: hidden;
+}

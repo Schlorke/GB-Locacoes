@@ -419,6 +419,15 @@ function QuotePage() {
     setIsSubmitting(true)
 
     try {
+      // Extrair startDate e endDate do primeiro item (se todos tiverem as mesmas datas)
+      const firstItem = selectedEquipments[0]
+      const allSameDates = selectedEquipments.every(
+        (item) =>
+          item.startDate?.toISOString() ===
+            firstItem?.startDate?.toISOString() &&
+          item.endDate?.toISOString() === firstItem?.endDate?.toISOString()
+      )
+
       const response = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -431,6 +440,14 @@ function QuotePage() {
           cnpj: formData.cnpj || undefined,
           cep: formData.cep || undefined,
           message: formData.message || undefined,
+          startDate:
+            allSameDates && firstItem?.startDate
+              ? firstItem.startDate.toISOString()
+              : undefined,
+          endDate:
+            allSameDates && firstItem?.endDate
+              ? firstItem.endDate.toISOString()
+              : undefined,
           items: selectedEquipments.map((eq) => {
             const days = Number(eq.days) || 1
             const quantity = Number(eq.quantity) || 1
@@ -450,6 +467,8 @@ function QuotePage() {
               equipmentId: eq.equipmentId,
               quantity: quantity,
               days: days,
+              startDate: eq.startDate?.toISOString(),
+              endDate: eq.endDate?.toISOString(),
               calculatedTotal: total,
               calculatedPricePerDay: intelligentPrice / days,
               // Informações de desconto/período

@@ -31,6 +31,9 @@ interface SmartQuoteButtonProps {
   weeklyDiscount?: number
   biweeklyDiscount?: number
   monthlyDiscount?: number
+  startDate?: Date | null
+  endDate?: Date | null
+  selectedDays?: number
   className?: string
   size?: 'sm' | 'lg' | 'default'
   variant?:
@@ -60,6 +63,9 @@ export function SmartQuoteButton({
   weeklyDiscount,
   biweeklyDiscount,
   monthlyDiscount,
+  startDate,
+  endDate,
+  selectedDays,
   className,
   size = 'lg',
   variant = 'default',
@@ -71,13 +77,16 @@ export function SmartQuoteButton({
   const handleQuoteRequest = useCallback(() => {
     if (!isAvailable) return
 
+    // Calcular dias: usar selectedDays se disponível, senão usar multiplier do período
+    const days = selectedDays || selectedPeriod.multiplier
+
     // Preparar dados do equipamento selecionado
     const equipmentForQuote: CartItem = {
       equipmentId,
       equipmentName,
       pricePerDay,
       quantity: 1,
-      days: selectedPeriod.multiplier,
+      days,
       selectedPeriod,
       finalPrice,
       maxStock,
@@ -88,6 +97,8 @@ export function SmartQuoteButton({
       weeklyDiscount,
       biweeklyDiscount,
       monthlyDiscount,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
     }
 
     // Adicionar ao carrinho
@@ -110,6 +121,9 @@ export function SmartQuoteButton({
     weeklyDiscount,
     biweeklyDiscount,
     monthlyDiscount,
+    startDate,
+    endDate,
+    selectedDays,
     addItem,
     router,
   ])

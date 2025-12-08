@@ -28,6 +28,8 @@ const makeSchema = () => z.object({
   sessions: z.union([z.boolean(), z.lazy(() => SessionFindManySchema)]).optional(),
   addresses: z.union([z.boolean(), z.lazy(() => AddressFindManySchema)]).optional(),
   cart: z.union([z.boolean(), z.lazy(() => CartArgsObjectSchema)]).optional(),
+  approvedQuotes: z.union([z.boolean(), z.lazy(() => QuoteFindManySchema)]).optional(),
+  rejectedQuotes: z.union([z.boolean(), z.lazy(() => QuoteFindManySchema)]).optional(),
   _count: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeArgsObjectSchema)]).optional()
 }).strict();
 export const UserSelectObjectSchema: z.ZodType<Prisma.UserSelect> = makeSchema() as unknown as z.ZodType<Prisma.UserSelect>;

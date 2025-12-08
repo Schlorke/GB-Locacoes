@@ -8,6 +8,8 @@ import { QuoteCountOutputTypeArgsObjectSchema as QuoteCountOutputTypeArgsObjectS
 const makeSchema = () => z.object({
   items: z.union([z.boolean(), z.lazy(() => QuoteItemFindManySchema)]).optional(),
   user: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional(),
+  approvedByUser: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional(),
+  rejectedByUser: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional(),
   _count: z.union([z.boolean(), z.lazy(() => QuoteCountOutputTypeArgsObjectSchema)]).optional()
 }).strict();
 export const QuoteIncludeObjectSchema: z.ZodType<Prisma.QuoteInclude> = makeSchema() as unknown as z.ZodType<Prisma.QuoteInclude>;

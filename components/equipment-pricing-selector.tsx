@@ -4,7 +4,12 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Clock, TrendingDown } from 'lucide-react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  calculateIntelligentPrice,
+  getPricingConfig,
+  sanitizeCartItemPricing,
+} from '@/lib/pricing'
 
 interface PricingOption {
   id: string
@@ -37,6 +42,11 @@ interface EquipmentPricingSelectorProps {
   weeklyUseDirectValue?: boolean
   biweeklyUseDirectValue?: boolean
   monthlyUseDirectValue?: boolean
+  // Datas selecionadas no calendário (para sincronização)
+  selectedDays?: number
+  startDate?: Date | null
+  endDate?: Date | null
+  selectedPeriod?: PricingOption | null
 }
 
 // Function to generate pricing options based on equipment configuration
@@ -125,6 +135,11 @@ export function EquipmentPricingSelector({
   weeklyUseDirectValue = false,
   biweeklyUseDirectValue = false,
   monthlyUseDirectValue = false,
+  // Datas selecionadas no calendário
+  selectedDays = 0,
+  startDate: _startDate,
+  endDate: _endDate,
+  selectedPeriod: externalSelectedPeriod,
 }: EquipmentPricingSelectorProps) {
   // Usar useMemo para evitar recriações desnecessárias
   const pricingOptions = useMemo(
@@ -161,49 +176,78 @@ export function EquipmentPricingSelector({
     ]
   )
 
-  const [selectedPeriod, setSelectedPeriod] = useState<PricingOption>(() => {
-    return (
-      pricingOptions[0] || pricingOptions.find((opt) => opt.id === 'daily')!
-    )
-  })
-
-  // Usar ref para rastrear o ID selecionado e evitar loops
-  const selectedIdRef = useRef(selectedPeriod.id)
-  const prevPricingOptionsRef = useRef(pricingOptions)
-
-  // Atualizar selectedPeriod apenas quando pricingOptions mudar (não quando selectedPeriod mudar)
-  useEffect(() => {
-    // Verificar se pricingOptions realmente mudou
-    const optionsChanged =
-      JSON.stringify(prevPricingOptionsRef.current) !==
-      JSON.stringify(pricingOptions)
-
-    if (optionsChanged) {
-      const currentSelectedOption = pricingOptions.find(
-        (opt) => opt.id === selectedIdRef.current
+  // Se há datas selecionadas, usar o período externo (sincronizado com calendário)
+  // Caso contrário, usar estado interno
+  const [internalSelectedPeriod, setInternalSelectedPeriod] =
+    useState<PricingOption>(() => {
+      return (
+        pricingOptions[0] || pricingOptions.find((opt) => opt.id === 'daily')!
       )
-      if (currentSelectedOption) {
-        setSelectedPeriod(currentSelectedOption)
-      }
-      prevPricingOptionsRef.current = pricingOptions
-    }
-  }, [pricingOptions])
+    })
 
-  // Atualizar ref quando selectedPeriod mudar
+  // Determinar qual período usar: externo (se há datas) ou interno
+  const selectedPeriod =
+    selectedDays > 0 && externalSelectedPeriod
+      ? externalSelectedPeriod
+      : internalSelectedPeriod
+
+  // Sincronizar período interno quando período externo mudar (se não há datas selecionadas)
   useEffect(() => {
-    selectedIdRef.current = selectedPeriod.id
-  }, [selectedPeriod.id])
+    if (selectedDays === 0 && externalSelectedPeriod) {
+      const matchingOption = pricingOptions.find(
+        (opt) => opt.id === externalSelectedPeriod.id
+      )
+      if (matchingOption) {
+        setInternalSelectedPeriod(matchingOption)
+      }
+    }
+  }, [externalSelectedPeriod, selectedDays, pricingOptions])
 
-  // Notificar mudanças de preço quando pricePerDay ou descontos mudarem
+  // Atualizar período interno quando pricingOptions mudar
+  useEffect(() => {
+    if (selectedDays === 0) {
+      const currentOption = pricingOptions.find(
+        (opt) => opt.id === internalSelectedPeriod.id
+      )
+      if (currentOption) {
+        setInternalSelectedPeriod(currentOption)
+      }
+    }
+  }, [pricingOptions, selectedDays, internalSelectedPeriod.id])
+
+  // Notificar mudanças de preço quando pricePerDay, descontos ou dias selecionados mudarem
   useEffect(() => {
     if (onPeriodChange) {
       const totalPrice = calculatePrice(selectedPeriod)
       onPeriodChange(selectedPeriod, totalPrice)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pricePerDay, selectedPeriod])
+  }, [pricePerDay, selectedPeriod, selectedDays])
 
   const calculatePrice = (option: PricingOption) => {
+    // Se há dias selecionados no calendário, calcular baseado nos dias REAIS
+    if (selectedDays > 0) {
+      const equipment = sanitizeCartItemPricing({
+        pricePerDay,
+        dailyDiscount,
+        weeklyDiscount,
+        biweeklyDiscount,
+        monthlyDiscount,
+        dailyDirectValue,
+        weeklyDirectValue,
+        biweeklyDirectValue,
+        monthlyDirectValue,
+        dailyUseDirectValue,
+        weeklyUseDirectValue,
+        biweeklyUseDirectValue,
+        monthlyUseDirectValue,
+      })
+
+      // Calcular preço inteligente baseado nos dias reais
+      return calculateIntelligentPrice(equipment, selectedDays)
+    }
+
+    // Se não há datas selecionadas, usar cálculo padrão do período
     // Se usar valor direto, retornar o valor direto (mesmo que seja 0)
     if (
       option.useDirectValue &&
@@ -229,17 +273,55 @@ export function EquipmentPricingSelector({
       event.stopPropagation()
     }
 
-    setSelectedPeriod(option)
+    // Se há datas selecionadas, não permitir mudança direta - deve ser sincronizado
+    if (selectedDays > 0) {
+      // A lógica de sincronização está no componente pai
+      // Aqui apenas notificamos, mas o período correto será determinado pelos dias
+      const totalPrice = calculatePrice(option)
+      onPeriodChange?.(option, totalPrice)
+      return
+    }
+
+    // Se não há datas, permitir seleção normal
+    setInternalSelectedPeriod(option)
     const totalPrice = calculatePrice(option)
     onPeriodChange?.(option, totalPrice)
   }
 
   const selectedPrice = calculatePrice(selectedPeriod)
-  const originalPrice = pricePerDay * selectedPeriod.multiplier
+
+  // Calcular preço original baseado nos dias reais ou no período
+  const originalPrice =
+    selectedDays > 0
+      ? pricePerDay * selectedDays // Preço sem desconto baseado nos dias reais
+      : pricePerDay * selectedPeriod.multiplier // Preço do período padrão
+
+  // Determinar se está usando valor direto
+  const equipment = sanitizeCartItemPricing({
+    pricePerDay,
+    dailyDiscount,
+    weeklyDiscount,
+    biweeklyDiscount,
+    monthlyDiscount,
+    dailyDirectValue,
+    weeklyDirectValue,
+    biweeklyDirectValue,
+    monthlyDirectValue,
+    dailyUseDirectValue,
+    weeklyUseDirectValue,
+    biweeklyUseDirectValue,
+    monthlyUseDirectValue,
+  })
+
+  const pricingConfig =
+    selectedDays > 0 ? getPricingConfig(equipment, selectedDays) : null
+
   const isUsingDirectValue =
-    selectedPeriod.useDirectValue &&
-    selectedPeriod.directValue !== undefined &&
-    selectedPeriod.directValue !== null
+    selectedDays > 0
+      ? (pricingConfig?.useDirectValue ?? false)
+      : selectedPeriod.useDirectValue &&
+        selectedPeriod.directValue !== undefined &&
+        selectedPeriod.directValue !== null
 
   return (
     <div className={cn('space-y-3', className)}>
@@ -301,53 +383,78 @@ export function EquipmentPricingSelector({
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5 text-xs text-gray-600">
             <Clock className="h-3 w-3" />
-            <span>Preço por {selectedPeriod.period}</span>
+            <span>
+              {selectedDays > 0
+                ? `Preço por ${selectedDays} ${selectedDays === 1 ? 'dia' : 'dias'}`
+                : `Preço por ${selectedPeriod.period}`}
+            </span>
           </div>
-          {!isUsingDirectValue && selectedPeriod.discount > 0 && (
-            <div className="flex items-center gap-1 text-green-600">
-              <TrendingDown className="h-3 w-3" />
-              <span className="text-xs font-medium">
-                {selectedPeriod.discount}% OFF
-              </span>
-            </div>
-          )}
+          {!isUsingDirectValue &&
+            ((selectedDays > 0 &&
+              pricingConfig &&
+              pricingConfig.discount > 0) ||
+              (selectedDays === 0 && selectedPeriod.discount > 0)) && (
+              <div className="flex items-center gap-1 text-green-600">
+                <TrendingDown className="h-3 w-3" />
+                <span className="text-xs font-medium">
+                  {selectedDays > 0 && pricingConfig
+                    ? `${pricingConfig.discount}% OFF`
+                    : `${selectedPeriod.discount}% OFF`}
+                </span>
+              </div>
+            )}
         </div>
 
         <div className="space-y-1">
-          {!isUsingDirectValue && selectedPeriod.discount > 0 && (
-            <div className="text-xs text-gray-500 line-through">
-              De: {formatCurrency(originalPrice)}
-            </div>
-          )}
+          {!isUsingDirectValue &&
+            ((selectedDays > 0 &&
+              pricingConfig &&
+              pricingConfig.discount > 0) ||
+              (selectedDays === 0 && selectedPeriod.discount > 0)) && (
+              <div className="text-xs text-gray-500 line-through">
+                De: {formatCurrency(originalPrice)}
+              </div>
+            )}
           <div className="text-2xl font-bold text-orange-600">
             {formatCurrency(selectedPrice)}
           </div>
-          {!isUsingDirectValue && selectedPeriod.multiplier > 1 && (
-            <div className="text-xs text-gray-600">
-              {formatCurrency(selectedPrice / selectedPeriod.multiplier)} por
-              dia
-              {selectedPeriod.discount > 0 && (
-                <span className="text-green-600 ml-1 font-medium">
-                  (economia: {formatCurrency(originalPrice - selectedPrice)})
-                </span>
-              )}
-            </div>
-          )}
+          {!isUsingDirectValue &&
+            ((selectedDays > 0 && selectedDays > 1) ||
+              (selectedDays === 0 && selectedPeriod.multiplier > 1)) && (
+              <div className="text-xs text-gray-600">
+                {formatCurrency(
+                  selectedDays > 0
+                    ? selectedPrice / selectedDays
+                    : selectedPrice / selectedPeriod.multiplier
+                )}{' '}
+                por dia
+                {((selectedDays > 0 &&
+                  pricingConfig &&
+                  pricingConfig.discount > 0) ||
+                  (selectedDays === 0 && selectedPeriod.discount > 0)) && (
+                  <span className="text-green-600 ml-1 font-medium">
+                    (economia: {formatCurrency(originalPrice - selectedPrice)})
+                  </span>
+                )}
+              </div>
+            )}
         </div>
       </div>
 
       {/* Informações Adicionais - apenas para desconto percentual */}
-      {!isUsingDirectValue && selectedPeriod.discount > 0 && (
-        <div className="text-xs bg-green-50 p-2.5 rounded-md border border-green-200">
-          <div className="flex items-center gap-1.5 text-green-700 font-medium">
-            <TrendingDown className="h-3 w-3" />
-            <span>
-              Você economiza {formatCurrency(originalPrice - selectedPrice)} com
-              este período!
-            </span>
+      {!isUsingDirectValue &&
+        ((selectedDays > 0 && pricingConfig && pricingConfig.discount > 0) ||
+          (selectedDays === 0 && selectedPeriod.discount > 0)) && (
+          <div className="text-xs bg-green-50 p-2.5 rounded-md border border-green-200">
+            <div className="flex items-center gap-1.5 text-green-700 font-medium">
+              <TrendingDown className="h-3 w-3" />
+              <span>
+                Você economiza {formatCurrency(originalPrice - selectedPrice)}{' '}
+                com este período!
+              </span>
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   )
 }

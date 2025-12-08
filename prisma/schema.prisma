@@ -42,6 +42,8 @@ model User {
   sessions      Session[]
   addresses     Address[] // NOVO
   cart          Cart?     // NOVO
+  approvedQuotes  Quote[]       @relation("ApprovedQuotes")
+  rejectedQuotes  Quote[]       @relation("RejectedQuotes")
 
   @@map("users")
 }
@@ -207,12 +209,49 @@ model Quote {
   total     Decimal     @default(0)
   status    QuoteStatus @default(PENDING)
   userId    String?
+
+  // Período de locação
+  startDate       DateTime?     // Data de início da locação
+  endDate         DateTime?     // Data de fim da locação
+  validUntil      DateTime?     // Data de validade do orçamento (ex: 7 dias após criação)
+
+  // Logística
+  deliveryType    DeliveryType? // DELIVERY, PICKUP, BOTH
+  deliveryAddress Json?          // Endereço completo de entrega (se delivery)
+  deliveryFee     Decimal?      // Taxa de entrega
+  pickupFee       Decimal?      // Taxa de retirada
+
+  // Financeiro
+  deposit         Decimal?      // Caução/depósito
+  subtotal        Decimal?      // Subtotal antes de taxas
+  taxes           Decimal?      // Impostos/taxas
+  discount        Decimal?      // Desconto aplicado (se houver)
+  finalTotal      Decimal?      // Total final (subtotal + taxas - desconto)
+
+  // Operacional
+  priority        Int?          @default(0) // Prioridade (0=normal, 1=alta, 2=urgente)
+  internalNotes   String?       // Notas internas (não visíveis ao cliente)
+  adminNotes      String?       // Anotações administrativas
+  rejectionReason String?       // Motivo da rejeição (se rejeitado)
+
+  // Rastreamento
+  approvedAt      DateTime?     // Data de aprovação
+  approvedBy      String?       // ID do admin que aprovou
+  rejectedAt      DateTime?     // Data de rejeição
+  rejectedBy      String?       // ID do admin que rejeitou
+  convertedToRentalId String?  // ID da locação gerada (se aprovado e convertido)
+
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   items     QuoteItem[]
   user      User?       @relation(fields: [userId], references: [id])
+  approvedByUser  User?          @relation("ApprovedQuotes", fields: [approvedBy], references: [id])
+  rejectedByUser User?          @relation("RejectedQuotes", fields: [rejectedBy], references: [id])
 
   @@index([userId])
+  @@index([startDate])
+  @@index([endDate])
+  @@index([status])
   @@map("quotes")
 }
 

@@ -18,7 +18,9 @@ export const UserAggregateResultSchema = z.object({  _count: z.object({
     rentals: z.number(),
     sessions: z.number(),
     addresses: z.number(),
-    cart: z.number()
+    cart: z.number(),
+    approvedQuotes: z.number(),
+    rejectedQuotes: z.number()
   }).optional(),
   _min: z.object({
     id: z.string().nullable(),

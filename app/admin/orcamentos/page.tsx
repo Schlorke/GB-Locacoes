@@ -3,15 +3,9 @@
 import { AdminFilterCard } from '@/components/admin/admin-filter-card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
+import { Dialog } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -57,6 +51,15 @@ interface Quote {
   }
   createdAt: string
   updatedAt: string
+  items?: Array<{
+    id: string
+    quantity: number
+    days: number
+    equipment?: {
+      id: string
+      name: string
+    }
+  }>
 }
 
 const statusConfig = {
@@ -132,21 +135,24 @@ function AdminQuotesPage() {
       let matchesPeriod = true
       if (periodFilter !== 'all') {
         const now = new Date()
-        const startDate = new Date(quote.startDate)
+        // Usar startDate se disponível, senão usar createdAt
+        const referenceDate = quote.startDate
+          ? new Date(quote.startDate)
+          : new Date(quote.createdAt)
 
         switch (periodFilter) {
           case 'today': {
-            matchesPeriod = startDate.toDateString() === now.toDateString()
+            matchesPeriod = referenceDate.toDateString() === now.toDateString()
             break
           }
           case 'week': {
             const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
-            matchesPeriod = startDate >= weekAgo
+            matchesPeriod = referenceDate >= weekAgo
             break
           }
           case 'month': {
             const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
-            matchesPeriod = startDate >= monthAgo
+            matchesPeriod = referenceDate >= monthAgo
             break
           }
         }
@@ -231,8 +237,15 @@ function AdminQuotesPage() {
     }).format(value)
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR')
+  const formatDate = (dateString: string | null | undefined) => {
+    if (!dateString) return 'Não definido'
+    try {
+      const date = new Date(dateString)
+      if (isNaN(date.getTime())) return 'Data inválida'
+      return date.toLocaleDateString('pt-BR')
+    } catch {
+      return 'Data inválida'
+    }
   }
 
   const getStatusBadge = (status: Quote['status']) => {
@@ -438,13 +451,28 @@ function AdminQuotesPage() {
                             </td>
                             <td className="p-4">
                               <div className="text-sm">
-                                <div className="flex items-center gap-1 text-gray-600">
-                                  <Calendar className="w-3 h-3" />
-                                  {formatDate(quote.startDate)}
-                                </div>
-                                <div className="text-gray-500 ml-4">
-                                  até {formatDate(quote.endDate)}
-                                </div>
+                                {quote.startDate && quote.endDate ? (
+                                  <>
+                                    <div className="flex items-center gap-1 text-gray-600">
+                                      <Calendar className="w-3 h-3" />
+                                      {formatDate(quote.startDate)}
+                                    </div>
+                                    <div className="text-gray-500 ml-4">
+                                      até {formatDate(quote.endDate)}
+                                    </div>
+                                  </>
+                                ) : quote.items &&
+                                  quote.items.length > 0 &&
+                                  quote.items[0]?.days ? (
+                                  <div className="text-gray-500">
+                                    {quote.items[0].days}{' '}
+                                    {quote.items[0].days === 1 ? 'dia' : 'dias'}
+                                  </div>
+                                ) : (
+                                  <div className="text-gray-400 italic">
+                                    Período não definido
+                                  </div>
+                                )}
                               </div>
                             </td>
                             <td className="p-4">
@@ -492,249 +520,271 @@ function AdminQuotesPage() {
         </motion.div>
 
         {/* Modal de Detalhes */}
-        {selectedQuote && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center px-2 py-6 sm:px-6"
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Detalhes do orçamento ${selectedQuote.name}`}
-          >
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setSelectedQuote(null)}
-              aria-hidden="true"
-            />
-            <Card className="relative z-10 flex max-h-[90vh] w-full max-w-4xl flex-col">
-              <CardHeader className="flex items-center gap-3 border-b border-gray-100 p-6">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white text-sm font-semibold">
-                  {selectedQuote.name?.charAt(0).toUpperCase()}
-                </div>
-                <CardTitle className="text-xl font-semibold text-gray-800">
-                  Detalhes do Orçamento - {selectedQuote.name}
-                </CardTitle>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="ml-auto rounded-full text-gray-500 hover:text-gray-700"
-                  onClick={() => setSelectedQuote(null)}
-                  aria-label="Fechar detalhes do orçamento"
-                >
-                  <XCircle className="h-5 w-5" />
-                </Button>
-              </CardHeader>
+        <Dialog.Root
+          open={!!selectedQuote}
+          onOpenChange={(open) => !open && setSelectedQuote(null)}
+        >
+          <Dialog.Backdrop />
+          <Dialog.Portal>
+            <Dialog.Popup variant="default" className="max-w-4xl">
+              <Dialog.Content>
+                <Dialog.Header>
+                  <Dialog.HeaderIcon>
+                    {selectedQuote?.name?.charAt(0).toUpperCase()}
+                  </Dialog.HeaderIcon>
+                  <Dialog.Title className="text-xl font-semibold text-gray-800">
+                    Detalhes do Orçamento - {selectedQuote?.name}
+                  </Dialog.Title>
+                  <Dialog.CloseButton />
+                </Dialog.Header>
 
-              <ScrollArea className="flex-1 min-h-0 p-6">
-                <div className="space-y-6">
-                  {/* Informações do Cliente */}
-                  <Card className="border-l-4 border-l-blue-500">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        <User className="w-5 h-5 text-blue-600" />
-                        Informações do Cliente
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="flex items-center gap-3">
-                        <Mail className="w-4 h-4 text-gray-400" />
-                        <div>
-                          <div className="text-sm text-gray-500">Email</div>
-                          <div className="font-medium">
-                            {selectedQuote.email}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Phone className="w-4 h-4 text-gray-400" />
-                        <div>
-                          <div className="text-sm text-gray-500">Telefone</div>
-                          <div className="font-medium">
-                            {selectedQuote.phone}
-                          </div>
-                        </div>
-                      </div>
-                      {selectedQuote.company && (
-                        <div className="flex items-center gap-3">
-                          <Building className="w-4 h-4 text-gray-400" />
-                          <div>
-                            <div className="text-sm text-gray-500">Empresa</div>
-                            <div className="font-medium">
-                              {selectedQuote.company}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      <div className="flex items-center gap-3">
-                        <Hash className="w-4 h-4 text-gray-400" />
-                        <div>
-                          <div className="text-sm text-gray-500">
-                            ID do Orçamento
-                          </div>
-                          <div className="font-medium font-mono text-xs">
-                            {selectedQuote.id}
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Período e Status */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Card className="border-l-4 border-l-green-500">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-lg">
-                          <Calendar className="w-5 h-5 text-green-600" />
-                          Período da Locação
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          <div>
-                            <span className="text-sm text-gray-500">
-                              Início:
-                            </span>
-                            <span className="ml-2 font-medium">
-                              {formatDate(selectedQuote.startDate)}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-sm text-gray-500">Fim:</span>
-                            <span className="ml-2 font-medium">
-                              {formatDate(selectedQuote.endDate)}
-                            </span>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="border-l-4 border-l-purple-500">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-lg">
-                          <Briefcase className="w-5 h-5 text-purple-600" />
-                          Status Atual
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center justify-between">
-                          {getStatusBadge(selectedQuote.status)}
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-green-600">
-                              {formatCurrency(selectedQuote.totalPrice || 0)}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              Valor Total
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Equipamentos */}
-                  <Card className="border-l-4 border-l-orange-500">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="flex items-center gap-2 text-lg">
-                        <Package className="w-5 h-5 text-orange-600" />
-                        Equipamentos Solicitados
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        {Array.isArray(selectedQuote.equipments) &&
-                          selectedQuote.equipments.map((equipment, index) => (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                            >
-                              <div>
-                                <div className="font-medium">
-                                  {equipment.name}
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                  Quantidade: {equipment.quantity} -{' '}
-                                  {formatCurrency(equipment.dailyPrice)}/dia
+                <Dialog.Body>
+                  <Dialog.BodyViewport>
+                    <Dialog.BodyContent>
+                      {selectedQuote ? (
+                        <div className="space-y-6">
+                          {/* Informações do Cliente */}
+                          <Card className="border-l-4 border-l-blue-500">
+                            <CardHeader className="pb-3">
+                              <CardTitle className="flex items-center gap-2 text-lg">
+                                <User className="w-5 h-5 text-blue-600" />
+                                Informações do Cliente
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="flex items-center gap-3">
+                                <Mail className="w-4 h-4 text-gray-400" />
+                                <div>
+                                  <div className="text-sm text-gray-500">
+                                    Email
+                                  </div>
+                                  <div className="font-medium">
+                                    {selectedQuote.email}
+                                  </div>
                                 </div>
                               </div>
-                              <div className="text-right">
-                                <div className="font-semibold text-green-600">
-                                  {formatCurrency(
-                                    equipment.quantity * equipment.dailyPrice
+                              <div className="flex items-center gap-3">
+                                <Phone className="w-4 h-4 text-gray-400" />
+                                <div>
+                                  <div className="text-sm text-gray-500">
+                                    Telefone
+                                  </div>
+                                  <div className="font-medium">
+                                    {selectedQuote.phone}
+                                  </div>
+                                </div>
+                              </div>
+                              {selectedQuote.company && (
+                                <div className="flex items-center gap-3">
+                                  <Building className="w-4 h-4 text-gray-400" />
+                                  <div>
+                                    <div className="text-sm text-gray-500">
+                                      Empresa
+                                    </div>
+                                    <div className="font-medium">
+                                      {selectedQuote.company}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                              <div className="flex items-center gap-3">
+                                <Hash className="w-4 h-4 text-gray-400" />
+                                <div>
+                                  <div className="text-sm text-gray-500">
+                                    ID do Orçamento
+                                  </div>
+                                  <div className="font-medium font-mono text-xs">
+                                    {selectedQuote.id}
+                                  </div>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+
+                          {/* Período e Status */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Card className="border-l-4 border-l-green-500">
+                              <CardHeader className="pb-3">
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                  <Calendar className="w-5 h-5 text-green-600" />
+                                  Período da Locação
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="space-y-2">
+                                  {selectedQuote.startDate &&
+                                  selectedQuote.endDate ? (
+                                    <>
+                                      <div>
+                                        <span className="text-sm text-gray-500">
+                                          Início:
+                                        </span>
+                                        <span className="ml-2 font-medium">
+                                          {formatDate(selectedQuote.startDate)}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        <span className="text-sm text-gray-500">
+                                          Fim:
+                                        </span>
+                                        <span className="ml-2 font-medium">
+                                          {formatDate(selectedQuote.endDate)}
+                                        </span>
+                                      </div>
+                                    </>
+                                  ) : selectedQuote.items &&
+                                    selectedQuote.items.length > 0 &&
+                                    selectedQuote.items[0]?.days ? (
+                                    <div>
+                                      <span className="text-sm text-gray-500">
+                                        Período:
+                                      </span>
+                                      <span className="ml-2 font-medium">
+                                        {selectedQuote.items[0].days}{' '}
+                                        {selectedQuote.items[0].days === 1
+                                          ? 'dia'
+                                          : 'dias'}
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    <div className="text-sm text-gray-400 italic">
+                                      Período não definido
+                                    </div>
                                   )}
                                 </div>
-                                <div className="text-xs text-gray-500">
-                                  subtotal/dia
+                              </CardContent>
+                            </Card>
+
+                            <Card className="border-l-4 border-l-purple-500">
+                              <CardHeader className="pb-3">
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                  <Briefcase className="w-5 h-5 text-purple-600" />
+                                  Status Atual
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <div className="flex items-center justify-between">
+                                  {getStatusBadge(selectedQuote.status)}
+                                  <div className="text-right">
+                                    <div className="text-2xl font-bold text-green-600">
+                                      {formatCurrency(
+                                        selectedQuote.totalPrice || 0
+                                      )}
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      Valor Total
+                                    </div>
+                                  </div>
                                 </div>
+                              </CardContent>
+                            </Card>
+                          </div>
+
+                          {/* Equipamentos */}
+                          <Card className="border-l-4 border-l-orange-500">
+                            <CardHeader className="pb-3">
+                              <CardTitle className="flex items-center gap-2 text-lg">
+                                <Package className="w-5 h-5 text-orange-600" />
+                                Equipamentos Solicitados
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <div className="space-y-3">
+                                {Array.isArray(selectedQuote.equipments) &&
+                                  selectedQuote.equipments.map(
+                                    (equipment, index) => (
+                                      <div
+                                        key={index}
+                                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                                      >
+                                        <div>
+                                          <div className="font-medium">
+                                            {equipment.name}
+                                          </div>
+                                          <div className="text-sm text-gray-500">
+                                            Quantidade: {equipment.quantity} -{' '}
+                                            {formatCurrency(
+                                              equipment.dailyPrice
+                                            )}
+                                            /dia
+                                          </div>
+                                        </div>
+                                        <div className="text-right">
+                                          <div className="font-semibold text-green-600">
+                                            {formatCurrency(
+                                              equipment.quantity *
+                                                equipment.dailyPrice
+                                            )}
+                                          </div>
+                                          <div className="text-xs text-gray-500">
+                                            subtotal/dia
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
                               </div>
-                            </div>
-                          ))}
-                      </div>
-                    </CardContent>
-                  </Card>
+                            </CardContent>
+                          </Card>
 
-                  {/* Mensagem */}
-                  {selectedQuote.message && (
-                    <Card className="border-l-4 border-l-indigo-500">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-lg">
-                          <MessageSquare className="w-5 h-5 text-indigo-600" />
-                          Mensagem do Cliente
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <Textarea
-                          value={selectedQuote.message}
-                          readOnly
-                          className="min-h-[100px] resize-none border-gray-200"
-                        />
-                      </CardContent>
-                    </Card>
-                  )}
-
-                  {/* Ações Administrativas */}
-                  {selectedQuote.status === 'pending' && (
-                    <Card className="border-l-4 border-l-yellow-500">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-lg">
-                          <Briefcase className="w-5 h-5 text-yellow-600" />
-                          Ações Administrativas
-                        </CardTitle>
-                        <CardDescription>
-                          Aprove ou rejeite este orçamento
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex gap-3">
-                          <Button
-                            onClick={() =>
-                              updateQuoteStatus(selectedQuote.id, 'approved')
-                            }
-                            disabled={isUpdating}
-                            className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white"
-                          >
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            {isUpdating ? 'Aprovando...' : 'Aprovar Orçamento'}
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              updateQuoteStatus(selectedQuote.id, 'rejected')
-                            }
-                            disabled={isUpdating}
-                            variant="outline"
-                            className="flex-1 border-red-200 text-red-600 hover:bg-red-100 hover:border-red-500 hover:text-red-800"
-                          >
-                            <XCircle className="w-4 h-4 mr-2" />
-                            {isUpdating
-                              ? 'Rejeitando...'
-                              : 'Rejeitar Orçamento'}
-                          </Button>
+                          {/* Mensagem */}
+                          {selectedQuote.message && (
+                            <Card className="border-l-4 border-l-indigo-500">
+                              <CardHeader className="pb-3">
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                  <MessageSquare className="w-5 h-5 text-indigo-600" />
+                                  Mensagem do Cliente
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <Textarea
+                                  value={selectedQuote.message}
+                                  readOnly
+                                  className="min-h-[100px] resize-none border-gray-200"
+                                />
+                              </CardContent>
+                            </Card>
+                          )}
                         </div>
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
-              </ScrollArea>
-            </Card>
-          </div>
-        )}
+                      ) : null}
+                    </Dialog.BodyContent>
+                  </Dialog.BodyViewport>
+                </Dialog.Body>
+
+                {selectedQuote?.status === 'pending' && selectedQuote && (
+                  <Dialog.Footer>
+                    <div className="flex gap-3 w-full">
+                      <Button
+                        onClick={() =>
+                          updateQuoteStatus(selectedQuote.id, 'approved')
+                        }
+                        disabled={isUpdating}
+                        variant="default"
+                        size="lg"
+                        className="flex-1"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        {isUpdating ? 'Aprovando...' : 'Aprovar Orçamento'}
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          updateQuoteStatus(selectedQuote.id, 'rejected')
+                        }
+                        disabled={isUpdating}
+                        variant="outline"
+                        size="lg"
+                        className="flex-1 bg-white"
+                      >
+                        <XCircle className="w-4 h-4" />
+                        {isUpdating ? 'Rejeitando...' : 'Rejeitar Orçamento'}
+                      </Button>
+                    </div>
+                  </Dialog.Footer>
+                )}
+              </Dialog.Content>
+            </Dialog.Popup>
+          </Dialog.Portal>
+        </Dialog.Root>
       </div>
     </div>
   )

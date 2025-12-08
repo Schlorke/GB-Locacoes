@@ -36,7 +36,9 @@ const userwhereinputSchema = z.object({
   rentals: z.lazy(() => RentalsListRelationFilterObjectSchema).optional(),
   sessions: z.lazy(() => SessionListRelationFilterObjectSchema).optional(),
   addresses: z.lazy(() => AddressListRelationFilterObjectSchema).optional(),
-  cart: z.union([z.lazy(() => CartNullableScalarRelationFilterObjectSchema), z.lazy(() => CartWhereInputObjectSchema)]).optional()
+  cart: z.union([z.lazy(() => CartNullableScalarRelationFilterObjectSchema), z.lazy(() => CartWhereInputObjectSchema)]).optional(),
+  approvedQuotes: z.lazy(() => QuoteListRelationFilterObjectSchema).optional(),
+  rejectedQuotes: z.lazy(() => QuoteListRelationFilterObjectSchema).optional()
 }).strict();
 export const UserWhereInputObjectSchema: z.ZodType<Prisma.UserWhereInput> = userwhereinputSchema as unknown as z.ZodType<Prisma.UserWhereInput>;
 export const UserWhereInputObjectZodSchema = userwhereinputSchema;
