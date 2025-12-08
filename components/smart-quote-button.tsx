@@ -34,6 +34,8 @@ interface SmartQuoteButtonProps {
   startDate?: Date | null
   endDate?: Date | null
   selectedDays?: number
+  /** Indica se finais de semana estão incluídos na contagem de dias */
+  includeWeekends?: boolean
   className?: string
   size?: 'sm' | 'lg' | 'default'
   variant?:
@@ -66,6 +68,7 @@ export function SmartQuoteButton({
   startDate,
   endDate,
   selectedDays,
+  includeWeekends = false,
   className,
   size = 'lg',
   variant = 'default',
@@ -99,6 +102,7 @@ export function SmartQuoteButton({
       monthlyDiscount,
       startDate: startDate || undefined,
       endDate: endDate || undefined,
+      includeWeekends,
     }
 
     // Adicionar ao carrinho
@@ -124,6 +128,7 @@ export function SmartQuoteButton({
     startDate,
     endDate,
     selectedDays,
+    includeWeekends,
     addItem,
     router,
   ])

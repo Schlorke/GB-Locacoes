@@ -328,7 +328,7 @@ export function EquipmentPricingSelector({
       {/* Seletor de Período */}
       <div>
         <h4 className="text-sm font-semibold text-gray-900 mb-3">
-          Período de Locação
+          Desconto aplicado
         </h4>
         <div className="grid grid-cols-2 gap-2">
           {pricingOptions.map((option) => (

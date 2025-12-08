@@ -25,6 +25,8 @@ export interface CartItem {
   // Datas de locação
   startDate?: Date
   endDate?: Date
+  // Indica se finais de semana estão incluídos na contagem de dias
+  includeWeekends?: boolean
   // Descontos percentuais
   dailyDiscount?: number
   weeklyDiscount?: number

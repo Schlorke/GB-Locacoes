@@ -6,7 +6,13 @@ import { DayPicker, useDayPicker } from 'react-day-picker'
 
 import { cn } from '@/lib/utils'
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  /**
+   * Quando true, finais de semana (sábado e domingo) estão incluídos na seleção.
+   * Por padrão é false, o que significa que apenas dias úteis (seg-sex) são considerados.
+   */
+  includeWeekends?: boolean
+}
 
 // Componente customizado para MonthCaption - botões dentro da mesma div
 function CustomMonthCaption(props: React.ComponentProps<'div'>) {
@@ -46,15 +52,42 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  includeWeekends = true,
+  modifiers: externalModifiers,
+  modifiersClassNames: externalModifiersClassNames,
   ...props
 }: CalendarProps) {
+  // Função para verificar se uma data é final de semana
+  const isWeekend = React.useCallback((date: Date) => {
+    const day = date.getDay()
+    return day === 0 || day === 6 // 0 = domingo, 6 = sábado
+  }, [])
+
+  // Modifiers para finais de semana
+  const modifiers = React.useMemo(
+    () => ({
+      weekend: isWeekend,
+      ...externalModifiers,
+    }),
+    [isWeekend, externalModifiers]
+  )
+
+  // Classes para os modifiers
+  const modifiersClassNames = React.useMemo(
+    () => ({
+      weekend: 'rdp-weekend',
+      ...externalModifiersClassNames,
+    }),
+    [externalModifiersClassNames]
+  )
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
       captionLayout="dropdown"
       className={cn('p-2 sm:p-3', className)}
       classNames={{
-        root: 'rdp-root',
+        root: cn('rdp-root', includeWeekends ? 'rdp-include-weekends' : 'rdp-exclude-weekends'),
         months: 'rdp-months flex flex-col gap-4',
         month: 'rdp-month',
         month_caption: 'rdp-month_caption',
@@ -81,6 +114,8 @@ function Calendar({
         dropdown_root: 'rdp-dropdown_root',
         ...classNames,
       }}
+      modifiers={modifiers}
+      modifiersClassNames={modifiersClassNames}
       components={{
         MonthCaption: CustomMonthCaption,
         Nav: CustomNav,

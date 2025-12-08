@@ -1710,3 +1710,64 @@ body.overflow-hidden {
 .rdp-hidden {
   visibility: hidden;
 }
+
+/* ================================ */
+/* WEEKEND TOGGLE - ESTILOS        */
+/* ================================ */
+
+/* Headers dos dias da semana - por padrão dias úteis são mais destacados */
+/* O calendário pt-BR começa no domingo, então:
+   - 1º elemento (first-child) = domingo
+   - 7º elemento (last-child) = sábado
+*/
+
+/* Por padrão, quando finais de semana NÃO estão incluídos */
+/* Dias da semana (seg-sex) com cor forte */
+.rdp-exclude-weekends .rdp-weekday:not(:first-child):not(:last-child) {
+  color: #1e293b; /* slate-800 - cor forte para dias úteis */
+  font-weight: 500;
+}
+
+/* Finais de semana (dom e sáb) com cor mais fraca quando não incluídos */
+.rdp-exclude-weekends .rdp-weekday:first-child,
+.rdp-exclude-weekends .rdp-weekday:last-child {
+  color: #9ca3af; /* gray-400 - cor fraca para finais de semana */
+  font-weight: 400;
+}
+
+/* Quando finais de semana estão incluídos, todos os dias ficam com mesma cor forte */
+.rdp-include-weekends .rdp-weekday {
+  color: #1e293b; /* slate-800 - cor forte para todos */
+  font-weight: 500;
+}
+
+/* Finais de semana desabilitados quando opção não está marcada */
+.rdp-exclude-weekends .rdp-weekend .rdp-day_button {
+  color: #d1d5db; /* gray-300 - bem fraco para desabilitado */
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.rdp-exclude-weekends .rdp-weekend .rdp-day_button:hover {
+  background-color: transparent;
+  color: #d1d5db;
+}
+
+/* Quando finais de semana estão incluídos, dias normais */
+.rdp-include-weekends .rdp-weekend .rdp-day_button:not(:disabled) {
+  color: inherit;
+  cursor: pointer;
+  opacity: 1;
+}
+
+/* Range selection em finais de semana quando incluídos */
+.rdp-include-weekends .rdp-weekend.rdp-range_middle .rdp-day_button {
+  background-color: #ffedd5; /* orange-100 */
+  color: #1e293b; /* slate-800 */
+}
+
+.rdp-include-weekends .rdp-weekend.rdp-range_start .rdp-day_button,
+.rdp-include-weekends .rdp-weekend.rdp-range_end .rdp-day_button {
+  background-color: #ea580c; /* orange-600 */
+  color: white;
+}

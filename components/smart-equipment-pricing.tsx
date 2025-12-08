@@ -9,11 +9,19 @@ import {
 } from '@/lib/pricing'
 import { useCallback, useState, useEffect, useMemo } from 'react'
 import { Calendar } from '@/components/ui/calendar'
-import { format, differenceInDays, addDays } from 'date-fns'
+import {
+  format,
+  differenceInDays,
+  addDays,
+  eachDayOfInterval,
+  isWeekend,
+} from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { DateRange } from 'react-day-picker'
 import { Calendar as CalendarIcon, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
 
 export interface PricingOption {
   id: string
@@ -89,6 +97,27 @@ export function SmartEquipmentPricing({
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const [selectedRange, setSelectedRange] = useState<DateRange | undefined>(
     startDate && endDate ? { from: startDate, to: endDate } : undefined
+  )
+  // Estado para incluir ou não finais de semana na locação
+  // Por padrão, apenas dias úteis (seg-sex) são considerados
+  const [includeWeekends, setIncludeWeekends] = useState(false)
+
+  /**
+   * Conta o número de dias úteis (seg-sex) entre duas datas.
+   * Se includeWeekends for true, conta todos os dias.
+   */
+  const countBusinessDays = useCallback(
+    (start: Date, end: Date, includeWeekendDays: boolean): number => {
+      if (includeWeekendDays) {
+        // Conta todos os dias
+        return differenceInDays(end, start) + 1
+      }
+
+      // Conta apenas dias úteis (seg-sex)
+      const allDays = eachDayOfInterval({ start, end })
+      return allDays.filter((day) => !isWeekend(day)).length
+    },
+    []
   )
 
   // Função para determinar o período correto baseado nos dias selecionados
@@ -303,6 +332,19 @@ export function SmartEquipmentPricing({
     }
   }, [startDate, endDate, isCalendarOpen])
 
+  // Recalcular quando a opção de incluir finais de semana muda
+  useEffect(() => {
+    if (startDate && endDate) {
+      // Recalcular número de dias com a nova configuração
+      const newDays = countBusinessDays(startDate, endDate, includeWeekends)
+
+      if (newDays > 0) {
+        handleDateRangeChange(startDate, endDate, newDays)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [includeWeekends])
+
   // Handler para seleção no calendário
   const handleCalendarSelect = useCallback(
     (range: DateRange | undefined) => {
@@ -327,13 +369,15 @@ export function SmartEquipmentPricing({
         }
 
         // Segundo clique: range completo selecionado (datas diferentes)
+        // Contar dias considerando se finais de semana estão incluídos
+        const days = countBusinessDays(range.from, range.to, includeWeekends)
+
         // Validar período mínimo
-        const days = differenceInDays(range.to, range.from) + 1
         if (days < 1) {
           return
         }
 
-        // Validar período máximo
+        // Validar período máximo (365 dias úteis ou totais dependendo da opção)
         if (days > 365) {
           return
         }
@@ -350,7 +394,7 @@ export function SmartEquipmentPricing({
         handleDateRangeChange(null, null, 0)
       }
     },
-    [handleDateRangeChange]
+    [handleDateRangeChange, countBusinessDays, includeWeekends]
   )
 
   // Handler para limpar seleção
@@ -392,9 +436,14 @@ export function SmartEquipmentPricing({
         return true
       }
 
+      // Se finais de semana não estão incluídos, desabilitar sábado e domingo
+      if (!includeWeekends && isWeekend(dateToCheck)) {
+        return true
+      }
+
       return false
     },
-    [today, maxDate]
+    [today, maxDate, includeWeekends]
   )
 
   // Texto do botão
@@ -452,6 +501,22 @@ export function SmartEquipmentPricing({
           )}
         </button>
 
+        {/* Toggle para incluir finais de semana */}
+        <div className="flex items-center gap-2 py-1">
+          <Checkbox
+            id="include-weekends"
+            checked={includeWeekends}
+            onCheckedChange={(checked) => setIncludeWeekends(checked === true)}
+            className="data-[state=checked]:bg-orange-600 data-[state=checked]:border-orange-600"
+          />
+          <Label
+            htmlFor="include-weekends"
+            className="text-sm font-normal text-gray-700 cursor-pointer select-none"
+          >
+            Incluir finais de semana
+          </Label>
+        </div>
+
         {/* Calendário inline - aparece quando isCalendarOpen é true */}
         {isCalendarOpen && (
           <div className="border border-gray-200 rounded-md bg-white p-0 shadow-md overflow-hidden max-w-full">
@@ -468,11 +533,24 @@ export function SmartEquipmentPricing({
               fromMonth={firstDayOfCurrentMonth}
               toDate={maxDate}
               showOutsideDays={false}
+              includeWeekends={includeWeekends}
             />
             <div className="border-t border-gray-200 px-3 py-2">
               <div className="flex flex-col gap-1 text-xs text-muted-foreground">
                 <div>Período mínimo: 1 dia</div>
                 <div>Período máximo: 365 dias</div>
+                {selectedDays > 0 && (
+                  <div className="text-green-600 font-medium">
+                    ✓ {selectedDays} {selectedDays === 1 ? 'dia' : 'dias'}{' '}
+                    {includeWeekends ? 'totais' : 'úteis'} selecionado
+                    {selectedDays === 1 ? '' : 's'}
+                  </div>
+                )}
+                {!includeWeekends && selectedDays === 0 && (
+                  <div className="text-orange-600 font-medium">
+                    ⚠️ Apenas dias úteis (seg-sex)
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -532,6 +610,7 @@ export function SmartEquipmentPricing({
             startDate={startDate}
             endDate={endDate}
             selectedDays={selectedDays}
+            includeWeekends={includeWeekends}
             variant="gradient"
             className="w-full bg-[linear-gradient(to_right,#f97316,#ea580c,#f97316)] bg-[length:200%_100%] bg-left hover:bg-right transition-[background-position,transform,box-shadow] duration-500 ease-in-out"
           />
@@ -558,6 +637,7 @@ export function SmartEquipmentPricing({
             weeklyDiscount={weeklyDiscount}
             biweeklyDiscount={biweeklyDiscount}
             monthlyDiscount={monthlyDiscount}
+            includeWeekends={includeWeekends}
             variant="gradient"
             className="w-full bg-[linear-gradient(to_right,#f97316,#ea580c,#f97316)] bg-[length:200%_100%] bg-left hover:bg-right transition-[background-position,transform,box-shadow] duration-500 ease-in-out"
           />
