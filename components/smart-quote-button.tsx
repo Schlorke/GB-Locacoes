@@ -31,6 +31,16 @@ interface SmartQuoteButtonProps {
   weeklyDiscount?: number
   biweeklyDiscount?: number
   monthlyDiscount?: number
+  // Campos de valor direto
+  dailyDirectValue?: number
+  weeklyDirectValue?: number
+  biweeklyDirectValue?: number
+  monthlyDirectValue?: number
+  // Campos de controle de método de preço
+  dailyUseDirectValue?: boolean
+  weeklyUseDirectValue?: boolean
+  biweeklyUseDirectValue?: boolean
+  monthlyUseDirectValue?: boolean
   startDate?: Date | null
   endDate?: Date | null
   selectedDays?: number
@@ -65,6 +75,14 @@ export function SmartQuoteButton({
   weeklyDiscount,
   biweeklyDiscount,
   monthlyDiscount,
+  dailyDirectValue,
+  weeklyDirectValue,
+  biweeklyDirectValue,
+  monthlyDirectValue,
+  dailyUseDirectValue,
+  weeklyUseDirectValue,
+  biweeklyUseDirectValue,
+  monthlyUseDirectValue,
   startDate,
   endDate,
   selectedDays,
@@ -100,6 +118,16 @@ export function SmartQuoteButton({
       weeklyDiscount,
       biweeklyDiscount,
       monthlyDiscount,
+      // Campos de valor direto
+      dailyDirectValue,
+      weeklyDirectValue,
+      biweeklyDirectValue,
+      monthlyDirectValue,
+      // Campos de controle de método de preço
+      dailyUseDirectValue,
+      weeklyUseDirectValue,
+      biweeklyUseDirectValue,
+      monthlyUseDirectValue,
       startDate: startDate || undefined,
       endDate: endDate || undefined,
       includeWeekends,
@@ -125,6 +153,14 @@ export function SmartQuoteButton({
     weeklyDiscount,
     biweeklyDiscount,
     monthlyDiscount,
+    dailyDirectValue,
+    weeklyDirectValue,
+    biweeklyDirectValue,
+    monthlyDirectValue,
+    dailyUseDirectValue,
+    weeklyUseDirectValue,
+    biweeklyUseDirectValue,
+    monthlyUseDirectValue,
     startDate,
     endDate,
     selectedDays,

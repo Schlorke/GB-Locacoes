@@ -302,9 +302,12 @@ function QuotePage() {
           const equipment = equipmentMap.get(item.equipmentId)
           if (!equipment) return sanitizeCartItemPricing(item)
 
-          return sanitizeCartItemPricing({
+          // Preservar dados críticos que já estão corretos no item (como valor direto e flags)
+          // para evitar flash de valores incorretos durante a sincronização
+          const sanitizedItem = sanitizeCartItemPricing({
             ...item,
             pricePerDay: Number(equipment.pricePerDay) || item.pricePerDay,
+            // Priorizar valores do item atual se já estiverem configurados corretamente
             dailyDiscount: equipment.dailyDiscount ?? item.dailyDiscount ?? 0,
             weeklyDiscount:
               equipment.weeklyDiscount ?? item.weeklyDiscount ?? 0,
@@ -312,6 +315,7 @@ function QuotePage() {
               equipment.biweeklyDiscount ?? item.biweeklyDiscount ?? 0,
             monthlyDiscount:
               equipment.monthlyDiscount ?? item.monthlyDiscount ?? 0,
+            // Valores diretos: usar do equipamento (fonte de verdade), mas preservar se já estiver no item
             dailyDirectValue:
               Number(
                 equipment.dailyDirectValue ?? item.dailyDirectValue ?? 0
@@ -328,6 +332,7 @@ function QuotePage() {
               Number(
                 equipment.monthlyDirectValue ?? item.monthlyDirectValue ?? 0
               ) || 0,
+            // Flags de uso de valor direto: priorizar equipamento (fonte de verdade)
             dailyUseDirectValue:
               equipment.dailyUseDirectValue ??
               item.dailyUseDirectValue ??
@@ -345,8 +350,11 @@ function QuotePage() {
               item.monthlyUseDirectValue ??
               false,
           })
+
+          return sanitizedItem
         })
 
+        // Atualizar apenas se houver mudanças significativas para evitar re-renders desnecessários
         hydrateItems(updatedItems)
       } catch (error) {
         console.error('Failed to sync cart pricing', error)
@@ -817,9 +825,15 @@ function QuotePage() {
                                             equipment,
                                             equipment.days
                                           )
+                                        // Só calcular originalPrice se realmente for mostrar (desconto, não valor direto)
+                                        const shouldShowOriginalPrice =
+                                          !pricingConfig.useDirectValue &&
+                                          (pricingConfig.discount || 0) > 0
                                         const originalPrice =
-                                          Number(equipment.pricePerDay) *
-                                          equipment.days
+                                          shouldShowOriginalPrice
+                                            ? Number(equipment.pricePerDay) *
+                                              equipment.days
+                                            : 0
                                         const actualPeriodLabel =
                                           pricingConfig.period === 'daily'
                                             ? 'diário'
@@ -840,11 +854,14 @@ function QuotePage() {
 
                                         return (
                                           <div>
-                                            {showDiscount && (
-                                              <div className="text-sm text-gray-500 line-through">
-                                                {formatCurrency(originalPrice)}
-                                              </div>
-                                            )}
+                                            {showDiscount &&
+                                              originalPrice > 0 && (
+                                                <div className="text-sm text-gray-500 line-through">
+                                                  {formatCurrency(
+                                                    originalPrice
+                                                  )}
+                                                </div>
+                                              )}
                                             <div>
                                               <span className="font-semibold text-green-600 text-base">
                                                 {formatCurrency(
@@ -1276,18 +1293,20 @@ function QuotePage() {
                                 equipment,
                                 equipment.days
                               )
-                              const originalPrice =
-                                Number(equipment.pricePerDay) *
-                                equipment.days *
-                                equipment.quantity
                               const finalPrice = calculateSubtotal(equipment)
                               const showDiscount =
                                 !pricingConfig.useDirectValue &&
                                 (pricingConfig.discount || 0) > 0
+                              // Só calcular originalPrice se realmente for mostrar (desconto, não valor direto)
+                              const originalPrice = showDiscount
+                                ? Number(equipment.pricePerDay) *
+                                  equipment.days *
+                                  equipment.quantity
+                                : 0
 
                               return (
                                 <div>
-                                  {showDiscount && (
+                                  {showDiscount && originalPrice > 0 && (
                                     <div className="text-sm text-gray-500 line-through">
                                       {formatCurrency(originalPrice)}
                                     </div>
