@@ -286,20 +286,47 @@ export function SmartEquipmentPricing({
   )
 
   // Atualizar selectedRange quando startDate/endDate mudarem externamente
+  // Mas NÃO interferir quando o calendário está aberto (usuário selecionando)
   useEffect(() => {
+    // Se o calendário está aberto, não sobrescrever a seleção visual
+    // para não interferir no processo de seleção do react-day-picker
+    if (isCalendarOpen) {
+      return
+    }
+
     if (startDate && endDate) {
       setSelectedRange({ from: startDate, to: endDate })
+    } else if (startDate) {
+      setSelectedRange({ from: startDate, to: undefined })
     } else {
       setSelectedRange(undefined)
     }
-  }, [startDate, endDate])
+  }, [startDate, endDate, isCalendarOpen])
 
   // Handler para seleção no calendário
   const handleCalendarSelect = useCallback(
     (range: DateRange | undefined) => {
+      // Sempre atualizar a seleção visual do calendário
       setSelectedRange(range)
 
       if (range?.from && range?.to) {
+        // Verificar se é o mesmo dia (primeiro clique) - NÃO fechar o calendário
+        const isSameDay =
+          range.from.getFullYear() === range.to.getFullYear() &&
+          range.from.getMonth() === range.to.getMonth() &&
+          range.from.getDate() === range.to.getDate()
+
+        if (isSameDay) {
+          // Primeiro clique: apenas manter a seleção visual, não processar ainda
+          // O calendário permanece aberto esperando o segundo clique
+          // Definir startDate para mostrar no botão, mas sem fechar
+          setStartDate(range.from)
+          setEndDate(null)
+          setSelectedDays(0)
+          return
+        }
+
+        // Segundo clique: range completo selecionado (datas diferentes)
         // Validar período mínimo
         const days = differenceInDays(range.to, range.from) + 1
         if (days < 1) {
@@ -312,11 +339,14 @@ export function SmartEquipmentPricing({
         }
 
         handleDateRangeChange(range.from, range.to, days)
-        setIsCalendarOpen(false) // Fechar calendário após seleção completa
+        setIsCalendarOpen(false) // Fechar calendário apenas após seleção completa
       } else if (range?.from) {
-        // Apenas início selecionado, aguardar fim
-        handleDateRangeChange(range.from, null, 0)
+        // Apenas início selecionado (clique inicial), aguardar fim
+        setStartDate(range.from)
+        setEndDate(null)
+        setSelectedDays(0)
       } else {
+        // Nenhuma seleção
         handleDateRangeChange(null, null, 0)
       }
     },

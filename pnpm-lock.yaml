@@ -5693,6 +5693,13 @@ packages:
       }
     hasBin: true
 
+  baseline-browser-mapping@2.9.5:
+    resolution:
+      {
+        integrity: sha512-D5vIoztZOq1XM54LUdttJVc96ggEsIfju2JBvht06pSzpckp3C7HReun67Bghzrtdsq9XdMGbSSB3v3GhMNmAA==,
+      }
+    hasBin: true
+
   bcryptjs@3.0.3:
     resolution:
       {
@@ -6717,10 +6724,10 @@ packages:
         integrity: sha512-OszpBN7xZX4vWMPJwB9illkN/znA8M36GQqQxi6MNy9axWxhOfJyZZJtSLQCpEFLHP2xK33BiWx9aIuIEXVCcw==,
       }
 
-  electron-to-chromium@1.5.264:
+  electron-to-chromium@1.5.267:
     resolution:
       {
-        integrity: sha512-1tEf0nLgltC3iy9wtlYDlQDc5Rg9lEKVjEmIHJ21rI9OcqkvD45K1oyNIRA4rR1z3LgJ7KeGzEBojVcV6m4qjA==,
+        integrity: sha512-0Drusm6MVRXSOJpGbaSVgcQsuB4hEkMpHXaVstcPmhu5LIedxs1xNK/nIxmQIU/RPC0+1/o0AVZfBTkTNJOdUw==,
       }
 
   embla-carousel-react@8.6.0:
@@ -11982,10 +11989,10 @@ packages:
         integrity: sha512-Dys3N8jFBThD9pNVpPCyUiu6DfWcTBdqWQJIvnAuVaFkGEdrPBJ43070vVbn6sTlLvn2IQK2zFW4FrVIrTo8eQ==,
       }
 
-  terser-webpack-plugin@5.3.14:
+  terser-webpack-plugin@5.3.15:
     resolution:
       {
-        integrity: sha512-vkZjpUjb6OMS7dhV+tILUW6BhpDR7P2L/aQSAv+Uwk+m8KATX9EccViHTJR2qDtACKPIYndLGCyl3FMo+r2LMw==,
+        integrity: sha512-PGkOdpRFK+rb1TzVz+msVhw4YMRT9txLF4kRqvJhGhCM324xuR3REBSHALN+l+sAhKUmz0aotnjp5D+P83mLhQ==,
       }
     engines: { node: '>= 10.13.0' }
     peerDependencies:
@@ -16914,6 +16921,9 @@ snapshots:
 
   baseline-browser-mapping@2.9.2: {}
 
+  baseline-browser-mapping@2.9.5:
+    optional: true
+
   bcryptjs@3.0.3: {}
 
   bidi-js@1.0.3:
@@ -16961,9 +16971,9 @@ snapshots:
 
   browserslist@4.28.1:
     dependencies:
-      baseline-browser-mapping: 2.9.2
+      baseline-browser-mapping: 2.9.5
       caniuse-lite: 1.0.30001759
-      electron-to-chromium: 1.5.264
+      electron-to-chromium: 1.5.267
       node-releases: 2.0.27
       update-browserslist-db: 1.2.2(browserslist@4.28.1)
     optional: true
@@ -17467,7 +17477,7 @@ snapshots:
 
   electron-to-chromium@1.5.244: {}
 
-  electron-to-chromium@1.5.264:
+  electron-to-chromium@1.5.267:
     optional: true
 
   embla-carousel-react@8.6.0(react@19.2.1):
@@ -21129,7 +21139,7 @@ snapshots:
       is-dom-node: 1.0.4
       is-dom-node-list: 1.2.1
 
-  terser-webpack-plugin@5.3.14(esbuild@0.27.1)(webpack@5.102.1(esbuild@0.27.1)):
+  terser-webpack-plugin@5.3.15(esbuild@0.27.1)(webpack@5.102.1(esbuild@0.27.1)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
@@ -21742,7 +21752,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.3.3
       tapable: 2.3.0
-      terser-webpack-plugin: 5.3.14(esbuild@0.27.1)(webpack@5.102.1(esbuild@0.27.1))
+      terser-webpack-plugin: 5.3.15(esbuild@0.27.1)(webpack@5.102.1(esbuild@0.27.1))
       watchpack: 2.4.4
       webpack-sources: 3.3.3
     transitivePeerDependencies:

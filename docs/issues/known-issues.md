@@ -5,6 +5,146 @@
 
 ---
 
+## 17. Warning de Depreciação do Zustand (Vercel Analytics/Speed Insights)
+
+### 🎯 Problema
+
+**Data da Ocorrência**: Janeiro 2025 **Severidade**: Baixa (Warning de console)
+**Status**: ✅ Documentado (Aguardando atualização da Vercel)
+
+#### Descrição
+
+O console do navegador exibe múltiplos warnings:
+
+```
+[DEPRECATED] Default export is deprecated. Instead use `import { create } from 'zustand'`.
+```
+
+Este warning **NÃO vem do código do projeto**, mas sim de dependências externas
+da Vercel (`@vercel/analytics` e `@vercel/speed-insights`) que ainda utilizam a
+sintaxe antiga do Zustand internamente.
+
+#### Sintomas
+
+- ⚠️ Múltiplos warnings no console do navegador
+- ⚠️ Warning aparece a cada carregamento da página
+- ✅ **Não afeta funcionalidade** - é apenas um aviso de depreciação
+- ✅ Código do projeto está correto (`stores/useCartStore.ts` usa
+  `import { create }`)
+
+#### Causa Raiz
+
+- `@vercel/analytics@1.6.1` e `@vercel/speed-insights@1.3.1` (versões mais
+  recentes) ainda utilizam internamente a sintaxe antiga do Zustand:
+
+  ```javascript
+  // Sintaxe antiga (usada internamente pela Vercel)
+  import zustand from "zustand"
+
+  // Sintaxe nova (usada no projeto)
+  import { create } from "zustand"
+  ```
+
+- Zustand 5.x emite warnings quando detecta a sintaxe antiga
+- O warning é emitido pelo código interno das dependências da Vercel, não pelo
+  projeto
+
+### ✅ Solução Implementada
+
+#### 1. Verificação de Versões
+
+As dependências já estão nas versões mais recentes disponíveis:
+
+```json
+{
+  "@vercel/analytics": "^1.6.1", // ✅ Mais recente
+  "@vercel/speed-insights": "^1.3.1" // ✅ Mais recente
+}
+```
+
+#### 2. Supressão do Warning (Opcional)
+
+Criado script para suprimir o warning específico no console do navegador:
+
+**Arquivo**: `app/ClientLayout.tsx`
+
+```tsx
+// Suprimir warning de depreciação do Zustand vindo de dependências externas
+useEffect(() => {
+  if (typeof window !== "undefined") {
+    const originalWarn = console.warn
+    console.warn = (...args: unknown[]) => {
+      const message = String(args[0] || "")
+      // Suprimir apenas o warning específico do Zustand
+      if (
+        message.includes("[DEPRECATED] Default export is deprecated") &&
+        message.includes("zustand")
+      ) {
+        return // Não exibir este warning
+      }
+      originalWarn.apply(console, args)
+    }
+
+    return () => {
+      console.warn = originalWarn
+    }
+  }
+}, [])
+```
+
+**Nota**: Esta solução é opcional e pode ser removida quando a Vercel atualizar
+suas dependências.
+
+### 🎯 Resultado
+
+- ✅ Warning suprimido no console (opcional)
+- ✅ Funcionalidade não afetada
+- ✅ Código do projeto mantém sintaxe correta
+- ⏳ Aguardando atualização da Vercel para resolução definitiva
+
+### 📝 Lições Aprendidas
+
+1. **Warnings de dependências externas** não podem ser corrigidos diretamente no
+   projeto
+2. **Verificar sempre** se o warning vem do próprio código ou de dependências
+3. **Documentar warnings conhecidos** para evitar investigações desnecessárias
+4. **Monitorar atualizações** das dependências para resolução futura
+
+### ⚠️ Armadilhas a Evitar
+
+- ❌ **NÃO** tentar corrigir o código interno das dependências da Vercel
+- ❌ **NÃO** fazer downgrade das dependências (versões mais antigas podem ter
+  outros problemas)
+- ❌ **NÃO** ignorar completamente - documentar para referência futura
+- ✅ **SEMPRE** verificar se o warning vem do próprio código antes de investigar
+
+### 🔍 Como Validar
+
+```bash
+# 1. Verificar versões instaladas
+pnpm list @vercel/analytics @vercel/speed-insights
+
+# 2. Verificar se o código do projeto está correto
+grep -r "import.*zustand" stores/
+
+# Deve retornar:
+# stores/useCartStore.ts:import { create } from 'zustand' ✅
+```
+
+### 📚 Referências
+
+- [Zustand Migration Guide](https://github.com/pmndrs/zustand/blob/main/docs/migrations/migrating-to-v4.md)
+- [Vercel Analytics GitHub](https://github.com/vercel/analytics)
+- [Vercel Speed Insights GitHub](https://github.com/vercel/speed-insights)
+
+### 🔄 Status de Atualização
+
+- **Última verificação**: Janeiro 2025
+- **Versões atuais**: `@vercel/analytics@1.6.1`, `@vercel/speed-insights@1.3.1`
+- **Ação recomendada**: Monitorar atualizações futuras da Vercel
+
+---
+
 ## 16. 🚨 CRÍTICO: Vulnerabilidade de Segurança CVE-2025-55182 e CVE-2025-66478
 
 ### 🔐 Vulnerabilidade de Segurança

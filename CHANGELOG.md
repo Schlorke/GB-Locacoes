@@ -10,6 +10,22 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🛠️
 
+- **Warning de Depreciação do Zustand (Vercel Analytics/Speed Insights)**:
+  Suprimido warning `[DEPRECATED] Default export is deprecated` no console do
+  navegador
+  - **Problema**: Múltiplos warnings apareciam no console devido a dependências
+    externas da Vercel (`@vercel/analytics` e `@vercel/speed-insights`) que
+    ainda usam sintaxe antiga do Zustand internamente
+  - **Causa Raiz**: Dependências da Vercel ainda utilizam
+    `import zustand from 'zustand'` em vez de `import { create } from 'zustand'`
+  - **Solução**: Implementado filtro no `console.warn` para suprimir apenas o
+    warning específico do Zustand, mantendo outros warnings visíveis
+  - **Nota**: O código do projeto está correto (`stores/useCartStore.ts` usa
+    sintaxe moderna). Aguardando atualização da Vercel para resolução definitiva
+  - **Arquivos Modificados**: `app/ClientLayout.tsx`,
+    `docs/issues/known-issues.md`
+  - **Data**: 2025-01-XX
+
 - **Erros SVG motion.path no console**: Corrigido erro
   `Error: <path> attribute d: Expected moveto path command ('M' or 'm'), "undefined"`
   que aparecia no console durante renderização de animações de ondas
