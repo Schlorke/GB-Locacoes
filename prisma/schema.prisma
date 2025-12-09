@@ -252,6 +252,8 @@ model Quote {
   @@index([startDate])
   @@index([endDate])
   @@index([status])
+  @@index([approvedBy])
+  @@index([rejectedBy])
   @@map("quotes")
 }
 

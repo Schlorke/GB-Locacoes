@@ -5,6 +5,183 @@
 
 ---
 
+## 18. Speed Insights da Vercel não exibindo dados
+
+### 🎯 Problema
+
+**Data da Ocorrência**: Janeiro 2025 **Severidade**: Média (Monitoramento não
+funcional) **Status**: 🔍 Investigando
+
+#### Descrição
+
+O Speed Insights da Vercel não está exibindo dados no dashboard, mostrando "No
+data available. Make sure you are using the latest @vercel/speed-insights
+package."
+
+#### Sintomas
+
+- ❌ Dashboard do Speed Insights mostra "No data available"
+- ❌ Mensagem sugere verificar se está usando a versão mais recente
+- ✅ Pacote está instalado (`@vercel/speed-insights@1.3.1`)
+- ✅ Componente está importado e usado no layout (`app/layout.tsx`)
+
+#### Causa Raiz Possível
+
+1. **Speed Insights não habilitado no dashboard da Vercel**: O serviço precisa
+   ser ativado manualmente no dashboard
+2. **Versão desatualizada**: Pode haver versão mais recente disponível
+3. **Bloqueadores de anúncios**: Extensões do navegador podem bloquear o script
+4. **Deploy necessário**: Alterações podem precisar de novo deploy para produção
+5. **Problemas conhecidos da Vercel**: Incidente em 07/12/2025 foi resolvido,
+   mas pode haver resquícios
+
+### ✅ Solução Implementada
+
+#### 1. Verificação de Configuração
+
+**Arquivo**: `app/layout.tsx`
+
+```tsx
+import { SpeedInsights } from "@vercel/speed-insights/next" // ✅ Importado corretamente
+
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="pt-BR">
+      <body>
+        {children}
+        <SpeedInsights /> {/* ✅ Componente adicionado */}
+        <Analytics />
+      </body>
+    </html>
+  )
+}
+```
+
+**Status**: ✅ Configuração correta
+
+#### 2. Verificação de Versão
+
+```json
+{
+  "@vercel/speed-insights": "^1.3.1" // ✅ Versão atual
+}
+```
+
+**Status**: ✅ Versão instalada
+
+### 🔍 Checklist de Troubleshooting
+
+#### 1. Verificar no Dashboard da Vercel
+
+1. Acesse o dashboard da Vercel: https://vercel.com/dashboard
+2. Selecione o projeto `gb-locacoes`
+3. Vá em **Analytics** → **Speed Insights**
+4. Verifique se o Speed Insights está **habilitado**
+5. Se não estiver, clique em **"Enable Speed Insights"** ou **"Implementar"**
+
+#### 2. Verificar no Código
+
+```bash
+# Verificar se o componente está no layout
+grep -r "SpeedInsights" app/layout.tsx
+
+# Deve retornar:
+# import { SpeedInsights } from '@vercel/speed-insights/next'
+# <SpeedInsights />
+```
+
+#### 3. Verificar no Navegador
+
+1. Abra o DevTools (F12)
+2. Vá na aba **Network**
+3. Recarregue a página
+4. Procure por requisições para `vitals.vercel-insights.com` ou
+   `speed-insights.vercel.app`
+5. Se não aparecer, o script pode estar sendo bloqueado
+
+#### 4. Verificar Bloqueadores
+
+- Desative temporariamente bloqueadores de anúncios (uBlock Origin, AdBlock,
+  etc.)
+- Teste em modo anônimo
+- Verifique se há extensões bloqueando scripts de terceiros
+
+#### 5. Fazer Novo Deploy
+
+```bash
+# Após verificar configuração, fazer deploy
+git add .
+git commit -m "fix: verificar configuração Speed Insights"
+git push origin main
+```
+
+#### 6. Aguardar Coleta de Dados
+
+- O Speed Insights precisa de **tráfego real** para coletar dados
+- Pode levar algumas horas ou dias para aparecer dados
+- Dados são coletados apenas em **produção** (não em desenvolvimento local)
+
+### 🎯 Resultado Esperado
+
+- ✅ Speed Insights habilitado no dashboard da Vercel
+- ✅ Script carregando no navegador (verificar Network tab)
+- ✅ Dados aparecendo após tráfego real em produção
+- ✅ Métricas de performance sendo coletadas
+
+### 📝 Lições Aprendidas
+
+1. **Speed Insights precisa ser habilitado no dashboard** - não é automático
+2. **Dados só aparecem em produção** - desenvolvimento local não coleta métricas
+3. **Bloqueadores podem interferir** - testar sem extensões
+4. **Pode levar tempo** - dados não aparecem imediatamente após deploy
+5. **Vercel Agent pode ajudar** - usar "Implementar" no dashboard para
+   configuração automática
+
+### ⚠️ Armadilhas a Evitar
+
+- ❌ **NÃO** assumir que está funcionando apenas porque o código está correto
+- ❌ **NÃO** esperar dados em desenvolvimento local
+- ❌ **NÃO** ignorar bloqueadores de anúncios como causa
+- ✅ **SEMPRE** verificar se está habilitado no dashboard da Vercel
+- ✅ **SEMPRE** fazer deploy após alterações
+
+### 🔍 Como Validar
+
+```bash
+# 1. Verificar versão instalada
+pnpm list @vercel/speed-insights
+
+# 2. Verificar se está no código
+grep -r "SpeedInsights" app/
+
+# 3. Verificar no navegador (DevTools → Network)
+# Procurar por: vitals.vercel-insights.com ou speed-insights.vercel.app
+```
+
+### 📚 Referências
+
+- [Vercel Speed Insights Quickstart](https://vercel.com/docs/speed-insights/quickstart)
+- [Vercel Speed Insights Package](https://vercel.com/docs/speed-insights/package)
+- [Vercel Speed Insights Troubleshooting](https://vercel.com/docs/speed-insights/troubleshooting)
+- [Vercel Agent Installation](https://vercel.com/changelog/vercel-agent-installation)
+- [Vercel Speed Insights GitHub](https://github.com/vercel/speed-insights)
+
+### 🔄 Status de Atualização
+
+- **Última verificação**: Janeiro 2025
+- **Versão atual**: `@vercel/speed-insights@1.3.1`
+- **Ação recomendada**:
+  1. Verificar se está habilitado no dashboard da Vercel
+  2. Fazer novo deploy se necessário
+  3. Aguardar coleta de dados em produção
+  4. Verificar Network tab no navegador para confirmar script carregando
+
+---
+
 ## 17. Warning de Depreciação do Zustand (Vercel Analytics/Speed Insights)
 
 ### 🎯 Problema

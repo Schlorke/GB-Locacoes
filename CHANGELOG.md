@@ -8,6 +8,25 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added ✨
+
+- **Otimização de Performance do Banco de Dados (Supabase)**: Adicionados
+  índices em foreign keys não indexadas na tabela `quotes`
+  - **Problema Identificado**: Supabase Database Linter detectou 2 foreign keys
+    sem índices (`quotes_approvedBy_fkey` e `quotes_rejectedBy_fkey`) causando
+    suboptimal query performance
+  - **Solução**: Criados índices `quotes_approvedBy_idx` e
+    `quotes_rejectedBy_idx` para otimizar JOINs e filtros
+  - **Impacto**: Melhoria significativa na performance de queries envolvendo
+    aprovação/rejeição de orçamentos
+  - **Arquivos Criados**:
+    - `prisma/migrations/20251208_fix_supabase_performance_issues.sql`
+    - `scripts/execute-supabase-performance-fix.js`
+    - `docs/guides/supabase-performance-analysis-december-2025.md`
+  - **Arquivos Modificados**: `prisma/schema.prisma`, `package.json`
+  - **Comando**: `pnpm migrate:supabase-performance`
+  - **Data**: 2025-12-08
+
 ### Fixed 🛠️
 
 - **Warning de Depreciação do Zustand (Vercel Analytics/Speed Insights)**:
