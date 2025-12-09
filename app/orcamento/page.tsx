@@ -20,6 +20,8 @@ import {
 import { formatCurrency } from '@/lib/utils'
 import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
 import { useCartStore, type CartItem } from '@/stores/useCartStore'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Loader2,
@@ -100,6 +102,14 @@ function QuotePage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const hasSyncedCartPricing = useRef(false)
+
+  // Helper para formatar datas (trata Date ou string do localStorage)
+  const formatDate = useCallback((date: Date | string | undefined): string => {
+    if (!date) return ''
+    const dateObj = typeof date === 'string' ? new Date(date) : date
+    if (isNaN(dateObj.getTime())) return ''
+    return format(dateObj, 'dd/MM/yyyy', { locale: ptBR })
+  }, [])
 
   // Função para formatar telefone brasileiro
   const formatPhoneNumber = (value: string) => {
@@ -894,10 +904,42 @@ function QuotePage() {
                                         )
                                       })()}
                                     </div>
+                                    {/* Informações de datas e finais de semana */}
+                                    {(equipment.startDate ||
+                                      equipment.endDate ||
+                                      equipment.includeWeekends) && (
+                                      <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-1.5 sm:gap-x-3 sm:gap-y-1 mt-3">
+                                        {equipment.startDate &&
+                                          equipment.endDate && (
+                                            <div className="flex items-center gap-2 text-xs text-gray-600">
+                                              <span className="font-medium text-gray-700">
+                                                Período:
+                                              </span>
+                                              <span>
+                                                {formatDate(
+                                                  equipment.startDate
+                                                )}{' '}
+                                                até{' '}
+                                                {formatDate(equipment.endDate)}
+                                              </span>
+                                            </div>
+                                          )}
+                                        {equipment.includeWeekends && (
+                                          <div className="flex items-center gap-1.5 text-xs">
+                                            <span className="text-green-600 font-semibold">
+                                              ✓
+                                            </span>
+                                            <span className="text-gray-600 font-medium">
+                                              Incluir finais de semana
+                                            </span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
                                   </div>
 
                                   {/* Controles - Layout Responsivo */}
-                                  <div className="flex flex-row gap-4 max-[1170px]:flex-col">
+                                  <div className="flex flex-row gap-4 max-[1170px]:flex-col mt-4">
                                     {/* Controle de Quantidade */}
                                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                                       <Label className="text-sm font-medium text-gray-700 text-center sm:text-left sm:w-20">
@@ -1219,7 +1261,7 @@ function QuotePage() {
                     {selectedEquipments.map((equipment, index) => (
                       <div
                         key={`summary-${equipment.equipmentId}-${index}`}
-                        className="space-y-1 pb-3 border-b border-gray-100 last:border-b-0"
+                        className="space-y-1 pb-3"
                       >
                         <div className="flex justify-between items-start">
                           <div className="flex-1 pr-2">
@@ -1286,6 +1328,29 @@ function QuotePage() {
                                 )
                               })()}
                             </div>
+                            {/* Informações de datas e finais de semana */}
+                            {(equipment.startDate ||
+                              equipment.endDate ||
+                              equipment.includeWeekends) && (
+                              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-1.5 sm:gap-x-3 sm:gap-y-1 mt-1">
+                                {equipment.startDate && equipment.endDate && (
+                                  <div className="text-xs text-gray-600">
+                                    {formatDate(equipment.startDate)} até{' '}
+                                    {formatDate(equipment.endDate)}
+                                  </div>
+                                )}
+                                {equipment.includeWeekends && (
+                                  <div className="flex items-center gap-1.5 text-xs">
+                                    <span className="text-green-600 font-semibold">
+                                      ✓
+                                    </span>
+                                    <span className="text-gray-600 font-medium">
+                                      Incluir finais de semana
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            )}
                           </div>
                           <div className="text-right">
                             {(() => {
