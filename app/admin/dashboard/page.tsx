@@ -13,6 +13,11 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart'
+import {
   BarChart3,
   Package,
   FileText,
@@ -28,10 +33,26 @@ import {
   Building,
   User,
   Activity,
+  Target,
+  Percent,
+  TrendingDown,
+  Lightbulb,
 } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { motion } from 'framer-motion'
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  Cell,
+  Pie,
+  PieChart,
+  XAxis,
+  YAxis,
+  Legend,
+} from 'recharts'
 
 interface DashboardStats {
   totalEquipments: number
@@ -44,6 +65,28 @@ interface DashboardStats {
   completedQuotes: number
   totalRevenue: number
   monthlyRevenue: number
+  quotesTrend?: Array<{
+    date: string
+    fullDate: string
+    count: number
+  }>
+  equipmentByCategory?: Array<{
+    categoryName: string
+    count: number
+    available: number
+    categoryId: string
+    bgColor: string
+    fontColor: string
+  }>
+  topEquipments?: Array<{
+    id: string
+    name: string
+    requestCount: number
+    category: string
+  }>
+  utilizationRate?: number
+  conversionRate?: number
+  averageTicket?: number
 }
 
 interface RecentQuote {
@@ -92,22 +135,16 @@ const mainStatsCards = [
     subtitle: (stats: DashboardStats | null) =>
       `${stats?.availableEquipments || 0} disponíveis`,
     icon: Package,
-    gradient: 'from-blue-500 to-blue-600',
-    bgColors: 'from-blue-400/12 via-transparent to-black/15',
-    bgColors2: 'from-transparent via-blue-500/6 to-blue-700/8',
-    textColors: 'text-blue-100',
-    subtitleColors: 'text-blue-200',
+    iconBg: 'bg-blue-50',
+    iconColor: 'text-blue-600',
   },
   {
     title: 'Categorias',
     value: (stats: DashboardStats | null) => stats?.totalCategories || 0,
     subtitle: () => 'Organizadas',
     icon: BarChart3,
-    gradient: 'from-green-500 to-green-600',
-    bgColors: 'from-green-400/12 via-transparent to-black/15',
-    bgColors2: 'from-transparent via-green-500/6 to-green-700/8',
-    textColors: 'text-green-100',
-    subtitleColors: 'text-green-200',
+    iconBg: 'bg-green-50',
+    iconColor: 'text-green-600',
   },
   {
     title: 'Orçamentos',
@@ -115,23 +152,22 @@ const mainStatsCards = [
     subtitle: (stats: DashboardStats | null) =>
       `${stats?.pendingQuotes || 0} pendentes`,
     icon: FileText,
-    gradient: 'from-purple-500 to-purple-600',
-    bgColors: 'from-purple-400/12 via-transparent to-black/15',
-    bgColors2: 'from-transparent via-purple-500/6 to-purple-700/8',
-    textColors: 'text-purple-100',
-    subtitleColors: 'text-purple-200',
+    iconBg: 'bg-purple-50',
+    iconColor: 'text-purple-600',
   },
   {
     title: 'Receita Mensal',
-    value: (stats: DashboardStats | null) =>
-      `R$ ${((stats?.monthlyRevenue || 0) / 100).toFixed(0)}`,
+    value: (stats: DashboardStats | null) => {
+      const revenue = Number(stats?.monthlyRevenue || 0)
+      return `R$ ${revenue.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      })}`
+    },
     subtitle: () => 'Este mês',
     icon: DollarSign,
-    gradient: 'from-orange-500 to-orange-600',
-    bgColors: 'from-orange-400/12 via-transparent to-black/15',
-    bgColors2: 'from-transparent via-orange-500/6 to-orange-700/8',
-    textColors: 'text-orange-100',
-    subtitleColors: 'text-orange-200',
+    iconBg: 'bg-orange-50',
+    iconColor: 'text-orange-600',
   },
 ]
 
@@ -212,6 +248,55 @@ export default function AdminDashboard() {
     fetchDashboardData()
   }, [])
 
+  // Saudação contextual
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return 'Bom dia'
+    if (hour < 18) return 'Boa tarde'
+    return 'Boa noite'
+  }
+
+  // Cores para gráficos
+  const chartColors = {
+    orange: '#ea580c',
+    orangeLight: '#f97316',
+    green: '#22c55e',
+    greenDark: '#16a34a',
+    yellow: '#eab308',
+    yellowDark: '#ca8a04',
+    red: '#ef4444',
+    redDark: '#dc2626',
+    blue: '#3b82f6',
+    blueDark: '#2563eb',
+    purple: '#8b5cf6',
+  }
+
+  // Dados para gráfico de rosca (status) - Usando variações de laranja
+  const statusChartData = stats
+    ? [
+        {
+          name: 'Pendentes',
+          value: stats.pendingQuotes,
+          color: '#fdba74', // orange-300
+        },
+        {
+          name: 'Aprovados',
+          value: stats.approvedQuotes,
+          color: '#f97316', // orange-500
+        },
+        {
+          name: 'Rejeitados',
+          value: stats.rejectedQuotes,
+          color: '#9a3412', // orange-800
+        },
+        {
+          name: 'Concluídos',
+          value: stats.completedQuotes,
+          color: '#ea580c', // orange-600
+        },
+      ].filter((item) => item.value > 0)
+    : []
+
   const fetchDashboardData = async () => {
     setIsLoading(true)
     setRecentQuotes([])
@@ -286,9 +371,14 @@ export default function AdminDashboard() {
             <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
             <div className="relative z-10">
-              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
-                Dashboard Administrativo
-              </h1>
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-3xl font-bold text-white drop-shadow-sm">
+                  Dashboard Executivo
+                </h1>
+                <Badge className="bg-white/20 text-white border-white/30">
+                  {getGreeting()}
+                </Badge>
+              </div>
               <p className="text-orange-50 mb-4 font-medium">
                 Visão geral completa do sistema de locação de equipamentos
               </p>
@@ -324,36 +414,29 @@ export default function AdminDashboard() {
                   }}
                   className="group"
                 >
-                  <Card
-                    className={`relative overflow-hidden border-0 bg-gradient-to-br ${card.gradient} text-white shadow-xl hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02]`}
-                  >
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${card.bgColors}`}
-                    ></div>
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-tr ${card.bgColors2}`}
-                    ></div>
+                  <Card className="relative overflow-hidden border border-gray-100 bg-gradient-to-br from-white via-white to-slate-50 text-gray-900 shadow-lg hover:shadow-xl transition-all duration-300 h-full hover:scale-[1.02]">
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-100/60 via-white to-slate-50/40"></div>
                     <CardContent className="relative z-10 p-6">
                       <div className="flex items-center justify-between">
                         <div className="min-w-0 flex-1">
-                          <p
-                            className={`${card.textColors} text-xs sm:text-sm truncate mb-1`}
-                          >
+                          <p className="text-xs sm:text-sm text-gray-500 truncate mb-1">
                             {card.title}
                           </p>
-                          <p className="text-2xl sm:text-3xl lg:text-4xl font-bold my-1">
+                          <p className="text-2xl sm:text-3xl lg:text-4xl font-bold my-1 text-gray-900">
                             {typeof card.value(stats) === 'string'
                               ? card.value(stats)
                               : card.value(stats)}
                           </p>
-                          <p
-                            className={`${card.subtitleColors} text-xs sm:text-sm font-medium`}
-                          >
+                          <p className="text-xs sm:text-sm font-medium text-gray-600">
                             {card.subtitle(stats)}
                           </p>
                         </div>
-                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center flex-shrink-0">
-                          <IconComponent className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+                        <div
+                          className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center flex-shrink-0 shadow-inner ${card.iconBg || 'bg-gray-100'}`}
+                        >
+                          <IconComponent
+                            className={`h-6 w-6 sm:h-8 sm:w-8 ${card.iconColor || 'text-orange-600'}`}
+                          />
                         </div>
                       </div>
                     </CardContent>
@@ -416,6 +499,548 @@ export default function AdminDashboard() {
               )
             })}
           </div>
+        </motion.div>
+
+        {/* Gráficos de Performance */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mb-8"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            {/* Gráfico de Área - Tendência de Orçamentos */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.3, duration: 0.3, ease: 'easeOut' }}
+            >
+              <Card className="relative h-full overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm flex flex-col">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                <CardHeader className="relative z-10">
+                  <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                      <TrendingUp className="h-5 w-5 text-white" />
+                    </div>
+                    Tendência de Orçamentos (7 dias)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="relative z-10 flex-1">
+                  {stats?.quotesTrend && stats.quotesTrend.length > 0 ? (
+                    <ChartContainer
+                      config={{
+                        count: {
+                          label: 'Orçamentos',
+                          color: chartColors.orange,
+                        },
+                      }}
+                      className="h-[280px] md:h-[320px]"
+                    >
+                      <AreaChart data={stats.quotesTrend}>
+                        <defs>
+                          <linearGradient
+                            id="colorCount"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1"
+                          >
+                            <stop
+                              offset="5%"
+                              stopColor={chartColors.orange}
+                              stopOpacity={0.8}
+                            />
+                            <stop
+                              offset="95%"
+                              stopColor={chartColors.orangeLight}
+                              stopOpacity={0.1}
+                            />
+                          </linearGradient>
+                        </defs>
+                        <XAxis
+                          dataKey="date"
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={8}
+                          tickFormatter={(value) => value}
+                        />
+                        <YAxis
+                          tickLine={false}
+                          axisLine={false}
+                          tickMargin={8}
+                          allowDecimals={false}
+                        />
+                        <ChartTooltip
+                          content={
+                            <ChartTooltipContent
+                              formatter={(value) => [
+                                `${value} orçamentos`,
+                                'Orçamentos',
+                              ]}
+                            />
+                          }
+                        />
+                        <Area
+                          type="monotone"
+                          dataKey="count"
+                          stroke={chartColors.orange}
+                          strokeWidth={2}
+                          fill="url(#colorCount)"
+                        />
+                      </AreaChart>
+                    </ChartContainer>
+                  ) : (
+                    <div className="h-[280px] md:h-[320px] flex items-center justify-center text-gray-400">
+                      Sem dados disponíveis
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Gráfico de Rosca - Distribuição de Status */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.35, duration: 0.3, ease: 'easeOut' }}
+            >
+              <Card className="relative h-full overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm flex flex-col">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                <CardHeader className="relative z-10">
+                  <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                      <Target className="h-5 w-5 text-white" />
+                    </div>
+                    Distribuição de Status
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="relative z-10 flex-1 flex flex-col">
+                  {statusChartData.length > 0 ? (
+                    <div className="flex flex-col items-center flex-1">
+                      <ChartContainer
+                        config={statusChartData.reduce(
+                          (acc, item) => ({
+                            ...acc,
+                            [item.name]: {
+                              label: item.name,
+                              color: item.color,
+                            },
+                          }),
+                          {}
+                        )}
+                        className="h-[280px] md:h-[320px]"
+                      >
+                        <PieChart>
+                          <Pie
+                            data={statusChartData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={100}
+                            paddingAngle={2}
+                            dataKey="value"
+                          >
+                            {statusChartData.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <ChartTooltip
+                            content={
+                              <ChartTooltipContent
+                                formatter={(value) => [
+                                  `${value} orçamentos`,
+                                  '',
+                                ]}
+                              />
+                            }
+                          />
+                          <Legend
+                            verticalAlign="bottom"
+                            height={36}
+                            formatter={(value) => value}
+                          />
+                        </PieChart>
+                      </ChartContainer>
+                      <div className="mt-4 text-center">
+                        <p className="text-2xl font-bold text-gray-900">
+                          {stats?.totalQuotes || 0}
+                        </p>
+                        <p className="text-sm text-gray-500">Total</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="h-[280px] md:h-[320px] flex items-center justify-center text-gray-400">
+                      Sem dados disponíveis
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Métricas de Saúde do Negócio */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mb-8"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Taxa de Utilização da Frota */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.4, duration: 0.3, ease: 'easeOut' }}
+            >
+              <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                <CardContent className="relative z-10 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">
+                        Taxa de Utilização
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stats?.utilizationRate?.toFixed(1) || 0}%
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                      <Activity className="h-6 w-6 text-green-600" />
+                    </div>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-gradient-to-r from-green-500 to-green-600 h-2.5 rounded-full transition-all duration-500"
+                      style={{
+                        width: `${Math.min(stats?.utilizationRate || 0, 100)}%`,
+                      }}
+                    ></div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    {stats?.availableEquipments || 0} de{' '}
+                    {stats?.totalEquipments || 0} disponíveis
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Taxa de Conversão */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.45, duration: 0.3, ease: 'easeOut' }}
+            >
+              <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                <CardContent className="relative z-10 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">
+                        Taxa de Conversão
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stats?.conversionRate?.toFixed(1) || 0}%
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                      <Percent className="h-6 w-6 text-blue-600" />
+                    </div>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-gradient-to-r from-blue-500 to-blue-600 h-2.5 rounded-full transition-all duration-500"
+                      style={{
+                        width: `${Math.min(stats?.conversionRate || 0, 100)}%`,
+                      }}
+                    ></div>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    {(stats?.approvedQuotes || 0) +
+                      (stats?.completedQuotes || 0)}{' '}
+                    de {stats?.totalQuotes || 0} orçamentos
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+
+            {/* Ticket Médio */}
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.3, ease: 'easeOut' }}
+            >
+              <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+                <CardContent className="relative z-10 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Ticket Médio</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        R${' '}
+                        {stats?.averageTicket?.toLocaleString('pt-BR', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }) || '0,00'}
+                      </p>
+                    </div>
+                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                      <DollarSign className="h-6 w-6 text-orange-600" />
+                    </div>
+                  </div>
+                  <div className="w-full h-2.5 mb-2"></div>
+                  <div className="flex items-center gap-2 text-xs text-gray-500 mt-2">
+                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    <span>Valor médio por orçamento</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Top Equipamentos Mais Solicitados */}
+        {stats?.topEquipments && stats.topEquipments.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55 }}
+            className="mb-8"
+          >
+            <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <CardHeader className="relative z-10">
+                <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                    <Package className="h-5 w-5 text-white" />
+                  </div>
+                  Equipamentos Mais Solicitados
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="relative z-10">
+                <div className="space-y-4">
+                  {stats.topEquipments.map((equipment, index) => {
+                    const maxCount = stats.topEquipments?.[0]?.requestCount || 1
+                    const percentage = (equipment.requestCount / maxCount) * 100
+
+                    return (
+                      <motion.div
+                        key={equipment.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{
+                          delay: 0.55 + index * 0.1,
+                          duration: 0.3,
+                        }}
+                        className="space-y-2"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1 min-w-0">
+                            <p className="font-semibold text-gray-900 truncate">
+                              {equipment.name}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {equipment.category}
+                            </p>
+                          </div>
+                          <div className="ml-4 text-right">
+                            <p className="font-bold text-gray-900">
+                              {equipment.requestCount}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              solicitações
+                            </p>
+                          </div>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500"
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
+        {/* Distribuição por Categoria */}
+        {stats?.equipmentByCategory && stats.equipmentByCategory.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mb-8"
+          >
+            <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <CardHeader className="relative z-10">
+                <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+                    <BarChart3 className="h-5 w-5 text-white" />
+                  </div>
+                  Distribuição por Categoria
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="relative z-10">
+                <ChartContainer
+                  config={stats.equipmentByCategory.reduce(
+                    (acc, item) => ({
+                      ...acc,
+                      [item.categoryName]: {
+                        label: item.categoryName,
+                        color: item.bgColor || chartColors.blue,
+                      },
+                    }),
+                    {}
+                  )}
+                  className="h-[400px]"
+                >
+                  <BarChart data={stats.equipmentByCategory} layout="vertical">
+                    <XAxis type="number" />
+                    <YAxis
+                      dataKey="categoryName"
+                      type="category"
+                      width={120}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <ChartTooltip
+                      content={
+                        <ChartTooltipContent
+                          formatter={(value, name) => [
+                            `${value} equipamentos`,
+                            name,
+                          ]}
+                        />
+                      }
+                    />
+                    <Bar dataKey="count" radius={[0, 8, 8, 0]}>
+                      {stats.equipmentByCategory.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={entry.bgColor || chartColors.blue}
+                        />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ChartContainer>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
+        {/* Insights e Oportunidades */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.65 }}
+          className="mb-8"
+        >
+          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 via-transparent to-orange-100/30"></div>
+            <CardHeader className="relative z-10">
+              <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                  <Lightbulb className="h-5 w-5 text-white" />
+                </div>
+                Insights e Oportunidades
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="relative z-10">
+              <div className="space-y-4">
+                {stats?.pendingQuotes && stats.pendingQuotes > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.65, duration: 0.3 }}
+                    className="flex items-start gap-3 p-4 bg-yellow-50 rounded-lg border border-yellow-200"
+                  >
+                    <AlertTriangle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <p className="font-semibold text-yellow-900">
+                        {stats.pendingQuotes} orçamento
+                        {stats.pendingQuotes > 1 ? 's' : ''} pendente
+                        {stats.pendingQuotes > 1 ? 's' : ''} aguardando análise
+                      </p>
+                      <p className="text-sm text-yellow-700 mt-1">
+                        Revise e processe os orçamentos pendentes para melhorar
+                        a taxa de conversão.
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+                {stats?.conversionRate &&
+                  stats.conversionRate < 50 &&
+                  stats.totalQuotes > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.7, duration: 0.3 }}
+                      className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg border border-blue-200"
+                    >
+                      <TrendingDown className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="font-semibold text-blue-900">
+                          Taxa de conversão abaixo do ideal
+                        </p>
+                        <p className="text-sm text-blue-700 mt-1">
+                          Considere revisar os critérios de aprovação ou
+                          melhorar a comunicação com os clientes.
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                {stats?.utilizationRate &&
+                  stats.utilizationRate < 60 &&
+                  stats.totalEquipments > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.75, duration: 0.3 }}
+                      className="flex items-start gap-3 p-4 bg-green-50 rounded-lg border border-green-200"
+                    >
+                      <Activity className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="font-semibold text-green-900">
+                          Oportunidade de otimização de estoque
+                        </p>
+                        <p className="text-sm text-green-700 mt-1">
+                          Alguns equipamentos podem estar ociosos. Considere
+                          ajustar o mix de produtos ou estratégias de marketing.
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                {(!stats?.pendingQuotes || stats.pendingQuotes === 0) &&
+                  stats?.conversionRate &&
+                  stats.conversionRate >= 50 &&
+                  stats?.utilizationRate &&
+                  stats.utilizationRate >= 60 && (
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.65, duration: 0.3 }}
+                      className="flex items-start gap-3 p-4 bg-green-50 rounded-lg border border-green-200"
+                    >
+                      <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="font-semibold text-green-900">
+                          Sistema operando em excelência
+                        </p>
+                        <p className="text-sm text-green-700 mt-1">
+                          Todas as métricas estão dentro dos parâmetros ideais.
+                          Continue monitorando para manter o desempenho.
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+              </div>
+            </CardContent>
+          </Card>
         </motion.div>
 
         {/* Ações Rápidas - Com stagger effect igual página equipamentos */}
@@ -497,7 +1122,7 @@ export default function AdminDashboard() {
             <CardHeader className="relative z-10">
               <div className="flex flex-col gap-4">
                 <CardTitle className="text-xl font-bold text-gray-900 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
                     <FileText className="h-5 w-5 text-white" />
                   </div>
                   Orçamentos Recentes
