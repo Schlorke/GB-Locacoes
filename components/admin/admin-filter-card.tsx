@@ -69,45 +69,43 @@ export function AdminFilterCard({
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
       <CardContent className="relative z-10 p-4 sm:p-6">
-        <div className="flex flex-col xl:flex-row gap-3 items-center justify-between">
-          {/* Left Side - Search and Filters */}
-          <div className="flex flex-col md:flex-row gap-3 flex-1 w-full items-center">
-            {/* Search Input */}
-            {onSearchChange && (
-              <div className="relative flex-1 w-full md:w-auto">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder={searchPlaceholder}
-                  value={searchValue}
-                  onChange={(e) => onSearchChange(e.target.value)}
-                  className="pl-9 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 transition-all duration-200"
-                  style={{
-                    boxShadow:
-                      '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                  }}
-                />
-              </div>
-            )}
-
-            {/* Filters Row */}
-            <div className="w-full md:w-auto">
-              {/* Filter Selects */}
-              <FilterSelectGroup filters={filters} gap="sm" />
+        <div className="flex flex-col lg:flex-row gap-3 items-center min-w-0">
+          {/* Search Input - Ocupa mais espaço */}
+          {onSearchChange && (
+            <div className="relative w-full lg:flex-1 lg:min-w-0">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                placeholder={searchPlaceholder}
+                value={searchValue}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="pl-9 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 transition-all duration-200 h-10"
+                style={{
+                  boxShadow:
+                    '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                }}
+              />
             </div>
-          </div>
+          )}
 
-          {/* Reset Button */}
-          <div className="flex items-center justify-center flex-shrink-0">
-            <FilterResetButton
-              onClick={handleReset}
-              title="Resetar filtros"
-              size="md"
+          {/* Filters Row - Ao lado do search */}
+          <div className="w-full lg:w-auto min-w-0 flex-shrink-0">
+            {/* Filter Selects */}
+            <FilterSelectGroup
+              filters={filters}
+              gap="sm"
+              resetButton={
+                <FilterResetButton
+                  onClick={handleReset}
+                  title="Resetar filtros"
+                  size="md"
+                />
+              }
             />
           </div>
 
-          {/* Right Side - Action Buttons */}
+          {/* Right Side - Action Buttons (se houver, em nova linha em mobile) */}
           {actionButtons && (
-            <div className="flex items-center justify-center w-full xl:w-auto">
+            <div className="flex items-center justify-center w-full lg:w-auto lg:self-center flex-shrink-0">
               {actionButtons}
             </div>
           )}

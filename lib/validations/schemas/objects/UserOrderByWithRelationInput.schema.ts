@@ -8,7 +8,8 @@ import { QuoteOrderByRelationAggregateInputObjectSchema as QuoteOrderByRelationA
 import { rentalsOrderByRelationAggregateInputObjectSchema as rentalsOrderByRelationAggregateInputObjectSchema } from './rentalsOrderByRelationAggregateInput.schema';
 import { SessionOrderByRelationAggregateInputObjectSchema as SessionOrderByRelationAggregateInputObjectSchema } from './SessionOrderByRelationAggregateInput.schema';
 import { AddressOrderByRelationAggregateInputObjectSchema as AddressOrderByRelationAggregateInputObjectSchema } from './AddressOrderByRelationAggregateInput.schema';
-import { CartOrderByWithRelationInputObjectSchema as CartOrderByWithRelationInputObjectSchema } from './CartOrderByWithRelationInput.schema'
+import { CartOrderByWithRelationInputObjectSchema as CartOrderByWithRelationInputObjectSchema } from './CartOrderByWithRelationInput.schema';
+import { AuditLogOrderByRelationAggregateInputObjectSchema as AuditLogOrderByRelationAggregateInputObjectSchema } from './AuditLogOrderByRelationAggregateInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
@@ -30,7 +31,8 @@ const makeSchema = () => z.object({
   addresses: z.lazy(() => AddressOrderByRelationAggregateInputObjectSchema).optional(),
   cart: z.lazy(() => CartOrderByWithRelationInputObjectSchema).optional(),
   approvedQuotes: z.lazy(() => QuoteOrderByRelationAggregateInputObjectSchema).optional(),
-  rejectedQuotes: z.lazy(() => QuoteOrderByRelationAggregateInputObjectSchema).optional()
+  rejectedQuotes: z.lazy(() => QuoteOrderByRelationAggregateInputObjectSchema).optional(),
+  auditLogs: z.lazy(() => AuditLogOrderByRelationAggregateInputObjectSchema).optional()
 }).strict();
 export const UserOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.UserOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.UserOrderByWithRelationInput>;
 export const UserOrderByWithRelationInputObjectZodSchema = makeSchema();

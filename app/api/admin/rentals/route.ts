@@ -1,0 +1,266 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
+import { z } from 'zod'
+import Decimal from 'decimal.js'
+
+const CreateRentalSchema = z.object({
+  userId: z.string(),
+  quoteId: z.string().optional(),
+  startDate: z.string().transform((str) => new Date(str)),
+  endDate: z.string().transform((str) => new Date(str)),
+  items: z.array(
+    z.object({
+      equipmentId: z.string(),
+      quantity: z.number().int().positive(),
+      days: z.number().int().positive(),
+      pricePerDay: z
+        .number()
+        .or(z.string())
+        .transform((val) => new Decimal(val)),
+    })
+  ),
+  notes: z.string().optional(),
+})
+
+// GET - Listar locações com filtros
+export async function GET(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const status = searchParams.get('status')
+    const userId = searchParams.get('userId')
+    const startDate = searchParams.get('startDate')
+    const endDate = searchParams.get('endDate')
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '50')
+    const skip = (page - 1) * limit
+
+    const where: {
+      status?: string
+      userid?: string
+      startdate?: { gte?: Date; lte?: Date }
+    } = {}
+    if (status) where.status = status
+    if (userId) where.userid = userId
+    if (startDate || endDate) {
+      where.startdate = {}
+      if (startDate) where.startdate.gte = new Date(startDate)
+      if (endDate) where.startdate.lte = new Date(endDate)
+    }
+
+    const [rentals, total] = await Promise.all([
+      prisma.rentals.findMany({
+        where,
+        include: {
+          users: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+            },
+          },
+          rental_items: {
+            include: {
+              equipments: {
+                select: {
+                  id: true,
+                  name: true,
+                  images: true,
+                },
+              },
+            },
+          },
+          quote: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          payments: {
+            select: {
+              id: true,
+              amount: true,
+              status: true,
+              method: true,
+              paidAt: true,
+            },
+          },
+        },
+        orderBy: {
+          createdat: 'desc',
+        },
+        skip,
+        take: limit,
+      }),
+      prisma.rentals.count({ where }),
+    ])
+
+    return NextResponse.json({
+      rentals,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    })
+  } catch (error) {
+    console.error('Error fetching rentals:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+// POST - Criar nova locação
+export async function POST(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const body = await request.json()
+    const validatedData = CreateRentalSchema.parse(body)
+
+    // Verificar disponibilidade dos equipamentos
+    for (const item of validatedData.items) {
+      const equipment = await prisma.equipment.findUnique({
+        where: { id: item.equipmentId },
+      })
+
+      if (!equipment) {
+        return NextResponse.json(
+          { error: `Equipamento não encontrado: ${item.equipmentId}` },
+          { status: 400 }
+        )
+      }
+
+      // Verificar disponibilidade no período
+      const conflictingRentals = await prisma.rental_items.findMany({
+        where: {
+          equipmentid: item.equipmentId,
+          rentals: {
+            status: {
+              in: ['PENDING', 'ACTIVE', 'OVERDUE'],
+            },
+            OR: [
+              {
+                AND: [
+                  { startdate: { lte: validatedData.endDate } },
+                  { enddate: { gte: validatedData.startDate } },
+                ],
+              },
+            ],
+          },
+        },
+        include: {
+          rentals: true,
+        },
+      })
+
+      const totalRented = conflictingRentals.reduce(
+        (sum, ri) => sum + ri.quantity,
+        0
+      )
+      const available = (equipment.maxStock || 1) - totalRented
+
+      if (available < item.quantity) {
+        return NextResponse.json(
+          {
+            error: `Equipamento ${equipment.name} não tem estoque suficiente. Disponível: ${available}, Solicitado: ${item.quantity}`,
+          },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Calcular total
+    let total = new Decimal(0)
+    for (const item of validatedData.items) {
+      const itemTotal = item.pricePerDay.times(item.days).times(item.quantity)
+      total = total.plus(itemTotal)
+    }
+
+    // Criar locação
+    const rental = await prisma.rentals.create({
+      data: {
+        id: `rental_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        userid: validatedData.userId,
+        quoteId: validatedData.quoteId,
+        startdate: validatedData.startDate,
+        enddate: validatedData.endDate,
+        total: total.toNumber(),
+        status: 'PENDING',
+        notes: validatedData.notes,
+        rental_items: {
+          create: validatedData.items.map((item) => ({
+            id: `rental_item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            equipmentid: item.equipmentId,
+            quantity: item.quantity,
+            priceperday: item.pricePerDay.toNumber(),
+            totaldays: item.days,
+            totalprice: item.pricePerDay
+              .times(item.days)
+              .times(item.quantity)
+              .toNumber(),
+          })),
+        },
+      },
+      include: {
+        users: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        rental_items: {
+          include: {
+            equipments: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    })
+
+    // Se veio de um orçamento, atualizar o orçamento
+    if (validatedData.quoteId) {
+      await prisma.quote.update({
+        where: { id: validatedData.quoteId },
+        data: {
+          convertedToRentalId: rental.id,
+          status: 'COMPLETED',
+        },
+      })
+    }
+
+    return NextResponse.json({ rental }, { status: 201 })
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Validation error', details: error.issues },
+        { status: 400 }
+      )
+    }
+    console.error('Error creating rental:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+

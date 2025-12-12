@@ -1,0 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { VehicleWhereInputObjectSchema as VehicleWhereInputObjectSchema } from './objects/VehicleWhereInput.schema';
+import { VehicleOrderByWithAggregationInputObjectSchema as VehicleOrderByWithAggregationInputObjectSchema } from './objects/VehicleOrderByWithAggregationInput.schema';
+import { VehicleScalarWhereWithAggregatesInputObjectSchema as VehicleScalarWhereWithAggregatesInputObjectSchema } from './objects/VehicleScalarWhereWithAggregatesInput.schema';
+import { VehicleScalarFieldEnumSchema } from './enums/VehicleScalarFieldEnum.schema';
+import { VehicleCountAggregateInputObjectSchema as VehicleCountAggregateInputObjectSchema } from './objects/VehicleCountAggregateInput.schema';
+import { VehicleMinAggregateInputObjectSchema as VehicleMinAggregateInputObjectSchema } from './objects/VehicleMinAggregateInput.schema';
+import { VehicleMaxAggregateInputObjectSchema as VehicleMaxAggregateInputObjectSchema } from './objects/VehicleMaxAggregateInput.schema';
+import { VehicleAvgAggregateInputObjectSchema as VehicleAvgAggregateInputObjectSchema } from './objects/VehicleAvgAggregateInput.schema';
+import { VehicleSumAggregateInputObjectSchema as VehicleSumAggregateInputObjectSchema } from './objects/VehicleSumAggregateInput.schema';
+
+export const VehicleGroupBySchema: z.ZodType<Prisma.VehicleGroupByArgs> = z.object({ where: VehicleWhereInputObjectSchema.optional(), orderBy: z.union([VehicleOrderByWithAggregationInputObjectSchema, VehicleOrderByWithAggregationInputObjectSchema.array()]).optional(), having: VehicleScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(VehicleScalarFieldEnumSchema), _count: z.union([ z.literal(true), VehicleCountAggregateInputObjectSchema ]).optional(), _min: VehicleMinAggregateInputObjectSchema.optional(), _max: VehicleMaxAggregateInputObjectSchema.optional(), _avg: VehicleAvgAggregateInputObjectSchema.optional(), _sum: VehicleSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.VehicleGroupByArgs>;
+
+export const VehicleGroupByZodSchema = z.object({ where: VehicleWhereInputObjectSchema.optional(), orderBy: z.union([VehicleOrderByWithAggregationInputObjectSchema, VehicleOrderByWithAggregationInputObjectSchema.array()]).optional(), having: VehicleScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(VehicleScalarFieldEnumSchema), _count: z.union([ z.literal(true), VehicleCountAggregateInputObjectSchema ]).optional(), _min: VehicleMinAggregateInputObjectSchema.optional(), _max: VehicleMaxAggregateInputObjectSchema.optional(), _avg: VehicleAvgAggregateInputObjectSchema.optional(), _sum: VehicleSumAggregateInputObjectSchema.optional() }).strict();

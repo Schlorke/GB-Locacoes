@@ -9,7 +9,8 @@ import { SessionCreateNestedManyWithoutUserInputObjectSchema as SessionCreateNes
 import { AddressCreateNestedManyWithoutUserInputObjectSchema as AddressCreateNestedManyWithoutUserInputObjectSchema } from './AddressCreateNestedManyWithoutUserInput.schema';
 import { CartCreateNestedOneWithoutUserInputObjectSchema as CartCreateNestedOneWithoutUserInputObjectSchema } from './CartCreateNestedOneWithoutUserInput.schema';
 import { QuoteCreateNestedManyWithoutApprovedByUserInputObjectSchema as QuoteCreateNestedManyWithoutApprovedByUserInputObjectSchema } from './QuoteCreateNestedManyWithoutApprovedByUserInput.schema';
-import { QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema as QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema } from './QuoteCreateNestedManyWithoutRejectedByUserInput.schema'
+import { QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema as QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema } from './QuoteCreateNestedManyWithoutRejectedByUserInput.schema';
+import { AuditLogCreateNestedManyWithoutUserInputObjectSchema as AuditLogCreateNestedManyWithoutUserInputObjectSchema } from './AuditLogCreateNestedManyWithoutUserInput.schema'
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
@@ -30,7 +31,8 @@ const makeSchema = () => z.object({
   addresses: z.lazy(() => AddressCreateNestedManyWithoutUserInputObjectSchema).optional(),
   cart: z.lazy(() => CartCreateNestedOneWithoutUserInputObjectSchema).optional(),
   approvedQuotes: z.lazy(() => QuoteCreateNestedManyWithoutApprovedByUserInputObjectSchema).optional(),
-  rejectedQuotes: z.lazy(() => QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema).optional()
+  rejectedQuotes: z.lazy(() => QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema).optional(),
+  auditLogs: z.lazy(() => AuditLogCreateNestedManyWithoutUserInputObjectSchema).optional()
 }).strict();
 export const UserCreateInputObjectSchema: z.ZodType<Prisma.UserCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateInput>;
 export const UserCreateInputObjectZodSchema = makeSchema();

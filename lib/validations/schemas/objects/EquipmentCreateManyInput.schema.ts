@@ -72,7 +72,44 @@ const makeSchema = () => z.object({
   biweeklyUseDirectValue: z.boolean().optional(),
   monthlyUseDirectValue: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional()
+  updatedAt: z.coerce.date().optional(),
+  purchasePrice: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'purchasePrice' must be a Decimal",
+}).optional().nullable(),
+  purchaseDate: z.coerce.date().optional().nullable(),
+  depreciationRate: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'depreciationRate' must be a Decimal",
+}).optional().nullable(),
+  hourMeter: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'hourMeter' must be a Decimal",
+}).optional().nullable(),
+  odometer: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'odometer' must be a Decimal",
+}).optional().nullable()
 }).strict();
 export const EquipmentCreateManyInputObjectSchema: z.ZodType<Prisma.EquipmentCreateManyInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentCreateManyInput>;
 export const EquipmentCreateManyInputObjectZodSchema = makeSchema();

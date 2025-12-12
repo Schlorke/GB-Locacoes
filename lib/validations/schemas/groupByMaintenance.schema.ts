@@ -1,0 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { MaintenanceWhereInputObjectSchema as MaintenanceWhereInputObjectSchema } from './objects/MaintenanceWhereInput.schema';
+import { MaintenanceOrderByWithAggregationInputObjectSchema as MaintenanceOrderByWithAggregationInputObjectSchema } from './objects/MaintenanceOrderByWithAggregationInput.schema';
+import { MaintenanceScalarWhereWithAggregatesInputObjectSchema as MaintenanceScalarWhereWithAggregatesInputObjectSchema } from './objects/MaintenanceScalarWhereWithAggregatesInput.schema';
+import { MaintenanceScalarFieldEnumSchema } from './enums/MaintenanceScalarFieldEnum.schema';
+import { MaintenanceCountAggregateInputObjectSchema as MaintenanceCountAggregateInputObjectSchema } from './objects/MaintenanceCountAggregateInput.schema';
+import { MaintenanceMinAggregateInputObjectSchema as MaintenanceMinAggregateInputObjectSchema } from './objects/MaintenanceMinAggregateInput.schema';
+import { MaintenanceMaxAggregateInputObjectSchema as MaintenanceMaxAggregateInputObjectSchema } from './objects/MaintenanceMaxAggregateInput.schema';
+import { MaintenanceAvgAggregateInputObjectSchema as MaintenanceAvgAggregateInputObjectSchema } from './objects/MaintenanceAvgAggregateInput.schema';
+import { MaintenanceSumAggregateInputObjectSchema as MaintenanceSumAggregateInputObjectSchema } from './objects/MaintenanceSumAggregateInput.schema';
+
+export const MaintenanceGroupBySchema: z.ZodType<Prisma.MaintenanceGroupByArgs> = z.object({ where: MaintenanceWhereInputObjectSchema.optional(), orderBy: z.union([MaintenanceOrderByWithAggregationInputObjectSchema, MaintenanceOrderByWithAggregationInputObjectSchema.array()]).optional(), having: MaintenanceScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(MaintenanceScalarFieldEnumSchema), _count: z.union([ z.literal(true), MaintenanceCountAggregateInputObjectSchema ]).optional(), _min: MaintenanceMinAggregateInputObjectSchema.optional(), _max: MaintenanceMaxAggregateInputObjectSchema.optional(), _avg: MaintenanceAvgAggregateInputObjectSchema.optional(), _sum: MaintenanceSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.MaintenanceGroupByArgs>;
+
+export const MaintenanceGroupByZodSchema = z.object({ where: MaintenanceWhereInputObjectSchema.optional(), orderBy: z.union([MaintenanceOrderByWithAggregationInputObjectSchema, MaintenanceOrderByWithAggregationInputObjectSchema.array()]).optional(), having: MaintenanceScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(MaintenanceScalarFieldEnumSchema), _count: z.union([ z.literal(true), MaintenanceCountAggregateInputObjectSchema ]).optional(), _min: MaintenanceMinAggregateInputObjectSchema.optional(), _max: MaintenanceMaxAggregateInputObjectSchema.optional(), _avg: MaintenanceAvgAggregateInputObjectSchema.optional(), _sum: MaintenanceSumAggregateInputObjectSchema.optional() }).strict();

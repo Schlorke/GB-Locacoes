@@ -29,7 +29,13 @@ export const EquipmentFindManyResultSchema = z.object({
   category: z.unknown(),
   quoteItems: z.array(z.unknown()),
   rental_items: z.array(z.unknown()),
-  cartItems: z.array(z.unknown())
+  cartItems: z.array(z.unknown()),
+  maintenances: z.array(z.unknown()),
+  purchasePrice: z.number().optional(),
+  purchaseDate: z.date().optional(),
+  depreciationRate: z.number().optional(),
+  hourMeter: z.number().optional(),
+  odometer: z.number().optional()
 })),
   pagination: z.object({
   page: z.number().int().min(1),

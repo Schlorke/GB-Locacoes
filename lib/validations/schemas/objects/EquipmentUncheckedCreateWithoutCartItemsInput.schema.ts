@@ -5,7 +5,8 @@ import Decimal from 'decimal.js';
 import { EquipmentCreateimagesInputObjectSchema as EquipmentCreateimagesInputObjectSchema } from './EquipmentCreateimagesInput.schema';
 import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
 import { QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema as QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema } from './QuoteItemUncheckedCreateNestedManyWithoutEquipmentInput.schema';
-import { rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema as rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema } from './rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInput.schema'
+import { rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema as rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema } from './rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInput.schema';
+import { MaintenanceUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema as MaintenanceUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema } from './MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -75,8 +76,46 @@ const makeSchema = () => z.object({
   monthlyUseDirectValue: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
+  purchasePrice: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'purchasePrice' must be a Decimal",
+}).optional().nullable(),
+  purchaseDate: z.coerce.date().optional().nullable(),
+  depreciationRate: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'depreciationRate' must be a Decimal",
+}).optional().nullable(),
+  hourMeter: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'hourMeter' must be a Decimal",
+}).optional().nullable(),
+  odometer: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'odometer' must be a Decimal",
+}).optional().nullable(),
   quoteItems: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
-  rental_items: z.lazy(() => rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema).optional()
+  rental_items: z.lazy(() => rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema).optional(),
+  maintenances: z.lazy(() => MaintenanceUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional()
 }).strict();
 export const EquipmentUncheckedCreateWithoutCartItemsInputObjectSchema: z.ZodType<Prisma.EquipmentUncheckedCreateWithoutCartItemsInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUncheckedCreateWithoutCartItemsInput>;
 export const EquipmentUncheckedCreateWithoutCartItemsInputObjectZodSchema = makeSchema();

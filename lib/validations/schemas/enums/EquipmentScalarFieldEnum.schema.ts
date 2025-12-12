@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 
-export const EquipmentScalarFieldEnumSchema = z.enum(['id', 'name', 'description', 'pricePerDay', 'images', 'available', 'categoryId', 'specifications', 'maxStock', 'dailyDiscount', 'weeklyDiscount', 'biweeklyDiscount', 'monthlyDiscount', 'popularPeriod', 'dailyDirectValue', 'weeklyDirectValue', 'biweeklyDirectValue', 'monthlyDirectValue', 'dailyUseDirectValue', 'weeklyUseDirectValue', 'biweeklyUseDirectValue', 'monthlyUseDirectValue', 'createdAt', 'updatedAt'])
+export const EquipmentScalarFieldEnumSchema = z.enum(['id', 'name', 'description', 'pricePerDay', 'images', 'available', 'categoryId', 'specifications', 'maxStock', 'dailyDiscount', 'weeklyDiscount', 'biweeklyDiscount', 'monthlyDiscount', 'popularPeriod', 'dailyDirectValue', 'weeklyDirectValue', 'biweeklyDirectValue', 'monthlyDirectValue', 'dailyUseDirectValue', 'weeklyUseDirectValue', 'biweeklyUseDirectValue', 'monthlyUseDirectValue', 'createdAt', 'updatedAt', 'purchasePrice', 'purchaseDate', 'depreciationRate', 'hourMeter', 'odometer'])
 
 export type EquipmentScalarFieldEnum = z.infer<typeof EquipmentScalarFieldEnumSchema>;

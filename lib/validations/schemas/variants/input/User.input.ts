@@ -22,7 +22,8 @@ export const UserInputSchema = z.object({
     addresses: z.array(z.unknown()),
     cart: z.unknown().optional().nullable(),
     approvedQuotes: z.array(z.unknown()),
-    rejectedQuotes: z.array(z.unknown())
+    rejectedQuotes: z.array(z.unknown()),
+    auditLogs: z.array(z.unknown())
 }).strict();
 
 export type UserInputType = z.infer<typeof UserInputSchema>;

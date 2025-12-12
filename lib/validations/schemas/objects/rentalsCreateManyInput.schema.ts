@@ -21,7 +21,30 @@ const makeSchema = () => z.object({
   status: z.string().optional().nullable(),
   userid: z.string(),
   createdat: z.coerce.date().optional().nullable(),
-  updatedat: z.coerce.date().optional().nullable()
+  updatedat: z.coerce.date().optional().nullable(),
+  quoteId: z.string().optional().nullable(),
+  lateFee: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'lateFee' must be a Decimal",
+}).optional().nullable(),
+  extensionDays: z.number().int().optional().nullable(),
+  extensionFee: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'extensionFee' must be a Decimal",
+}).optional().nullable(),
+  checkInAt: z.coerce.date().optional().nullable(),
+  checkOutAt: z.coerce.date().optional().nullable(),
+  notes: z.string().optional().nullable()
 }).strict();
 export const rentalsCreateManyInputObjectSchema: z.ZodType<Prisma.rentalsCreateManyInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsCreateManyInput>;
 export const rentalsCreateManyInputObjectZodSchema = makeSchema();

@@ -1,0 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { PaymentWhereInputObjectSchema as PaymentWhereInputObjectSchema } from './objects/PaymentWhereInput.schema';
+import { PaymentOrderByWithAggregationInputObjectSchema as PaymentOrderByWithAggregationInputObjectSchema } from './objects/PaymentOrderByWithAggregationInput.schema';
+import { PaymentScalarWhereWithAggregatesInputObjectSchema as PaymentScalarWhereWithAggregatesInputObjectSchema } from './objects/PaymentScalarWhereWithAggregatesInput.schema';
+import { PaymentScalarFieldEnumSchema } from './enums/PaymentScalarFieldEnum.schema';
+import { PaymentCountAggregateInputObjectSchema as PaymentCountAggregateInputObjectSchema } from './objects/PaymentCountAggregateInput.schema';
+import { PaymentMinAggregateInputObjectSchema as PaymentMinAggregateInputObjectSchema } from './objects/PaymentMinAggregateInput.schema';
+import { PaymentMaxAggregateInputObjectSchema as PaymentMaxAggregateInputObjectSchema } from './objects/PaymentMaxAggregateInput.schema';
+import { PaymentAvgAggregateInputObjectSchema as PaymentAvgAggregateInputObjectSchema } from './objects/PaymentAvgAggregateInput.schema';
+import { PaymentSumAggregateInputObjectSchema as PaymentSumAggregateInputObjectSchema } from './objects/PaymentSumAggregateInput.schema';
+
+export const PaymentGroupBySchema: z.ZodType<Prisma.PaymentGroupByArgs> = z.object({ where: PaymentWhereInputObjectSchema.optional(), orderBy: z.union([PaymentOrderByWithAggregationInputObjectSchema, PaymentOrderByWithAggregationInputObjectSchema.array()]).optional(), having: PaymentScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(PaymentScalarFieldEnumSchema), _count: z.union([ z.literal(true), PaymentCountAggregateInputObjectSchema ]).optional(), _min: PaymentMinAggregateInputObjectSchema.optional(), _max: PaymentMaxAggregateInputObjectSchema.optional(), _avg: PaymentAvgAggregateInputObjectSchema.optional(), _sum: PaymentSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.PaymentGroupByArgs>;
+
+export const PaymentGroupByZodSchema = z.object({ where: PaymentWhereInputObjectSchema.optional(), orderBy: z.union([PaymentOrderByWithAggregationInputObjectSchema, PaymentOrderByWithAggregationInputObjectSchema.array()]).optional(), having: PaymentScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(PaymentScalarFieldEnumSchema), _count: z.union([ z.literal(true), PaymentCountAggregateInputObjectSchema ]).optional(), _min: PaymentMinAggregateInputObjectSchema.optional(), _max: PaymentMaxAggregateInputObjectSchema.optional(), _avg: PaymentAvgAggregateInputObjectSchema.optional(), _sum: PaymentSumAggregateInputObjectSchema.optional() }).strict();

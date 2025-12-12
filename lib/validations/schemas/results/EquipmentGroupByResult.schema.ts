@@ -25,6 +25,11 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
   monthlyUseDirectValue: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
+  purchasePrice: z.number(),
+  purchaseDate: z.date(),
+  depreciationRate: z.number(),
+  hourMeter: z.number(),
+  odometer: z.number(),
   _count: z.object({
     id: z.number(),
     name: z.number(),
@@ -53,7 +58,13 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     category: z.number(),
     quoteItems: z.number(),
     rental_items: z.number(),
-    cartItems: z.number()
+    cartItems: z.number(),
+    maintenances: z.number(),
+    purchasePrice: z.number(),
+    purchaseDate: z.number(),
+    depreciationRate: z.number(),
+    hourMeter: z.number(),
+    odometer: z.number()
   }).optional(),
   _sum: z.object({
     pricePerDay: z.number().nullable(),
@@ -65,7 +76,11 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     dailyDirectValue: z.number().nullable(),
     weeklyDirectValue: z.number().nullable(),
     biweeklyDirectValue: z.number().nullable(),
-    monthlyDirectValue: z.number().nullable()
+    monthlyDirectValue: z.number().nullable(),
+    purchasePrice: z.number().nullable(),
+    depreciationRate: z.number().nullable(),
+    hourMeter: z.number().nullable(),
+    odometer: z.number().nullable()
   }).nullable().optional(),
   _avg: z.object({
     pricePerDay: z.number().nullable(),
@@ -77,7 +92,11 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     dailyDirectValue: z.number().nullable(),
     weeklyDirectValue: z.number().nullable(),
     biweeklyDirectValue: z.number().nullable(),
-    monthlyDirectValue: z.number().nullable()
+    monthlyDirectValue: z.number().nullable(),
+    purchasePrice: z.number().nullable(),
+    depreciationRate: z.number().nullable(),
+    hourMeter: z.number().nullable(),
+    odometer: z.number().nullable()
   }).nullable().optional(),
   _min: z.object({
     id: z.string().nullable(),
@@ -97,7 +116,12 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     biweeklyDirectValue: z.number().nullable(),
     monthlyDirectValue: z.number().nullable(),
     createdAt: z.date().nullable(),
-    updatedAt: z.date().nullable()
+    updatedAt: z.date().nullable(),
+    purchasePrice: z.number().nullable(),
+    purchaseDate: z.date().nullable(),
+    depreciationRate: z.number().nullable(),
+    hourMeter: z.number().nullable(),
+    odometer: z.number().nullable()
   }).nullable().optional(),
   _max: z.object({
     id: z.string().nullable(),
@@ -117,6 +141,11 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     biweeklyDirectValue: z.number().nullable(),
     monthlyDirectValue: z.number().nullable(),
     createdAt: z.date().nullable(),
-    updatedAt: z.date().nullable()
+    updatedAt: z.date().nullable(),
+    purchasePrice: z.number().nullable(),
+    purchaseDate: z.date().nullable(),
+    depreciationRate: z.number().nullable(),
+    hourMeter: z.number().nullable(),
+    odometer: z.number().nullable()
   }).nullable().optional()
 }));

@@ -5,6 +5,7 @@ import { CategoryArgsObjectSchema as CategoryArgsObjectSchema } from './Category
 import { QuoteItemFindManySchema as QuoteItemFindManySchema } from '../findManyQuoteItem.schema';
 import { rental_itemsFindManySchema as rental_itemsFindManySchema } from '../findManyrental_items.schema';
 import { CartItemFindManySchema as CartItemFindManySchema } from '../findManyCartItem.schema';
+import { MaintenanceFindManySchema as MaintenanceFindManySchema } from '../findManyMaintenance.schema';
 import { EquipmentCountOutputTypeArgsObjectSchema as EquipmentCountOutputTypeArgsObjectSchema } from './EquipmentCountOutputTypeArgs.schema'
 
 const makeSchema = () => z.object({
@@ -12,6 +13,7 @@ const makeSchema = () => z.object({
   quoteItems: z.union([z.boolean(), z.lazy(() => QuoteItemFindManySchema)]).optional(),
   rental_items: z.union([z.boolean(), z.lazy(() => rental_itemsFindManySchema)]).optional(),
   cartItems: z.union([z.boolean(), z.lazy(() => CartItemFindManySchema)]).optional(),
+  maintenances: z.union([z.boolean(), z.lazy(() => MaintenanceFindManySchema)]).optional(),
   _count: z.union([z.boolean(), z.lazy(() => EquipmentCountOutputTypeArgsObjectSchema)]).optional()
 }).strict();
 export const EquipmentIncludeObjectSchema: z.ZodType<Prisma.EquipmentInclude> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentInclude>;

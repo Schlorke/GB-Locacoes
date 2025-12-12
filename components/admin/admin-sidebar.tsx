@@ -12,6 +12,7 @@ import {
   PackageSearch,
   Settings,
   UserCircle,
+  Package,
 } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -27,6 +28,7 @@ const navItems = [
   { href: '/admin/equipamentos', icon: PackageSearch, label: 'Equipamentos' },
   { href: '/admin/categorias', icon: ListChecks, label: 'Categorias' },
   { href: '/admin/orcamentos', icon: FileText, label: 'Orçamentos' },
+  { href: '/admin/rentals', icon: Package, label: 'Locações' },
   { href: '/admin/settings', icon: Settings, label: 'Configurações' },
 ]
 

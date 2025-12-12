@@ -22,7 +22,8 @@ export const UserModelSchema = z.object({
     addresses: z.array(z.unknown()),
     cart: z.unknown().nullable(),
     approvedQuotes: z.array(z.unknown()),
-    rejectedQuotes: z.array(z.unknown())
+    rejectedQuotes: z.array(z.unknown()),
+    auditLogs: z.array(z.unknown())
 }).strict();
 
 export type UserPureType = z.infer<typeof UserModelSchema>;

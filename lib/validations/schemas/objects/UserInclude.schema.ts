@@ -7,6 +7,7 @@ import { rentalsFindManySchema as rentalsFindManySchema } from '../findManyrenta
 import { SessionFindManySchema as SessionFindManySchema } from '../findManySession.schema';
 import { AddressFindManySchema as AddressFindManySchema } from '../findManyAddress.schema';
 import { CartArgsObjectSchema as CartArgsObjectSchema } from './CartArgs.schema';
+import { AuditLogFindManySchema as AuditLogFindManySchema } from '../findManyAuditLog.schema';
 import { UserCountOutputTypeArgsObjectSchema as UserCountOutputTypeArgsObjectSchema } from './UserCountOutputTypeArgs.schema'
 
 const makeSchema = () => z.object({
@@ -18,6 +19,7 @@ const makeSchema = () => z.object({
   cart: z.union([z.boolean(), z.lazy(() => CartArgsObjectSchema)]).optional(),
   approvedQuotes: z.union([z.boolean(), z.lazy(() => QuoteFindManySchema)]).optional(),
   rejectedQuotes: z.union([z.boolean(), z.lazy(() => QuoteFindManySchema)]).optional(),
+  auditLogs: z.union([z.boolean(), z.lazy(() => AuditLogFindManySchema)]).optional(),
   _count: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeArgsObjectSchema)]).optional()
 }).strict();
 export const UserIncludeObjectSchema: z.ZodType<Prisma.UserInclude> = makeSchema() as unknown as z.ZodType<Prisma.UserInclude>;

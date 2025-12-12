@@ -1,0 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { PermissionWhereInputObjectSchema as PermissionWhereInputObjectSchema } from './objects/PermissionWhereInput.schema';
+import { PermissionOrderByWithAggregationInputObjectSchema as PermissionOrderByWithAggregationInputObjectSchema } from './objects/PermissionOrderByWithAggregationInput.schema';
+import { PermissionScalarWhereWithAggregatesInputObjectSchema as PermissionScalarWhereWithAggregatesInputObjectSchema } from './objects/PermissionScalarWhereWithAggregatesInput.schema';
+import { PermissionScalarFieldEnumSchema } from './enums/PermissionScalarFieldEnum.schema';
+import { PermissionCountAggregateInputObjectSchema as PermissionCountAggregateInputObjectSchema } from './objects/PermissionCountAggregateInput.schema';
+import { PermissionMinAggregateInputObjectSchema as PermissionMinAggregateInputObjectSchema } from './objects/PermissionMinAggregateInput.schema';
+import { PermissionMaxAggregateInputObjectSchema as PermissionMaxAggregateInputObjectSchema } from './objects/PermissionMaxAggregateInput.schema';
+
+export const PermissionGroupBySchema: z.ZodType<Prisma.PermissionGroupByArgs> = z.object({ where: PermissionWhereInputObjectSchema.optional(), orderBy: z.union([PermissionOrderByWithAggregationInputObjectSchema, PermissionOrderByWithAggregationInputObjectSchema.array()]).optional(), having: PermissionScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(PermissionScalarFieldEnumSchema), _count: z.union([ z.literal(true), PermissionCountAggregateInputObjectSchema ]).optional(), _min: PermissionMinAggregateInputObjectSchema.optional(), _max: PermissionMaxAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.PermissionGroupByArgs>;
+
+export const PermissionGroupByZodSchema = z.object({ where: PermissionWhereInputObjectSchema.optional(), orderBy: z.union([PermissionOrderByWithAggregationInputObjectSchema, PermissionOrderByWithAggregationInputObjectSchema.array()]).optional(), having: PermissionScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(PermissionScalarFieldEnumSchema), _count: z.union([ z.literal(true), PermissionCountAggregateInputObjectSchema ]).optional(), _min: PermissionMinAggregateInputObjectSchema.optional(), _max: PermissionMaxAggregateInputObjectSchema.optional() }).strict();

@@ -73,7 +73,9 @@ export const QuoteGroupByResultSchema = z.array(z.object({
     items: z.number(),
     user: z.number(),
     approvedByUser: z.number(),
-    rejectedByUser: z.number()
+    rejectedByUser: z.number(),
+    payments: z.number(),
+    rentals: z.number()
   }).optional(),
   _sum: z.object({
     total: z.number().nullable(),

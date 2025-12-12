@@ -44,6 +44,7 @@ model User {
   cart          Cart?     // NOVO
   approvedQuotes  Quote[]       @relation("ApprovedQuotes")
   rejectedQuotes  Quote[]       @relation("RejectedQuotes")
+  auditLogs     AuditLog[]
 
   @@map("users")
 }
@@ -191,6 +192,12 @@ model Equipment {
   quoteItems        QuoteItem[]
   rental_items      rental_items[]
   cartItems         CartItem[] // NOVO
+  maintenances      Maintenance[]
+  purchasePrice     Decimal?       @db.Decimal // Valor de compra
+  purchaseDate      DateTime?      // Data de compra
+  depreciationRate Decimal?       @db.Decimal // Taxa de depreciação anual (%)
+  hourMeter         Decimal?       @db.Decimal // Horímetro atual
+  odometer          Decimal?       @db.Decimal // Odômetro atual
 
   @@index([categoryId])
   @@map("equipments")
@@ -247,6 +254,8 @@ model Quote {
   user      User?       @relation(fields: [userId], references: [id])
   approvedByUser  User?          @relation("ApprovedQuotes", fields: [approvedBy], references: [id])
   rejectedByUser User?          @relation("RejectedQuotes", fields: [rejectedBy], references: [id])
+  payments  Payment[]
+  rentals   rentals[]
 
   @@index([userId])
   @@index([startDate])
@@ -301,10 +310,25 @@ model rentals {
   userid       String
   createdat    DateTime?      @default(now()) @db.Timestamp(6)
   updatedat    DateTime?      @default(now()) @db.Timestamp(6)
+  quoteId     String?        // Referência ao orçamento que originou esta locação
+  quote        Quote?         @relation(fields: [quoteId], references: [id])
+  lateFee      Decimal?       @db.Decimal // Multa por atraso
+  extensionDays Int?          // Dias de prorrogação
+  extensionFee  Decimal?      @db.Decimal // Taxa de prorrogação
+  checkInAt    DateTime?      @db.Timestamp(6) // Data/hora de check-in
+  checkOutAt   DateTime?      @db.Timestamp(6) // Data/hora de check-out
+  notes        String?        // Notas internas
   rental_items rental_items[]
   users        User           @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  payments     Payment[]
+  deliveries   Delivery[]
+  contract     Contract?
 
   @@index([userid])
+  @@index([quoteId])
+  @@index([status])
+  @@index([startdate])
+  @@index([enddate])
 }
 
 model Setting {
@@ -341,6 +365,168 @@ model Setting {
   updatedAt           DateTime @updatedAt
 
   @@map("settings")
+}
+
+// Sistema de Manutenção
+model Maintenance {
+  id          String           @id @default(cuid())
+  equipmentId String
+  equipment   Equipment        @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  type        MaintenanceType
+  scheduledAt DateTime
+  completedAt DateTime?
+  cost        Decimal?        @db.Decimal
+  laborCost   Decimal?        @db.Decimal // Custo de mão de obra
+  partsCost   Decimal?        @db.Decimal // Custo de peças
+  description String?
+  notes       String?         // Notas técnicas
+  technician  String?         // Nome do técnico responsável
+  status      MaintenanceStatus @default(SCHEDULED)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([equipmentId])
+  @@index([scheduledAt])
+  @@index([status])
+  @@map("maintenances")
+}
+
+// Sistema de Pagamentos
+model Payment {
+  id            String        @id @default(cuid())
+  rentalId      String?
+  quoteId       String?
+  rental        rentals?      @relation(fields: [rentalId], references: [id], onDelete: SetNull)
+  quote         Quote?        @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  amount        Decimal       @db.Decimal
+  method        PaymentMethod
+  status        PaymentStatus @default(PENDING)
+  type          PaymentType   @default(RENTAL)
+  paidAt        DateTime?     @db.Timestamp(6)
+  dueDate       DateTime      @db.Timestamp(6)
+  invoiceNumber String?
+  transactionId String?       // ID da transação no gateway
+  pixCode       String?       // Código PIX (se método PIX)
+  pixQrCode     String?       // QR Code PIX
+  metadata      Json?         // Dados adicionais do pagamento
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([rentalId])
+  @@index([quoteId])
+  @@index([status])
+  @@index([dueDate])
+  @@index([method])
+  @@map("payments")
+}
+
+// Sistema de Entregas e Coletas
+model Delivery {
+  id          String        @id @default(cuid())
+  rentalId   String
+  rental     rentals       @relation(fields: [rentalId], references: [id], onDelete: Cascade)
+  type       DeliveryType  // DELIVERY, PICKUP
+  status     DeliveryStatus @default(SCHEDULED)
+  scheduledAt DateTime
+  completedAt DateTime?     @db.Timestamp(6)
+  address    Json           // Endereço completo
+  distance   Decimal?       @db.Decimal // Distância em km
+  vehicleId  String?        // ID do veículo usado
+  driverId   String?        // ID do motorista
+  driverName String?       // Nome do motorista
+  photos     String[]       // URLs das fotos
+  checklist Json?           // Checklist de saída/entrada
+  notes      String?        // Observações
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([rentalId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([type])
+  @@map("deliveries")
+}
+
+// Veículos para logística
+model Vehicle {
+  id          String   @id @default(cuid())
+  plate       String   @unique // Placa do veículo
+  brand       String?  // Marca
+  model       String?  // Modelo
+  year        Int?     // Ano
+  type        VehicleType @default(TRUCK)
+  status      VehicleStatus @default(AVAILABLE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("vehicles")
+}
+
+// Motoristas
+model Driver {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String
+  cnh         String?  // Número da CNH
+  cnhCategory String?  // Categoria da CNH
+  status      DriverStatus @default(ACTIVE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("drivers")
+}
+
+// Contratos e Documentos
+model Contract {
+  id          String   @id @default(cuid())
+  rentalId   String   @unique
+  rental     rentals  @relation(fields: [rentalId], references: [id], onDelete: Cascade)
+  template   String?  // Template usado
+  content    String?  // Conteúdo do contrato (HTML/PDF)
+  pdfUrl     String?  // URL do PDF gerado
+  signedAt   DateTime? // Data de assinatura
+  signedBy   String?  // ID do usuário que assinou
+  zapSignId  String?  // ID no ZapSign
+  status     ContractStatus @default(DRAFT)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([rentalId])
+  @@index([status])
+  @@map("contracts")
+}
+
+// Log de Auditoria
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?  // Usuário que executou a ação
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action      String   // Tipo de ação (CREATE, UPDATE, DELETE, etc.)
+  entity      String   // Entidade afetada (Equipment, Quote, etc.)
+  entityId    String   // ID da entidade
+  changes     Json?    // Mudanças realizadas (before/after)
+  ipAddress  String?  // IP do usuário
+  userAgent  String?  // User agent
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([entity, entityId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// Permissões por módulo
+model Permission {
+  id          String   @id @default(cuid())
+  role        Role
+  module      String   // Módulo (EQUIPMENTS, QUOTES, RENTALS, etc.)
+  action      String   // Ação (READ, WRITE, DELETE, APPROVE, etc.)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([role, module, action])
+  @@index([role])
+  @@map("permissions")
 }
 
 enum Role {
@@ -433,4 +619,45 @@ enum user_role {
   OPERATOR
   FINANCIAL
   CUSTOMER
+}
+
+enum MaintenanceType {
+  PREVENTIVE
+  CORRECTIVE
+  INSPECTION
+}
+
+enum MaintenanceStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum VehicleType {
+  TRUCK
+  VAN
+  PICKUP
+  MOTORCYCLE
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  IN_USE
+  MAINTENANCE
+  OUT_OF_SERVICE
+}
+
+enum DriverStatus {
+  ACTIVE
+  INACTIVE
+  ON_LEAVE
+}
+
+enum ContractStatus {
+  DRAFT
+  SENT
+  SIGNED
+  EXPIRED
+  CANCELLED
 }

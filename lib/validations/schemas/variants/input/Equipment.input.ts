@@ -29,7 +29,13 @@ export const EquipmentInputSchema = z.object({
     category: z.unknown(),
     quoteItems: z.array(z.unknown()),
     rental_items: z.array(z.unknown()),
-    cartItems: z.array(z.unknown())
+    cartItems: z.array(z.unknown()),
+    maintenances: z.array(z.unknown()),
+    purchasePrice: z.number().optional().nullable(),
+    purchaseDate: z.date().optional().nullable(),
+    depreciationRate: z.number().optional().nullable(),
+    hourMeter: z.number().optional().nullable(),
+    odometer: z.number().optional().nullable()
 }).strict();
 
 export type EquipmentInputType = z.infer<typeof EquipmentInputSchema>;

@@ -13,7 +13,11 @@ const makeSchema = () => z.object({
   dailyDirectValue: SortOrderSchema.optional(),
   weeklyDirectValue: SortOrderSchema.optional(),
   biweeklyDirectValue: SortOrderSchema.optional(),
-  monthlyDirectValue: SortOrderSchema.optional()
+  monthlyDirectValue: SortOrderSchema.optional(),
+  purchasePrice: SortOrderSchema.optional(),
+  depreciationRate: SortOrderSchema.optional(),
+  hourMeter: SortOrderSchema.optional(),
+  odometer: SortOrderSchema.optional()
 }).strict();
 export const EquipmentSumOrderByAggregateInputObjectSchema: z.ZodType<Prisma.EquipmentSumOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentSumOrderByAggregateInput>;
 export const EquipmentSumOrderByAggregateInputObjectZodSchema = makeSchema();

@@ -5,6 +5,106 @@
 
 ---
 
+## 19. Erro "params are being enumerated" no Cursor DevTools
+
+### 🎯 Problema
+
+**Data da Ocorrência**: Janeiro 2025 **Severidade**: Baixa (Apenas aviso do
+DevTools) **Status**: ✅ Conhecido - Não afeta funcionalidade
+
+#### Descrição
+
+Ao usar a ferramenta "Select Element" do Cursor IDE para inspecionar componentes
+React em páginas dinâmicas do Next.js 16, aparece o erro:
+
+```
+params are being enumerated. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties.
+```
+
+#### Sintomas
+
+- ⚠️ Erro aparece no console quando o Cursor tenta inspecionar componentes
+- ⚠️ Ocorre especificamente ao clicar em "Select Element" no webview do Cursor
+- ✅ **NÃO afeta a funcionalidade da aplicação**
+- ✅ O código está correto e funcionando normalmente
+
+#### Causa Raiz
+
+No Next.js 16, `params` em Server Components e API Routes é uma `Promise` que
+precisa ser desembrulhada com `await` antes de usar. Quando o Cursor IDE tenta
+inspecionar um componente React, ele tenta serializar as props fazendo
+`Object.keys(params)`, o que causa o erro porque está tentando enumerar uma
+Promise.
+
+**Isso é um problema conhecido do Next.js 16 com ferramentas de
+desenvolvimento** que tentam serializar props que são Promises.
+
+#### Onde Ocorre
+
+- Páginas dinâmicas: `app/equipamentos/[id]/page.tsx`
+- API Routes dinâmicas: `app/api/**/[id]/route.ts`
+- Qualquer componente que recebe `params: Promise<{ ... }>` como prop
+
+### ✅ Solução
+
+#### 1. Código Está Correto
+
+O código já está implementado corretamente:
+
+```typescript
+// ✅ CORRETO - Server Component
+interface Props {
+  params: Promise<{ id: string }>
+}
+
+export default async function Page(props: Props) {
+  const params = await props.params // ✅ Desembrulhando a Promise
+  // ... usar params.id
+}
+```
+
+```typescript
+// ✅ CORRETO - API Route
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const resolvedParams = await params // ✅ Desembrulhando a Promise
+  // ... usar resolvedParams.id
+}
+```
+
+#### 2. Ações Recomendadas
+
+1. **Ignorar o erro**: Não afeta a funcionalidade da aplicação
+2. **Aguardar atualização**: Cursor/React DevTools podem adicionar suporte para
+   Promises em props no futuro
+3. **Usar DevTools do navegador**: Para inspeção detalhada, use as ferramentas
+   do navegador (F12) em vez do Cursor
+
+#### 3. Verificação
+
+Para confirmar que o código está correto, verifique:
+
+- ✅ Todas as páginas dinâmicas fazem `await props.params` antes de usar
+- ✅ Todas as API Routes dinâmicas fazem `await params` antes de usar
+- ✅ Não há uso direto de `params.id` sem desembrulhar primeiro
+
+### 📈 Resultado
+
+- ✅ Aplicação funciona normalmente
+- ⚠️ Erro aparece apenas no DevTools do Cursor (não afeta usuários)
+- ✅ Código segue as melhores práticas do Next.js 16
+
+#### Como Validar
+
+1. A aplicação funciona normalmente em desenvolvimento e produção
+2. Páginas dinâmicas carregam corretamente
+3. API Routes respondem corretamente
+4. O erro só aparece ao usar "Select Element" no Cursor
+
+---
+
 ## 18. Speed Insights da Vercel não exibindo dados
 
 ### 🎯 Problema

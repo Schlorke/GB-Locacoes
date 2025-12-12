@@ -4,7 +4,9 @@ import { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
 import { QuoteStatusSchema } from '../enums/QuoteStatus.schema';
 import { DeliveryTypeSchema } from '../enums/DeliveryType.schema';
-import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema'
+import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
+import { PaymentUncheckedCreateNestedManyWithoutQuoteInputObjectSchema as PaymentUncheckedCreateNestedManyWithoutQuoteInputObjectSchema } from './PaymentUncheckedCreateNestedManyWithoutQuoteInput.schema';
+import { rentalsUncheckedCreateNestedManyWithoutQuoteInputObjectSchema as rentalsUncheckedCreateNestedManyWithoutQuoteInputObjectSchema } from './rentalsUncheckedCreateNestedManyWithoutQuoteInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -108,7 +110,9 @@ const makeSchema = () => z.object({
   rejectedBy: z.string().optional().nullable(),
   convertedToRentalId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional()
+  updatedAt: z.coerce.date().optional(),
+  payments: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutQuoteInputObjectSchema).optional(),
+  rentals: z.lazy(() => rentalsUncheckedCreateNestedManyWithoutQuoteInputObjectSchema).optional()
 }).strict();
 export const QuoteUncheckedCreateWithoutItemsInputObjectSchema: z.ZodType<Prisma.QuoteUncheckedCreateWithoutItemsInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteUncheckedCreateWithoutItemsInput>;
 export const QuoteUncheckedCreateWithoutItemsInputObjectZodSchema = makeSchema();

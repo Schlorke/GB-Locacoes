@@ -40,10 +40,10 @@ export function FilterResetButton({
   }
 
   const sizeClasses = {
-    sm: 'w-8 h-8',
-    md: 'w-10 h-10',
-    lg: 'w-12 h-12',
-  }
+    sm: 'w-8 h-8 min-w-8 shrink-0',
+    md: 'w-10 h-10 min-w-10 shrink-0',
+    lg: 'w-12 h-12 min-w-12 shrink-0',
+  } as const
 
   const iconSizes = {
     sm: 'w-3 h-3',
@@ -54,11 +54,11 @@ export function FilterResetButton({
   return (
     <Button
       variant="reset"
-      size="sm"
+      size="icon"
       onClick={handleClick}
       disabled={disabled}
       className={cn(
-        'filter-reset-button flex items-center justify-center p-0 group',
+        'filter-reset-button group p-0',
         sizeClasses[size],
         className
       )}

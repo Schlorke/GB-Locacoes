@@ -42,7 +42,9 @@ export const QuoteModelSchema = z.object({
     items: z.array(z.unknown()),
     user: z.unknown().nullable(),
     approvedByUser: z.unknown().nullable(),
-    rejectedByUser: z.unknown().nullable()
+    rejectedByUser: z.unknown().nullable(),
+    payments: z.array(z.unknown()),
+    rentals: z.array(z.unknown())
 }).strict();
 
 export type QuotePureType = z.infer<typeof QuoteModelSchema>;

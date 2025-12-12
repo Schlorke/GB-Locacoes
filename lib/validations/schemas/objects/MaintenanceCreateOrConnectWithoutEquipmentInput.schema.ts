@@ -1,0 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import * as z from 'zod';
+import type { Prisma } from '@prisma/client';
+import { MaintenanceWhereUniqueInputObjectSchema as MaintenanceWhereUniqueInputObjectSchema } from './MaintenanceWhereUniqueInput.schema';
+import { MaintenanceCreateWithoutEquipmentInputObjectSchema as MaintenanceCreateWithoutEquipmentInputObjectSchema } from './MaintenanceCreateWithoutEquipmentInput.schema';
+import { MaintenanceUncheckedCreateWithoutEquipmentInputObjectSchema as MaintenanceUncheckedCreateWithoutEquipmentInputObjectSchema } from './MaintenanceUncheckedCreateWithoutEquipmentInput.schema'
+
+const makeSchema = () => z.object({
+  where: z.lazy(() => MaintenanceWhereUniqueInputObjectSchema),
+  create: z.union([z.lazy(() => MaintenanceCreateWithoutEquipmentInputObjectSchema), z.lazy(() => MaintenanceUncheckedCreateWithoutEquipmentInputObjectSchema)])
+}).strict();
+export const MaintenanceCreateOrConnectWithoutEquipmentInputObjectSchema: z.ZodType<Prisma.MaintenanceCreateOrConnectWithoutEquipmentInput> = makeSchema() as unknown as z.ZodType<Prisma.MaintenanceCreateOrConnectWithoutEquipmentInput>;
+export const MaintenanceCreateOrConnectWithoutEquipmentInputObjectZodSchema = makeSchema();

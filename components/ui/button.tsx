@@ -5,23 +5,25 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         default:
-          'bg-slate-700 text-white border shadow-md hover:bg-slate-600 hover:scale-105 hover:shadow-lg',
+          'bg-slate-700 text-white border border-slate-700 shadow-md hover:bg-slate-600 hover:border-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-200',
         destructive:
-          'bg-destructive text-destructive-foreground shadow-md hover:bg-destructive/90 hover:scale-105 hover:shadow-lg hover:text-orange-500 group',
+          'bg-destructive text-destructive-foreground shadow-md hover:bg-destructive/90 hover:scale-105 hover:shadow-lg hover:text-orange-500 group transition-all duration-200',
         outline:
-          'border bg-background shadow-md hover:text-orange-600 hover:scale-105 hover:shadow-lg',
+          'border border-gray-300 bg-background shadow-md hover:text-orange-600 hover:border-orange-600 hover:scale-105 hover:shadow-lg transition-all duration-200',
         secondary:
-          'bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/80 hover:scale-105 hover:shadow-lg',
-        ghost: 'hover:text-orange-600 hover:scale-105',
+          'bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/80 hover:scale-105 hover:shadow-lg transition-all duration-200',
+        ghost:
+          'border border-transparent hover:text-orange-600 hover:scale-105 transition-all duration-200',
         reset:
-          'border shadow-md hover:text-orange-500 hover:scale-105 hover:shadow-lg group',
-        gradient: 'text-white border shadow-md hover:scale-105 hover:shadow-lg',
-        link: 'text-primary underline-offset-4 hover:underline',
+          'border border-gray-300 shadow-md hover:text-orange-500 hover:border-orange-500 hover:scale-105 hover:shadow-lg group transition-all duration-200',
+        gradient:
+          'text-white border border-transparent shadow-md hover:scale-105 hover:shadow-lg transition-all duration-200',
+        link: 'text-primary underline-offset-4 hover:underline transition-colors duration-200',
       },
       size: {
         compact: 'h-8 px-3 text-xs sm:h-9 sm:px-4 sm:text-sm',

@@ -297,7 +297,7 @@ export default function AdminEquipmentsPage() {
               },
             ]}
             actionButtons={
-              <Button asChild variant="default">
+              <Button asChild variant="default" className="h-10">
                 <Link href="/admin/equipamentos/novo">
                   <Plus className="w-4 h-4 mr-2 group-hover:text-orange-500 transition-colors duration-200" />
                   <span className="group-hover:text-orange-500 transition-colors duration-200">

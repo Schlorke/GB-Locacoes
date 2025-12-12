@@ -32,7 +32,8 @@ export const UserGroupByResultSchema = z.array(z.object({
     addresses: z.number(),
     cart: z.number(),
     approvedQuotes: z.number(),
-    rejectedQuotes: z.number()
+    rejectedQuotes: z.number(),
+    auditLogs: z.number()
   }).optional(),
   _min: z.object({
     id: z.string().nullable(),

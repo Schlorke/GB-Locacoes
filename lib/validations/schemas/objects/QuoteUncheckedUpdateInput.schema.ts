@@ -14,7 +14,9 @@ import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValue
 import { NullableDecimalFieldUpdateOperationsInputObjectSchema as NullableDecimalFieldUpdateOperationsInputObjectSchema } from './NullableDecimalFieldUpdateOperationsInput.schema';
 import { NullableIntFieldUpdateOperationsInputObjectSchema as NullableIntFieldUpdateOperationsInputObjectSchema } from './NullableIntFieldUpdateOperationsInput.schema';
 import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
-import { QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema as QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema } from './QuoteItemUncheckedUpdateManyWithoutQuoteNestedInput.schema'
+import { QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema as QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema } from './QuoteItemUncheckedUpdateManyWithoutQuoteNestedInput.schema';
+import { PaymentUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema as PaymentUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema } from './PaymentUncheckedUpdateManyWithoutQuoteNestedInput.schema';
+import { rentalsUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema as rentalsUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema } from './rentalsUncheckedUpdateManyWithoutQuoteNestedInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -119,7 +121,9 @@ const makeSchema = () => z.object({
   convertedToRentalId: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
-  items: z.lazy(() => QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema).optional()
+  items: z.lazy(() => QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema).optional(),
+  payments: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema).optional(),
+  rentals: z.lazy(() => rentalsUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema).optional()
 }).strict();
 export const QuoteUncheckedUpdateInputObjectSchema: z.ZodType<Prisma.QuoteUncheckedUpdateInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteUncheckedUpdateInput>;
 export const QuoteUncheckedUpdateInputObjectZodSchema = makeSchema();

@@ -4,7 +4,9 @@ import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { SortOrderInputObjectSchema as SortOrderInputObjectSchema } from './SortOrderInput.schema';
 import { QuoteItemOrderByRelationAggregateInputObjectSchema as QuoteItemOrderByRelationAggregateInputObjectSchema } from './QuoteItemOrderByRelationAggregateInput.schema';
-import { UserOrderByWithRelationInputObjectSchema as UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema'
+import { UserOrderByWithRelationInputObjectSchema as UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema';
+import { PaymentOrderByRelationAggregateInputObjectSchema as PaymentOrderByRelationAggregateInputObjectSchema } from './PaymentOrderByRelationAggregateInput.schema';
+import { rentalsOrderByRelationAggregateInputObjectSchema as rentalsOrderByRelationAggregateInputObjectSchema } from './rentalsOrderByRelationAggregateInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
@@ -45,7 +47,9 @@ const makeSchema = () => z.object({
   items: z.lazy(() => QuoteItemOrderByRelationAggregateInputObjectSchema).optional(),
   user: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
   approvedByUser: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
-  rejectedByUser: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional()
+  rejectedByUser: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
+  payments: z.lazy(() => PaymentOrderByRelationAggregateInputObjectSchema).optional(),
+  rentals: z.lazy(() => rentalsOrderByRelationAggregateInputObjectSchema).optional()
 }).strict();
 export const QuoteOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.QuoteOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteOrderByWithRelationInput>;
 export const QuoteOrderByWithRelationInputObjectZodSchema = makeSchema();

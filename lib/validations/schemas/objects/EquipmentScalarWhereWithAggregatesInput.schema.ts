@@ -11,7 +11,8 @@ import { UuidWithAggregatesFilterObjectSchema as UuidWithAggregatesFilterObjectS
 import { JsonNullableWithAggregatesFilterObjectSchema as JsonNullableWithAggregatesFilterObjectSchema } from './JsonNullableWithAggregatesFilter.schema';
 import { IntNullableWithAggregatesFilterObjectSchema as IntNullableWithAggregatesFilterObjectSchema } from './IntNullableWithAggregatesFilter.schema';
 import { DecimalNullableWithAggregatesFilterObjectSchema as DecimalNullableWithAggregatesFilterObjectSchema } from './DecimalNullableWithAggregatesFilter.schema';
-import { DateTimeWithAggregatesFilterObjectSchema as DateTimeWithAggregatesFilterObjectSchema } from './DateTimeWithAggregatesFilter.schema'
+import { DateTimeWithAggregatesFilterObjectSchema as DateTimeWithAggregatesFilterObjectSchema } from './DateTimeWithAggregatesFilter.schema';
+import { DateTimeNullableWithAggregatesFilterObjectSchema as DateTimeNullableWithAggregatesFilterObjectSchema } from './DateTimeNullableWithAggregatesFilter.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const equipmentscalarwherewithaggregatesinputSchema = z.object({
@@ -81,7 +82,44 @@ const equipmentscalarwherewithaggregatesinputSchema = z.object({
   biweeklyUseDirectValue: z.union([z.lazy(() => BoolWithAggregatesFilterObjectSchema), z.boolean()]).optional(),
   monthlyUseDirectValue: z.union([z.lazy(() => BoolWithAggregatesFilterObjectSchema), z.boolean()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.coerce.date()]).optional(),
-  updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.coerce.date()]).optional()
+  updatedAt: z.union([z.lazy(() => DateTimeWithAggregatesFilterObjectSchema), z.coerce.date()]).optional(),
+  purchasePrice: z.union([z.lazy(() => DecimalNullableWithAggregatesFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'purchasePrice' must be a Decimal",
+})]).optional().nullable(),
+  purchaseDate: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  depreciationRate: z.union([z.lazy(() => DecimalNullableWithAggregatesFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'depreciationRate' must be a Decimal",
+})]).optional().nullable(),
+  hourMeter: z.union([z.lazy(() => DecimalNullableWithAggregatesFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'hourMeter' must be a Decimal",
+})]).optional().nullable(),
+  odometer: z.union([z.lazy(() => DecimalNullableWithAggregatesFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'odometer' must be a Decimal",
+})]).optional().nullable()
 }).strict();
 export const EquipmentScalarWhereWithAggregatesInputObjectSchema: z.ZodType<Prisma.EquipmentScalarWhereWithAggregatesInput> = equipmentscalarwherewithaggregatesinputSchema as unknown as z.ZodType<Prisma.EquipmentScalarWhereWithAggregatesInput>;
 export const EquipmentScalarWhereWithAggregatesInputObjectZodSchema = equipmentscalarwherewithaggregatesinputSchema;

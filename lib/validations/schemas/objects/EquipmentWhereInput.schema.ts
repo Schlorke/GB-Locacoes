@@ -12,11 +12,13 @@ import { JsonNullableFilterObjectSchema as JsonNullableFilterObjectSchema } from
 import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
 import { DecimalNullableFilterObjectSchema as DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema';
 import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
+import { DateTimeNullableFilterObjectSchema as DateTimeNullableFilterObjectSchema } from './DateTimeNullableFilter.schema';
 import { CategoryScalarRelationFilterObjectSchema as CategoryScalarRelationFilterObjectSchema } from './CategoryScalarRelationFilter.schema';
 import { CategoryWhereInputObjectSchema as CategoryWhereInputObjectSchema } from './CategoryWhereInput.schema';
 import { QuoteItemListRelationFilterObjectSchema as QuoteItemListRelationFilterObjectSchema } from './QuoteItemListRelationFilter.schema';
 import { Rental_itemsListRelationFilterObjectSchema as Rental_itemsListRelationFilterObjectSchema } from './Rental_itemsListRelationFilter.schema';
-import { CartItemListRelationFilterObjectSchema as CartItemListRelationFilterObjectSchema } from './CartItemListRelationFilter.schema'
+import { CartItemListRelationFilterObjectSchema as CartItemListRelationFilterObjectSchema } from './CartItemListRelationFilter.schema';
+import { MaintenanceListRelationFilterObjectSchema as MaintenanceListRelationFilterObjectSchema } from './MaintenanceListRelationFilter.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const equipmentwhereinputSchema = z.object({
@@ -87,10 +89,48 @@ const equipmentwhereinputSchema = z.object({
   monthlyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
+  purchasePrice: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'purchasePrice' must be a Decimal",
+})]).optional().nullable(),
+  purchaseDate: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  depreciationRate: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'depreciationRate' must be a Decimal",
+})]).optional().nullable(),
+  hourMeter: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'hourMeter' must be a Decimal",
+})]).optional().nullable(),
+  odometer: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'odometer' must be a Decimal",
+})]).optional().nullable(),
   category: z.union([z.lazy(() => CategoryScalarRelationFilterObjectSchema), z.lazy(() => CategoryWhereInputObjectSchema)]).optional(),
   quoteItems: z.lazy(() => QuoteItemListRelationFilterObjectSchema).optional(),
   rental_items: z.lazy(() => Rental_itemsListRelationFilterObjectSchema).optional(),
-  cartItems: z.lazy(() => CartItemListRelationFilterObjectSchema).optional()
+  cartItems: z.lazy(() => CartItemListRelationFilterObjectSchema).optional(),
+  maintenances: z.lazy(() => MaintenanceListRelationFilterObjectSchema).optional()
 }).strict();
 export const EquipmentWhereInputObjectSchema: z.ZodType<Prisma.EquipmentWhereInput> = equipmentwhereinputSchema as unknown as z.ZodType<Prisma.EquipmentWhereInput>;
 export const EquipmentWhereInputObjectZodSchema = equipmentwhereinputSchema;

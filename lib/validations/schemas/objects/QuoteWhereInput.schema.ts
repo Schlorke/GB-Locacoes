@@ -16,7 +16,9 @@ import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from '
 import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { QuoteItemListRelationFilterObjectSchema as QuoteItemListRelationFilterObjectSchema } from './QuoteItemListRelationFilter.schema';
 import { UserNullableScalarRelationFilterObjectSchema as UserNullableScalarRelationFilterObjectSchema } from './UserNullableScalarRelationFilter.schema';
-import { UserWhereInputObjectSchema as UserWhereInputObjectSchema } from './UserWhereInput.schema'
+import { UserWhereInputObjectSchema as UserWhereInputObjectSchema } from './UserWhereInput.schema';
+import { PaymentListRelationFilterObjectSchema as PaymentListRelationFilterObjectSchema } from './PaymentListRelationFilter.schema';
+import { RentalsListRelationFilterObjectSchema as RentalsListRelationFilterObjectSchema } from './RentalsListRelationFilter.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const quotewhereinputSchema = z.object({
@@ -125,7 +127,9 @@ const quotewhereinputSchema = z.object({
   items: z.lazy(() => QuoteItemListRelationFilterObjectSchema).optional(),
   user: z.union([z.lazy(() => UserNullableScalarRelationFilterObjectSchema), z.lazy(() => UserWhereInputObjectSchema)]).optional(),
   approvedByUser: z.union([z.lazy(() => UserNullableScalarRelationFilterObjectSchema), z.lazy(() => UserWhereInputObjectSchema)]).optional(),
-  rejectedByUser: z.union([z.lazy(() => UserNullableScalarRelationFilterObjectSchema), z.lazy(() => UserWhereInputObjectSchema)]).optional()
+  rejectedByUser: z.union([z.lazy(() => UserNullableScalarRelationFilterObjectSchema), z.lazy(() => UserWhereInputObjectSchema)]).optional(),
+  payments: z.lazy(() => PaymentListRelationFilterObjectSchema).optional(),
+  rentals: z.lazy(() => RentalsListRelationFilterObjectSchema).optional()
 }).strict();
 export const QuoteWhereInputObjectSchema: z.ZodType<Prisma.QuoteWhereInput> = quotewhereinputSchema as unknown as z.ZodType<Prisma.QuoteWhereInput>;
 export const QuoteWhereInputObjectZodSchema = quotewhereinputSchema;

@@ -38,14 +38,23 @@ export function Toaster(props: ToasterProps) {
   return (
     <>
       {/* Mantém a altura natural das toasts mesmo com expand={false} */}
-      {/* Ajusta posição das toasts para aparecer abaixo do header (104px + 16px de espaçamento) */}
       <style jsx global>{`
         [data-sonner-toast] {
           height: auto !important;
         }
-        /* Ajusta posição do container do toaster quando está no topo */
+        /* Público (default): abaixo do header público (104px + 16px) */
         [data-sonner-toaster] {
           top: 120px !important;
+        }
+        /* Admin: usa class adicionada em app/admin/layout.tsx */
+        body.admin-body-layout [data-sonner-toaster] {
+          top: 16px !important;
+        }
+        /* Admin mobile: header do admin aparece (pt-16) */
+        @media (max-width: 767px) {
+          body.admin-body-layout [data-sonner-toaster] {
+            top: 80px !important;
+          }
         }
       `}</style>
 

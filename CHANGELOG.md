@@ -29,6 +29,10 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🛠️
 
+- **Posicionamento de toasts no Admin**: Ajustado offset do Sonner para o
+  domínio administrativo, mantendo o comportamento das páginas públicas (toast
+  abaixo do header).
+
 - **Warning de Depreciação do Zustand (Vercel Analytics/Speed Insights)**:
   Suprimido warning `[DEPRECATED] Default export is deprecated` no console do
   navegador

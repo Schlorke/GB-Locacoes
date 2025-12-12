@@ -8,7 +8,8 @@ import { SessionUncheckedCreateNestedManyWithoutUserInputObjectSchema as Session
 import { AddressUncheckedCreateNestedManyWithoutUserInputObjectSchema as AddressUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './AddressUncheckedCreateNestedManyWithoutUserInput.schema';
 import { CartUncheckedCreateNestedOneWithoutUserInputObjectSchema as CartUncheckedCreateNestedOneWithoutUserInputObjectSchema } from './CartUncheckedCreateNestedOneWithoutUserInput.schema';
 import { QuoteUncheckedCreateNestedManyWithoutApprovedByUserInputObjectSchema as QuoteUncheckedCreateNestedManyWithoutApprovedByUserInputObjectSchema } from './QuoteUncheckedCreateNestedManyWithoutApprovedByUserInput.schema';
-import { QuoteUncheckedCreateNestedManyWithoutRejectedByUserInputObjectSchema as QuoteUncheckedCreateNestedManyWithoutRejectedByUserInputObjectSchema } from './QuoteUncheckedCreateNestedManyWithoutRejectedByUserInput.schema'
+import { QuoteUncheckedCreateNestedManyWithoutRejectedByUserInputObjectSchema as QuoteUncheckedCreateNestedManyWithoutRejectedByUserInputObjectSchema } from './QuoteUncheckedCreateNestedManyWithoutRejectedByUserInput.schema';
+import { AuditLogUncheckedCreateNestedManyWithoutUserInputObjectSchema as AuditLogUncheckedCreateNestedManyWithoutUserInputObjectSchema } from './AuditLogUncheckedCreateNestedManyWithoutUserInput.schema'
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
@@ -29,7 +30,8 @@ const makeSchema = () => z.object({
   addresses: z.lazy(() => AddressUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional(),
   cart: z.lazy(() => CartUncheckedCreateNestedOneWithoutUserInputObjectSchema).optional(),
   approvedQuotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutApprovedByUserInputObjectSchema).optional(),
-  rejectedQuotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutRejectedByUserInputObjectSchema).optional()
+  rejectedQuotes: z.lazy(() => QuoteUncheckedCreateNestedManyWithoutRejectedByUserInputObjectSchema).optional(),
+  auditLogs: z.lazy(() => AuditLogUncheckedCreateNestedManyWithoutUserInputObjectSchema).optional()
 }).strict();
 export const UserUncheckedCreateWithoutRentalsInputObjectSchema: z.ZodType<Prisma.UserUncheckedCreateWithoutRentalsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUncheckedCreateWithoutRentalsInput>;
 export const UserUncheckedCreateWithoutRentalsInputObjectZodSchema = makeSchema();

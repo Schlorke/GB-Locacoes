@@ -7,7 +7,9 @@ import { DeliveryTypeSchema } from '../enums/DeliveryType.schema';
 import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
 import { QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema as QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema } from './QuoteItemCreateNestedManyWithoutQuoteInput.schema';
 import { UserCreateNestedOneWithoutQuotesInputObjectSchema as UserCreateNestedOneWithoutQuotesInputObjectSchema } from './UserCreateNestedOneWithoutQuotesInput.schema';
-import { UserCreateNestedOneWithoutApprovedQuotesInputObjectSchema as UserCreateNestedOneWithoutApprovedQuotesInputObjectSchema } from './UserCreateNestedOneWithoutApprovedQuotesInput.schema'
+import { UserCreateNestedOneWithoutApprovedQuotesInputObjectSchema as UserCreateNestedOneWithoutApprovedQuotesInputObjectSchema } from './UserCreateNestedOneWithoutApprovedQuotesInput.schema';
+import { PaymentCreateNestedManyWithoutQuoteInputObjectSchema as PaymentCreateNestedManyWithoutQuoteInputObjectSchema } from './PaymentCreateNestedManyWithoutQuoteInput.schema';
+import { rentalsCreateNestedManyWithoutQuoteInputObjectSchema as rentalsCreateNestedManyWithoutQuoteInputObjectSchema } from './rentalsCreateNestedManyWithoutQuoteInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -111,7 +113,9 @@ const makeSchema = () => z.object({
   updatedAt: z.coerce.date().optional(),
   items: z.lazy(() => QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema).optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputObjectSchema).optional(),
-  approvedByUser: z.lazy(() => UserCreateNestedOneWithoutApprovedQuotesInputObjectSchema).optional()
+  approvedByUser: z.lazy(() => UserCreateNestedOneWithoutApprovedQuotesInputObjectSchema).optional(),
+  payments: z.lazy(() => PaymentCreateNestedManyWithoutQuoteInputObjectSchema).optional(),
+  rentals: z.lazy(() => rentalsCreateNestedManyWithoutQuoteInputObjectSchema).optional()
 }).strict();
 export const QuoteCreateWithoutRejectedByUserInputObjectSchema: z.ZodType<Prisma.QuoteCreateWithoutRejectedByUserInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteCreateWithoutRejectedByUserInput>;
 export const QuoteCreateWithoutRejectedByUserInputObjectZodSchema = makeSchema();

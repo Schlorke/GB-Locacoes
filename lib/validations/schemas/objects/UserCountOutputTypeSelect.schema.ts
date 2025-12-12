@@ -7,7 +7,8 @@ import { UserCountOutputTypeCountRentalsArgsObjectSchema as UserCountOutputTypeC
 import { UserCountOutputTypeCountSessionsArgsObjectSchema as UserCountOutputTypeCountSessionsArgsObjectSchema } from './UserCountOutputTypeCountSessionsArgs.schema';
 import { UserCountOutputTypeCountAddressesArgsObjectSchema as UserCountOutputTypeCountAddressesArgsObjectSchema } from './UserCountOutputTypeCountAddressesArgs.schema';
 import { UserCountOutputTypeCountApprovedQuotesArgsObjectSchema as UserCountOutputTypeCountApprovedQuotesArgsObjectSchema } from './UserCountOutputTypeCountApprovedQuotesArgs.schema';
-import { UserCountOutputTypeCountRejectedQuotesArgsObjectSchema as UserCountOutputTypeCountRejectedQuotesArgsObjectSchema } from './UserCountOutputTypeCountRejectedQuotesArgs.schema'
+import { UserCountOutputTypeCountRejectedQuotesArgsObjectSchema as UserCountOutputTypeCountRejectedQuotesArgsObjectSchema } from './UserCountOutputTypeCountRejectedQuotesArgs.schema';
+import { UserCountOutputTypeCountAuditLogsArgsObjectSchema as UserCountOutputTypeCountAuditLogsArgsObjectSchema } from './UserCountOutputTypeCountAuditLogsArgs.schema'
 
 const makeSchema = () => z.object({
   accounts: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeCountAccountsArgsObjectSchema)]).optional(),
@@ -16,7 +17,8 @@ const makeSchema = () => z.object({
   sessions: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeCountSessionsArgsObjectSchema)]).optional(),
   addresses: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeCountAddressesArgsObjectSchema)]).optional(),
   approvedQuotes: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeCountApprovedQuotesArgsObjectSchema)]).optional(),
-  rejectedQuotes: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeCountRejectedQuotesArgsObjectSchema)]).optional()
+  rejectedQuotes: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeCountRejectedQuotesArgsObjectSchema)]).optional(),
+  auditLogs: z.union([z.boolean(), z.lazy(() => UserCountOutputTypeCountAuditLogsArgsObjectSchema)]).optional()
 }).strict();
 export const UserCountOutputTypeSelectObjectSchema: z.ZodType<Prisma.UserCountOutputTypeSelect> = makeSchema() as unknown as z.ZodType<Prisma.UserCountOutputTypeSelect>;
 export const UserCountOutputTypeSelectObjectZodSchema = makeSchema();

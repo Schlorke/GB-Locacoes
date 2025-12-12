@@ -27,7 +27,12 @@ const makeSchema = () => z.object({
   biweeklyUseDirectValue: SortOrderSchema.optional(),
   monthlyUseDirectValue: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
-  updatedAt: SortOrderSchema.optional()
+  updatedAt: SortOrderSchema.optional(),
+  purchasePrice: SortOrderSchema.optional(),
+  purchaseDate: SortOrderSchema.optional(),
+  depreciationRate: SortOrderSchema.optional(),
+  hourMeter: SortOrderSchema.optional(),
+  odometer: SortOrderSchema.optional()
 }).strict();
 export const EquipmentCountOrderByAggregateInputObjectSchema: z.ZodType<Prisma.EquipmentCountOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentCountOrderByAggregateInput>;
 export const EquipmentCountOrderByAggregateInputObjectZodSchema = makeSchema();

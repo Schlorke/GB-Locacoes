@@ -8,7 +8,8 @@ import { rentalsCreateNestedManyWithoutUsersInputObjectSchema as rentalsCreateNe
 import { SessionCreateNestedManyWithoutUserInputObjectSchema as SessionCreateNestedManyWithoutUserInputObjectSchema } from './SessionCreateNestedManyWithoutUserInput.schema';
 import { AddressCreateNestedManyWithoutUserInputObjectSchema as AddressCreateNestedManyWithoutUserInputObjectSchema } from './AddressCreateNestedManyWithoutUserInput.schema';
 import { QuoteCreateNestedManyWithoutApprovedByUserInputObjectSchema as QuoteCreateNestedManyWithoutApprovedByUserInputObjectSchema } from './QuoteCreateNestedManyWithoutApprovedByUserInput.schema';
-import { QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema as QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema } from './QuoteCreateNestedManyWithoutRejectedByUserInput.schema'
+import { QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema as QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema } from './QuoteCreateNestedManyWithoutRejectedByUserInput.schema';
+import { AuditLogCreateNestedManyWithoutUserInputObjectSchema as AuditLogCreateNestedManyWithoutUserInputObjectSchema } from './AuditLogCreateNestedManyWithoutUserInput.schema'
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
@@ -29,7 +30,8 @@ const makeSchema = () => z.object({
   sessions: z.lazy(() => SessionCreateNestedManyWithoutUserInputObjectSchema).optional(),
   addresses: z.lazy(() => AddressCreateNestedManyWithoutUserInputObjectSchema).optional(),
   approvedQuotes: z.lazy(() => QuoteCreateNestedManyWithoutApprovedByUserInputObjectSchema).optional(),
-  rejectedQuotes: z.lazy(() => QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema).optional()
+  rejectedQuotes: z.lazy(() => QuoteCreateNestedManyWithoutRejectedByUserInputObjectSchema).optional(),
+  auditLogs: z.lazy(() => AuditLogCreateNestedManyWithoutUserInputObjectSchema).optional()
 }).strict();
 export const UserCreateWithoutCartInputObjectSchema: z.ZodType<Prisma.UserCreateWithoutCartInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateWithoutCartInput>;
 export const UserCreateWithoutCartInputObjectZodSchema = makeSchema();

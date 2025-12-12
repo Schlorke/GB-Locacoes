@@ -50,6 +50,8 @@ export const QuoteFindFirstOrThrowSelectSchema: z.ZodType<Prisma.QuoteSelect> = 
     user: z.boolean().optional(),
     approvedByUser: z.boolean().optional(),
     rejectedByUser: z.boolean().optional(),
+    payments: z.boolean().optional(),
+    rentals: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.QuoteSelect>;
 
@@ -93,6 +95,8 @@ export const QuoteFindFirstOrThrowSelectZodSchema = z.object({
     user: z.boolean().optional(),
     approvedByUser: z.boolean().optional(),
     rejectedByUser: z.boolean().optional(),
+    payments: z.boolean().optional(),
+    rentals: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict();
 

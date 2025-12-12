@@ -8,7 +8,9 @@ import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValue
 import { QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema as QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema } from './QuoteItemCreateNestedManyWithoutQuoteInput.schema';
 import { UserCreateNestedOneWithoutQuotesInputObjectSchema as UserCreateNestedOneWithoutQuotesInputObjectSchema } from './UserCreateNestedOneWithoutQuotesInput.schema';
 import { UserCreateNestedOneWithoutApprovedQuotesInputObjectSchema as UserCreateNestedOneWithoutApprovedQuotesInputObjectSchema } from './UserCreateNestedOneWithoutApprovedQuotesInput.schema';
-import { UserCreateNestedOneWithoutRejectedQuotesInputObjectSchema as UserCreateNestedOneWithoutRejectedQuotesInputObjectSchema } from './UserCreateNestedOneWithoutRejectedQuotesInput.schema'
+import { UserCreateNestedOneWithoutRejectedQuotesInputObjectSchema as UserCreateNestedOneWithoutRejectedQuotesInputObjectSchema } from './UserCreateNestedOneWithoutRejectedQuotesInput.schema';
+import { PaymentCreateNestedManyWithoutQuoteInputObjectSchema as PaymentCreateNestedManyWithoutQuoteInputObjectSchema } from './PaymentCreateNestedManyWithoutQuoteInput.schema';
+import { rentalsCreateNestedManyWithoutQuoteInputObjectSchema as rentalsCreateNestedManyWithoutQuoteInputObjectSchema } from './rentalsCreateNestedManyWithoutQuoteInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -112,7 +114,9 @@ const makeSchema = () => z.object({
   items: z.lazy(() => QuoteItemCreateNestedManyWithoutQuoteInputObjectSchema).optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutQuotesInputObjectSchema).optional(),
   approvedByUser: z.lazy(() => UserCreateNestedOneWithoutApprovedQuotesInputObjectSchema).optional(),
-  rejectedByUser: z.lazy(() => UserCreateNestedOneWithoutRejectedQuotesInputObjectSchema).optional()
+  rejectedByUser: z.lazy(() => UserCreateNestedOneWithoutRejectedQuotesInputObjectSchema).optional(),
+  payments: z.lazy(() => PaymentCreateNestedManyWithoutQuoteInputObjectSchema).optional(),
+  rentals: z.lazy(() => rentalsCreateNestedManyWithoutQuoteInputObjectSchema).optional()
 }).strict();
 export const QuoteCreateInputObjectSchema: z.ZodType<Prisma.QuoteCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteCreateInput>;
 export const QuoteCreateInputObjectZodSchema = makeSchema();

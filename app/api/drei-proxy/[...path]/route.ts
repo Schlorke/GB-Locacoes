@@ -9,10 +9,11 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { path: string[] } }
+  { params }: { params: Promise<{ path: string[] }> }
 ) {
   try {
-    const path = params.path.join('/')
+    const resolvedParams = await params
+    const path = resolvedParams.path.join('/')
     const githubUrl = `https://raw.githubusercontent.com/pmndrs/drei-assets/456060a26bbeb8fdf79326f224b6d99b8bcce736/${path}`
 
     // Fazer requisição ao GitHub com cache do servidor

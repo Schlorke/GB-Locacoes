@@ -13,7 +13,8 @@ import { rentalsUncheckedUpdateManyWithoutUsersNestedInputObjectSchema as rental
 import { SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema as SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { AddressUncheckedUpdateManyWithoutUserNestedInputObjectSchema as AddressUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './AddressUncheckedUpdateManyWithoutUserNestedInput.schema';
 import { CartUncheckedUpdateOneWithoutUserNestedInputObjectSchema as CartUncheckedUpdateOneWithoutUserNestedInputObjectSchema } from './CartUncheckedUpdateOneWithoutUserNestedInput.schema';
-import { QuoteUncheckedUpdateManyWithoutRejectedByUserNestedInputObjectSchema as QuoteUncheckedUpdateManyWithoutRejectedByUserNestedInputObjectSchema } from './QuoteUncheckedUpdateManyWithoutRejectedByUserNestedInput.schema'
+import { QuoteUncheckedUpdateManyWithoutRejectedByUserNestedInputObjectSchema as QuoteUncheckedUpdateManyWithoutRejectedByUserNestedInputObjectSchema } from './QuoteUncheckedUpdateManyWithoutRejectedByUserNestedInput.schema';
+import { AuditLogUncheckedUpdateManyWithoutUserNestedInputObjectSchema as AuditLogUncheckedUpdateManyWithoutUserNestedInputObjectSchema } from './AuditLogUncheckedUpdateManyWithoutUserNestedInput.schema'
 
 const makeSchema = () => z.object({
   id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -34,7 +35,8 @@ const makeSchema = () => z.object({
   sessions: z.lazy(() => SessionUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   addresses: z.lazy(() => AddressUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   cart: z.lazy(() => CartUncheckedUpdateOneWithoutUserNestedInputObjectSchema).optional(),
-  rejectedQuotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutRejectedByUserNestedInputObjectSchema).optional()
+  rejectedQuotes: z.lazy(() => QuoteUncheckedUpdateManyWithoutRejectedByUserNestedInputObjectSchema).optional(),
+  auditLogs: z.lazy(() => AuditLogUncheckedUpdateManyWithoutUserNestedInputObjectSchema).optional()
 }).strict();
 export const UserUncheckedUpdateWithoutApprovedQuotesInputObjectSchema: z.ZodType<Prisma.UserUncheckedUpdateWithoutApprovedQuotesInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUncheckedUpdateWithoutApprovedQuotesInput>;
 export const UserUncheckedUpdateWithoutApprovedQuotesInputObjectZodSchema = makeSchema();

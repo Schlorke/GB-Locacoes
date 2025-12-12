@@ -1,6 +1,7 @@
 'use client'
 
 import { AdminFilterCard } from '@/components/admin/admin-filter-card'
+import { KanbanPipeline } from '@/components/admin/kanban-pipeline'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -23,6 +24,8 @@ import {
   Phone,
   User,
   XCircle,
+  LayoutGrid,
+  Table,
 } from 'lucide-react'
 import { Suspense, useCallback, useEffect, useState } from 'react'
 
@@ -60,22 +63,35 @@ interface Quote {
       name: string
     }
   }>
+  [key: string]: unknown // Index signature para compatibilidade com KanbanItem
 }
 
-const statusConfig = {
+const statusConfig: Record<
+  string,
+  {
+    key: string
+    label: string
+    color: string
+    icon: typeof Clock
+    gradient: string
+  }
+> = {
   pending: {
+    key: 'pending',
     label: 'Pendente',
     color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     icon: Clock,
     gradient: 'from-yellow-400 to-orange-500',
   },
   approved: {
+    key: 'approved',
     label: 'Aprovado',
     color: 'bg-green-100 text-green-800 border-green-200',
     icon: CheckCircle,
     gradient: 'from-green-400 to-emerald-500',
   },
   rejected: {
+    key: 'rejected',
     label: 'Rejeitado',
     color: 'bg-red-100 text-red-800 border-red-200',
     icon: XCircle,
@@ -93,6 +109,7 @@ function AdminQuotesPage() {
   const [periodFilter, setPeriodFilter] = useState<string>('all')
   const [valueFilter, setValueFilter] = useState<string>('all')
   const [isUpdating, setIsUpdating] = useState(false)
+  const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban')
 
   const fetchQuotes = useCallback(async () => {
     try {
@@ -369,155 +386,258 @@ function AdminQuotesPage() {
           />
         </motion.div>
 
-        {/* Tabela de Orçamentos */}
+        {/* Toggle de Visualização */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          transition={{ delay: 0.15 }}
+          className="mb-4 flex justify-end gap-2"
         >
-          <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
-            {/* Clean depth layers for table card */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+          <div className="flex items-center gap-2 bg-white rounded-lg p-1 shadow-sm border border-gray-200">
+            <Button
+              variant={viewMode === 'kanban' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('kanban')}
+              className="flex items-center gap-2"
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span className="hidden sm:inline">Kanban</span>
+            </Button>
+            <Button
+              variant={viewMode === 'table' ? 'default' : 'ghost'}
+              size="sm"
+              onClick={() => setViewMode('table')}
+              className="flex items-center gap-2"
+            >
+              <Table className="w-4 h-4" />
+              <span className="hidden sm:inline">Tabela</span>
+            </Button>
+          </div>
+        </motion.div>
 
-            <CardContent className="relative z-10 p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-100 bg-gray-50/50">
-                      <th className="text-left p-4 font-semibold text-gray-700">
-                        Cliente
-                      </th>
-                      <th className="text-left p-4 font-semibold text-gray-700">
-                        Equipamentos
-                      </th>
-                      <th className="text-left p-4 font-semibold text-gray-700">
-                        Período
-                      </th>
-                      <th className="text-left p-4 font-semibold text-gray-700">
-                        Valor Total
-                      </th>
-                      <th className="text-left p-4 font-semibold text-gray-700">
-                        Status
-                      </th>
-                      <th className="text-left p-4 font-semibold text-gray-700">
-                        Ações
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <AnimatePresence>
-                      {Array.isArray(filteredQuotes) &&
-                        filteredQuotes.map((quote, index) => (
-                          <motion.tr
-                            key={quote.id}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 20 }}
-                            transition={{ delay: index * 0.05 }}
-                            className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors group"
-                          >
-                            <td className="p-4">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                  {quote.name?.charAt(0).toUpperCase()}
+        {/* Pipeline Kanban */}
+        {viewMode === 'kanban' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-6"
+          >
+            <KanbanPipeline<Quote>
+              items={filteredQuotes}
+              statusConfig={statusConfig}
+              onItemClick={(quote) => setSelectedQuote(quote as Quote)}
+              columnsPerRow={{
+                mobile: 1,
+                tablet: 3,
+                desktop: 3,
+                xl: 3,
+              }}
+              renderItem={(quote) => {
+                const quoteTyped = quote as Quote
+                return (
+                  <div
+                    className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-orange-300 cursor-pointer transition-colors"
+                    onClick={() => setSelectedQuote(quoteTyped)}
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <p className="font-medium text-sm text-gray-900">
+                            {quoteTyped.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {quoteTyped.email}
+                          </p>
+                          {quoteTyped.company && (
+                            <p className="text-xs text-gray-400 mt-1">
+                              {quoteTyped.company}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <Package className="w-3 h-3" />
+                        <span>
+                          {Array.isArray(quoteTyped.equipments)
+                            ? quoteTyped.equipments.length
+                            : quoteTyped.items?.length || 0}{' '}
+                          equipamento(s)
+                        </span>
+                      </div>
+                      {quoteTyped.totalPrice && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold text-orange-600">
+                            {formatCurrency(quoteTyped.totalPrice)}
+                          </span>
+                          {quoteTyped.startDate && (
+                            <span className="text-xs text-gray-500">
+                              {formatDate(quoteTyped.startDate)}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              }}
+            />
+          </motion.div>
+        )}
+
+        {/* Tabela de Orçamentos */}
+        {viewMode === 'table' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm">
+              {/* Clean depth layers for table card */}
+              <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
+
+              <CardContent className="relative z-10 p-0">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-gray-100 bg-gray-50/50">
+                        <th className="text-left p-4 font-semibold text-gray-700">
+                          Cliente
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-700">
+                          Equipamentos
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-700">
+                          Período
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-700">
+                          Valor Total
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-700">
+                          Status
+                        </th>
+                        <th className="text-left p-4 font-semibold text-gray-700">
+                          Ações
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <AnimatePresence>
+                        {Array.isArray(filteredQuotes) &&
+                          filteredQuotes.map((quote, index) => (
+                            <motion.tr
+                              key={quote.id}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              exit={{ opacity: 0, x: 20 }}
+                              transition={{ delay: index * 0.05 }}
+                              className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors group"
+                            >
+                              <td className="p-4">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                    {quote.name?.charAt(0).toUpperCase()}
+                                  </div>
+                                  <div>
+                                    <div className="font-medium text-gray-900">
+                                      {quote.name}
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      {quote.email}
+                                    </div>
+                                    {quote.company && (
+                                      <div className="text-xs text-gray-400 flex items-center gap-1 mt-1">
+                                        <Building className="w-3 h-3" />
+                                        {quote.company}
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
-                                <div>
-                                  <div className="font-medium text-gray-900">
-                                    {quote.name}
-                                  </div>
-                                  <div className="text-sm text-gray-500">
-                                    {quote.email}
-                                  </div>
-                                  {quote.company && (
-                                    <div className="text-xs text-gray-400 flex items-center gap-1 mt-1">
-                                      <Building className="w-3 h-3" />
-                                      {quote.company}
+                              </td>
+                              <td className="p-4">
+                                <div className="flex items-center gap-2">
+                                  <Package className="w-4 h-4 text-gray-400" />
+                                  <span className="text-sm font-medium">
+                                    {Array.isArray(quote.equipments)
+                                      ? quote.equipments.length
+                                      : 0}{' '}
+                                    equipamentos
+                                  </span>
+                                </div>
+                              </td>
+                              <td className="p-4">
+                                <div className="text-sm">
+                                  {quote.startDate && quote.endDate ? (
+                                    <>
+                                      <div className="flex items-center gap-1 text-gray-600">
+                                        <Calendar className="w-3 h-3" />
+                                        {formatDate(quote.startDate)}
+                                      </div>
+                                      <div className="text-gray-500 ml-4">
+                                        até {formatDate(quote.endDate)}
+                                      </div>
+                                    </>
+                                  ) : quote.items &&
+                                    quote.items.length > 0 &&
+                                    quote.items[0]?.days ? (
+                                    <div className="text-gray-500">
+                                      {quote.items[0].days}{' '}
+                                      {quote.items[0].days === 1
+                                        ? 'dia'
+                                        : 'dias'}
+                                    </div>
+                                  ) : (
+                                    <div className="text-gray-400 italic">
+                                      Período não definido
                                     </div>
                                   )}
                                 </div>
-                              </div>
-                            </td>
-                            <td className="p-4">
-                              <div className="flex items-center gap-2">
-                                <Package className="w-4 h-4 text-gray-400" />
-                                <span className="text-sm font-medium">
-                                  {Array.isArray(quote.equipments)
-                                    ? quote.equipments.length
-                                    : 0}{' '}
-                                  equipamentos
+                              </td>
+                              <td className="p-4">
+                                <span className="font-semibold text-lg text-green-600">
+                                  {formatCurrency(quote.totalPrice || 0)}
                                 </span>
-                              </div>
-                            </td>
-                            <td className="p-4">
-                              <div className="text-sm">
-                                {quote.startDate && quote.endDate ? (
-                                  <>
-                                    <div className="flex items-center gap-1 text-gray-600">
-                                      <Calendar className="w-3 h-3" />
-                                      {formatDate(quote.startDate)}
-                                    </div>
-                                    <div className="text-gray-500 ml-4">
-                                      até {formatDate(quote.endDate)}
-                                    </div>
-                                  </>
-                                ) : quote.items &&
-                                  quote.items.length > 0 &&
-                                  quote.items[0]?.days ? (
-                                  <div className="text-gray-500">
-                                    {quote.items[0].days}{' '}
-                                    {quote.items[0].days === 1 ? 'dia' : 'dias'}
-                                  </div>
-                                ) : (
-                                  <div className="text-gray-400 italic">
-                                    Período não definido
-                                  </div>
-                                )}
-                              </div>
-                            </td>
-                            <td className="p-4">
-                              <span className="font-semibold text-lg text-green-600">
-                                {formatCurrency(quote.totalPrice || 0)}
-                              </span>
-                            </td>
-                            <td className="p-4">
-                              {getStatusBadge(quote.status)}
-                            </td>
-                            <td className="p-4">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => setSelectedQuote(quote)}
-                                className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-opacity"
-                              >
-                                <Eye className="w-4 h-4 mr-2" />
-                                Ver Detalhes
-                              </Button>
-                            </td>
-                          </motion.tr>
-                        ))}
-                    </AnimatePresence>
-                  </tbody>
-                </table>
+                              </td>
+                              <td className="p-4">
+                                {getStatusBadge(quote.status)}
+                              </td>
+                              <td className="p-4">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setSelectedQuote(quote)}
+                                  className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Eye className="w-4 h-4 mr-2" />
+                                  Ver Detalhes
+                                </Button>
+                              </td>
+                            </motion.tr>
+                          ))}
+                      </AnimatePresence>
+                    </tbody>
+                  </table>
 
-                {(!Array.isArray(filteredQuotes) ||
-                  filteredQuotes.length === 0) && (
-                  <div className="text-center py-12">
-                    <div className="text-gray-400 mb-4">
-                      <FileText className="w-12 h-12 mx-auto mb-3" />
-                      <p className="text-lg font-medium">
-                        Nenhum orçamento encontrado
-                      </p>
-                      <p className="text-sm">
-                        Tente ajustar os filtros ou aguarde novos orçamentos
-                      </p>
+                  {(!Array.isArray(filteredQuotes) ||
+                    filteredQuotes.length === 0) && (
+                    <div className="text-center py-12">
+                      <div className="text-gray-400 mb-4">
+                        <FileText className="w-12 h-12 mx-auto mb-3" />
+                        <p className="text-lg font-medium">
+                          Nenhum orçamento encontrado
+                        </p>
+                        <p className="text-sm">
+                          Tente ajustar os filtros ou aguarde novos orçamentos
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
 
         {/* Modal de Detalhes */}
         <Dialog.Root
@@ -760,7 +880,7 @@ function AdminQuotesPage() {
                         }
                         disabled={isUpdating}
                         variant="default"
-                        size="lg"
+                        size="default"
                         className="flex-1"
                       >
                         <CheckCircle className="w-4 h-4" />
@@ -772,7 +892,7 @@ function AdminQuotesPage() {
                         }
                         disabled={isUpdating}
                         variant="outline"
-                        size="lg"
+                        size="default"
                         className="flex-1 bg-white"
                       >
                         <XCircle className="w-4 h-4" />

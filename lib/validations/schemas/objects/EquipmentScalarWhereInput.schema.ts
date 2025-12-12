@@ -11,7 +11,8 @@ import { UuidFilterObjectSchema as UuidFilterObjectSchema } from './UuidFilter.s
 import { JsonNullableFilterObjectSchema as JsonNullableFilterObjectSchema } from './JsonNullableFilter.schema';
 import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
 import { DecimalNullableFilterObjectSchema as DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema';
-import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema'
+import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
+import { DateTimeNullableFilterObjectSchema as DateTimeNullableFilterObjectSchema } from './DateTimeNullableFilter.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const equipmentscalarwhereinputSchema = z.object({
@@ -81,7 +82,44 @@ const equipmentscalarwhereinputSchema = z.object({
   biweeklyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   monthlyUseDirectValue: z.union([z.lazy(() => BoolFilterObjectSchema), z.boolean()]).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
-  updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional()
+  updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
+  purchasePrice: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'purchasePrice' must be a Decimal",
+})]).optional().nullable(),
+  purchaseDate: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  depreciationRate: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'depreciationRate' must be a Decimal",
+})]).optional().nullable(),
+  hourMeter: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'hourMeter' must be a Decimal",
+})]).optional().nullable(),
+  odometer: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'odometer' must be a Decimal",
+})]).optional().nullable()
 }).strict();
 export const EquipmentScalarWhereInputObjectSchema: z.ZodType<Prisma.EquipmentScalarWhereInput> = equipmentscalarwhereinputSchema as unknown as z.ZodType<Prisma.EquipmentScalarWhereInput>;
 export const EquipmentScalarWhereInputObjectZodSchema = equipmentscalarwhereinputSchema;

@@ -182,11 +182,22 @@ useEffect(() => {
 
 ### **Integração:**
 
-`app/ClientLayout.tsx` (componente `<SonnerToaster />`)
+`app/ClientLayout.tsx` (componente `<Toaster />`)
 
-### **Estilos Customizados:**
+### **Posicionamento (Público vs Admin)**
 
-`app/globals.css` (seção 18: Sonner Toast Customização)
+O projeto usa **offsets diferentes** para não quebrar UX:
+
+- **Páginas públicas**: toast aparece **abaixo do header público** (offset
+  maior)
+- **Admin**: toast fica **mais acima no desktop** (admin não tem header fixa), e
+  **abaixo do header do admin no mobile**
+
+Isso é controlado em `components/ui/sonner-toaster.tsx` via CSS global:
+
+- Default (público): `[data-sonner-toaster] { top: 120px }`
+- Admin (override): `body.admin-body-layout [data-sonner-toaster] { top: 16px }`
+- Admin mobile: `@media (max-width: 767px) { top: 80px }`
 
 ---
 

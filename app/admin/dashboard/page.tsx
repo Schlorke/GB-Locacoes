@@ -686,16 +686,17 @@ export default function AdminDashboard() {
           transition={{ delay: 0.4 }}
           className="mb-8"
         >
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
             {/* Taxa de Utilização da Frota */}
             <motion.div
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.3, ease: 'easeOut' }}
+              className="h-full"
             >
-              <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+              <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-                <CardContent className="relative z-10 p-6">
+                <CardContent className="relative z-10 p-6 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <p className="text-sm text-gray-600 mb-1">
@@ -730,10 +731,11 @@ export default function AdminDashboard() {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.45, duration: 0.3, ease: 'easeOut' }}
+              className="h-full"
             >
-              <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+              <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-                <CardContent className="relative z-10 p-6">
+                <CardContent className="relative z-10 p-6 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <p className="text-sm text-gray-600 mb-1">
@@ -769,10 +771,11 @@ export default function AdminDashboard() {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.5, duration: 0.3, ease: 'easeOut' }}
+              className="h-full"
             >
-              <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300">
+              <Card className="relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 via-transparent to-gray-100/30"></div>
-                <CardContent className="relative z-10 p-6">
+                <CardContent className="relative z-10 p-6 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <p className="text-sm text-gray-600 mb-1">Ticket Médio</p>
@@ -788,7 +791,9 @@ export default function AdminDashboard() {
                       <DollarSign className="h-6 w-6 text-orange-600" />
                     </div>
                   </div>
-                  <div className="w-full h-2.5 mb-2"></div>
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div className="bg-gray-200 h-2.5 rounded-full"></div>
+                  </div>
                   <div className="flex items-center gap-2 text-xs text-gray-500 mt-2">
                     <TrendingUp className="h-4 w-4 text-green-500" />
                     <span>Valor médio por orçamento</span>
@@ -1092,11 +1097,11 @@ export default function AdminDashboard() {
                               className={`h-6 w-6 ${button.iconColor}`}
                             />
                           </div>
-                          <div className="text-center">
-                            <span className="font-semibold text-lg text-gray-900 group-hover:text-orange-500 block mb-1 break-words transition-colors duration-300">
+                          <div className="text-center w-full max-w-full px-2">
+                            <span className="font-semibold text-lg text-gray-900 group-hover:text-orange-500 block mb-1 break-words whitespace-normal transition-colors duration-300">
                               {button.title}
                             </span>
-                            <span className="text-sm text-gray-600 group-hover:text-orange-400 break-words transition-colors duration-300">
+                            <span className="text-sm text-gray-600 group-hover:text-orange-400 break-words whitespace-normal transition-colors duration-300">
                               {button.subtitle}
                             </span>
                           </div>
@@ -1246,7 +1251,15 @@ export default function AdminDashboard() {
                               </TableCell>
                               <TableCell className="p-4">
                                 <Badge
-                                  className={`${statusConfig[quote.status as keyof typeof statusConfig]?.color} flex items-center gap-2 w-fit text-xs font-medium px-3 py-1`}
+                                  className={`${statusConfig[quote.status as keyof typeof statusConfig]?.color} flex items-center gap-2 w-fit text-xs font-medium px-3 py-1 ${
+                                    quote.status === 'pending'
+                                      ? 'hover:!bg-yellow-100 dark:hover:!bg-yellow-900'
+                                      : quote.status === 'approved'
+                                        ? 'hover:!bg-green-100 dark:hover:!bg-green-900'
+                                        : quote.status === 'rejected'
+                                          ? 'hover:!bg-red-100 dark:hover:!bg-red-900'
+                                          : 'hover:!bg-blue-100 dark:hover:!bg-blue-900'
+                                  }`}
                                 >
                                   <StatusIcon className="h-3 w-3" />
                                   <span className="hidden sm:inline">

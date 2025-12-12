@@ -13,7 +13,8 @@ import { rentalsUpdateManyWithoutUsersNestedInputObjectSchema as rentalsUpdateMa
 import { SessionUpdateManyWithoutUserNestedInputObjectSchema as SessionUpdateManyWithoutUserNestedInputObjectSchema } from './SessionUpdateManyWithoutUserNestedInput.schema';
 import { CartUpdateOneWithoutUserNestedInputObjectSchema as CartUpdateOneWithoutUserNestedInputObjectSchema } from './CartUpdateOneWithoutUserNestedInput.schema';
 import { QuoteUpdateManyWithoutApprovedByUserNestedInputObjectSchema as QuoteUpdateManyWithoutApprovedByUserNestedInputObjectSchema } from './QuoteUpdateManyWithoutApprovedByUserNestedInput.schema';
-import { QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema as QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema } from './QuoteUpdateManyWithoutRejectedByUserNestedInput.schema'
+import { QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema as QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema } from './QuoteUpdateManyWithoutRejectedByUserNestedInput.schema';
+import { AuditLogUpdateManyWithoutUserNestedInputObjectSchema as AuditLogUpdateManyWithoutUserNestedInputObjectSchema } from './AuditLogUpdateManyWithoutUserNestedInput.schema'
 
 const makeSchema = () => z.object({
   id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -34,7 +35,8 @@ const makeSchema = () => z.object({
   sessions: z.lazy(() => SessionUpdateManyWithoutUserNestedInputObjectSchema).optional(),
   cart: z.lazy(() => CartUpdateOneWithoutUserNestedInputObjectSchema).optional(),
   approvedQuotes: z.lazy(() => QuoteUpdateManyWithoutApprovedByUserNestedInputObjectSchema).optional(),
-  rejectedQuotes: z.lazy(() => QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema).optional()
+  rejectedQuotes: z.lazy(() => QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema).optional(),
+  auditLogs: z.lazy(() => AuditLogUpdateManyWithoutUserNestedInputObjectSchema).optional()
 }).strict();
 export const UserUpdateWithoutAddressesInputObjectSchema: z.ZodType<Prisma.UserUpdateWithoutAddressesInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUpdateWithoutAddressesInput>;
 export const UserUpdateWithoutAddressesInputObjectZodSchema = makeSchema();

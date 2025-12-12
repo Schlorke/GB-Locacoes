@@ -3,8 +3,12 @@ import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
 import { SortOrderInputObjectSchema as SortOrderInputObjectSchema } from './SortOrderInput.schema';
+import { QuoteOrderByWithRelationInputObjectSchema as QuoteOrderByWithRelationInputObjectSchema } from './QuoteOrderByWithRelationInput.schema';
 import { rental_itemsOrderByRelationAggregateInputObjectSchema as rental_itemsOrderByRelationAggregateInputObjectSchema } from './rental_itemsOrderByRelationAggregateInput.schema';
-import { UserOrderByWithRelationInputObjectSchema as UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema'
+import { UserOrderByWithRelationInputObjectSchema as UserOrderByWithRelationInputObjectSchema } from './UserOrderByWithRelationInput.schema';
+import { PaymentOrderByRelationAggregateInputObjectSchema as PaymentOrderByRelationAggregateInputObjectSchema } from './PaymentOrderByRelationAggregateInput.schema';
+import { DeliveryOrderByRelationAggregateInputObjectSchema as DeliveryOrderByRelationAggregateInputObjectSchema } from './DeliveryOrderByRelationAggregateInput.schema';
+import { ContractOrderByWithRelationInputObjectSchema as ContractOrderByWithRelationInputObjectSchema } from './ContractOrderByWithRelationInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
@@ -15,8 +19,19 @@ const makeSchema = () => z.object({
   userid: SortOrderSchema.optional(),
   createdat: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   updatedat: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  quoteId: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  lateFee: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  extensionDays: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  extensionFee: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  checkInAt: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  checkOutAt: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  notes: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  quote: z.lazy(() => QuoteOrderByWithRelationInputObjectSchema).optional(),
   rental_items: z.lazy(() => rental_itemsOrderByRelationAggregateInputObjectSchema).optional(),
-  users: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional()
+  users: z.lazy(() => UserOrderByWithRelationInputObjectSchema).optional(),
+  payments: z.lazy(() => PaymentOrderByRelationAggregateInputObjectSchema).optional(),
+  deliveries: z.lazy(() => DeliveryOrderByRelationAggregateInputObjectSchema).optional(),
+  contract: z.lazy(() => ContractOrderByWithRelationInputObjectSchema).optional()
 }).strict();
 export const rentalsOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.rentalsOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsOrderByWithRelationInput>;
 export const rentalsOrderByWithRelationInputObjectZodSchema = makeSchema();

@@ -20,5 +20,6 @@ export const UserFindFirstResultSchema = z.nullable(z.object({
   addresses: z.array(z.unknown()),
   cart: z.unknown().optional(),
   approvedQuotes: z.array(z.unknown()),
-  rejectedQuotes: z.array(z.unknown())
+  rejectedQuotes: z.array(z.unknown()),
+  auditLogs: z.array(z.unknown())
 }));

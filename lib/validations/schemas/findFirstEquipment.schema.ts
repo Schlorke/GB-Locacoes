@@ -39,6 +39,12 @@ export const EquipmentFindFirstSelectSchema: z.ZodType<Prisma.EquipmentSelect> =
     quoteItems: z.boolean().optional(),
     rental_items: z.boolean().optional(),
     cartItems: z.boolean().optional(),
+    maintenances: z.boolean().optional(),
+    purchasePrice: z.boolean().optional(),
+    purchaseDate: z.boolean().optional(),
+    depreciationRate: z.boolean().optional(),
+    hourMeter: z.boolean().optional(),
+    odometer: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.EquipmentSelect>;
 
@@ -71,6 +77,12 @@ export const EquipmentFindFirstSelectZodSchema = z.object({
     quoteItems: z.boolean().optional(),
     rental_items: z.boolean().optional(),
     cartItems: z.boolean().optional(),
+    maintenances: z.boolean().optional(),
+    purchasePrice: z.boolean().optional(),
+    purchaseDate: z.boolean().optional(),
+    depreciationRate: z.boolean().optional(),
+    hourMeter: z.boolean().optional(),
+    odometer: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict();
 

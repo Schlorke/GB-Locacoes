@@ -6,7 +6,8 @@ import { SortOrderInputObjectSchema as SortOrderInputObjectSchema } from './Sort
 import { CategoryOrderByWithRelationInputObjectSchema as CategoryOrderByWithRelationInputObjectSchema } from './CategoryOrderByWithRelationInput.schema';
 import { QuoteItemOrderByRelationAggregateInputObjectSchema as QuoteItemOrderByRelationAggregateInputObjectSchema } from './QuoteItemOrderByRelationAggregateInput.schema';
 import { rental_itemsOrderByRelationAggregateInputObjectSchema as rental_itemsOrderByRelationAggregateInputObjectSchema } from './rental_itemsOrderByRelationAggregateInput.schema';
-import { CartItemOrderByRelationAggregateInputObjectSchema as CartItemOrderByRelationAggregateInputObjectSchema } from './CartItemOrderByRelationAggregateInput.schema'
+import { CartItemOrderByRelationAggregateInputObjectSchema as CartItemOrderByRelationAggregateInputObjectSchema } from './CartItemOrderByRelationAggregateInput.schema';
+import { MaintenanceOrderByRelationAggregateInputObjectSchema as MaintenanceOrderByRelationAggregateInputObjectSchema } from './MaintenanceOrderByRelationAggregateInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
@@ -33,10 +34,16 @@ const makeSchema = () => z.object({
   monthlyUseDirectValue: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional(),
+  purchasePrice: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  purchaseDate: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  depreciationRate: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  hourMeter: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  odometer: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   category: z.lazy(() => CategoryOrderByWithRelationInputObjectSchema).optional(),
   quoteItems: z.lazy(() => QuoteItemOrderByRelationAggregateInputObjectSchema).optional(),
   rental_items: z.lazy(() => rental_itemsOrderByRelationAggregateInputObjectSchema).optional(),
-  cartItems: z.lazy(() => CartItemOrderByRelationAggregateInputObjectSchema).optional()
+  cartItems: z.lazy(() => CartItemOrderByRelationAggregateInputObjectSchema).optional(),
+  maintenances: z.lazy(() => MaintenanceOrderByRelationAggregateInputObjectSchema).optional()
 }).strict();
 export const EquipmentOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.EquipmentOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentOrderByWithRelationInput>;
 export const EquipmentOrderByWithRelationInputObjectZodSchema = makeSchema();

@@ -40,7 +40,9 @@ export const QuoteFindManyResultSchema = z.object({
   items: z.array(z.unknown()),
   user: z.unknown().optional(),
   approvedByUser: z.unknown().optional(),
-  rejectedByUser: z.unknown().optional()
+  rejectedByUser: z.unknown().optional(),
+  payments: z.array(z.unknown()),
+  rentals: z.array(z.unknown())
 })),
   pagination: z.object({
   page: z.number().int().min(1),

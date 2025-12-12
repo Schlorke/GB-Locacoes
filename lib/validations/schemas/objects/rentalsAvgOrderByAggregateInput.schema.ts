@@ -4,7 +4,10 @@ import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema'
 
 const makeSchema = () => z.object({
-  total: SortOrderSchema.optional()
+  total: SortOrderSchema.optional(),
+  lateFee: SortOrderSchema.optional(),
+  extensionDays: SortOrderSchema.optional(),
+  extensionFee: SortOrderSchema.optional()
 }).strict();
 export const rentalsAvgOrderByAggregateInputObjectSchema: z.ZodType<Prisma.rentalsAvgOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsAvgOrderByAggregateInput>;
 export const rentalsAvgOrderByAggregateInputObjectZodSchema = makeSchema();

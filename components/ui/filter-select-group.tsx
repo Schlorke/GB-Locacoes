@@ -3,6 +3,7 @@
 import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select'
 import { cn } from '@/lib/utils'
 import type { Filter } from '@/types/filters'
+import React from 'react'
 
 interface FilterSelectGroupProps {
   filters: Filter[]
@@ -10,6 +11,7 @@ interface FilterSelectGroupProps {
   selectClassName?: string
   activeClassName?: string
   gap?: 'sm' | 'md' | 'lg'
+  resetButton?: React.ReactNode
 }
 
 export function FilterSelectGroup({
@@ -17,11 +19,12 @@ export function FilterSelectGroup({
   className,
   selectClassName,
   gap: _gap = 'md',
+  resetButton,
 }: FilterSelectGroupProps) {
   return (
     <div
       className={cn(
-        'flex flex-col md:flex-row md:items-center gap-3',
+        'flex flex-col lg:flex-row gap-3 min-w-0 w-full lg:items-center',
         className
       )}
     >
@@ -32,7 +35,7 @@ export function FilterSelectGroup({
           onValueChange={filter.onValueChange}
           placeholder={filter.placeholder || filter.label}
           className={cn(
-            'w-full md:w-auto lg:max-w-[220px] h-10 md:min-w-[180px]',
+            'w-full lg:w-auto lg:min-w-[180px] h-10 flex-shrink-0',
             selectClassName
           )}
         >
@@ -43,6 +46,11 @@ export function FilterSelectGroup({
           ))}
         </CustomSelect>
       ))}
+      {resetButton && (
+        <div className="flex items-center justify-center flex-shrink-0 w-full lg:w-auto">
+          {resetButton}
+        </div>
+      )}
     </div>
   )
 }

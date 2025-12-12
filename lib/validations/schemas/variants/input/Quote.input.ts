@@ -42,7 +42,9 @@ export const QuoteInputSchema = z.object({
     items: z.array(z.unknown()),
     user: z.unknown().optional().nullable(),
     approvedByUser: z.unknown().optional().nullable(),
-    rejectedByUser: z.unknown().optional().nullable()
+    rejectedByUser: z.unknown().optional().nullable(),
+    payments: z.array(z.unknown()),
+    rentals: z.array(z.unknown())
 }).strict();
 
 export type QuoteInputType = z.infer<typeof QuoteInputSchema>;

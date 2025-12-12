@@ -13,7 +13,8 @@ import { RentalsListRelationFilterObjectSchema as RentalsListRelationFilterObjec
 import { SessionListRelationFilterObjectSchema as SessionListRelationFilterObjectSchema } from './SessionListRelationFilter.schema';
 import { AddressListRelationFilterObjectSchema as AddressListRelationFilterObjectSchema } from './AddressListRelationFilter.schema';
 import { CartNullableScalarRelationFilterObjectSchema as CartNullableScalarRelationFilterObjectSchema } from './CartNullableScalarRelationFilter.schema';
-import { CartWhereInputObjectSchema as CartWhereInputObjectSchema } from './CartWhereInput.schema'
+import { CartWhereInputObjectSchema as CartWhereInputObjectSchema } from './CartWhereInput.schema';
+import { AuditLogListRelationFilterObjectSchema as AuditLogListRelationFilterObjectSchema } from './AuditLogListRelationFilter.schema'
 
 const userwhereinputSchema = z.object({
   AND: z.union([z.lazy(() => UserWhereInputObjectSchema), z.lazy(() => UserWhereInputObjectSchema).array()]).optional(),
@@ -38,7 +39,8 @@ const userwhereinputSchema = z.object({
   addresses: z.lazy(() => AddressListRelationFilterObjectSchema).optional(),
   cart: z.union([z.lazy(() => CartNullableScalarRelationFilterObjectSchema), z.lazy(() => CartWhereInputObjectSchema)]).optional(),
   approvedQuotes: z.lazy(() => QuoteListRelationFilterObjectSchema).optional(),
-  rejectedQuotes: z.lazy(() => QuoteListRelationFilterObjectSchema).optional()
+  rejectedQuotes: z.lazy(() => QuoteListRelationFilterObjectSchema).optional(),
+  auditLogs: z.lazy(() => AuditLogListRelationFilterObjectSchema).optional()
 }).strict();
 export const UserWhereInputObjectSchema: z.ZodType<Prisma.UserWhereInput> = userwhereinputSchema as unknown as z.ZodType<Prisma.UserWhereInput>;
 export const UserWhereInputObjectZodSchema = userwhereinputSchema;
