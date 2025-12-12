@@ -211,7 +211,8 @@ const IconCustomizationHeader = ({
             aria-label="Remover ícone da badge"
             disabled={!canRemoveCustomIcon || activeTab === 'emoji'}
             className={cn(
-              'flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border shadow-md hover:scale-105 hover:shadow-lg filter-reset-button rounded-md text-sm',
+              // ⚠️ CRÍTICO: filter-reset-button deve ter APENAS hover:text (sem scale, shadow-lg ou border-orange)
+              'flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors duration-200 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border shadow-md filter-reset-button rounded-md text-sm',
               'text-rose-500 hover:text-rose-600 h-10 w-10'
             )}
           >
@@ -871,7 +872,7 @@ export function IconCustomizationBlock({
                 size="icon"
                 onClick={onClearCustomIcon}
                 aria-label="Remover ícone personalizado"
-                className="filter-reset-button flex h-9 w-9 shrink-0 items-center justify-center border border-slate-300 text-slate-500 shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-lg hover:text-rose-600"
+                className="filter-reset-button flex h-9 w-9 shrink-0 items-center justify-center border border-slate-300 text-slate-500 shadow-sm transition-colors duration-200 hover:text-rose-600"
               >
                 <Trash2 className="h-4 w-4" aria-hidden="true" />
               </Button>

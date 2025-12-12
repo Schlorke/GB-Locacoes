@@ -1,5 +1,57 @@
 'use client'
 
+/**
+ * ⚠️⚠️⚠️ CRÍTICO - REGRAS DE ESTILO OBRIGATÓRIAS - NUNCA VIOLAR ⚠️⚠️⚠️
+ *
+ * ============================================================
+ * O USUÁRIO SOLICITOU EXPLICITAMENTE:
+ * ============================================================
+ *
+ * ✅ OBRIGATÓRIO: hover:text-orange-500 (cor do texto/ícone no hover)
+ * ✅ OBRIGATÓRIO: hover:shadow-lg (sombra aumentada no hover)
+ *
+ * ============================================================
+ * O USUÁRIO NUNCA SOLICITOU:
+ * ============================================================
+ *
+ * ❌ NUNCA ADICIONAR: hover:border-orange-500 (mudança de borda)
+ * ❌ NUNCA ADICIONAR: hover:scale-105 (escala/zoom)
+ *
+ * ============================================================
+ * HISTÓRICO DO PROBLEMA:
+ * ============================================================
+ *
+ * O usuário NUNCA solicitou hover orange na borda ou scale.
+ * O usuário QUER hover:text-orange-500 + hover:shadow-lg.
+ *
+ * Se alguém remover hover:shadow-lg ou hover:text-orange-500,
+ * o usuário vai reclamar porque ele PEDIU isso.
+ *
+ * Se alguém adicionar hover:border-orange ou hover:scale-105,
+ * o usuário vai reclamar porque ele NUNCA pediu isso.
+ *
+ * ============================================================
+ * ONDE MODIFICAR ESTILOS:
+ * ============================================================
+ *
+ * Se precisar modificar estilos, edite APENAS:
+ * - components/ui/button.tsx (variante "reset")
+ * - app/globals.css (.filter-reset-button)
+ *
+ * NUNCA adicione classes customizadas com hover effects neste componente.
+ * NUNCA passe className com hover:border-orange ou hover:scale-105.
+ *
+ * ============================================================
+ * VERIFICAÇÃO ANTES DE COMMIT:
+ * ============================================================
+ *
+ * Antes de fazer commit, verifique que o botão tem:
+ * ✅ hover:text-orange-500 (no ícone via group-hover)
+ * ✅ hover:shadow-lg (sombra aumentada no hover)
+ * ❌ SEM hover:border-orange-500
+ * ❌ SEM hover:scale-105
+ */
+
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { RotateCcw } from 'lucide-react'

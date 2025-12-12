@@ -20,7 +20,21 @@ const buttonVariants = cva(
         ghost:
           'border border-transparent hover:text-orange-600 hover:scale-105 transition-all duration-200',
         reset:
-          'border border-gray-300 shadow-md hover:text-orange-500 hover:border-orange-500 hover:scale-105 hover:shadow-lg group transition-all duration-200',
+          // ⚠️⚠️⚠️ CRÍTICO - REGRAS OBRIGATÓRIAS - NUNCA VIOLAR ⚠️⚠️⚠️
+          // ============================================================
+          // O USUÁRIO SOLICITOU EXPLICITAMENTE:
+          // ============================================================
+          // ✅ OBRIGATÓRIO: hover:text-orange-500 (cor do texto/ícone)
+          // ✅ OBRIGATÓRIO: hover:shadow-lg (sombra aumentada no hover)
+          // ============================================================
+          // O USUÁRIO NUNCA SOLICITOU:
+          // ============================================================
+          // ❌ NUNCA ADICIONAR: hover:border-orange-500 (mudança de borda)
+          // ❌ NUNCA ADICIONAR: hover:scale-105 (escala/zoom)
+          // ============================================================
+          // Se remover hover:shadow-lg ou hover:text-orange-500,
+          // o usuário vai reclamar porque ele PEDIU isso.
+          'border border-gray-300 shadow-md hover:text-orange-500 hover:shadow-lg group transition-all duration-200',
         gradient:
           'text-white border border-transparent shadow-md hover:scale-105 hover:shadow-lg transition-all duration-200',
         link: 'text-primary underline-offset-4 hover:underline transition-colors duration-200',
