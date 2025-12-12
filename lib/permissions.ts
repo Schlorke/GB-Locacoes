@@ -105,4 +105,3 @@ export function requirePermission(module: Module, action: Action) {
     return hasPermission(role, module, action)
   }
 }
-

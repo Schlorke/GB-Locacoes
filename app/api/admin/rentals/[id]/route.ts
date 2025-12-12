@@ -250,4 +250,3 @@ export async function DELETE(
     )
   }
 }
-

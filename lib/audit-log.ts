@@ -99,4 +99,3 @@ export async function getAuditLogs({
 
   return { logs, total }
 }
-

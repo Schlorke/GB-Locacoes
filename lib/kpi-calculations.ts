@@ -286,4 +286,3 @@ export async function calculateAllKPIs(
     maintenanceCostPerEquipment,
   }
 }
-

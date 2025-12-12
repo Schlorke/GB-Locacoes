@@ -91,4 +91,3 @@ function generateQRCodeSVG(_code: string): string {
     <text x="100" y="100" text-anchor="middle" font-size="12">QR Code PIX</text>
   </svg>`
 }
-

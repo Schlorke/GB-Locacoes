@@ -105,4 +105,3 @@ export function KanbanPipeline<T extends KanbanItem>({
     </div>
   )
 }
-
