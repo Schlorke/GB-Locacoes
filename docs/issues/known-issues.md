@@ -5,6 +5,154 @@
 
 ---
 
+## 21. Direção da animação invertida na tabela de Orçamentos (Admin)
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-12-12 **Severidade**: Baixa (UX) **Status**: ✅
+Resolvido
+
+#### Descrição
+
+No modo **Tabela** em `/admin/orcamentos`, as linhas entravam da direita para a
+esquerda ao aplicar filtros, contrariando o fluxo esperado (entrada da esquerda
+para a direita). O efeito ficava mais evidente em sequências rápidas de filtros.
+
+#### Causa Raiz
+
+- O offset horizontal não estava explícito para forçar entrada pela esquerda; em
+  re-renderizações rápidas o slide parecia vir da direita.
+- Ausência de easing dedicado na transição de saída aumentava a percepção de
+  inversão de direção.
+
+### ✅ Solução Implementada
+
+- Entrada das linhas agora fixa `x: -32` com `easeOut`, garantindo percepção da
+  esquerda para a direita.
+- Saída usa deslocamento discreto para a direita (`x: 18`) com `easeIn`,
+  evitando leitura de movimento invertido ao limpar a lista.
+
+#### Arquivos Modificados
+
+1. `app/admin/orcamentos/page.tsx`
+
+### 🎯 Resultado
+
+- Linhas entram consistentemente da esquerda para a direita ao aplicar qualquer
+  filtro.
+- Saída suave para a direita evita sensação de inversão durante a transição.
+
+#### Como Validar
+
+1. `pnpm dev`
+2. Acessar `http://localhost:3000/admin/orcamentos` e alternar para **Tabela**.
+3. Alterar filtros (status, valor, período) em sequência; verificar que as
+   linhas entram da esquerda para a direita e saem apenas com leve deslocamento
+   à direita.
+
+## 20. Animação “bruta”/flash ao filtrar linhas na tabela e cards do Kanban (Admin)
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-12-12 **Severidade**: Média (UX) **Status**: ✅
+Resolvido
+
+#### Descrição
+
+Ao aplicar filtros na tela de **Orçamentos** (`/admin/orcamentos`) em ambos os
+modos (**Tabela** e **Kanban**), os itens removidos começavam a animar
+corretamente (saindo), porém:
+
+- Alguns itens “não sumiam 100%” por um frame
+- A lista nova aparecia “de uma vez” e **sem animação de entrada**
+- Itens que permaneciam entre filtros não reanimavam, quebrando a expectativa de
+  “entrar um por um”
+- Itens saíam de baixo para cima (invertido) em vez de cima para baixo
+
+#### Causa Raiz
+
+- Tanto a tabela quanto o Kanban renderizavam diretamente
+  `filteredQuotes`/`items` dentro de `AnimatePresence`. Em mudanças rápidas de
+  estado (select → close), o React atualizava o array no mesmo ciclo em que
+  ocorria o exit de itens anteriores.
+- `AnimatePresence` no modo padrão permite **enter/exit simultâneos** e, como os
+  itens “persistentes” mantinham `key`, eles não remontavam — portanto **não
+  executavam `initial`** novamente.
+- O stagger de saída usava “reverse stagger” (`total - 1 - idx`), fazendo o
+  último item sair primeiro.
+
+### ✅ Solução Implementada
+
+#### Arquivos Modificados
+
+1. `app/admin/orcamentos/page.tsx` (modo Tabela)
+2. `components/admin/kanban-pipeline.tsx` (modo Kanban)
+
+#### Implementação
+
+**Tabela:**
+
+- Introduzida uma lista intermediária `tableQuotes` (estado) para renderização
+  da tabela.
+- Ao mudar os filtros:
+  1. salvamos a lista “alvo” em `pendingTableQuotesRef`
+  2. definimos `tableQuotes = []` para disparar o **exit** das linhas atuais
+  3. no `onExitComplete`, montamos `tableQuotes = pending`
+- Ajustado `AnimatePresence` para `mode="wait"` (garante que a entrada só ocorre
+  após a saída terminar).
+- Implementado stagger determinístico (entrada e saída) via `variants` +
+  `custom` com `index`.
+- Saída agora usa stagger normal (de cima para baixo): `delay: idx * 0.04`.
+
+**Kanban:**
+
+- Introduzido estado intermediário `displayedItems` por coluna (uma por status).
+- Cada coluna controla sua própria saída/entrada independentemente.
+- Refs `pendingItemsRef` armazenam itens pendentes por coluna.
+- `AnimatePresence` com `mode="wait"` e `onExitComplete` por coluna.
+- Stagger normal (de cima para baixo) tanto na entrada quanto na saída.
+
+### 🎯 Resultado
+
+- Itens saem **um a um de cima para baixo** ao filtrar (tanto na tabela quanto
+  no Kanban).
+- Itens entram **um a um de cima para baixo** após a saída terminar.
+- Sem flash e sem “aparecer bruto” após selecionar filtros.
+- Cada coluna do Kanban anima independentemente.
+
+#### Como Validar
+
+**Tabela:**
+
+1. `pnpm dev`
+2. Acesse `http://localhost:3000/admin/orcamentos`
+3. Alterne para a aba **Tabela**
+4. Aplique/alterne filtros (ex.: **Valor** “Acima de R$ 2.000”)
+5. Confirme:
+   - saída escalonada de cima para baixo
+   - após terminar a saída, entrada escalonada de cima para baixo
+   - nenhum frame com “lista inteira aparecendo sem animação”
+
+**Kanban:**
+
+1. Acesse a aba **Kanban** na mesma página
+2. Aplique/alterne filtros
+3. Confirme:
+   - cards saem um a um de cima para baixo em cada coluna
+   - após terminar a saída, novos cards entram um a um de cima para baixo
+   - cada coluna anima independentemente
+
+### ⚠️ Armadilhas a Evitar
+
+- Renderizar `filteredQuotes`/`items` diretamente quando a UX exigir “exit
+  completo → enter completo” com stagger.
+- Depender de `delay` por `index` sem controlar o lifecycle (pode gerar
+  concorrência de enter/exit em updates rápidos).
+- Usar “reverse stagger” (`total - 1 - idx`) na saída quando a expectativa é
+  sair de cima para baixo — sempre usar stagger normal (`idx * delay`).
+
+---
+
 ## 19. Erro "params are being enumerated" no Cursor DevTools
 
 ### 🎯 Problema

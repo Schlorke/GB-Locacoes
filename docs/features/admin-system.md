@@ -442,6 +442,16 @@ export function AdminFilterCard({
 }
 ```
 
+#### **Layout (coluna única em resoluções intermediárias)**
+
+Algumas telas (ex.: `app/admin/orcamentos/page.tsx`) podem ficar “apertadas” em
+tablet/`md`. Para isso, o `AdminFilterCard` suporta um modo que **força coluna
+única** para todos os elementos do card:
+
+```tsx
+<AdminFilterCard layout="stacked" />
+```
+
 ---
 
 ## 🗂️ Gerenciamento de Categorias

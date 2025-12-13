@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog } from '@/components/ui/dialog'
+import { cn } from '@/lib/utils'
 import { toast } from 'sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -27,7 +28,7 @@ import {
   LayoutGrid,
   Table,
 } from 'lucide-react'
-import { Suspense, useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 
 interface Quote {
   id: string
@@ -110,6 +111,12 @@ function AdminQuotesPage() {
   const [valueFilter, setValueFilter] = useState<string>('all')
   const [isUpdating, setIsUpdating] = useState(false)
   const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban')
+
+  // Controle de animação determinística para tabela (evita flick/flash e garante
+  // entrada/saída escalonadas ao aplicar filtros).
+  const [tableQuotes, setTableQuotes] = useState<Quote[]>([])
+  const pendingTableQuotesRef = useRef<Quote[] | null>(null)
+  const didInitTableQuotesRef = useRef(false)
 
   const fetchQuotes = useCallback(async () => {
     try {
@@ -212,6 +219,33 @@ function AdminQuotesPage() {
     valueFilter,
     filterQuotes,
   ])
+
+  // Quando os filtros mudam, a lista filtrada muda imediatamente; porém, para a
+  // UX desejada (linhas saindo uma a uma e entrando uma a uma), precisamos:
+  // 1) disparar exit das linhas atuais
+  // 2) esperar `onExitComplete`
+  // 3) montar a nova lista (enter com stagger)
+  useEffect(() => {
+    if (!didInitTableQuotesRef.current) {
+      setTableQuotes(Array.isArray(filteredQuotes) ? filteredQuotes : [])
+      didInitTableQuotesRef.current = true
+      return
+    }
+
+    const next = Array.isArray(filteredQuotes) ? filteredQuotes : []
+    const prev = tableQuotes
+
+    // Se não havia nada renderizado, apenas renderiza o novo conjunto.
+    if (prev.length === 0) {
+      setTableQuotes(next)
+      return
+    }
+
+    pendingTableQuotesRef.current = next
+    // Esvaziar dispara exit animations no AnimatePresence.
+    setTableQuotes([])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredQuotes])
 
   const updateQuoteStatus = async (
     quoteId: string,
@@ -383,36 +417,58 @@ function AdminQuotesPage() {
                 ],
               },
             ]}
+            viewToggleButtons={
+              <div className="relative flex flex-col lg:flex-row items-stretch lg:items-center gap-2 lg:gap-1 bg-white rounded-lg lg:rounded-md p-0 lg:p-0 lg:h-10 lg:px-0 transition-all duration-200 admin-filter-element w-full">
+                {/* Slider animado */}
+                <motion.div
+                  className="absolute bg-slate-700 rounded-lg lg:rounded-md z-0 h-full"
+                  initial={false}
+                  animate={{
+                    x: viewMode === 'kanban' ? 0 : 'calc(100% + 0.25rem)',
+                    y: 0,
+                  }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 30,
+                  }}
+                  style={{
+                    width: 'calc(50% - 0.125rem)',
+                    top: 0,
+                    left: 0,
+                  }}
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setViewMode('kanban')}
+                  className={cn(
+                    'relative z-10 flex flex-1 items-center justify-center gap-2 hover:scale-100 w-full lg:h-10 transition-colors duration-200',
+                    viewMode === 'kanban'
+                      ? 'text-white hover:text-white'
+                      : 'text-inherit hover:text-orange-600'
+                  )}
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                  <span className="hidden sm:inline">Kanban</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setViewMode('table')}
+                  className={cn(
+                    'relative z-10 flex flex-1 items-center justify-center gap-2 hover:scale-100 w-full lg:h-10 transition-colors duration-200',
+                    viewMode === 'table'
+                      ? 'text-white hover:text-white'
+                      : 'text-inherit hover:text-orange-600'
+                  )}
+                >
+                  <Table className="w-4 h-4" />
+                  <span className="hidden sm:inline">Tabela</span>
+                </Button>
+              </div>
+            }
           />
-        </motion.div>
-
-        {/* Toggle de Visualização */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="mb-4 flex justify-end gap-2"
-        >
-          <div className="flex items-center gap-2 bg-white rounded-lg p-1 shadow-sm border border-gray-200">
-            <Button
-              variant={viewMode === 'kanban' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('kanban')}
-              className="flex items-center gap-2"
-            >
-              <LayoutGrid className="w-4 h-4" />
-              <span className="hidden sm:inline">Kanban</span>
-            </Button>
-            <Button
-              variant={viewMode === 'table' ? 'default' : 'ghost'}
-              size="sm"
-              onClick={() => setViewMode('table')}
-              className="flex items-center gap-2"
-            >
-              <Table className="w-4 h-4" />
-              <span className="hidden sm:inline">Tabela</span>
-            </Button>
-          </div>
         </motion.div>
 
         {/* Pipeline Kanban */}
@@ -437,7 +493,7 @@ function AdminQuotesPage() {
                 const quoteTyped = quote as Quote
                 return (
                   <div
-                    className="p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-orange-300 cursor-pointer transition-colors"
+                    className="p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer transition-colors"
                     onClick={() => setSelectedQuote(quoteTyped)}
                   >
                     <div className="space-y-2">
@@ -523,15 +579,60 @@ function AdminQuotesPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      <AnimatePresence>
-                        {Array.isArray(filteredQuotes) &&
-                          filteredQuotes.map((quote, index) => (
+                      <AnimatePresence
+                        mode="wait"
+                        onExitComplete={() => {
+                          const pending = pendingTableQuotesRef.current
+                          if (pending) {
+                            pendingTableQuotesRef.current = null
+                            setTableQuotes(pending)
+                          }
+                        }}
+                      >
+                        {Array.isArray(tableQuotes) &&
+                          tableQuotes.map((quote, index) => (
                             <motion.tr
                               key={quote.id}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              exit={{ opacity: 0, x: 20 }}
-                              transition={{ delay: index * 0.05 }}
+                              custom={{ index }}
+                              variants={{
+                                hidden: ({
+                                  index: idx,
+                                }: {
+                                  index: number
+                                }) => ({
+                                  opacity: 0,
+                                  // Entrada garantida da esquerda para a direita.
+                                  x: -32,
+                                  transition: {
+                                    duration: 0.22,
+                                    ease: 'easeOut',
+                                    delay: idx * 0.05,
+                                  },
+                                }),
+                                show: ({ index: idx }: { index: number }) => ({
+                                  opacity: 1,
+                                  x: 0,
+                                  transition: {
+                                    duration: 0.24,
+                                    ease: 'easeOut',
+                                    delay: idx * 0.055,
+                                  },
+                                }),
+                                exit: ({ index: idx }: { index: number }) => ({
+                                  opacity: 0,
+                                  // Saida leve para a direita para evitar percepcao invertida.
+                                  x: 18,
+                                  transition: {
+                                    duration: 0.18,
+                                    ease: 'easeIn',
+                                    // Stagger normal na saída (primeiro sai primeiro, de cima para baixo)
+                                    delay: idx * 0.04,
+                                  },
+                                }),
+                              }}
+                              initial="hidden"
+                              animate="show"
+                              exit="exit"
                               className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors group"
                             >
                               <td className="p-4">
@@ -619,8 +720,8 @@ function AdminQuotesPage() {
                     </tbody>
                   </table>
 
-                  {(!Array.isArray(filteredQuotes) ||
-                    filteredQuotes.length === 0) && (
+                  {(!Array.isArray(tableQuotes) ||
+                    tableQuotes.length === 0) && (
                     <div className="text-center py-12">
                       <div className="text-gray-400 mb-4">
                         <FileText className="w-12 h-12 mx-auto mb-3" />

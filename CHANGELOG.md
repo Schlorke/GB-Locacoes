@@ -29,6 +29,40 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🛠️
 
+- **Layout em coluna única nos filtros de Orçamentos (Admin) no tablet/`md`**:
+  Em resoluções `md`, os filtros/ações ficam em **coluna única** (stack
+  vertical) para evitar compactação; em `lg+` o layout volta a ficar **inline**.
+  - **Arquivos Modificados**: `components/admin/admin-filter-card.tsx`,
+    `app/admin/orcamentos/page.tsx`
+  - **Data**: 2025-12-12
+
+- **Direcao da animacao da tabela de Orcamentos (Admin)**: Linhas agora entram
+  da esquerda para a direita e saem levemente para a direita, evitando a
+  percepcao de slide invertido ao mudar filtros.
+  - **Arquivos Modificados**: `app/admin/orcamentos/page.tsx`
+  - **Data**: 2025-12-12
+
+- **Toggle de visualização (Kanban/Tabela) nos filtros de Orçamentos (Admin)**:
+  Ajustado wrapper para manter o visual flat e alinhar com os outros controles
+  do filtro (mesma **altura `h-10`** e **border radius `rounded-md`** no `lg+`).
+  - **Arquivos Modificados**: `app/admin/orcamentos/page.tsx`
+  - **Data**: 2025-12-12
+
+- **Animação da tabela e Kanban de Orçamentos ao aplicar filtros (Admin)**:
+  Corrigido flick/flash e entrada “bruta” sem animação; agora os itens **saem um
+  a um de cima para baixo** e **entram um a um de cima para baixo** (sequência
+  determinística com `AnimatePresence` `mode="wait"` + transição em duas fases).
+  - **Modo Tabela**: linhas animam sequencialmente de cima para baixo
+  - **Modo Kanban**: cards em cada coluna animam independentemente, de cima para
+    baixo
+  - **Ajuste fino**: animação levemente mais lenta para transição mais suave
+  - **Ajuste fino (Kanban)**: entrada agora vem da esquerda para a direita
+  - **Correção (Kanban)**: evita loop `Maximum update depth exceeded` ao aplicar
+    filtros
+  - **Arquivos Modificados**: `app/admin/orcamentos/page.tsx`,
+    `components/admin/kanban-pipeline.tsx`, `docs/issues/known-issues.md`
+  - **Data**: 2025-12-12
+
 - **Posicionamento de toasts no Admin**: Ajustado offset do Sonner para o
   domínio administrativo, mantendo o comportamento das páginas públicas (toast
   abaixo do header).

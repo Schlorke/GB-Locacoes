@@ -132,7 +132,7 @@ export function CustomSelect({
           onFocus={handleFocus}
           onBlur={handleBlur}
           className={cn(
-            'flex h-10 w-full items-center justify-between rounded-md border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:outline-none focus:ring-0 transition-all duration-200 admin-filter-element',
+            'group flex h-10 w-full items-center justify-between rounded-md border bg-background pl-9 pr-3 py-2 text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 border-gray-200 focus:outline-none focus:ring-0 transition-all duration-200 admin-filter-element',
             // Aplicar classe CSS para estilo laranja quando categoria está selecionada
             value && value !== 'all' && 'selected'
           )}
@@ -140,17 +140,19 @@ export function CustomSelect({
           <Funnel
             className={cn(
               'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 transition-colors duration-300',
-              value && value !== 'all' ? 'text-orange-500' : 'text-gray-400'
+              value && value !== 'all'
+                ? 'text-orange-500'
+                : 'text-gray-400 group-hover:text-orange-600'
             )}
           />
           <span
             className={cn(
-              'flex-1 text-left whitespace-nowrap overflow-hidden mr-2',
+              'flex-1 text-left whitespace-nowrap overflow-hidden mr-2 transition-colors duration-300',
               value && value !== 'all'
-                ? 'font-medium'
+                ? 'font-medium text-orange-600'
                 : value
-                  ? 'text-foreground'
-                  : 'text-muted-foreground'
+                  ? 'text-foreground group-hover:text-orange-600'
+                  : 'text-muted-foreground group-hover:text-orange-600'
             )}
           >
             {displayText}

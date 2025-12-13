@@ -13,6 +13,12 @@ interface AdminFilterCardProps {
   searchPlaceholder?: string
   searchValue?: string
   onSearchChange?: (_value: string) => void
+  /**
+   * Controla o layout do card de filtros.
+   * - `responsive` (padrão): empilha em mobile/tablet e vira linha no `lg+`
+   * - `stacked`: força **coluna única** em todos os breakpoints
+   */
+  layout?: 'responsive' | 'stacked'
   filters?: {
     label: string
     value: string
@@ -21,6 +27,7 @@ interface AdminFilterCardProps {
     placeholder?: string
   }[]
   actionButtons?: React.ReactNode
+  viewToggleButtons?: React.ReactNode
   className?: string
 }
 
@@ -28,8 +35,10 @@ export function AdminFilterCard({
   searchPlaceholder = 'Buscar...',
   searchValue = '',
   onSearchChange,
+  layout = 'responsive',
   filters = [],
   actionButtons,
+  viewToggleButtons,
   className,
 }: AdminFilterCardProps) {
   const [_isFiltered, _setIsFiltered] = useState(false)
@@ -69,10 +78,21 @@ export function AdminFilterCard({
       <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
       <CardContent className="relative z-10 p-4 sm:p-6">
-        <div className="flex flex-col lg:flex-row gap-3 items-center min-w-0">
+        <div
+          className={cn(
+            'flex flex-col gap-3 min-w-0',
+            layout === 'responsive' && 'lg:flex-row lg:items-center',
+            layout === 'stacked' && 'items-stretch'
+          )}
+        >
           {/* Search Input - Ocupa mais espaço */}
           {onSearchChange && (
-            <div className="relative w-full lg:flex-1 lg:min-w-0">
+            <div
+              className={cn(
+                'relative w-full',
+                layout === 'responsive' && 'lg:flex-1 lg:min-w-0'
+              )}
+            >
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 placeholder={searchPlaceholder}
@@ -88,11 +108,17 @@ export function AdminFilterCard({
           )}
 
           {/* Filters Row - Ao lado do search */}
-          <div className="w-full lg:w-auto min-w-0 flex-shrink-0">
+          <div
+            className={cn(
+              'w-full min-w-0',
+              layout === 'responsive' && 'lg:w-auto flex-shrink-0'
+            )}
+          >
             {/* Filter Selects */}
             <FilterSelectGroup
               filters={filters}
               gap="sm"
+              viewToggleButtons={viewToggleButtons}
               resetButton={
                 <FilterResetButton
                   onClick={handleReset}
@@ -105,7 +131,14 @@ export function AdminFilterCard({
 
           {/* Right Side - Action Buttons (se houver, em nova linha em mobile) */}
           {actionButtons && (
-            <div className="flex items-center justify-center w-full lg:w-auto lg:self-center flex-shrink-0">
+            <div
+              className={cn(
+                'flex items-center w-full flex-shrink-0',
+                layout === 'responsive' &&
+                  'justify-center lg:w-auto lg:self-center',
+                layout === 'stacked' && 'justify-start'
+              )}
+            >
               {actionButtons}
             </div>
           )}
