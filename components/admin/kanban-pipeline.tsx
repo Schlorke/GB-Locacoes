@@ -125,7 +125,7 @@ export function KanbanPipeline<T extends KanbanItem>({
         const Icon = config.icon
 
         return (
-          <Card key={status} className="bg-white shadow-lg">
+          <Card key={status} className="bg-white shadow-lg border-0">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -140,7 +140,13 @@ export function KanbanPipeline<T extends KanbanItem>({
                   {statusItems.length}
                 </Badge>
               </div>
-              <div className="space-y-2 max-h-[600px] overflow-y-auto">
+              <div
+                className="space-y-2 max-h-[600px] overflow-y-auto pr-2 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-orange-500 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-orange-600 [&::-webkit-scrollbar-button]:bg-orange-500"
+                style={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: 'rgb(249 115 22) transparent',
+                }}
+              >
                 <AnimatePresence
                   mode="wait"
                   onExitComplete={() => handleExitComplete(status)}

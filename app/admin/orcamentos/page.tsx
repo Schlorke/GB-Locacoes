@@ -493,7 +493,7 @@ function AdminQuotesPage() {
                 const quoteTyped = quote as Quote
                 return (
                   <div
-                    className="p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer transition-colors"
+                    className="p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer transition-all shadow-sm hover:shadow-md"
                     onClick={() => setSelectedQuote(quoteTyped)}
                   >
                     <div className="space-y-2">
@@ -637,7 +637,7 @@ function AdminQuotesPage() {
                             >
                               <td className="p-4">
                                 <div className="flex items-center gap-3">
-                                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold shrink-0">
                                     {quote.name?.charAt(0).toUpperCase()}
                                   </div>
                                   <div>

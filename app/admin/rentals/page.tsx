@@ -124,7 +124,7 @@ export default function AdminRentalsPage() {
   const [loading, setLoading] = useState(true)
   const [selectedRental, setSelectedRental] = useState<Rental | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [statusFilter, setStatusFilter] = useState<string>('PENDING')
   const [periodFilter, setPeriodFilter] = useState<string>('all')
 
   const fetchRentals = useCallback(async () => {
@@ -416,7 +416,6 @@ export default function AdminRentalsPage() {
                           onClick={() => {
                             setPeriodFilter('all')
                             setSearchTerm('')
-                            setStatusFilter('all')
                           }}
                           title="Resetar filtros"
                           size="md"
