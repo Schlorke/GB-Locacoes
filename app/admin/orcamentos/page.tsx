@@ -418,7 +418,7 @@ function AdminQuotesPage() {
               },
             ]}
             viewToggleButtons={
-              <div className="relative flex flex-col lg:flex-row items-stretch lg:items-center gap-2 lg:gap-1 bg-white rounded-lg lg:rounded-md p-0 lg:p-0 lg:h-10 lg:px-0 transition-all duration-200 admin-filter-element w-full">
+              <div className="relative flex flex-row items-center gap-1 bg-white rounded-lg lg:rounded-md p-0 h-10 transition-all duration-200 admin-filter-element w-full">
                 {/* Slider animado */}
                 <motion.div
                   className="absolute bg-slate-700 rounded-lg lg:rounded-md z-0 h-full"
@@ -443,7 +443,7 @@ function AdminQuotesPage() {
                   size="sm"
                   onClick={() => setViewMode('kanban')}
                   className={cn(
-                    'relative z-10 flex flex-1 items-center justify-center gap-2 hover:scale-100 w-full lg:h-10 transition-colors duration-200',
+                    'relative z-10 flex flex-1 items-center justify-center gap-2 hover:scale-100 h-10 transition-colors duration-200',
                     viewMode === 'kanban'
                       ? 'text-white hover:text-white'
                       : 'text-inherit hover:text-orange-600'
@@ -457,7 +457,7 @@ function AdminQuotesPage() {
                   size="sm"
                   onClick={() => setViewMode('table')}
                   className={cn(
-                    'relative z-10 flex flex-1 items-center justify-center gap-2 hover:scale-100 w-full lg:h-10 transition-colors duration-200',
+                    'relative z-10 flex flex-1 items-center justify-center gap-2 hover:scale-100 h-10 transition-colors duration-200',
                     viewMode === 'table'
                       ? 'text-white hover:text-white'
                       : 'text-inherit hover:text-orange-600'
