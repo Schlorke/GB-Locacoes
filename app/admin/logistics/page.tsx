@@ -374,16 +374,6 @@ export default function AdminLogisticsPage() {
             icon={<Truck className="w-8 h-8" />}
             className="flex-1"
           />
-          <Button
-            onClick={() => {
-              // TODO: Implementar criação de entrega/coleta
-              toast.info('Funcionalidade em desenvolvimento')
-            }}
-            className="bg-orange-600 hover:bg-orange-700 text-white"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Nova Entrega/Coleta
-          </Button>
         </div>
 
         {/* Filtros */}
@@ -457,6 +447,16 @@ export default function AdminLogisticsPage() {
                     setViewMode(value as 'table' | 'calendar')
                   }
                 />
+                <Button
+                  onClick={() => {
+                    // TODO: Implementar criação de entrega/coleta
+                    toast.info('Funcionalidade em desenvolvimento')
+                  }}
+                  className="bg-orange-600 hover:bg-orange-700 text-white border-0"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Nova Entrega/Coleta
+                </Button>
               </div>
             </CardContent>
           </Card>

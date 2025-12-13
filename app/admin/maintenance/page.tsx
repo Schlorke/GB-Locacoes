@@ -363,7 +363,7 @@ export default function AdminMaintenancePage() {
                   />
                   <Button
                     variant="outline"
-                    className="bg-orange-600 text-white hover:bg-orange-700 border-orange-600"
+                    className="bg-orange-600 text-white hover:bg-orange-700 hover:text-white border-orange-600"
                     onClick={() => {
                       // TODO: Abrir modal para agendar preventiva
                       toast.info('Funcionalidade em desenvolvimento')
