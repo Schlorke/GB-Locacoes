@@ -648,6 +648,50 @@ export function ChartCard({ title, data, type }: ChartCardProps) {
 
 ---
 
+## 📋 Páginas Administrativas Específicas
+
+### **Gerenciamento de Locações (`/admin/rentals`)**
+
+#### **⚠️ Comportamento Crítico do Filtro Padrão**
+
+A página de gerenciamento de locações (`app/admin/rentals/page.tsx`) **DEVE**
+exibir por padrão apenas as locações com status **"Pendente" (PENDING)**,
+similar ao comportamento da primeira seção na página de configurações
+(`/admin/settings`).
+
+**Implementação Obrigatória:**
+
+```tsx
+// ⚠️ CRÍTICO: Filtro padrão deve ser 'PENDING' para exibir pendentes por padrão
+// Similar ao comportamento da primeira seção em /admin/settings
+// NUNCA alterar para 'all' sem consultar o usuário
+const [statusFilter, setStatusFilter] = useState<string>("PENDING")
+```
+
+**Por que isso é importante:**
+
+1. **UX Consistente**: Mantém o mesmo padrão de comportamento da página de
+   configurações
+2. **Foco Operacional**: Administradores geralmente precisam ver pendências
+   primeiro
+3. **Performance**: Reduz a quantidade inicial de dados carregados
+
+**⚠️ REGRA CRÍTICA**:
+
+- **NUNCA** altere o valor inicial de `statusFilter` de `'PENDING'` para `'all'`
+  sem consultar explicitamente o usuário
+- **SEMPRE** mantenha o comentário explicativo no código
+- **SEMPRE** documente qualquer mudança neste comportamento
+
+**Histórico:**
+
+- **Data**: Janeiro 2025
+- **Motivo**: Usuário solicitou que a página exiba pendentes por padrão, similar
+  ao primeiro botão em configurações
+- **Status**: ✅ Implementado e documentado
+
+---
+
 ## 🔐 Autenticação e Permissões
 
 ### **Sistema de Roles**

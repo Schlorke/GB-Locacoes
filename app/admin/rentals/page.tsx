@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { AdminPageHeader } from '@/components/admin/admin-page-header'
 import { AdminCard } from '@/components/admin/admin-card'
+import { KanbanPipeline } from '@/components/admin/kanban-pipeline'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -10,6 +11,7 @@ import { Dialog } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { FilterSelectGroup } from '@/components/ui/filter-select-group'
 import { FilterResetButton } from '@/components/ui/filter-reset-button'
+import { ViewToggle } from '@/components/ui/view-toggle'
 import type React from 'react'
 import { toast } from 'sonner'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -26,6 +28,8 @@ import {
   Calendar,
   Eye,
   Search,
+  LayoutGrid,
+  List,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -69,6 +73,7 @@ interface Rental {
     method: string
     paidAt: string | null
   }>
+  [key: string]: unknown // Index signature para compatibilidade com KanbanItem
 }
 
 const statusConfig: Record<
@@ -124,8 +129,12 @@ export default function AdminRentalsPage() {
   const [loading, setLoading] = useState(true)
   const [selectedRental, setSelectedRental] = useState<Rental | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
+  // ⚠️ CRÍTICO: Filtro padrão deve ser 'PENDING' para exibir pendentes por padrão
+  // Similar ao comportamento da primeira seção em /admin/settings
+  // NUNCA alterar para 'all' sem consultar o usuário
   const [statusFilter, setStatusFilter] = useState<string>('PENDING')
   const [periodFilter, setPeriodFilter] = useState<string>('all')
+  const [viewMode, setViewMode] = useState<'table' | 'kanban'>('table')
 
   const fetchRentals = useCallback(async () => {
     try {
@@ -254,6 +263,52 @@ export default function AdminRentalsPage() {
     CANCELLED: filteredRentals.filter(
       (r) => (r.status?.toUpperCase() || r.status) === 'CANCELLED'
     ),
+  }
+
+  // Configuração para Kanban
+  const kanbanStatusConfig = {
+    PENDING: {
+      key: 'PENDING',
+      label: 'Pendente',
+      color: 'bg-yellow-100 text-yellow-800',
+      icon: Clock,
+      gradient: 'from-yellow-400 to-orange-500',
+    },
+    ACTIVE: {
+      key: 'ACTIVE',
+      label: 'Ativa',
+      color: 'bg-blue-100 text-blue-800',
+      icon: CheckCircle,
+      gradient: 'from-blue-400 to-cyan-500',
+    },
+    OVERDUE: {
+      key: 'OVERDUE',
+      label: 'Atrasada',
+      color: 'bg-orange-100 text-orange-800',
+      icon: AlertTriangle,
+      gradient: 'from-orange-400 to-red-500',
+    },
+    PENDING_RETURN: {
+      key: 'PENDING_RETURN',
+      label: 'Aguardando Devolução',
+      color: 'bg-purple-100 text-purple-800',
+      icon: Clock,
+      gradient: 'from-purple-400 to-pink-500',
+    },
+    COMPLETED: {
+      key: 'COMPLETED',
+      label: 'Concluída',
+      color: 'bg-green-100 text-green-800',
+      icon: CheckCircle,
+      gradient: 'from-green-400 to-emerald-500',
+    },
+    CANCELLED: {
+      key: 'CANCELLED',
+      label: 'Cancelada',
+      color: 'bg-red-100 text-red-800',
+      icon: XCircle,
+      gradient: 'from-red-400 to-rose-500',
+    },
   }
 
   if (loading) {
@@ -423,14 +478,26 @@ export default function AdminRentalsPage() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Right Side - View Toggle */}
+                  <ViewToggle
+                    options={[
+                      { value: 'table', label: 'Tabela', icon: List },
+                      { value: 'kanban', label: 'Kanban', icon: LayoutGrid },
+                    ]}
+                    value={viewMode}
+                    onValueChange={(value) =>
+                      setViewMode(value as 'table' | 'kanban')
+                    }
+                  />
                 </div>
               </div>
             </CardContent>
           </Card>
         </motion.div>
 
-        {/* Lista de Locações Filtradas */}
-        {filteredRentals.length > 0 && (
+        {/* Lista de Locações Filtradas - Tabela */}
+        {filteredRentals.length > 0 && viewMode === 'table' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -545,6 +612,69 @@ export default function AdminRentalsPage() {
           </motion.div>
         )}
 
+        {/* Lista de Locações Filtradas - Kanban */}
+        {filteredRentals.length > 0 && viewMode === 'kanban' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mb-6"
+          >
+            <KanbanPipeline<Rental>
+              items={filteredRentals}
+              statusConfig={kanbanStatusConfig}
+              renderItem={(rental) => (
+                <Card
+                  className="mb-2 cursor-pointer hover:shadow-md transition-shadow"
+                  onClick={() => setSelectedRental(rental as Rental)}
+                >
+                  <CardContent className="p-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold text-sm text-gray-900 truncate">
+                          {(rental as Rental).users.name || 'Sem nome'}
+                        </p>
+                        <Badge
+                          variant="outline"
+                          className={cn(
+                            'text-xs',
+                            statusConfig[(rental as Rental).status]?.color
+                          )}
+                        >
+                          {formatCurrency((rental as Rental).total)}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-gray-500 truncate">
+                        {(rental as Rental).users.email}
+                      </p>
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <Package className="w-3 h-3" />
+                        <span>
+                          {(rental as Rental).rental_items.length} item(s)
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <Calendar className="w-3 h-3" />
+                        <span>
+                          {formatDate((rental as Rental).startdate)} -{' '}
+                          {formatDate((rental as Rental).enddate)}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+              onItemClick={(rental) => setSelectedRental(rental as Rental)}
+              columnsPerRow={{
+                mobile: 1,
+                tablet: 3,
+                desktop: 3,
+                xl: 6,
+              }}
+            />
+          </motion.div>
+        )}
+
         {/* Mensagem quando não há locações */}
         {!loading && filteredRentals.length === 0 && (
           <motion.div
@@ -553,7 +683,7 @@ export default function AdminRentalsPage() {
             transition={{ delay: 0.3 }}
             className="mb-6"
           >
-            <Card className="bg-white shadow-lg">
+            <Card className="bg-white shadow-lg border-0">
               <CardContent className="p-12 text-center">
                 <Package className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                 <h3 className="text-lg font-semibold text-gray-700 mb-2">
@@ -734,6 +864,113 @@ export default function AdminRentalsPage() {
                                 </span>
                               </div>
                             </div>
+
+                            {/* Check-in/Check-out */}
+                            {(selectedRental.status === 'PENDING' ||
+                              selectedRental.status === 'ACTIVE') && (
+                              <AdminCard title="Check-in/Check-out">
+                                <div className="space-y-4">
+                                  {!selectedRental.checkInAt && (
+                                    <Button
+                                      className="w-full"
+                                      onClick={async () => {
+                                        try {
+                                          const response = await fetch(
+                                            `/api/admin/rentals/${selectedRental.id}`,
+                                            {
+                                              method: 'PATCH',
+                                              headers: {
+                                                'Content-Type':
+                                                  'application/json',
+                                              },
+                                              body: JSON.stringify({
+                                                checkInAt:
+                                                  new Date().toISOString(),
+                                                status: 'ACTIVE',
+                                              }),
+                                            }
+                                          )
+                                          if (response.ok) {
+                                            toast.success(
+                                              'Check-in realizado com sucesso'
+                                            )
+                                            fetchRentals()
+                                            setSelectedRental(null)
+                                          } else {
+                                            toast.error(
+                                              'Erro ao realizar check-in'
+                                            )
+                                          }
+                                        } catch (_error) {
+                                          toast.error(
+                                            'Erro ao realizar check-in'
+                                          )
+                                        }
+                                      }}
+                                    >
+                                      <CheckCircle className="w-4 h-4 mr-2" />
+                                      Realizar Check-in
+                                    </Button>
+                                  )}
+                                  {selectedRental.checkInAt &&
+                                    !selectedRental.checkOutAt && (
+                                      <Button
+                                        variant="outline"
+                                        className="w-full"
+                                        onClick={async () => {
+                                          try {
+                                            const response = await fetch(
+                                              `/api/admin/rentals/${selectedRental.id}`,
+                                              {
+                                                method: 'PATCH',
+                                                headers: {
+                                                  'Content-Type':
+                                                    'application/json',
+                                                },
+                                                body: JSON.stringify({
+                                                  checkOutAt:
+                                                    new Date().toISOString(),
+                                                  status: 'COMPLETED',
+                                                }),
+                                              }
+                                            )
+                                            if (response.ok) {
+                                              toast.success(
+                                                'Check-out realizado com sucesso'
+                                              )
+                                              fetchRentals()
+                                              setSelectedRental(null)
+                                            } else {
+                                              toast.error(
+                                                'Erro ao realizar check-out'
+                                              )
+                                            }
+                                          } catch (_error) {
+                                            toast.error(
+                                              'Erro ao realizar check-out'
+                                            )
+                                          }
+                                        }}
+                                      >
+                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                        Realizar Check-out
+                                      </Button>
+                                    )}
+                                  {selectedRental.checkInAt && (
+                                    <p className="text-sm text-gray-600">
+                                      Check-in:{' '}
+                                      {formatDate(selectedRental.checkInAt)}
+                                    </p>
+                                  )}
+                                  {selectedRental.checkOutAt && (
+                                    <p className="text-sm text-gray-600">
+                                      Check-out:{' '}
+                                      {formatDate(selectedRental.checkOutAt)}
+                                    </p>
+                                  )}
+                                </div>
+                              </AdminCard>
+                            )}
 
                             {/* Ações */}
                             <div className="flex gap-2">

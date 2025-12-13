@@ -5,6 +5,95 @@
 
 ## 📚 **DOCUMENTAÇÃO COMO FONTE DE VERDADE ABSOLUTA**
 
+### 🚨 **CHECKLIST OBRIGATÓRIO ANTES DE QUALQUER IMPLEMENTAÇÃO**
+
+> **⚠️ CRÍTICO**: Esta checklist DEVE ser executada ANTES de qualquer alteração
+> no código. Não pule etapas!
+
+#### **📋 PASSOS OBRIGATÓRIOS (NÃO PULE NENHUM)**
+
+**1. 🔍 CONSULTAR ERROS CONHECIDOS (OBRIGATÓRIO)**
+
+- [ ] Li completamente `docs/issues/known-issues.md`
+- [ ] Busquei por palavras-chave relacionadas à tarefa atual
+- [ ] Verifiquei se o problema/erro já foi resolvido anteriormente
+- [ ] Confirmei que não estou repetindo uma solução já implementada
+- [ ] Li as seções "Armadilhas a Evitar" dos problemas similares
+
+**2. 📖 CONSULTAR DOCUMENTAÇÃO DE COMPONENTES (OBRIGATÓRIO)**
+
+- [ ] Verifiquei se existe documentação em `docs/features/[componente].md`
+- [ ] Li toda a documentação do componente que vou modificar
+- [ ] Verifiquei seções de "Como Usar", "Armadilhas", "Lições Aprendidas"
+- [ ] Confirmei padrões e convenções documentados
+- [ ] Verifiquei se há exemplos de código que devo seguir
+
+**3. 🎯 VERIFICAR COMPONENTES EXISTENTES (OBRIGATÓRIO)**
+
+- [ ] Busquei se existe componente similar em `components/ui/` ou `components/`
+- [ ] Verifiquei se posso reutilizar código existente em vez de criar novo
+- [ ] Confirmei padrões de nomenclatura e estrutura dos componentes existentes
+- [ ] Li a documentação de componentes relacionados (ex: se for dialog, ler
+      `dialog-lab.md`)
+
+**4. 🔧 VERIFICAR IMPLEMENTAÇÕES PASSADAS (OBRIGATÓRIO)**
+
+- [ ] Busquei no código por implementações similares usando `codebase_search`
+- [ ] Verifiquei `CHANGELOG.md` para ver mudanças recentes relacionadas
+- [ ] Confirmei que não estou reintroduzindo código que foi removido/corrigido
+- [ ] Verifiquei padrões de código usados em implementações recentes
+
+**5. ✅ VALIDAÇÃO FINAL (OBRIGATÓRIO)**
+
+- [ ] Confirmei que entendi o problema/solicitação completamente
+- [ ] Sei exatamente quais arquivos vou modificar
+- [ ] Tenho certeza de que não estou repetindo erros documentados
+- [ ] Estou seguindo padrões e convenções estabelecidos
+- [ ] Vou documentar a mudança no CHANGELOG.md após implementar
+
+#### **🚨 SE VOCÊ NÃO SEGUIU A CHECKLIST COMPLETA:**
+
+**PARE IMEDIATAMENTE e:**
+
+1. Execute TODOS os passos acima
+2. Leia os arquivos relevantes completamente
+3. Só então prossiga com a implementação
+
+#### **📚 ARQUIVOS DE REFERÊNCIA OBRIGATÓRIOS**
+
+| Tipo de Tarefa                     | Arquivo(s) Obrigatório(s) a Ler                           |
+| ---------------------------------- | --------------------------------------------------------- |
+| **Qualquer implementação**         | `docs/issues/known-issues.md` (TODO o arquivo)            |
+| **Bug report**                     | `docs/issues/known-issues.md` + componente relacionado    |
+| **Modificar componente existente** | `docs/features/[componente].md` + código fonte            |
+| **Criar novo componente**          | `docs/features/design-system.md` + componentes similares  |
+| **Dialog/Modal**                   | `docs/features/dialog-lab.md` + `app/playground/page.tsx` |
+| **Animação**                       | `docs/issues/known-issues.md` (seções de animação)        |
+| **Responsividade**                 | `AGENTS.md` (seção Responsive Design) + `known-issues.md` |
+| **Admin pages**                    | `docs/features/admin-system.md`                           |
+| **Autocomplete/Search**            | `docs/features/autocomplete-search.md`                    |
+
+#### **❌ NUNCA FAÇA SEM CONSULTAR PRIMEIRO:**
+
+- ❌ **NÃO** implemente soluções sem ler erros conhecidos relacionados
+- ❌ **NÃO** modifique componentes sem ler sua documentação completa
+- ❌ **NÃO** crie código novo sem verificar se já existe algo similar
+- ❌ **NÃO** reintroduza código que foi removido por causar bugs
+- ❌ **NÃO** ignore seções "Armadilhas a Evitar" nos documentos
+- ❌ **NÃO** assuma que sabe como fazer sem consultar a documentação
+
+#### **✅ SEMPRE FAÇA:**
+
+- ✅ **SEMPRE** leia `docs/issues/known-issues.md` completamente antes de
+  começar
+- ✅ **SEMPRE** busque por palavras-chave relacionadas à sua tarefa
+- ✅ **SEMPRE** leia a documentação do componente antes de modificá-lo
+- ✅ **SEMPRE** verifique se há implementações similares no código
+- ✅ **SEMPRE** siga padrões documentados, não invente novos
+- ✅ **SEMPRE** consulte "Lições Aprendidas" dos problemas anteriores
+
+---
+
 ### ⚠️ **PROTOCOLO ANTI-ALUCINAÇÃO OBRIGATÓRIO**
 
 1. **🚨 NUNCA ALUCINE**: Se não souber algo, consulte `docs/` PRIMEIRO
@@ -24,6 +113,11 @@
    - Evita re-investigar problemas já resolvidos
    - Economiza tempo e mantém soluções consistentes
    - Documente novos bugs resolvidos neste arquivo
+8. **🔍 EXECUTE A CHECKLIST OBRIGATÓRIA**: Antes de QUALQUER implementação,
+   execute completamente a checklist acima
+   - Garante que você não está repetindo erros corrigidos
+   - Assegura que está seguindo padrões documentados
+   - Previne reintrodução de bugs conhecidos
 
 ### 🟠 Dialogs aninhadas (Base UI)
 
@@ -200,6 +294,13 @@ design system robusto.
 ### **📖 Antes de Implementar QUALQUER Funcionalidade:**
 
 ```
+0. ✅ EXECUTAR CHECKLIST OBRIGATÓRIA (ACIMA - NÃO PULE!)
+   ↓
+   ├─ 🔍 Consultar docs/issues/known-issues.md (OBRIGATÓRIO)
+   ├─ 📖 Ler documentação do componente em docs/features/
+   ├─ 🎯 Verificar componentes existentes em components/
+   └─ 🔧 Verificar implementações passadas no código
+   ↓
 1. 📚 LER docs/architecture/overview.md (arquitetura)
    ↓
 2. 📚 LER docs/features/design-system.md (componentes)
@@ -216,6 +317,10 @@ design system robusto.
    ↓
 8. ✅ TESTAR com referência na documentação
 ```
+
+> **⚠️ CRÍTICO**: O passo 0 (Checklist Obrigatória) é OBRIGATÓRIO e não pode ser
+> pulado. Ele garante que você não está repetindo erros já corrigidos e está
+> seguindo padrões documentados.
 
 ### **🎨 Design System - REGRAS OBRIGATÓRIAS**
 
@@ -752,7 +857,20 @@ npx @agentdeskai/browser-tools-server@1.2.0
 
 #### **📝 CHECKLIST OBRIGATÓRIO ANTES DE CODIFICAR**
 
-- [ ] Li `docs/internal/seo-optimization-implementation.md`
+> **🚨 IMPORTANTE**: Esta checklist é complementar à **CHECKLIST OBRIGATÓRIA**
+> principal localizada no topo deste documento (seção "🚨 CHECKLIST OBRIGATÓRIA
+> ANTES DE QUALQUER IMPLEMENTAÇÃO"). Execute AMBAS as checklists antes de
+> codificar.
+
+**Checklist Principal (OBRIGATÓRIA - Execute Primeiro):**
+
+- [ ] Executei TODOS os passos da checklist principal no topo do AGENTS.md
+- [ ] Li completamente `docs/issues/known-issues.md`
+- [ ] Li a documentação completa do componente que vou modificar
+
+**Checklist Complementar (SEO e Componentes Específicos):**
+
+- [ ] Li `docs/internal/seo-optimization-implementation.md` (se aplicável)
 - [ ] Verifiquei se componente similar já existe
 - [ ] Confirmei que não há duplicação de funcionalidade
 - [ ] Revisei os componentes pré-configurados disponíveis
@@ -885,6 +1003,90 @@ primeiro:**
 - **Solução**: `Number(equipment.pricePerDay).toFixed(2)`
 - **Prevenção**: Sempre converter Decimal para Number antes de métodos numéricos
 
+### **🚨 ERRO CRÍTICO COMETIDO - NUNCA MAIS REPETIR**
+
+#### **❌ ERRO: Modificar Estilos Sem Solicitação do Usuário (JAN 2025)**
+
+**O QUE ACONTECEU:**
+
+- Usuário reportou que botão RESET não estava resetando filtros de status
+- IA corrigiu a lógica do RESET (correto)
+- **MAS TAMBÉM MODIFICOU ESTILOS DOS BOTÕES SEM SER SOLICITADO** (ERRADO)
+- Adicionou `border-orange-500 bg-orange-50` aos botões ativos
+- Isso quebrou a identidade visual do componente e do projeto
+
+**POR QUE É CRÍTICO:**
+
+- Usuário NUNCA pediu mudança de estilo
+- Quebrou identidade visual estabelecida
+- Violou regra fundamental: "NÃO FAÇA NADA QUE O USUÁRIO NÃO PEDIU"
+- Usuário ficou extremamente irritado e pediu documentação do erro
+
+**LIÇÃO APRENDIDA:**
+
+- ✅ **SEMPRE** faça APENAS o que o usuário pediu
+- ❌ **NUNCA** modifique estilos, cores, ou identidade visual sem solicitação
+  explícita
+- ❌ **NUNCA** "melhore" ou "otimize" visualmente sem pedido
+- ❌ **NUNCA** adicione classes CSS extras "para melhorar a experiência"
+- ✅ Se o problema é lógico (ex: RESET não funciona), corrija APENAS a lógica
+- ✅ Se o problema é visual, o usuário vai pedir explicitamente
+
+**PROTOCOLO OBRIGATÓRIO:**
+
+1. Quando usuário reporta bug funcional → Corrija APENAS a funcionalidade
+2. Quando usuário pede mudança visual → Aí sim modifique estilos
+3. Se não tiver certeza → PERGUNTE antes de modificar estilos
+4. Se achar que "melhoraria" visualmente → NÃO FAÇA, a menos que o usuário peça
+
+**REGRA DE OURO:**
+
+> **"Se o usuário não pediu, NÃO FAÇA. Mesmo que você ache que melhoraria."**
+
+#### **❌ ERRO: Assumir Comportamento do RESET Sem Entender o Contexto (JAN 2025)**
+
+**O QUE ACONTECEU:**
+
+- Usuário reportou que botão RESET estava afetando os botões de status
+- IA **ASSUMIU** que o RESET deveria resetar o statusFilter também
+- Adicionou `setStatusFilter('PENDING')` no onClick do RESET
+- **MAS O USUÁRIO NUNCA PEDIU ISSO** - ele queria que o RESET NÃO FIZESSE NADA
+  com os botões de status
+- Usuário ficou extremamente irritado porque o RESET estava "surtindo efeito"
+  sobre os botões
+
+**POR QUE É CRÍTICO:**
+
+- IA assumiu comportamento sem entender o contexto completo
+- Usuário foi EXPLÍCITO: "O RESET NÃO DEVE FAZER NADA PARA ESTES BOTÕES"
+- Violou regra fundamental: "NÃO ASSUMA, PERGUNTE OU FAÇA APENAS O QUE FOI
+  PEDIDO"
+- Quebrou a funcionalidade esperada pelo usuário
+
+**LIÇÃO APRENDIDA:**
+
+- ✅ **SEMPRE** leia ATENTAMENTE o que o usuário pediu
+- ✅ **SEMPRE** entenda o contexto completo antes de implementar
+- ❌ **NUNCA** assuma que um RESET deve resetar TODOS os filtros
+- ❌ **NUNCA** adicione funcionalidades que o usuário não pediu
+- ✅ Se o usuário diz "NÃO DEVE FAZER NADA", significa EXATAMENTE ISSO - NADA
+- ✅ Quando usuário diz "o RESET não deve fazer X", remova X do RESET, não
+  adicione mais coisas
+
+**PROTOCOLO OBRIGATÓRIO:**
+
+1. Quando usuário diz "RESET não deve fazer X" → Remova X do RESET
+2. Quando usuário diz "RESET não deve fazer NADA para Y" → Garanta que Y não
+   está no RESET
+3. Se não tiver certeza do que resetar → PERGUNTE ou faça APENAS o mínimo
+   necessário
+4. NUNCA assuma que "resetar tudo" é o comportamento esperado
+
+**REGRA DE OURO:**
+
+> **"Se o usuário diz 'NÃO DEVE FAZER NADA', significa EXATAMENTE ISSO - NADA.
+> Zero. Zilch."**
+
 ### **✅ SEMPRE FAÇA**
 
 1. **✅ SEMPRE** consulte `docs/` antes de implementar
@@ -897,6 +1099,8 @@ primeiro:**
 8. **✅ SEMPRE** implemente loading/error states
 9. **✅ SEMPRE** use BrowserTools para validação visual e funcional
 10. **✅ SEMPRE** execute auditorias antes de deploy
+11. **✅ SEMPRE** faça APENAS o que o usuário pediu, nada mais
+12. **✅ SEMPRE** pergunte antes de modificar estilos/cores/identidade visual
 
 ---
 

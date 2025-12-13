@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,21 +10,154 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import {
   FileText,
   Clock,
   ShoppingCart,
   TrendingUp,
   Plus,
-  FileTextIcon,
+  Package,
+  Eye,
+  CheckCircle,
+  AlertTriangle,
 } from 'lucide-react'
 import Link from 'next/link'
 import { useCartStore } from '@/stores/useCartStore'
 import { motion } from 'framer-motion'
+import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
+
+interface Rental {
+  id: string
+  startdate: string
+  enddate: string
+  total: number
+  status: string
+  rental_items: Array<{
+    id: string
+    quantity: number
+    totaldays: number
+    equipments: {
+      id: string
+      name: string
+      images: string[]
+    }
+  }>
+  payments?: Array<{
+    id: string
+    amount: number
+    status: string
+    method: string
+  }>
+}
+
+const statusConfig: Record<
+  string,
+  {
+    label: string
+    color: string
+    icon: React.ComponentType<{ className?: string }>
+  }
+> = {
+  PENDING: {
+    label: 'Pendente',
+    color: 'bg-yellow-100 text-yellow-800',
+    icon: Clock,
+  },
+  ACTIVE: {
+    label: 'Ativa',
+    color: 'bg-blue-100 text-blue-800',
+    icon: CheckCircle,
+  },
+  COMPLETED: {
+    label: 'Concluída',
+    color: 'bg-green-100 text-green-800',
+    icon: CheckCircle,
+  },
+  OVERDUE: {
+    label: 'Atrasada',
+    color: 'bg-red-100 text-red-800',
+    icon: AlertTriangle,
+  },
+}
 
 export default function AreaClientePage() {
   const { data: session } = useSession()
   const { getItemCount, getTotalPrice } = useCartStore()
+  const [rentals, setRentals] = useState<Rental[]>([])
+  const [loading, setLoading] = useState(true)
+  const [quotesCount, setQuotesCount] = useState(0)
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchRentals()
+      fetchQuotesCount()
+    }
+  }, [session])
+
+  const fetchRentals = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/client/rentals')
+      if (!response.ok) throw new Error('Erro ao carregar locações')
+
+      const data = await response.json()
+      setRentals(data.rentals || [])
+    } catch (error) {
+      console.error('Error fetching rentals:', error)
+      toast.error('Erro ao carregar locações')
+      setRentals([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchQuotesCount = async () => {
+    try {
+      // Fetch quotes from the quotes API
+      const response = await fetch('/api/orcamentos')
+      if (response.ok) {
+        const data = await response.json()
+        // If it's an array, count it; otherwise try to get count from response
+        if (Array.isArray(data)) {
+          setQuotesCount(data.length)
+        } else if (data.quotes && Array.isArray(data.quotes)) {
+          setQuotesCount(data.quotes.length)
+        } else if (typeof data.count === 'number') {
+          setQuotesCount(data.count)
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching quotes count:', error)
+      // Don't show error to user, just keep default 0
+    }
+  }
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value)
+  }
+
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString)
+      return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      })
+    } catch {
+      return 'Data inválida'
+    }
+  }
+
+  const activeRentals = rentals.filter(
+    (r) => r.status === 'ACTIVE' || r.status === 'PENDING'
+  )
+  const _completedRentals = rentals.filter((r) => r.status === 'COMPLETED')
 
   return (
     <div
@@ -118,7 +252,9 @@ export default function AreaClientePage() {
                       <p className="text-sm font-medium text-gray-600 mb-1">
                         Orçamentos
                       </p>
-                      <p className="text-3xl font-bold text-gray-900 mb-1">0</p>
+                      <p className="text-3xl font-bold text-gray-900 mb-1">
+                        {quotesCount}
+                      </p>
                       <p className="text-sm text-gray-500">solicitações</p>
                     </div>
                     <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl text-white group-hover:scale-110 transition-transform self-center">
@@ -238,38 +374,107 @@ export default function AreaClientePage() {
               </CardContent>
             </Card>
 
-            {/* Meus Orçamentos - Layout com Botões no Fundo */}
+            {/* Minhas Locações - Layout com Lista */}
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
-                    <FileText className="h-5 w-5" />
+                    <Package className="h-5 w-5" />
                   </div>
-                  Meus Orçamentos
+                  Minhas Locações
                 </CardTitle>
               </CardHeader>
               <CardContent className="relative pb-8 z-10 pt-0 flex flex-col flex-1">
-                <div className="flex flex-col flex-1 min-h-0">
-                  {/* Área central com ícone e texto */}
-                  <div className="flex flex-col flex-1 justify-center items-center text-center px-4 py-8">
-                    <div className="space-y-4">
-                      <FileText className="h-12 w-12 md:h-14 md:w-14 text-gray-300 mx-auto" />
-                      <p className="text-base md:text-lg font-medium text-gray-500">
-                        Nenhum orçamento encontrado
-                      </p>
+                {loading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <Clock className="h-8 w-8 text-gray-300 animate-spin" />
+                  </div>
+                ) : activeRentals.length > 0 ? (
+                  <div className="flex flex-col flex-1 min-h-0 space-y-3">
+                    {activeRentals.slice(0, 3).map((rental) => {
+                      const StatusIcon =
+                        statusConfig[rental.status]?.icon || Clock
+                      return (
+                        <div
+                          key={rental.id}
+                          className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
+                        >
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex-1">
+                              <p className="font-semibold text-gray-900">
+                                {rental.rental_items[0]?.equipments.name ||
+                                  'Equipamento'}
+                                {rental.rental_items.length > 1 &&
+                                  ` +${rental.rental_items.length - 1}`}
+                              </p>
+                              <p className="text-sm text-gray-500">
+                                {formatDate(rental.startdate)} -{' '}
+                                {formatDate(rental.enddate)}
+                              </p>
+                            </div>
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                'text-xs',
+                                statusConfig[rental.status]?.color
+                              )}
+                            >
+                              <StatusIcon className="w-3 h-3 mr-1" />
+                              {statusConfig[rental.status]?.label}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-green-600">
+                              {formatCurrency(rental.total)}
+                            </span>
+                            <Button variant="ghost" size="sm" asChild>
+                              <Link
+                                href={`/area-cliente/locacoes/${rental.id}`}
+                              >
+                                <Eye className="w-4 h-4 mr-1" />
+                                Ver
+                              </Link>
+                            </Button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                    {activeRentals.length > 3 && (
+                      <Button variant="outline" className="w-full" asChild>
+                        <Link href="/area-cliente/locacoes">
+                          Ver todas as locações ({rentals.length})
+                        </Link>
+                      </Button>
+                    )}
+                    {activeRentals.length <= 3 && rentals.length > 3 && (
+                      <Button variant="outline" className="w-full" asChild>
+                        <Link href="/area-cliente/locacoes">
+                          Ver todas as locações ({rentals.length})
+                        </Link>
+                      </Button>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex flex-col flex-1 min-h-0">
+                    <div className="flex flex-col flex-1 justify-center items-center text-center px-4 py-8">
+                      <div className="space-y-4">
+                        <Package className="h-12 w-12 md:h-14 md:w-14 text-gray-300 mx-auto" />
+                        <p className="text-base md:text-lg font-medium text-gray-500">
+                          Nenhuma locação ativa
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex justify-center">
+                      <Button size="default" asChild className="w-full h-10">
+                        <Link href="/equipamentos">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Alugar Equipamentos
+                        </Link>
+                      </Button>
                     </div>
                   </div>
-                  {/* Botão fixo na parte inferior */}
-                  <div className="flex justify-center ">
-                    <Button size="default" asChild className="w-full h-10">
-                      <Link href="/orcamento">
-                        <FileTextIcon className="h-4 w-4 " />
-                        Solicitar Orçamento
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
+                )}
               </CardContent>
             </Card>
           </motion.div>

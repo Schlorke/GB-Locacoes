@@ -13,6 +13,9 @@ import {
   Settings,
   UserCircle,
   Package,
+  DollarSign,
+  Wrench,
+  Truck,
 } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -29,6 +32,9 @@ const navItems = [
   { href: '/admin/categorias', icon: ListChecks, label: 'Categorias' },
   { href: '/admin/orcamentos', icon: FileText, label: 'Orçamentos' },
   { href: '/admin/rentals', icon: Package, label: 'Locações' },
+  { href: '/admin/financial', icon: DollarSign, label: 'Financeiro' },
+  { href: '/admin/maintenance', icon: Wrench, label: 'Manutenção' },
+  { href: '/admin/logistics', icon: Truck, label: 'Logística' },
   { href: '/admin/settings', icon: Settings, label: 'Configurações' },
 ]
 

@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { requireAdminOrOperator } from '@/middlewares/require-admin'
+import {
+  calculateFleetUtilizationRate,
+  calculateEquipmentROI,
+  calculateAverageRevenuePerEquipment,
+} from '@/lib/kpi-calculations'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -243,6 +248,9 @@ export async function GET() {
     }
 
     // Buscar estatísticas gerais
+    const now = new Date()
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
     const [
       totalEquipments,
       totalCategories,
@@ -252,6 +260,10 @@ export async function GET() {
       rejectedQuotes,
       completedQuotes,
       totalRevenue,
+      monthlyRevenue,
+      utilizationRate,
+      equipmentROI,
+      averageRevenuePerEquipment,
     ] = await Promise.all([
       prisma.equipment.count(),
       prisma.category.count(),
@@ -264,11 +276,28 @@ export async function GET() {
         where: { status: 'COMPLETED' },
         _sum: { total: true },
       }),
+      prisma.payment.aggregate({
+        where: {
+          status: 'PAID',
+          paidAt: {
+            gte: startOfMonth,
+          },
+        },
+        _sum: { amount: true },
+      }),
+      calculateFleetUtilizationRate(),
+      calculateEquipmentROI(),
+      calculateAverageRevenuePerEquipment(startOfMonth, now),
     ])
+
+    // Calcular equipamentos disponíveis
+    const availableEquipments = await prisma.equipment.count({
+      where: { available: true },
+    })
 
     const stats = {
       totalEquipments,
-      availableEquipments: totalEquipments, // Por enquanto consideramos todos disponíveis
+      availableEquipments,
       totalCategories,
       totalQuotes,
       pendingQuotes,
@@ -276,7 +305,12 @@ export async function GET() {
       rejectedQuotes,
       completedQuotes,
       totalRevenue: totalRevenue._sum.total || 0,
-      monthlyRevenue: 0, // Pode ser calculado se necessário
+      monthlyRevenue: monthlyRevenue._sum.amount
+        ? Number(monthlyRevenue._sum.amount)
+        : 0,
+      utilizationRate: utilizationRate || 0,
+      equipmentROI: equipmentROI.slice(0, 10), // Top 10 por ROI
+      averageRevenuePerEquipment: averageRevenuePerEquipment || 0,
     }
 
     return NextResponse.json(stats)

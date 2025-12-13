@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog } from '@/components/ui/dialog'
-import { cn } from '@/lib/utils'
+import { ViewToggle } from '@/components/ui/view-toggle'
 import { toast } from 'sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -418,55 +418,16 @@ function AdminQuotesPage() {
               },
             ]}
             viewToggleButtons={
-              <div className="relative flex flex-row items-center gap-1 bg-white rounded-lg lg:rounded-md p-0 h-10 transition-all duration-200 admin-filter-element w-full">
-                {/* Slider animado */}
-                <motion.div
-                  className="absolute bg-slate-700 rounded-lg lg:rounded-md z-0 h-full"
-                  initial={false}
-                  animate={{
-                    x: viewMode === 'kanban' ? 0 : 'calc(100% + 0.25rem)',
-                    y: 0,
-                  }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 300,
-                    damping: 30,
-                  }}
-                  style={{
-                    width: 'calc(50% - 0.125rem)',
-                    top: 0,
-                    left: 0,
-                  }}
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setViewMode('kanban')}
-                  className={cn(
-                    'relative z-10 flex flex-1 items-center justify-center gap-2 hover:scale-100 h-10 transition-colors duration-200',
-                    viewMode === 'kanban'
-                      ? 'text-white hover:text-white'
-                      : 'text-inherit hover:text-orange-600'
-                  )}
-                >
-                  <LayoutGrid className="w-4 h-4" />
-                  <span className="hidden sm:inline">Kanban</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setViewMode('table')}
-                  className={cn(
-                    'relative z-10 flex flex-1 items-center justify-center gap-2 hover:scale-100 h-10 transition-colors duration-200',
-                    viewMode === 'table'
-                      ? 'text-white hover:text-white'
-                      : 'text-inherit hover:text-orange-600'
-                  )}
-                >
-                  <Table className="w-4 h-4" />
-                  <span className="hidden sm:inline">Tabela</span>
-                </Button>
-              </div>
+              <ViewToggle
+                options={[
+                  { value: 'kanban', label: 'Kanban', icon: LayoutGrid },
+                  { value: 'table', label: 'Tabela', icon: Table },
+                ]}
+                value={viewMode}
+                onValueChange={(value) =>
+                  setViewMode(value as 'kanban' | 'table')
+                }
+              />
             }
           />
         </motion.div>

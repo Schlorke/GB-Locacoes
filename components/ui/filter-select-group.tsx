@@ -24,37 +24,47 @@ export function FilterSelectGroup({
   resetButton,
 }: FilterSelectGroupProps) {
   return (
-    <div
-      className={cn(
-        'flex flex-col lg:flex-row gap-3 min-w-0 w-full lg:items-center',
-        className
-      )}
-    >
-      {filters.map((filter, index) => (
-        <CustomSelect
-          key={index}
-          value={filter.value}
-          onValueChange={filter.onValueChange}
-          placeholder={filter.placeholder || filter.label}
-          className={cn(
-            'w-full lg:w-auto lg:min-w-[180px] h-10 flex-shrink-0',
-            selectClassName
-          )}
-        >
-          {filter.options.map((option) => (
-            <CustomSelectItem key={option.value} value={option.value}>
-              {option.label}
-            </CustomSelectItem>
-          ))}
-        </CustomSelect>
-      ))}
-      {resetButton && (
-        <div className="flex items-center justify-center flex-shrink-0 w-full lg:w-auto">
-          {resetButton}
-        </div>
-      )}
+    <div className="flex flex-col gap-3 w-full md:w-full lg:w-auto">
+      {/* Primeira linha: Filtros e Reset Button */}
+      <div
+        className={cn(
+          'flex flex-col md:flex-col lg:flex-row gap-3 min-w-0 w-full md:w-full lg:w-auto lg:items-center',
+          className
+        )}
+      >
+        {filters.map((filter, index) => (
+          <CustomSelect
+            key={index}
+            value={filter.value}
+            onValueChange={filter.onValueChange}
+            placeholder={filter.placeholder || filter.label}
+            className={cn(
+              'w-full md:w-full lg:w-auto lg:min-w-[180px] h-10 flex-shrink-0',
+              selectClassName
+            )}
+          >
+            {filter.options.map((option) => (
+              <CustomSelectItem key={option.value} value={option.value}>
+                {option.label}
+              </CustomSelectItem>
+            ))}
+          </CustomSelect>
+        ))}
+        {resetButton && (
+          <div className="flex items-center justify-center flex-shrink-0 w-full md:w-full lg:w-auto">
+            {resetButton}
+          </div>
+        )}
+        {/* ViewToggle em mobile/tablet - mesma linha */}
+        {viewToggleButtons && (
+          <div className="flex items-center justify-center flex-shrink-0 w-full md:w-full lg:hidden">
+            {viewToggleButtons}
+          </div>
+        )}
+      </div>
+      {/* Segunda linha: ViewToggle apenas em lg (desktop) */}
       {viewToggleButtons && (
-        <div className="flex items-center justify-center flex-shrink-0 w-full lg:w-auto">
+        <div className="hidden lg:flex items-center justify-start flex-shrink-0 w-full">
           {viewToggleButtons}
         </div>
       )}

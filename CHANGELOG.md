@@ -8,6 +8,22 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Fixed 🛠️
+
+- **Filtro padrão na página de Locações (Admin)**: Restaurado comportamento onde
+  a página `/admin/rentals` exibe por padrão apenas locações com status
+  "Pendente" (PENDING), similar ao comportamento da primeira seção em
+  `/admin/settings`. Este comportamento havia sido removido acidentalmente em
+  uma atualização anterior.
+  - **Arquivos Modificados**: `app/admin/rentals/page.tsx`,
+    `docs/features/admin-system.md`
+  - **Comentário no código**: Adicionado comentário crítico explicando que o
+    filtro padrão deve ser 'PENDING' e nunca alterado para 'all' sem consultar o
+    usuário
+  - **Documentação**: Adicionada seção específica em
+    `docs/features/admin-system.md` documentando este comportamento crítico
+  - **Data**: 2025-12-12
+
 ### Added ✨
 
 - **Otimização de Performance do Banco de Dados (Supabase)**: Adicionados
