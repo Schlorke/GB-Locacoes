@@ -58,6 +58,15 @@ export async function GET(
             },
           },
         },
+        contract: {
+          select: {
+            id: true,
+            pdfUrl: true,
+            status: true,
+            signedAt: true,
+            zapSignId: true,
+          },
+        },
       },
     })
 

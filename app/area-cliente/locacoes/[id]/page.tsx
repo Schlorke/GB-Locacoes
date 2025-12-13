@@ -75,6 +75,13 @@ interface Rental {
     name: string
     email: string
   }
+  contract?: {
+    id: string
+    pdfUrl: string | null
+    status: string
+    signedAt: string | null
+    zapSignId: string | null
+  }
 }
 
 const statusConfig: Record<
@@ -632,7 +639,40 @@ export default function RentalDetailsPage() {
                       Entrar em Contato
                     </Link>
                   </Button>
-                  <Button variant="outline" className="w-full">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={async () => {
+                      try {
+                        const response = await fetch(
+                          `/api/contracts/${rental.id}/download`
+                        )
+                        if (response.ok) {
+                          // Se for HTML, criar blob e fazer download
+                          const blob = await response.blob()
+                          const url = window.URL.createObjectURL(blob)
+                          const a = document.createElement('a')
+                          a.href = url
+                          a.download = `contrato-${rental.id}.html`
+                          document.body.appendChild(a)
+                          a.click()
+                          window.URL.revokeObjectURL(url)
+                          document.body.removeChild(a)
+                          toast.success('Contrato baixado com sucesso')
+                        } else if (
+                          response.status === 302 ||
+                          response.redirected
+                        ) {
+                          // Se for redirecionamento para PDF, abrir em nova aba
+                          window.open(response.url, '_blank')
+                        } else {
+                          toast.error('Erro ao baixar contrato')
+                        }
+                      } catch (_error) {
+                        toast.error('Erro ao baixar contrato')
+                      }
+                    }}
+                  >
                     <Download className="w-4 h-4 mr-2" />
                     Baixar Contrato
                   </Button>
