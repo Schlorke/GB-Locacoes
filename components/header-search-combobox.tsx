@@ -252,7 +252,7 @@ export function HeaderSearchCombobox() {
                 type="button"
                 onClick={() => handleSearch(query)}
                 disabled={!query.trim()}
-                className="h-8 w-8 p-0 bg-orange-600 hover:bg-orange-700 text-white"
+                className="h-8 w-8 p-0 bg-orange-600 hover:bg-orange-700 text-white border-0"
                 aria-label="Buscar equipamentos"
               >
                 <Search className="h-4 w-4" />

@@ -1,5 +1,8 @@
 'use client'
 
+import Equipment3DCarousel, {
+  type Equipment3DModel,
+} from '@/components/equipment-3d-carousel'
 import { Card, CardContent } from '@/components/ui/card'
 import { usePublicSettings } from '@/hooks/use-public-settings'
 import {
@@ -14,8 +17,28 @@ import {
   Users,
   Wrench,
 } from 'lucide-react'
-import Image from 'next/image'
 import { useEffect, useState } from 'react'
+
+const SOBRE_EQUIPMENT_MODELS: Equipment3DModel[] = [
+  {
+    id: 'compressor',
+    name: 'Compressor de Ar',
+    modelUrl: '/models/Compressor.glb',
+    description: 'Compressores de alta pressão',
+  },
+  {
+    id: 'betoneira',
+    name: 'Betoneira',
+    modelUrl: '/models/Betoneira.glb',
+    description: 'Betoneiras para preparo de concreto',
+  },
+  {
+    id: 'andaime',
+    name: 'Andaime',
+    modelUrl: '/models/Andaime.glb',
+    description: 'Andaimes para trabalhos em altura',
+  },
+]
 
 const stats = [
   {
@@ -209,20 +232,65 @@ export default function SobrePage() {
             </div>
 
             <div className="hero-image relative px-0 sm:px-0 md:px-8">
-              <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl p-4 sm:p-6 md:p-8 lg:p-10 shadow-xl group">
-                <Image
-                  src="/placeholder.svg?height=400&width=500&text=Equipamentos+GB+Locações"
-                  alt="Equipamentos GB Locações"
-                  width={500}
-                  height={400}
-                  className="rounded-xl shadow-lg w-full h-auto transform group-hover:scale-105 transition-transform duration-500"
-                />
+              {/* Container do componente 3D com cards flutuantes - estilo da homepage */}
+              <div className="hero-image group relative w-full lg:w-[540px] aspect-square mx-auto rounded-2xl">
+                {/* Wrapper interno com backdrop-filter, opacity e scale */}
+                <div
+                  className="hero-image-inner relative h-full w-full rounded-2xl transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                  style={{
+                    opacity: 0,
+                    backdropFilter: 'blur(20px) saturate(180%)',
+                    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                  }}
+                >
+                  <Equipment3DCarousel
+                    models={SOBRE_EQUIPMENT_MODELS}
+                    autoRotate={true}
+                    autoRotateInterval={6000}
+                    className="transform transition-transform duration-500"
+                    height="100%"
+                  />
+                </div>
 
-                {/* Floating badge - estilo quadrado como na hero */}
-                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 bg-white/90 backdrop-blur-sm text-orange-600 p-3 sm:p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+                {/* Cards flutuantes posicionados ao redor do componente 3D */}
+                {/* Card 1: +200 Equipamentos - Estilo amarelo da homepage - bottom-left */}
+                <div
+                  className="hero-badge-left hidden sm:block absolute -bottom-2 -left-2 bg-yellow-500 text-gray-900 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20"
+                  style={{ opacity: 0 }}
+                >
+                  <div className="text-2xl font-bold animate-count-up">
+                    +200
+                  </div>
+                  <div className="text-sm font-medium">
+                    Equipamentos Disponíveis
+                  </div>
+                </div>
+
+                {/* Card 2: 10+ Anos - Estilo branco/laranja da homepage - top-right */}
+                <div
+                  className="hero-badge-right hidden sm:block absolute -top-2 -right-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20"
+                  style={{ opacity: 0 }}
+                >
                   <div className="text-2xl font-bold">10+</div>
                   <div className="text-sm font-medium">Anos de Experiência</div>
                 </div>
+
+                {/* Card 3: 500+ Clientes - Estilo similar ao segundo - top-left para não conflitar */}
+                <div
+                  className="hero-badge-top-left hidden sm:block absolute -top-2 -left-2 bg-white/90 backdrop-blur-sm text-orange-600 p-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer z-20"
+                  style={{ opacity: 0 }}
+                >
+                  <div className="text-2xl font-bold">500+</div>
+                  <div className="text-sm font-medium">
+                    Clientes Satisfeitos
+                  </div>
+                </div>
+
+                {/* Border animado */}
+                <div
+                  className="hero-border absolute inset-[-1rem] border-2 border-white/20 rounded-2xl animate-pulse pointer-events-none group-hover:scale-105 transform transition-transform duration-600"
+                  style={{ opacity: 0 }}
+                ></div>
               </div>
             </div>
           </div>

@@ -169,7 +169,7 @@ export default function ScrollRevealInit() {
        * - .hero-border: Border animado ao redor do carrossel
        */
       const selectors =
-        '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image-inner, .hero-badge-left, .hero-badge-right, .hero-border, .hero-wave, ' +
+        '.hero-title, .hero-subtitle, .hero-search, .hero-buttons, .hero-contact, .hero-image-inner, .hero-badge-left, .hero-badge-right, .hero-badge-bottom, .hero-badge-top-left, .hero-border, .hero-wave, ' +
         '.section-title, .section-subtitle, .category-card, .material-card, .benefit-card, ' +
         '.contact-form, .contact-info, .cta-section, .animate-on-scroll, .animate-on-scroll-delayed, .category-card-animate, ' +
         '[data-scroll-reveal], [data-fade-only]'
