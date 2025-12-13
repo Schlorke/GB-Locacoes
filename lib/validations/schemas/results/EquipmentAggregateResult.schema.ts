@@ -30,6 +30,7 @@ export const EquipmentAggregateResultSchema = z.object({  _count: z.object({
     rental_items: z.number(),
     cartItems: z.number(),
     maintenances: z.number(),
+    units: z.number(),
     purchasePrice: z.number(),
     purchaseDate: z.number(),
     depreciationRate: z.number(),

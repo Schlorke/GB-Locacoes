@@ -13,6 +13,7 @@ export { CartResultSchema } from './Cart.result';
 export { CartItemResultSchema } from './CartItem.result';
 export { CategoryResultSchema } from './Category.result';
 export { EquipmentResultSchema } from './Equipment.result';
+export { EquipmentUnitResultSchema } from './EquipmentUnit.result';
 export { QuoteResultSchema } from './Quote.result';
 export { QuoteItemResultSchema } from './QuoteItem.result';
 export { rental_itemsResultSchema } from './rental_items.result';

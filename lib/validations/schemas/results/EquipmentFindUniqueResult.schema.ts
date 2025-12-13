@@ -30,6 +30,7 @@ export const EquipmentFindUniqueResultSchema = z.nullable(z.object({
   rental_items: z.array(z.unknown()),
   cartItems: z.array(z.unknown()),
   maintenances: z.array(z.unknown()),
+  units: z.array(z.unknown()),
   purchasePrice: z.number().optional(),
   purchaseDate: z.date().optional(),
   depreciationRate: z.number().optional(),

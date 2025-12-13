@@ -1,132 +1,240 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import {
-  CheckCircle,
-  Clock,
-  Package,
-  Truck,
-  DollarSign,
-  FileText,
-} from 'lucide-react'
+import { CheckCircle, Clock, Package, Truck, FileText } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface TimelineEvent {
+export interface TimelineStep {
   id: string
-  type:
-    | 'quote'
-    | 'approved'
-    | 'delivery'
-    | 'active'
-    | 'payment'
-    | 'return'
-    | 'completed'
-  title: string
-  description: string
-  date: string
-  completed: boolean
+  label: string
+  status: 'completed' | 'current' | 'pending'
+  date?: Date
+  description?: string
 }
 
 interface RentalTimelineProps {
-  events: TimelineEvent[]
+  steps: TimelineStep[]
   className?: string
 }
 
-const eventIcons = {
-  quote: FileText,
-  approved: CheckCircle,
-  delivery: Truck,
-  active: Package,
-  payment: DollarSign,
-  return: Truck,
-  completed: CheckCircle,
-}
-
-const eventColors = {
-  quote: 'bg-blue-500',
-  approved: 'bg-green-500',
-  delivery: 'bg-purple-500',
-  active: 'bg-orange-500',
-  payment: 'bg-green-500',
-  return: 'bg-blue-500',
-  completed: 'bg-gray-500',
-}
-
-export function RentalTimeline({ events, className }: RentalTimelineProps) {
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString)
-      return date.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      })
-    } catch {
-      return dateString
-    }
-  }
-
+export function RentalTimeline({ steps, className }: RentalTimelineProps) {
   return (
     <div className={cn('space-y-4', className)}>
-      {events.map((event, index) => {
-        const Icon = eventIcons[event.type] || Clock
-        const isLast = index === events.length - 1
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        Linha do Tempo
+      </h3>
+      <div className="relative">
+        {/* Linha vertical */}
+        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200" />
 
-        return (
-          <motion.div
-            key={event.id}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="relative flex gap-4"
-          >
-            {/* Linha vertical */}
-            {!isLast && (
-              <div className="absolute left-5 top-12 bottom-0 w-0.5 bg-gray-200" />
-            )}
+        {/* Steps */}
+        <div className="space-y-6">
+          {steps.map((step) => {
+            const Icon = getStepIcon(step.id)
 
-            {/* Ícone */}
-            <div
-              className={cn(
-                'relative z-10 flex h-10 w-10 items-center justify-center rounded-full',
-                event.completed ? eventColors[event.type] : 'bg-gray-300',
-                event.completed && 'ring-2 ring-white'
-              )}
-            >
-              <Icon
-                className={cn(
-                  'h-5 w-5',
-                  event.completed ? 'text-white' : 'text-gray-500'
-                )}
-              />
-            </div>
-
-            {/* Conteúdo */}
-            <div className="flex-1 pb-8">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p
-                    className={cn(
-                      'font-semibold',
-                      event.completed ? 'text-gray-900' : 'text-gray-500'
-                    )}
-                  >
-                    {event.title}
-                  </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {event.description}
-                  </p>
+            return (
+              <div key={step.id} className="relative flex items-start gap-4">
+                {/* Ícone */}
+                <div
+                  className={cn(
+                    'relative z-10 flex items-center justify-center w-8 h-8 rounded-full border-2 transition-colors',
+                    step.status === 'completed' &&
+                      'bg-green-500 border-green-500 text-white',
+                    step.status === 'current' &&
+                      'bg-orange-500 border-orange-500 text-white',
+                    step.status === 'pending' &&
+                      'bg-gray-200 border-gray-300 text-gray-400'
+                  )}
+                >
+                  <Icon className="w-4 h-4" />
                 </div>
-                <span className="text-xs text-gray-400 whitespace-nowrap ml-4">
-                  {formatDate(event.date)}
-                </span>
+
+                {/* Conteúdo */}
+                <div className="flex-1 pt-1">
+                  <div className="flex items-center justify-between">
+                    <p
+                      className={cn(
+                        'font-medium',
+                        step.status === 'completed' && 'text-gray-900',
+                        step.status === 'current' && 'text-orange-600',
+                        step.status === 'pending' && 'text-gray-500'
+                      )}
+                    >
+                      {step.label}
+                    </p>
+                    {step.date && (
+                      <p className="text-sm text-gray-500">
+                        {step.date.toLocaleDateString('pt-BR', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </p>
+                    )}
+                  </div>
+                  {step.description && (
+                    <p className="text-sm text-gray-600 mt-1">
+                      {step.description}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )
-      })}
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
+}
+
+function getStepIcon(stepId: string) {
+  switch (stepId) {
+    case 'quote':
+      return FileText
+    case 'approved':
+      return CheckCircle
+    case 'boleto':
+      return FileText
+    case 'paid':
+      return CheckCircle
+    case 'checkout':
+      return Truck
+    case 'active':
+      return Package
+    case 'checkin':
+      return Truck
+    case 'completed':
+      return CheckCircle
+    default:
+      return Clock
+  }
+}
+
+/**
+ * Gera steps da timeline baseado no status da locação
+ */
+export function generateTimelineSteps(rental: {
+  status: string
+  createdAt: Date
+  checkOutAt?: Date | null
+  checkInAt?: Date | null
+  payments?: Array<{
+    status: string
+    method: string
+    paidAt?: Date | null
+    createdAt: Date
+  }>
+  quote?: {
+    status: string
+    approvedAt?: Date | null
+  } | null
+}): TimelineStep[] {
+  const steps: TimelineStep[] = []
+
+  // Step 1: Pedido/Orçamento
+  steps.push({
+    id: 'quote',
+    label: 'Orçamento Criado',
+    status: 'completed',
+    date: rental.createdAt,
+    description: 'Seu orçamento foi criado e está aguardando aprovação',
+  })
+
+  // Step 2: Aprovação
+  if (rental.quote?.approvedAt) {
+    steps.push({
+      id: 'approved',
+      label: 'Orçamento Aprovado',
+      status: 'completed',
+      date: rental.quote.approvedAt,
+      description: 'Seu orçamento foi aprovado',
+    })
+  } else if (rental.status !== 'PENDING') {
+    steps.push({
+      id: 'approved',
+      label: 'Orçamento Aprovado',
+      status: 'completed',
+      description: 'Orçamento foi aprovado',
+    })
+  }
+
+  // Step 3: Boleto Gerado
+  const boletoPayment = rental.payments?.find((p) => p.method === 'BOLETO')
+  if (boletoPayment) {
+    steps.push({
+      id: 'boleto',
+      label: 'Boleto Gerado',
+      status: boletoPayment.status === 'PAID' ? 'completed' : 'current',
+      date: boletoPayment.createdAt,
+      description:
+        boletoPayment.status === 'PAID'
+          ? 'Boleto foi pago'
+          : 'Aguardando pagamento do boleto',
+    })
+  }
+
+  // Step 4: Pagamento Confirmado
+  const paidPayment = rental.payments?.find((p) => p.status === 'PAID')
+  if (paidPayment) {
+    steps.push({
+      id: 'paid',
+      label: 'Pagamento Confirmado',
+      status: 'completed',
+      date: paidPayment.paidAt || paidPayment.createdAt,
+      description: 'Pagamento foi confirmado',
+    })
+  }
+
+  // Step 5: Check-out
+  if (rental.checkOutAt) {
+    steps.push({
+      id: 'checkout',
+      label: 'Equipamento Retirado',
+      status: 'completed',
+      date: rental.checkOutAt,
+      description: 'Equipamento foi retirado e está em uso',
+    })
+  } else if (rental.status === 'ACTIVE') {
+    steps.push({
+      id: 'checkout',
+      label: 'Equipamento Retirado',
+      status: 'current',
+      description: 'Equipamento está em uso',
+    })
+  }
+
+  // Step 6: Locação Ativa
+  if (rental.status === 'ACTIVE') {
+    steps.push({
+      id: 'active',
+      label: 'Locação Ativa',
+      status: 'current',
+      description: 'Equipamento está em uso',
+    })
+  }
+
+  // Step 7: Check-in
+  if (rental.checkInAt) {
+    steps.push({
+      id: 'checkin',
+      label: 'Equipamento Devolvido',
+      status: 'completed',
+      date: rental.checkInAt,
+      description: 'Equipamento foi devolvido',
+    })
+  }
+
+  // Step 8: Concluída
+  if (rental.status === 'COMPLETED') {
+    steps.push({
+      id: 'completed',
+      label: 'Locação Concluída',
+      status: 'completed',
+      date: rental.checkInAt || rental.createdAt,
+      description: 'Locação foi finalizada',
+    })
+  }
+
+  return steps
 }

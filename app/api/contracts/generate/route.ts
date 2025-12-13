@@ -169,9 +169,33 @@ function generateContractHTML(rental: {
 
       <div class="section">
         <h2>5. CONDIÇÕES GERAIS</h2>
-        <p>O locatário se compromete a devolver os equipamentos no prazo estabelecido e em bom estado de conservação.</p>
-        <p>Em caso de atraso na devolução, será cobrada multa diária conforme estabelecido.</p>
-        <p>Danos aos equipamentos serão cobrados do locatário.</p>
+        <p><strong>5.1.</strong> O locatário se compromete a devolver os equipamentos no prazo estabelecido e em bom estado de conservação.</p>
+        <p><strong>5.2.</strong> Em caso de atraso na devolução, será cobrada multa diária de 10% do valor da diária por dia de atraso.</p>
+        <p><strong>5.3.</strong> Danos aos equipamentos serão cobrados do locatário conforme avaliação técnica.</p>
+        <p><strong>5.4.</strong> O locatário é responsável pelo uso adequado dos equipamentos conforme instruções fornecidas.</p>
+        <p><strong>5.5.</strong> Em caso de perda ou roubo, o locatário será responsável pelo valor integral do equipamento.</p>
+        <p><strong>5.6.</strong> O locador não se responsabiliza por acidentes ou danos causados pelo uso inadequado dos equipamentos.</p>
+        <p><strong>5.7.</strong> O locatário deve manter os equipamentos em local seguro e protegido.</p>
+        <p><strong>5.8.</strong> É proibida a sublocação dos equipamentos sem autorização prévia do locador.</p>
+      </div>
+
+      <div class="section">
+        <h2>6. PAGAMENTO</h2>
+        <p><strong>6.1.</strong> O pagamento deve ser realizado conforme acordado no momento da contratação.</p>
+        <p><strong>6.2.</strong> Em caso de atraso no pagamento, será cobrado juros de 1% ao mês mais multa de 2%.</p>
+        <p><strong>6.3.</strong> O não pagamento pode resultar na rescisão do contrato e cobrança judicial.</p>
+      </div>
+
+      <div class="section">
+        <h2>7. RESCISÃO</h2>
+        <p><strong>7.1.</strong> O contrato pode ser rescindido por qualquer das partes mediante aviso prévio de 48 horas.</p>
+        <p><strong>7.2.</strong> Em caso de rescisão antecipada pelo locatário, não haverá devolução proporcional do valor pago.</p>
+        <p><strong>7.3.</strong> O locador pode rescindir o contrato em caso de inadimplência ou uso inadequado dos equipamentos.</p>
+      </div>
+
+      <div class="section">
+        <h2>8. FORO</h2>
+        <p>Fica eleito o foro da comarca de Porto Alegre/RS para dirimir quaisquer controvérsias oriundas do presente contrato.</p>
       </div>
 
       <div class="signature">

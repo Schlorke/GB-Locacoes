@@ -13,6 +13,7 @@ export { CartInputSchema } from './Cart.input';
 export { CartItemInputSchema } from './CartItem.input';
 export { CategoryInputSchema } from './Category.input';
 export { EquipmentInputSchema } from './Equipment.input';
+export { EquipmentUnitInputSchema } from './EquipmentUnit.input';
 export { QuoteInputSchema } from './Quote.input';
 export { QuoteItemInputSchema } from './QuoteItem.input';
 export { rental_itemsInputSchema } from './rental_items.input';

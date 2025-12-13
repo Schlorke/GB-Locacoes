@@ -21,6 +21,8 @@ import {
   XCircle,
   LayoutGrid,
   List,
+  AlertTriangle,
+  CalendarPlus,
 } from 'lucide-react'
 import { Calendar } from '@/components/ui/calendar'
 import { toast } from 'sonner'
@@ -98,22 +100,57 @@ export default function AdminMaintenancePage() {
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
   const [selectedMonth, setSelectedMonth] = useState<Date>(new Date())
+  const [overdueAlerts, setOverdueAlerts] = useState<
+    Array<{
+      id: string
+      equipmentId: string
+      equipmentName: string
+      scheduledAt: Date
+      daysOverdue: number
+      type: string
+    }>
+  >([])
 
   const fetchMaintenances = useCallback(async () => {
     try {
       setLoading(true)
-      // Sempre buscar todos os dados - filtros serão aplicados localmente
-      const response = await fetch(`/api/admin/maintenance`)
-      if (!response.ok) throw new Error('Erro ao carregar manutenções')
+      // Buscar manutenções e alertas vencidos
+      const [maintenancesResponse, scheduledResponse] = await Promise.all([
+        fetch(`/api/admin/maintenance`),
+        fetch(`/api/admin/maintenance/scheduled?includeOverdue=true`),
+      ])
 
-      const data = await response.json()
-      setMaintenances(data.maintenances || [])
+      if (!maintenancesResponse.ok)
+        throw new Error('Erro ao carregar manutenções')
+      if (!scheduledResponse.ok)
+        throw new Error('Erro ao carregar manutenções agendadas')
+
+      const maintenancesData = await maintenancesResponse.json()
+      const scheduledData = await scheduledResponse.json()
+
+      setMaintenances(maintenancesData.maintenances || [])
+      setOverdueAlerts(
+        scheduledData.overdueAlerts?.map(
+          (alert: {
+            id: string
+            equipmentId: string
+            equipmentName: string
+            scheduledAt: string
+            daysOverdue: number
+            type: string
+          }) => ({
+            ...alert,
+            scheduledAt: new Date(alert.scheduledAt),
+          })
+        ) || []
+      )
     } catch (error) {
       console.error('Error fetching maintenances:', error)
       toast.error('Erro', {
         description: 'Erro ao carregar manutenções. Tente novamente.',
       })
       setMaintenances([])
+      setOverdueAlerts([])
     } finally {
       setLoading(false)
     }
@@ -216,6 +253,41 @@ export default function AdminMaintenancePage() {
           className="mb-8"
         />
 
+        {/* Alertas de Manutenções Vencidas */}
+        {overdueAlerts.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <Card className="border-red-200 bg-red-50">
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-red-900 mb-2 flex items-center gap-2">
+                      <AlertTriangle className="w-5 h-5" />
+                      {overdueAlerts.length} Manutenção(ões) Vencida(s)
+                    </h3>
+                    <ul className="space-y-1 text-sm text-red-800">
+                      {overdueAlerts.slice(0, 5).map((alert) => (
+                        <li key={alert.id}>
+                          {alert.equipmentName} - Vencida há {alert.daysOverdue}{' '}
+                          dia(s)
+                        </li>
+                      ))}
+                      {overdueAlerts.length > 5 && (
+                        <li className="font-medium">
+                          +{overdueAlerts.length - 5} mais...
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+
         {/* Filtros */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -289,6 +361,17 @@ export default function AdminMaintenancePage() {
                       setViewMode(value as 'list' | 'calendar')
                     }
                   />
+                  <Button
+                    variant="outline"
+                    className="bg-orange-600 text-white hover:bg-orange-700 border-orange-600"
+                    onClick={() => {
+                      // TODO: Abrir modal para agendar preventiva
+                      toast.info('Funcionalidade em desenvolvimento')
+                    }}
+                  >
+                    <CalendarPlus className="w-4 h-4 mr-2" />
+                    Agendar Preventiva
+                  </Button>
                 </div>
               </div>
             </CardContent>

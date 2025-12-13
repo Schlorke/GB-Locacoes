@@ -6,6 +6,11 @@ import { z } from 'zod'
 import Decimal from 'decimal.js'
 import { MaintenanceStatus } from '@prisma/client'
 import { Prisma } from '@prisma/client'
+import {
+  markEquipmentUnavailableForMaintenance,
+  markEquipmentAvailableAfterMaintenance,
+  canStartMaintenance,
+} from '@/lib/maintenance-automation'
 
 const UpdateMaintenanceSchema = z.object({
   status: z
@@ -69,6 +74,24 @@ export async function PATCH(
       updateData.completedAt = new Date()
     }
 
+    // Se status está mudando para IN_PROGRESS, validar se pode iniciar
+    if (validatedData.status === 'IN_PROGRESS') {
+      const maintenance = await prisma.maintenance.findUnique({
+        where: { id: params.id },
+        select: { equipmentId: true },
+      })
+
+      if (maintenance) {
+        const validation = await canStartMaintenance(maintenance.equipmentId)
+        if (!validation.canStart) {
+          return NextResponse.json(
+            { error: validation.reason },
+            { status: 400 }
+          )
+        }
+      }
+    }
+
     const maintenance = await prisma.maintenance.update({
       where: { id: params.id },
       data: updateData,
@@ -82,10 +105,11 @@ export async function PATCH(
       },
     })
 
-    // Se manutenção foi completada, verificar se equipamento pode voltar ao estoque
-    if (validatedData.status === 'COMPLETED') {
-      // Aqui você pode adicionar lógica para verificar outras manutenções pendentes
-      // e atualizar disponibilidade do equipamento
+    // Atualizar disponibilidade do equipamento baseado no status
+    if (validatedData.status === 'IN_PROGRESS') {
+      await markEquipmentUnavailableForMaintenance(maintenance.equipment.id)
+    } else if (validatedData.status === 'COMPLETED') {
+      await markEquipmentAvailableAfterMaintenance(maintenance.equipment.id)
     }
 
     return NextResponse.json({ maintenance })

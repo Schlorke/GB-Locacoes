@@ -15,6 +15,26 @@
     {
       "path": "/api/cron/expire-quotes",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/verify-boleto-payments",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/boleto-overdue-alerts",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/auto-convert-quotes",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/preventive-maintenance",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/send-notifications",
+      "schedule": "0 * * * *"
     }
   ]
 }

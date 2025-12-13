@@ -1,6 +1,7 @@
 'use client'
 
 import { ImageCarouselZoom } from '@/components/image-carousel-zoom'
+import { EquipmentUnitsManager } from '@/components/admin/equipment-units-manager'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -381,6 +382,9 @@ export default function EquipmentDetailsPage() {
             </CardContent>
           </Card>
         )}
+
+      {/* Unidades Físicas */}
+      <EquipmentUnitsManager equipmentId={equipment.id} />
     </div>
   )
 }

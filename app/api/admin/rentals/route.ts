@@ -93,6 +93,14 @@ export async function GET(request: NextRequest) {
               paidAt: true,
             },
           },
+          contract: {
+            select: {
+              id: true,
+              status: true,
+              signedAt: true,
+              pdfUrl: true,
+            },
+          },
         },
         orderBy: {
           createdat: 'desc',
@@ -232,6 +240,14 @@ export async function POST(request: NextRequest) {
                 name: true,
               },
             },
+          },
+        },
+        contract: {
+          select: {
+            id: true,
+            status: true,
+            signedAt: true,
+            pdfUrl: true,
           },
         },
       },

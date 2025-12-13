@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import { DeliveryStatus } from '@prisma/client'
 import { Prisma } from '@prisma/client'
+import Decimal from 'decimal.js'
 
 const UpdateDeliverySchema = z.object({
   status: z
@@ -17,6 +18,10 @@ const UpdateDeliverySchema = z.object({
   photos: z.array(z.string()).optional(),
   checklist: z.record(z.string(), z.unknown()).optional(),
   notes: z.string().optional(),
+  vehicleId: z.string().optional().nullable(),
+  driverId: z.string().optional().nullable(),
+  driverName: z.string().optional().nullable(),
+  distance: z.number().optional().nullable(),
 })
 
 // PATCH - Atualizar entrega/coleta
@@ -43,6 +48,16 @@ export async function PATCH(
       updateData.checklist = validatedData.checklist as Prisma.InputJsonValue
     if (validatedData.notes !== undefined)
       updateData.notes = validatedData.notes
+    if (validatedData.vehicleId !== undefined)
+      updateData.vehicleId = validatedData.vehicleId
+    if (validatedData.driverId !== undefined)
+      updateData.driverId = validatedData.driverId
+    if (validatedData.driverName !== undefined)
+      updateData.driverName = validatedData.driverName
+    if (validatedData.distance !== undefined)
+      updateData.distance = validatedData.distance
+        ? new Decimal(validatedData.distance)
+        : null
 
     // Se foi completada, atualizar data de conclusão
     if (validatedData.status === 'COMPLETED' && !validatedData.completedAt) {

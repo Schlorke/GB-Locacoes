@@ -6,7 +6,8 @@ import { EquipmentCreateimagesInputObjectSchema as EquipmentCreateimagesInputObj
 import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
 import { QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema as QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema } from './QuoteItemUncheckedCreateNestedManyWithoutEquipmentInput.schema';
 import { rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema as rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema } from './rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInput.schema';
-import { MaintenanceUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema as MaintenanceUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema } from './MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput.schema'
+import { MaintenanceUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema as MaintenanceUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema } from './MaintenanceUncheckedCreateNestedManyWithoutEquipmentInput.schema';
+import { EquipmentUnitUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema as EquipmentUnitUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema } from './EquipmentUnitUncheckedCreateNestedManyWithoutEquipmentInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -115,7 +116,8 @@ const makeSchema = () => z.object({
 }).optional().nullable(),
   quoteItems: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
   rental_items: z.lazy(() => rental_itemsUncheckedCreateNestedManyWithoutEquipmentsInputObjectSchema).optional(),
-  maintenances: z.lazy(() => MaintenanceUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional()
+  maintenances: z.lazy(() => MaintenanceUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
+  units: z.lazy(() => EquipmentUnitUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional()
 }).strict();
 export const EquipmentUncheckedCreateWithoutCartItemsInputObjectSchema: z.ZodType<Prisma.EquipmentUncheckedCreateWithoutCartItemsInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUncheckedCreateWithoutCartItemsInput>;
 export const EquipmentUncheckedCreateWithoutCartItemsInputObjectZodSchema = makeSchema();

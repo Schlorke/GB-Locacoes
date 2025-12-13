@@ -18,7 +18,8 @@ import { CategoryWhereInputObjectSchema as CategoryWhereInputObjectSchema } from
 import { QuoteItemListRelationFilterObjectSchema as QuoteItemListRelationFilterObjectSchema } from './QuoteItemListRelationFilter.schema';
 import { Rental_itemsListRelationFilterObjectSchema as Rental_itemsListRelationFilterObjectSchema } from './Rental_itemsListRelationFilter.schema';
 import { CartItemListRelationFilterObjectSchema as CartItemListRelationFilterObjectSchema } from './CartItemListRelationFilter.schema';
-import { MaintenanceListRelationFilterObjectSchema as MaintenanceListRelationFilterObjectSchema } from './MaintenanceListRelationFilter.schema'
+import { MaintenanceListRelationFilterObjectSchema as MaintenanceListRelationFilterObjectSchema } from './MaintenanceListRelationFilter.schema';
+import { EquipmentUnitListRelationFilterObjectSchema as EquipmentUnitListRelationFilterObjectSchema } from './EquipmentUnitListRelationFilter.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const equipmentwhereinputSchema = z.object({
@@ -130,7 +131,8 @@ const equipmentwhereinputSchema = z.object({
   quoteItems: z.lazy(() => QuoteItemListRelationFilterObjectSchema).optional(),
   rental_items: z.lazy(() => Rental_itemsListRelationFilterObjectSchema).optional(),
   cartItems: z.lazy(() => CartItemListRelationFilterObjectSchema).optional(),
-  maintenances: z.lazy(() => MaintenanceListRelationFilterObjectSchema).optional()
+  maintenances: z.lazy(() => MaintenanceListRelationFilterObjectSchema).optional(),
+  units: z.lazy(() => EquipmentUnitListRelationFilterObjectSchema).optional()
 }).strict();
 export const EquipmentWhereInputObjectSchema: z.ZodType<Prisma.EquipmentWhereInput> = equipmentwhereinputSchema as unknown as z.ZodType<Prisma.EquipmentWhereInput>;
 export const EquipmentWhereInputObjectZodSchema = equipmentwhereinputSchema;

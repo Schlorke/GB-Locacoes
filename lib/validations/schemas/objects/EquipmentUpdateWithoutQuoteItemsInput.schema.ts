@@ -15,7 +15,8 @@ import { NullableDateTimeFieldUpdateOperationsInputObjectSchema as NullableDateT
 import { CategoryUpdateOneRequiredWithoutEquipmentsNestedInputObjectSchema as CategoryUpdateOneRequiredWithoutEquipmentsNestedInputObjectSchema } from './CategoryUpdateOneRequiredWithoutEquipmentsNestedInput.schema';
 import { rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema as rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema } from './rental_itemsUpdateManyWithoutEquipmentsNestedInput.schema';
 import { CartItemUpdateManyWithoutEquipmentNestedInputObjectSchema as CartItemUpdateManyWithoutEquipmentNestedInputObjectSchema } from './CartItemUpdateManyWithoutEquipmentNestedInput.schema';
-import { MaintenanceUpdateManyWithoutEquipmentNestedInputObjectSchema as MaintenanceUpdateManyWithoutEquipmentNestedInputObjectSchema } from './MaintenanceUpdateManyWithoutEquipmentNestedInput.schema'
+import { MaintenanceUpdateManyWithoutEquipmentNestedInputObjectSchema as MaintenanceUpdateManyWithoutEquipmentNestedInputObjectSchema } from './MaintenanceUpdateManyWithoutEquipmentNestedInput.schema';
+import { EquipmentUnitUpdateManyWithoutEquipmentNestedInputObjectSchema as EquipmentUnitUpdateManyWithoutEquipmentNestedInputObjectSchema } from './EquipmentUnitUpdateManyWithoutEquipmentNestedInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -124,7 +125,8 @@ const makeSchema = () => z.object({
   category: z.lazy(() => CategoryUpdateOneRequiredWithoutEquipmentsNestedInputObjectSchema).optional(),
   rental_items: z.lazy(() => rental_itemsUpdateManyWithoutEquipmentsNestedInputObjectSchema).optional(),
   cartItems: z.lazy(() => CartItemUpdateManyWithoutEquipmentNestedInputObjectSchema).optional(),
-  maintenances: z.lazy(() => MaintenanceUpdateManyWithoutEquipmentNestedInputObjectSchema).optional()
+  maintenances: z.lazy(() => MaintenanceUpdateManyWithoutEquipmentNestedInputObjectSchema).optional(),
+  units: z.lazy(() => EquipmentUnitUpdateManyWithoutEquipmentNestedInputObjectSchema).optional()
 }).strict();
 export const EquipmentUpdateWithoutQuoteItemsInputObjectSchema: z.ZodType<Prisma.EquipmentUpdateWithoutQuoteItemsInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUpdateWithoutQuoteItemsInput>;
 export const EquipmentUpdateWithoutQuoteItemsInputObjectZodSchema = makeSchema();

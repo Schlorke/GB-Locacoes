@@ -38,32 +38,40 @@ export async function createZapSignDocument({
     throw new Error('ZapSign token não configurado')
   }
 
-  // Em produção, fazer chamada real à API do ZapSign
-  // Por enquanto, retornar mock
+  // Fazer chamada real à API do ZapSign se token estiver configurado
   try {
-    // Exemplo de chamada real (descomentar quando tiver token):
-    /*
-    const response = await fetch('https://api.zapsign.com.br/api/v1/docs/', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Token ${client.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name,
-        content,
-        signers,
-      }),
-    })
+    if (client.token && process.env.NODE_ENV === 'production') {
+      // Chamada real à API do ZapSign
+      const response = await fetch('https://api.zapsign.com.br/api/v1/docs/', {
+        method: 'POST',
+        headers: {
+          Authorization: `Token ${client.token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          content: _content,
+          signers: _signers,
+        }),
+      })
 
-    if (!response.ok) {
-      throw new Error('Erro ao criar documento no ZapSign')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(
+          `Erro ao criar documento no ZapSign: ${errorData.message || response.statusText}`
+        )
+      }
+
+      const data = await response.json()
+      return {
+        id: data.id || data.doc_token,
+        name: data.name || name,
+        status: data.status || 'PENDING',
+        url: data.url || data.link || undefined,
+      }
     }
 
-    return await response.json()
-    */
-
-    // Mock para desenvolvimento
+    // Mock para desenvolvimento ou quando token não está configurado
     return {
       id: `zapsign_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       name,

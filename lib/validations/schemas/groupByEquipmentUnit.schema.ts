@@ -1,0 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
+import type { Prisma } from '@prisma/client';
+import * as z from 'zod';
+import { EquipmentUnitWhereInputObjectSchema as EquipmentUnitWhereInputObjectSchema } from './objects/EquipmentUnitWhereInput.schema';
+import { EquipmentUnitOrderByWithAggregationInputObjectSchema as EquipmentUnitOrderByWithAggregationInputObjectSchema } from './objects/EquipmentUnitOrderByWithAggregationInput.schema';
+import { EquipmentUnitScalarWhereWithAggregatesInputObjectSchema as EquipmentUnitScalarWhereWithAggregatesInputObjectSchema } from './objects/EquipmentUnitScalarWhereWithAggregatesInput.schema';
+import { EquipmentUnitScalarFieldEnumSchema } from './enums/EquipmentUnitScalarFieldEnum.schema';
+import { EquipmentUnitCountAggregateInputObjectSchema as EquipmentUnitCountAggregateInputObjectSchema } from './objects/EquipmentUnitCountAggregateInput.schema';
+import { EquipmentUnitMinAggregateInputObjectSchema as EquipmentUnitMinAggregateInputObjectSchema } from './objects/EquipmentUnitMinAggregateInput.schema';
+import { EquipmentUnitMaxAggregateInputObjectSchema as EquipmentUnitMaxAggregateInputObjectSchema } from './objects/EquipmentUnitMaxAggregateInput.schema';
+import { EquipmentUnitAvgAggregateInputObjectSchema as EquipmentUnitAvgAggregateInputObjectSchema } from './objects/EquipmentUnitAvgAggregateInput.schema';
+import { EquipmentUnitSumAggregateInputObjectSchema as EquipmentUnitSumAggregateInputObjectSchema } from './objects/EquipmentUnitSumAggregateInput.schema';
+
+export const EquipmentUnitGroupBySchema: z.ZodType<Prisma.EquipmentUnitGroupByArgs> = z.object({ where: EquipmentUnitWhereInputObjectSchema.optional(), orderBy: z.union([EquipmentUnitOrderByWithAggregationInputObjectSchema, EquipmentUnitOrderByWithAggregationInputObjectSchema.array()]).optional(), having: EquipmentUnitScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(EquipmentUnitScalarFieldEnumSchema), _count: z.union([ z.literal(true), EquipmentUnitCountAggregateInputObjectSchema ]).optional(), _min: EquipmentUnitMinAggregateInputObjectSchema.optional(), _max: EquipmentUnitMaxAggregateInputObjectSchema.optional(), _avg: EquipmentUnitAvgAggregateInputObjectSchema.optional(), _sum: EquipmentUnitSumAggregateInputObjectSchema.optional() }).strict() as unknown as z.ZodType<Prisma.EquipmentUnitGroupByArgs>;
+
+export const EquipmentUnitGroupByZodSchema = z.object({ where: EquipmentUnitWhereInputObjectSchema.optional(), orderBy: z.union([EquipmentUnitOrderByWithAggregationInputObjectSchema, EquipmentUnitOrderByWithAggregationInputObjectSchema.array()]).optional(), having: EquipmentUnitScalarWhereWithAggregatesInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), by: z.array(EquipmentUnitScalarFieldEnumSchema), _count: z.union([ z.literal(true), EquipmentUnitCountAggregateInputObjectSchema ]).optional(), _min: EquipmentUnitMinAggregateInputObjectSchema.optional(), _max: EquipmentUnitMaxAggregateInputObjectSchema.optional(), _avg: EquipmentUnitAvgAggregateInputObjectSchema.optional(), _sum: EquipmentUnitSumAggregateInputObjectSchema.optional() }).strict();

@@ -8,6 +8,65 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added ✨
+
+- **Sistema de Gestão de Unidades Físicas**: Implementado sistema completo para
+  gerenciar unidades físicas individuais de equipamentos
+  - **Modelo EquipmentUnit**: Novo modelo no Prisma para representar unidades
+    físicas individuais com:
+    - Código único por unidade (ex: "BET-001", "COMP-042")
+    - Status granular (AVAILABLE, RESERVED, RENTED, MAINTENANCE, RETIRED)
+    - Horímetro e odômetro por unidade
+    - Número de série e notas
+  - **APIs RESTful**: Endpoints completos para CRUD de unidades físicas:
+    - `GET /api/admin/equipment-units` - Listar unidades (com filtros por
+      equipamento, status, busca)
+    - `POST /api/admin/equipment-units` - Criar nova unidade
+    - `GET /api/admin/equipment-units/[id]` - Buscar unidade específica
+    - `PATCH /api/admin/equipment-units/[id]` - Atualizar unidade (status,
+      horímetro, odômetro, etc.)
+    - `DELETE /api/admin/equipment-units/[id]` - Deletar unidade (com validação
+      de uso)
+  - **Componente EquipmentUnitsManager**: Interface completa para gerenciar
+    unidades na página de detalhes do equipamento:
+    - Listagem de todas as unidades com status visual
+    - Criação e edição de unidades via dialog
+    - Atualização de horímetro/odômetro por unidade
+    - Exibição de número de série e notas
+    - Validação de código único
+    - Prevenção de exclusão de unidades em uso
+  - **Integração na Página de Equipamentos**: Seção "Unidades Físicas"
+    adicionada em `/admin/equipamentos/[id]`
+  - **Enum EquipmentUnitStatus**: Novo enum com status: AVAILABLE, RESERVED,
+    RENTED, MAINTENANCE, RETIRED
+  - **Arquivos Criados**:
+    - `app/api/admin/equipment-units/route.ts`
+    - `app/api/admin/equipment-units/[id]/route.ts`
+    - `components/admin/equipment-units-manager.tsx`
+  - **Arquivos Modificados**:
+    - `prisma/schema.prisma` (adicionado modelo EquipmentUnit e enum
+      EquipmentUnitStatus)
+    - `app/admin/equipamentos/[id]/page.tsx` (integração do componente)
+  - **Data**: 2025-12-13
+
+### Added ✨
+
+- **Script de limpeza de orçamentos**: Criado script `scripts/clean-quotes.ts`
+  para limpar todos os registros de orçamentos do banco de dados, útil para
+  testes e reset do sistema
+  - **Funcionalidades**:
+    - Deleta todos os orçamentos (Quote) e seus itens (QuoteItem)
+      automaticamente via cascade
+    - Exibe estatísticas antes e depois da limpeza
+    - Verifica e alerta sobre pagamentos órfãos e locações vinculadas
+  - **Comando**: `pnpm db:clean:quotes`
+  - **Arquivos Criados**: `scripts/clean-quotes.ts`
+  - **Arquivos Modificados**: `package.json` (adicionado script
+    `db:clean:quotes`)
+  - **Dependências**: Adicionado `dotenv` como dev dependency para carregar
+    variáveis de ambiente
+  - **Data**: 2025-12-13
+
 ### Fixed 🛠️
 
 - **Filtro padrão na página de Locações (Admin)**: Restaurado comportamento onde
@@ -42,6 +101,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - **Arquivos Modificados**: `prisma/schema.prisma`, `package.json`
   - **Comando**: `pnpm migrate:supabase-performance`
   - **Data**: 2025-12-08
+- **Geração de contrato para locações (Admin)**: endpoint dedicado para
+  criar/atualizar contrato vinculado à locação e ação no modal de detalhes para
+  emitir/atualizar contrato.
+  - **Arquivos Criados**: `app/api/admin/rentals/[id]/contract/route.ts`,
+    `docs/features/contracts.md`
+  - **Arquivos Modificados**: `app/api/admin/rentals/route.ts`,
+    `app/admin/rentals/page.tsx`
+  - **Data**: 2025-12-12
 
 ### Fixed 🛠️
 

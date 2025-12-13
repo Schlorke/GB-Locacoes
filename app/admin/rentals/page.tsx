@@ -73,6 +73,12 @@ interface Rental {
     method: string
     paidAt: string | null
   }>
+  contract?: {
+    id: string
+    status: string
+    signedAt?: string | null
+    pdfUrl?: string | null
+  }
   [key: string]: unknown // Index signature para compatibilidade com KanbanItem
 }
 
@@ -128,6 +134,7 @@ export default function AdminRentalsPage() {
   const [filteredRentals, setFilteredRentals] = useState<Rental[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedRental, setSelectedRental] = useState<Rental | null>(null)
+  const [contractLoading, setContractLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   // ⚠️ CRÍTICO: Filtro padrão deve ser 'PENDING' para exibir pendentes por padrão
   // Similar ao comportamento da primeira seção em /admin/settings
@@ -223,6 +230,29 @@ export default function AdminRentalsPage() {
       })
     } catch {
       return 'Data inválida'
+    }
+  }
+
+  const handleGenerateContract = async (rentalId: string) => {
+    try {
+      setContractLoading(true)
+      const response = await fetch(`/api/admin/rentals/${rentalId}/contract`, {
+        method: 'POST',
+      })
+      if (!response.ok) {
+        throw new Error('Erro ao gerar contrato')
+      }
+      const data = await response.json()
+      toast.success('Contrato gerado com sucesso')
+      setSelectedRental((prev) =>
+        prev ? { ...prev, contract: data.contract } : prev
+      )
+      fetchRentals()
+    } catch (error) {
+      console.error(error)
+      toast.error('Erro ao gerar contrato')
+    } finally {
+      setContractLoading(false)
     }
   }
 
@@ -972,13 +1002,67 @@ export default function AdminRentalsPage() {
                               </AdminCard>
                             )}
 
+                            {/* Contrato */}
+                            <AdminCard title="Contrato">
+                              <div className="flex flex-col gap-3">
+                                <div className="flex items-center justify-between">
+                                  <div>
+                                    <p className="text-sm text-gray-500">
+                                      Status
+                                    </p>
+                                    <p className="font-medium">
+                                      {selectedRental.contract?.status ||
+                                        'Não gerado'}
+                                    </p>
+                                    {selectedRental.contract?.signedAt && (
+                                      <p className="text-xs text-gray-500">
+                                        Assinado em:{' '}
+                                        {formatDate(
+                                          selectedRental.contract.signedAt
+                                        )}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <Button
+                                    variant="outline"
+                                    onClick={() =>
+                                      handleGenerateContract(selectedRental.id)
+                                    }
+                                    disabled={contractLoading}
+                                  >
+                                    <FileText className="w-4 h-4 mr-2" />
+                                    {selectedRental.contract
+                                      ? 'Atualizar contrato'
+                                      : 'Gerar contrato'}
+                                  </Button>
+                                </div>
+                                {selectedRental.contract?.pdfUrl && (
+                                  <a
+                                    href={selectedRental.contract.pdfUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-sm text-blue-600 underline"
+                                  >
+                                    Abrir PDF
+                                  </a>
+                                )}
+                              </div>
+                            </AdminCard>
+
                             {/* Ações */}
                             <div className="flex gap-2">
                               <Button variant="outline" className="flex-1">
                                 <Edit className="w-4 h-4 mr-2" />
                                 Editar
                               </Button>
-                              <Button variant="outline" className="flex-1">
+                              <Button
+                                variant="outline"
+                                className="flex-1"
+                                onClick={() =>
+                                  handleGenerateContract(selectedRental.id)
+                                }
+                                disabled={contractLoading}
+                              >
                                 <FileText className="w-4 h-4 mr-2" />
                                 Contrato
                               </Button>

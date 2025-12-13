@@ -7,7 +7,8 @@ import { CategoryOrderByWithRelationInputObjectSchema as CategoryOrderByWithRela
 import { QuoteItemOrderByRelationAggregateInputObjectSchema as QuoteItemOrderByRelationAggregateInputObjectSchema } from './QuoteItemOrderByRelationAggregateInput.schema';
 import { rental_itemsOrderByRelationAggregateInputObjectSchema as rental_itemsOrderByRelationAggregateInputObjectSchema } from './rental_itemsOrderByRelationAggregateInput.schema';
 import { CartItemOrderByRelationAggregateInputObjectSchema as CartItemOrderByRelationAggregateInputObjectSchema } from './CartItemOrderByRelationAggregateInput.schema';
-import { MaintenanceOrderByRelationAggregateInputObjectSchema as MaintenanceOrderByRelationAggregateInputObjectSchema } from './MaintenanceOrderByRelationAggregateInput.schema'
+import { MaintenanceOrderByRelationAggregateInputObjectSchema as MaintenanceOrderByRelationAggregateInputObjectSchema } from './MaintenanceOrderByRelationAggregateInput.schema';
+import { EquipmentUnitOrderByRelationAggregateInputObjectSchema as EquipmentUnitOrderByRelationAggregateInputObjectSchema } from './EquipmentUnitOrderByRelationAggregateInput.schema'
 
 const makeSchema = () => z.object({
   id: SortOrderSchema.optional(),
@@ -43,7 +44,8 @@ const makeSchema = () => z.object({
   quoteItems: z.lazy(() => QuoteItemOrderByRelationAggregateInputObjectSchema).optional(),
   rental_items: z.lazy(() => rental_itemsOrderByRelationAggregateInputObjectSchema).optional(),
   cartItems: z.lazy(() => CartItemOrderByRelationAggregateInputObjectSchema).optional(),
-  maintenances: z.lazy(() => MaintenanceOrderByRelationAggregateInputObjectSchema).optional()
+  maintenances: z.lazy(() => MaintenanceOrderByRelationAggregateInputObjectSchema).optional(),
+  units: z.lazy(() => EquipmentUnitOrderByRelationAggregateInputObjectSchema).optional()
 }).strict();
 export const EquipmentOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.EquipmentOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentOrderByWithRelationInput>;
 export const EquipmentOrderByWithRelationInputObjectZodSchema = makeSchema();

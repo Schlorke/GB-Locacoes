@@ -22,6 +22,8 @@ import {
   Calendar,
   Search,
   FileText,
+  Download,
+  FileSpreadsheet,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Bar, BarChart, XAxis, YAxis } from 'recharts'
@@ -74,6 +76,7 @@ export default function AdminFinancialPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [dateFilter, setDateFilter] = useState<string>('all')
+  const [reportLoading, setReportLoading] = useState(false)
 
   const fetchFinancialData = useCallback(async () => {
     try {
@@ -121,6 +124,106 @@ export default function AdminFinancialPage() {
     } catch {
       return 'Data inválida'
     }
+  }
+
+  const handleExportReport = async (format: 'pdf' | 'excel') => {
+    try {
+      setReportLoading(true)
+      const params = new URLSearchParams({
+        format,
+        ...(statusFilter !== 'all' && { status: statusFilter }),
+        ...(dateFilter !== 'all' && { dateFilter }),
+      })
+
+      const response = await fetch(`/api/admin/financial/reports?${params}`)
+      if (!response.ok) throw new Error('Erro ao gerar relatório')
+
+      const data = await response.json()
+
+      if (format === 'pdf') {
+        // Para PDF, criar um HTML e converter (simplificado)
+        // Em produção, usar biblioteca como jsPDF ou puppeteer
+        const htmlContent = generateReportHTML(data)
+        const blob = new Blob([htmlContent], { type: 'text/html' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `relatorio-financeiro-${new Date().toISOString().split('T')[0]}.html`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+        toast.success('Relatório HTML gerado (converta para PDF manualmente)')
+      } else {
+        // Para Excel, criar CSV (simplificado)
+        // Em produção, usar biblioteca como xlsx
+        const csvContent = generateReportCSV(data)
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `relatorio-financeiro-${new Date().toISOString().split('T')[0]}.csv`
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(url)
+        toast.success('Relatório CSV gerado')
+      }
+    } catch (error) {
+      console.error('Error exporting report:', error)
+      toast.error('Erro ao gerar relatório')
+    } finally {
+      setReportLoading(false)
+    }
+  }
+
+  const generateReportHTML = (data: unknown) => {
+    return `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Relatório Financeiro</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          h1 { color: #ea580c; }
+          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+          th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+          th { background-color: #f5f5f5; }
+        </style>
+      </head>
+      <body>
+        <h1>Relatório Financeiro</h1>
+        <p>Gerado em: ${new Date().toLocaleString('pt-BR')}</p>
+        <pre>${JSON.stringify(data, null, 2)}</pre>
+      </body>
+      </html>
+    `
+  }
+
+  const generateReportCSV = (data: unknown) => {
+    // Converter dados para CSV (simplificado)
+    if (typeof data === 'object' && data !== null && 'byPeriod' in data) {
+      const byPeriod = (
+        data as {
+          byPeriod: Array<{
+            amount: number
+            method: string
+            paidAt: string
+            client: string
+          }>
+        }
+      ).byPeriod
+      const headers = ['Data', 'Cliente', 'Valor', 'Método']
+      const rows = byPeriod.map((item) => [
+        item.paidAt,
+        item.client,
+        item.amount.toString(),
+        item.method,
+      ])
+      return [headers, ...rows].map((row) => row.join(',')).join('\n')
+    }
+    return 'Dados não disponíveis'
   }
 
   const filteredReceivables = receivables.filter((receivable) => {
@@ -410,6 +513,26 @@ export default function AdminFinancialPage() {
                     title="Resetar filtros"
                     size="md"
                   />
+                </div>
+
+                {/* Botões de Exportação */}
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => handleExportReport('pdf')}
+                    disabled={reportLoading}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Exportar PDF
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleExportReport('excel')}
+                    disabled={reportLoading}
+                  >
+                    <FileSpreadsheet className="w-4 h-4 mr-2" />
+                    Exportar Excel
+                  </Button>
                 </div>
               </div>
             </CardContent>

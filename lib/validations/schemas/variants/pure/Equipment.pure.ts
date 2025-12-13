@@ -31,6 +31,7 @@ export const EquipmentModelSchema = z.object({
     rental_items: z.array(z.unknown()),
     cartItems: z.array(z.unknown()),
     maintenances: z.array(z.unknown()),
+    units: z.array(z.unknown()),
     purchasePrice: z.number().nullable(),
     purchaseDate: z.date().nullable(),
     depreciationRate: z.number().nullable(),

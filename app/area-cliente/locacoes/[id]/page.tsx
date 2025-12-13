@@ -439,66 +439,72 @@ export default function RentalDetailsPage() {
                 </CardHeader>
                 <CardContent>
                   <RentalTimeline
-                    events={[
+                    steps={[
                       {
                         id: '1',
-                        type: 'quote',
-                        title: 'Orçamento Criado',
+                        label: 'Orçamento Criado',
+                        status: 'completed',
                         description:
                           'Orçamento foi criado e está aguardando aprovação',
-                        date: rental.quote?.id || rental.startdate,
-                        completed: true,
+                        date: rental.quote?.id
+                          ? new Date(rental.quote.id)
+                          : new Date(rental.startdate),
                       },
                       {
                         id: '2',
-                        type: 'approved',
-                        title: 'Orçamento Aprovado',
+                        label: 'Orçamento Aprovado',
+                        status:
+                          rental.status !== 'PENDING' ? 'completed' : 'pending',
                         description:
                           'Orçamento foi aprovado e convertido em locação',
-                        date: rental.startdate,
-                        completed: rental.status !== 'PENDING',
+                        date: new Date(rental.startdate),
                       },
                       ...(rental.deliveries?.map((delivery, idx) => ({
                         id: `delivery-${idx}`,
-                        type: (delivery.type === 'DELIVERY'
-                          ? 'delivery'
-                          : 'return') as 'delivery' | 'return',
-                        title:
+                        label:
                           delivery.type === 'DELIVERY'
                             ? 'Entrega Agendada'
                             : 'Coleta Agendada',
+                        status: (delivery.status === 'COMPLETED'
+                          ? 'completed'
+                          : delivery.status === 'IN_TRANSIT'
+                            ? 'current'
+                            : 'pending') as 'completed' | 'current' | 'pending',
                         description:
                           delivery.type === 'DELIVERY'
                             ? 'Equipamentos serão entregues no endereço informado'
                             : 'Equipamentos serão coletados no endereço informado',
-                        date: delivery.scheduledAt,
-                        completed: delivery.status === 'COMPLETED',
+                        date: new Date(delivery.scheduledAt),
                       })) || []),
                       {
                         id: '3',
-                        type: 'active' as const,
-                        title: 'Locação Ativa',
+                        label: 'Locação Ativa',
+                        status: (rental.status === 'ACTIVE'
+                          ? 'current'
+                          : rental.status === 'COMPLETED'
+                            ? 'completed'
+                            : 'pending') as 'completed' | 'current' | 'pending',
                         description: 'Locação está em andamento',
-                        date: rental.startdate,
-                        completed:
-                          rental.status === 'ACTIVE' ||
-                          rental.status === 'COMPLETED',
+                        date: new Date(rental.startdate),
                       },
                       ...(rental.payments?.map((payment, idx) => ({
                         id: `payment-${idx}`,
-                        type: 'payment' as const,
-                        title: `Pagamento - ${payment.method}`,
+                        label: `Pagamento - ${payment.method}`,
+                        status: (payment.status === 'PAID'
+                          ? 'completed'
+                          : 'pending') as 'completed' | 'current' | 'pending',
                         description: `Valor de ${formatCurrency(payment.amount)}`,
-                        date: payment.dueDate,
-                        completed: payment.status === 'PAID',
+                        date: new Date(payment.dueDate),
                       })) || []),
                       {
                         id: '4',
-                        type: 'completed' as const,
-                        title: 'Locação Concluída',
+                        label: 'Locação Concluída',
+                        status:
+                          rental.status === 'COMPLETED'
+                            ? 'completed'
+                            : 'pending',
                         description: 'Locação foi finalizada com sucesso',
-                        date: rental.enddate,
-                        completed: rental.status === 'COMPLETED',
+                        date: new Date(rental.enddate),
                       },
                     ]}
                   />
@@ -605,33 +611,97 @@ export default function RentalDetailsPage() {
                 <CardContent className="space-y-3">
                   {(rental.status === 'ACTIVE' ||
                     rental.status === 'OVERDUE') && (
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={async () => {
-                        try {
-                          const response = await fetch(
-                            `/api/client/rentals/${rental.id}/extend`,
-                            {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({ extensionDays: 7 }),
-                            }
+                    <>
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={async () => {
+                          const days = prompt(
+                            'Quantos dias deseja prorrogar? (máximo 30 dias)',
+                            '7'
                           )
-                          if (response.ok) {
-                            toast.success('Prorrogação solicitada com sucesso')
-                            fetchRental()
-                          } else {
+                          if (!days) return
+
+                          const extensionDays = parseInt(days, 10)
+                          if (
+                            isNaN(extensionDays) ||
+                            extensionDays < 1 ||
+                            extensionDays > 30
+                          ) {
+                            toast.error(
+                              'Por favor, insira um número válido entre 1 e 30'
+                            )
+                            return
+                          }
+
+                          try {
+                            const response = await fetch(
+                              `/api/client/rentals/${rental.id}/extend`,
+                              {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ extensionDays }),
+                              }
+                            )
+                            if (response.ok) {
+                              const data = await response.json()
+                              toast.success(
+                                `Prorrogação de ${extensionDays} dias solicitada com sucesso. Taxa adicional: ${formatCurrency(data.extensionFee || 0)}`
+                              )
+                              fetchRental()
+                            } else {
+                              const error = await response.json()
+                              toast.error(
+                                error.error || 'Erro ao solicitar prorrogação'
+                              )
+                            }
+                          } catch (_error) {
                             toast.error('Erro ao solicitar prorrogação')
                           }
-                        } catch (_error) {
-                          toast.error('Erro ao solicitar prorrogação')
-                        }
-                      }}
-                    >
-                      <Calendar className="w-4 h-4 mr-2" />
-                      Solicitar Prorrogação
-                    </Button>
+                        }}
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Solicitar Prorrogação
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={async () => {
+                          if (
+                            !confirm(
+                              'Deseja solicitar a coleta do equipamento? Nossa equipe entrará em contato para agendar.'
+                            )
+                          ) {
+                            return
+                          }
+
+                          try {
+                            const response = await fetch(
+                              `/api/client/rentals/${rental.id}/request-pickup`,
+                              {
+                                method: 'POST',
+                              }
+                            )
+                            if (response.ok) {
+                              toast.success(
+                                'Solicitação de coleta enviada. Nossa equipe entrará em contato em breve.'
+                              )
+                              fetchRental()
+                            } else {
+                              const error = await response.json()
+                              toast.error(
+                                error.error || 'Erro ao solicitar coleta'
+                              )
+                            }
+                          } catch (_error) {
+                            toast.error('Erro ao solicitar coleta')
+                          }
+                        }}
+                      >
+                        <Truck className="w-4 h-4 mr-2" />
+                        Solicitar Coleta
+                      </Button>
+                    </>
                   )}
                   <Button variant="outline" className="w-full" asChild>
                     <Link href={`tel:+5551999999999`}>

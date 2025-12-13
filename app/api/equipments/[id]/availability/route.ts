@@ -182,6 +182,7 @@ export async function GET(
           endDate: string
           quantity: number
         }>
+        blockedByMaintenance?: boolean
       }
     > = {}
 

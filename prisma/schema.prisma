@@ -193,14 +193,35 @@ model Equipment {
   rental_items      rental_items[]
   cartItems         CartItem[] // NOVO
   maintenances      Maintenance[]
+  units             EquipmentUnit[] // Unidades físicas individuais
   purchasePrice     Decimal?       @db.Decimal // Valor de compra
   purchaseDate      DateTime?      // Data de compra
   depreciationRate Decimal?       @db.Decimal // Taxa de depreciação anual (%)
-  hourMeter         Decimal?       @db.Decimal // Horímetro atual
-  odometer          Decimal?       @db.Decimal // Odômetro atual
+  hourMeter         Decimal?       @db.Decimal // Horímetro atual (deprecated - usar em EquipmentUnit)
+  odometer          Decimal?       @db.Decimal // Odômetro atual (deprecated - usar em EquipmentUnit)
 
   @@index([categoryId])
   @@map("equipments")
+}
+
+// Unidades físicas individuais de equipamentos
+model EquipmentUnit {
+  id            String              @id @default(cuid())
+  equipmentId   String
+  equipment     Equipment           @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  uniqueCode    String              @unique // Código único (ex: "BET-001", "COMP-042")
+  status        EquipmentUnitStatus @default(AVAILABLE)
+  hourMeter     Decimal?            @db.Decimal // Horímetro atual (horas de uso)
+  odometer      Decimal?            @db.Decimal // Odômetro atual (quilometragem)
+  serialNumber  String?             // Número de série do fabricante
+  notes         String?             // Notas sobre a unidade
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([equipmentId])
+  @@index([status])
+  @@index([uniqueCode])
+  @@map("equipment_units")
 }
 
 model Quote {
@@ -660,4 +681,12 @@ enum ContractStatus {
   SIGNED
   EXPIRED
   CANCELLED
+}
+
+enum EquipmentUnitStatus {
+  AVAILABLE   // Disponível para locação
+  RESERVED   // Reservado (orçamento aprovado, aguardando contrato)
+  RENTED     // Locado (em uso)
+  MAINTENANCE // Em manutenção (indisponível)
+  RETIRED    // Baixado (não está mais em uso)
 }
