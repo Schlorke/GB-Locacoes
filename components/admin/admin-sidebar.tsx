@@ -90,7 +90,7 @@ export default function AdminSidebar({ onCollapseChange }: AdminSidebarProps) {
         </Link>
       </div>
 
-      <nav className="flex-1 p-4 overflow-y-auto">
+      <nav className="flex-1 p-4 overflow-y-auto admin-sidebar-nav">
         <ul className="space-y-2.5">
           {navItems.map((item) => {
             const Icon = item.icon

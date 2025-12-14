@@ -581,6 +581,62 @@ aside.admin-sidebar-dark {
   z-index: 9999 !important;
 }
 
+/* Scrollbar customizada para navegação da sidebar admin (desktop) */
+@media (min-width: 768px) {
+  .admin-sidebar-nav {
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #ea580c transparent;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar-track {
+    /* Background transparente - igual ao fundo da nav */
+    background: transparent;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar-thumb {
+    /* Barra laranja */
+    background: #ea580c;
+    border-radius: 4px;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: #c2410c; /* Laranja mais escuro no hover */
+  }
+
+  /* Botões de setas (aparecem em alguns navegadores/versões) */
+  .admin-sidebar-nav::-webkit-scrollbar-button {
+    display: block;
+    height: 0;
+    width: 0;
+  }
+
+  /* Setas (caso o navegador as mostre) */
+  .admin-sidebar-nav::-webkit-scrollbar-button:single-button:vertical:decrement {
+    border-style: solid;
+    border-width: 0 4px 6px 4px;
+    border-color: transparent transparent #ea580c transparent;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar-button:single-button:vertical:decrement:hover {
+    border-color: transparent transparent #c2410c transparent;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar-button:single-button:vertical:increment {
+    border-style: solid;
+    border-width: 6px 4px 0 4px;
+    border-color: #ea580c transparent transparent transparent;
+  }
+
+  .admin-sidebar-nav::-webkit-scrollbar-button:single-button:vertical:increment:hover {
+    border-color: #c2410c transparent transparent transparent;
+  }
+}
+
 /* ================================ */
 /* 11. SCROLLBAR CUSTOMIZADO        */
 /* ================================ */

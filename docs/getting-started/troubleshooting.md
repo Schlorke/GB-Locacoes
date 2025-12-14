@@ -609,6 +609,63 @@ logger.error("API Error", {
 
 _Última atualização: dezembro 2024_
 
+## 🖥️ Problemas do IDE/Editor (Cursor/VSCode)
+
+### **❌ Prompt "Relaunch Terminal" Aparece Sempre**
+
+#### **Problema:**
+
+Toda vez que você abre o Cursor, aparece um pop-up pedindo para relançar o
+terminal porque a extensão Git quer contribuir com o ambiente.
+
+#### **Sintoma:**
+
+```
+Process ID (PID): [número]
+Command line: ...\pwsh.exe ...
+Shell integration: Rich
+
+⚠️ The following extensions want to relaunch the terminal:
+  • Git : Enables the following features: git auth provider
+```
+
+#### **Solução:**
+
+1. **Configuração já aplicada**: O arquivo `.vscode/settings.json` já foi
+   configurado com:
+
+   ```json
+   "terminal.integrated.allowWorkspaceShellConfiguration": true,
+   "terminal.integrated.enablePersistentSessions": true,
+   "git.terminalAuthentication": false
+   ```
+
+   A última configuração (`git.terminalAuthentication: false`) desabilita a
+   autenticação Git no terminal, que é o que causa o prompt de relançamento. Se
+   você usa SSH ou credenciais já configuradas, não precisa dessa
+   funcionalidade.
+
+2. **Primeira vez (necessário)**:
+   - Quando aparecer o prompt, clique em **"Relaunch Terminal"**
+   - Isso permite que a extensão Git configure o ambiente automaticamente
+
+3. **Após relançar uma vez**:
+   - O prompt não deve mais aparecer porque as configurações permitem
+     contribuições automáticas
+   - Se ainda aparecer, feche todos os terminais e abra um novo (`Ctrl + \``)
+
+#### **Verificação:**
+
+- Feche e reabra o Cursor
+- Se não aparecer mais o prompt, está resolvido ✅
+- Se ainda aparecer, clique em "Relaunch Terminal" e depois reinicie o Cursor
+
+#### **Status:**
+
+✅ Configuração aplicada em `.vscode/settings.json` ✅ Documentado nesta seção
+
+---
+
 ## 🔄 Histórico de Problemas Resolvidos
 
 ### **🚨 DEZ 2024 - RESOLUÇÃO CRÍTICA DE BUILD & TYPESCRIPT**

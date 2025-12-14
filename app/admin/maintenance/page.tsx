@@ -297,56 +297,81 @@ export default function AdminMaintenancePage() {
         >
           <Card className="relative overflow-visible border-0 shadow-xl bg-white backdrop-blur-sm">
             <CardContent className="relative z-10 p-4 md:p-6">
-              <div className="flex flex-col md:flex-col lg:flex-row gap-3 items-center">
-                <div className="relative flex-1 w-full">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <Input
-                    placeholder="Buscar por equipamento ou técnico..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-9"
-                  />
+              <div className="flex flex-col gap-3">
+                {/* Primeira linha em lg+ - Search, Filters, Reset e Botão */}
+                <div className="flex flex-col lg:flex-row gap-3 lg:items-center">
+                  {/* Search - linha própria em md */}
+                  <div className="relative w-full lg:flex-1">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Input
+                      placeholder="Buscar por equipamento ou técnico..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-9"
+                    />
+                  </div>
+
+                  {/* Filters e Reset - linha própria em md */}
+                  <div className="flex flex-col lg:flex-row items-center gap-3 w-full lg:w-auto">
+                    <FilterSelectGroup
+                      filters={[
+                        {
+                          label: 'Status',
+                          value: statusFilter,
+                          onValueChange: setStatusFilter,
+                          placeholder: 'Filtrar por status',
+                          options: [
+                            { value: 'all', label: 'Todos' },
+                            { value: 'SCHEDULED', label: 'Agendada' },
+                            { value: 'IN_PROGRESS', label: 'Em Andamento' },
+                            { value: 'COMPLETED', label: 'Concluída' },
+                            { value: 'CANCELLED', label: 'Cancelada' },
+                          ],
+                        },
+                        {
+                          label: 'Tipo',
+                          value: typeFilter,
+                          onValueChange: setTypeFilter,
+                          placeholder: 'Filtrar por tipo',
+                          options: [
+                            { value: 'all', label: 'Todos' },
+                            { value: 'PREVENTIVE', label: 'Preventiva' },
+                            { value: 'CORRECTIVE', label: 'Corretiva' },
+                            { value: 'INSPECTION', label: 'Inspeção' },
+                          ],
+                        },
+                      ]}
+                      gap="sm"
+                    />
+                    <FilterResetButton
+                      onClick={() => {
+                        setStatusFilter('all')
+                        setTypeFilter('all')
+                        setSearchTerm('')
+                      }}
+                      title="Resetar filtros"
+                      size="md"
+                    />
+                  </div>
+
+                  {/* Botão Agendar - linha própria em md */}
+                  <div className="w-full lg:w-auto flex md:justify-center lg:justify-start">
+                    <Button
+                      variant="outline"
+                      className="w-auto bg-orange-600 text-white hover:bg-orange-700 hover:text-white border-orange-600"
+                      onClick={() => {
+                        // TODO: Abrir modal para agendar preventiva
+                        toast.info('Funcionalidade em desenvolvimento')
+                      }}
+                    >
+                      <CalendarPlus className="w-4 h-4 mr-2" />
+                      Agendar Preventiva
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex flex-col md:flex-col lg:flex-row items-center gap-3 w-full md:w-full lg:w-auto">
-                  <FilterSelectGroup
-                    filters={[
-                      {
-                        label: 'Status',
-                        value: statusFilter,
-                        onValueChange: setStatusFilter,
-                        placeholder: 'Filtrar por status',
-                        options: [
-                          { value: 'all', label: 'Todos' },
-                          { value: 'SCHEDULED', label: 'Agendada' },
-                          { value: 'IN_PROGRESS', label: 'Em Andamento' },
-                          { value: 'COMPLETED', label: 'Concluída' },
-                          { value: 'CANCELLED', label: 'Cancelada' },
-                        ],
-                      },
-                      {
-                        label: 'Tipo',
-                        value: typeFilter,
-                        onValueChange: setTypeFilter,
-                        placeholder: 'Filtrar por tipo',
-                        options: [
-                          { value: 'all', label: 'Todos' },
-                          { value: 'PREVENTIVE', label: 'Preventiva' },
-                          { value: 'CORRECTIVE', label: 'Corretiva' },
-                          { value: 'INSPECTION', label: 'Inspeção' },
-                        ],
-                      },
-                    ]}
-                    gap="sm"
-                  />
-                  <FilterResetButton
-                    onClick={() => {
-                      setStatusFilter('all')
-                      setTypeFilter('all')
-                      setSearchTerm('')
-                    }}
-                    title="Resetar filtros"
-                    size="md"
-                  />
+
+                {/* Segunda linha - ViewToggle (sempre em linha própria) */}
+                <div className="flex items-center justify-center w-full">
                   <ViewToggle
                     options={[
                       { value: 'list', label: 'Lista', icon: List },
@@ -361,17 +386,6 @@ export default function AdminMaintenancePage() {
                       setViewMode(value as 'list' | 'calendar')
                     }
                   />
-                  <Button
-                    variant="outline"
-                    className="bg-orange-600 text-white hover:bg-orange-700 hover:text-white border-orange-600"
-                    onClick={() => {
-                      // TODO: Abrir modal para agendar preventiva
-                      toast.info('Funcionalidade em desenvolvimento')
-                    }}
-                  >
-                    <CalendarPlus className="w-4 h-4 mr-2" />
-                    Agendar Preventiva
-                  </Button>
                 </div>
               </div>
             </CardContent>

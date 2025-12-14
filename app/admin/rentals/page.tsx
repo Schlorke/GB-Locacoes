@@ -459,8 +459,8 @@ export default function AdminRentalsPage() {
                 </div>
 
                 {/* Filtros - Busca e Dropdowns */}
-                <div className="flex flex-col xl:flex-row gap-3 items-center justify-between pt-4 border-t border-gray-200">
-                  {/* Left Side - Search and Filters */}
+                <div className="flex flex-col gap-3 pt-4 border-t border-gray-200">
+                  {/* Primeira linha - Search and Filters */}
                   <div className="flex flex-col md:flex-row gap-3 flex-1 w-full items-center">
                     {/* Search Input */}
                     <div className="relative flex-1 w-full md:w-auto">
@@ -509,17 +509,19 @@ export default function AdminRentalsPage() {
                     </div>
                   </div>
 
-                  {/* Right Side - View Toggle */}
-                  <ViewToggle
-                    options={[
-                      { value: 'table', label: 'Tabela', icon: List },
-                      { value: 'kanban', label: 'Kanban', icon: LayoutGrid },
-                    ]}
-                    value={viewMode}
-                    onValueChange={(value) =>
-                      setViewMode(value as 'table' | 'kanban')
-                    }
-                  />
+                  {/* Segunda linha - View Toggle */}
+                  <div className="flex items-center justify-center w-full">
+                    <ViewToggle
+                      options={[
+                        { value: 'table', label: 'Tabela', icon: List },
+                        { value: 'kanban', label: 'Kanban', icon: LayoutGrid },
+                      ]}
+                      value={viewMode}
+                      onValueChange={(value) =>
+                        setViewMode(value as 'table' | 'kanban')
+                      }
+                    />
+                  </div>
                 </div>
               </div>
             </CardContent>
