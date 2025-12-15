@@ -75,6 +75,10 @@ com o projeto.
 - **[project-decisions.md](./internal/project-decisions.md)** - Decisões
   arquiteturais
 - **[tools.md](./internal/tools.md)** - Ferramentas e utilitários internos
+- **[orcamento-e-progresso.md](./internal/orcamento-e-progresso.md)** - Status
+  financeiro e progresso das etapas
+- **[prisma-client-regeneration.md](./internal/prisma-client-regeneration.md)** -
+  Procedimento obrigatório de regen do Prisma Client
 
 ## 🎯 Navegação Rápida
 

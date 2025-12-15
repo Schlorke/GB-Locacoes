@@ -66,8 +66,22 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - **Dependências**: Adicionado `dotenv` como dev dependency para carregar
     variáveis de ambiente
   - **Data**: 2025-12-13
+- **Documentação interna organizada**: Arquivos de progresso financeiro e
+  regeneração do Prisma foram movidos para o diretório `docs/internal` com links
+  no índice
+  - **Arquivos Criados**: `docs/internal/orcamento-e-progresso.md`,
+    `docs/internal/prisma-client-regeneration.md`
+  - **Arquivos Modificados**: `docs/README.md`
+  - **Data**: 2025-12-15
 
 ### Fixed 🛠️
+
+- **Dropdowns de filtros em `/admin/maintenance`**: Ajustado o `CustomSelect`
+  para renderizar via portal com posicionamento fixo e camada de popover,
+  garantindo que as listas de opções não fiquem atrás do calendário ou de outros
+  cards na página.
+  - **Arquivos Modificados**: `components/ui/custom-select.tsx`
+  - **Data**: 2025-12-15
 
 - **Filtro padrão na página de Locações (Admin)**: Restaurado comportamento onde
   a página `/admin/rentals` exibe por padrão apenas locações com status
@@ -82,6 +96,25 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - **Documentação**: Adicionada seção específica em
     `docs/features/admin-system.md` documentando este comportamento crítico
   - **Data**: 2025-12-12
+
+### Security 🔐
+
+- **RLS nas unidades físicas (`equipment_units`)**: RLS habilitado com políticas
+  explícitas para corrigir alerta `rls_disabled_in_public`.
+  - Leitura liberada para `authenticated` e `service_role`
+  - Escrita (INSERT/UPDATE/DELETE) restrita a usuários com `role = 'ADMIN'`
+  - `FORCE ROW LEVEL SECURITY` aplicado para evitar bypass
+  - **Arquivos Criados**:
+    - `prisma/migrations/20251215_enable_rls_equipment_units.sql`
+  - **Documentação**: `docs/architecture/security.md` atualizada com o escopo
+
+### Removed ❌
+
+- Arquivos `ORCAMENTO_E_PROGRESSO.md` e `PRISMA_REGENERATE_REQUIRED.md`
+  removidos da raiz; documentação consolidada em
+  `docs/internal/orcamento-e-progresso.md` e
+  `docs/internal/prisma-client-regeneration.md`
+  - **Data**: 2025-12-15
 
 ### Added ✨
 

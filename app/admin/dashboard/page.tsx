@@ -426,27 +426,29 @@ export default function AdminDashboard() {
                   <Card className="relative overflow-hidden border border-gray-100 bg-gradient-to-br from-white via-white to-slate-50 text-gray-900 shadow-lg hover:shadow-xl transition-all duration-300 h-full hover:scale-[1.02]">
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-100/60 via-white to-slate-50/40"></div>
                     <CardContent className="relative z-10 p-6">
-                      <div className="flex items-center justify-between">
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs sm:text-sm text-gray-500 truncate mb-1">
+                      <div className="flex items-start gap-3">
+                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                          <div
+                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-inner ${card.iconBg || 'bg-gray-100'}`}
+                          >
+                            <IconComponent
+                              className={`h-3 w-3 sm:h-3.5 sm:w-3.5 ${card.iconColor || 'text-orange-600'}`}
+                            />
+                          </div>
+                          <p className="text-xs sm:text-sm text-gray-500 truncate">
                             {card.title}
                           </p>
-                          <p className="text-2xl sm:text-3xl lg:text-4xl font-bold my-1 text-gray-900">
-                            {typeof card.value(stats) === 'string'
-                              ? card.value(stats)
-                              : card.value(stats)}
-                          </p>
-                          <p className="text-xs sm:text-sm font-medium text-gray-600">
-                            {card.subtitle(stats)}
-                          </p>
                         </div>
-                        <div
-                          className={`w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center flex-shrink-0 shadow-inner ${card.iconBg || 'bg-gray-100'}`}
-                        >
-                          <IconComponent
-                            className={`h-6 w-6 sm:h-8 sm:w-8 ${card.iconColor || 'text-orange-600'}`}
-                          />
-                        </div>
+                      </div>
+                      <div className="mt-2 text-right">
+                        <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 text-left">
+                          {typeof card.value(stats) === 'string'
+                            ? card.value(stats)
+                            : card.value(stats)}
+                        </p>
+                        <p className="text-xs sm:text-sm font-medium text-gray-600 mt-1 text-left">
+                          {card.subtitle(stats)}
+                        </p>
                       </div>
                     </CardContent>
                   </Card>

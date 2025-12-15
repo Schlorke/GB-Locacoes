@@ -5,6 +5,36 @@
 
 ---
 
+## 22. Dropdowns de filtros de Manutenções ficam atrás do calendário (Admin)
+
+### 🎯 Problema
+
+**Data da Ocorrência**: 2025-12-15 **Severidade**: Baixa (UX) **Status**: ✅
+Resolvido
+
+#### Descrição
+
+Nos filtros da página `/admin/maintenance`, os dropdowns de tipo/status ficavam
+atrás do card do calendário, dificultando a seleção de opções.
+
+### ✅ Solução Implementada
+
+- `CustomSelect` passou a renderizar o dropdown via portal com posicionamento
+  `fixed` e camada `z-[var(--layer-popover)]`, evitando clipping por
+  `overflow-hidden` dos cards.
+- Reposicionamento acompanha scroll/resize para manter alinhamento ao trigger.
+
+#### Arquivos Modificados
+
+1. `components/ui/custom-select.tsx`
+
+#### Como Validar
+
+1. `pnpm dev`
+2. Acessar `http://localhost:3000/admin/maintenance`
+3. Alternar filtros de status/tipo com a visão **Calendário** ativada; o menu
+   deve aparecer acima do calendário, sem ser coberto.
+
 ## 21. Direção da animação invertida na tabela de Orçamentos (Admin)
 
 ### 🎯 Problema

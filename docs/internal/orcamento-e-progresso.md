@@ -319,8 +319,8 @@ Cobrar**: R$ 200,00
 - ❌ Sugestões baseadas em histórico
 - ❌ Machine learning para personalização
 
-**Nota**: A parte de SEO Avançado (R$ 700,00) já foi concluída e paga na etapa
-E8 parcial.
+> Nota: A parte de SEO Avançado (R$ 700,00) já foi concluída e paga na etapa E8
+> parcial.
 
 ---
 

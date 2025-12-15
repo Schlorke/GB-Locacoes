@@ -3,6 +3,7 @@
 import { cn } from '@/lib/utils'
 import { Check, ChevronDown, Funnel } from 'lucide-react'
 import * as React from 'react'
+import { createPortal } from 'react-dom'
 import { useEffect, useRef, useState } from 'react'
 
 interface CustomSelectProps {
@@ -37,7 +38,7 @@ export function CustomSelect({
   children,
 }: Omit<CustomSelectProps, 'required'>) {
   const [isOpen, setIsOpen] = useState(false)
-  const [, setDropdownPosition] = useState({
+  const [dropdownPosition, setDropdownPosition] = useState({
     top: 0,
     left: 0,
     width: 0,
@@ -120,7 +121,10 @@ export function CustomSelect({
     <CustomSelectContext.Provider
       value={{ value, onValueChange, isOpen, setIsOpen }}
     >
-      <div ref={selectRef} className={cn('relative', className)}>
+      <div
+        ref={selectRef}
+        className={cn('relative z-[var(--layer-dropdown)]', className)}
+      >
         {/* Trigger Button */}
         <button
           ref={buttonRef}
@@ -168,22 +172,28 @@ export function CustomSelect({
         </button>
 
         {/* Dropdown Content - Posicionamento absoluto simples */}
-        {isOpen && (
-          <div
-            id="dropdown-content"
-            className="absolute z-[99999] mt-1 w-full rounded-md border bg-white shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 overflow-hidden"
-            style={{
-              maxHeight: '300px',
-            }}
-          >
+        {isOpen &&
+          typeof document !== 'undefined' &&
+          createPortal(
             <div
-              className="max-h-full overflow-y-auto overscroll-contain p-1 filter-dropdown-scroll scrollbar-thin"
-              style={{ maxHeight: '280px', overflowY: 'auto' }}
+              id="dropdown-content"
+              className="fixed z-[var(--layer-popover)] rounded-md border bg-white shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 overflow-hidden"
+              style={{
+                top: dropdownPosition.top,
+                left: dropdownPosition.left,
+                width: dropdownPosition.width,
+                maxHeight: '300px',
+              }}
             >
-              {children}
-            </div>
-          </div>
-        )}
+              <div
+                className="max-h-full overflow-y-auto overscroll-contain p-1 filter-dropdown-scroll scrollbar-thin"
+                style={{ maxHeight: '280px', overflowY: 'auto' }}
+              >
+                {children}
+              </div>
+            </div>,
+            document.body
+          )}
       </div>
     </CustomSelectContext.Provider>
   )

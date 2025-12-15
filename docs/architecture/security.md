@@ -121,6 +121,13 @@ diferentes rotas.
 - Validação de parâmetros de entrada
 - Responses padronizadas
 
+### ✅ RLS (Row Level Security)
+
+- `equipment_units` com RLS **ativado** e políticas explícitas:
+  - Leitura liberada para `authenticated` e `service_role`
+  - Escrita (INSERT/UPDATE/DELETE) restrita a usuários com `role = 'ADMIN'`
+  - RLS forçado para prevenir bypass acidental
+
 ## 📈 **Próximos Passos Recomendados**
 
 ### 🔄 **Validação Aprimorada (Pendente)**
