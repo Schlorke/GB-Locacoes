@@ -25,9 +25,12 @@ import {
   AlertTriangle,
   CalendarPlus,
 } from 'lucide-react'
-import { GanttView } from '@/components/admin/gantt-view'
+import {
+  AdvancedCalendar,
+  type CalendarEvent,
+} from '@/components/admin/advanced-calendar'
 import { toast } from 'sonner'
-import { addDays, parseISO, startOfDay } from 'date-fns'
+import { addHours, parseISO } from 'date-fns'
 
 interface Maintenance {
   id: string
@@ -101,8 +104,6 @@ export default function AdminMaintenancePage() {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
-  const [ganttMode, setGanttMode] = useState<'day' | 'week' | 'month'>('week')
-  const [ganttDate, setGanttDate] = useState<Date>(startOfDay(new Date()))
   const [overdueAlerts, setOverdueAlerts] = useState<
     Array<{
       id: string
@@ -395,7 +396,7 @@ export default function AdminMaintenancePage() {
           </Card>
         </motion.div>
 
-        {/* Gantt de Manutenções */}
+        {/* Calendário Avançado de Manutenções */}
         {viewMode === 'calendar' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -403,54 +404,56 @@ export default function AdminMaintenancePage() {
             transition={{ delay: 0.2 }}
             className="mb-6"
           >
-            <AdminCard title="Gantt de Manutenções" variant="flat">
-              <GanttView
-                mode={ganttMode}
-                startDate={ganttDate}
-                onModeChange={setGanttMode}
-                onNavigate={(direction) => {
-                  if (direction === 'today') return setGanttDate(startOfDay(new Date()))
-                  if (direction === 'next') {
-                    if (ganttMode === 'day') return setGanttDate((d) => addDays(d, 1))
-                    if (ganttMode === 'week') return setGanttDate((d) => addDays(d, 7))
-                    return setGanttDate((d) => addDays(d, 30))
+            <AdminCard title="Calendário de Manutenções" variant="flat">
+              <AdvancedCalendar
+                events={filteredMaintenances.map(
+                  (maintenance): CalendarEvent => {
+                    const start = parseISO(maintenance.scheduledAt)
+                    const end = maintenance.completedAt
+                      ? parseISO(maintenance.completedAt)
+                      : addHours(start, 4) // Duração padrão de 4 horas se não concluída
+                    return {
+                      id: maintenance.id,
+                      title: `${typeConfig[maintenance.type] ?? 'Manutenção'} - ${maintenance.equipment.name}`,
+                      start,
+                      end,
+                      resourceId: maintenance.equipment.id,
+                      color:
+                        maintenance.type === 'PREVENTIVE'
+                          ? '#10B981' // Verde
+                          : maintenance.type === 'CORRECTIVE'
+                            ? '#F59E0B' // Amarelo
+                            : '#6366F1', // Índigo para inspeção
+                      type: 'maintenance',
+                      status: maintenance.status,
+                      metadata: {
+                        technician: maintenance.technician,
+                        equipmentName: maintenance.equipment.name,
+                        cost: maintenance.cost,
+                      },
+                    }
                   }
-                  if (ganttMode === 'day') return setGanttDate((d) => addDays(d, -1))
-                  if (ganttMode === 'week') return setGanttDate((d) => addDays(d, -7))
-                  return setGanttDate((d) => addDays(d, -30))
-                }}
-                onDateChange={(date) => setGanttDate(startOfDay(date))}
-                rows={Array.from(
+                )}
+                resources={Array.from(
                   new Map(
                     filteredMaintenances.map((m) => [
                       m.equipment.id,
                       {
                         id: m.equipment.id,
-                        label: m.equipment.name,
-                        meta: {
-                          status:
-                            m.status === 'IN_PROGRESS'
-                              ? 'Em andamento'
-                              : m.status === 'SCHEDULED'
-                                ? 'Agendada'
-                                : m.status === 'COMPLETED'
-                                  ? 'Concluída'
-                                  : 'Outros',
-                        },
+                        name: m.equipment.name,
                       },
                     ])
                   ).values()
                 )}
-                items={filteredMaintenances.map((m) => ({
-                  id: m.id,
-                  rowId: m.equipment.id,
-                  start: parseISO(m.scheduledAt),
-                  end: m.completedAt ? parseISO(m.completedAt) : parseISO(m.scheduledAt),
-                  title: m.equipment.name,
-                  subtitle: typeConfig[m.type] ?? 'Manutenção',
-                  status: m.status,
-                  conflict: m.status === 'SCHEDULED' && overdueAlerts.some((o) => o.id === m.id),
-                }))}
+                onEventClick={(event) => {
+                  const maintenance = filteredMaintenances.find(
+                    (m) => m.id === event.id
+                  )
+                  if (maintenance) {
+                    setSelectedMaintenance(maintenance)
+                  }
+                }}
+                defaultViewMode="weekly"
               />
             </AdminCard>
           </motion.div>

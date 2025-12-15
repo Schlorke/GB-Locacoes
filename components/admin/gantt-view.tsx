@@ -1,14 +1,42 @@
 'use client'
 
 import { useMemo } from 'react'
-import { addDays, addMonths, addWeeks, eachDayOfInterval, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfDay, startOfMonth, startOfWeek } from 'date-fns'
+import {
+  addDays,
+  addMonths,
+  addWeeks,
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  isSameDay,
+  isSameMonth,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, Layout } from 'lucide-react'
+import {
+  Calendar as CalendarIcon,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Layout,
+} from 'lucide-react'
 
 type GanttMode = 'day' | 'week' | 'month'
 
@@ -39,10 +67,10 @@ interface GanttViewProps {
   startDate: Date
   rows: GanttRow[]
   items: GanttItem[]
-  onModeChange: (mode: GanttMode) => void
-  onNavigate: (direction: 'prev' | 'next' | 'today') => void
-  onDateChange: (date: Date) => void
-  onItemSelect?: (id: string) => void
+  onModeChange: (_mode: GanttMode) => void
+  onNavigate: (_direction: 'prev' | 'next' | 'today') => void
+  onDateChange: (_date: Date) => void
+  onItemSelect?: (_id: string) => void
   stickySidebarWidth?: string
 }
 
@@ -89,18 +117,26 @@ export function GanttView({
   rows,
   items,
   onModeChange,
-  onNavigate,
+  onNavigate: _onNavigate,
   onDateChange,
   onItemSelect,
   stickySidebarWidth = '220px',
 }: GanttViewProps) {
   const { columns, columnLabels } = useMemo(() => {
     if (mode === 'day') {
-      return { columns: dayHours(), columnLabels: dayHours().map((h) => `${h.toString().padStart(2, '0')}:00`) }
+      return {
+        columns: dayHours(),
+        columnLabels: dayHours().map(
+          (h) => `${h.toString().padStart(2, '0')}:00`
+        ),
+      }
     }
     if (mode === 'week') {
       const days = weekDays(startDate)
-      return { columns: days, columnLabels: days.map((d) => format(d, "EEE dd")) }
+      return {
+        columns: days,
+        columnLabels: days.map((d) => format(d, 'EEE dd')),
+      }
     }
     const days = monthDays(startDate)
     return { columns: days, columnLabels: days.map((d) => format(d, 'dd')) }
@@ -123,7 +159,10 @@ export function GanttView({
   const getGridPosition = (item: GanttItem) => {
     if (mode === 'day') {
       const startHour = item.start.getHours()
-      const endHour = Math.max(startHour + 1, item.end.getHours() + (item.end.getMinutes() > 0 ? 1 : 0))
+      const endHour = Math.max(
+        startHour + 1,
+        item.end.getHours() + (item.end.getMinutes() > 0 ? 1 : 0)
+      )
       return { gridColumnStart: startHour + 1, gridColumnEnd: endHour + 1 }
     }
     const cols = mode === 'week' ? weekDays(startDate) : monthDays(startDate)
@@ -142,7 +181,7 @@ export function GanttView({
       const end = addDays(start, 6)
       return `Semana de ${format(start, 'dd MMM')} – ${format(end, 'dd MMM, yyyy')}`
     }
-    return format(startDate, "MMMM yyyy")
+    return format(startDate, 'MMMM yyyy')
   })()
 
   const monthGridDays = useMemo(() => {
@@ -156,15 +195,27 @@ export function GanttView({
     <div className="w-full space-y-4">
       <div className="flex flex-wrap items-center gap-2 justify-between">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={() => navigateDate('prev')}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigateDate('prev')}
+          >
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <div className="text-sm font-medium">{title}</div>
-          <Button variant="ghost" size="icon" onClick={() => navigateDate('next')}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigateDate('next')}
+          >
             <ChevronRight className="h-4 w-4" />
           </Button>
           <Separator orientation="vertical" className="h-6 mx-2" />
-          <Button variant="secondary" size="sm" onClick={() => navigateDate('today')}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => navigateDate('today')}
+          >
             Hoje
           </Button>
         </div>
@@ -221,7 +272,9 @@ export function GanttView({
                   key={day.toISOString() + idx}
                   className={cn(
                     'min-h-[96px] border-l border-b px-3 py-2 text-xs align-top',
-                    isSameMonth(day, startDate) ? 'bg-white' : 'bg-gray-50/60 text-gray-400'
+                    isSameMonth(day, startDate)
+                      ? 'bg-white'
+                      : 'bg-gray-50/60 text-gray-400'
                   )}
                 >
                   <div className="flex items-center justify-between text-[11px] font-semibold text-gray-700">
@@ -247,7 +300,9 @@ export function GanttView({
                       </button>
                     ))}
                     {dayItems.length > 3 && (
-                      <div className="text-[10px] text-gray-500">+{dayItems.length - 3} mais</div>
+                      <div className="text-[10px] text-gray-500">
+                        +{dayItems.length - 3} mais
+                      </div>
                     )}
                   </div>
                 </div>
@@ -256,100 +311,111 @@ export function GanttView({
           </div>
         </div>
       ) : (
-      <div className="border rounded-lg bg-white shadow-sm overflow-hidden">
-        <div className="grid" style={{ gridTemplateColumns: `${stickySidebarWidth} 1fr` }}>
-          <div className="bg-gray-50 border-r px-3 py-2 text-sm font-semibold sticky left-0 z-10">
-            Recurso
-          </div>
-          <div className="overflow-x-auto">
-            <div
-              className="grid min-w-[720px]"
-              style={{
-                gridTemplateColumns:
-                  mode === 'day'
-                    ? 'repeat(24, minmax(64px, 1fr))'
-                    : `repeat(${columns.length || 1}, minmax(96px, 1fr))`,
-              }}
-            >
-              {columns.map((col, idx) => (
-                <div
-                  key={idx}
-                  className="border-b border-l px-3 py-2 text-xs font-semibold text-gray-600 bg-gray-50"
-                >
-                  {columnLabels[idx]}
-                </div>
-              ))}
+        <div className="border rounded-lg bg-white shadow-sm overflow-hidden">
+          <div
+            className="grid"
+            style={{ gridTemplateColumns: `${stickySidebarWidth} 1fr` }}
+          >
+            <div className="bg-gray-50 border-r px-3 py-2 text-sm font-semibold sticky left-0 z-10">
+              Recurso
+            </div>
+            <div className="overflow-x-auto">
+              <div
+                className="grid min-w-[720px]"
+                style={{
+                  gridTemplateColumns:
+                    mode === 'day'
+                      ? 'repeat(24, minmax(64px, 1fr))'
+                      : `repeat(${columns.length || 1}, minmax(96px, 1fr))`,
+                }}
+              >
+                {columns.map((col, idx) => (
+                  <div
+                    key={idx}
+                    className="border-b border-l px-3 py-2 text-xs font-semibold text-gray-600 bg-gray-50"
+                  >
+                    {columnLabels[idx]}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="divide-y">
-          {rows.map((row) => (
-            <div
-              key={row.id}
-              className="grid"
-              style={{ gridTemplateColumns: `${stickySidebarWidth} 1fr` }}
-            >
-              <div className="bg-white border-r px-3 py-3 text-sm sticky left-0 z-10 flex flex-col gap-1">
-                <span className="font-medium text-gray-900">{row.label}</span>
-                {row.meta?.status && (
-                  <span className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium text-gray-600">
-                    {row.meta.status}
-                  </span>
-                )}
-              </div>
-              <div className="overflow-x-auto">
-                <div
-                  className="relative grid min-w-[720px]"
-                  style={{
-                    gridTemplateColumns:
-                      mode === 'day'
-                        ? 'repeat(24, minmax(64px, 1fr))'
-                        : `repeat(${columns.length || 1}, minmax(96px, 1fr))`,
-                  }}
-                >
-                  {items
-                    .filter((it) => it.rowId === row.id)
-                    .map((it) => {
-                      const position = getGridPosition(it)
-                      if (!position) return null
-                      return (
-                        <button
-                          key={it.id}
-                          type="button"
-                          onClick={() => onItemSelect?.(it.id)}
-                          className={cn(
-                            'relative m-0.5 rounded-md border px-3 py-2 text-left text-xs shadow-sm transition hover:shadow-md',
-                            getStatusClass(it.status),
-                            it.conflict && 'ring-2 ring-orange-500/70'
-                          )}
-                          style={{
-                            gridColumnStart: position.gridColumnStart,
-                            gridColumnEnd: position.gridColumnEnd,
-                          }}
-                        >
-                          <div className="flex items-center gap-1 text-[11px] font-semibold">
-                            {it.title}
-                          </div>
-                          {it.subtitle && (
-                            <div className="text-[11px] text-gray-700">{it.subtitle}</div>
-                          )}
-                          <div className="mt-1 flex items-center gap-1 text-[10px] text-gray-600">
-                            <Clock className="h-3 w-3" />
-                            {format(it.start, mode === 'day' ? 'HH:mm' : 'dd/MM')} –{' '}
-                            {format(it.end, mode === 'day' ? 'HH:mm' : 'dd/MM')}
-                          </div>
-                        </button>
-                      )
-                    })}
+          <div className="divide-y">
+            {rows.map((row) => (
+              <div
+                key={row.id}
+                className="grid"
+                style={{ gridTemplateColumns: `${stickySidebarWidth} 1fr` }}
+              >
+                <div className="bg-white border-r px-3 py-3 text-sm sticky left-0 z-10 flex flex-col gap-1">
+                  <span className="font-medium text-gray-900">{row.label}</span>
+                  {row.meta?.status && (
+                    <span className="inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium text-gray-600">
+                      {row.meta.status}
+                    </span>
+                  )}
+                </div>
+                <div className="overflow-x-auto">
+                  <div
+                    className="relative grid min-w-[720px]"
+                    style={{
+                      gridTemplateColumns:
+                        mode === 'day'
+                          ? 'repeat(24, minmax(64px, 1fr))'
+                          : `repeat(${columns.length || 1}, minmax(96px, 1fr))`,
+                    }}
+                  >
+                    {items
+                      .filter((it) => it.rowId === row.id)
+                      .map((it) => {
+                        const position = getGridPosition(it)
+                        if (!position) return null
+                        return (
+                          <button
+                            key={it.id}
+                            type="button"
+                            onClick={() => onItemSelect?.(it.id)}
+                            className={cn(
+                              'relative m-0.5 rounded-md border px-3 py-2 text-left text-xs shadow-sm transition hover:shadow-md',
+                              getStatusClass(it.status),
+                              it.conflict && 'ring-2 ring-orange-500/70'
+                            )}
+                            style={{
+                              gridColumnStart: position.gridColumnStart,
+                              gridColumnEnd: position.gridColumnEnd,
+                            }}
+                          >
+                            <div className="flex items-center gap-1 text-[11px] font-semibold">
+                              {it.title}
+                            </div>
+                            {it.subtitle && (
+                              <div className="text-[11px] text-gray-700">
+                                {it.subtitle}
+                              </div>
+                            )}
+                            <div className="mt-1 flex items-center gap-1 text-[10px] text-gray-600">
+                              <Clock className="h-3 w-3" />
+                              {format(
+                                it.start,
+                                mode === 'day' ? 'HH:mm' : 'dd/MM'
+                              )}{' '}
+                              –{' '}
+                              {format(
+                                it.end,
+                                mode === 'day' ? 'HH:mm' : 'dd/MM'
+                              )}
+                            </div>
+                          </button>
+                        )
+                      })}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
       )}
     </div>
   )
 }
-

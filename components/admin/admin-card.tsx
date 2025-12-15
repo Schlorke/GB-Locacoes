@@ -30,8 +30,7 @@ export function AdminCard({
       'relative overflow-hidden border-0 shadow-2xl bg-white backdrop-blur-sm hover:shadow-3xl transition-all duration-300 h-full hover:scale-[1.03]',
     glass:
       'relative overflow-hidden border border-white/20 bg-white/10 backdrop-blur-md shadow-xl hover:shadow-2xl transition-all duration-300 h-full hover:scale-[1.02]',
-    flat:
-      'relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm transition-all duration-200 h-full', // sem hover scale
+    flat: 'relative overflow-hidden border-0 shadow-xl bg-white backdrop-blur-sm transition-all duration-200 h-full', // sem hover scale
   }
 
   return (

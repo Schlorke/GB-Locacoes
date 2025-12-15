@@ -83,6 +83,29 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🛠️
 
+- **Grade diária do calendário em `/admin/maintenance`**: Inclusão da linha de
+  00:00 como primeira hora, alinhando a visão diária/semanal para mostrar a
+  meia-noite no topo da coluna de horas.
+  - **Arquivos Modificados**:
+    `components/admin/advanced-calendar/daily-view.tsx`,
+    `components/admin/advanced-calendar/weekly-view.tsx`
+  - **Data**: 2025-12-15
+
+- **Visão diária do calendário em `/admin/maintenance`**: A grade diária agora
+  renderiza uma coluna padrão mesmo quando não há recursos filtrados e mantém
+  linhas horizontais por hora, evitando que a área de eventos fique em branco.
+  - **Arquivos Modificados**:
+    `components/admin/advanced-calendar/daily-view.tsx`
+  - **Data**: 2025-12-15
+
+- **Labels de 00:00 ocultos na visão diária/semanal**: A primeira linha da grade
+  (meia-noite) permanece visível mas sem texto para reduzir ruído visual,
+  mantendo o restante das horas etiquetadas normalmente.
+  - **Arquivos Modificados**:
+    `components/admin/advanced-calendar/daily-view.tsx`,
+    `components/admin/advanced-calendar/weekly-view.tsx`
+  - **Data**: 2025-12-15
+
 - **Dropdowns de filtros em `/admin/maintenance`**: Ajustado o `CustomSelect`
   para renderizar via portal com posicionamento fixo e camada de popover,
   garantindo que as listas de opções não fiquem atrás do calendário ou de outros

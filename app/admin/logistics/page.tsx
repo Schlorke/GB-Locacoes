@@ -4,7 +4,10 @@ import { useState, useEffect, useCallback } from 'react'
 import { AdminPageHeader } from '@/components/admin/admin-page-header'
 import { AdminCard } from '@/components/admin/admin-card'
 import { DeliveryChecklist } from '@/components/admin/delivery-checklist'
-import { GanttView } from '@/components/admin/gantt-view'
+import {
+  AdvancedCalendar,
+  type CalendarEvent,
+} from '@/components/admin/advanced-calendar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -38,7 +41,7 @@ import {
   Save,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { addDays, addHours, parseISO, startOfDay } from 'date-fns'
+import { addHours, parseISO } from 'date-fns'
 
 interface Delivery {
   id: string
@@ -140,8 +143,6 @@ export default function AdminLogisticsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [viewMode, setViewMode] = useState<'table' | 'calendar'>('table')
-  const [ganttMode, setGanttMode] = useState<'day' | 'week' | 'month'>('week')
-  const [ganttDate, setGanttDate] = useState<Date>(startOfDay(new Date()))
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [drivers, setDrivers] = useState<Driver[]>([])
   const [isEditing, setIsEditing] = useState(false)
@@ -480,7 +481,7 @@ export default function AdminLogisticsPage() {
           </Card>
         </motion.div>
 
-        {/* Gantt de Entregas/Coletas */}
+        {/* Calendário Avançado de Entregas/Coletas */}
         {viewMode === 'calendar' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -488,52 +489,44 @@ export default function AdminLogisticsPage() {
             transition={{ delay: 0.2 }}
             className="mb-6"
           >
-            <AdminCard title="Gantt de Logística" variant="flat">
-              <GanttView
-                mode={ganttMode}
-                startDate={ganttDate}
-                onModeChange={setGanttMode}
-                onNavigate={(direction) => {
-                  if (direction === 'today') return setGanttDate(startOfDay(new Date()))
-                  if (direction === 'next') {
-                    if (ganttMode === 'day') return setGanttDate((d) => addDays(d, 1))
-                    if (ganttMode === 'week') return setGanttDate((d) => addDays(d, 7))
-                    return setGanttDate((d) => addDays(d, 30))
-                  }
-                  if (ganttMode === 'day') return setGanttDate((d) => addDays(d, -1))
-                  if (ganttMode === 'week') return setGanttDate((d) => addDays(d, -7))
-                  return setGanttDate((d) => addDays(d, -30))
-                }}
-                onDateChange={(date) => setGanttDate(startOfDay(date))}
-                rows={Array.from(
-                  (() => {
-                    const map = new Map<string, { id: string; label: string; meta?: { status?: string } }>()
-                    vehicles.forEach((vehicle) => {
-                      map.set(vehicle.id, {
-                        id: vehicle.id,
-                        label: `${vehicle.plate} • ${vehicle.model ?? vehicle.brand ?? vehicle.type}`,
-                        meta: { status: vehicle.status },
-                      })
-                    })
-                    map.set('type-DELIVERY', { id: 'type-DELIVERY', label: 'Sem veículo • Entregas' })
-                    map.set('type-PICKUP', { id: 'type-PICKUP', label: 'Sem veículo • Coletas' })
-                    return map
-                  })().values()
-                )}
-                items={filteredDeliveries.map((delivery) => {
+            <AdminCard title="Calendário de Logística" variant="flat">
+              <AdvancedCalendar
+                events={filteredDeliveries.map((delivery): CalendarEvent => {
                   const start = parseISO(delivery.scheduledAt)
                   const end = addHours(start, 2)
                   return {
                     id: delivery.id,
-                    rowId: delivery.vehicleId ?? `type-${delivery.type}`,
+                    title: `${delivery.type === 'DELIVERY' ? 'Entrega' : 'Coleta'} - ${delivery.rental.users.name || 'Cliente'}`,
                     start,
                     end,
-                    title: delivery.rental.users.name || 'Cliente',
-                    subtitle: delivery.address.city || (delivery.type === 'DELIVERY' ? 'Entrega' : 'Coleta'),
+                    resourceId: delivery.vehicleId ?? `type-${delivery.type}`,
+                    color: delivery.type === 'DELIVERY' ? '#3B82F6' : '#8B5CF6',
+                    type: delivery.type === 'DELIVERY' ? 'delivery' : 'pickup',
                     status: delivery.status,
-                    conflict: delivery.status === 'FAILED',
+                    metadata: {
+                      address: delivery.address,
+                      driverName: delivery.driverName,
+                      vehicleId: delivery.vehicleId,
+                    },
                   }
                 })}
+                resources={[
+                  ...vehicles.map((vehicle) => ({
+                    id: vehicle.id,
+                    name: `${vehicle.plate} • ${vehicle.model ?? vehicle.brand ?? vehicle.type}`,
+                  })),
+                  { id: 'type-DELIVERY', name: 'Sem veículo • Entregas' },
+                  { id: 'type-PICKUP', name: 'Sem veículo • Coletas' },
+                ]}
+                onEventClick={(event) => {
+                  const delivery = filteredDeliveries.find(
+                    (d) => d.id === event.id
+                  )
+                  if (delivery) {
+                    handleEditDelivery(delivery)
+                  }
+                }}
+                defaultViewMode="weekly"
               />
             </AdminCard>
           </motion.div>
