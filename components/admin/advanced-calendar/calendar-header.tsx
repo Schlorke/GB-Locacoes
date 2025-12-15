@@ -49,41 +49,45 @@ export function CalendarHeader({
   }
 
   return (
-    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-4 py-3 border-b border-slate-200 bg-white">
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => onNavigate('prev')}
-          className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => onNavigate('next')}
-          className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </Button>
-        <h2 className="text-lg font-semibold text-gray-900 capitalize ml-2">
+    <div className="flex flex-col gap-4 px-4 py-3 border-b border-slate-200 bg-white">
+      <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 sm:gap-2 w-full">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onNavigate('prev')}
+            className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onNavigate('next')}
+            className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </Button>
+        </div>
+        <h2 className="text-lg font-semibold text-gray-900 capitalize flex-1 text-center sm:text-left">
           {getTitle()}
         </h2>
         <Button
           variant="outline"
           size="sm"
           onClick={() => onNavigate('today')}
-          className="ml-2 text-gray-700 border border-gray-200"
+          className="text-gray-700 border border-gray-200"
         >
           Hoje
         </Button>
       </div>
-      <ViewToggle
-        options={viewOptions}
-        value={viewMode}
-        onValueChange={(value) => onViewModeChange(value as ViewMode)}
-      />
+      <div className="w-full sm:w-auto flex justify-center sm:justify-start">
+        <ViewToggle
+          options={viewOptions}
+          value={viewMode}
+          onValueChange={(value) => onViewModeChange(value as ViewMode)}
+        />
+      </div>
     </div>
   )
 }

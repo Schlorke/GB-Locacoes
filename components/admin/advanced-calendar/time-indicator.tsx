@@ -13,12 +13,13 @@ export function TimeIndicator({ currentTime, hourHeight }: TimeIndicatorProps) {
     currentTime,
     startOfDay(currentTime)
   )
+  // Alinha a linha de tempo ao grid horário (1px por minuto com hourHeight=60)
   const top = (minutesFromMidnight / 60) * hourHeight
 
   return (
     <div
       className="absolute left-0 right-0 flex items-center z-10 pointer-events-none"
-      style={{ top }}
+      style={{ top, transform: 'translateY(-1px)' }}
     >
       <div className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-r font-medium shadow-sm">
         {format(currentTime, 'HH:mm', { locale: ptBR })}

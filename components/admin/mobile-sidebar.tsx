@@ -13,6 +13,9 @@ import {
   UserCircle,
   X,
   Package,
+  DollarSign,
+  Wrench,
+  Truck,
 } from 'lucide-react'
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -25,6 +28,9 @@ const navItems = [
   { href: '/admin/categorias', icon: ListChecks, label: 'Categorias' },
   { href: '/admin/orcamentos', icon: FileText, label: 'Orçamentos' },
   { href: '/admin/rentals', icon: Package, label: 'Locações' },
+  { href: '/admin/financial', icon: DollarSign, label: 'Financeiro' },
+  { href: '/admin/maintenance', icon: Wrench, label: 'Manutenção' },
+  { href: '/admin/logistics', icon: Truck, label: 'Logística' },
   { href: '/admin/settings', icon: Settings, label: 'Configurações' },
 ]
 
@@ -72,7 +78,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
       {/* Overlay */}
       <div
         className={cn(
-          'fixed inset-0 z-[var(--layer-dialog-backdrop)] bg-black/80 transition-opacity duration-300',
+          'fixed inset-0 z-[9998] bg-black/80 transition-opacity duration-300',
           isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
         )}
         onClick={onClose}
@@ -81,7 +87,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
       {/* Sidebar */}
       <div
         className={cn(
-          'fixed inset-y-0 right-0 z-[var(--layer-dialog)] w-80 transform transition-transform duration-300 ease-in-out',
+          'fixed inset-y-0 right-0 z-[9999] w-80 transform transition-transform duration-300 ease-in-out',
           isOpen ? 'translate-x-0' : 'translate-x-full'
         )}
         style={{
@@ -154,7 +160,7 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
           </div>
 
           {/* Navegação */}
-          <nav className="flex-1 p-4">
+          <nav className="flex-1 p-4 overflow-y-auto">
             <div className="space-y-2">
               {navItems.map((item) => {
                 const Icon = item.icon

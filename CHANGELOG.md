@@ -105,6 +105,12 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     `components/admin/advanced-calendar/daily-view.tsx`,
     `components/admin/advanced-calendar/weekly-view.tsx`
   - **Data**: 2025-12-15
+- **Indicador de horário atual alinhado ao grid**: Linha de tempo real ajustada
+  para alinhar pixel a pixel às linhas do calendário, evitando deslocamento
+  visual entre a marcação e as linhas de hora.
+  - **Arquivos Modificados**:
+    `components/admin/advanced-calendar/time-indicator.tsx`
+  - **Data**: 2025-12-15
 
 - **Dropdowns de filtros em `/admin/maintenance`**: Ajustado o `CustomSelect`
   para renderizar via portal com posicionamento fixo e camada de popover,

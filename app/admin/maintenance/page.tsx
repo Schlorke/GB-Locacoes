@@ -359,7 +359,7 @@ export default function AdminMaintenancePage() {
                   </div>
 
                   {/* Botão Agendar - linha própria em md */}
-                  <div className="w-full lg:w-auto flex md:justify-center lg:justify-start">
+                  <div className="w-full lg:w-auto flex justify-center lg:justify-start">
                     <Button
                       variant="outline"
                       className="w-auto bg-orange-600 text-white hover:bg-orange-700 hover:text-white border-orange-600"

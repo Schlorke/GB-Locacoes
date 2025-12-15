@@ -16,6 +16,10 @@ export default function AdminMobileHeader() {
     if (pathname?.includes('/equipamentos')) return 'Equipamentos'
     if (pathname?.includes('/categorias')) return 'Categorias'
     if (pathname?.includes('/orcamentos')) return 'Orçamentos'
+    if (pathname?.includes('/rentals')) return 'Locações'
+    if (pathname?.includes('/financial')) return 'Financeiro'
+    if (pathname?.includes('/maintenance')) return 'Manutenção'
+    if (pathname?.includes('/logistics')) return 'Logística'
     if (pathname?.includes('/settings')) return 'Configurações'
     return 'GB Admin'
   }
