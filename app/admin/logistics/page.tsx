@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { AdminPageHeader } from '@/components/admin/admin-page-header'
 import { AdminCard } from '@/components/admin/admin-card'
 import { DeliveryChecklist } from '@/components/admin/delivery-checklist'
-import { LogisticsCalendar } from '@/components/admin/logistics-calendar'
+import { GanttView } from '@/components/admin/gantt-view'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -38,6 +38,7 @@ import {
   Save,
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { addDays, addHours, parseISO, startOfDay } from 'date-fns'
 
 interface Delivery {
   id: string
@@ -139,7 +140,8 @@ export default function AdminLogisticsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [viewMode, setViewMode] = useState<'table' | 'calendar'>('table')
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined)
+  const [ganttMode, setGanttMode] = useState<'day' | 'week' | 'month'>('week')
+  const [ganttDate, setGanttDate] = useState<Date>(startOfDay(new Date()))
   const [vehicles, setVehicles] = useState<Vehicle[]>([])
   const [drivers, setDrivers] = useState<Driver[]>([])
   const [isEditing, setIsEditing] = useState(false)
@@ -478,7 +480,7 @@ export default function AdminLogisticsPage() {
           </Card>
         </motion.div>
 
-        {/* Calendário de Entregas */}
+        {/* Gantt de Entregas/Coletas */}
         {viewMode === 'calendar' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -486,27 +488,54 @@ export default function AdminLogisticsPage() {
             transition={{ delay: 0.2 }}
             className="mb-6"
           >
-            <LogisticsCalendar
-              deliveries={
-                filteredDeliveries as Array<{
-                  id: string
-                  type: 'DELIVERY' | 'PICKUP'
-                  status: string
-                  scheduledAt: string
-                  address: {
-                    street?: string
-                    city?: string
+            <AdminCard title="Gantt de Logística" variant="flat">
+              <GanttView
+                mode={ganttMode}
+                startDate={ganttDate}
+                onModeChange={setGanttMode}
+                onNavigate={(direction) => {
+                  if (direction === 'today') return setGanttDate(startOfDay(new Date()))
+                  if (direction === 'next') {
+                    if (ganttMode === 'day') return setGanttDate((d) => addDays(d, 1))
+                    if (ganttMode === 'week') return setGanttDate((d) => addDays(d, 7))
+                    return setGanttDate((d) => addDays(d, 30))
                   }
-                  rental: {
-                    users: {
-                      name: string | null
-                    }
+                  if (ganttMode === 'day') return setGanttDate((d) => addDays(d, -1))
+                  if (ganttMode === 'week') return setGanttDate((d) => addDays(d, -7))
+                  return setGanttDate((d) => addDays(d, -30))
+                }}
+                onDateChange={(date) => setGanttDate(startOfDay(date))}
+                rows={Array.from(
+                  (() => {
+                    const map = new Map<string, { id: string; label: string; meta?: { status?: string } }>()
+                    vehicles.forEach((vehicle) => {
+                      map.set(vehicle.id, {
+                        id: vehicle.id,
+                        label: `${vehicle.plate} • ${vehicle.model ?? vehicle.brand ?? vehicle.type}`,
+                        meta: { status: vehicle.status },
+                      })
+                    })
+                    map.set('type-DELIVERY', { id: 'type-DELIVERY', label: 'Sem veículo • Entregas' })
+                    map.set('type-PICKUP', { id: 'type-PICKUP', label: 'Sem veículo • Coletas' })
+                    return map
+                  })().values()
+                )}
+                items={filteredDeliveries.map((delivery) => {
+                  const start = parseISO(delivery.scheduledAt)
+                  const end = addHours(start, 2)
+                  return {
+                    id: delivery.id,
+                    rowId: delivery.vehicleId ?? `type-${delivery.type}`,
+                    start,
+                    end,
+                    title: delivery.rental.users.name || 'Cliente',
+                    subtitle: delivery.address.city || (delivery.type === 'DELIVERY' ? 'Entrega' : 'Coleta'),
+                    status: delivery.status,
+                    conflict: delivery.status === 'FAILED',
                   }
-                }>
-              }
-              onDateSelect={setSelectedDate}
-              selectedDate={selectedDate}
-            />
+                })}
+              />
+            </AdminCard>
           </motion.div>
         )}
 

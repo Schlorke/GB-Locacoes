@@ -10,6 +10,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Especificação Gantt (Admin Manutenção/Logística)**: Documento detalhando
+  header inspirado no Notion (dropdown diário/semanal/mensal, setas, Hoje,
+  mini-calendário), estrutura de linhas/colunas para unidades físicas e
+  veículos, barras/legendas de status, interações MVP e evoluções futuras (drag
+  & drop na fase 2).
+  - **Arquivos Criados**: `docs/features/gantt-admin.md`
+  - **Data**: 2025-12-15
 - **Sistema de Gestão de Unidades Físicas**: Implementado sistema completo para
   gerenciar unidades físicas individuais de equipamentos
   - **Modelo EquipmentUnit**: Novo modelo no Prisma para representar unidades

@@ -17,6 +17,7 @@ import {
   Search,
   Edit,
   CheckCircle,
+  Calendar,
   Clock,
   XCircle,
   LayoutGrid,
@@ -24,8 +25,9 @@ import {
   AlertTriangle,
   CalendarPlus,
 } from 'lucide-react'
-import { Calendar } from '@/components/ui/calendar'
+import { GanttView } from '@/components/admin/gantt-view'
 import { toast } from 'sonner'
+import { addDays, parseISO, startOfDay } from 'date-fns'
 
 interface Maintenance {
   id: string
@@ -99,7 +101,8 @@ export default function AdminMaintenancePage() {
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [typeFilter, setTypeFilter] = useState<string>('all')
   const [viewMode, setViewMode] = useState<'list' | 'calendar'>('list')
-  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date())
+  const [ganttMode, setGanttMode] = useState<'day' | 'week' | 'month'>('week')
+  const [ganttDate, setGanttDate] = useState<Date>(startOfDay(new Date()))
   const [overdueAlerts, setOverdueAlerts] = useState<
     Array<{
       id: string
@@ -392,7 +395,7 @@ export default function AdminMaintenancePage() {
           </Card>
         </motion.div>
 
-        {/* Calendário de Manutenções */}
+        {/* Gantt de Manutenções */}
         {viewMode === 'calendar' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -400,86 +403,55 @@ export default function AdminMaintenancePage() {
             transition={{ delay: 0.2 }}
             className="mb-6"
           >
-            <AdminCard title="Calendário de Manutenções">
-              <div className="space-y-6">
-                <Calendar
-                  mode="single"
-                  month={selectedMonth}
-                  onMonthChange={setSelectedMonth}
-                  modifiers={{
-                    scheduled: filteredMaintenances
-                      .filter((m) => m.status === 'SCHEDULED')
-                      .map((m) => new Date(m.scheduledAt)),
-                    inProgress: filteredMaintenances
-                      .filter((m) => m.status === 'IN_PROGRESS')
-                      .map((m) => new Date(m.scheduledAt)),
-                    completed: filteredMaintenances
-                      .filter((m) => m.status === 'COMPLETED')
-                      .map((m) =>
-                        m.completedAt ? new Date(m.completedAt) : null
-                      )
-                      .filter((d): d is Date => d !== null),
-                  }}
-                  modifiersClassNames={{
-                    scheduled: 'bg-blue-500 text-white rounded-full',
-                    inProgress: 'bg-yellow-500 text-white rounded-full',
-                    completed: 'bg-green-500 text-white rounded-full',
-                  }}
-                  className="rounded-md border"
-                />
-                <div className="flex flex-wrap gap-4 pt-4 border-t">
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded-full bg-blue-500"></div>
-                    <span className="text-sm text-gray-700">Agendada</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
-                    <span className="text-sm text-gray-700">Em Andamento</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded-full bg-green-500"></div>
-                    <span className="text-sm text-gray-700">Concluída</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <h4 className="font-semibold text-gray-900">
-                    Manutenções do Mês
-                  </h4>
-                  {filteredMaintenances
-                    .filter((m) => {
-                      const scheduledDate = new Date(m.scheduledAt)
-                      return (
-                        scheduledDate.getMonth() === selectedMonth.getMonth() &&
-                        scheduledDate.getFullYear() ===
-                          selectedMonth.getFullYear()
-                      )
-                    })
-                    .map((maintenance) => (
-                      <div
-                        key={maintenance.id}
-                        className="p-3 bg-gray-50 rounded-lg border border-gray-200"
-                      >
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              {maintenance.equipment.name}
-                            </p>
-                            <p className="text-sm text-gray-600">
-                              {typeConfig[maintenance.type]} -{' '}
-                              {formatDate(maintenance.scheduledAt)}
-                            </p>
-                            {maintenance.technician && (
-                              <p className="text-xs text-gray-500 mt-1">
-                                Técnico: {maintenance.technician}
-                              </p>
-                            )}
-                          </div>
-                          {getStatusBadge(maintenance.status)}
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
+            <AdminCard title="Gantt de Manutenções" variant="flat">
+              <GanttView
+                mode={ganttMode}
+                startDate={ganttDate}
+                onModeChange={setGanttMode}
+                onNavigate={(direction) => {
+                  if (direction === 'today') return setGanttDate(startOfDay(new Date()))
+                  if (direction === 'next') {
+                    if (ganttMode === 'day') return setGanttDate((d) => addDays(d, 1))
+                    if (ganttMode === 'week') return setGanttDate((d) => addDays(d, 7))
+                    return setGanttDate((d) => addDays(d, 30))
+                  }
+                  if (ganttMode === 'day') return setGanttDate((d) => addDays(d, -1))
+                  if (ganttMode === 'week') return setGanttDate((d) => addDays(d, -7))
+                  return setGanttDate((d) => addDays(d, -30))
+                }}
+                onDateChange={(date) => setGanttDate(startOfDay(date))}
+                rows={Array.from(
+                  new Map(
+                    filteredMaintenances.map((m) => [
+                      m.equipment.id,
+                      {
+                        id: m.equipment.id,
+                        label: m.equipment.name,
+                        meta: {
+                          status:
+                            m.status === 'IN_PROGRESS'
+                              ? 'Em andamento'
+                              : m.status === 'SCHEDULED'
+                                ? 'Agendada'
+                                : m.status === 'COMPLETED'
+                                  ? 'Concluída'
+                                  : 'Outros',
+                        },
+                      },
+                    ])
+                  ).values()
+                )}
+                items={filteredMaintenances.map((m) => ({
+                  id: m.id,
+                  rowId: m.equipment.id,
+                  start: parseISO(m.scheduledAt),
+                  end: m.completedAt ? parseISO(m.completedAt) : parseISO(m.scheduledAt),
+                  title: m.equipment.name,
+                  subtitle: typeConfig[m.type] ?? 'Manutenção',
+                  status: m.status,
+                  conflict: m.status === 'SCHEDULED' && overdueAlerts.some((o) => o.id === m.id),
+                }))}
+              />
             </AdminCard>
           </motion.div>
         )}
