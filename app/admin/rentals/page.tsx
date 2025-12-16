@@ -364,6 +364,10 @@ export default function AdminRentalsPage() {
           title="Gerenciar Locações"
           subtitle="Visualize e gerencie todas as locações de equipamentos"
           icon={<Package className="w-8 h-8" />}
+          infoBadge={{
+            icon: <Package className="w-5 h-5 text-orange-50" />,
+            text: `${Array.isArray(filteredRentals) ? filteredRentals.length : rentals.length} locações encontradas`,
+          }}
           className="mb-8"
         />
 

@@ -26,6 +26,8 @@ com o projeto.
 ### ✨ [features/](./features/) - Funcionalidades
 
 - **[admin-system.md](./features/admin-system.md)** - Sistema administrativo
+- **[admin-page-header-pattern.md](./features/admin-page-header-pattern.md)** -
+  📋 **Padrão AdminPageHeader e Erros Comuns** (OBRIGATÓRIO para novos headers)
 - **[equipment-management.md](./features/equipment-management.md)** - Gestão de
   equipamentos
 - **[quote-system.md](./features/quote-system.md)** - Sistema de orçamentos

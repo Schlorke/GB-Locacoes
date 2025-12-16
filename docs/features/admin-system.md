@@ -7,6 +7,7 @@
 
 - [🎯 Visão Geral](#-visão-geral)
 - [🚀 Quick Start Guide](#-quick-start-guide)
+- [📋 AdminPageHeader - Padrão e Erros](#-adminpageheader---padrão-e-erros)
 - [🎨 Design System](#-design-system)
 - [🧩 Componentes Reutilizáveis](#-componentes-reutilizáveis)
 - [⚙️ Configurações e Settings](#️-configurações-e-settings)
@@ -41,9 +42,15 @@ construída com:
 
 ### **Template Base para Nova Página**
 
+> ⚠️ **IMPORTANTE**: Sempre use o componente `AdminPageHeader` em vez de criar
+> headers customizados. Consulte
+> [`admin-page-header-pattern.md`](./admin-page-header-pattern.md) para detalhes
+> completos.
+
 ```tsx
 "use client"
 
+import { AdminPageHeader } from "@/components/admin/admin-page-header"
 import { AdminFilterCard } from "@/components/admin/admin-filter-card"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -51,57 +58,29 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { motion } from "framer-motion"
-import { ArrowLeft, Save, Package } from "lucide-react"
-import Link from "next/link"
+import { Package } from "lucide-react"
 import { useState, useEffect } from "react"
 
 export default function NovaPagina() {
   const [loading, setLoading] = useState(false)
+  const [items, setItems] = useState([])
+  const [filteredItems, setFilteredItems] = useState([])
   const { toast } = useToast()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="max-w-7xl mx-auto space-y-6 p-6">
-        {/* HEADER OBRIGATÓRIO */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+      <div className="p-3 sm:p-4 lg:p-6 xl:p-8 pb-24 md:pb-12 max-w-7xl mx-auto">
+        {/* HEADER OBRIGATÓRIO - Use AdminPageHeader */}
+        <AdminPageHeader
+          title="Título da Página"
+          subtitle="Subtítulo explicativo"
+          icon={<Package className="w-8 h-8" />}
+          infoBadge={{
+            icon: <Package className="w-5 h-5 text-orange-50" />,
+            text: `${filteredItems.length} itens encontrados`
+          }}
           className="mb-8"
-        >
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
-
-            <div className="relative z-10">
-              <div className="flex items-center gap-4 mb-4">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  asChild
-                  className="bg-white/15 backdrop-blur-sm hover:bg-white/25 text-white"
-                >
-                  <Link href="/admin/voltar">
-                    <ArrowLeft className="h-5 w-5" />
-                  </Link>
-                </Button>
-                <div>
-                  <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
-                    Título da Página
-                  </h1>
-                  <p className="text-orange-50 font-medium">
-                    Subtítulo explicativo
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
-                <Package className="w-5 h-5 text-orange-50" />
-                <span className="font-semibold text-white">
-                  Informação contextual
-                </span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        />
 
         {/* CONTEÚDO */}
         <motion.div

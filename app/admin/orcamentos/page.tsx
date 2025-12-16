@@ -1,6 +1,7 @@
 'use client'
 
 import { AdminFilterCard } from '@/components/admin/admin-filter-card'
+import { AdminPageHeader } from '@/components/admin/admin-page-header'
 import { KanbanPipeline } from '@/components/admin/kanban-pipeline'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -339,34 +340,16 @@ function AdminQuotesPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="p-3 sm:p-4 lg:p-6 xl:p-8 pb-24 md:pb-12 max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
+        <AdminPageHeader
+          title="Gerenciar Orçamentos"
+          subtitle="Visualize, analise e gerencie todos os orçamentos solicitados"
+          icon={<FileText className="w-8 h-8" />}
+          infoBadge={{
+            icon: <FileText className="w-5 h-5 text-orange-50" />,
+            text: `${Array.isArray(filteredQuotes) ? filteredQuotes.length : 0} orçamentos encontrados`,
+          }}
           className="mb-8"
-        >
-          <div className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 rounded-2xl p-6 text-white shadow-xl">
-            {/* Clean depth layers without decorative elements */}
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/12 via-transparent to-black/15"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-orange-500/6 to-orange-700/8"></div>
-
-            {/* Content */}
-            <div className="relative z-10">
-              <h1 className="text-3xl font-bold mb-2 text-white drop-shadow-sm">
-                Gerenciar Orçamentos
-              </h1>
-              <p className="text-orange-50 mb-4 font-medium">
-                Visualize, analise e gerencie todos os orçamentos solicitados
-              </p>
-              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-lg px-3 py-2 w-fit">
-                <FileText className="w-5 h-5 text-orange-50" />
-                <span className="font-semibold text-white">
-                  {Array.isArray(filteredQuotes) ? filteredQuotes.length : 0}{' '}
-                  orçamentos encontrados
-                </span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        />
 
         {/* Filtros */}
         <motion.div

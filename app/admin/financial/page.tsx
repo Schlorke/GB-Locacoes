@@ -294,6 +294,10 @@ export default function AdminFinancialPage() {
           title="Dashboard Financeiro"
           subtitle="Contas a receber e métricas financeiras"
           icon={<DollarSign className="w-8 h-8" />}
+          infoBadge={{
+            icon: <DollarSign className="w-5 h-5 text-orange-50" />,
+            text: `${receivables.length} contas a receber`,
+          }}
           className="mb-8"
         />
 

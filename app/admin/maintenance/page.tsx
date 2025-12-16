@@ -254,6 +254,10 @@ export default function AdminMaintenancePage() {
           title="Gerenciar Manutenções"
           subtitle="Agenda e histórico de manutenções de equipamentos"
           icon={<Wrench className="w-8 h-8" />}
+          infoBadge={{
+            icon: <Wrench className="w-5 h-5 text-orange-50" />,
+            text: `${Array.isArray(filteredMaintenances) ? filteredMaintenances.length : maintenances.length} manutenções encontradas`,
+          }}
           className="mb-8"
         />
 

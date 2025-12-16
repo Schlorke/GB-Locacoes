@@ -375,6 +375,10 @@ export default function AdminLogisticsPage() {
             title="Gerenciar Logística"
             subtitle="Entregas e coletas de equipamentos"
             icon={<Truck className="w-8 h-8" />}
+            infoBadge={{
+              icon: <Truck className="w-5 h-5 text-orange-50" />,
+              text: `${Array.isArray(filteredDeliveries) ? filteredDeliveries.length : deliveries.length} entregas encontradas`,
+            }}
             className="flex-1"
           />
         </div>
