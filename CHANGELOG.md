@@ -10,6 +10,33 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Comandos de formatação e lint combinados**: Adicionados novos comandos npm
+  para facilitar o workflow de desenvolvimento
+  - `pnpm format:all` - Executa `format` e `format:md` juntos, formatando todos
+    os arquivos do projeto (código e Markdown)
+  - `pnpm lint:all` - Executa `lint:fix` e `lint` em sequência, corrigindo
+    automaticamente problemas e depois verificando o restante
+  - **Data**: 2025-12-16
+
+### Fixed 🐛
+
+- **Remoção automática de imagens do Supabase Storage**: Implementada remoção
+  automática de imagens do Supabase Storage quando:
+  - Uma imagem é removida durante a edição de um equipamento
+  - Um equipamento é completamente deletado
+  - Isso evita acúmulo de arquivos órfãos ocupando espaço de armazenamento
+  - **Arquivos criados**:
+    - `lib/storage-utils.ts` - Funções utilitárias para gerenciar remoção de
+      arquivos do Storage
+    - `scripts/cleanup-orphaned-images.ts` - Script para limpar imagens órfãs
+      existentes
+  - **Arquivos modificados**:
+    - `app/api/admin/equipments/[id]/route.ts` - Rotas PUT e DELETE agora
+      removem arquivos do Storage
+  - **Data**: 2025-12-16
+
+### Added ✨
+
 - **Automa��o de cron jobs sem upgrade Vercel**: Workflow do GitHub Actions
   .github/workflows/cron-dispatch.yml dispara os 5 cron jobs extras via HTTP
   (fora do limite Hobby), com fallback manual (workflow_dispatch) e segredos

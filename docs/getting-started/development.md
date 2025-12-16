@@ -516,8 +516,12 @@ export async function GET(request: NextRequest) {
 
 ```bash
 # Análise de código
-pnpm lint                    # ESLint
-pnpm format                  # Prettier
+pnpm lint                    # ESLint (verificar problemas)
+pnpm lint:fix                # ESLint (corrigir automaticamente)
+pnpm lint:all                # ESLint (corrigir + verificar)
+pnpm format                  # Prettier (formatar código)
+pnpm format:md               # Prettier (formatar apenas Markdown)
+pnpm format:all              # Prettier (formatar código + Markdown)
 pnpm type-check              # TypeScript
 
 # Qualidade

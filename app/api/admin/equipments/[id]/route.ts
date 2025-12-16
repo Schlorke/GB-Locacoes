@@ -1,6 +1,7 @@
 import { requireAdmin } from '@/middlewares/require-admin'
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { deleteFilesFromStorage } from '@/lib/storage-utils'
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic'
@@ -286,6 +287,37 @@ export async function PUT(
       )
     }
 
+    // Se as imagens foram atualizadas, remover arquivos deletados do Storage
+    if (images !== undefined && Array.isArray(images)) {
+      const oldImages = existingEquipment.images || []
+      const newImages = images.filter(
+        (img) => typeof img === 'string' && img.trim() !== ''
+      )
+
+      // Identificar imagens que foram removidas (estavam na lista antiga mas não na nova)
+      const deletedImages = oldImages.filter(
+        (oldImg) => !newImages.includes(oldImg)
+      )
+
+      if (deletedImages.length > 0) {
+        // Remover arquivos deletados do Supabase Storage
+        const deleteResult = await deleteFilesFromStorage(deletedImages)
+
+        if (!deleteResult.success) {
+          console.error(
+            'Erro ao remover algumas imagens do Storage:',
+            deleteResult.errors
+          )
+          // Não bloqueia a atualização, apenas loga o erro
+          // As imagens podem ser removidas manualmente depois se necessário
+        } else {
+          console.log(
+            `✅ ${deleteResult.deleted} imagem(ns) removida(s) do Storage`
+          )
+        }
+      }
+    }
+
     const equipment = await prisma.equipment.update({
       where: { id },
       data: updateData,
@@ -347,6 +379,39 @@ export async function DELETE(
 
     const { id } = await params
     const prisma = await getPrisma()
+
+    // Buscar o equipamento antes de deletar para obter as imagens
+    const equipment = await prisma.equipment.findUnique({
+      where: { id },
+      select: { images: true },
+    })
+
+    if (!equipment) {
+      return NextResponse.json(
+        { error: 'Equipamento não encontrado' },
+        { status: 404 }
+      )
+    }
+
+    // Remover todas as imagens do Supabase Storage antes de deletar o equipamento
+    if (equipment.images && equipment.images.length > 0) {
+      const deleteResult = await deleteFilesFromStorage(equipment.images)
+
+      if (!deleteResult.success) {
+        console.error(
+          'Erro ao remover imagens do Storage:',
+          deleteResult.errors
+        )
+        // Não bloqueia a deleção, apenas loga o erro
+        // As imagens podem ser removidas manualmente depois se necessário
+      } else {
+        console.log(
+          `✅ ${deleteResult.deleted} imagem(ns) removida(s) do Storage antes de deletar o equipamento`
+        )
+      }
+    }
+
+    // Deletar o equipamento do banco de dados
     await prisma.equipment.delete({
       where: { id },
     })

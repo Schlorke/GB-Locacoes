@@ -541,9 +541,12 @@ open coverage/lcov-report/index.html
 pnpm dev                    # Servidor de desenvolvimento
 pnpm build                  # Build de produção
 pnpm start                  # Servidor de produção
-pnpm lint                   # Linting
-pnpm lint:fix               # Auto-fix linting
-pnpm format                 # Formatação
+pnpm lint                   # ESLint (verificar problemas)
+pnpm lint:fix               # ESLint (corrigir automaticamente)
+pnpm lint:all               # ESLint (corrigir + verificar)
+pnpm format                 # Prettier (formatar código)
+pnpm format:md              # Prettier (formatar apenas Markdown)
+pnpm format:all             # Prettier (formatar código + Markdown)
 pnpm format:check           # Verificar formatação
 pnpm type-check             # Verificar tipos TypeScript
 ```
