@@ -413,9 +413,12 @@ export default function AdminRentalsPage() {
                         onClick={(e) => {
                           e.preventDefault()
                           e.stopPropagation()
-                          setStatusFilter(
-                            status === statusFilter ? 'all' : status
-                          )
+                          // Botões de status funcionam como abas:
+                          // clicar novamente no status ativo NÃO deve desativar a página.
+                          // Mantém sempre uma seção ativa, alinhado com /admin/settings.
+                          if (statusFilter !== status) {
+                            setStatusFilter(status)
+                          }
                         }}
                         className={cn(
                           'group flex flex-col items-center justify-center gap-2 p-6 md:p-4 rounded-lg border transition-all duration-300 relative',
