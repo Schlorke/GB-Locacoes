@@ -270,7 +270,7 @@ export default function AdminLogisticsPage() {
     return (
       <Badge
         variant="outline"
-        className={`${config.color} flex items-center gap-1.5 font-medium`}
+        className={`${config.color} items-center gap-1.5 font-medium w-fit`}
       >
         <Icon className="w-3.5 h-3.5" />
         {config.label}

@@ -90,6 +90,16 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🛠️
 
+- **Indicador de horário atual no calendário**: Linha laranja volta ao topo após
+  23:59, usando o passo real do slot (altura da hora + borda) para evitar
+  estouro abaixo da última linha.
+  - **Arquivos Modificados**:
+    `components/admin/advanced-calendar/time-indicator.tsx`,
+    `components/admin/advanced-calendar/constants.ts`,
+    `components/admin/advanced-calendar/daily-view.tsx`,
+    `components/admin/advanced-calendar/weekly-view.tsx`
+  - **Data**: 2025-12-16
+
 - **Warning `--localstorage-file` no build Next**: Persistência do carrinho
   acessava `localStorage` durante o SSR, gerando avisos ao gerar páginas
   estáticas. O store agora é marcado como client-only e ignora o storage quando

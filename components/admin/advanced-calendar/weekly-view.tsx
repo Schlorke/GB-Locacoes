@@ -16,6 +16,7 @@ import {
 import { ptBR } from 'date-fns/locale'
 import { EventBlock } from './event-block'
 import { TimeIndicator } from './time-indicator'
+import { HOUR_SLOT_HEIGHT, MINUTE_HEIGHT } from './constants'
 import type { CalendarEvent } from './types'
 
 interface WeeklyViewProps {
@@ -25,7 +26,6 @@ interface WeeklyViewProps {
   onDateClick?: (_date: Date) => void
 }
 
-const HOUR_HEIGHT = 60
 const HOURS = Array.from({ length: 24 }, (_, i) => i) // 00:00 at\u00e9 23:00
 
 export function WeeklyView({
@@ -54,8 +54,8 @@ export function WeeklyView({
     const duration = differenceInMinutes(event.end, event.start)
 
     return {
-      top: (minutesFromStart / 60) * HOUR_HEIGHT,
-      height: Math.max((duration / 60) * HOUR_HEIGHT, 30),
+      top: minutesFromStart * MINUTE_HEIGHT,
+      height: Math.max(duration * MINUTE_HEIGHT, 30),
     }
   }
 
@@ -136,7 +136,7 @@ export function WeeklyView({
               {isSameDay(currentTime, day) && (
                 <TimeIndicator
                   currentTime={currentTime}
-                  hourHeight={HOUR_HEIGHT}
+                  hourSlotHeight={HOUR_SLOT_HEIGHT}
                 />
               )}
             </div>
