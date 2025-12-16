@@ -1,3 +1,6 @@
+// Client-only store because it relies on browser storage (localStorage)
+'use client'
+
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
@@ -55,6 +58,11 @@ interface CartState {
   getItemCount: () => number
   getTotalPrice: () => number
 }
+
+const storage =
+  typeof window !== 'undefined'
+    ? createJSONStorage(() => localStorage)
+    : undefined
 
 export const useCartStore = create<CartState>()(
   persist(
@@ -125,7 +133,7 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'gb-locacoes-cart',
-      storage: createJSONStorage(() => localStorage),
+      storage,
     }
   )
 )

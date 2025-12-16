@@ -451,7 +451,7 @@ export default function AdminLogisticsPage() {
                         // TODO: Implementar criação de entrega/coleta
                         toast.info('Funcionalidade em desenvolvimento')
                       }}
-                      className="w-auto bg-orange-600 hover:bg-orange-700 text-white border-0"
+                      className="border border-slate-700 shadow-md hover:border-slate-600 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Nova Entrega/Coleta

@@ -83,6 +83,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🛠️
 
+- **Warning `--localstorage-file` no build Next**: Persistência do carrinho
+  acessava `localStorage` durante o SSR, gerando avisos ao gerar páginas
+  estáticas. O store agora é marcado como client-only e ignora o storage quando
+  a janela não existe.
+  - **Arquivos Modificados**: `stores/useCartStore.ts`
+  - **Data**: 2025-12-15
+
 - **Grade diária do calendário em `/admin/maintenance`**: Inclusão da linha de
   00:00 como primeira hora, alinhando a visão diária/semanal para mostrar a
   meia-noite no topo da coluna de horas.

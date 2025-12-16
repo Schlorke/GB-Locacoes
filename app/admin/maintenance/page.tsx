@@ -361,8 +361,7 @@ export default function AdminMaintenancePage() {
                   {/* Botão Agendar - linha própria em md */}
                   <div className="w-full lg:w-auto flex justify-center lg:justify-start">
                     <Button
-                      variant="outline"
-                      className="w-auto bg-orange-600 text-white hover:bg-orange-700 hover:text-white border-orange-600"
+                      className="border border-slate-700 shadow-md hover:border-slate-600 bg-slate-700 text-primary-foreground hover:bg-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-300 h-10 px-4"
                       onClick={() => {
                         // TODO: Abrir modal para agendar preventiva
                         toast.info('Funcionalidade em desenvolvimento')
