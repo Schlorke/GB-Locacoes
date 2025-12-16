@@ -2,7 +2,7 @@
 
 import { format, differenceInMinutes, startOfDay } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { TIME_INDICATOR_LINE_HEIGHT } from './constants'
+import { MINUTE_HEIGHT, TIME_INDICATOR_LINE_HEIGHT } from './constants'
 
 interface TimeIndicatorProps {
   currentTime: Date
@@ -11,36 +11,37 @@ interface TimeIndicatorProps {
 
 export function TimeIndicator({
   currentTime,
-  hourSlotHeight,
+  hourSlotHeight: _hourSlotHeight,
 }: TimeIndicatorProps) {
-  const minutesFromMidnight = differenceInMinutes(
-    currentTime,
-    startOfDay(currentTime)
-  )
-  const minutesInDay = 24 * 60
-  const minuteHeight = hourSlotHeight / 60
+  // Calcula minutos desde meia-noite
+  const dayStart = startOfDay(currentTime)
+  const minutesFromStart = differenceInMinutes(currentTime, dayStart)
+
   const lineHeight = TIME_INDICATOR_LINE_HEIGHT
-  const minutesWithinDay =
-    ((minutesFromMidnight % minutesInDay) + minutesInDay) % minutesInDay
-  const topPosition = minutesWithinDay * minuteHeight - lineHeight / 2
+
+  // Calcula a posição EXATA da linha laranja
+  // A LINHA precisa estar alinhada com o border-b do slot de hora
+  // O border-b está na posição: minutos * MINUTE_HEIGHT
+  // Centraliza a linha subtraindo metade da altura
+  const lineTopPosition = minutesFromStart * MINUTE_HEIGHT - lineHeight / 2
 
   return (
     <div
-      className="absolute left-0 right-0 z-10 pointer-events-none flex items-center"
-      style={{ top: topPosition <= 0 ? 0 : topPosition }}
+      className="absolute left-0 right-0 z-10 pointer-events-none"
+      style={{ top: Math.max(0, lineTopPosition) }}
     >
-      {/* Label - alinhado verticalmente com a linha */}
-      <div
-        className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-r font-medium shadow-sm"
-        style={{ marginTop: -(lineHeight / 2) }}
-      >
-        {format(currentTime, 'HH:mm', { locale: ptBR })}
+      {/* Container flex: bloco à esquerda, linha à direita */}
+      <div className="flex items-center" style={{ height: lineHeight }}>
+        {/* Bloco do horário - centralizado verticalmente com a linha */}
+        <div className="bg-orange-500 text-white text-xs px-2 py-0.5 rounded-r font-medium shadow-sm">
+          {format(currentTime, 'HH:mm', { locale: ptBR })}
+        </div>
+        {/* LINHA LARANJA - esta é a que precisa estar alinhada com o border-b */}
+        <div
+          className="flex-1 bg-orange-500 shadow-sm"
+          style={{ height: lineHeight }}
+        />
       </div>
-      {/* Linha - alinhada com o border-b do bloco de hora */}
-      <div
-        className="flex-1 bg-orange-500 shadow-sm"
-        style={{ height: lineHeight }}
-      />
     </div>
   )
 }
