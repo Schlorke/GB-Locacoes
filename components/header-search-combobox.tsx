@@ -68,6 +68,23 @@ export function HeaderSearchCombobox() {
     })
   }, [])
 
+  // Remover uma pesquisa recente individual
+  const removeRecentSearch = useCallback((termToRemove: string) => {
+    setRecentSearches((prev) => {
+      const filtered = prev.filter(
+        (term) => term.toLowerCase() !== termToRemove.toLowerCase()
+      )
+
+      if (filtered.length === 0) {
+        localStorage.removeItem(RECENT_SEARCHES_KEY)
+      } else {
+        localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(filtered))
+      }
+
+      return filtered
+    })
+  }, [])
+
   // Fechar popover quando a rota mudar (evita flick durante navegação)
   useEffect(() => {
     setOpen(false)
@@ -394,13 +411,26 @@ export function HeaderSearchCombobox() {
                       <button
                         key={`${term}-${index}`}
                         onClick={() => handlePopularSearch(term)}
-                        className="p-3 bg-gradient-to-br from-slate-50 to-slate-100 hover:from-orange-50 hover:to-orange-100 rounded-xl transition-all duration-200 group text-left shadow-sm hover:shadow-md"
+                        className="relative p-3 bg-gradient-to-br from-slate-50 to-slate-100 hover:from-orange-50 hover:to-orange-100 rounded-xl transition-all duration-200 group text-left shadow-sm hover:shadow-md"
                       >
-                        <div className="flex items-center gap-2">
-                          <div className="p-1.5 bg-white rounded-lg transition-colors shadow-sm">
-                            <Search className="h-3.5 w-3.5 text-slate-600 group-hover:text-orange-600" />
+                        {/* Botão de fechar - Canto superior direito */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            removeRecentSearch(term)
+                          }}
+                          className="absolute top-1 right-1 p-1 rounded-md hover:bg-white text-slate-400 transition-colors z-10"
+                          aria-label={`Remover pesquisa "${term}"`}
+                          title={`Remover "${term}"`}
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                        <div className="flex items-center gap-2 pr-6">
+                          <div className="p-1.5 bg-white rounded-lg shadow-sm">
+                            <Search className="h-3.5 w-3.5 text-slate-600 group-hover:text-orange-600 transition-colors duration-200" />
                           </div>
-                          <span className="text-sm font-medium text-slate-700 group-hover:text-orange-700 truncate">
+                          <span className="text-sm font-medium text-slate-700 group-hover:text-orange-700 truncate transition-colors duration-200">
                             {term}
                           </span>
                         </div>
