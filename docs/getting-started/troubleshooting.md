@@ -476,7 +476,102 @@ pnpm add @vercel/node
 cat vercel.json
 ```
 
-### **2. Environment Variables em Produção**
+### **2. ❌ CRÍTICO: Limite de Cron Jobs na Vercel**
+
+#### **Problema:**
+
+Deploy falha com erro relacionado a cron jobs ou deploy não inicia.
+
+**Erro comum:**
+
+- "Too many cron jobs configured"
+- "Cron job limit exceeded"
+- Deploy trava sem erro específico
+
+#### **Causa Raiz:**
+
+A Vercel tem limites rígidos de cron jobs por plano:
+
+| Plano           | Limite de Cron Jobs | Observações                  |
+| --------------- | ------------------- | ---------------------------- |
+| **Hobby**       | **2 cron jobs**     | Apenas 1 execução por dia    |
+| **Pro**         | **40 cron jobs**    | Execuções ilimitadas         |
+| **Enterprise**  | **100 cron jobs**   | Execuções ilimitadas         |
+| **Por Projeto** | **20 cron jobs**    | Hard limit (todos os planos) |
+
+**⚠️ IMPORTANTE**: O projeto tinha **7 cron jobs** configurados, excedendo o
+limite do plano Hobby.
+
+#### **Solução Implementada:**
+
+1. **Redução para 2 cron jobs** (compatível com plano Hobby):
+   - `late-fees` - Multas por atraso (diário)
+   - `expire-quotes` - Expirar orçamentos (diário)
+
+2. **Cron jobs movidos para comentário** (para upgrade futuro):
+   - `verify-boleto-payments` - Verificação de boletos (6h)
+   - `boleto-overdue-alerts` - Alertas de boletos vencidos (diário 9h)
+   - `auto-convert-quotes` - Conversão automática (horário)
+   - `preventive-maintenance` - Manutenção preventiva (diário 2h)
+   - `send-notifications` - Notificações (horário)
+
+3. **Correção do buildCommand**:
+
+   ```json
+   // ❌ ANTES (incorreto)
+   "buildCommand": "prisma generate && next build"
+
+   // ✅ DEPOIS (correto)
+   "buildCommand": "pnpm run build"
+   ```
+
+   O script `pnpm run build` executa `prebuild` que inclui
+   `post-prisma-generate.js` (crítico para build).
+
+#### **Como Ativar Cron Jobs Adicionais (Upgrade para Pro):**
+
+1. **Fazer upgrade para plano Pro** na Vercel
+2. **Descomentar os cron jobs** em `vercel.json`:
+   ```json
+   {
+     "crons": [
+       {
+         "path": "/api/cron/late-fees",
+         "schedule": "0 0 * * *"
+       },
+       {
+         "path": "/api/cron/expire-quotes",
+         "schedule": "0 0 * * *"
+       },
+       // Descomentar abaixo após upgrade para Pro
+       {
+         "path": "/api/cron/verify-boleto-payments",
+         "schedule": "0 */6 * * *"
+       }
+       // ... outros cron jobs
+     ]
+   }
+   ```
+3. **Fazer redeploy** após descomentar
+
+#### **Verificação:**
+
+```bash
+# Verificar quantos cron jobs estão ativos
+cat vercel.json | grep -c '"path"'
+
+# Deve mostrar 2 para plano Hobby
+# Deve mostrar até 40 para plano Pro
+```
+
+#### **Referências:**
+
+- **Documentação Vercel**:
+  [Cron Jobs Usage & Pricing](https://vercel.com/docs/cron-jobs)
+- **Arquivo corrigido**: `vercel.json`
+- **Cron jobs implementados**: `app/api/cron/**/route.ts`
+
+### **3. Environment Variables em Produção**
 
 #### **Problema:**
 
@@ -494,7 +589,7 @@ Variáveis não disponíveis em produção.
 vercel logs [deployment-url]
 ```
 
-### **3. Database Connection em Produção**
+### **4. Database Connection em Produção**
 
 #### **Problema:**
 

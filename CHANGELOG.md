@@ -10,6 +10,13 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Automa��o de cron jobs sem upgrade Vercel**: Workflow do GitHub Actions
+  .github/workflows/cron-dispatch.yml dispara os 5 cron jobs extras via HTTP
+  (fora do limite Hobby), com fallback manual (workflow_dispatch) e segredos
+  CRON_BASE_URL + CRON_SECRET. Documenta��o atualizada em
+  docs/issues/vercel-deploy-cron-jobs-limit.md.
+  - **Data**: 2025-12-15
+
 - **Especificação Gantt (Admin Manutenção/Logística)**: Documento detalhando
   header inspirado no Notion (dropdown diário/semanal/mensal, setas, Hoje,
   mini-calendário), estrutura de linhas/colunas para unidades físicas e

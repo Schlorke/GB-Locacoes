@@ -5,6 +5,61 @@
 
 ---
 
+## 23. Deploy na Vercel falhando - Limite de Cron Jobs Excedido
+
+### 🎯 Problema
+
+**Data da Ocorrência**: Janeiro 2025 **Severidade**: 🔴 CRÍTICA (Bloqueava
+deploy) **Status**: ✅ Resolvido
+
+#### Descrição
+
+O projeto estava configurado com **7 cron jobs** no `vercel.json`, mas o plano
+**Hobby da Vercel permite apenas 2 cron jobs**. Isso causava falha silenciosa no
+deploy, impedindo que o projeto fosse publicado em produção.
+
+**Problemas Identificados:**
+
+1. ❌ 7 cron jobs configurados (limite Hobby: 2)
+2. ❌ buildCommand incorreto (não usava script completo do package.json)
+
+### ✅ Solução Implementada
+
+1. **Redução para 2 cron jobs** (compatível com plano Hobby):
+   - `late-fees` - Multas por atraso (diário)
+   - `expire-quotes` - Expirar orçamentos (diário)
+
+2. **5 cron jobs movidos para comentário** (para upgrade futuro):
+   - `verify-boleto-payments`, `boleto-overdue-alerts`, `auto-convert-quotes`,
+     `preventive-maintenance`, `send-notifications`
+
+3. **Correção do buildCommand**:
+   - Alterado de `prisma generate && next build` para `pnpm run build`
+
+#### Arquivos Modificados
+
+1. `vercel.json` - Redução de cron jobs e correção de buildCommand
+2. `docs/getting-started/troubleshooting.md` - Documentação adicionada
+
+#### Documentação Completa
+
+📄 **Relatório Completo**:
+[`docs/issues/vercel-deploy-cron-jobs-limit.md`](./vercel-deploy-cron-jobs-limit.md)
+
+#### Como Validar
+
+```bash
+# Verificar número de cron jobs ativos
+cat vercel.json | grep -c '"path"' | head -1
+# Deve retornar: 2 (para plano Hobby)
+
+# Verificar buildCommand
+cat vercel.json | grep buildCommand
+# Deve mostrar: "buildCommand": "pnpm run build"
+```
+
+---
+
 ## 22. Dropdowns de filtros de Manutenções ficam atrás do calendário (Admin)
 
 ### 🎯 Problema

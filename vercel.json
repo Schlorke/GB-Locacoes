@@ -1,5 +1,5 @@
 {
-  "buildCommand": "prisma generate && next build",
+  "buildCommand": "pnpm run build",
   "framework": "nextjs",
   "rewrites": [
     {
@@ -15,7 +15,10 @@
     {
       "path": "/api/cron/expire-quotes",
       "schedule": "0 0 * * *"
-    },
+    }
+  ],
+  "_comment": "⚠️ LIMITE DE CRON JOBS: Plano Hobby permite apenas 2 cron jobs. Os 5 cron jobs abaixo estão comentados. Descomente quando fizer upgrade para Pro (40 cron jobs permitidos).",
+  "_crons_pro_plan": [
     {
       "path": "/api/cron/verify-boleto-payments",
       "schedule": "0 */6 * * *"

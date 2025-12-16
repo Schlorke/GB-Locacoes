@@ -1,0 +1,95 @@
+name: External Cron Dispatch
+
+on:
+  schedule:
+    - cron: '0 * * * *' # hourly: auto-convert-quotes, send-notifications
+    - cron: '0 */6 * * *' # every 6h: verify-boleto-payments
+    - cron: '0 9 * * *' # daily 09:00 UTC: boleto-overdue-alerts
+    - cron: '0 2 * * *' # daily 02:00 UTC: preventive-maintenance
+  workflow_dispatch: {}
+
+env:
+  BASE_URL: ${{ secrets.CRON_BASE_URL }}
+  CRON_SECRET: ${{ secrets.CRON_SECRET }}
+
+jobs:
+  hourly:
+    if:
+      github.event_name == 'workflow_dispatch' || github.event.schedule == '0 *
+      * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate secrets
+        run: |
+          if [ -z "$BASE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "CRON_BASE_URL or CRON_SECRET is missing in repository/org secrets." >&2
+            exit 1
+          fi
+      - name: Auto convert quotes (hourly)
+        run: |
+          curl -fsS --retry 3 --retry-delay 10 --retry-connrefused \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$BASE_URL/api/cron/auto-convert-quotes"
+      - name: Send notifications (hourly)
+        run: |
+          curl -fsS --retry 3 --retry-delay 10 --retry-connrefused \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$BASE_URL/api/cron/send-notifications"
+
+  verify_boleto:
+    if:
+      github.event_name == 'workflow_dispatch' || github.event.schedule == '0
+      */6 * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate secrets
+        run: |
+          if [ -z "$BASE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "CRON_BASE_URL or CRON_SECRET is missing in repository/org secrets." >&2
+            exit 1
+          fi
+      - name: Verify boleto payments (every 6h)
+        run: |
+          curl -fsS --retry 3 --retry-delay 10 --retry-connrefused \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$BASE_URL/api/cron/verify-boleto-payments"
+
+  boleto_overdue_alerts:
+    if:
+      github.event_name == 'workflow_dispatch' || github.event.schedule == '0 9
+      * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate secrets
+        run: |
+          if [ -z "$BASE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "CRON_BASE_URL or CRON_SECRET is missing in repository/org secrets." >&2
+            exit 1
+          fi
+      - name: Boleto overdue alerts (daily 09:00 UTC)
+        run: |
+          curl -fsS --retry 3 --retry-delay 10 --retry-connrefused \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$BASE_URL/api/cron/boleto-overdue-alerts"
+
+  preventive_maintenance:
+    if:
+      github.event_name == 'workflow_dispatch' || github.event.schedule == '0 2
+      * * *'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate secrets
+        run: |
+          if [ -z "$BASE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "CRON_BASE_URL or CRON_SECRET is missing in repository/org secrets." >&2
+            exit 1
+          fi
+      - name: Preventive maintenance (daily 02:00 UTC)
+        run: |
+          curl -fsS --retry 3 --retry-delay 10 --retry-connrefused \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$BASE_URL/api/cron/preventive-maintenance"
