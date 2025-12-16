@@ -67,7 +67,7 @@ export function SmartPagination({
             <PaginationPrevious
               onClick={() => canGoPrev && onPageChange(currentPage - 1)}
               className={cn(
-                'cursor-pointer select-none hover:!bg-white hover:!border-gray-300 hover:!text-current',
+                'cursor-pointer select-none hover:!bg-white hover:!border hover:!border-gray-200 hover:!text-current',
                 !canGoPrev && 'pointer-events-none opacity-50'
               )}
             />
@@ -81,7 +81,7 @@ export function SmartPagination({
                   onClick={() => onPageChange(1)}
                   isActive={1 === currentPage}
                   className={cn(
-                    'cursor-pointer select-none hover:!bg-white hover:!border hover:!border-gray-300 hover:!text-current',
+                    'cursor-pointer select-none hover:!bg-white hover:!border hover:!border-gray-200 hover:!text-current',
                     1 === currentPage &&
                       'bg-orange-600 hover:bg-orange-700 text-white border-orange-600'
                   )}
@@ -104,7 +104,7 @@ export function SmartPagination({
                 onClick={() => onPageChange(page)}
                 isActive={page === currentPage}
                 className={cn(
-                  'cursor-pointer select-none hover:!bg-white hover:!border hover:!border-gray-300 hover:!text-current',
+                  'cursor-pointer select-none hover:!bg-white hover:!border hover:!border-gray-200 hover:!text-current',
                   page === currentPage &&
                     'bg-orange-600 hover:bg-orange-700 text-white border-orange-600'
                 )}
@@ -130,7 +130,7 @@ export function SmartPagination({
                     onClick={() => onPageChange(totalPages)}
                     isActive={totalPages === currentPage}
                     className={cn(
-                      'cursor-pointer select-none hover:!bg-white hover:!border hover:!border-gray-300 hover:!text-current',
+                      'cursor-pointer select-none hover:!bg-white hover:!border hover:!border-gray-200 hover:!text-current',
                       totalPages === currentPage &&
                         'bg-orange-600 hover:bg-orange-700 text-white border-orange-600'
                     )}
@@ -146,7 +146,7 @@ export function SmartPagination({
             <PaginationNext
               onClick={() => canGoNext && onPageChange(currentPage + 1)}
               className={cn(
-                'cursor-pointer select-none hover:!bg-white hover:!border-gray-300 hover:!text-current',
+                'cursor-pointer select-none hover:!bg-white hover:!border hover:!border-gray-200 hover:!text-current',
                 !canGoNext && 'pointer-events-none opacity-50'
               )}
             />
