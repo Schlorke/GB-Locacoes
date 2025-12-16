@@ -19,10 +19,10 @@ export const CategoryFindFirstOrThrowSelectSchema: z.ZodType<Prisma.CategorySele
     bgColor: z.boolean().optional(),
     fontColor: z.boolean().optional(),
     slug: z.boolean().optional(),
-    placement: z.boolean().optional(),
-    customIcon: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     updatedAt: z.boolean().optional(),
+    placement: z.boolean().optional(),
+    customIcon: z.boolean().optional(),
     equipments: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.CategorySelect>;
@@ -36,10 +36,10 @@ export const CategoryFindFirstOrThrowSelectZodSchema = z.object({
     bgColor: z.boolean().optional(),
     fontColor: z.boolean().optional(),
     slug: z.boolean().optional(),
-    placement: z.boolean().optional(),
-    customIcon: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     updatedAt: z.boolean().optional(),
+    placement: z.boolean().optional(),
+    customIcon: z.boolean().optional(),
     equipments: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict();

@@ -3,7 +3,6 @@ import * as z from 'zod';
 export const ContractAggregateResultSchema = z.object({  _count: z.object({
     id: z.number(),
     rentalId: z.number(),
-    rental: z.number(),
     template: z.number(),
     content: z.number(),
     pdfUrl: z.number(),
@@ -12,7 +11,8 @@ export const ContractAggregateResultSchema = z.object({  _count: z.object({
     zapSignId: z.number(),
     status: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    rental: z.number()
   }).optional(),
   _min: z.object({
     id: z.string().nullable(),

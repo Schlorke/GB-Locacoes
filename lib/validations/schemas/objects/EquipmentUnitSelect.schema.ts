@@ -6,7 +6,6 @@ import { EquipmentArgsObjectSchema as EquipmentArgsObjectSchema } from './Equipm
 const makeSchema = () => z.object({
   id: z.boolean().optional(),
   equipmentId: z.boolean().optional(),
-  equipment: z.union([z.boolean(), z.lazy(() => EquipmentArgsObjectSchema)]).optional(),
   uniqueCode: z.boolean().optional(),
   status: z.boolean().optional(),
   hourMeter: z.boolean().optional(),
@@ -14,7 +13,8 @@ const makeSchema = () => z.object({
   serialNumber: z.boolean().optional(),
   notes: z.boolean().optional(),
   createdAt: z.boolean().optional(),
-  updatedAt: z.boolean().optional()
+  updatedAt: z.boolean().optional(),
+  equipment: z.union([z.boolean(), z.lazy(() => EquipmentArgsObjectSchema)]).optional()
 }).strict();
 export const EquipmentUnitSelectObjectSchema: z.ZodType<Prisma.EquipmentUnitSelect> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentUnitSelect>;
 export const EquipmentUnitSelectObjectZodSchema = makeSchema();

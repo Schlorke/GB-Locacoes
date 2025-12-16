@@ -18,8 +18,6 @@ export const PaymentGroupByResultSchema = z.array(z.object({
     id: z.number(),
     rentalId: z.number(),
     quoteId: z.number(),
-    rental: z.number(),
-    quote: z.number(),
     amount: z.number(),
     method: z.number(),
     status: z.number(),
@@ -32,7 +30,9 @@ export const PaymentGroupByResultSchema = z.array(z.object({
     pixQrCode: z.number(),
     metadata: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    quote: z.number(),
+    rental: z.number()
   }).optional(),
   _sum: z.object({
     amount: z.number().nullable()

@@ -4,7 +4,6 @@ export const EquipmentUnitFindManyResultSchema = z.object({
   data: z.array(z.object({
   id: z.string(),
   equipmentId: z.string(),
-  equipment: z.unknown(),
   uniqueCode: z.string(),
   status: z.unknown(),
   hourMeter: z.number().optional(),
@@ -12,7 +11,8 @@ export const EquipmentUnitFindManyResultSchema = z.object({
   serialNumber: z.string().optional(),
   notes: z.string().optional(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
+  equipment: z.unknown()
 })),
   pagination: z.object({
   page: z.number().int().min(1),

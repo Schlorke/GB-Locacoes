@@ -13,7 +13,6 @@ import { AddressScalarFieldEnumSchema } from './enums/AddressScalarFieldEnum.sch
 export const AddressFindFirstSelectSchema: z.ZodType<Prisma.AddressSelect> = z.object({
     id: z.boolean().optional(),
     userId: z.boolean().optional(),
-    user: z.boolean().optional(),
     street: z.boolean().optional(),
     number: z.boolean().optional(),
     complement: z.boolean().optional(),
@@ -23,13 +22,13 @@ export const AddressFindFirstSelectSchema: z.ZodType<Prisma.AddressSelect> = z.o
     zipCode: z.boolean().optional(),
     isPrimary: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    user: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.AddressSelect>;
 
 export const AddressFindFirstSelectZodSchema = z.object({
     id: z.boolean().optional(),
     userId: z.boolean().optional(),
-    user: z.boolean().optional(),
     street: z.boolean().optional(),
     number: z.boolean().optional(),
     complement: z.boolean().optional(),
@@ -39,7 +38,8 @@ export const AddressFindFirstSelectZodSchema = z.object({
     zipCode: z.boolean().optional(),
     isPrimary: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    user: z.boolean().optional()
   }).strict();
 
 export const AddressFindFirstSchema: z.ZodType<Prisma.AddressFindFirstArgs> = z.object({ select: AddressFindFirstSelectSchema.optional(), include: z.lazy(() => AddressIncludeObjectSchema.optional()), orderBy: z.union([AddressOrderByWithRelationInputObjectSchema, AddressOrderByWithRelationInputObjectSchema.array()]).optional(), where: AddressWhereInputObjectSchema.optional(), cursor: AddressWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([AddressScalarFieldEnumSchema, AddressScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.AddressFindFirstArgs>;

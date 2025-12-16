@@ -13,10 +13,10 @@ const makeSchema = () => z.object({
   bgColor: z.boolean().optional(),
   fontColor: z.boolean().optional(),
   slug: z.boolean().optional(),
-  placement: z.boolean().optional(),
-  customIcon: z.boolean().optional(),
   createdAt: z.boolean().optional(),
   updatedAt: z.boolean().optional(),
+  placement: z.boolean().optional(),
+  customIcon: z.boolean().optional(),
   equipments: z.union([z.boolean(), z.lazy(() => EquipmentFindManySchema)]).optional(),
   _count: z.union([z.boolean(), z.lazy(() => CategoryCountOutputTypeArgsObjectSchema)]).optional()
 }).strict();

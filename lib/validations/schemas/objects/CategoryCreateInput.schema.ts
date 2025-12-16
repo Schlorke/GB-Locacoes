@@ -15,9 +15,9 @@ const makeSchema = () => z.object({
   bgColor: z.string().optional(),
   fontColor: z.string().optional(),
   slug: z.string(),
+  createdAt: z.coerce.date().optional(),
   placement: z.string().optional().nullable(),
   customIcon: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
-  createdAt: z.coerce.date().optional(),
   equipments: z.lazy(() => EquipmentCreateNestedManyWithoutCategoryInputObjectSchema).optional()
 }).strict();
 export const CategoryCreateInputObjectSchema: z.ZodType<Prisma.CategoryCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.CategoryCreateInput>;

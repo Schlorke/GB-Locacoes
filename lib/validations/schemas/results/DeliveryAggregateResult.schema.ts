@@ -3,7 +3,6 @@ import * as z from 'zod';
 export const DeliveryAggregateResultSchema = z.object({  _count: z.object({
     id: z.number(),
     rentalId: z.number(),
-    rental: z.number(),
     type: z.number(),
     status: z.number(),
     scheduledAt: z.number(),
@@ -17,7 +16,8 @@ export const DeliveryAggregateResultSchema = z.object({  _count: z.object({
     checklist: z.number(),
     notes: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    rental: z.number()
   }).optional(),
   _sum: z.object({
     distance: z.number().nullable()

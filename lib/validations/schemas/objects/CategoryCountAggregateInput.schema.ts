@@ -12,10 +12,10 @@ const makeSchema = () => z.object({
   bgColor: z.literal(true).optional(),
   fontColor: z.literal(true).optional(),
   slug: z.literal(true).optional(),
-  placement: z.literal(true).optional(),
-  customIcon: z.literal(true).optional(),
   createdAt: z.literal(true).optional(),
   updatedAt: z.literal(true).optional(),
+  placement: z.literal(true).optional(),
+  customIcon: z.literal(true).optional(),
   _all: z.literal(true).optional()
 }).strict();
 export const CategoryCountAggregateInputObjectSchema: z.ZodType<Prisma.CategoryCountAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.CategoryCountAggregateInputType>;

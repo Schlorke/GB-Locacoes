@@ -11,7 +11,6 @@ const makeSchema = () => z.object({
   companyAddress: SortOrderSchema.optional(),
   heroCarousel: SortOrderSchema.optional(),
   contactEmail: SortOrderSchema.optional(),
-  marketingEmail: SortOrderSchema.optional(),
   socialLinks: SortOrderSchema.optional(),
   seoTitle: SortOrderSchema.optional(),
   seoDescription: SortOrderSchema.optional(),
@@ -32,9 +31,10 @@ const makeSchema = () => z.object({
   securityConfig: SortOrderSchema.optional(),
   customCss: SortOrderSchema.optional(),
   customJs: SortOrderSchema.optional(),
-  waveAnimation: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
-  updatedAt: SortOrderSchema.optional()
+  updatedAt: SortOrderSchema.optional(),
+  marketingEmail: SortOrderSchema.optional(),
+  waveAnimation: SortOrderSchema.optional()
 }).strict();
 export const SettingCountOrderByAggregateInputObjectSchema: z.ZodType<Prisma.SettingCountOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.SettingCountOrderByAggregateInput>;
 export const SettingCountOrderByAggregateInputObjectZodSchema = makeSchema();

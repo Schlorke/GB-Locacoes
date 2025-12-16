@@ -7,8 +7,8 @@ import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './Date
 import { DecimalFilterObjectSchema as DecimalFilterObjectSchema } from './DecimalFilter.schema';
 import { StringNullableFilterObjectSchema as StringNullableFilterObjectSchema } from './StringNullableFilter.schema';
 import { DateTimeNullableFilterObjectSchema as DateTimeNullableFilterObjectSchema } from './DateTimeNullableFilter.schema';
-import { DecimalNullableFilterObjectSchema as DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema';
-import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from './IntNullableFilter.schema'
+import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
+import { DecimalNullableFilterObjectSchema as DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const rentalsscalarwhereinputSchema = z.object({
@@ -31,16 +31,8 @@ const rentalsscalarwhereinputSchema = z.object({
   userid: z.union([z.lazy(() => StringFilterObjectSchema), z.string()]).optional(),
   createdat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
   updatedat: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
-  quoteId: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
-  lateFee: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
-  z.number(),
-  z.string(),
-  z.instanceof(Decimal),
-  z.instanceof(Prisma.Decimal),
-  DecimalJSLikeSchema,
-]).refine((v) => isValidDecimalInput(v), {
-  message: "Field 'lateFee' must be a Decimal",
-})]).optional().nullable(),
+  checkInAt: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  checkOutAt: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
   extensionDays: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).optional().nullable(),
   extensionFee: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
   z.number(),
@@ -51,9 +43,17 @@ const rentalsscalarwhereinputSchema = z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'extensionFee' must be a Decimal",
 })]).optional().nullable(),
-  checkInAt: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
-  checkOutAt: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
-  notes: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable()
+  lateFee: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'lateFee' must be a Decimal",
+})]).optional().nullable(),
+  notes: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  quoteId: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable()
 }).strict();
 export const rentalsScalarWhereInputObjectSchema: z.ZodType<Prisma.rentalsScalarWhereInput> = rentalsscalarwhereinputSchema as unknown as z.ZodType<Prisma.rentalsScalarWhereInput>;
 export const rentalsScalarWhereInputObjectZodSchema = rentalsscalarwhereinputSchema;

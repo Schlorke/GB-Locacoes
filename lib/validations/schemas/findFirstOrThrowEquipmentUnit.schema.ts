@@ -13,7 +13,6 @@ import { EquipmentUnitScalarFieldEnumSchema } from './enums/EquipmentUnitScalarF
 export const EquipmentUnitFindFirstOrThrowSelectSchema: z.ZodType<Prisma.EquipmentUnitSelect> = z.object({
     id: z.boolean().optional(),
     equipmentId: z.boolean().optional(),
-    equipment: z.boolean().optional(),
     uniqueCode: z.boolean().optional(),
     status: z.boolean().optional(),
     hourMeter: z.boolean().optional(),
@@ -21,13 +20,13 @@ export const EquipmentUnitFindFirstOrThrowSelectSchema: z.ZodType<Prisma.Equipme
     serialNumber: z.boolean().optional(),
     notes: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    equipment: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.EquipmentUnitSelect>;
 
 export const EquipmentUnitFindFirstOrThrowSelectZodSchema = z.object({
     id: z.boolean().optional(),
     equipmentId: z.boolean().optional(),
-    equipment: z.boolean().optional(),
     uniqueCode: z.boolean().optional(),
     status: z.boolean().optional(),
     hourMeter: z.boolean().optional(),
@@ -35,7 +34,8 @@ export const EquipmentUnitFindFirstOrThrowSelectZodSchema = z.object({
     serialNumber: z.boolean().optional(),
     notes: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    equipment: z.boolean().optional()
   }).strict();
 
 export const EquipmentUnitFindFirstOrThrowSchema: z.ZodType<Prisma.EquipmentUnitFindFirstOrThrowArgs> = z.object({ select: EquipmentUnitFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => EquipmentUnitIncludeObjectSchema.optional()), orderBy: z.union([EquipmentUnitOrderByWithRelationInputObjectSchema, EquipmentUnitOrderByWithRelationInputObjectSchema.array()]).optional(), where: EquipmentUnitWhereInputObjectSchema.optional(), cursor: EquipmentUnitWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([EquipmentUnitScalarFieldEnumSchema, EquipmentUnitScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.EquipmentUnitFindFirstOrThrowArgs>;

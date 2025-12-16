@@ -6,7 +6,6 @@ import { MaintenanceStatusSchema } from '../../enums/MaintenanceStatus.schema';
 export const MaintenanceResultSchema = z.object({
     id: z.string(),
     equipmentId: z.string(),
-    equipment: z.unknown(),
     type: MaintenanceTypeSchema,
     scheduledAt: z.date(),
     completedAt: z.date().nullable(),
@@ -18,7 +17,8 @@ export const MaintenanceResultSchema = z.object({
     technician: z.string().nullable(),
     status: MaintenanceStatusSchema,
     createdAt: z.date(),
-    updatedAt: z.date()
+    updatedAt: z.date(),
+    equipment: z.unknown()
 }).strict();
 
 export type MaintenanceResultType = z.infer<typeof MaintenanceResultSchema>;

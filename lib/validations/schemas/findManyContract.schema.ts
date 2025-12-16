@@ -13,7 +13,6 @@ import { ContractScalarFieldEnumSchema } from './enums/ContractScalarFieldEnum.s
 export const ContractFindManySelectSchema: z.ZodType<Prisma.ContractSelect> = z.object({
     id: z.boolean().optional(),
     rentalId: z.boolean().optional(),
-    rental: z.boolean().optional(),
     template: z.boolean().optional(),
     content: z.boolean().optional(),
     pdfUrl: z.boolean().optional(),
@@ -22,13 +21,13 @@ export const ContractFindManySelectSchema: z.ZodType<Prisma.ContractSelect> = z.
     zapSignId: z.boolean().optional(),
     status: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    rental: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.ContractSelect>;
 
 export const ContractFindManySelectZodSchema = z.object({
     id: z.boolean().optional(),
     rentalId: z.boolean().optional(),
-    rental: z.boolean().optional(),
     template: z.boolean().optional(),
     content: z.boolean().optional(),
     pdfUrl: z.boolean().optional(),
@@ -37,7 +36,8 @@ export const ContractFindManySelectZodSchema = z.object({
     zapSignId: z.boolean().optional(),
     status: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    rental: z.boolean().optional()
   }).strict();
 
 export const ContractFindManySchema: z.ZodType<Prisma.ContractFindManyArgs> = z.object({ select: ContractFindManySelectSchema.optional(), include: z.lazy(() => ContractIncludeObjectSchema.optional()), orderBy: z.union([ContractOrderByWithRelationInputObjectSchema, ContractOrderByWithRelationInputObjectSchema.array()]).optional(), where: ContractWhereInputObjectSchema.optional(), cursor: ContractWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([ContractScalarFieldEnumSchema, ContractScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.ContractFindManyArgs>;

@@ -4,8 +4,6 @@ export const PaymentFindUniqueResultSchema = z.nullable(z.object({
   id: z.string(),
   rentalId: z.string().optional(),
   quoteId: z.string().optional(),
-  rental: z.unknown().optional(),
-  quote: z.unknown().optional(),
   amount: z.number(),
   method: z.unknown(),
   status: z.unknown(),
@@ -18,5 +16,7 @@ export const PaymentFindUniqueResultSchema = z.nullable(z.object({
   pixQrCode: z.string().optional(),
   metadata: z.unknown().optional(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
+  quote: z.unknown().optional(),
+  rental: z.unknown().optional()
 }));

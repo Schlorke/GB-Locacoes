@@ -10,10 +10,10 @@ export const CategoryFindManyResultSchema = z.object({
   bgColor: z.string(),
   fontColor: z.string(),
   slug: z.string(),
-  placement: z.string().optional(),
-  customIcon: z.unknown().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
+  placement: z.string().optional(),
+  customIcon: z.unknown().optional(),
   equipments: z.array(z.unknown())
 })),
   pagination: z.object({

@@ -13,7 +13,6 @@ import { MaintenanceScalarFieldEnumSchema } from './enums/MaintenanceScalarField
 export const MaintenanceFindFirstOrThrowSelectSchema: z.ZodType<Prisma.MaintenanceSelect> = z.object({
     id: z.boolean().optional(),
     equipmentId: z.boolean().optional(),
-    equipment: z.boolean().optional(),
     type: z.boolean().optional(),
     scheduledAt: z.boolean().optional(),
     completedAt: z.boolean().optional(),
@@ -25,13 +24,13 @@ export const MaintenanceFindFirstOrThrowSelectSchema: z.ZodType<Prisma.Maintenan
     technician: z.boolean().optional(),
     status: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    equipment: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.MaintenanceSelect>;
 
 export const MaintenanceFindFirstOrThrowSelectZodSchema = z.object({
     id: z.boolean().optional(),
     equipmentId: z.boolean().optional(),
-    equipment: z.boolean().optional(),
     type: z.boolean().optional(),
     scheduledAt: z.boolean().optional(),
     completedAt: z.boolean().optional(),
@@ -43,7 +42,8 @@ export const MaintenanceFindFirstOrThrowSelectZodSchema = z.object({
     technician: z.boolean().optional(),
     status: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    equipment: z.boolean().optional()
   }).strict();
 
 export const MaintenanceFindFirstOrThrowSchema: z.ZodType<Prisma.MaintenanceFindFirstOrThrowArgs> = z.object({ select: MaintenanceFindFirstOrThrowSelectSchema.optional(), include: z.lazy(() => MaintenanceIncludeObjectSchema.optional()), orderBy: z.union([MaintenanceOrderByWithRelationInputObjectSchema, MaintenanceOrderByWithRelationInputObjectSchema.array()]).optional(), where: MaintenanceWhereInputObjectSchema.optional(), cursor: MaintenanceWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([MaintenanceScalarFieldEnumSchema, MaintenanceScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.MaintenanceFindFirstOrThrowArgs>;

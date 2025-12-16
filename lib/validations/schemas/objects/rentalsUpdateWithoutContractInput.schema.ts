@@ -7,13 +7,13 @@ import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOp
 import { DecimalFieldUpdateOperationsInputObjectSchema as DecimalFieldUpdateOperationsInputObjectSchema } from './DecimalFieldUpdateOperationsInput.schema';
 import { NullableStringFieldUpdateOperationsInputObjectSchema as NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { NullableDateTimeFieldUpdateOperationsInputObjectSchema as NullableDateTimeFieldUpdateOperationsInputObjectSchema } from './NullableDateTimeFieldUpdateOperationsInput.schema';
-import { NullableDecimalFieldUpdateOperationsInputObjectSchema as NullableDecimalFieldUpdateOperationsInputObjectSchema } from './NullableDecimalFieldUpdateOperationsInput.schema';
 import { NullableIntFieldUpdateOperationsInputObjectSchema as NullableIntFieldUpdateOperationsInputObjectSchema } from './NullableIntFieldUpdateOperationsInput.schema';
-import { QuoteUpdateOneWithoutRentalsNestedInputObjectSchema as QuoteUpdateOneWithoutRentalsNestedInputObjectSchema } from './QuoteUpdateOneWithoutRentalsNestedInput.schema';
-import { rental_itemsUpdateManyWithoutRentalsNestedInputObjectSchema as rental_itemsUpdateManyWithoutRentalsNestedInputObjectSchema } from './rental_itemsUpdateManyWithoutRentalsNestedInput.schema';
-import { UserUpdateOneRequiredWithoutRentalsNestedInputObjectSchema as UserUpdateOneRequiredWithoutRentalsNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutRentalsNestedInput.schema';
+import { NullableDecimalFieldUpdateOperationsInputObjectSchema as NullableDecimalFieldUpdateOperationsInputObjectSchema } from './NullableDecimalFieldUpdateOperationsInput.schema';
+import { DeliveryUpdateManyWithoutRentalNestedInputObjectSchema as DeliveryUpdateManyWithoutRentalNestedInputObjectSchema } from './DeliveryUpdateManyWithoutRentalNestedInput.schema';
 import { PaymentUpdateManyWithoutRentalNestedInputObjectSchema as PaymentUpdateManyWithoutRentalNestedInputObjectSchema } from './PaymentUpdateManyWithoutRentalNestedInput.schema';
-import { DeliveryUpdateManyWithoutRentalNestedInputObjectSchema as DeliveryUpdateManyWithoutRentalNestedInputObjectSchema } from './DeliveryUpdateManyWithoutRentalNestedInput.schema'
+import { rental_itemsUpdateManyWithoutRentalsNestedInputObjectSchema as rental_itemsUpdateManyWithoutRentalsNestedInputObjectSchema } from './rental_itemsUpdateManyWithoutRentalsNestedInput.schema';
+import { QuoteUpdateOneWithoutRentalsNestedInputObjectSchema as QuoteUpdateOneWithoutRentalsNestedInputObjectSchema } from './QuoteUpdateOneWithoutRentalsNestedInput.schema';
+import { UserUpdateOneRequiredWithoutRentalsNestedInputObjectSchema as UserUpdateOneRequiredWithoutRentalsNestedInputObjectSchema } from './UserUpdateOneRequiredWithoutRentalsNestedInput.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const makeSchema = () => z.object({
@@ -32,15 +32,8 @@ const makeSchema = () => z.object({
   status: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
   createdat: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
   updatedat: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
-  lateFee: z.union([z.union([
-  z.number(),
-  z.string(),
-  z.instanceof(Decimal),
-  z.instanceof(Prisma.Decimal),
-  DecimalJSLikeSchema,
-]).refine((v) => isValidDecimalInput(v), {
-  message: "Field 'lateFee' must be a Decimal",
-}), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  checkInAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  checkOutAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
   extensionDays: z.union([z.number().int(), z.lazy(() => NullableIntFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
   extensionFee: z.union([z.union([
   z.number(),
@@ -51,14 +44,21 @@ const makeSchema = () => z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'extensionFee' must be a Decimal",
 }), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
-  checkInAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
-  checkOutAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  lateFee: z.union([z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'lateFee' must be a Decimal",
+}), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
   notes: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
-  quote: z.lazy(() => QuoteUpdateOneWithoutRentalsNestedInputObjectSchema).optional(),
-  rental_items: z.lazy(() => rental_itemsUpdateManyWithoutRentalsNestedInputObjectSchema).optional(),
-  users: z.lazy(() => UserUpdateOneRequiredWithoutRentalsNestedInputObjectSchema).optional(),
+  deliveries: z.lazy(() => DeliveryUpdateManyWithoutRentalNestedInputObjectSchema).optional(),
   payments: z.lazy(() => PaymentUpdateManyWithoutRentalNestedInputObjectSchema).optional(),
-  deliveries: z.lazy(() => DeliveryUpdateManyWithoutRentalNestedInputObjectSchema).optional()
+  rental_items: z.lazy(() => rental_itemsUpdateManyWithoutRentalsNestedInputObjectSchema).optional(),
+  quote: z.lazy(() => QuoteUpdateOneWithoutRentalsNestedInputObjectSchema).optional(),
+  users: z.lazy(() => UserUpdateOneRequiredWithoutRentalsNestedInputObjectSchema).optional()
 }).strict();
 export const rentalsUpdateWithoutContractInputObjectSchema: z.ZodType<Prisma.rentalsUpdateWithoutContractInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsUpdateWithoutContractInput>;
 export const rentalsUpdateWithoutContractInputObjectZodSchema = makeSchema();

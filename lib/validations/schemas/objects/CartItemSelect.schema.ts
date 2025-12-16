@@ -7,14 +7,14 @@ import { EquipmentArgsObjectSchema as EquipmentArgsObjectSchema } from './Equipm
 const makeSchema = () => z.object({
   id: z.boolean().optional(),
   cartId: z.boolean().optional(),
-  cart: z.union([z.boolean(), z.lazy(() => CartArgsObjectSchema)]).optional(),
   equipmentId: z.boolean().optional(),
-  equipment: z.union([z.boolean(), z.lazy(() => EquipmentArgsObjectSchema)]).optional(),
   quantity: z.boolean().optional(),
   days: z.boolean().optional(),
   pricePerDay: z.boolean().optional(),
   finalPrice: z.boolean().optional(),
-  createdAt: z.boolean().optional()
+  createdAt: z.boolean().optional(),
+  cart: z.union([z.boolean(), z.lazy(() => CartArgsObjectSchema)]).optional(),
+  equipment: z.union([z.boolean(), z.lazy(() => EquipmentArgsObjectSchema)]).optional()
 }).strict();
 export const CartItemSelectObjectSchema: z.ZodType<Prisma.CartItemSelect> = makeSchema() as unknown as z.ZodType<Prisma.CartItemSelect>;
 export const CartItemSelectObjectZodSchema = makeSchema();

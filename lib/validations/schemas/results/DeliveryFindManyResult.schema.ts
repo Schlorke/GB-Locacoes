@@ -4,7 +4,6 @@ export const DeliveryFindManyResultSchema = z.object({
   data: z.array(z.object({
   id: z.string(),
   rentalId: z.string(),
-  rental: z.unknown(),
   type: z.unknown(),
   status: z.unknown(),
   scheduledAt: z.date(),
@@ -18,7 +17,8 @@ export const DeliveryFindManyResultSchema = z.object({
   checklist: z.unknown().optional(),
   notes: z.string().optional(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
+  rental: z.unknown()
 })),
   pagination: z.object({
   page: z.number().int().min(1),

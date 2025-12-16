@@ -14,10 +14,10 @@ const makeSchema = () => z.object({
   bgColor: SortOrderSchema.optional(),
   fontColor: SortOrderSchema.optional(),
   slug: SortOrderSchema.optional(),
-  placement: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
-  customIcon: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional(),
+  placement: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  customIcon: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   equipments: z.lazy(() => EquipmentOrderByRelationAggregateInputObjectSchema).optional()
 }).strict();
 export const CategoryOrderByWithRelationInputObjectSchema: z.ZodType<Prisma.CategoryOrderByWithRelationInput> = makeSchema() as unknown as z.ZodType<Prisma.CategoryOrderByWithRelationInput>;

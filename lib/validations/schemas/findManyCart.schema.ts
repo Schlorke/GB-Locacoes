@@ -13,20 +13,20 @@ import { CartScalarFieldEnumSchema } from './enums/CartScalarFieldEnum.schema';
 export const CartFindManySelectSchema: z.ZodType<Prisma.CartSelect> = z.object({
     id: z.boolean().optional(),
     userId: z.boolean().optional(),
-    user: z.boolean().optional(),
-    items: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     updatedAt: z.boolean().optional(),
+    items: z.boolean().optional(),
+    user: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.CartSelect>;
 
 export const CartFindManySelectZodSchema = z.object({
     id: z.boolean().optional(),
     userId: z.boolean().optional(),
-    user: z.boolean().optional(),
-    items: z.boolean().optional(),
     createdAt: z.boolean().optional(),
     updatedAt: z.boolean().optional(),
+    items: z.boolean().optional(),
+    user: z.boolean().optional(),
     _count: z.boolean().optional()
   }).strict();
 

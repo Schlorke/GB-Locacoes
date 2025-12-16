@@ -3,7 +3,6 @@ import * as z from 'zod';
 export const MaintenanceDeleteResultSchema = z.nullable(z.object({
   id: z.string(),
   equipmentId: z.string(),
-  equipment: z.unknown(),
   type: z.unknown(),
   scheduledAt: z.date(),
   completedAt: z.date().optional(),
@@ -15,5 +14,6 @@ export const MaintenanceDeleteResultSchema = z.nullable(z.object({
   technician: z.string().optional(),
   status: z.unknown(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
+  equipment: z.unknown()
 }));

@@ -5,7 +5,6 @@ import { ContractStatusSchema } from '../../enums/ContractStatus.schema';
 export const ContractInputSchema = z.object({
     id: z.string(),
     rentalId: z.string(),
-    rental: z.unknown(),
     template: z.string().optional().nullable(),
     content: z.string().optional().nullable(),
     pdfUrl: z.string().optional().nullable(),
@@ -14,7 +13,8 @@ export const ContractInputSchema = z.object({
     zapSignId: z.string().optional().nullable(),
     status: ContractStatusSchema,
     createdAt: z.date(),
-    updatedAt: z.date()
+    updatedAt: z.date(),
+    rental: z.unknown()
 }).strict();
 
 export type ContractInputType = z.infer<typeof ContractInputSchema>;

@@ -8,7 +8,6 @@ export const SettingAggregateResultSchema = z.object({  _count: z.object({
     companyAddress: z.number(),
     heroCarousel: z.number(),
     contactEmail: z.number(),
-    marketingEmail: z.number(),
     socialLinks: z.number(),
     seoTitle: z.number(),
     seoDescription: z.number(),
@@ -29,9 +28,10 @@ export const SettingAggregateResultSchema = z.object({  _count: z.object({
     securityConfig: z.number(),
     customCss: z.number(),
     customJs: z.number(),
-    waveAnimation: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    marketingEmail: z.number(),
+    waveAnimation: z.number()
   }).optional(),
   _min: z.object({
     id: z.string().nullable(),
@@ -40,7 +40,6 @@ export const SettingAggregateResultSchema = z.object({  _count: z.object({
     aboutUsText: z.string().nullable(),
     companyAddress: z.string().nullable(),
     contactEmail: z.string().nullable(),
-    marketingEmail: z.string().nullable(),
     seoTitle: z.string().nullable(),
     seoDescription: z.string().nullable(),
     themeColorPrimary: z.string().nullable(),
@@ -54,9 +53,10 @@ export const SettingAggregateResultSchema = z.object({  _count: z.object({
     maintenanceMessage: z.string().nullable(),
     customCss: z.string().nullable(),
     customJs: z.string().nullable(),
-    waveAnimation: z.string().nullable(),
     createdAt: z.date().nullable(),
-    updatedAt: z.date().nullable()
+    updatedAt: z.date().nullable(),
+    marketingEmail: z.string().nullable(),
+    waveAnimation: z.string().nullable()
   }).nullable().optional(),
   _max: z.object({
     id: z.string().nullable(),
@@ -65,7 +65,6 @@ export const SettingAggregateResultSchema = z.object({  _count: z.object({
     aboutUsText: z.string().nullable(),
     companyAddress: z.string().nullable(),
     contactEmail: z.string().nullable(),
-    marketingEmail: z.string().nullable(),
     seoTitle: z.string().nullable(),
     seoDescription: z.string().nullable(),
     themeColorPrimary: z.string().nullable(),
@@ -79,7 +78,8 @@ export const SettingAggregateResultSchema = z.object({  _count: z.object({
     maintenanceMessage: z.string().nullable(),
     customCss: z.string().nullable(),
     customJs: z.string().nullable(),
-    waveAnimation: z.string().nullable(),
     createdAt: z.date().nullable(),
-    updatedAt: z.date().nullable()
+    updatedAt: z.date().nullable(),
+    marketingEmail: z.string().nullable(),
+    waveAnimation: z.string().nullable()
   }).nullable().optional()});

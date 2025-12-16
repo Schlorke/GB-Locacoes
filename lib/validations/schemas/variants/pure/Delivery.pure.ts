@@ -6,7 +6,6 @@ import { DeliveryStatusSchema } from '../../enums/DeliveryStatus.schema';
 export const DeliveryModelSchema = z.object({
     id: z.string(),
     rentalId: z.string(),
-    rental: z.unknown(),
     type: DeliveryTypeSchema,
     status: DeliveryStatusSchema,
     scheduledAt: z.date(),
@@ -20,7 +19,8 @@ export const DeliveryModelSchema = z.object({
     checklist: z.unknown().nullable(),
     notes: z.string().nullable(),
     createdAt: z.date(),
-    updatedAt: z.date()
+    updatedAt: z.date(),
+    rental: z.unknown()
 }).strict();
 
 export type DeliveryPureType = z.infer<typeof DeliveryModelSchema>;

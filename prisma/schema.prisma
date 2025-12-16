@@ -20,31 +20,31 @@ generator zod {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  password      String?
-  phone         String?   // NOVO
-  cpf           String?   @unique // NOVO
-  cnpj          String?   @unique // NOVO
-  role          Role      @default(CLIENT)
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  accounts      Account[]
-  quotes        Quote[]
-  rentals       rentals[]
-  sessions      Session[]
-  addresses     Address[] // NOVO
-  cart          Cart?     // NOVO
-  approvedQuotes  Quote[]       @relation("ApprovedQuotes")
-  rejectedQuotes  Quote[]       @relation("RejectedQuotes")
-  auditLogs     AuditLog[]
+  id             String     @id @default(cuid())
+  name           String?
+  email          String     @unique
+  password       String?
+  role           Role       @default(CLIENT)
+  emailVerified  DateTime?
+  image          String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  cnpj           String?    @unique
+  cpf            String?    @unique
+  phone          String?
+  accounts       Account[]
+  addresses      Address[]
+  auditLogs      AuditLog[]
+  cart           Cart?
+  approvedQuotes Quote[]    @relation("ApprovedQuotes")
+  rejectedQuotes Quote[]    @relation("RejectedQuotes")
+  quotes         Quote[]
+  rentals        rentals[]
+  sessions       Session[]
 
   @@map("users")
 }
@@ -89,11 +89,9 @@ model VerificationToken {
   @@map("verificationtokens")
 }
 
-// NOVO MODELO
 model Address {
   id           String   @id @default(cuid())
   userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   street       String
   number       String
   complement   String?
@@ -104,35 +102,34 @@ model Address {
   isPrimary    Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("addresses")
 }
 
-// NOVO MODELO
 model Cart {
   id        String     @id @default(cuid())
   userId    String     @unique
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items     CartItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  items     CartItem[]
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("carts")
 }
 
-// NOVO MODELO
 model CartItem {
   id          String    @id @default(cuid())
   cartId      String
-  cart        Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
   equipmentId String
-  equipment   Equipment @relation(fields: [equipmentId], references: [id])
   quantity    Int
   days        Int
   pricePerDay Decimal
   finalPrice  Decimal?
   createdAt   DateTime  @default(now())
+  cart        Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
 
   @@unique([cartId, equipmentId])
   @@index([equipmentId])
@@ -148,75 +145,68 @@ model Category {
   bgColor     String      @default("#EFF6FF")
   fontColor   String      @default("#1E40AF")
   slug        String      @unique
-  placement   String?     // 'phases' | 'types' | null - Tab onde a categoria aparece (filtro)
-  customIcon  Json?        // Ícone customizado (SVG, emoji, URL) como JSON
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  placement   String?
+  customIcon  Json?
   equipments  Equipment[]
 
   @@map("categories")
 }
 
 model Equipment {
-  id                String         @id @default(cuid())
-  name              String
-  description       String?
-  pricePerDay       Decimal
-  images            String[]
-  available         Boolean        @default(true)
-  categoryId        String         @db.Uuid
-  specifications    Json?          // Technical specifications as JSON
-  // Inventory management
-  maxStock          Int?           @default(1) // Maximum available quantity
-  // Rental period configurations
-  dailyDiscount     Int?           @default(0) // Percentage discount for daily rentals
-  weeklyDiscount    Int?           @default(0) // Percentage discount for weekly rentals
-  biweeklyDiscount  Int?           @default(0) // Percentage discount for biweekly rentals
-  monthlyDiscount   Int?           @default(0) // Percentage discount for monthly rentals
-  popularPeriod     String?        @default("weekly") // Which period to mark as popular (daily, weekly, biweekly, monthly)
-
-  // Direct value pricing configurations
-  dailyDirectValue     Decimal?     // Direct value for daily rentals (overrides discount)
-  weeklyDirectValue    Decimal?     // Direct value for weekly rentals (overrides discount)
-  biweeklyDirectValue  Decimal?     // Direct value for biweekly rentals (overrides discount)
-  monthlyDirectValue   Decimal?     // Direct value for monthly rentals (overrides discount)
-
-  // Pricing method control (percentage or direct value)
-  dailyUseDirectValue     Boolean   @default(false) // Use direct value instead of percentage for daily
-  weeklyUseDirectValue    Boolean   @default(false) // Use direct value instead of percentage for weekly
-  biweeklyUseDirectValue  Boolean   @default(false) // Use direct value instead of percentage for biweekly
-  monthlyUseDirectValue   Boolean   @default(false) // Use direct value instead of percentage for monthly
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  category          Category       @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_category")
-  quoteItems        QuoteItem[]
-  rental_items      rental_items[]
-  cartItems         CartItem[] // NOVO
-  maintenances      Maintenance[]
-  units             EquipmentUnit[] // Unidades físicas individuais
-  purchasePrice     Decimal?       @db.Decimal // Valor de compra
-  purchaseDate      DateTime?      // Data de compra
-  depreciationRate Decimal?       @db.Decimal // Taxa de depreciação anual (%)
-  hourMeter         Decimal?       @db.Decimal // Horímetro atual (deprecated - usar em EquipmentUnit)
-  odometer          Decimal?       @db.Decimal // Odômetro atual (deprecated - usar em EquipmentUnit)
+  id                     String          @id @default(cuid())
+  name                   String
+  description            String?
+  pricePerDay            Decimal
+  images                 String[]
+  available              Boolean         @default(true)
+  categoryId             String          @db.Uuid
+  createdAt              DateTime        @default(now())
+  updatedAt              DateTime        @updatedAt
+  biweeklyDiscount       Int?            @default(0)
+  dailyDiscount          Int?            @default(0)
+  maxStock               Int?            @default(1)
+  monthlyDiscount        Int?            @default(0)
+  popularPeriod          String?         @default("weekly")
+  weeklyDiscount         Int?            @default(0)
+  specifications         Json?
+  biweeklyDirectValue    Decimal?
+  biweeklyUseDirectValue Boolean         @default(false)
+  dailyDirectValue       Decimal?
+  dailyUseDirectValue    Boolean         @default(false)
+  monthlyDirectValue     Decimal?
+  monthlyUseDirectValue  Boolean         @default(false)
+  weeklyDirectValue      Decimal?
+  weeklyUseDirectValue   Boolean         @default(false)
+  depreciationRate       Decimal?        @db.Decimal
+  hourMeter              Decimal?        @db.Decimal
+  odometer               Decimal?        @db.Decimal
+  purchaseDate           DateTime?
+  purchasePrice          Decimal?        @db.Decimal
+  cartItems              CartItem[]
+  units                  EquipmentUnit[]
+  category               Category        @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_category")
+  maintenances           Maintenance[]
+  quoteItems             QuoteItem[]
+  rental_items           rental_items[]
 
   @@index([categoryId])
   @@map("equipments")
 }
 
-// Unidades físicas individuais de equipamentos
 model EquipmentUnit {
-  id            String              @id @default(cuid())
-  equipmentId   String
-  equipment     Equipment           @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
-  uniqueCode    String              @unique // Código único (ex: "BET-001", "COMP-042")
-  status        EquipmentUnitStatus @default(AVAILABLE)
-  hourMeter     Decimal?            @db.Decimal // Horímetro atual (horas de uso)
-  odometer      Decimal?            @db.Decimal // Odômetro atual (quilometragem)
-  serialNumber  String?             // Número de série do fabricante
-  notes         String?             // Notas sobre a unidade
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  id           String              @id @default(cuid())
+  equipmentId  String
+  uniqueCode   String              @unique
+  status       EquipmentUnitStatus @default(AVAILABLE)
+  hourMeter    Decimal?            @db.Decimal
+  odometer     Decimal?            @db.Decimal
+  serialNumber String?
+  notes        String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  equipment    Equipment           @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
 
   @@index([equipmentId])
   @@index([status])
@@ -225,58 +215,47 @@ model EquipmentUnit {
 }
 
 model Quote {
-  id        String      @id @default(cuid())
-  name      String
-  email     String
-  phone     String
-  cpf       String?     // CPF do cliente (opcional)
-  cnpj      String?     // CNPJ da empresa (opcional)
-  cep       String?     // CEP do cliente (opcional)
-  company   String?
-  message   String?
-  total     Decimal     @default(0)
-  status    QuoteStatus @default(PENDING)
-  userId    String?
-
-  // Período de locação
-  startDate       DateTime?     // Data de início da locação
-  endDate         DateTime?     // Data de fim da locação
-  validUntil      DateTime?     // Data de validade do orçamento (ex: 7 dias após criação)
-
-  // Logística
-  deliveryType    DeliveryType? // DELIVERY, PICKUP, BOTH
-  deliveryAddress Json?          // Endereço completo de entrega (se delivery)
-  deliveryFee     Decimal?      // Taxa de entrega
-  pickupFee       Decimal?      // Taxa de retirada
-
-  // Financeiro
-  deposit         Decimal?      // Caução/depósito
-  subtotal        Decimal?      // Subtotal antes de taxas
-  taxes           Decimal?      // Impostos/taxas
-  discount        Decimal?      // Desconto aplicado (se houver)
-  finalTotal      Decimal?      // Total final (subtotal + taxas - desconto)
-
-  // Operacional
-  priority        Int?          @default(0) // Prioridade (0=normal, 1=alta, 2=urgente)
-  internalNotes   String?       // Notas internas (não visíveis ao cliente)
-  adminNotes      String?       // Anotações administrativas
-  rejectionReason String?       // Motivo da rejeição (se rejeitado)
-
-  // Rastreamento
-  approvedAt      DateTime?     // Data de aprovação
-  approvedBy      String?       // ID do admin que aprovou
-  rejectedAt      DateTime?     // Data de rejeição
-  rejectedBy      String?       // ID do admin que rejeitou
-  convertedToRentalId String?  // ID da locação gerada (se aprovado e convertido)
-
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  items     QuoteItem[]
-  user      User?       @relation(fields: [userId], references: [id])
-  approvedByUser  User?          @relation("ApprovedQuotes", fields: [approvedBy], references: [id])
-  rejectedByUser User?          @relation("RejectedQuotes", fields: [rejectedBy], references: [id])
-  payments  Payment[]
-  rentals   rentals[]
+  id                  String        @id @default(cuid())
+  name                String
+  email               String
+  phone               String
+  company             String?
+  message             String?
+  total               Decimal       @default(0)
+  status              QuoteStatus   @default(PENDING)
+  userId              String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  cep                 String?
+  cnpj                String?
+  cpf                 String?
+  adminNotes          String?
+  approvedAt          DateTime?
+  approvedBy          String?
+  convertedToRentalId String?
+  deliveryAddress     Json?
+  deliveryFee         Decimal?
+  deliveryType        DeliveryType?
+  deposit             Decimal?
+  discount            Decimal?
+  endDate             DateTime?
+  finalTotal          Decimal?
+  internalNotes       String?
+  pickupFee           Decimal?
+  priority            Int?          @default(0)
+  rejectedAt          DateTime?
+  rejectedBy          String?
+  rejectionReason     String?
+  startDate           DateTime?
+  subtotal            Decimal?
+  taxes               Decimal?
+  validUntil          DateTime?
+  payments            Payment[]
+  items               QuoteItem[]
+  approvedByUser      User?         @relation("ApprovedQuotes", fields: [approvedBy], references: [id])
+  rejectedByUser      User?         @relation("RejectedQuotes", fields: [rejectedBy], references: [id])
+  user                User?         @relation(fields: [userId], references: [id])
+  rentals             rentals[]
 
   @@index([userId])
   @@index([startDate])
@@ -323,27 +302,27 @@ model rental_items {
 }
 
 model rentals {
-  id           String         @id
-  startdate    DateTime       @db.Timestamp(6)
-  enddate      DateTime       @db.Timestamp(6)
-  total        Decimal        @db.Decimal
-  status       String?        @default("PENDING")
-  userid       String
-  createdat    DateTime?      @default(now()) @db.Timestamp(6)
-  updatedat    DateTime?      @default(now()) @db.Timestamp(6)
-  quoteId     String?        // Referência ao orçamento que originou esta locação
-  quote        Quote?         @relation(fields: [quoteId], references: [id])
-  lateFee      Decimal?       @db.Decimal // Multa por atraso
-  extensionDays Int?          // Dias de prorrogação
-  extensionFee  Decimal?      @db.Decimal // Taxa de prorrogação
-  checkInAt    DateTime?      @db.Timestamp(6) // Data/hora de check-in
-  checkOutAt   DateTime?      @db.Timestamp(6) // Data/hora de check-out
-  notes        String?        // Notas internas
-  rental_items rental_items[]
-  users        User           @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  payments     Payment[]
-  deliveries   Delivery[]
-  contract     Contract?
+  id            String         @id
+  startdate     DateTime       @db.Timestamp(6)
+  enddate       DateTime       @db.Timestamp(6)
+  total         Decimal        @db.Decimal
+  status        String?        @default("PENDING")
+  userid        String
+  createdat     DateTime?      @default(now()) @db.Timestamp(6)
+  updatedat     DateTime?      @default(now()) @db.Timestamp(6)
+  checkInAt     DateTime?      @db.Timestamp(6)
+  checkOutAt    DateTime?      @db.Timestamp(6)
+  extensionDays Int?
+  extensionFee  Decimal?       @db.Decimal
+  lateFee       Decimal?       @db.Decimal
+  notes         String?
+  quoteId       String?
+  contract      Contract?
+  deliveries    Delivery[]
+  payments      Payment[]
+  rental_items  rental_items[]
+  quote         Quote?         @relation(fields: [quoteId], references: [id])
+  users         User           @relation(fields: [userid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([userid])
   @@index([quoteId])
@@ -360,7 +339,6 @@ model Setting {
   companyAddress      String   @default("")
   heroCarousel        Json     @default("[]")
   contactEmail        String   @default("")
-  marketingEmail      String   @default("")
   socialLinks         Json     @default("{}")
   seoTitle            String   @default("GB Locações - Equipamentos para Construção")
   seoDescription      String   @default("Locação de equipamentos para construção civil com qualidade e segurança")
@@ -381,30 +359,30 @@ model Setting {
   securityConfig      Json     @default("{}")
   customCss           String   @default("")
   customJs            String   @default("")
-  waveAnimation       String   @default("animated")
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+  marketingEmail      String   @default("")
+  waveAnimation       String   @default("animated")
 
   @@map("settings")
 }
 
-// Sistema de Manutenção
 model Maintenance {
-  id          String           @id @default(cuid())
+  id          String            @id @default(cuid())
   equipmentId String
-  equipment   Equipment        @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
   type        MaintenanceType
   scheduledAt DateTime
   completedAt DateTime?
-  cost        Decimal?        @db.Decimal
-  laborCost   Decimal?        @db.Decimal // Custo de mão de obra
-  partsCost   Decimal?        @db.Decimal // Custo de peças
+  cost        Decimal?          @db.Decimal
+  laborCost   Decimal?          @db.Decimal
+  partsCost   Decimal?          @db.Decimal
   description String?
-  notes       String?         // Notas técnicas
-  technician  String?         // Nome do técnico responsável
+  notes       String?
+  technician  String?
   status      MaintenanceStatus @default(SCHEDULED)
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  equipment   Equipment         @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
 
   @@index([equipmentId])
   @@index([scheduledAt])
@@ -412,13 +390,10 @@ model Maintenance {
   @@map("maintenances")
 }
 
-// Sistema de Pagamentos
 model Payment {
   id            String        @id @default(cuid())
   rentalId      String?
   quoteId       String?
-  rental        rentals?      @relation(fields: [rentalId], references: [id], onDelete: SetNull)
-  quote         Quote?        @relation(fields: [quoteId], references: [id], onDelete: SetNull)
   amount        Decimal       @db.Decimal
   method        PaymentMethod
   status        PaymentStatus @default(PENDING)
@@ -426,12 +401,14 @@ model Payment {
   paidAt        DateTime?     @db.Timestamp(6)
   dueDate       DateTime      @db.Timestamp(6)
   invoiceNumber String?
-  transactionId String?       // ID da transação no gateway
-  pixCode       String?       // Código PIX (se método PIX)
-  pixQrCode     String?       // QR Code PIX
-  metadata      Json?         // Dados adicionais do pagamento
+  transactionId String?
+  pixCode       String?
+  pixQrCode     String?
+  metadata      Json?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  quote         Quote?        @relation(fields: [quoteId], references: [id])
+  rental        rentals?      @relation(fields: [rentalId], references: [id])
 
   @@index([rentalId])
   @@index([quoteId])
@@ -441,25 +418,24 @@ model Payment {
   @@map("payments")
 }
 
-// Sistema de Entregas e Coletas
 model Delivery {
-  id          String        @id @default(cuid())
-  rentalId   String
-  rental     rentals       @relation(fields: [rentalId], references: [id], onDelete: Cascade)
-  type       DeliveryType  // DELIVERY, PICKUP
-  status     DeliveryStatus @default(SCHEDULED)
+  id          String         @id @default(cuid())
+  rentalId    String
+  type        DeliveryType
+  status      DeliveryStatus @default(SCHEDULED)
   scheduledAt DateTime
-  completedAt DateTime?     @db.Timestamp(6)
-  address    Json           // Endereço completo
-  distance   Decimal?       @db.Decimal // Distância em km
-  vehicleId  String?        // ID do veículo usado
-  driverId   String?        // ID do motorista
-  driverName String?       // Nome do motorista
-  photos     String[]       // URLs das fotos
-  checklist Json?           // Checklist de saída/entrada
-  notes      String?        // Observações
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @updatedAt
+  completedAt DateTime?      @db.Timestamp(6)
+  address     Json
+  distance    Decimal?       @db.Decimal
+  vehicleId   String?
+  driverId    String?
+  driverName  String?
+  photos      String[]
+  checklist   Json?
+  notes       String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  rental      rentals        @relation(fields: [rentalId], references: [id], onDelete: Cascade)
 
   @@index([rentalId])
   @@index([status])
@@ -468,67 +444,63 @@ model Delivery {
   @@map("deliveries")
 }
 
-// Veículos para logística
 model Vehicle {
-  id          String   @id @default(cuid())
-  plate       String   @unique // Placa do veículo
-  brand       String?  // Marca
-  model       String?  // Modelo
-  year        Int?     // Ano
-  type        VehicleType @default(TRUCK)
-  status      VehicleStatus @default(AVAILABLE)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String        @id @default(cuid())
+  plate     String        @unique
+  brand     String?
+  model     String?
+  year      Int?
+  type      VehicleType   @default(TRUCK)
+  status    VehicleStatus @default(AVAILABLE)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   @@map("vehicles")
 }
 
-// Motoristas
 model Driver {
-  id          String   @id @default(cuid())
+  id          String       @id @default(cuid())
   name        String
   phone       String
-  cnh         String?  // Número da CNH
-  cnhCategory String?  // Categoria da CNH
+  cnh         String?
+  cnhCategory String?
   status      DriverStatus @default(ACTIVE)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@map("drivers")
 }
 
-// Contratos e Documentos
 model Contract {
-  id          String   @id @default(cuid())
-  rentalId   String   @unique
-  rental     rentals  @relation(fields: [rentalId], references: [id], onDelete: Cascade)
-  template   String?  // Template usado
-  content    String?  // Conteúdo do contrato (HTML/PDF)
-  pdfUrl     String?  // URL do PDF gerado
-  signedAt   DateTime? // Data de assinatura
-  signedBy   String?  // ID do usuário que assinou
-  zapSignId  String?  // ID no ZapSign
-  status     ContractStatus @default(DRAFT)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String         @id @default(cuid())
+  rentalId  String         @unique
+  template  String?
+  content   String?
+  pdfUrl    String?
+  signedAt  DateTime?
+  signedBy  String?
+  zapSignId String?
+  status    ContractStatus @default(DRAFT)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  rental    rentals        @relation(fields: [rentalId], references: [id], onDelete: Cascade)
 
   @@index([rentalId])
   @@index([status])
   @@map("contracts")
 }
 
-// Log de Auditoria
 model AuditLog {
-  id          String   @id @default(cuid())
-  userId      String?  // Usuário que executou a ação
-  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  action      String   // Tipo de ação (CREATE, UPDATE, DELETE, etc.)
-  entity      String   // Entidade afetada (Equipment, Quote, etc.)
-  entityId    String   // ID da entidade
-  changes     Json?    // Mudanças realizadas (before/after)
-  ipAddress  String?  // IP do usuário
-  userAgent  String?  // User agent
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String
+  changes   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([entity, entityId])
@@ -536,14 +508,13 @@ model AuditLog {
   @@map("audit_logs")
 }
 
-// Permissões por módulo
 model Permission {
-  id          String   @id @default(cuid())
-  role        Role
-  module      String   // Módulo (EQUIPMENTS, QUOTES, RENTALS, etc.)
-  action      String   // Ação (READ, WRITE, DELETE, APPROVE, etc.)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  role      Role
+  module    String
+  action    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([role, module, action])
   @@index([role])
@@ -684,9 +655,9 @@ enum ContractStatus {
 }
 
 enum EquipmentUnitStatus {
-  AVAILABLE   // Disponível para locação
-  RESERVED   // Reservado (orçamento aprovado, aguardando contrato)
-  RENTED     // Locado (em uso)
-  MAINTENANCE // Em manutenção (indisponível)
-  RETIRED    // Baixado (não está mais em uso)
+  AVAILABLE
+  RESERVED
+  RENTED
+  MAINTENANCE
+  RETIRED
 }

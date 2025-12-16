@@ -5,19 +5,19 @@ import { SortOrderSchema } from '../enums/SortOrder.schema'
 
 const makeSchema = () => z.object({
   pricePerDay: SortOrderSchema.optional(),
-  maxStock: SortOrderSchema.optional(),
-  dailyDiscount: SortOrderSchema.optional(),
-  weeklyDiscount: SortOrderSchema.optional(),
   biweeklyDiscount: SortOrderSchema.optional(),
+  dailyDiscount: SortOrderSchema.optional(),
+  maxStock: SortOrderSchema.optional(),
   monthlyDiscount: SortOrderSchema.optional(),
-  dailyDirectValue: SortOrderSchema.optional(),
-  weeklyDirectValue: SortOrderSchema.optional(),
+  weeklyDiscount: SortOrderSchema.optional(),
   biweeklyDirectValue: SortOrderSchema.optional(),
+  dailyDirectValue: SortOrderSchema.optional(),
   monthlyDirectValue: SortOrderSchema.optional(),
-  purchasePrice: SortOrderSchema.optional(),
+  weeklyDirectValue: SortOrderSchema.optional(),
   depreciationRate: SortOrderSchema.optional(),
   hourMeter: SortOrderSchema.optional(),
-  odometer: SortOrderSchema.optional()
+  odometer: SortOrderSchema.optional(),
+  purchasePrice: SortOrderSchema.optional()
 }).strict();
 export const EquipmentAvgOrderByAggregateInputObjectSchema: z.ZodType<Prisma.EquipmentAvgOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentAvgOrderByAggregateInput>;
 export const EquipmentAvgOrderByAggregateInputObjectZodSchema = makeSchema();

@@ -4,11 +4,11 @@ import { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
 import { EquipmentCreateimagesInputObjectSchema as EquipmentCreateimagesInputObjectSchema } from './EquipmentCreateimagesInput.schema';
 import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
-import { CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema as CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema } from './CategoryCreateNestedOneWithoutEquipmentsInput.schema';
-import { rental_itemsCreateNestedManyWithoutEquipmentsInputObjectSchema as rental_itemsCreateNestedManyWithoutEquipmentsInputObjectSchema } from './rental_itemsCreateNestedManyWithoutEquipmentsInput.schema';
 import { CartItemCreateNestedManyWithoutEquipmentInputObjectSchema as CartItemCreateNestedManyWithoutEquipmentInputObjectSchema } from './CartItemCreateNestedManyWithoutEquipmentInput.schema';
+import { EquipmentUnitCreateNestedManyWithoutEquipmentInputObjectSchema as EquipmentUnitCreateNestedManyWithoutEquipmentInputObjectSchema } from './EquipmentUnitCreateNestedManyWithoutEquipmentInput.schema';
+import { CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema as CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema } from './CategoryCreateNestedOneWithoutEquipmentsInput.schema';
 import { MaintenanceCreateNestedManyWithoutEquipmentInputObjectSchema as MaintenanceCreateNestedManyWithoutEquipmentInputObjectSchema } from './MaintenanceCreateNestedManyWithoutEquipmentInput.schema';
-import { EquipmentUnitCreateNestedManyWithoutEquipmentInputObjectSchema as EquipmentUnitCreateNestedManyWithoutEquipmentInputObjectSchema } from './EquipmentUnitCreateNestedManyWithoutEquipmentInput.schema'
+import { rental_itemsCreateNestedManyWithoutEquipmentsInputObjectSchema as rental_itemsCreateNestedManyWithoutEquipmentsInputObjectSchema } from './rental_itemsCreateNestedManyWithoutEquipmentsInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -28,31 +28,15 @@ const makeSchema = () => z.object({
 }),
   images: z.union([z.lazy(() => EquipmentCreateimagesInputObjectSchema), z.string().array()]).optional(),
   available: z.boolean().optional(),
-  specifications: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
-  maxStock: z.number().int().optional().nullable(),
-  dailyDiscount: z.number().int().optional().nullable(),
-  weeklyDiscount: z.number().int().optional().nullable(),
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
   biweeklyDiscount: z.number().int().optional().nullable(),
+  dailyDiscount: z.number().int().optional().nullable(),
+  maxStock: z.number().int().optional().nullable(),
   monthlyDiscount: z.number().int().optional().nullable(),
   popularPeriod: z.string().optional().nullable(),
-  dailyDirectValue: z.union([
-  z.number(),
-  z.string(),
-  z.instanceof(Decimal),
-  z.instanceof(Prisma.Decimal),
-  DecimalJSLikeSchema,
-]).refine((v) => isValidDecimalInput(v), {
-  message: "Field 'dailyDirectValue' must be a Decimal",
-}).optional().nullable(),
-  weeklyDirectValue: z.union([
-  z.number(),
-  z.string(),
-  z.instanceof(Decimal),
-  z.instanceof(Prisma.Decimal),
-  DecimalJSLikeSchema,
-]).refine((v) => isValidDecimalInput(v), {
-  message: "Field 'weeklyDirectValue' must be a Decimal",
-}).optional().nullable(),
+  weeklyDiscount: z.number().int().optional().nullable(),
+  specifications: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   biweeklyDirectValue: z.union([
   z.number(),
   z.string(),
@@ -62,6 +46,17 @@ const makeSchema = () => z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'biweeklyDirectValue' must be a Decimal",
 }).optional().nullable(),
+  biweeklyUseDirectValue: z.boolean().optional(),
+  dailyDirectValue: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'dailyDirectValue' must be a Decimal",
+}).optional().nullable(),
+  dailyUseDirectValue: z.boolean().optional(),
   monthlyDirectValue: z.union([
   z.number(),
   z.string(),
@@ -71,22 +66,17 @@ const makeSchema = () => z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'monthlyDirectValue' must be a Decimal",
 }).optional().nullable(),
-  dailyUseDirectValue: z.boolean().optional(),
-  weeklyUseDirectValue: z.boolean().optional(),
-  biweeklyUseDirectValue: z.boolean().optional(),
   monthlyUseDirectValue: z.boolean().optional(),
-  createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional(),
-  purchasePrice: z.union([
+  weeklyDirectValue: z.union([
   z.number(),
   z.string(),
   z.instanceof(Decimal),
   z.instanceof(Prisma.Decimal),
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
-  message: "Field 'purchasePrice' must be a Decimal",
+  message: "Field 'weeklyDirectValue' must be a Decimal",
 }).optional().nullable(),
-  purchaseDate: z.coerce.date().optional().nullable(),
+  weeklyUseDirectValue: z.boolean().optional(),
   depreciationRate: z.union([
   z.number(),
   z.string(),
@@ -114,11 +104,21 @@ const makeSchema = () => z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'odometer' must be a Decimal",
 }).optional().nullable(),
-  category: z.lazy(() => CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema),
-  rental_items: z.lazy(() => rental_itemsCreateNestedManyWithoutEquipmentsInputObjectSchema).optional(),
+  purchaseDate: z.coerce.date().optional().nullable(),
+  purchasePrice: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'purchasePrice' must be a Decimal",
+}).optional().nullable(),
   cartItems: z.lazy(() => CartItemCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
+  units: z.lazy(() => EquipmentUnitCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
+  category: z.lazy(() => CategoryCreateNestedOneWithoutEquipmentsInputObjectSchema),
   maintenances: z.lazy(() => MaintenanceCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
-  units: z.lazy(() => EquipmentUnitCreateNestedManyWithoutEquipmentInputObjectSchema).optional()
+  rental_items: z.lazy(() => rental_itemsCreateNestedManyWithoutEquipmentsInputObjectSchema).optional()
 }).strict();
 export const EquipmentCreateWithoutQuoteItemsInputObjectSchema: z.ZodType<Prisma.EquipmentCreateWithoutQuoteItemsInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentCreateWithoutQuoteItemsInput>;
 export const EquipmentCreateWithoutQuoteItemsInputObjectZodSchema = makeSchema();

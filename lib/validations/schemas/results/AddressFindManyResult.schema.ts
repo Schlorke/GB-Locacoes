@@ -4,7 +4,6 @@ export const AddressFindManyResultSchema = z.object({
   data: z.array(z.object({
   id: z.string(),
   userId: z.string(),
-  user: z.unknown(),
   street: z.string(),
   number: z.string(),
   complement: z.string().optional(),
@@ -14,7 +13,8 @@ export const AddressFindManyResultSchema = z.object({
   zipCode: z.string(),
   isPrimary: z.boolean(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
+  user: z.unknown()
 })),
   pagination: z.object({
   page: z.number().int().min(1),

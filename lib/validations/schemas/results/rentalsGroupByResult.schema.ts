@@ -9,13 +9,13 @@ export const rentalsGroupByResultSchema = z.array(z.object({
   userid: z.string(),
   createdat: z.date(),
   updatedat: z.date(),
-  quoteId: z.string(),
-  lateFee: z.number(),
-  extensionDays: z.number().int(),
-  extensionFee: z.number(),
   checkInAt: z.date(),
   checkOutAt: z.date(),
+  extensionDays: z.number().int(),
+  extensionFee: z.number(),
+  lateFee: z.number(),
   notes: z.string(),
+  quoteId: z.string(),
   _count: z.object({
     id: z.number(),
     startdate: z.number(),
@@ -25,31 +25,31 @@ export const rentalsGroupByResultSchema = z.array(z.object({
     userid: z.number(),
     createdat: z.number(),
     updatedat: z.number(),
-    quoteId: z.number(),
-    quote: z.number(),
-    lateFee: z.number(),
-    extensionDays: z.number(),
-    extensionFee: z.number(),
     checkInAt: z.number(),
     checkOutAt: z.number(),
+    extensionDays: z.number(),
+    extensionFee: z.number(),
+    lateFee: z.number(),
     notes: z.number(),
-    rental_items: z.number(),
-    users: z.number(),
-    payments: z.number(),
+    quoteId: z.number(),
+    contract: z.number(),
     deliveries: z.number(),
-    contract: z.number()
+    payments: z.number(),
+    rental_items: z.number(),
+    quote: z.number(),
+    users: z.number()
   }).optional(),
   _sum: z.object({
     total: z.number().nullable(),
-    lateFee: z.number().nullable(),
     extensionDays: z.number().nullable(),
-    extensionFee: z.number().nullable()
+    extensionFee: z.number().nullable(),
+    lateFee: z.number().nullable()
   }).nullable().optional(),
   _avg: z.object({
     total: z.number().nullable(),
-    lateFee: z.number().nullable(),
     extensionDays: z.number().nullable(),
-    extensionFee: z.number().nullable()
+    extensionFee: z.number().nullable(),
+    lateFee: z.number().nullable()
   }).nullable().optional(),
   _min: z.object({
     id: z.string().nullable(),
@@ -60,13 +60,13 @@ export const rentalsGroupByResultSchema = z.array(z.object({
     userid: z.string().nullable(),
     createdat: z.date().nullable(),
     updatedat: z.date().nullable(),
-    quoteId: z.string().nullable(),
-    lateFee: z.number().nullable(),
-    extensionDays: z.number().int().nullable(),
-    extensionFee: z.number().nullable(),
     checkInAt: z.date().nullable(),
     checkOutAt: z.date().nullable(),
-    notes: z.string().nullable()
+    extensionDays: z.number().int().nullable(),
+    extensionFee: z.number().nullable(),
+    lateFee: z.number().nullable(),
+    notes: z.string().nullable(),
+    quoteId: z.string().nullable()
   }).nullable().optional(),
   _max: z.object({
     id: z.string().nullable(),
@@ -77,12 +77,12 @@ export const rentalsGroupByResultSchema = z.array(z.object({
     userid: z.string().nullable(),
     createdat: z.date().nullable(),
     updatedat: z.date().nullable(),
-    quoteId: z.string().nullable(),
-    lateFee: z.number().nullable(),
-    extensionDays: z.number().int().nullable(),
-    extensionFee: z.number().nullable(),
     checkInAt: z.date().nullable(),
     checkOutAt: z.date().nullable(),
-    notes: z.string().nullable()
+    extensionDays: z.number().int().nullable(),
+    extensionFee: z.number().nullable(),
+    lateFee: z.number().nullable(),
+    notes: z.string().nullable(),
+    quoteId: z.string().nullable()
   }).nullable().optional()
 }));

@@ -10,7 +10,6 @@ const makeSchema = () => z.object({
   aboutUsText: z.literal(true).optional(),
   companyAddress: z.literal(true).optional(),
   contactEmail: z.literal(true).optional(),
-  marketingEmail: z.literal(true).optional(),
   seoTitle: z.literal(true).optional(),
   seoDescription: z.literal(true).optional(),
   themeColorPrimary: z.literal(true).optional(),
@@ -26,9 +25,10 @@ const makeSchema = () => z.object({
   maintenanceMessage: z.literal(true).optional(),
   customCss: z.literal(true).optional(),
   customJs: z.literal(true).optional(),
-  waveAnimation: z.literal(true).optional(),
   createdAt: z.literal(true).optional(),
-  updatedAt: z.literal(true).optional()
+  updatedAt: z.literal(true).optional(),
+  marketingEmail: z.literal(true).optional(),
+  waveAnimation: z.literal(true).optional()
 }).strict();
 export const SettingMaxAggregateInputObjectSchema: z.ZodType<Prisma.SettingMaxAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.SettingMaxAggregateInputType>;
 export const SettingMaxAggregateInputObjectZodSchema = makeSchema();

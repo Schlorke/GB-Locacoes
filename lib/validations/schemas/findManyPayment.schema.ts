@@ -14,8 +14,6 @@ export const PaymentFindManySelectSchema: z.ZodType<Prisma.PaymentSelect> = z.ob
     id: z.boolean().optional(),
     rentalId: z.boolean().optional(),
     quoteId: z.boolean().optional(),
-    rental: z.boolean().optional(),
-    quote: z.boolean().optional(),
     amount: z.boolean().optional(),
     method: z.boolean().optional(),
     status: z.boolean().optional(),
@@ -28,15 +26,15 @@ export const PaymentFindManySelectSchema: z.ZodType<Prisma.PaymentSelect> = z.ob
     pixQrCode: z.boolean().optional(),
     metadata: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    quote: z.boolean().optional(),
+    rental: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.PaymentSelect>;
 
 export const PaymentFindManySelectZodSchema = z.object({
     id: z.boolean().optional(),
     rentalId: z.boolean().optional(),
     quoteId: z.boolean().optional(),
-    rental: z.boolean().optional(),
-    quote: z.boolean().optional(),
     amount: z.boolean().optional(),
     method: z.boolean().optional(),
     status: z.boolean().optional(),
@@ -49,7 +47,9 @@ export const PaymentFindManySelectZodSchema = z.object({
     pixQrCode: z.boolean().optional(),
     metadata: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    quote: z.boolean().optional(),
+    rental: z.boolean().optional()
   }).strict();
 
 export const PaymentFindManySchema: z.ZodType<Prisma.PaymentFindManyArgs> = z.object({ select: PaymentFindManySelectSchema.optional(), include: z.lazy(() => PaymentIncludeObjectSchema.optional()), orderBy: z.union([PaymentOrderByWithRelationInputObjectSchema, PaymentOrderByWithRelationInputObjectSchema.array()]).optional(), where: PaymentWhereInputObjectSchema.optional(), cursor: PaymentWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([PaymentScalarFieldEnumSchema, PaymentScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.PaymentFindManyArgs>;

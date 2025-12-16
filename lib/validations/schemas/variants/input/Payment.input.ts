@@ -8,8 +8,6 @@ export const PaymentInputSchema = z.object({
     id: z.string(),
     rentalId: z.string().optional().nullable(),
     quoteId: z.string().optional().nullable(),
-    rental: z.unknown().optional().nullable(),
-    quote: z.unknown().optional().nullable(),
     amount: z.number(),
     method: PaymentMethodSchema,
     status: PaymentStatusSchema,
@@ -22,7 +20,9 @@ export const PaymentInputSchema = z.object({
     pixQrCode: z.string().optional().nullable(),
     metadata: z.unknown().optional().nullable(),
     createdAt: z.date(),
-    updatedAt: z.date()
+    updatedAt: z.date(),
+    quote: z.unknown().optional().nullable(),
+    rental: z.unknown().optional().nullable()
 }).strict();
 
 export type PaymentInputType = z.infer<typeof PaymentInputSchema>;

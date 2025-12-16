@@ -9,7 +9,6 @@ export const SettingInputSchema = z.object({
     companyAddress: z.string(),
     heroCarousel: z.unknown(),
     contactEmail: z.string(),
-    marketingEmail: z.string(),
     socialLinks: z.unknown(),
     seoTitle: z.string(),
     seoDescription: z.string(),
@@ -30,9 +29,10 @@ export const SettingInputSchema = z.object({
     securityConfig: z.unknown(),
     customCss: z.string(),
     customJs: z.string(),
-    waveAnimation: z.string(),
     createdAt: z.date(),
-    updatedAt: z.date()
+    updatedAt: z.date(),
+    marketingEmail: z.string(),
+    waveAnimation: z.string()
 }).strict();
 
 export type SettingInputType = z.infer<typeof SettingInputSchema>;

@@ -3,10 +3,10 @@ import * as z from 'zod';
 export const CartAggregateResultSchema = z.object({  _count: z.object({
     id: z.number(),
     userId: z.number(),
-    user: z.number(),
-    items: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    items: z.number(),
+    user: z.number()
   }).optional(),
   _min: z.object({
     id: z.string().nullable(),

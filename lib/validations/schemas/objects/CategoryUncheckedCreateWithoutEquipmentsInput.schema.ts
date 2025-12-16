@@ -14,10 +14,10 @@ const makeSchema = () => z.object({
   bgColor: z.string().optional(),
   fontColor: z.string().optional(),
   slug: z.string(),
-  placement: z.string().optional().nullable(),
-  customIcon: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional()
+  updatedAt: z.coerce.date().optional(),
+  placement: z.string().optional().nullable(),
+  customIcon: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional()
 }).strict();
 export const CategoryUncheckedCreateWithoutEquipmentsInputObjectSchema: z.ZodType<Prisma.CategoryUncheckedCreateWithoutEquipmentsInput> = makeSchema() as unknown as z.ZodType<Prisma.CategoryUncheckedCreateWithoutEquipmentsInput>;
 export const CategoryUncheckedCreateWithoutEquipmentsInputObjectZodSchema = makeSchema();

@@ -14,8 +14,8 @@ import { NullableDateTimeFieldUpdateOperationsInputObjectSchema as NullableDateT
 import { DateTimeFieldUpdateOperationsInputObjectSchema as DateTimeFieldUpdateOperationsInputObjectSchema } from './DateTimeFieldUpdateOperationsInput.schema';
 import { NullableStringFieldUpdateOperationsInputObjectSchema as NullableStringFieldUpdateOperationsInputObjectSchema } from './NullableStringFieldUpdateOperationsInput.schema';
 import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
-import { rentalsUpdateOneWithoutPaymentsNestedInputObjectSchema as rentalsUpdateOneWithoutPaymentsNestedInputObjectSchema } from './rentalsUpdateOneWithoutPaymentsNestedInput.schema';
-import { QuoteUpdateOneWithoutPaymentsNestedInputObjectSchema as QuoteUpdateOneWithoutPaymentsNestedInputObjectSchema } from './QuoteUpdateOneWithoutPaymentsNestedInput.schema'
+import { QuoteUpdateOneWithoutPaymentsNestedInputObjectSchema as QuoteUpdateOneWithoutPaymentsNestedInputObjectSchema } from './QuoteUpdateOneWithoutPaymentsNestedInput.schema';
+import { rentalsUpdateOneWithoutPaymentsNestedInputObjectSchema as rentalsUpdateOneWithoutPaymentsNestedInputObjectSchema } from './rentalsUpdateOneWithoutPaymentsNestedInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -43,8 +43,8 @@ const makeSchema = () => z.object({
   metadata: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
   updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
-  rental: z.lazy(() => rentalsUpdateOneWithoutPaymentsNestedInputObjectSchema).optional(),
-  quote: z.lazy(() => QuoteUpdateOneWithoutPaymentsNestedInputObjectSchema).optional()
+  quote: z.lazy(() => QuoteUpdateOneWithoutPaymentsNestedInputObjectSchema).optional(),
+  rental: z.lazy(() => rentalsUpdateOneWithoutPaymentsNestedInputObjectSchema).optional()
 }).strict();
 export const PaymentUpdateInputObjectSchema: z.ZodType<Prisma.PaymentUpdateInput> = makeSchema() as unknown as z.ZodType<Prisma.PaymentUpdateInput>;
 export const PaymentUpdateInputObjectZodSchema = makeSchema();

@@ -10,19 +10,19 @@ export const rentalsModelSchema = z.object({
     userid: z.string(),
     createdat: z.date().nullable(),
     updatedat: z.date().nullable(),
-    quoteId: z.string().nullable(),
-    quote: z.unknown().nullable(),
-    lateFee: z.number().nullable(),
-    extensionDays: z.number().int().nullable(),
-    extensionFee: z.number().nullable(),
     checkInAt: z.date().nullable(),
     checkOutAt: z.date().nullable(),
+    extensionDays: z.number().int().nullable(),
+    extensionFee: z.number().nullable(),
+    lateFee: z.number().nullable(),
     notes: z.string().nullable(),
-    rental_items: z.array(z.unknown()),
-    users: z.unknown(),
-    payments: z.array(z.unknown()),
+    quoteId: z.string().nullable(),
+    contract: z.unknown().nullable(),
     deliveries: z.array(z.unknown()),
-    contract: z.unknown().nullable()
+    payments: z.array(z.unknown()),
+    rental_items: z.array(z.unknown()),
+    quote: z.unknown().nullable(),
+    users: z.unknown()
 }).strict();
 
 export type rentalsPureType = z.infer<typeof rentalsModelSchema>;

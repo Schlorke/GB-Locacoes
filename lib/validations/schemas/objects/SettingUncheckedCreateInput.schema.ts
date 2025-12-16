@@ -13,7 +13,6 @@ const makeSchema = () => z.object({
   companyAddress: z.string().optional(),
   heroCarousel: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   contactEmail: z.string().optional(),
-  marketingEmail: z.string().optional(),
   socialLinks: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
@@ -34,8 +33,9 @@ const makeSchema = () => z.object({
   securityConfig: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   customCss: z.string().optional(),
   customJs: z.string().optional(),
-  waveAnimation: z.string().optional(),
-  createdAt: z.coerce.date().optional()
+  createdAt: z.coerce.date().optional(),
+  marketingEmail: z.string().optional(),
+  waveAnimation: z.string().optional()
 }).strict();
 export const SettingUncheckedCreateInputObjectSchema: z.ZodType<Prisma.SettingUncheckedCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.SettingUncheckedCreateInput>;
 export const SettingUncheckedCreateInputObjectZodSchema = makeSchema();

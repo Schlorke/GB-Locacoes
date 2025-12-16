@@ -13,14 +13,14 @@ export const AuditLogGroupByResultSchema = z.array(z.object({
   _count: z.object({
     id: z.number(),
     userId: z.number(),
-    user: z.number(),
     action: z.number(),
     entity: z.number(),
     entityId: z.number(),
     changes: z.number(),
     ipAddress: z.number(),
     userAgent: z.number(),
-    createdAt: z.number()
+    createdAt: z.number(),
+    user: z.number()
   }).optional(),
   _min: z.object({
     id: z.string().nullable(),

@@ -8,14 +8,14 @@ const makeSchema = () => z.object({
   name: SortOrderSchema.optional(),
   email: SortOrderSchema.optional(),
   password: SortOrderSchema.optional(),
-  phone: SortOrderSchema.optional(),
-  cpf: SortOrderSchema.optional(),
-  cnpj: SortOrderSchema.optional(),
   role: SortOrderSchema.optional(),
   emailVerified: SortOrderSchema.optional(),
   image: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
-  updatedAt: SortOrderSchema.optional()
+  updatedAt: SortOrderSchema.optional(),
+  cnpj: SortOrderSchema.optional(),
+  cpf: SortOrderSchema.optional(),
+  phone: SortOrderSchema.optional()
 }).strict();
 export const UserMaxOrderByAggregateInputObjectSchema: z.ZodType<Prisma.UserMaxOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.UserMaxOrderByAggregateInput>;
 export const UserMaxOrderByAggregateInputObjectZodSchema = makeSchema();

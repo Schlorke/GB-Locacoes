@@ -9,10 +9,10 @@ export const CategoryGroupByResultSchema = z.array(z.object({
   bgColor: z.string(),
   fontColor: z.string(),
   slug: z.string(),
-  placement: z.string(),
-  customIcon: z.unknown(),
   createdAt: z.date(),
   updatedAt: z.date(),
+  placement: z.string(),
+  customIcon: z.unknown(),
   _count: z.object({
     id: z.number(),
     name: z.number(),
@@ -22,10 +22,10 @@ export const CategoryGroupByResultSchema = z.array(z.object({
     bgColor: z.number(),
     fontColor: z.number(),
     slug: z.number(),
-    placement: z.number(),
-    customIcon: z.number(),
     createdAt: z.number(),
     updatedAt: z.number(),
+    placement: z.number(),
+    customIcon: z.number(),
     equipments: z.number()
   }).optional(),
   _min: z.object({
@@ -37,9 +37,9 @@ export const CategoryGroupByResultSchema = z.array(z.object({
     bgColor: z.string().nullable(),
     fontColor: z.string().nullable(),
     slug: z.string().nullable(),
-    placement: z.string().nullable(),
     createdAt: z.date().nullable(),
-    updatedAt: z.date().nullable()
+    updatedAt: z.date().nullable(),
+    placement: z.string().nullable()
   }).nullable().optional(),
   _max: z.object({
     id: z.string().nullable(),
@@ -50,8 +50,8 @@ export const CategoryGroupByResultSchema = z.array(z.object({
     bgColor: z.string().nullable(),
     fontColor: z.string().nullable(),
     slug: z.string().nullable(),
-    placement: z.string().nullable(),
     createdAt: z.date().nullable(),
-    updatedAt: z.date().nullable()
+    updatedAt: z.date().nullable(),
+    placement: z.string().nullable()
   }).nullable().optional()
 }));

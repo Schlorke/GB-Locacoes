@@ -18,7 +18,6 @@ export const DeliveryGroupByResultSchema = z.array(z.object({
   _count: z.object({
     id: z.number(),
     rentalId: z.number(),
-    rental: z.number(),
     type: z.number(),
     status: z.number(),
     scheduledAt: z.number(),
@@ -32,7 +31,8 @@ export const DeliveryGroupByResultSchema = z.array(z.object({
     checklist: z.number(),
     notes: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    rental: z.number()
   }).optional(),
   _sum: z.object({
     distance: z.number().nullable()

@@ -3,7 +3,6 @@ import * as z from 'zod';
 export const AddressFindUniqueResultSchema = z.nullable(z.object({
   id: z.string(),
   userId: z.string(),
-  user: z.unknown(),
   street: z.string(),
   number: z.string(),
   complement: z.string().optional(),
@@ -13,5 +12,6 @@ export const AddressFindUniqueResultSchema = z.nullable(z.object({
   zipCode: z.string(),
   isPrimary: z.boolean(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
+  user: z.unknown()
 }));

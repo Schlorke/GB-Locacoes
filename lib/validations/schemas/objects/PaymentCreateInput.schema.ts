@@ -6,8 +6,8 @@ import { PaymentMethodSchema } from '../enums/PaymentMethod.schema';
 import { PaymentStatusSchema } from '../enums/PaymentStatus.schema';
 import { PaymentTypeSchema } from '../enums/PaymentType.schema';
 import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
-import { rentalsCreateNestedOneWithoutPaymentsInputObjectSchema as rentalsCreateNestedOneWithoutPaymentsInputObjectSchema } from './rentalsCreateNestedOneWithoutPaymentsInput.schema';
-import { QuoteCreateNestedOneWithoutPaymentsInputObjectSchema as QuoteCreateNestedOneWithoutPaymentsInputObjectSchema } from './QuoteCreateNestedOneWithoutPaymentsInput.schema'
+import { QuoteCreateNestedOneWithoutPaymentsInputObjectSchema as QuoteCreateNestedOneWithoutPaymentsInputObjectSchema } from './QuoteCreateNestedOneWithoutPaymentsInput.schema';
+import { rentalsCreateNestedOneWithoutPaymentsInputObjectSchema as rentalsCreateNestedOneWithoutPaymentsInputObjectSchema } from './rentalsCreateNestedOneWithoutPaymentsInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
@@ -34,8 +34,8 @@ const makeSchema = () => z.object({
   pixQrCode: z.string().optional().nullable(),
   metadata: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   createdAt: z.coerce.date().optional(),
-  rental: z.lazy(() => rentalsCreateNestedOneWithoutPaymentsInputObjectSchema).optional(),
-  quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentsInputObjectSchema).optional()
+  quote: z.lazy(() => QuoteCreateNestedOneWithoutPaymentsInputObjectSchema).optional(),
+  rental: z.lazy(() => rentalsCreateNestedOneWithoutPaymentsInputObjectSchema).optional()
 }).strict();
 export const PaymentCreateInputObjectSchema: z.ZodType<Prisma.PaymentCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.PaymentCreateInput>;
 export const PaymentCreateInputObjectZodSchema = makeSchema();

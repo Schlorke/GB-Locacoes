@@ -5,9 +5,9 @@ import { SortOrderSchema } from '../enums/SortOrder.schema'
 
 const makeSchema = () => z.object({
   total: SortOrderSchema.optional(),
-  lateFee: SortOrderSchema.optional(),
   extensionDays: SortOrderSchema.optional(),
-  extensionFee: SortOrderSchema.optional()
+  extensionFee: SortOrderSchema.optional(),
+  lateFee: SortOrderSchema.optional()
 }).strict();
 export const rentalsSumOrderByAggregateInputObjectSchema: z.ZodType<Prisma.rentalsSumOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsSumOrderByAggregateInput>;
 export const rentalsSumOrderByAggregateInputObjectZodSchema = makeSchema();

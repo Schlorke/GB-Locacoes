@@ -4,7 +4,6 @@ export const MaintenanceFindManyResultSchema = z.object({
   data: z.array(z.object({
   id: z.string(),
   equipmentId: z.string(),
-  equipment: z.unknown(),
   type: z.unknown(),
   scheduledAt: z.date(),
   completedAt: z.date().optional(),
@@ -16,7 +15,8 @@ export const MaintenanceFindManyResultSchema = z.object({
   technician: z.string().optional(),
   status: z.unknown(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
+  equipment: z.unknown()
 })),
   pagination: z.object({
   page: z.number().int().min(1),

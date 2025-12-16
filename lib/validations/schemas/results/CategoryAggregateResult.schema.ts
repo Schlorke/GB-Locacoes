@@ -9,10 +9,10 @@ export const CategoryAggregateResultSchema = z.object({  _count: z.object({
     bgColor: z.number(),
     fontColor: z.number(),
     slug: z.number(),
-    placement: z.number(),
-    customIcon: z.number(),
     createdAt: z.number(),
     updatedAt: z.number(),
+    placement: z.number(),
+    customIcon: z.number(),
     equipments: z.number()
   }).optional(),
   _min: z.object({
@@ -24,9 +24,9 @@ export const CategoryAggregateResultSchema = z.object({  _count: z.object({
     bgColor: z.string().nullable(),
     fontColor: z.string().nullable(),
     slug: z.string().nullable(),
-    placement: z.string().nullable(),
     createdAt: z.date().nullable(),
-    updatedAt: z.date().nullable()
+    updatedAt: z.date().nullable(),
+    placement: z.string().nullable()
   }).nullable().optional(),
   _max: z.object({
     id: z.string().nullable(),
@@ -37,7 +37,7 @@ export const CategoryAggregateResultSchema = z.object({  _count: z.object({
     bgColor: z.string().nullable(),
     fontColor: z.string().nullable(),
     slug: z.string().nullable(),
-    placement: z.string().nullable(),
     createdAt: z.date().nullable(),
-    updatedAt: z.date().nullable()
+    updatedAt: z.date().nullable(),
+    placement: z.string().nullable()
   }).nullable().optional()});

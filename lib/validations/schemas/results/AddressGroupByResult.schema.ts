@@ -16,7 +16,6 @@ export const AddressGroupByResultSchema = z.array(z.object({
   _count: z.object({
     id: z.number(),
     userId: z.number(),
-    user: z.number(),
     street: z.number(),
     number: z.number(),
     complement: z.number(),
@@ -26,7 +25,8 @@ export const AddressGroupByResultSchema = z.array(z.object({
     zipCode: z.number(),
     isPrimary: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    user: z.number()
   }).optional(),
   _min: z.object({
     id: z.string().nullable(),

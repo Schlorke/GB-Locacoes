@@ -10,10 +10,10 @@ export const CategoryResultSchema = z.object({
     bgColor: z.string(),
     fontColor: z.string(),
     slug: z.string(),
-    placement: z.string().nullable(),
-    customIcon: z.unknown().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
+    placement: z.string().nullable(),
+    customIcon: z.unknown().nullable(),
     equipments: z.array(z.unknown())
 }).strict();
 

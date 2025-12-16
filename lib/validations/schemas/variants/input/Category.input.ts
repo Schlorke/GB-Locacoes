@@ -10,10 +10,10 @@ export const CategoryInputSchema = z.object({
     bgColor: z.string(),
     fontColor: z.string(),
     slug: z.string(),
-    placement: z.string().optional().nullable(),
-    customIcon: z.unknown().optional().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
+    placement: z.string().optional().nullable(),
+    customIcon: z.unknown().optional().nullable(),
     equipments: z.array(z.unknown())
 }).strict();
 

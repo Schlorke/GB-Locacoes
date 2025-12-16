@@ -12,14 +12,14 @@ export const CartItemGroupByResultSchema = z.array(z.object({
   _count: z.object({
     id: z.number(),
     cartId: z.number(),
-    cart: z.number(),
     equipmentId: z.number(),
-    equipment: z.number(),
     quantity: z.number(),
     days: z.number(),
     pricePerDay: z.number(),
     finalPrice: z.number(),
-    createdAt: z.number()
+    createdAt: z.number(),
+    cart: z.number(),
+    equipment: z.number()
   }).optional(),
   _sum: z.object({
     quantity: z.number().nullable(),

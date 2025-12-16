@@ -1,4 +1,37 @@
-# 🛠️ Ferramentas de Formatação Markdown
+# 🛠️ Ferramentas e Scripts Utilitários
+
+Este documento lista todas as ferramentas e scripts utilitários disponíveis no
+projeto.
+
+## 📦 Scripts de Migração e Backup
+
+### 🔄 Script de Migração de Storage Supabase
+
+**Arquivo**: `scripts/migrate-storage.js`
+
+**Propósito**: Migra todos os arquivos de um bucket Supabase antigo para um
+novo, preservando estrutura completa de diretórios.
+
+**Documentação Completa**:
+[`migrate-storage-script.md`](./migrate-storage-script.md)
+
+**Uso Rápido**:
+
+```bash
+# Configure as variáveis de ambiente no .env
+node scripts/migrate-storage.js
+```
+
+**Variáveis Necessárias**:
+
+- `SUPABASE_URL_OLD`
+- `SUPABASE_SERVICE_ROLE_KEY_OLD`
+- `SUPABASE_URL_NEW`
+- `SUPABASE_SERVICE_ROLE_KEY_NEW`
+
+---
+
+## 🛠️ Ferramentas de Formatação Markdown
 
 Este guia explica como usar as ferramentas automatizadas para corrigir warnings
 de formatação em arquivos Markdown.

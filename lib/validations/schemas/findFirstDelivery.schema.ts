@@ -13,7 +13,6 @@ import { DeliveryScalarFieldEnumSchema } from './enums/DeliveryScalarFieldEnum.s
 export const DeliveryFindFirstSelectSchema: z.ZodType<Prisma.DeliverySelect> = z.object({
     id: z.boolean().optional(),
     rentalId: z.boolean().optional(),
-    rental: z.boolean().optional(),
     type: z.boolean().optional(),
     status: z.boolean().optional(),
     scheduledAt: z.boolean().optional(),
@@ -27,13 +26,13 @@ export const DeliveryFindFirstSelectSchema: z.ZodType<Prisma.DeliverySelect> = z
     checklist: z.boolean().optional(),
     notes: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    rental: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.DeliverySelect>;
 
 export const DeliveryFindFirstSelectZodSchema = z.object({
     id: z.boolean().optional(),
     rentalId: z.boolean().optional(),
-    rental: z.boolean().optional(),
     type: z.boolean().optional(),
     status: z.boolean().optional(),
     scheduledAt: z.boolean().optional(),
@@ -47,7 +46,8 @@ export const DeliveryFindFirstSelectZodSchema = z.object({
     checklist: z.boolean().optional(),
     notes: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    rental: z.boolean().optional()
   }).strict();
 
 export const DeliveryFindFirstSchema: z.ZodType<Prisma.DeliveryFindFirstArgs> = z.object({ select: DeliveryFindFirstSelectSchema.optional(), include: z.lazy(() => DeliveryIncludeObjectSchema.optional()), orderBy: z.union([DeliveryOrderByWithRelationInputObjectSchema, DeliveryOrderByWithRelationInputObjectSchema.array()]).optional(), where: DeliveryWhereInputObjectSchema.optional(), cursor: DeliveryWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([DeliveryScalarFieldEnumSchema, DeliveryScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.DeliveryFindFirstArgs>;

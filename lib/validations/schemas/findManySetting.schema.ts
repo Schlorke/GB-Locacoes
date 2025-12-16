@@ -17,7 +17,6 @@ export const SettingFindManySelectSchema: z.ZodType<Prisma.SettingSelect> = z.ob
     companyAddress: z.boolean().optional(),
     heroCarousel: z.boolean().optional(),
     contactEmail: z.boolean().optional(),
-    marketingEmail: z.boolean().optional(),
     socialLinks: z.boolean().optional(),
     seoTitle: z.boolean().optional(),
     seoDescription: z.boolean().optional(),
@@ -38,9 +37,10 @@ export const SettingFindManySelectSchema: z.ZodType<Prisma.SettingSelect> = z.ob
     securityConfig: z.boolean().optional(),
     customCss: z.boolean().optional(),
     customJs: z.boolean().optional(),
-    waveAnimation: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    marketingEmail: z.boolean().optional(),
+    waveAnimation: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.SettingSelect>;
 
 export const SettingFindManySelectZodSchema = z.object({
@@ -51,7 +51,6 @@ export const SettingFindManySelectZodSchema = z.object({
     companyAddress: z.boolean().optional(),
     heroCarousel: z.boolean().optional(),
     contactEmail: z.boolean().optional(),
-    marketingEmail: z.boolean().optional(),
     socialLinks: z.boolean().optional(),
     seoTitle: z.boolean().optional(),
     seoDescription: z.boolean().optional(),
@@ -72,9 +71,10 @@ export const SettingFindManySelectZodSchema = z.object({
     securityConfig: z.boolean().optional(),
     customCss: z.boolean().optional(),
     customJs: z.boolean().optional(),
-    waveAnimation: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    marketingEmail: z.boolean().optional(),
+    waveAnimation: z.boolean().optional()
   }).strict();
 
 export const SettingFindManySchema: z.ZodType<Prisma.SettingFindManyArgs> = z.object({ select: SettingFindManySelectSchema.optional(),  orderBy: z.union([SettingOrderByWithRelationInputObjectSchema, SettingOrderByWithRelationInputObjectSchema.array()]).optional(), where: SettingWhereInputObjectSchema.optional(), cursor: SettingWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([SettingScalarFieldEnumSchema, SettingScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.SettingFindManyArgs>;

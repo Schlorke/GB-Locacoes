@@ -3,7 +3,6 @@ import * as z from 'zod';
 export const ContractUpsertResultSchema = z.object({
   id: z.string(),
   rentalId: z.string(),
-  rental: z.unknown(),
   template: z.string().optional(),
   content: z.string().optional(),
   pdfUrl: z.string().optional(),
@@ -12,5 +11,6 @@ export const ContractUpsertResultSchema = z.object({
   zapSignId: z.string().optional(),
   status: z.unknown(),
   createdAt: z.date(),
-  updatedAt: z.date()
+  updatedAt: z.date(),
+  rental: z.unknown()
 });

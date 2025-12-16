@@ -11,7 +11,6 @@ const makeSchema = () => z.object({
   companyAddress: z.boolean().optional(),
   heroCarousel: z.boolean().optional(),
   contactEmail: z.boolean().optional(),
-  marketingEmail: z.boolean().optional(),
   socialLinks: z.boolean().optional(),
   seoTitle: z.boolean().optional(),
   seoDescription: z.boolean().optional(),
@@ -32,9 +31,10 @@ const makeSchema = () => z.object({
   securityConfig: z.boolean().optional(),
   customCss: z.boolean().optional(),
   customJs: z.boolean().optional(),
-  waveAnimation: z.boolean().optional(),
   createdAt: z.boolean().optional(),
-  updatedAt: z.boolean().optional()
+  updatedAt: z.boolean().optional(),
+  marketingEmail: z.boolean().optional(),
+  waveAnimation: z.boolean().optional()
 }).strict();
 export const SettingSelectObjectSchema: z.ZodType<Prisma.SettingSelect> = makeSchema() as unknown as z.ZodType<Prisma.SettingSelect>;
 export const SettingSelectObjectZodSchema = makeSchema();

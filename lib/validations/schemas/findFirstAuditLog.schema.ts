@@ -13,27 +13,27 @@ import { AuditLogScalarFieldEnumSchema } from './enums/AuditLogScalarFieldEnum.s
 export const AuditLogFindFirstSelectSchema: z.ZodType<Prisma.AuditLogSelect> = z.object({
     id: z.boolean().optional(),
     userId: z.boolean().optional(),
-    user: z.boolean().optional(),
     action: z.boolean().optional(),
     entity: z.boolean().optional(),
     entityId: z.boolean().optional(),
     changes: z.boolean().optional(),
     ipAddress: z.boolean().optional(),
     userAgent: z.boolean().optional(),
-    createdAt: z.boolean().optional()
+    createdAt: z.boolean().optional(),
+    user: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.AuditLogSelect>;
 
 export const AuditLogFindFirstSelectZodSchema = z.object({
     id: z.boolean().optional(),
     userId: z.boolean().optional(),
-    user: z.boolean().optional(),
     action: z.boolean().optional(),
     entity: z.boolean().optional(),
     entityId: z.boolean().optional(),
     changes: z.boolean().optional(),
     ipAddress: z.boolean().optional(),
     userAgent: z.boolean().optional(),
-    createdAt: z.boolean().optional()
+    createdAt: z.boolean().optional(),
+    user: z.boolean().optional()
   }).strict();
 
 export const AuditLogFindFirstSchema: z.ZodType<Prisma.AuditLogFindFirstArgs> = z.object({ select: AuditLogFindFirstSelectSchema.optional(), include: z.lazy(() => AuditLogIncludeObjectSchema.optional()), orderBy: z.union([AuditLogOrderByWithRelationInputObjectSchema, AuditLogOrderByWithRelationInputObjectSchema.array()]).optional(), where: AuditLogWhereInputObjectSchema.optional(), cursor: AuditLogWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([AuditLogScalarFieldEnumSchema, AuditLogScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.AuditLogFindFirstArgs>;

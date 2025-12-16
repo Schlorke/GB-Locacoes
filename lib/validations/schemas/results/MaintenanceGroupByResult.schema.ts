@@ -16,7 +16,6 @@ export const MaintenanceGroupByResultSchema = z.array(z.object({
   _count: z.object({
     id: z.number(),
     equipmentId: z.number(),
-    equipment: z.number(),
     type: z.number(),
     scheduledAt: z.number(),
     completedAt: z.number(),
@@ -28,7 +27,8 @@ export const MaintenanceGroupByResultSchema = z.array(z.object({
     technician: z.number(),
     status: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    equipment: z.number()
   }).optional(),
   _sum: z.object({
     cost: z.number().nullable(),

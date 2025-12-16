@@ -3,7 +3,6 @@ import * as z from 'zod';
 export const MaintenanceAggregateResultSchema = z.object({  _count: z.object({
     id: z.number(),
     equipmentId: z.number(),
-    equipment: z.number(),
     type: z.number(),
     scheduledAt: z.number(),
     completedAt: z.number(),
@@ -15,7 +14,8 @@ export const MaintenanceAggregateResultSchema = z.object({  _count: z.object({
     technician: z.number(),
     status: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    equipment: z.number()
   }).optional(),
   _sum: z.object({
     cost: z.number().nullable(),

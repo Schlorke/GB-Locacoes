@@ -6,7 +6,6 @@ import { rentalsArgsObjectSchema as rentalsArgsObjectSchema } from './rentalsArg
 const makeSchema = () => z.object({
   id: z.boolean().optional(),
   rentalId: z.boolean().optional(),
-  rental: z.union([z.boolean(), z.lazy(() => rentalsArgsObjectSchema)]).optional(),
   type: z.boolean().optional(),
   status: z.boolean().optional(),
   scheduledAt: z.boolean().optional(),
@@ -20,7 +19,8 @@ const makeSchema = () => z.object({
   checklist: z.boolean().optional(),
   notes: z.boolean().optional(),
   createdAt: z.boolean().optional(),
-  updatedAt: z.boolean().optional()
+  updatedAt: z.boolean().optional(),
+  rental: z.union([z.boolean(), z.lazy(() => rentalsArgsObjectSchema)]).optional()
 }).strict();
 export const DeliverySelectObjectSchema: z.ZodType<Prisma.DeliverySelect> = makeSchema() as unknown as z.ZodType<Prisma.DeliverySelect>;
 export const DeliverySelectObjectZodSchema = makeSchema();

@@ -3,7 +3,6 @@ import * as z from 'zod';
 export const EquipmentUnitAggregateResultSchema = z.object({  _count: z.object({
     id: z.number(),
     equipmentId: z.number(),
-    equipment: z.number(),
     uniqueCode: z.number(),
     status: z.number(),
     hourMeter: z.number(),
@@ -11,7 +10,8 @@ export const EquipmentUnitAggregateResultSchema = z.object({  _count: z.object({
     serialNumber: z.number(),
     notes: z.number(),
     createdAt: z.number(),
-    updatedAt: z.number()
+    updatedAt: z.number(),
+    equipment: z.number()
   }).optional(),
   _sum: z.object({
     hourMeter: z.number().nullable(),

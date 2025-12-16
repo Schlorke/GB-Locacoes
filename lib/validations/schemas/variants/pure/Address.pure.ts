@@ -4,7 +4,6 @@ import * as z from 'zod';
 export const AddressModelSchema = z.object({
     id: z.string(),
     userId: z.string(),
-    user: z.unknown(),
     street: z.string(),
     number: z.string(),
     complement: z.string().nullable(),
@@ -14,7 +13,8 @@ export const AddressModelSchema = z.object({
     zipCode: z.string(),
     isPrimary: z.boolean(),
     createdAt: z.date(),
-    updatedAt: z.date()
+    updatedAt: z.date(),
+    user: z.unknown()
 }).strict();
 
 export type AddressPureType = z.infer<typeof AddressModelSchema>;

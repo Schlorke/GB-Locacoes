@@ -5,7 +5,6 @@ import { EquipmentUnitStatusSchema } from '../../enums/EquipmentUnitStatus.schem
 export const EquipmentUnitModelSchema = z.object({
     id: z.string(),
     equipmentId: z.string(),
-    equipment: z.unknown(),
     uniqueCode: z.string(),
     status: EquipmentUnitStatusSchema,
     hourMeter: z.number().nullable(),
@@ -13,7 +12,8 @@ export const EquipmentUnitModelSchema = z.object({
     serialNumber: z.string().nullable(),
     notes: z.string().nullable(),
     createdAt: z.date(),
-    updatedAt: z.date()
+    updatedAt: z.date(),
+    equipment: z.unknown()
 }).strict();
 
 export type EquipmentUnitPureType = z.infer<typeof EquipmentUnitModelSchema>;

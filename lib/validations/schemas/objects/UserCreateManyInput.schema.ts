@@ -8,14 +8,14 @@ const makeSchema = () => z.object({
   name: z.string().optional().nullable(),
   email: z.string(),
   password: z.string().optional().nullable(),
-  phone: z.string().optional().nullable(),
-  cpf: z.string().optional().nullable(),
-  cnpj: z.string().optional().nullable(),
   role: RoleSchema.optional(),
   emailVerified: z.coerce.date().optional().nullable(),
   image: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional()
+  updatedAt: z.coerce.date().optional(),
+  cnpj: z.string().optional().nullable(),
+  cpf: z.string().optional().nullable(),
+  phone: z.string().optional().nullable()
 }).strict();
 export const UserCreateManyInputObjectSchema: z.ZodType<Prisma.UserCreateManyInput> = makeSchema() as unknown as z.ZodType<Prisma.UserCreateManyInput>;
 export const UserCreateManyInputObjectZodSchema = makeSchema();

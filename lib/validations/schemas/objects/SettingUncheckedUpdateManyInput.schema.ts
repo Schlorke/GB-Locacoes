@@ -16,7 +16,6 @@ const makeSchema = () => z.object({
   companyAddress: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   heroCarousel: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   contactEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
-  marketingEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   socialLinks: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   seoTitle: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   seoDescription: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -37,9 +36,10 @@ const makeSchema = () => z.object({
   securityConfig: z.union([JsonNullValueInputSchema, jsonSchema]).optional(),
   customCss: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   customJs: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
-  waveAnimation: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
   createdAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
-  updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional()
+  updatedAt: z.union([z.coerce.date(), z.lazy(() => DateTimeFieldUpdateOperationsInputObjectSchema)]).optional(),
+  marketingEmail: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
+  waveAnimation: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional()
 }).strict();
 export const SettingUncheckedUpdateManyInputObjectSchema: z.ZodType<Prisma.SettingUncheckedUpdateManyInput> = makeSchema() as unknown as z.ZodType<Prisma.SettingUncheckedUpdateManyInput>;
 export const SettingUncheckedUpdateManyInputObjectZodSchema = makeSchema();

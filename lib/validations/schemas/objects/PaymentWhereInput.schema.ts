@@ -14,10 +14,10 @@ import { PaymentTypeSchema } from '../enums/PaymentType.schema';
 import { DateTimeNullableFilterObjectSchema as DateTimeNullableFilterObjectSchema } from './DateTimeNullableFilter.schema';
 import { DateTimeFilterObjectSchema as DateTimeFilterObjectSchema } from './DateTimeFilter.schema';
 import { JsonNullableFilterObjectSchema as JsonNullableFilterObjectSchema } from './JsonNullableFilter.schema';
-import { RentalsNullableScalarRelationFilterObjectSchema as RentalsNullableScalarRelationFilterObjectSchema } from './RentalsNullableScalarRelationFilter.schema';
-import { rentalsWhereInputObjectSchema as rentalsWhereInputObjectSchema } from './rentalsWhereInput.schema';
 import { QuoteNullableScalarRelationFilterObjectSchema as QuoteNullableScalarRelationFilterObjectSchema } from './QuoteNullableScalarRelationFilter.schema';
-import { QuoteWhereInputObjectSchema as QuoteWhereInputObjectSchema } from './QuoteWhereInput.schema'
+import { QuoteWhereInputObjectSchema as QuoteWhereInputObjectSchema } from './QuoteWhereInput.schema';
+import { RentalsNullableScalarRelationFilterObjectSchema as RentalsNullableScalarRelationFilterObjectSchema } from './RentalsNullableScalarRelationFilter.schema';
+import { rentalsWhereInputObjectSchema as rentalsWhereInputObjectSchema } from './rentalsWhereInput.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const paymentwhereinputSchema = z.object({
@@ -48,8 +48,8 @@ const paymentwhereinputSchema = z.object({
   metadata: z.lazy(() => JsonNullableFilterObjectSchema).optional(),
   createdAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
   updatedAt: z.union([z.lazy(() => DateTimeFilterObjectSchema), z.coerce.date()]).optional(),
-  rental: z.union([z.lazy(() => RentalsNullableScalarRelationFilterObjectSchema), z.lazy(() => rentalsWhereInputObjectSchema)]).optional(),
-  quote: z.union([z.lazy(() => QuoteNullableScalarRelationFilterObjectSchema), z.lazy(() => QuoteWhereInputObjectSchema)]).optional()
+  quote: z.union([z.lazy(() => QuoteNullableScalarRelationFilterObjectSchema), z.lazy(() => QuoteWhereInputObjectSchema)]).optional(),
+  rental: z.union([z.lazy(() => RentalsNullableScalarRelationFilterObjectSchema), z.lazy(() => rentalsWhereInputObjectSchema)]).optional()
 }).strict();
 export const PaymentWhereInputObjectSchema: z.ZodType<Prisma.PaymentWhereInput> = paymentwhereinputSchema as unknown as z.ZodType<Prisma.PaymentWhereInput>;
 export const PaymentWhereInputObjectZodSchema = paymentwhereinputSchema;

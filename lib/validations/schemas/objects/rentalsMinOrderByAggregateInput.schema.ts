@@ -12,13 +12,13 @@ const makeSchema = () => z.object({
   userid: SortOrderSchema.optional(),
   createdat: SortOrderSchema.optional(),
   updatedat: SortOrderSchema.optional(),
-  quoteId: SortOrderSchema.optional(),
-  lateFee: SortOrderSchema.optional(),
-  extensionDays: SortOrderSchema.optional(),
-  extensionFee: SortOrderSchema.optional(),
   checkInAt: SortOrderSchema.optional(),
   checkOutAt: SortOrderSchema.optional(),
-  notes: SortOrderSchema.optional()
+  extensionDays: SortOrderSchema.optional(),
+  extensionFee: SortOrderSchema.optional(),
+  lateFee: SortOrderSchema.optional(),
+  notes: SortOrderSchema.optional(),
+  quoteId: SortOrderSchema.optional()
 }).strict();
 export const rentalsMinOrderByAggregateInputObjectSchema: z.ZodType<Prisma.rentalsMinOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.rentalsMinOrderByAggregateInput>;
 export const rentalsMinOrderByAggregateInputObjectZodSchema = makeSchema();

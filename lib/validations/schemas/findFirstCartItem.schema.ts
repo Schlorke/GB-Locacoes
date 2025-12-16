@@ -13,27 +13,27 @@ import { CartItemScalarFieldEnumSchema } from './enums/CartItemScalarFieldEnum.s
 export const CartItemFindFirstSelectSchema: z.ZodType<Prisma.CartItemSelect> = z.object({
     id: z.boolean().optional(),
     cartId: z.boolean().optional(),
-    cart: z.boolean().optional(),
     equipmentId: z.boolean().optional(),
-    equipment: z.boolean().optional(),
     quantity: z.boolean().optional(),
     days: z.boolean().optional(),
     pricePerDay: z.boolean().optional(),
     finalPrice: z.boolean().optional(),
-    createdAt: z.boolean().optional()
+    createdAt: z.boolean().optional(),
+    cart: z.boolean().optional(),
+    equipment: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.CartItemSelect>;
 
 export const CartItemFindFirstSelectZodSchema = z.object({
     id: z.boolean().optional(),
     cartId: z.boolean().optional(),
-    cart: z.boolean().optional(),
     equipmentId: z.boolean().optional(),
-    equipment: z.boolean().optional(),
     quantity: z.boolean().optional(),
     days: z.boolean().optional(),
     pricePerDay: z.boolean().optional(),
     finalPrice: z.boolean().optional(),
-    createdAt: z.boolean().optional()
+    createdAt: z.boolean().optional(),
+    cart: z.boolean().optional(),
+    equipment: z.boolean().optional()
   }).strict();
 
 export const CartItemFindFirstSchema: z.ZodType<Prisma.CartItemFindFirstArgs> = z.object({ select: CartItemFindFirstSelectSchema.optional(), include: z.lazy(() => CartItemIncludeObjectSchema.optional()), orderBy: z.union([CartItemOrderByWithRelationInputObjectSchema, CartItemOrderByWithRelationInputObjectSchema.array()]).optional(), where: CartItemWhereInputObjectSchema.optional(), cursor: CartItemWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([CartItemScalarFieldEnumSchema, CartItemScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.CartItemFindFirstArgs>;

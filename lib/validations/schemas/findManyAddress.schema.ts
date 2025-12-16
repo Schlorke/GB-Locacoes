@@ -13,7 +13,6 @@ import { AddressScalarFieldEnumSchema } from './enums/AddressScalarFieldEnum.sch
 export const AddressFindManySelectSchema: z.ZodType<Prisma.AddressSelect> = z.object({
     id: z.boolean().optional(),
     userId: z.boolean().optional(),
-    user: z.boolean().optional(),
     street: z.boolean().optional(),
     number: z.boolean().optional(),
     complement: z.boolean().optional(),
@@ -23,13 +22,13 @@ export const AddressFindManySelectSchema: z.ZodType<Prisma.AddressSelect> = z.ob
     zipCode: z.boolean().optional(),
     isPrimary: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    user: z.boolean().optional()
   }).strict() as unknown as z.ZodType<Prisma.AddressSelect>;
 
 export const AddressFindManySelectZodSchema = z.object({
     id: z.boolean().optional(),
     userId: z.boolean().optional(),
-    user: z.boolean().optional(),
     street: z.boolean().optional(),
     number: z.boolean().optional(),
     complement: z.boolean().optional(),
@@ -39,7 +38,8 @@ export const AddressFindManySelectZodSchema = z.object({
     zipCode: z.boolean().optional(),
     isPrimary: z.boolean().optional(),
     createdAt: z.boolean().optional(),
-    updatedAt: z.boolean().optional()
+    updatedAt: z.boolean().optional(),
+    user: z.boolean().optional()
   }).strict();
 
 export const AddressFindManySchema: z.ZodType<Prisma.AddressFindManyArgs> = z.object({ select: AddressFindManySelectSchema.optional(), include: z.lazy(() => AddressIncludeObjectSchema.optional()), orderBy: z.union([AddressOrderByWithRelationInputObjectSchema, AddressOrderByWithRelationInputObjectSchema.array()]).optional(), where: AddressWhereInputObjectSchema.optional(), cursor: AddressWhereUniqueInputObjectSchema.optional(), take: z.number().optional(), skip: z.number().optional(), distinct: z.union([AddressScalarFieldEnumSchema, AddressScalarFieldEnumSchema.array()]).optional() }).strict() as unknown as z.ZodType<Prisma.AddressFindManyArgs>;
