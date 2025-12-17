@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { CloseButton } from '@/components/ui/close-button'
 import { Input } from '@/components/ui/input'
 import { MessageCircle, Send } from 'lucide-react'
+import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 type MessageSender = 'bot' | 'user'
@@ -165,6 +166,14 @@ export default function WhatsAppFAB() {
     'conhecer todos os equipamentos disponíveis',
   ]
 
+  // Garante que o scroll do mouse atue dentro da área do chat,
+  // sem “vazar” para o scroll principal da página
+  const handleScrollWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    event.stopPropagation()
+    const target = event.currentTarget
+    target.scrollTop += event.deltaY
+  }
+
   return (
     <>
       {/* Estilos inline para garantir prioridade */}
@@ -222,7 +231,10 @@ export default function WhatsAppFAB() {
           {/* Messages + Quick Messages - área flexível */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Messages */}
-            <div className="flex-1 p-4 space-y-4 overflow-y-auto whatsapp-chat-scroll bg-gray-50">
+            <div
+              className="flex-1 p-4 space-y-4 overflow-y-auto overscroll-y-contain whatsapp-chat-scroll bg-gray-50"
+              onWheel={handleScrollWheel}
+            >
               {messages.map((msg) => (
                 <div
                   key={msg.id}
@@ -261,7 +273,10 @@ export default function WhatsAppFAB() {
                 <p className="text-xs text-gray-600 mb-2 font-medium">
                   Mensagens rápidas:
                 </p>
-                <div className="space-y-1 max-h-20 overflow-y-auto whatsapp-chat-scroll">
+                <div
+                  className="space-y-1 max-h-20 overflow-y-auto overscroll-y-contain whatsapp-chat-scroll"
+                  onWheel={handleScrollWheel}
+                >
                   {quickMessages.map((quickMsg, index) => (
                     <button
                       key={`quick-${index}-${quickMsg}`}
