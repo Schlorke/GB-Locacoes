@@ -70,6 +70,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Confirmação de exclusão de orçamento travava modal no admin**: Ao clicar em
+  "Excluir Permanentemente" em orçamentos rejeitados, a confirmação ficava atrás
+  do dialog Base UI e o focus trap bloqueava toda a página.
+  - **Causa Raiz**: `AlertDialog` usava `z-50` fora do `Dialog.BodyContent`,
+    enquanto o modal pai usa `z-[var(--layer-dialog)]`, deixando a confirmação
+    invisível e com overlay ativo.
+  - **Arquivos Modificados**:
+    - `app/admin/orcamentos/page.tsx`
+    - `components/ui/alert-dialog.tsx`
+  - **Data**: 2025-12-17
+
 - **Upload de avaria isolado do carrossel público**: O upload de fotos em
   "Registro de Perdas de Peças e Avarias" agora usa inputs únicos por instância,
   evitando que imagens de avaria sejam adicionadas ao carrossel público do

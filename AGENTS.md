@@ -219,49 +219,155 @@ Após QUALQUER implementação, execute esta checklist:
 
 ### 🟠 Dialogs aninhadas (Base UI)
 
-- Sempre que um botão interno de uma dialog precisar abrir outra dialog (ex.:
-  **Editar**, **Customizar**, **Configurar**), utilize o padrão oficial
-  documentado em `docs/features/dialog-lab.md` e implementado em
-  `app/playground/page.tsx`.
-- Reaproveite as classes globais:
-  - `BACKDROP_CLASSES`: "fixed inset-0 z-[var(--layer-dialog-backdrop)]
-    min-h-dvh bg-black/60 transition-all duração-150
-    data-[starting-style]:opacity-0 data-[ending-style]:opacity-0
-    dark:bg-black/70"
-  - `POPUP_CLASSES`: "fixed top-[calc(50%+1.25rem*var(--nested-dialogs))]
-    left-1/2 z-[var(--layer-dialog)] w-96 max-w-[calc(100vw-3rem)]
-    -translate-x-1/2 -translate-y-1/2 scale-[calc(1-0.1*var(--nested-dialogs))]
-    rounded-lg bg-gray-50 p-6 text-gray-900 outline outline-1 outline-gray-200
-    transition-all duração-150 data-[starting-style]:scale-90
-    data-[starting-style]:opacity-0 data-[ending-style]:scale-90
-    data-[ending-style]:opacity-0 data-[nested-dialog-open]:after:absolute
-    data-[nested-dialog-open]:after:inset-0
-    data-[nested-dialog-open]:after:rounded-[inherit]
-    data-[nested-dialog-open]:after:bg-black/5"
-- Ao abrir uma dialog aninhada, o pai deve receber `data-nested-parent` (setado
-  quando o filho estiver `open`) para deslocar-se levemente:
-  `"-data-[nested-parent]:translate-y-[0.85rem] data-[nested-parent]:scale-[0.985]"`.
-  Essa regra mantém o efeito visual do exemplo oficial da Base UI, com o dialog
-  pai recuando e a nova dialog em destaque.
-- O efeito de animação em camadas (`scale-[calc(1-0.1*var(--nested-dialogs))]` +
-  `data-[starting-style]`/`data-[ending-style]`) é obrigatório em **toda**
-  dialog aninhada; configure `data-nested`, `--nested-dialogs` e atributos do
-  Base UI exatamente como no playground para manter a fluidez, independentemente
-  das dimensões escolhidas.
-- Dimensões (largura, altura, `max-*`, padding etc.) devem seguir o layout e o
-  fluxo da tela em que a dialog está inserida; adapte medidas conforme o
-  contexto (ex.: criar categoria, editar equipamento, fluxo compacto) em vez de
-  replicar tamanhos fixos do playground.
-- Esses utilitários dependem dos atributos `data-nested` e `--nested-dialogs`
-  gerados pelo Base UI para animar a sobreposição corretamente; não modifique as
-  classes sem validar contra o playground.
-- **Importante**: o backdrop precisa permanecer `position: fixed` em todos os
-  navegadores (inclusive iOS). Não utilize mais
-  `supports-[-webkit-touch-callout]` para trocar o posicionamento — isso libera
-  a rolagem do fundo.
-- Mantenha o bloqueio de scroll global (`overflow-hidden` em `<html>` e
-  `<body>`) enquanto qualquer dialog estiver aberta, garantindo que camadas
-  adicionais não quebrem a experiência.
+> **⚠️ CRÍTICO**: Para implementar dialogs aninhadas com efeito visual (dialog
+> filha acima, dialog pai menor e mais abaixo), siga **EXATAMENTE** o padrão
+> documentado abaixo. Consulte `components/dialogs/category-dialog.tsx` (linhas
+> 1539-1636) como referência de implementação correta.
+
+#### **📋 PADRÃO OBRIGATÓRIO DE IMPLEMENTAÇÃO**
+
+**1. Estado para controlar a dialog aninhada:**
+
+```typescript
+const [nestedDialogOpen, setNestedDialogOpen] = useState(false)
+```
+
+**2. Dialog Pai - Configurar `data-nested-parent`:**
+
+A dialog pai **DEVE** receber o atributo `data-nested-parent` quando a dialog
+filha estiver aberta:
+
+```tsx
+<Dialog.Popup
+  variant="default"
+  data-nested-parent={nestedDialogOpen ? "" : undefined}
+>
+  <Dialog.Content>
+    {/* ... conteúdo da dialog pai ... */}
+    <Dialog.Body>
+      <Dialog.BodyViewport>
+        <Dialog.BodyContent>
+          {/* Conteúdo da dialog pai */}
+
+          {/* 3. Dialog Aninhada - Renderizar DENTRO do Dialog.BodyContent */}
+          {condition && (
+            <Dialog.Root
+              open={nestedDialogOpen}
+              onOpenChange={setNestedDialogOpen}
+            >
+              <Dialog.Portal>
+                <Dialog.Backdrop />
+                <Dialog.Popup variant="default">
+                  <Dialog.Content>
+                    {/* Conteúdo da dialog filha */}
+                  </Dialog.Content>
+                </Dialog.Popup>
+              </Dialog.Portal>
+            </Dialog.Root>
+          )}
+        </Dialog.BodyContent>
+      </Dialog.BodyViewport>
+    </Dialog.Body>
+  </Dialog.Content>
+</Dialog.Popup>
+```
+
+#### **🚨 REGRAS CRÍTICAS**
+
+1. **Dialog aninhada DEVE estar dentro do `Dialog.BodyContent` da dialog pai**:
+   - ❌ **NUNCA** renderize a dialog aninhada fora da dialog pai
+   - ❌ **NUNCA** renderize como componente separado no mesmo nível
+   - ✅ **SEMPRE** renderize dentro do `Dialog.BodyContent` da dialog pai
+
+2. **Dialog pai DEVE ter `data-nested-parent`**:
+
+   ```tsx
+   data-nested-parent={nestedDialogOpen ? '' : undefined}
+   ```
+
+   - Quando `nestedDialogOpen` é `true`, passa string vazia `''`
+   - Quando `false`, passa `undefined` para remover o atributo
+
+3. **Dialog filha DEVE usar `variant="default"`**:
+   - O `variant="default"` já inclui todas as classes CSS necessárias para o
+     efeito nested
+   - Não precisa adicionar `data-nested` manualmente - o Base UI gerencia
+     automaticamente
+
+#### **🎨 EFEITO VISUAL AUTOMÁTICO**
+
+O Base UI detecta automaticamente dialogs aninhadas e aplica o efeito através da
+variável CSS `--nested-dialogs`:
+
+**Dialog Filha (aninhada):**
+
+- Fica mais acima: `top-[calc(50%+1rem*var(--nested-dialogs))]`
+- Tamanho reduzido: `scale-[calc(1-0.1*var(--nested-dialogs))]`
+
+**Dialog Pai:**
+
+- Move para baixo: `translate-y-[0.85rem]` (quando tem `data-nested-parent`)
+- Tamanho reduzido: `scale-[0.985]` (quando tem `data-nested-parent`)
+
+**Resultado Visual:**
+
+- Dialog filha aparece acima e em destaque
+- Dialog pai recua levemente para baixo e fica menor
+- Efeito similar ao Sonner (toasts empilhados)
+
+#### **📚 EXEMPLO COMPLETO DE REFERÊNCIA**
+
+Consulte `components/dialogs/category-dialog.tsx`:
+
+- **Dialog Pai**: Linhas 1539-1545 (configuração `data-nested-parent`)
+- **Dialog Aninhada**: Linhas 1616-1636 (renderizada dentro do
+  `Dialog.BodyContent`)
+
+Consulte `components/dialogs/view-equipment-dialog.tsx`:
+
+- **Dialog Pai**: Linha 178 (configuração `data-nested-parent`)
+- **Dialog Aninhada**: Linhas 539-589 (renderizada dentro do
+  `Dialog.BodyContent`)
+
+#### **⚠️ ANTI-PADRÕES - NUNCA FAÇA**
+
+- ❌ **NUNCA** renderize a dialog aninhada fora da dialog pai
+- ❌ **NUNCA** renderize como componente separado no mesmo nível do JSX
+- ❌ **NUNCA** adicione `data-nested` manualmente na dialog filha
+- ❌ **NUNCA** remova o `variant="default"` da dialog filha
+- ❌ **NUNCA** esqueça de configurar `data-nested-parent` na dialog pai
+
+#### **✅ CHECKLIST DE IMPLEMENTAÇÃO**
+
+Antes de considerar uma dialog aninhada implementada corretamente:
+
+- [ ] Estado criado para controlar a dialog aninhada
+- [ ] Dialog pai tem `data-nested-parent={nestedDialogOpen ? '' : undefined}`
+- [ ] Dialog aninhada renderizada **DENTRO** do `Dialog.BodyContent` da dialog
+      pai
+- [ ] Dialog aninhada usa `variant="default"`
+- [ ] Dialog aninhada tem seu próprio `Dialog.Portal` e `Dialog.Backdrop`
+- [ ] Efeito visual funciona: dialog filha acima, dialog pai abaixo e menor
+- [ ] Testado em diferentes resoluções
+
+#### **🔧 DETALHES TÉCNICOS**
+
+- **Base UI gerencia automaticamente**: O Base UI detecta quando há uma dialog
+  aninhada dentro do conteúdo da dialog pai e aplica `--nested-dialogs`
+  automaticamente
+- **Classes CSS**: As classes necessárias já estão em `components/ui/dialog.tsx`
+  no `POPUP_CLASS_VARIANTS.default`
+- **Dimensões**: Ajuste `max-w`, `max-h`, `w`, `h` conforme necessário, mas
+  mantenha `variant="default"` para preservar o efeito nested
+- **Backdrop**: Cada dialog aninhada deve ter seu próprio `Dialog.Backdrop`
+- **Portal**: Cada dialog aninhada deve ter seu próprio `Dialog.Portal`
+
+#### **📖 DOCUMENTAÇÃO ADICIONAL**
+
+- `docs/features/dialog-lab.md` - Documentação completa do sistema de dialogs
+- `app/playground/page.tsx` - Exemplos interativos de dialogs
+- `components/dialogs/category-dialog.tsx` - Implementação de referência
+  completa
 
 ### 🔢 Stack global de camadas (z-index)
 

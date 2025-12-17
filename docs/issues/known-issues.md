@@ -5,6 +5,58 @@
 
 ---
 
+## 24. Dialog de exclusão de orçamento travava página (Admin)
+
+### ?? Problema
+
+**Data da Ocorrência**: 2025-12-17 **Severidade**: Alta (bloqueava fluxo admin)
+**Status**: ? Resolvido
+
+#### Descrição
+
+Ao clicar em **"Excluir Permanentemente"** dentro do modal de detalhes de
+orçamentos rejeitados em `/admin/orcamentos`, a confirmação não aparecia e toda
+a interface ficava travada (nenhum clique respondia).
+
+#### Causa Raiz
+
+- Modal pai usa Base UI (`Dialog` com `z-[var(--layer-dialog)] = 90`)
+- A confirmação era um `AlertDialog` com `z-50` renderizado fora do
+  `Dialog.BodyContent`, ficando **atrás** do modal pai
+- O focus trap do `AlertDialog` bloqueava interações mesmo sem exibir conteúdo
+
+### ? Solução Implementada
+
+- Migração das confirmações (exclusão, ajuste de valor e multa) para dialogs
+  aninhadas Base UI dentro do `Dialog.BodyContent`, com
+  `data-nested-parent={nestedDialogOpen ? "" : undefined}`
+- Estados sincronizados para fechar dialogs filhas ao fechar o modal pai,
+  evitando overlays órfãos
+- `AlertDialog` atualizado para usar tokens de camada
+  (`--layer-dialog-backdrop`/`--layer-dialog`) e evitar novos conflitos de
+  z-index
+
+#### Arquivos Modificados
+
+1. `app/admin/orcamentos/page.tsx`
+2. `components/ui/alert-dialog.tsx`
+
+#### Como Validar
+
+1. `pnpm dev`
+2. Acessar `/admin/orcamentos`, abrir um orçamento **rejeitado** e clicar em
+   "Excluir Permanentemente"
+3. A confirmação deve aparecer acima do modal, permitir cancelar/confirmar e a
+   página volta a responder ao fechar
+
+#### Armadilhas a Evitar
+
+- NÃO usar `AlertDialog` fora do `Dialog.BodyContent` quando o modal pai for
+  Base UI
+- Respeitar tokens de camada (`--layer-dialog*`) para overlays/modais
+
+---
+
 ## 23. Deploy na Vercel falhando - Limite de Cron Jobs Excedido
 
 ### 🎯 Problema

@@ -9,16 +9,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog } from '@/components/ui/dialog'
 import { ViewToggle } from '@/components/ui/view-toggle'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
 import { toast } from 'sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -166,6 +156,7 @@ function AdminQuotesPage() {
   const [showPriceAdjustmentDialog, setShowPriceAdjustmentDialog] =
     useState(false)
   const [showLateFeeDialog, setShowLateFeeDialog] = useState(false)
+  const [nestedDialogOpen, setNestedDialogOpen] = useState(false)
   const [priceAdjustmentValue, setPriceAdjustmentValue] = useState('')
   const [priceAdjustmentReason, setPriceAdjustmentReason] = useState('')
   const [isAdjustingPrice, setIsAdjustingPrice] = useState(false)
@@ -309,6 +300,23 @@ function AdminQuotesPage() {
     setTableQuotes([])
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredQuotes])
+
+  useEffect(() => {
+    setNestedDialogOpen(
+      showDeleteDialog || showPriceAdjustmentDialog || showLateFeeDialog
+    )
+  }, [showDeleteDialog, showPriceAdjustmentDialog, showLateFeeDialog])
+
+  useEffect(() => {
+    if (!selectedQuote) {
+      setShowDeleteDialog(false)
+      setShowPriceAdjustmentDialog(false)
+      setShowLateFeeDialog(false)
+      setCalculatedLateFee(null)
+      setPriceAdjustmentValue('')
+      setPriceAdjustmentReason('')
+    }
+  }, [selectedQuote])
 
   const updateQuoteStatus = async (
     quoteId: string,
@@ -914,7 +922,11 @@ function AdminQuotesPage() {
         >
           <Dialog.Backdrop />
           <Dialog.Portal>
-            <Dialog.Popup variant="default" className="max-w-4xl">
+            <Dialog.Popup
+              variant="default"
+              data-nested-parent={nestedDialogOpen ? '' : undefined}
+              className="max-w-4xl"
+            >
               <Dialog.Content>
                 <Dialog.Header>
                   <Dialog.HeaderIcon>
@@ -1531,6 +1543,276 @@ function AdminQuotesPage() {
                               </CardContent>
                             </Card>
                           )}
+
+                          {/* Dialogs aninhadas dentro do dialog pai */}
+                          <Dialog.Root
+                            open={showDeleteDialog}
+                            onOpenChange={setShowDeleteDialog}
+                          >
+                            <Dialog.Portal>
+                              <Dialog.Backdrop />
+                              <Dialog.Popup
+                                variant="default"
+                                className="max-w-md h-auto max-h-[70vh] md:h-auto md:max-h-[70vh]"
+                              >
+                                <Dialog.Content>
+                                  <Dialog.Header className="flex-col items-start gap-1 pb-3">
+                                    <Dialog.Title className="text-lg font-semibold text-gray-900">
+                                      Excluir Orçamento Permanentemente?
+                                    </Dialog.Title>
+                                  </Dialog.Header>
+                                  <Dialog.Body className="flex-none">
+                                    <Dialog.BodyViewport className="max-h-[50vh] overflow-y-auto">
+                                      <Dialog.BodyContent className="space-y-2 py-2">
+                                        <p className="text-sm text-gray-600">
+                                          Esta ação não pode ser desfeita. O
+                                          orçamento de{' '}
+                                          <strong>{selectedQuote.name}</strong>{' '}
+                                          será removido com todos os itens e
+                                          registros associados.
+                                        </p>
+                                      </Dialog.BodyContent>
+                                    </Dialog.BodyViewport>
+                                  </Dialog.Body>
+                                  <Dialog.Footer className="flex flex-row gap-3">
+                                    <Button
+                                      variant="outline"
+                                      onClick={() => setShowDeleteDialog(false)}
+                                      disabled={isDeleting}
+                                      className="flex-1"
+                                    >
+                                      Cancelar
+                                    </Button>
+                                    <Button
+                                      variant="default"
+                                      onClick={() =>
+                                        selectedQuote &&
+                                        deleteQuote(selectedQuote.id)
+                                      }
+                                      disabled={isDeleting}
+                                      className="flex-1"
+                                    >
+                                      {isDeleting
+                                        ? 'Excluindo...'
+                                        : 'Confirmar'}
+                                    </Button>
+                                  </Dialog.Footer>
+                                </Dialog.Content>
+                              </Dialog.Popup>
+                            </Dialog.Portal>
+                          </Dialog.Root>
+
+                          <Dialog.Root
+                            open={showPriceAdjustmentDialog}
+                            onOpenChange={setShowPriceAdjustmentDialog}
+                          >
+                            <Dialog.Portal>
+                              <Dialog.Backdrop />
+                              <Dialog.Popup
+                                variant="default"
+                                className="max-w-xl h-auto max-h-[75vh] md:h-auto md:max-h-[75vh]"
+                              >
+                                <Dialog.Content>
+                                  <Dialog.Header className="flex-col items-start gap-2">
+                                    <Dialog.Title className="flex items-center gap-2 text-xl font-semibold text-gray-900">
+                                      <DollarSign className="w-5 h-5" />
+                                      Ajustar Valor Final do Orçamento
+                                    </Dialog.Title>
+                                    <Dialog.Description className="text-sm text-gray-600">
+                                      Edite o valor final do orçamento. A
+                                      justificativa é obrigatória e será exibida
+                                      junto com o valor original e o valor final
+                                      editado.
+                                    </Dialog.Description>
+                                  </Dialog.Header>
+                                  <Dialog.Body className="flex-none">
+                                    <Dialog.BodyViewport className="max-h-[55vh] overflow-y-auto">
+                                      <Dialog.BodyContent className="space-y-4">
+                                        <div>
+                                          <Label htmlFor="original-value">
+                                            Valor Original
+                                          </Label>
+                                          <Input
+                                            id="original-value"
+                                            value={formatCurrency(
+                                              selectedQuote.originalTotal ||
+                                                selectedQuote.totalPrice ||
+                                                0
+                                            )}
+                                            readOnly
+                                            className="mt-1 bg-gray-50"
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label htmlFor="final-value">
+                                            Valor Final Editado{' '}
+                                            <span className="text-red-500">
+                                              *
+                                            </span>
+                                          </Label>
+                                          <Input
+                                            id="final-value"
+                                            type="number"
+                                            step="0.01"
+                                            min="0"
+                                            value={priceAdjustmentValue}
+                                            onChange={(e) =>
+                                              setPriceAdjustmentValue(
+                                                e.target.value
+                                              )
+                                            }
+                                            placeholder="0.00"
+                                            className="mt-1"
+                                          />
+                                        </div>
+                                        <div>
+                                          <Label htmlFor="adjustment-reason">
+                                            Justificativa do Ajuste{' '}
+                                            <span className="text-red-500">
+                                              *
+                                            </span>
+                                          </Label>
+                                          <Textarea
+                                            id="adjustment-reason"
+                                            value={priceAdjustmentReason}
+                                            onChange={(e) =>
+                                              setPriceAdjustmentReason(
+                                                e.target.value
+                                              )
+                                            }
+                                            placeholder="Ex: Taxa de quebra/avaria, ajuste por perdas de pe‡as, etc."
+                                            rows={4}
+                                            className="mt-1"
+                                            required
+                                          />
+                                          <p className="text-xs text-gray-500 mt-1">
+                                            Esta justificativa será exibida para
+                                            o cliente junto com o valor original
+                                            e o valor final editado.
+                                          </p>
+                                        </div>
+                                      </Dialog.BodyContent>
+                                    </Dialog.BodyViewport>
+                                  </Dialog.Body>
+                                  <Dialog.Footer className="flex-col-reverse sm:flex-row gap-3">
+                                    <Button
+                                      variant="outline"
+                                      disabled={isAdjustingPrice}
+                                      onClick={() => {
+                                        setPriceAdjustmentValue('')
+                                        setPriceAdjustmentReason('')
+                                        setShowPriceAdjustmentDialog(false)
+                                      }}
+                                      className="w-full sm:w-auto"
+                                    >
+                                      Cancelar
+                                    </Button>
+                                    <Button
+                                      onClick={() =>
+                                        selectedQuote &&
+                                        adjustQuotePrice(selectedQuote.id)
+                                      }
+                                      disabled={
+                                        isAdjustingPrice ||
+                                        !priceAdjustmentValue ||
+                                        !priceAdjustmentReason.trim()
+                                      }
+                                      className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white"
+                                    >
+                                      {isAdjustingPrice
+                                        ? 'Ajustando...'
+                                        : 'Ajustar Valor'}
+                                    </Button>
+                                  </Dialog.Footer>
+                                </Dialog.Content>
+                              </Dialog.Popup>
+                            </Dialog.Portal>
+                          </Dialog.Root>
+
+                          <Dialog.Root
+                            open={showLateFeeDialog}
+                            onOpenChange={setShowLateFeeDialog}
+                          >
+                            <Dialog.Portal>
+                              <Dialog.Backdrop />
+                              <Dialog.Popup
+                                variant="default"
+                                className="max-w-md h-auto max-h-[70vh] md:h-auto md:max-h-[70vh]"
+                              >
+                                <Dialog.Content>
+                                  <Dialog.Header className="flex-col items-start gap-2">
+                                    <Dialog.Title className="flex items-center gap-2 text-xl font-semibold text-gray-900">
+                                      <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                                      Multa por Atraso
+                                    </Dialog.Title>
+                                    <Dialog.Description className="text-sm text-gray-600">
+                                      {calculatedLateFee
+                                        ? 'Multa calculada com base no atraso detectado.'
+                                        : 'Calculando multa por atraso...'}
+                                    </Dialog.Description>
+                                  </Dialog.Header>
+                                  {calculatedLateFee && (
+                                    <Dialog.Body className="flex-none">
+                                      <Dialog.BodyViewport className="max-h-[50vh] overflow-y-auto">
+                                        <Dialog.BodyContent className="space-y-3">
+                                          <p className="text-sm text-gray-700">
+                                            Multa calculada automaticamente
+                                            baseada no atraso de{' '}
+                                            <strong>
+                                              {calculatedLateFee.daysLate}{' '}
+                                              dia(s)
+                                            </strong>
+                                            .
+                                          </p>
+                                          <p className="text-base font-semibold text-red-700">
+                                            Valor calculado:{' '}
+                                            <span className="text-red-600">
+                                              {formatCurrency(
+                                                calculatedLateFee.lateFee
+                                              )}
+                                            </span>
+                                          </p>
+                                          <p className="text-sm text-gray-600">
+                                            Ao aprovar, a multa será adicionada
+                                            ao valor final do orçamento e uma
+                                            justificativa será criada
+                                            automaticamente.
+                                          </p>
+                                        </Dialog.BodyContent>
+                                      </Dialog.BodyViewport>
+                                    </Dialog.Body>
+                                  )}
+                                  {calculatedLateFee && (
+                                    <Dialog.Footer className="flex-col-reverse sm:flex-row gap-3">
+                                      <Button
+                                        variant="outline"
+                                        disabled={isUpdating}
+                                        onClick={() => {
+                                          setCalculatedLateFee(null)
+                                          setShowLateFeeDialog(false)
+                                        }}
+                                        className="w-full sm:w-auto"
+                                      >
+                                        Cancelar
+                                      </Button>
+                                      <Button
+                                        onClick={() =>
+                                          selectedQuote &&
+                                          approveLateFee(selectedQuote.id)
+                                        }
+                                        disabled={isUpdating}
+                                        className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white"
+                                      >
+                                        {isUpdating
+                                          ? 'Aprovando...'
+                                          : 'Aprovar e Aplicar Multa'}
+                                      </Button>
+                                    </Dialog.Footer>
+                                  )}
+                                </Dialog.Content>
+                              </Dialog.Popup>
+                            </Dialog.Portal>
+                          </Dialog.Root>
                         </div>
                       ) : null}
                     </Dialog.BodyContent>
@@ -1673,11 +1955,19 @@ function AdminQuotesPage() {
                   <Dialog.Footer>
                     <div className="flex gap-3 w-full">
                       <Button
+                        variant="outline"
+                        onClick={() => setSelectedQuote(null)}
+                        disabled={isDeleting}
+                        className="flex-1"
+                      >
+                        Cancelar
+                      </Button>
+                      <Button
                         onClick={() => setShowDeleteDialog(true)}
                         disabled={isDeleting}
                         variant="destructive"
                         size="default"
-                        className="flex-1"
+                        className="flex-1 hover:text-destructive-foreground"
                       >
                         <Trash2 className="w-4 h-4 mr-2" />
                         Excluir Permanentemente
@@ -1689,186 +1979,6 @@ function AdminQuotesPage() {
             </Dialog.Popup>
           </Dialog.Portal>
         </Dialog.Root>
-
-        {/* Dialog de Confirmação de Exclusão */}
-        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                Excluir Orçamento Permanentemente?
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Esta ação não pode ser desfeita. O orçamento de{' '}
-                <strong>{selectedQuote?.name}</strong> será excluído
-                permanentemente do sistema, incluindo todos os seus itens e
-                informações relacionadas.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>
-                Cancelar
-              </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => selectedQuote && deleteQuote(selectedQuote.id)}
-                disabled={isDeleting}
-                className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
-              >
-                {isDeleting ? 'Excluindo...' : 'Excluir Permanentemente'}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
-        {/* Dialog de Ajuste de Valor Final */}
-        <AlertDialog
-          open={showPriceAdjustmentDialog}
-          onOpenChange={setShowPriceAdjustmentDialog}
-        >
-          <AlertDialogContent className="max-w-md">
-            <AlertDialogHeader>
-              <AlertDialogTitle className="flex items-center gap-2">
-                <DollarSign className="w-5 h-5" />
-                Ajustar Valor Final do Orçamento
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Edite o valor final do orçamento. A justificativa é obrigatória
-                e será exibida para o cliente junto com o valor original e o
-                valor final editado.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <div className="space-y-4 py-4">
-              <div>
-                <Label htmlFor="original-value">Valor Original</Label>
-                <Input
-                  id="original-value"
-                  value={formatCurrency(
-                    selectedQuote?.originalTotal ||
-                      selectedQuote?.totalPrice ||
-                      0
-                  )}
-                  readOnly
-                  className="mt-1 bg-gray-50"
-                />
-              </div>
-              <div>
-                <Label htmlFor="final-value">
-                  Valor Final Editado <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="final-value"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={priceAdjustmentValue}
-                  onChange={(e) => setPriceAdjustmentValue(e.target.value)}
-                  placeholder="0.00"
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="adjustment-reason">
-                  Justificativa do Ajuste{' '}
-                  <span className="text-red-500">*</span>
-                </Label>
-                <Textarea
-                  id="adjustment-reason"
-                  value={priceAdjustmentReason}
-                  onChange={(e) => setPriceAdjustmentReason(e.target.value)}
-                  placeholder="Ex: Taxa de quebra/avaria, ajuste por perdas de peças, etc."
-                  rows={4}
-                  className="mt-1"
-                  required
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Esta justificativa será exibida para o cliente junto com o
-                  valor original e o valor final editado.
-                </p>
-              </div>
-            </div>
-            <AlertDialogFooter>
-              <AlertDialogCancel
-                disabled={isAdjustingPrice}
-                onClick={() => {
-                  setPriceAdjustmentValue('')
-                  setPriceAdjustmentReason('')
-                }}
-              >
-                Cancelar
-              </AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() =>
-                  selectedQuote && adjustQuotePrice(selectedQuote.id)
-                }
-                disabled={
-                  isAdjustingPrice ||
-                  !priceAdjustmentValue ||
-                  !priceAdjustmentReason.trim()
-                }
-                className="bg-orange-600 hover:bg-orange-700"
-              >
-                {isAdjustingPrice ? 'Ajustando...' : 'Ajustar Valor'}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
-        {/* Dialog de Cálculo e Aprovação de Multa */}
-        <AlertDialog
-          open={showLateFeeDialog}
-          onOpenChange={setShowLateFeeDialog}
-        >
-          <AlertDialogContent className="max-w-md">
-            <AlertDialogHeader>
-              <AlertDialogTitle className="flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-yellow-600" />
-                Multa por Atraso
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                {calculatedLateFee ? (
-                  <div className="space-y-2">
-                    <p>
-                      Multa calculada automaticamente baseada no atraso de{' '}
-                      <strong>{calculatedLateFee.daysLate} dia(s)</strong>.
-                    </p>
-                    <p>
-                      Valor calculado:{' '}
-                      <strong className="text-red-600">
-                        {formatCurrency(calculatedLateFee.lateFee)}
-                      </strong>
-                    </p>
-                    <p className="text-sm text-gray-600 mt-3">
-                      Ao aprovar, a multa será adicionada ao valor final do
-                      orçamento e uma justificativa será criada automaticamente.
-                    </p>
-                  </div>
-                ) : (
-                  'Calculando multa por atraso...'
-                )}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            {calculatedLateFee && (
-              <AlertDialogFooter>
-                <AlertDialogCancel
-                  disabled={isUpdating}
-                  onClick={() => {
-                    setCalculatedLateFee(null)
-                  }}
-                >
-                  Cancelar
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() =>
-                    selectedQuote && approveLateFee(selectedQuote.id)
-                  }
-                  disabled={isUpdating}
-                  className="bg-red-600 hover:bg-red-700"
-                >
-                  {isUpdating ? 'Aprovando...' : 'Aprovar e Aplicar Multa'}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            )}
-          </AlertDialogContent>
-        </AlertDialog>
       </div>
     </div>
   )

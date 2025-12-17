@@ -167,449 +167,469 @@ export function ViewEquipmentDialog({
 
   return (
     <>
-      <Dialog.Root
-        open={isOpen}
-        onOpenChange={onClose}
-      >
+      <Dialog.Root open={isOpen} onOpenChange={onClose}>
         <Dialog.Portal>
           <Dialog.Backdrop />
           <Dialog.Popup
             variant="default"
             data-nested-parent={partsLossDialogOpen ? '' : undefined}
           >
-          <Dialog.Content>
-            <Dialog.Header data-dialog-section="header">
-              <Dialog.HeaderIcon>
-                <Eye className="h-4 w-4" />
-              </Dialog.HeaderIcon>
-              <Dialog.Title className="text-xl font-semibold text-gray-800">
-                Visualizar Equipamento
-              </Dialog.Title>
-              <Dialog.CloseButton aria-label="Fechar dialog" />
-            </Dialog.Header>
+            <Dialog.Content>
+              <Dialog.Header data-dialog-section="header">
+                <Dialog.HeaderIcon>
+                  <Eye className="h-4 w-4" />
+                </Dialog.HeaderIcon>
+                <Dialog.Title className="text-xl font-semibold text-gray-800">
+                  Visualizar Equipamento
+                </Dialog.Title>
+                <Dialog.CloseButton aria-label="Fechar dialog" />
+              </Dialog.Header>
 
-            <Dialog.Body>
-              <Dialog.BodyViewport style={{ scrollbarGutter: 'stable' }}>
-                <Dialog.BodyContent>
-                  {equipment && (
-                    <>
-                      {/* Preview do Equipamento com Carrossel */}
-                      <div className="bg-white rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-3 xs:rounded-md">
-                        <div className="flex items-center justify-between mb-4 w-full">
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-sm font-semibold text-slate-700">
-                              Preview do Equipamento
-                            </h3>
-                            <HybridTooltip
-                              content={
-                                <div className="max-w-xs leading-relaxed">
-                                  <span className="inline-flex items-start gap-1">
-                                    <span>💡</span>
-                                    <span>
-                                      <strong className="font-semibold">
-                                        Background Padrão:
-                                      </strong>{' '}
-                                      Quando nenhuma imagem estiver configurada,
-                                      o fundo laranja atual será exibido
-                                      automaticamente.
+              <Dialog.Body>
+                <Dialog.BodyViewport style={{ scrollbarGutter: 'stable' }}>
+                  <Dialog.BodyContent>
+                    {equipment && (
+                      <>
+                        {/* Preview do Equipamento com Carrossel */}
+                        <div className="bg-white rounded-lg p-5 border border-slate-200 shadow-sm relative w-full max-w-full xs:p-3 xs:rounded-md">
+                          <div className="flex items-center justify-between mb-4 w-full">
+                            <div className="flex items-center gap-2">
+                              <h3 className="text-sm font-semibold text-slate-700">
+                                Preview do Equipamento
+                              </h3>
+                              <HybridTooltip
+                                content={
+                                  <div className="max-w-xs leading-relaxed">
+                                    <span className="inline-flex items-start gap-1">
+                                      <span>💡</span>
+                                      <span>
+                                        <strong className="font-semibold">
+                                          Background Padrão:
+                                        </strong>{' '}
+                                        Quando nenhuma imagem estiver
+                                        configurada, o fundo laranja atual será
+                                        exibido automaticamente.
+                                      </span>
                                     </span>
-                                  </span>
-                                </div>
-                              }
-                            >
-                              <Info
-                                className="size-5 !text-gray-700 cursor-help transition-colors hover:!text-orange-600"
-                                aria-hidden="true"
-                              />
-                            </HybridTooltip>
-                          </div>
-                          {equipment.images && equipment.images.length > 1 && (
-                            <div className="text-xs text-slate-500 bg-white/70 px-2 py-1 rounded-full">
-                              {currentImageIndex + 1} de{' '}
-                              {equipment.images.length}
-                            </div>
-                          )}
-                        </div>
-
-                        {equipment.images && equipment.images.length > 0 ? (
-                          <div className="relative group">
-                            <div
-                              className={`w-full h-64 mb-4 bg-gray-100 rounded-lg overflow-hidden relative cursor-pointer transition-all duration-300 ${
-                                isImageZoomed ? 'transform scale-105' : ''
-                              }`}
-                              onClick={() => setIsImageZoomed(!isImageZoomed)}
-                            >
-                              <motion.div
-                                key={currentImageIndex}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 0.4, ease: 'easeOut' }}
-                                className="w-full h-full"
+                                  </div>
+                                }
                               >
-                                <Image
-                                  src={
-                                    equipment.images[currentImageIndex] || ''
-                                  }
-                                  alt={`${equipment.name} - Imagem ${currentImageIndex + 1}`}
-                                  width={500}
-                                  height={300}
-                                  className={`max-w-full max-h-full object-contain transition-all duration-500 ${
-                                    isImageZoomed
-                                      ? 'object-contain bg-black/90'
-                                      : ''
-                                  }`}
+                                <Info
+                                  className="size-5 !text-gray-700 cursor-help transition-colors hover:!text-orange-600"
+                                  aria-hidden="true"
                                 />
-                              </motion.div>
-
-                              {equipment.images.length > 1 && (
-                                <>
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      prevImage()
-                                    }}
-                                    aria-label="Imagem anterior"
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
-                                  >
-                                    <ChevronLeft className="w-5 h-5 text-gray-700" />
-                                  </button>
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation()
-                                      nextImage()
-                                    }}
-                                    aria-label="Próxima imagem"
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
-                                  >
-                                    <ChevronRight className="w-5 h-5 text-gray-700" />
-                                  </button>
-                                </>
+                              </HybridTooltip>
+                            </div>
+                            {equipment.images &&
+                              equipment.images.length > 1 && (
+                                <div className="text-xs text-slate-500 bg-white/70 px-2 py-1 rounded-full">
+                                  {currentImageIndex + 1} de{' '}
+                                  {equipment.images.length}
+                                </div>
                               )}
+                          </div>
 
-                              {equipment.images.length > 1 && (
-                                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-                                  {equipment.images.map((_, index) => (
-                                    <motion.button
-                                      key={index}
+                          {equipment.images && equipment.images.length > 0 ? (
+                            <div className="relative group">
+                              <div
+                                className={`w-full h-64 mb-4 bg-gray-100 rounded-lg overflow-hidden relative cursor-pointer transition-all duration-300 ${
+                                  isImageZoomed ? 'transform scale-105' : ''
+                                }`}
+                                onClick={() => setIsImageZoomed(!isImageZoomed)}
+                              >
+                                <motion.div
+                                  key={currentImageIndex}
+                                  initial={{ opacity: 0, scale: 0.95 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{
+                                    duration: 0.4,
+                                    ease: 'easeOut',
+                                  }}
+                                  className="w-full h-full"
+                                >
+                                  <Image
+                                    src={
+                                      equipment.images[currentImageIndex] || ''
+                                    }
+                                    alt={`${equipment.name} - Imagem ${currentImageIndex + 1}`}
+                                    width={500}
+                                    height={300}
+                                    className={`max-w-full max-h-full object-contain transition-all duration-500 ${
+                                      isImageZoomed
+                                        ? 'object-contain bg-black/90'
+                                        : ''
+                                    }`}
+                                  />
+                                </motion.div>
+
+                                {equipment.images.length > 1 && (
+                                  <>
+                                    <button
                                       onClick={(e) => {
                                         e.stopPropagation()
-                                        goToImage(index)
+                                        prevImage()
                                       }}
-                                      whileHover={{ scale: 1.2 }}
-                                      whileTap={{ scale: 0.9 }}
-                                      aria-label={`Ir para imagem ${index + 1}`}
-                                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                        index === currentImageIndex
-                                          ? 'bg-white shadow-lg scale-125'
-                                          : 'bg-white/60 hover:bg-white/80'
-                                      }`}
-                                    />
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-
-                            {equipment.images.length > 1 && (
-                              <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
-                                className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
-                              >
-                                {equipment.images.map((image, index) => (
-                                  <motion.button
-                                    key={index}
-                                    onClick={() => goToImage(index)}
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    aria-label={`Selecionar imagem ${index + 1}`}
-                                    className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                                      index === currentImageIndex
-                                        ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
-                                        : 'border-gray-200 hover:border-gray-300'
-                                    }`}
-                                  >
-                                    <Image
-                                      src={image}
-                                      alt={`Thumbnail ${index + 1}`}
-                                      width={64}
-                                      height={48}
-                                      className="max-w-full max-h-full object-contain"
-                                    />
-                                  </motion.button>
-                                ))}
-                              </motion.div>
-                            )}
-                          </div>
-                        ) : (
-                          <div className="w-full h-64 mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
-                            <div className="text-center">
-                              <Package className="w-16 h-16 text-gray-300 mx-auto mb-2" />
-                              <p className="text-sm text-gray-500">
-                                Sem imagens disponíveis
-                              </p>
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="text-center">
-                          <h4 className="text-lg font-semibold text-slate-800 mb-2">
-                            {equipment.name}
-                          </h4>
-                          <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
-                            {equipment.description || 'Sem descrição'}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Informações Detalhadas */}
-                      <div className="space-y-4 w-full max-w-full">
-                        <div
-                          className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm relative"
-                          style={{
-                            borderLeft: `4px solid ${equipment.category?.bgColor || '#3b82f6'}`,
-                          }}
-                        >
-                          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
-                            <Package className="w-4 h-4" />
-                            Informações do Equipamento
-                          </h3>
-                          <div className="grid grid-cols-2 gap-4 max-w-full">
-                            <div className="space-y-4 min-w-0 max-w-full">
-                              <div className="flex items-start gap-3">
-                                <Package className="w-4 h-4 text-gray-400 mt-0.5" />
-                                <div>
-                                  <div className="text-xs text-gray-500">
-                                    Nome
-                                  </div>
-                                  <div className="font-medium text-sm">
-                                    {equipment.name}
-                                  </div>
-                                </div>
-                              </div>
-
-                              {equipment.description && (
-                                <div className="flex items-start gap-3">
-                                  <FileText className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                                  <div className="flex-1 min-w-0 max-w-full">
-                                    <div className="text-xs text-gray-500">
-                                      Descrição
-                                    </div>
-                                    <div
-                                      className="font-medium text-sm break-words hyphens-auto leading-relaxed"
-                                      title={equipment.description}
-                                      style={{
-                                        wordBreak: 'break-word',
-                                        overflowWrap: 'break-word',
-                                        hyphens: 'auto',
-                                      }}
+                                      aria-label="Imagem anterior"
+                                      className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
                                     >
-                                      {equipment.description}
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
+                                      <ChevronLeft className="w-5 h-5 text-gray-700" />
+                                    </button>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation()
+                                        nextImage()
+                                      }}
+                                      aria-label="Próxima imagem"
+                                      className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
+                                    >
+                                      <ChevronRight className="w-5 h-5 text-gray-700" />
+                                    </button>
+                                  </>
+                                )}
 
-                              <div className="flex items-start gap-3">
-                                <Calendar className="w-4 h-4 text-gray-400 mt-0.5" />
-                                <div>
-                                  <div className="text-xs text-gray-500">
-                                    Criado em
+                                {equipment.images.length > 1 && (
+                                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                                    {equipment.images.map((_, index) => (
+                                      <motion.button
+                                        key={index}
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          goToImage(index)
+                                        }}
+                                        whileHover={{ scale: 1.2 }}
+                                        whileTap={{ scale: 0.9 }}
+                                        aria-label={`Ir para imagem ${index + 1}`}
+                                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                          index === currentImageIndex
+                                            ? 'bg-white shadow-lg scale-125'
+                                            : 'bg-white/60 hover:bg-white/80'
+                                        }`}
+                                      />
+                                    ))}
                                   </div>
-                                  <div className="font-medium text-sm">
-                                    {formatDate(equipment.createdAt)}
-                                  </div>
-                                </div>
+                                )}
+                              </div>
+
+                              {equipment.images.length > 1 && (
+                                <motion.div
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: 0.2 }}
+                                  className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide"
+                                >
+                                  {equipment.images.map((image, index) => (
+                                    <motion.button
+                                      key={index}
+                                      onClick={() => goToImage(index)}
+                                      whileHover={{ scale: 1.05 }}
+                                      whileTap={{ scale: 0.95 }}
+                                      aria-label={`Selecionar imagem ${index + 1}`}
+                                      className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                                        index === currentImageIndex
+                                          ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
+                                          : 'border-gray-200 hover:border-gray-300'
+                                      }`}
+                                    >
+                                      <Image
+                                        src={image}
+                                        alt={`Thumbnail ${index + 1}`}
+                                        width={64}
+                                        height={48}
+                                        className="max-w-full max-h-full object-contain"
+                                      />
+                                    </motion.button>
+                                  ))}
+                                </motion.div>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="w-full h-64 mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
+                              <div className="text-center">
+                                <Package className="w-16 h-16 text-gray-300 mx-auto mb-2" />
+                                <p className="text-sm text-gray-500">
+                                  Sem imagens disponíveis
+                                </p>
                               </div>
                             </div>
+                          )}
 
-                            <div className="space-y-4 min-w-0 max-w-full">
-                              {equipment.category && (
+                          <div className="text-center">
+                            <h4 className="text-lg font-semibold text-slate-800 mb-2">
+                              {equipment.name}
+                            </h4>
+                            <p className="text-xs text-slate-500 italic max-w-xs mx-auto leading-relaxed">
+                              {equipment.description || 'Sem descrição'}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Informações Detalhadas */}
+                        <div className="space-y-4 w-full max-w-full">
+                          <div
+                            className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm relative"
+                            style={{
+                              borderLeft: `4px solid ${equipment.category?.bgColor || '#3b82f6'}`,
+                            }}
+                          >
+                            <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+                              <Package className="w-4 h-4" />
+                              Informações do Equipamento
+                            </h3>
+                            <div className="grid grid-cols-2 gap-4 max-w-full">
+                              <div className="space-y-4 min-w-0 max-w-full">
                                 <div className="flex items-start gap-3">
-                                  <Tag className="w-4 h-4 text-gray-400 mt-0.5" />
+                                  <Package className="w-4 h-4 text-gray-400 mt-0.5" />
                                   <div>
                                     <div className="text-xs text-gray-500">
-                                      Categoria
+                                      Nome
                                     </div>
-                                    <Badge
-                                      style={{
-                                        backgroundColor:
-                                          equipment.category.bgColor ||
-                                          '#f0f9ff',
-                                        color:
-                                          equipment.category.fontColor ||
-                                          '#0c4a6e',
-                                      }}
-                                      className="text-xs inline-flex items-center gap-1 font-medium px-2.5 py-0.5 rounded-full border-0"
-                                    >
-                                      {equipment.category.icon &&
-                                        renderIcon(
-                                          equipment.category.icon,
-                                          equipment.category.iconColor
-                                        )}
-                                      {equipment.category.name}
-                                    </Badge>
+                                    <div className="font-medium text-sm">
+                                      {equipment.name}
+                                    </div>
                                   </div>
                                 </div>
-                              )}
 
-                              <div className="flex items-start gap-3">
-                                <DollarSign className="w-4 h-4 text-gray-400 mt-0.5" />
-                                <div>
-                                  <div className="text-xs text-gray-500">
-                                    Preço por dia
+                                {equipment.description && (
+                                  <div className="flex items-start gap-3">
+                                    <FileText className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                                    <div className="flex-1 min-w-0 max-w-full">
+                                      <div className="text-xs text-gray-500">
+                                        Descrição
+                                      </div>
+                                      <div
+                                        className="font-medium text-sm break-words hyphens-auto leading-relaxed"
+                                        title={equipment.description}
+                                        style={{
+                                          wordBreak: 'break-word',
+                                          overflowWrap: 'break-word',
+                                          hyphens: 'auto',
+                                        }}
+                                      >
+                                        {equipment.description}
+                                      </div>
+                                    </div>
                                   </div>
-                                  <div className="font-medium text-sm text-green-600">
-                                    {formatPrice(equipment.pricePerDay)}
-                                  </div>
-                                </div>
-                              </div>
-
-                              <div className="flex items-start gap-3">
-                                {equipment.isAvailable ? (
-                                  <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                                ) : (
-                                  <XCircle className="w-4 h-4 text-red-500 mt-0.5" />
                                 )}
-                                <div>
-                                  <div className="text-xs text-gray-500">
-                                    Status
-                                  </div>
-                                  <div
-                                    className={`font-medium text-sm ${equipment.isAvailable ? 'text-green-600' : 'text-red-600'}`}
-                                  >
-                                    {equipment.isAvailable
-                                      ? 'Disponível'
-                                      : 'Indisponível'}
+
+                                <div className="flex items-start gap-3">
+                                  <Calendar className="w-4 h-4 text-gray-400 mt-0.5" />
+                                  <div>
+                                    <div className="text-xs text-gray-500">
+                                      Criado em
+                                    </div>
+                                    <div className="font-medium text-sm">
+                                      {formatDate(equipment.createdAt)}
+                                    </div>
                                   </div>
                                 </div>
                               </div>
 
-                              {/* Registro de Perdas de Peças */}
-                              {(equipment.partsLossCount !== undefined &&
-                                equipment.partsLossCount > 0) ||
-                              (equipment.partsLossHistory &&
-                                equipment.partsLossHistory.length > 0) ? (
-                                <div className="pt-4 border-t border-gray-200 mt-4">
-                                  <div className="flex items-start gap-3 mb-3">
-                                    <Package className="w-4 h-4 text-red-500 mt-0.5" />
-                                    <div className="flex-1">
-                                      <div className="text-xs font-semibold text-red-700 mb-1">
-                                        Registro de Perdas de Peças
+                              <div className="space-y-4 min-w-0 max-w-full">
+                                {equipment.category && (
+                                  <div className="flex items-start gap-3">
+                                    <Tag className="w-4 h-4 text-gray-400 mt-0.5" />
+                                    <div>
+                                      <div className="text-xs text-gray-500">
+                                        Categoria
                                       </div>
-                                      <div className="text-lg font-bold text-red-900">
-                                        {equipment.partsLossCount || 0} perda(s)
-                                        registrada(s)
-                                      </div>
+                                      <Badge
+                                        style={{
+                                          backgroundColor:
+                                            equipment.category.bgColor ||
+                                            '#f0f9ff',
+                                          color:
+                                            equipment.category.fontColor ||
+                                            '#0c4a6e',
+                                        }}
+                                        className="text-xs inline-flex items-center gap-1 font-medium px-2.5 py-0.5 rounded-full border-0"
+                                      >
+                                        {equipment.category.icon &&
+                                          renderIcon(
+                                            equipment.category.icon,
+                                            equipment.category.iconColor
+                                          )}
+                                        {equipment.category.name}
+                                      </Badge>
                                     </div>
                                   </div>
-                                  {equipment.partsLossHistory &&
-                                    equipment.partsLossHistory.length > 0 && (
-                                      <>
-                                        <Button
-                                          type="button"
-                                          variant="outline"
-                                          onClick={() => setPartsLossDialogOpen(true)}
-                                          className="w-full mt-3 border-red-200 hover:bg-red-50 hover:border-red-300 text-red-700"
-                                          size="sm"
-                                        >
-                                          <AlertTriangle className="w-4 h-4 mr-2" />
-                                          Ver Detalhes das Perdas
-                                        </Button>
-                                      </>
-                                    )}
+                                )}
+
+                                <div className="flex items-start gap-3">
+                                  <DollarSign className="w-4 h-4 text-gray-400 mt-0.5" />
+                                  <div>
+                                    <div className="text-xs text-gray-500">
+                                      Preço por dia
+                                    </div>
+                                    <div className="font-medium text-sm text-green-600">
+                                      {formatPrice(equipment.pricePerDay)}
+                                    </div>
+                                  </div>
                                 </div>
-                              ) : null}
+
+                                <div className="flex items-start gap-3">
+                                  {equipment.isAvailable ? (
+                                    <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
+                                  ) : (
+                                    <XCircle className="w-4 h-4 text-red-500 mt-0.5" />
+                                  )}
+                                  <div>
+                                    <div className="text-xs text-gray-500">
+                                      Status
+                                    </div>
+                                    <div
+                                      className={`font-medium text-sm ${equipment.isAvailable ? 'text-green-600' : 'text-red-600'}`}
+                                    >
+                                      {equipment.isAvailable
+                                        ? 'Disponível'
+                                        : 'Indisponível'}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
+
+                          {/* Registro de Perdas de Peças - Bloco Independente */}
+                          {(equipment.partsLossCount !== undefined &&
+                            equipment.partsLossCount > 0) ||
+                          (equipment.partsLossHistory &&
+                            equipment.partsLossHistory.length > 0) ? (
+                            <div
+                              className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm relative"
+                              style={{
+                                borderLeft: '4px solid #ef4444',
+                              }}
+                            >
+                              <div className="flex items-center justify-between mb-3">
+                                <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                                  <AlertTriangle className="w-4 h-4 text-red-500" />
+                                  Registro de Perdas de Peças
+                                </h3>
+                                {equipment.partsLossHistory &&
+                                  equipment.partsLossHistory.length > 0 && (
+                                    <Button
+                                      type="button"
+                                      variant="outline"
+                                      onClick={() =>
+                                        setPartsLossDialogOpen(true)
+                                      }
+                                      className="border border-gray-200 text-red-700"
+                                      size="sm"
+                                    >
+                                      <AlertTriangle className="w-4 h-4 mr-2" />
+                                      Ver Detalhes
+                                    </Button>
+                                  )}
+                              </div>
+                              <div className="flex items-start gap-3">
+                                <Package className="w-4 h-4 text-red-500 mt-0.5" />
+                                <div>
+                                  <div className="text-xs text-gray-500">
+                                    Total de Perdas
+                                  </div>
+                                  <div className="text-lg font-bold text-red-900">
+                                    {equipment.partsLossCount || 0} perda(s)
+                                    registrada(s)
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ) : null}
                         </div>
-                      </div>
-                    </>
-                  )}
-                </Dialog.BodyContent>
-              </Dialog.BodyViewport>
-            </Dialog.Body>
+                      </>
+                    )}
 
-            <Dialog.Footer data-dialog-section="footer">
-              <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
-                <Button
-                  variant="outline"
-                  onClick={onClose}
-                  className="flex-1 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300"
-                >
-                  <X className="w-4 h-4 mr-2" />
-                  Fechar
-                </Button>
-                <Button
-                  onClick={() => {
-                    if (equipment) {
-                      onClose()
-                      onEdit(equipment)
-                    }
-                  }}
-                  className="flex-1 h-10 shadow-md transition-all duration-300 hover:shadow-lg"
-                >
-                  <Edit className="w-4 h-4 mr-2 transition-colors duration-200" />
-                  Editar Equipamento
-                </Button>
-              </div>
-            </Dialog.Footer>
-          </Dialog.Content>
-          </Dialog.Popup>
-        </Dialog.Portal>
-      </Dialog.Root>
+                    {/* Dialog Nested para Detalhes das Perdas - Renderizada dentro do conteúdo da dialog pai */}
+                    {equipment &&
+                      equipment.partsLossHistory &&
+                      equipment.partsLossHistory.length > 0 && (
+                        <Dialog.Root
+                          open={partsLossDialogOpen}
+                          onOpenChange={setPartsLossDialogOpen}
+                        >
+                          <Dialog.Portal>
+                            <Dialog.Backdrop />
+                            <Dialog.Popup variant="default">
+                              <Dialog.Content>
+                                <Dialog.Header data-dialog-section="header">
+                                  <Dialog.HeaderIcon>
+                                    <AlertTriangle className="h-4 w-4" />
+                                  </Dialog.HeaderIcon>
+                                  <Dialog.Title className="text-xl font-semibold text-gray-800">
+                                    Detalhes das Perdas de Peças e Avarias
+                                  </Dialog.Title>
+                                  <Dialog.CloseButton aria-label="Fechar dialog" />
+                                </Dialog.Header>
 
-      {/* Dialog Nested para Detalhes das Perdas */}
-      {equipment && equipment.partsLossHistory && equipment.partsLossHistory.length > 0 && (
-        <Dialog.Root
-          open={partsLossDialogOpen}
-          onOpenChange={setPartsLossDialogOpen}
-        >
-          <Dialog.Portal>
-            <Dialog.Backdrop />
-            <Dialog.Popup variant="default" className="max-w-4xl max-h-[90vh]">
-              <Dialog.Content>
-                <Dialog.Header data-dialog-section="header">
-                  <Dialog.HeaderIcon>
-                    <AlertTriangle className="h-4 w-4" />
-                  </Dialog.HeaderIcon>
-                  <Dialog.Title className="text-xl font-semibold text-gray-800">
-                    Detalhes das Perdas de Peças e Avarias
-                  </Dialog.Title>
-                  <Dialog.CloseButton aria-label="Fechar dialog" />
-                </Dialog.Header>
+                                <Dialog.Body>
+                                  <Dialog.BodyViewport
+                                    style={{ scrollbarGutter: 'stable' }}
+                                  >
+                                    <Dialog.BodyContent>
+                                      <div className="space-y-6">
+                                        {equipment.partsLossHistory.map(
+                                          (loss, index) => (
+                                            <PartsLossDetailCard
+                                              key={index}
+                                              loss={loss}
+                                              index={index}
+                                            />
+                                          )
+                                        )}
+                                      </div>
+                                    </Dialog.BodyContent>
+                                  </Dialog.BodyViewport>
+                                </Dialog.Body>
 
-                <Dialog.Body>
-                  <Dialog.BodyViewport style={{ scrollbarGutter: 'stable' }}>
-                    <Dialog.BodyContent>
-                      <div className="space-y-6">
-                        {equipment.partsLossHistory.map((loss, index) => (
-                          <PartsLossDetailCard
-                            key={index}
-                            loss={loss}
-                            index={index}
-                          />
-                        ))}
-                      </div>
-                    </Dialog.BodyContent>
-                  </Dialog.BodyViewport>
-                </Dialog.Body>
+                                <Dialog.Footer data-dialog-section="footer">
+                                  <Button
+                                    variant="outline"
+                                    onClick={() =>
+                                      setPartsLossDialogOpen(false)
+                                    }
+                                    className="w-full"
+                                  >
+                                    <X className="w-4 h-4 mr-2" />
+                                    Fechar
+                                  </Button>
+                                </Dialog.Footer>
+                              </Dialog.Content>
+                            </Dialog.Popup>
+                          </Dialog.Portal>
+                        </Dialog.Root>
+                      )}
+                  </Dialog.BodyContent>
+                </Dialog.BodyViewport>
+              </Dialog.Body>
 
-                <Dialog.Footer data-dialog-section="footer">
+              <Dialog.Footer data-dialog-section="footer">
+                <div className="flex gap-4 w-full xs:gap-2 flex-wrap">
                   <Button
                     variant="outline"
-                    onClick={() => setPartsLossDialogOpen(false)}
-                    className="w-full"
+                    onClick={onClose}
+                    className="flex-1 h-10 rounded-lg border border-slate-200 hover:bg-slate-50 bg-transparent shadow-md hover:scale-105 hover:shadow-lg transition-all duration-300"
                   >
                     <X className="w-4 h-4 mr-2" />
                     Fechar
                   </Button>
-                </Dialog.Footer>
-              </Dialog.Content>
-            </Dialog.Popup>
-          </Dialog.Portal>
-        </Dialog.Root>
-      )}
+                  <Button
+                    onClick={() => {
+                      if (equipment) {
+                        onClose()
+                        onEdit(equipment)
+                      }
+                    }}
+                    className="flex-1 h-10 shadow-md transition-all duration-300 hover:shadow-lg"
+                  >
+                    <Edit className="w-4 h-4 mr-2 transition-colors duration-200" />
+                    Editar Equipamento
+                  </Button>
+                </div>
+              </Dialog.Footer>
+            </Dialog.Content>
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
     </>
   )
 }
@@ -678,13 +698,17 @@ function PartsLossDetailCard({
         </div>
         <div>
           <div className="text-xs text-gray-500 mb-1">Quantidade</div>
-          <div className="text-sm font-medium text-red-900">{loss.quantity}</div>
+          <div className="text-sm font-medium text-red-900">
+            {loss.quantity}
+          </div>
         </div>
       </div>
 
       {loss.images && loss.images.length > 0 ? (
         <div className="mt-4">
-          <div className="text-xs text-gray-500 mb-2">Fotos da Avaria/Perda</div>
+          <div className="text-xs text-gray-500 mb-2">
+            Fotos da Avaria/Perda
+          </div>
           <div className="relative group">
             <div className="w-full h-64 bg-gray-100 rounded-lg overflow-hidden relative">
               <motion.div

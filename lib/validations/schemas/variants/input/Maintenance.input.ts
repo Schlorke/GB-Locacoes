@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { MaintenanceTypeSchema } from '../../enums/MaintenanceType.schema';
 import { MaintenanceStatusSchema } from '../../enums/MaintenanceStatus.schema';

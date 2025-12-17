@@ -1,4 +1,5 @@
 import Decimal from 'decimal.js'
+import { prisma } from './prisma'
 
 export interface LateFeeConfig {
   dailyRate?: number // Taxa diária de multa (ex: 0.05 = 5% ao dia)
@@ -93,4 +94,96 @@ export const DEFAULT_LATE_FEE_CONFIG: LateFeeConfig = {
   maxDays: 30, // Máximo de 30 dias para calcular
   minAmount: 50, // Mínimo de R$ 50,00
   maxAmount: 5000, // Máximo de R$ 5.000,00
+}
+
+/**
+ * Calcula e aplica multas por atraso em lote para orçamentos elegíveis.
+ *
+ * Regra de negócio:
+ * - Considera apenas orçamentos com data de término passada (endDate < hoje)
+ * - Status deve ser APPROVED ou COMPLETED
+ * - Não sobrescreve multas aprovadas
+ * - Apenas grava/atualiza o campo lateFee; aprovação continua manual
+ */
+export async function calculateAndApplyLateFees() {
+  const now = new Date()
+
+  const quotes = await prisma.quote.findMany({
+    where: {
+      endDate: {
+        lt: now,
+      },
+      status: {
+        in: ['APPROVED', 'COMPLETED'],
+      },
+      OR: [{ lateFeeApproved: null }, { lateFeeApproved: false }],
+    },
+    select: {
+      id: true,
+      total: true,
+      originalTotal: true,
+      endDate: true,
+      lateFee: true,
+    },
+  })
+
+  let processed = 0
+  let updated = 0
+  const errors: Array<{ id: string; error: string }> = []
+
+  for (const quote of quotes) {
+    processed += 1
+
+    if (!quote.endDate) {
+      continue
+    }
+
+    try {
+      const baseValue = quote.originalTotal
+        ? Number(quote.originalTotal)
+        : Number(quote.total)
+
+      const result = calculateLateFee(
+        baseValue,
+        new Date(quote.endDate),
+        now,
+        DEFAULT_LATE_FEE_CONFIG
+      )
+
+      if (result.daysLate <= 0 || result.fee.lte(0)) {
+        continue
+      }
+
+      const currentLateFee =
+        quote.lateFee !== null && quote.lateFee !== undefined
+          ? new Decimal(quote.lateFee as unknown as number)
+          : null
+
+      if (currentLateFee && currentLateFee.eq(result.fee)) {
+        continue
+      }
+
+      await prisma.quote.update({
+        where: { id: quote.id },
+        data: {
+          lateFee: result.fee.toNumber(),
+        },
+      })
+
+      updated += 1
+    } catch (error) {
+      errors.push({
+        id: quote.id,
+        error: error instanceof Error ? error.message : String(error),
+      })
+    }
+  }
+
+  return {
+    processedQuotes: processed,
+    updatedQuotes: updated,
+    failedQuotes: errors.length,
+    errors,
+    timestamp: now.toISOString(),
+  }
 }

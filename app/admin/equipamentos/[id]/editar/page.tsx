@@ -373,6 +373,138 @@ export default function EditarEquipamento() {
     setIsPartsLossCalendarOpen(false)
   }, [])
 
+  // Handler para salvar/adicionar registro de perda
+  const handleSavePartsLoss = useCallback(async () => {
+    if (
+      newPartsLossDate &&
+      newPartsLossDescription.trim() &&
+      newPartsLossQuantity
+    ) {
+      const quantity = parseInt(newPartsLossQuantity) || 0
+      const newLoss = {
+        date: newPartsLossDate,
+        description: newPartsLossDescription.trim(),
+        quantity,
+        images: newPartsLossImages,
+      }
+
+      // Calcular novos valores antes de atualizar estado
+      let updatedHistory: typeof formData.partsLossHistory
+      let updatedCount: number
+      let previousHistory: typeof formData.partsLossHistory
+      let previousCount: number
+
+      // Usar forma funcional para pegar estado atual e calcular novos valores
+      setFormData((prev) => {
+        previousHistory = prev.partsLossHistory
+        previousCount = prev.partsLossCount || 0
+
+        if (editingPartsLossIndex !== null) {
+          // Atualizar registro existente
+          const oldLoss = prev.partsLossHistory?.[editingPartsLossIndex]
+          const oldQuantity = oldLoss?.quantity || 0
+          const newHistory = [...(prev.partsLossHistory || [])]
+          newHistory[editingPartsLossIndex] = newLoss
+
+          updatedHistory = newHistory
+          updatedCount = previousCount - oldQuantity + quantity
+
+          return {
+            ...prev,
+            partsLossHistory: newHistory,
+            partsLossCount: updatedCount,
+          }
+        } else {
+          // Adicionar novo registro
+          updatedHistory = [...(prev.partsLossHistory || []), newLoss]
+          updatedCount = previousCount + quantity
+
+          return {
+            ...prev,
+            partsLossHistory: updatedHistory,
+            partsLossCount: updatedCount,
+          }
+        }
+      })
+
+      // Salvar imediatamente no backend usando formData atualizado
+      try {
+        // Construir dados atualizados baseado no estado atual
+        // Usar setFormData para pegar o estado mais recente de forma síncrona
+        let currentFormData: FormData | null = null
+        setFormData((prev) => {
+          currentFormData = {
+            ...prev,
+            partsLossHistory: updatedHistory,
+            partsLossCount: updatedCount,
+          }
+          return currentFormData
+        })
+
+        // Aguardar um tick para garantir que o estado foi atualizado
+        await new Promise((resolve) => setTimeout(resolve, 0))
+
+        if (!currentFormData) {
+          throw new Error('Erro ao obter dados do formulário')
+        }
+
+        const response = await fetch(`/api/admin/equipments/${params.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(currentFormData),
+        })
+
+        if (!response.ok) {
+          throw new Error('Erro ao salvar alteração')
+        }
+
+        if (editingPartsLossIndex !== null) {
+          toast.success('Registro atualizado!', {
+            description: 'Registro de perda atualizado com sucesso.',
+          })
+        } else {
+          toast.success('Perda registrada!', {
+            description: 'Registro de perda adicionado com sucesso.',
+          })
+        }
+
+        // Limpar formulário
+        setNewPartsLossDate('')
+        setNewPartsLossSelectedDate(null)
+        setNewPartsLossDescription('')
+        setNewPartsLossQuantity('')
+        setNewPartsLossImages([])
+        setEditingPartsLossIndex(null)
+        setIsPartsLossCalendarOpen(false)
+      } catch (error) {
+        console.error('Erro ao salvar registro de perda:', error)
+        // Reverter estado local em caso de erro
+        setFormData((prev) => ({
+          ...prev,
+          partsLossHistory: previousHistory,
+          partsLossCount: previousCount,
+        }))
+        toast.error('Erro ao salvar registro', {
+          description: 'Não foi possível salvar o registro. Tente novamente.',
+        })
+      }
+    } else {
+      toast.warning('Atenção', {
+        description: 'Preencha todos os campos para registrar a perda.',
+      })
+    }
+  }, [
+    newPartsLossDate,
+    newPartsLossDescription,
+    newPartsLossQuantity,
+    newPartsLossImages,
+    editingPartsLossIndex,
+    params.id,
+    formData,
+  ])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -1446,22 +1578,38 @@ export default function EditarEquipamento() {
                             <Label className="text-sm font-medium">
                               Histórico de Perdas
                             </Label>
-                            <div className="space-y-2 max-h-48 overflow-y-auto">
+                            <div className="space-y-2 overflow-visible">
                               {formData.partsLossHistory.map((loss, index) => (
                                 <div
                                   key={index}
-                                  className="flex items-start justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
+                                  className="flex items-start justify-between p-3 bg-gray-50/50 rounded-lg border border-gray-200 shadow-sm transition-all duration-300 hover:shadow-md"
                                 >
-                                  <div className="flex-1">
-                                    <div className="text-sm font-medium text-gray-900">
-                                      {loss.description}
-                                    </div>
-                                    <div className="text-xs text-gray-500 mt-1">
-                                      Data:{' '}
-                                      {new Date(loss.date).toLocaleDateString(
-                                        'pt-BR'
-                                      )}{' '}
-                                      - Quantidade: {loss.quantity}
+                                  <div className="flex items-center gap-3 flex-1">
+                                    {/* Thumbnail da primeira imagem */}
+                                    {loss.images && loss.images.length > 0 && (
+                                      <div className="flex-shrink-0">
+                                        <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                                          <Image
+                                            src={loss.images[0]!}
+                                            alt={`Imagem da perda: ${loss.description}`}
+                                            fill
+                                            className="object-cover"
+                                            sizes="64px"
+                                          />
+                                        </div>
+                                      </div>
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                      <div className="text-sm font-medium text-gray-900 text-left">
+                                        {loss.description}
+                                      </div>
+                                      <div className="text-xs text-gray-500 mt-1 text-left">
+                                        Data:{' '}
+                                        {new Date(loss.date).toLocaleDateString(
+                                          'pt-BR'
+                                        )}{' '}
+                                        - Quantidade: {loss.quantity}
+                                      </div>
                                     </div>
                                   </div>
                                   <div className="flex items-center gap-1 flex-shrink-0 ml-2">
@@ -1470,7 +1618,7 @@ export default function EditarEquipamento() {
                                       variant="ghost"
                                       size="icon"
                                       onClick={() => handleEditPartsLoss(index)}
-                                      className="h-8 w-8"
+                                      className="h-8 w-8 hover:bg-white"
                                       title="Editar registro"
                                     >
                                       <Pencil className="h-4 w-4 text-blue-500" />
@@ -1480,24 +1628,110 @@ export default function EditarEquipamento() {
                                       variant="ghost"
                                       size="icon"
                                       onClick={() => {
-                                        const newHistory =
-                                          formData.partsLossHistory?.filter(
-                                            (_, i) => i !== index
-                                          ) || []
-                                        const newCount =
-                                          (formData.partsLossCount || 0) -
-                                          loss.quantity
-                                        setFormData((prev) => ({
-                                          ...prev,
-                                          partsLossHistory: newHistory,
-                                          partsLossCount: Math.max(0, newCount),
-                                        }))
-                                        toast.success('Registro removido', {
-                                          description:
-                                            'Registro de perda removido com sucesso.',
-                                        })
+                                        const handleConfirm = async () => {
+                                          const newHistory =
+                                            formData.partsLossHistory?.filter(
+                                              (_, i) => i !== index
+                                            ) || []
+                                          const newCount =
+                                            (formData.partsLossCount || 0) -
+                                            loss.quantity
+
+                                          // Atualizar estado local imediatamente
+                                          setFormData((prev) => ({
+                                            ...prev,
+                                            partsLossHistory: newHistory,
+                                            partsLossCount: Math.max(
+                                              0,
+                                              newCount
+                                            ),
+                                          }))
+
+                                          // Salvar imediatamente no backend
+                                          try {
+                                            const response = await fetch(
+                                              `/api/admin/equipments/${params.id}`,
+                                              {
+                                                method: 'PUT',
+                                                headers: {
+                                                  'Content-Type':
+                                                    'application/json',
+                                                },
+                                                body: JSON.stringify({
+                                                  ...formData,
+                                                  partsLossHistory: newHistory,
+                                                  partsLossCount: Math.max(
+                                                    0,
+                                                    newCount
+                                                  ),
+                                                }),
+                                              }
+                                            )
+
+                                            if (!response.ok) {
+                                              throw new Error(
+                                                'Erro ao salvar alteração'
+                                              )
+                                            }
+
+                                            toast.success('Registro removido', {
+                                              description:
+                                                'Registro de perda removido com sucesso.',
+                                            })
+                                          } catch (error) {
+                                            console.error(
+                                              'Erro ao remover registro de perda:',
+                                              error
+                                            )
+                                            // Reverter estado local em caso de erro
+                                            setFormData((prev) => ({
+                                              ...prev,
+                                              partsLossHistory:
+                                                formData.partsLossHistory,
+                                              partsLossCount:
+                                                formData.partsLossCount,
+                                            }))
+                                            toast.error(
+                                              'Erro ao remover registro',
+                                              {
+                                                description:
+                                                  'Não foi possível remover o registro. Tente novamente.',
+                                              }
+                                            )
+                                          }
+                                        }
+
+                                        toast.warning(
+                                          <span
+                                            className="font-bold cursor-pointer hover:text-orange-700 transition-colors"
+                                            onClick={handleConfirm}
+                                          >
+                                            Confirmar remoção?
+                                          </span>,
+                                          {
+                                            description: (
+                                              <span>
+                                                Deseja realmente remover o
+                                                registro{' '}
+                                                <strong className="font-bold">
+                                                  "{loss.description}"
+                                                </strong>
+                                                ? Esta ação não pode ser
+                                                desfeita.
+                                              </span>
+                                            ),
+                                            action: {
+                                              label: 'Confirmar',
+                                              onClick: handleConfirm,
+                                            },
+                                            cancel: {
+                                              label: 'Cancelar',
+                                              onClick: () => {},
+                                            },
+                                          }
+                                        )
                                       }}
-                                      className="h-8 w-8"
+                                      className="h-8 w-8 hover:bg-white"
                                       title="Remover registro"
                                     >
                                       <Trash2 className="h-4 w-4 text-red-500" />
@@ -1518,15 +1752,25 @@ export default function EditarEquipamento() {
                               : 'Adicionar Novo Registro de Perda'}
                           </h4>
                           {editingPartsLossIndex !== null && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={handleCancelEditPartsLoss}
-                              className="text-xs text-gray-500 hover:text-gray-700"
-                            >
-                              Cancelar Edição
-                            </Button>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={handleCancelEditPartsLoss}
+                                className="bg-white text-gray-700 hover:text-orange-600"
+                              >
+                                Cancelar Edição
+                              </Button>
+                              <Button
+                                type="button"
+                                onClick={handleSavePartsLoss}
+                                className="bg-slate-700 text-white border border-slate-700 shadow-md hover:bg-slate-600 hover:border-slate-600 hover:scale-105 hover:shadow-lg transition-all duration-200"
+                              >
+                                <Save className="h-4 w-4 mr-2" />
+                                Aplicar Alterações
+                              </Button>
+                            </div>
                           )}
                         </div>
                         <div className="space-y-4">
@@ -1643,12 +1887,30 @@ export default function EditarEquipamento() {
                               </Label>
                               <Input
                                 id="partsLossQuantity"
-                                type="number"
+                                type="text"
                                 min="1"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 value={newPartsLossQuantity}
-                                onChange={(e) =>
-                                  setNewPartsLossQuantity(e.target.value)
-                                }
+                                onKeyDown={(e) => {
+                                  if (
+                                    e.key === 'e' ||
+                                    e.key === 'E' ||
+                                    e.key === '+' ||
+                                    e.key === '-' ||
+                                    e.key === '.' ||
+                                    e.key === ','
+                                  ) {
+                                    e.preventDefault()
+                                  }
+                                }}
+                                onChange={(e) => {
+                                  const onlyDigits = e.target.value.replace(
+                                    /\D/g,
+                                    ''
+                                  )
+                                  setNewPartsLossQuantity(onlyDigits)
+                                }}
                                 placeholder="Ex: 5"
                                 className="mt-1 focus:border-blue-500"
                               />
@@ -1683,114 +1945,21 @@ export default function EditarEquipamento() {
                               />
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <Button
-                              type="button"
-                              variant="outline"
-                              onClick={() => {
-                                if (
-                                  newPartsLossDate &&
-                                  newPartsLossDescription.trim() &&
-                                  newPartsLossQuantity
-                                ) {
-                                  const quantity =
-                                    parseInt(newPartsLossQuantity) || 0
-                                  const newLoss = {
-                                    date: newPartsLossDate,
-                                    description: newPartsLossDescription.trim(),
-                                    quantity,
-                                    images: newPartsLossImages,
-                                  }
-
-                                  if (editingPartsLossIndex !== null) {
-                                    // Atualizar registro existente
-                                    const oldLoss =
-                                      formData.partsLossHistory?.[
-                                        editingPartsLossIndex
-                                      ]
-                                    const oldQuantity = oldLoss?.quantity || 0
-                                    const newHistory = [
-                                      ...(formData.partsLossHistory || []),
-                                    ]
-                                    newHistory[editingPartsLossIndex] = newLoss
-
-                                    setFormData((prev) => ({
-                                      ...prev,
-                                      partsLossHistory: newHistory,
-                                      partsLossCount:
-                                        (prev.partsLossCount || 0) -
-                                        oldQuantity +
-                                        quantity,
-                                    }))
-
-                                    toast.success('Registro atualizado!', {
-                                      description:
-                                        'Registro de perda atualizado com sucesso.',
-                                    })
-                                  } else {
-                                    // Adicionar novo registro
-                                    const newHistory = [
-                                      ...(formData.partsLossHistory || []),
-                                      newLoss,
-                                    ]
-                                    setFormData((prev) => ({
-                                      ...prev,
-                                      partsLossHistory: newHistory,
-                                      partsLossCount:
-                                        (prev.partsLossCount || 0) + quantity,
-                                    }))
-
-                                    toast.success('Perda registrada!', {
-                                      description:
-                                        'Registro de perda adicionado com sucesso.',
-                                    })
-                                  }
-
-                                  // Limpar formulário
-                                  setNewPartsLossDate('')
-                                  setNewPartsLossSelectedDate(null)
-                                  setNewPartsLossDescription('')
-                                  setNewPartsLossQuantity('')
-                                  setNewPartsLossImages([])
-                                  setEditingPartsLossIndex(null)
-                                  setIsPartsLossCalendarOpen(false)
-                                } else {
-                                  toast.warning('Atenção', {
-                                    description:
-                                      'Preencha todos os campos para registrar a perda.',
-                                  })
-                                }
-                              }}
-                              className="w-fit px-4 bg-transparent border-gray-200 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
-                            >
-                              {editingPartsLossIndex !== null ? (
-                                <>
-                                  <Save className="h-4 w-4 mr-2 group-hover:text-blue-500 transition-colors duration-200" />
-                                  <span className="group-hover:text-blue-500 transition-colors duration-200">
-                                    Salvar Alterações
-                                  </span>
-                                </>
-                              ) : (
-                                <>
-                                  <PlusCircle className="h-4 w-4 mr-2 group-hover:text-red-500 transition-colors duration-200" />
-                                  <span className="group-hover:text-red-500 transition-colors duration-200">
-                                    Adicionar Registro de Perda
-                                  </span>
-                                </>
-                              )}
-                            </Button>
-                            {editingPartsLossIndex !== null && (
+                          {editingPartsLossIndex === null && (
+                            <div className="flex items-center gap-2">
                               <Button
                                 type="button"
-                                variant="ghost"
-                                size="sm"
-                                onClick={handleCancelEditPartsLoss}
-                                className="text-xs text-gray-500 hover:text-gray-700"
+                                variant="outline"
+                                onClick={handleSavePartsLoss}
+                                className="w-fit px-4 bg-transparent border-gray-200 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
                               >
-                                Cancelar
+                                <PlusCircle className="h-4 w-4 mr-2 group-hover:text-red-500 transition-colors duration-200" />
+                                <span className="group-hover:text-red-500 transition-colors duration-200">
+                                  Adicionar Registro de Perda
+                                </span>
                               </Button>
-                            )}
-                          </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

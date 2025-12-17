@@ -672,3 +672,216 @@ export function generateQuoteEmailHTML(
     </html>
   `
 }
+
+/**
+ * Gera email HTML para notificar mudança de status de um orçamento
+ * Inclui comparação de valores e, quando aplicável, informações de multa por atraso.
+ */
+export function generateQuoteStatusChangeEmailHTML(
+  customerName: string,
+  quoteId: string,
+  status: 'APPROVED' | 'REJECTED' | 'COMPLETED',
+  originalTotal: number,
+  finalTotal: number | null,
+  priceAdjustmentReason: string | null,
+  lateFee: number | null,
+  lateFeeApproved: boolean
+): string {
+  const formatCurrency = (value: number) =>
+    new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value)
+
+  const statusLabel =
+    status === 'APPROVED'
+      ? 'Aprovado'
+      : status === 'REJECTED'
+        ? 'Rejeitado'
+        : 'Convertido em Locação'
+
+  const statusEmoji =
+    status === 'APPROVED' ? '✅' : status === 'REJECTED' ? '❌' : '🎉'
+
+  const hasAdjustment =
+    finalTotal !== null &&
+    typeof finalTotal === 'number' &&
+    finalTotal !== originalTotal
+
+  const hasLateFee = lateFee !== null && typeof lateFee === 'number'
+
+  return `
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Status do Orçamento Atualizado - GB Locações</title>
+      </head>
+      <body style="margin: 0; padding: 0; background: #f1f5f9; font-family: 'Arial', sans-serif;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f1f5f9; padding: 20px;">
+          <tr>
+            <td align="center">
+              <table width="680" cellpadding="0" cellspacing="0" border="0" style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); max-width: 680px;">
+
+                <!-- HEADER -->
+                <tr>
+                  <td style="background: linear-gradient(135deg, #334155 0%, #475569 100%); padding: 40px 30px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                      <tr>
+                        <td valign="top" width="60%">
+                          <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td style="width: 48px; height: 48px; background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%); border-radius: 8px; text-align: center; vertical-align: middle; font-size: 20px; font-weight: 700; color: #ffffff;">
+                                GB
+                              </td>
+                              <td style="padding-left: 12px; vertical-align: middle;">
+                                <div style="font-size: 22px; font-weight: 700; color: #ffffff; line-height: 1;">GB Locações</div>
+                                <div style="font-size: 11px; font-weight: 500; color: #ffffff; margin-top: 6px;">Equipamentos para Construção</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                        <td valign="top" width="40%" align="right">
+                          <table cellpadding="0" cellspacing="0" border="0" align="right">
+                            <tr>
+                              <td style="padding-right: 12px;">
+                                <div style="font-size: 9px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-bottom: 6px;">Data e Hora:</div>
+                                <div style="background: rgba(255, 255, 255, 0.25); padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 600; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); white-space: nowrap;">⏰ ${new Date().toLocaleString(
+                                  'pt-BR',
+                                  { dateStyle: 'short', timeStyle: 'short' }
+                                )}</div>
+                              </td>
+                              <td>
+                                <div style="font-size: 9px; font-weight: 600; color: #ffffff; text-transform: uppercase; margin-bottom: 6px;">ID do Orçamento:</div>
+                                <div style="background: rgba(255, 255, 255, 0.25); padding: 8px 16px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); white-space: nowrap;">#${quoteId
+                                  .slice(-8)
+                                  .toUpperCase()}</div>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" style="padding-top: 24px;">
+                          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                              <td width="50" style="font-size: 36px; vertical-align: top;">${statusEmoji}</td>
+                              <td style="vertical-align: top; padding-left: 8px;">
+                                <h1 style="font-size: 26px; font-weight: 700; color: #ffffff; margin: 0;">
+                                  Status do seu <span style="color: #ffd700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.5);">Orçamento</span> foi atualizado
+                                </h1>
+                                <p style="font-size: 14px; color: #ffffff; margin: 8px 0 0 0;">
+                                  Olá, ${customerName}! O status do seu orçamento agora é: <strong>${statusLabel}</strong>.
+                                </p>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- CONTENT -->
+                <tr>
+                  <td style="padding: 32px 30px 36px 30px;">
+                    <div style="font-size: 14px; font-weight: 700; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 18px;">📊 Resumo dos Valores</div>
+
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 24px;">
+                      <tr>
+                        <td style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9;">
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tr>
+                              <td style="font-size: 13px; color: #64748b;">Valor Original</td>
+                              <td align="right" style="font-size: 15px; font-weight: 700; color: #0f172a;">${formatCurrency(
+                                originalTotal
+                              )}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      ${
+                        hasAdjustment
+                          ? `
+                      <tr>
+                        <td style="padding: 16px 20px; border-bottom: 1px solid #f1f5f9;">
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tr>
+                              <td style="font-size: 13px; color: #64748b;">Valor Final Editado</td>
+                              <td align="right" style="font-size: 15px; font-weight: 700; color: #ea580c;">${formatCurrency(
+                                finalTotal as number
+                              )}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      `
+                          : ''
+                      }
+                      ${
+                        hasLateFee
+                          ? `
+                      <tr>
+                        <td style="padding: 16px 20px;">
+                          <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <tr>
+                              <td style="font-size: 13px; color: #64748b;">Multa por atraso</td>
+                              <td align="right" style="font-size: 15px; font-weight: 700; color: ${
+                                lateFeeApproved ? '#b91c1c' : '#f97316'
+                              };">
+                                ${formatCurrency(lateFee as number)}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colspan="2" style="padding-top: 6px; font-size: 11px; color: #6b7280;">
+                                ${
+                                  lateFeeApproved
+                                    ? '✔️ Multa aprovada e considerada no valor final.'
+                                    : '⏳ Multa calculada, aguardando aprovação do administrador.'
+                                }
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                      `
+                          : ''
+                      }
+                    </table>
+
+                    ${
+                      priceAdjustmentReason
+                        ? `
+                    <div style="font-size: 14px; font-weight: 700; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">📝 Justificativa do Ajuste</div>
+                    <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 18px 20px; font-size: 13px; color: #1f2933; line-height: 1.7;">
+                      ${priceAdjustmentReason}
+                    </div>
+                    `
+                        : ''
+                    }
+
+                    <div style="margin-top: 28px; font-size: 12px; color: #64748b; line-height: 1.7;">
+                      Se tiver qualquer dúvida sobre os valores ou o status do seu orçamento, você pode responder diretamente a este email e nossa equipe terá prazer em ajudar.
+                    </div>
+                  </td>
+                </tr>
+
+                <!-- FOOTER -->
+                <tr>
+                  <td style="background: #f8fafc; padding: 24px 30px; text-align: center; border-top: 1px solid #e2e8f0;">
+                    <div style="font-size: 12px; color: #64748b; line-height: 1.7; margin: 0;">
+                      <strong>GB Locações</strong> - Equipamentos para Construção<br>
+                      Orçamento #${quoteId.slice(-8).toUpperCase()} · © ${new Date().getFullYear()}
+                    </div>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+    </html>
+  `
+}

@@ -528,10 +528,7 @@ export function ImageUpload({
 
       {/* Upload de arquivos */}
       <div>
-        <Label
-          htmlFor={fileInputId}
-          className="block text-sm font-medium mb-2"
-        >
+        <Label htmlFor={fileInputId} className="block text-sm font-medium mb-2">
           Upload de Imagens
         </Label>
         <div className="flex items-start">

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { VehicleTypeSchema } from '../../enums/VehicleType.schema';
 import { VehicleStatusSchema } from '../../enums/VehicleStatus.schema';

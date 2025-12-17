@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 export { UserFindUniqueResultSchema } from './UserFindUniqueResult.schema';
 export { UserFindFirstResultSchema } from './UserFindFirstResult.schema';
 export { UserFindManyResultSchema } from './UserFindManyResult.schema';
