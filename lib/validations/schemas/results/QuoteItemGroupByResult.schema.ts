@@ -8,6 +8,13 @@ export const QuoteItemGroupByResultSchema = z.array(z.object({
   days: z.number().int(),
   pricePerDay: z.number(),
   total: z.number(),
+  startDate: z.date(),
+  endDate: z.date(),
+  includeWeekends: z.boolean(),
+  appliedDiscount: z.number(),
+  appliedPeriod: z.string(),
+  useDirectValue: z.boolean(),
+  directValue: z.number(),
   createdAt: z.date(),
   updatedAt: z.date(),
   _count: z.object({
@@ -18,6 +25,13 @@ export const QuoteItemGroupByResultSchema = z.array(z.object({
     days: z.number(),
     pricePerDay: z.number(),
     total: z.number(),
+    startDate: z.number(),
+    endDate: z.number(),
+    includeWeekends: z.number(),
+    appliedDiscount: z.number(),
+    appliedPeriod: z.number(),
+    useDirectValue: z.number(),
+    directValue: z.number(),
     createdAt: z.number(),
     updatedAt: z.number(),
     equipment: z.number(),
@@ -27,13 +41,17 @@ export const QuoteItemGroupByResultSchema = z.array(z.object({
     quantity: z.number().nullable(),
     days: z.number().nullable(),
     pricePerDay: z.number().nullable(),
-    total: z.number().nullable()
+    total: z.number().nullable(),
+    appliedDiscount: z.number().nullable(),
+    directValue: z.number().nullable()
   }).nullable().optional(),
   _avg: z.object({
     quantity: z.number().nullable(),
     days: z.number().nullable(),
     pricePerDay: z.number().nullable(),
-    total: z.number().nullable()
+    total: z.number().nullable(),
+    appliedDiscount: z.number().nullable(),
+    directValue: z.number().nullable()
   }).nullable().optional(),
   _min: z.object({
     id: z.string().nullable(),
@@ -43,6 +61,11 @@ export const QuoteItemGroupByResultSchema = z.array(z.object({
     days: z.number().int().nullable(),
     pricePerDay: z.number().nullable(),
     total: z.number().nullable(),
+    startDate: z.date().nullable(),
+    endDate: z.date().nullable(),
+    appliedDiscount: z.number().nullable(),
+    appliedPeriod: z.string().nullable(),
+    directValue: z.number().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional(),
@@ -54,6 +77,11 @@ export const QuoteItemGroupByResultSchema = z.array(z.object({
     days: z.number().int().nullable(),
     pricePerDay: z.number().nullable(),
     total: z.number().nullable(),
+    startDate: z.date().nullable(),
+    endDate: z.date().nullable(),
+    appliedDiscount: z.number().nullable(),
+    appliedPeriod: z.string().nullable(),
+    directValue: z.number().nullable(),
     createdAt: z.date().nullable(),
     updatedAt: z.date().nullable()
   }).nullable().optional()

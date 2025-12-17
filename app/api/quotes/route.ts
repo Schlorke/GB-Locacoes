@@ -5,6 +5,10 @@ import { ZodError } from 'zod'
 import getResend from '@/lib/resend'
 import { generateQuoteEmailHTML } from '@/lib/email-templates'
 import { buildQuotePricing } from '@/lib/quote-pricing'
+import { isEquipmentAvailableForRental } from '@/lib/equipment-availability'
+import { calculateFreight } from '@/lib/freight-calculator'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
 const resend = getResend()
 
@@ -167,6 +171,10 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
 
+    // Verificar se usuário está logado (opcional - endpoint é público)
+    const session = await getServerSession(authOptions)
+    const userId = session?.user?.id
+
     // Validação usando schema Zod
     const validatedData = QuoteRequestSchema.parse(body)
     const {
@@ -178,8 +186,65 @@ export async function POST(request: Request) {
       cep,
       customerCompany,
       message,
+      deliveryType,
+      deliveryAddress,
       items,
     } = validatedData
+
+    // Validar disponibilidade usando as datas de cada item
+    for (const item of items) {
+      // Se o item tem datas definidas, validar disponibilidade
+      if (item.startDate && item.endDate) {
+        const itemStartDate =
+          typeof item.startDate === 'string'
+            ? new Date(item.startDate)
+            : item.startDate
+        const itemEndDate =
+          typeof item.endDate === 'string'
+            ? new Date(item.endDate)
+            : item.endDate
+
+        const availability = await isEquipmentAvailableForRental(
+          item.equipmentId,
+          itemStartDate,
+          itemEndDate,
+          item.quantity
+        )
+
+        if (!availability.available) {
+          return NextResponse.json(
+            {
+              error: `Equipamento indisponível: ${availability.reason || 'Não disponível nas datas selecionadas'}`,
+            },
+            { status: 400 }
+          )
+        }
+      }
+    }
+
+    // Calcular datas globais para o quote (usar a primeira data encontrada ou calcular)
+    let globalStartDate: Date | undefined = undefined
+    let globalEndDate: Date | undefined = undefined
+
+    for (const item of items) {
+      if (item.startDate && item.endDate) {
+        const itemStartDate =
+          typeof item.startDate === 'string'
+            ? new Date(item.startDate)
+            : item.startDate
+        const itemEndDate =
+          typeof item.endDate === 'string'
+            ? new Date(item.endDate)
+            : item.endDate
+
+        if (!globalStartDate || itemStartDate < globalStartDate) {
+          globalStartDate = itemStartDate
+        }
+        if (!globalEndDate || itemEndDate > globalEndDate) {
+          globalEndDate = itemEndDate
+        }
+      }
+    }
 
     // Calcular total
     let totalAmount = 0
@@ -210,12 +275,35 @@ export async function POST(request: Request) {
 
       totalAmount += total
 
+      // Converter datas do item se existirem
+      const itemStartDate = item.startDate
+        ? typeof item.startDate === 'string'
+          ? new Date(item.startDate)
+          : item.startDate
+        : undefined
+      const itemEndDate = item.endDate
+        ? typeof item.endDate === 'string'
+          ? new Date(item.endDate)
+          : item.endDate
+        : undefined
+
       quoteItems.push({
         equipmentId: item.equipmentId,
         quantity: item.quantity,
         days,
         pricePerDay,
         total,
+        startDate: itemStartDate,
+        endDate: itemEndDate,
+        includeWeekends: item.includeWeekends || false,
+        appliedDiscount: pricingConfig.useDirectValue
+          ? null
+          : pricingConfig.discount || null,
+        appliedPeriod: appliedPeriod || null,
+        useDirectValue: pricingConfig.useDirectValue || false,
+        directValue: pricingConfig.useDirectValue
+          ? pricingConfig.directValue || null
+          : null,
       })
 
       // Preparar informacoes detalhadas para o email com base no calculo inteligente
@@ -238,6 +326,29 @@ export async function POST(request: Request) {
         periodMultiplier: pricingConfig.multiplier || 1,
       })
     }
+    // Calcular frete se necessário
+    let deliveryFee: number | undefined = undefined
+    let pickupFee: number | undefined = undefined
+
+    if (deliveryType === 'DELIVERY' && deliveryAddress?.cep) {
+      try {
+        const freightResult = await calculateFreight({
+          fromCEP: '90000-000', // CEP da GB Locações (configurável)
+          toCEP: deliveryAddress.cep,
+          equipmentIds: items.map((item) => item.equipmentId),
+          quantities: items.map((item) => item.quantity),
+        })
+        // Usar o primeiro frete disponível como padrão
+        if (freightResult.shippingOptions.length > 0) {
+          deliveryFee = freightResult.shippingOptions[0]!.price
+          totalAmount += deliveryFee
+        }
+      } catch (error) {
+        console.error('Erro ao calcular frete:', error)
+        // Continuar sem frete se houver erro
+      }
+    }
+
     // Criar orcamento
     const quote = await prisma.quote.create({
       data: {
@@ -251,6 +362,23 @@ export async function POST(request: Request) {
         message,
         total: totalAmount,
         status: 'PENDING', // Fixed: using correct enum value
+        userId: userId || undefined, // Associar com usuário logado se houver
+        startDate: globalStartDate,
+        endDate: globalEndDate,
+        deliveryType: deliveryType || undefined,
+        deliveryAddress: deliveryAddress
+          ? {
+              cep: deliveryAddress.cep,
+              logradouro: deliveryAddress.logradouro,
+              numero: deliveryAddress.numero,
+              complemento: deliveryAddress.complemento,
+              bairro: deliveryAddress.bairro,
+              cidade: deliveryAddress.cidade,
+              estado: deliveryAddress.estado,
+            }
+          : undefined,
+        deliveryFee: deliveryFee ? deliveryFee : undefined,
+        pickupFee: pickupFee ? pickupFee : undefined,
         items: {
           create: quoteItems,
         },
@@ -272,6 +400,55 @@ export async function POST(request: Request) {
         },
       },
     })
+
+    // Criar locação placeholder (status PENDING) para aparecer em /admin/rentals
+    // sem bloquear estoque até aprovação do orçamento.
+    try {
+      // Usar datas globais calculadas ou calcular baseado em dias
+      const rentalStartDate = globalStartDate || new Date()
+      const rentalEndDate =
+        globalEndDate ||
+        (() => {
+          const maxDays =
+            quoteItems.reduce(
+              (max, item) => Math.max(max, item.days || 1),
+              1
+            ) || 1
+          return new Date(
+            rentalStartDate.getTime() + maxDays * 24 * 60 * 60 * 1000
+          )
+        })()
+
+      await prisma.rentals.create({
+        data: {
+          id: `rental_${Date.now()}_${Math.random()
+            .toString(36)
+            .substring(2, 9)}`,
+          userid: quote.userId || '',
+          quoteId: quote.id,
+          startdate: rentalStartDate,
+          enddate: rentalEndDate,
+          total: totalAmount,
+          status: 'PENDING', // placeholder; não bloqueia estoque enquanto orçamento estiver PENDING
+          notes: quote.message || quote.company || undefined,
+          rental_items: {
+            create: quoteItems.map((item) => ({
+              id: `rental_item_${Date.now()}_${Math.random()
+                .toString(36)
+                .substring(2, 9)}`,
+              equipmentid: item.equipmentId,
+              quantity: item.quantity,
+              priceperday: item.pricePerDay,
+              totaldays: item.days,
+              totalprice: item.total,
+            })),
+          },
+        },
+      })
+    } catch (rentError) {
+      console.error('Falha ao criar locação placeholder:', rentError)
+      // Não falhar a criação do orçamento; apenas logar.
+    }
 
     // Enviar email com informações completas de desconto/período
     if (resend && process.env.FROM_EMAIL) {

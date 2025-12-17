@@ -75,16 +75,31 @@ export async function calculateEquipmentAvailability(
           startdate: true,
           enddate: true,
           status: true,
+          quote: {
+            select: {
+              status: true,
+            },
+          },
         },
       },
     },
   })
 
   // Calcular quantidade bloqueada por locações
-  const blockedByRentals = activeRentals.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  )
+  const blockedByRentals = activeRentals.reduce((sum, item) => {
+    const rental = item.rentals
+    const isPending = rental.status === 'PENDING'
+    const quotePending =
+      rental.quote && rental.quote.status && rental.quote.status !== 'APPROVED'
+
+    // Só bloqueia estoque se:
+    // - não for PENDING, OU
+    // - for PENDING, mas o orçamento já estiver APPROVED ou não existir quote
+    const blocksInventory =
+      rental.status !== 'PENDING' || (isPending && !quotePending)
+
+    return blocksInventory ? sum + item.quantity : sum
+  }, 0)
 
   const availableQuantity = Math.max(0, maxStock - blockedByRentals)
 

@@ -11,7 +11,17 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { AddressForm, type AddressData } from '@/components/ui/address-form'
 import { toast } from 'sonner'
+import { validateCPF, validateCNPJ } from '@/lib/utils/validation'
+import { calculateFreight, type FreightOption } from '@/lib/freight-calculator'
 import {
   calculateIntelligentPrice,
   getPricingConfig,
@@ -31,9 +41,12 @@ import {
   ShoppingCart,
   Trash2,
   User,
+  MapPin,
+  Truck,
 } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { useSession } from 'next-auth/react'
 
 interface Equipment {
   id: string
@@ -71,11 +84,15 @@ interface QuoteFormData {
   cpf: string
   cnpj: string
   cep: string
+  company: string
   message: string
+  deliveryType?: 'DELIVERY' | 'PICKUP'
+  deliveryAddress?: AddressData
 }
 
 function QuotePage() {
   const searchParams = useSearchParams()
+  const { data: session } = useSession()
   const {
     items: selectedEquipments,
     removeItem,
@@ -98,9 +115,29 @@ function QuotePage() {
     cpf: '',
     cnpj: '',
     cep: '',
+    company: '',
     message: '',
+    deliveryType: undefined,
+    deliveryAddress: undefined,
   })
+
+  // Preencher dados do usuário logado
+  useEffect(() => {
+    if (session?.user) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || session.user?.name || '',
+        email: prev.email || session.user?.email || '',
+      }))
+    }
+  }, [session])
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [freightOptions, setFreightOptions] = useState<FreightOption[]>([])
+  const [selectedFreight, setSelectedFreight] = useState<string | null>(null)
+  const [isCalculatingFreight, setIsCalculatingFreight] = useState(false)
+  const [availabilityErrors, setAvailabilityErrors] = useState<
+    Record<string, string>
+  >({})
   const hasSyncedCartPricing = useRef(false)
 
   // Helper para formatar datas (trata Date ou string do localStorage)
@@ -162,19 +199,6 @@ function QuotePage() {
     }
   }
 
-  // Função para formatar CEP brasileiro
-  const formatCEP = (value: string) => {
-    // Remove todos os caracteres não numéricos
-    const numbers = value.replace(/\D/g, '')
-
-    // Aplica a formatação baseada no tamanho
-    if (numbers.length <= 5) {
-      return numbers
-    } else {
-      return `${numbers.slice(0, 5)}-${numbers.slice(5, 8)}`
-    }
-  }
-
   // Função para lidar com mudanças no campo de telefone
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatPhoneNumber(e.target.value)
@@ -199,15 +223,6 @@ function QuotePage() {
     setFormData((prev) => ({
       ...prev,
       cnpj: formatted,
-    }))
-  }
-
-  // Função para lidar com mudanças no campo de CEP
-  const handleCEPChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatCEP(e.target.value)
-    setFormData((prev) => ({
-      ...prev,
-      cep: formatted,
     }))
   }
 
@@ -417,11 +432,144 @@ function QuotePage() {
   }
 
   const calculateTotal = () => {
-    return selectedEquipments.reduce(
+    const equipmentTotal = selectedEquipments.reduce(
       (total, eq) => total + calculateSubtotal(eq),
       0
     )
+    const freightTotal =
+      selectedFreight && freightOptions.length > 0
+        ? freightOptions.find((opt) => opt.id === selectedFreight)?.price || 0
+        : 0
+    return equipmentTotal + freightTotal
   }
+
+  // Calcular frete quando endereço e tipo de entrega estiverem definidos
+  useEffect(() => {
+    const calculateFreightAsync = async () => {
+      if (
+        formData.deliveryType === 'DELIVERY' &&
+        formData.deliveryAddress?.cep &&
+        selectedEquipments.length > 0
+      ) {
+        setIsCalculatingFreight(true)
+        try {
+          // CEP da GB Locações (Porto Alegre) - pode ser configurável
+          const fromCEP = '90000-000' // CEP padrão da empresa
+          const result = await calculateFreight({
+            fromCEP,
+            toCEP: formData.deliveryAddress.cep,
+            equipmentIds: selectedEquipments.map((eq) => eq.equipmentId),
+            quantities: selectedEquipments.map((eq) => eq.quantity),
+          })
+          setFreightOptions(result.shippingOptions)
+          if (result.shippingOptions.length > 0 && !selectedFreight) {
+            setSelectedFreight(result.shippingOptions[0]!.id)
+          }
+        } catch (error) {
+          console.error('Erro ao calcular frete:', error)
+          toast.error('Erro ao calcular frete')
+        } finally {
+          setIsCalculatingFreight(false)
+        }
+      } else {
+        setFreightOptions([])
+        setSelectedFreight(null)
+      }
+    }
+
+    void calculateFreightAsync()
+  }, [
+    formData.deliveryType,
+    formData.deliveryAddress?.cep,
+    selectedEquipments,
+    selectedFreight,
+  ])
+
+  // Validar disponibilidade quando itens do carrinho mudarem (usando datas individuais de cada item)
+  useEffect(() => {
+    const validateAvailability = async () => {
+      if (selectedEquipments.length > 0) {
+        const errors: Record<string, string> = {}
+
+        for (const equipment of selectedEquipments) {
+          // Só validar se o equipamento tiver datas definidas
+          if (!equipment.startDate || !equipment.endDate) {
+            continue
+          }
+
+          try {
+            const response = await fetch(
+              `/api/equipments/${equipment.equipmentId}/availability?startDate=${equipment.startDate instanceof Date ? equipment.startDate.toISOString() : new Date(equipment.startDate).toISOString()}&endDate=${equipment.endDate instanceof Date ? equipment.endDate.toISOString() : new Date(equipment.endDate).toISOString()}`
+            )
+            if (response.ok) {
+              const data = await response.json()
+              const availability = data.availability
+
+              if (!availability || typeof availability !== 'object') {
+                // Se não houver dados de disponibilidade, não bloquear
+                continue
+              }
+
+              // Verificar disponibilidade para cada dia do período
+              const startDate =
+                equipment.startDate instanceof Date
+                  ? equipment.startDate
+                  : new Date(equipment.startDate)
+              const endDate =
+                equipment.endDate instanceof Date
+                  ? equipment.endDate
+                  : new Date(equipment.endDate)
+              const currentDate = new Date(startDate)
+              let minAvailable = Infinity
+              let hasUnavailableDay = false
+
+              while (currentDate <= endDate) {
+                const dateKey = currentDate.toISOString().split('T')[0]!
+                const dayAvailability = availability[dateKey]
+
+                if (!dayAvailability || !dayAvailability.available) {
+                  hasUnavailableDay = true
+                  const dateStr = currentDate.toLocaleDateString('pt-BR')
+                  errors[equipment.equipmentId] =
+                    `Equipamento indisponível em ${dateStr}`
+                  break
+                }
+
+                if (dayAvailability.availableQuantity < equipment.quantity) {
+                  minAvailable = Math.min(
+                    minAvailable,
+                    dayAvailability.availableQuantity
+                  )
+                }
+
+                currentDate.setDate(currentDate.getDate() + 1)
+              }
+
+              if (
+                !hasUnavailableDay &&
+                minAvailable < equipment.quantity &&
+                minAvailable !== Infinity
+              ) {
+                errors[equipment.equipmentId] =
+                  `Apenas ${minAvailable} unidade(s) disponível(is) em algumas datas do período. Solicitado: ${equipment.quantity}`
+              }
+            }
+          } catch (error) {
+            console.error(
+              `Erro ao verificar disponibilidade de ${equipment.equipmentId}:`,
+              error
+            )
+          }
+        }
+
+        setAvailabilityErrors(errors)
+      } else {
+        setAvailabilityErrors({})
+      }
+    }
+
+    void validateAvailability()
+  }, [selectedEquipments])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -434,18 +582,60 @@ function QuotePage() {
       return
     }
 
+    // Validação: CPF/CNPJ válidos
+    if (formData.cpf.trim() && !validateCPF(formData.cpf)) {
+      toast.error('Erro de Validação', {
+        description: 'CPF inválido. Por favor, verifique o número.',
+      })
+      return
+    }
+
+    if (formData.cnpj.trim() && !validateCNPJ(formData.cnpj)) {
+      toast.error('Erro de Validação', {
+        description: 'CNPJ inválido. Por favor, verifique o número.',
+      })
+      return
+    }
+
+    // Validação: Se tem CNPJ, deve ter empresa
+    if (formData.cnpj.trim() && !formData.company.trim()) {
+      toast.error('Erro de Validação', {
+        description: 'Empresa é obrigatória quando CNPJ é informado.',
+      })
+      return
+    }
+
+    // Validação: Verificar se todos os equipamentos têm datas definidas
+    const itemsWithoutDates = selectedEquipments.filter(
+      (eq) => !eq.startDate || !eq.endDate
+    )
+    if (itemsWithoutDates.length > 0) {
+      toast.error('Erro de Validação', {
+        description: `Alguns equipamentos não têm período de locação definido. Por favor, configure as datas na página de detalhes de cada equipamento.`,
+      })
+      return
+    }
+
+    // Validação: Se tipo é DELIVERY, deve ter endereço
+    if (formData.deliveryType === 'DELIVERY' && !formData.deliveryAddress) {
+      toast.error('Erro de Validação', {
+        description: 'Endereço de entrega é obrigatório para entrega.',
+      })
+      return
+    }
+
+    // Validação: Verificar disponibilidade se houver erros
+    if (Object.keys(availabilityErrors).length > 0) {
+      toast.error('Erro de Disponibilidade', {
+        description:
+          'Um ou mais equipamentos não estão disponíveis nas datas selecionadas.',
+      })
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
-      // Extrair startDate e endDate do primeiro item (se todos tiverem as mesmas datas)
-      const firstItem = selectedEquipments[0]
-      const allSameDates = selectedEquipments.every(
-        (item) =>
-          item.startDate?.toISOString() ===
-            firstItem?.startDate?.toISOString() &&
-          item.endDate?.toISOString() === firstItem?.endDate?.toISOString()
-      )
-
       const response = await fetch('/api/quotes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -453,50 +643,48 @@ function QuotePage() {
           customerName: formData.name,
           customerEmail: formData.email,
           customerPhone: formData.phone,
-          customerCompany: undefined,
-          cpf: formData.cpf || undefined,
-          cnpj: formData.cnpj || undefined,
-          cep: formData.cep || undefined,
-          message: formData.message || undefined,
-          startDate:
-            allSameDates && firstItem?.startDate
-              ? firstItem.startDate.toISOString()
-              : undefined,
-          endDate:
-            allSameDates && firstItem?.endDate
-              ? firstItem.endDate.toISOString()
-              : undefined,
+          cpf: formData.cpf.trim() || undefined,
+          cnpj: formData.cnpj.trim() || undefined,
+          cep: formData.cep.trim() || undefined,
+          customerCompany: formData.company.trim() || undefined,
+          message: formData.message.trim() || undefined,
+          deliveryType: formData.deliveryType,
+          deliveryAddress: formData.deliveryAddress
+            ? {
+                cep: formData.deliveryAddress.cep,
+                logradouro: formData.deliveryAddress.logradouro,
+                numero: formData.deliveryAddress.numero,
+                complemento: formData.deliveryAddress.complemento,
+                bairro: formData.deliveryAddress.bairro,
+                cidade: formData.deliveryAddress.cidade,
+                estado: formData.deliveryAddress.estado,
+              }
+            : undefined,
           items: selectedEquipments.map((eq) => {
             const days = Number(eq.days) || 1
             const quantity = Number(eq.quantity) || 1
-            const intelligentPrice = calculateIntelligentPrice(eq, days)
-            const pricingConfig = getPricingConfig(eq, days)
-            const total = intelligentPrice * quantity
 
-            // Determinar nome do período em português
-            const periodNames = {
-              daily: 'diária',
-              weekly: 'semanal',
-              biweekly: 'quinzenal',
-              monthly: 'mensal',
-            }
+            // Converter datas para formato ISO se existirem
+            const startDate = eq.startDate
+              ? eq.startDate instanceof Date
+                ? eq.startDate
+                : new Date(eq.startDate)
+              : undefined
+            const endDate = eq.endDate
+              ? eq.endDate instanceof Date
+                ? eq.endDate
+                : new Date(eq.endDate)
+              : undefined
 
+            // A API espera equipmentId, quantity, days e opcionalmente startDate/endDate por item
+            // Os cálculos de preço são feitos no backend
             return {
               equipmentId: eq.equipmentId,
               quantity: quantity,
               days: days,
-              startDate: eq.startDate?.toISOString(),
-              endDate: eq.endDate?.toISOString(),
-              calculatedTotal: total,
-              calculatedPricePerDay: intelligentPrice / days,
-              // Informações de desconto/período
-              appliedPeriod:
-                periodNames[pricingConfig.period as keyof typeof periodNames] ||
-                'diária',
-              appliedDiscount: pricingConfig.discount || 0,
-              useDirectValue: pricingConfig.useDirectValue || false,
-              directValue: pricingConfig.directValue || 0,
-              periodMultiplier: pricingConfig.multiplier || 1,
+              startDate: startDate?.toISOString(),
+              endDate: endDate?.toISOString(),
+              includeWeekends: eq.includeWeekends || false,
             }
           }),
         }),
@@ -525,14 +713,32 @@ function QuotePage() {
           cpf: '',
           cnpj: '',
           cep: '',
+          company: '',
           message: '',
+          deliveryType: undefined,
+          deliveryAddress: undefined,
         })
+        setFreightOptions([])
+        setSelectedFreight(null)
+        setAvailabilityErrors({})
       } else {
-        throw new Error('Erro ao enviar orçamento')
+        // Tentar ler a resposta de erro do servidor
+        let errorMessage = 'Erro ao enviar orçamento. Tente novamente.'
+        try {
+          const errorData = await response.json()
+          errorMessage = errorData.error || errorData.message || errorMessage
+        } catch {
+          // Se não conseguir ler JSON, usar mensagem padrão
+        }
+        throw new Error(errorMessage)
       }
-    } catch {
+    } catch (error) {
+      console.error('Erro ao enviar orçamento:', error)
       toast.error('Erro', {
-        description: 'Erro ao enviar orçamento. Tente novamente.',
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Erro ao enviar orçamento. Tente novamente.',
       })
     } finally {
       setIsSubmitting(false)
@@ -936,6 +1142,23 @@ function QuotePage() {
                                         )}
                                       </div>
                                     )}
+                                    {/* Erros de disponibilidade */}
+                                    {availabilityErrors[
+                                      equipment.equipmentId
+                                    ] && (
+                                      <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 p-2 rounded mt-2">
+                                        <span className="font-semibold">
+                                          ⚠️
+                                        </span>
+                                        <span>
+                                          {
+                                            availabilityErrors[
+                                              equipment.equipmentId
+                                            ]
+                                          }
+                                        </span>
+                                      </div>
+                                    )}
                                   </div>
 
                                   {/* Controles - Layout Responsivo */}
@@ -1204,17 +1427,127 @@ function QuotePage() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="cep">CEP</Label>
+                      <Label htmlFor="company">Empresa/Construtora</Label>
                       <Input
-                        id="cep"
-                        value={formData.cep}
-                        onChange={handleCEPChange}
+                        id="company"
+                        value={formData.company}
+                        onChange={(e) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            company: e.target.value,
+                          }))
+                        }
                         className="mt-1"
-                        placeholder="00000-000"
-                        maxLength={9}
+                        placeholder="Nome da empresa (se PJ)"
                       />
                     </div>
                   </div>
+
+                  {/* Tipo de Entrega */}
+                  <div>
+                    <Label className="flex items-center gap-2 mb-2">
+                      <Truck className="h-4 w-4" />
+                      Tipo de Entrega/Retirada
+                    </Label>
+                    <Select
+                      value={formData.deliveryType}
+                      onValueChange={(value: 'DELIVERY' | 'PICKUP') =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          deliveryType: value,
+                          deliveryAddress:
+                            value === 'PICKUP'
+                              ? undefined
+                              : prev.deliveryAddress,
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Selecione o tipo de entrega" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="PICKUP">Retirada na Loja</SelectItem>
+                        <SelectItem value="DELIVERY">
+                          Entrega no Endereço
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Endereço de Entrega */}
+                  {formData.deliveryType === 'DELIVERY' && (
+                    <div>
+                      <Label className="flex items-center gap-2 mb-2">
+                        <MapPin className="h-4 w-4" />
+                        Endereço de Entrega
+                      </Label>
+                      <AddressForm
+                        value={
+                          formData.deliveryAddress || {
+                            cep: '',
+                            logradouro: '',
+                            numero: '',
+                            complemento: '',
+                            bairro: '',
+                            cidade: '',
+                            estado: '',
+                          }
+                        }
+                        onChange={(address) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            deliveryAddress: address,
+                          }))
+                        }
+                        required
+                      />
+                    </div>
+                  )}
+
+                  {/* Seleção de Frete */}
+                  {formData.deliveryType === 'DELIVERY' &&
+                    freightOptions.length > 0 && (
+                      <div>
+                        <Label
+                          htmlFor="freight"
+                          className="flex items-center gap-2 mb-2"
+                        >
+                          <Truck className="h-4 w-4" />
+                          Opções de Frete
+                        </Label>
+                        {isCalculatingFreight ? (
+                          <div className="flex items-center gap-2 text-sm text-gray-500">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Calculando frete...
+                          </div>
+                        ) : (
+                          <Select
+                            value={selectedFreight || undefined}
+                            onValueChange={setSelectedFreight}
+                          >
+                            <SelectTrigger className="mt-1">
+                              <SelectValue placeholder="Selecione uma opção de frete" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {freightOptions.map((option) => (
+                                <SelectItem key={option.id} value={option.id}>
+                                  <div className="flex flex-col">
+                                    <span className="font-medium">
+                                      {option.name}
+                                    </span>
+                                    <span className="text-xs text-gray-500">
+                                      {option.company} -{' '}
+                                      {formatCurrency(option.price)} -{' '}
+                                      {option.deliveryTime}
+                                    </span>
+                                  </div>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        )}
+                      </div>
+                    )}
 
                   <div>
                     <Label htmlFor="message">Observações</Label>
@@ -1389,11 +1722,37 @@ function QuotePage() {
 
                     <Separator />
 
-                    <div className="flex justify-between items-center text-xl font-bold">
-                      <span>Total:</span>
-                      <span className="text-primary text-xl">
-                        {formatCurrency(calculateTotal())}
-                      </span>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-gray-600">Subtotal:</span>
+                        <span className="text-gray-900 font-medium">
+                          {formatCurrency(
+                            selectedEquipments.reduce(
+                              (total, eq) => total + calculateSubtotal(eq),
+                              0
+                            )
+                          )}
+                        </span>
+                      </div>
+                      {selectedFreight && freightOptions.length > 0 && (
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-600">Frete:</span>
+                          <span className="text-gray-900 font-medium">
+                            {formatCurrency(
+                              freightOptions.find(
+                                (opt) => opt.id === selectedFreight
+                              )?.price || 0
+                            )}
+                          </span>
+                        </div>
+                      )}
+                      <Separator />
+                      <div className="flex justify-between items-center text-xl font-bold">
+                        <span>Total:</span>
+                        <span className="text-primary text-xl">
+                          {formatCurrency(calculateTotal())}
+                        </span>
+                      </div>
                     </div>
 
                     <p className="text-xs text-gray-500 mt-2">

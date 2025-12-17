@@ -56,6 +56,17 @@ export const ContactSchema = z.object({
   message: z.string().min(1, 'Mensagem é obrigatória').describe('Mensagem'),
 })
 
+// Esquema para endereço de entrega
+const DeliveryAddressSchema = z.object({
+  cep: z.string().describe('CEP'),
+  logradouro: z.string().describe('Logradouro'),
+  numero: z.string().describe('Número'),
+  complemento: z.string().optional().describe('Complemento'),
+  bairro: z.string().describe('Bairro'),
+  cidade: z.string().describe('Cidade'),
+  estado: z.string().describe('Estado'),
+})
+
 // Esquemas para orçamentos
 export const QuoteRequestSchema = z.object({
   customerName: z.string().min(1, 'Nome é obrigatório').describe('Nome do cliente'),
@@ -66,10 +77,15 @@ export const QuoteRequestSchema = z.object({
   cep: z.string().optional().describe('CEP do cliente'),
   customerCompany: z.string().optional().describe('Empresa do cliente'),
   message: z.string().optional().describe('Mensagem adicional'),
+  deliveryType: z.enum(['DELIVERY', 'PICKUP']).optional().describe('Tipo de entrega'),
+  deliveryAddress: DeliveryAddressSchema.optional().describe('Endereço de entrega'),
   items: z.array(z.object({
     equipmentId: z.string().describe('ID do equipamento'),
     quantity: z.number().positive().describe('Quantidade'),
     days: z.number().positive().describe('Dias de locação'),
+    startDate: z.union([z.string(), z.date()]).optional().describe('Data de início da locação'),
+    endDate: z.union([z.string(), z.date()]).optional().describe('Data de fim da locação'),
+    includeWeekends: z.boolean().optional().describe('Incluir finais de semana na contagem'),
   })).min(1, 'Selecione pelo menos um equipamento').describe('Itens do orçamento'),
 })
 

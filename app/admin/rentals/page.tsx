@@ -4,6 +4,10 @@ import { useState, useEffect, useCallback } from 'react'
 import { AdminPageHeader } from '@/components/admin/admin-page-header'
 import { AdminCard } from '@/components/admin/admin-card'
 import { KanbanPipeline } from '@/components/admin/kanban-pipeline'
+import {
+  AdvancedCalendar,
+  type CalendarEvent,
+} from '@/components/admin/advanced-calendar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -32,6 +36,7 @@ import {
   List,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { parseISO } from 'date-fns'
 
 interface Rental {
   id: string
@@ -141,7 +146,9 @@ export default function AdminRentalsPage() {
   // NUNCA alterar para 'all' sem consultar o usuário
   const [statusFilter, setStatusFilter] = useState<string>('PENDING')
   const [periodFilter, setPeriodFilter] = useState<string>('all')
-  const [viewMode, setViewMode] = useState<'table' | 'kanban'>('table')
+  const [viewMode, setViewMode] = useState<'table' | 'kanban' | 'calendar'>(
+    'table'
+  )
 
   const fetchRentals = useCallback(async () => {
     try {
@@ -522,10 +529,15 @@ export default function AdminRentalsPage() {
                       options={[
                         { value: 'table', label: 'Tabela', icon: List },
                         { value: 'kanban', label: 'Kanban', icon: LayoutGrid },
+                        {
+                          value: 'calendar',
+                          label: 'Calendário',
+                          icon: Calendar,
+                        },
                       ]}
                       value={viewMode}
                       onValueChange={(value) =>
-                        setViewMode(value as 'table' | 'kanban')
+                        setViewMode(value as 'table' | 'kanban' | 'calendar')
                       }
                     />
                   </div>
@@ -534,6 +546,71 @@ export default function AdminRentalsPage() {
             </CardContent>
           </Card>
         </motion.div>
+
+        {/* Calendário Avançado de Locações */}
+        {viewMode === 'calendar' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-6"
+          >
+            <AdminCard title="Calendário de Locações" variant="flat">
+              <AdvancedCalendar
+                events={filteredRentals.map((rental): CalendarEvent => {
+                  const start = parseISO(rental.startdate)
+                  const end = parseISO(rental.enddate)
+                  const equipmentNames = rental.rental_items
+                    .map((item) => item.equipments.name)
+                    .join(', ')
+                  const clientName = rental.users.name || 'Cliente'
+
+                  // Cores baseadas no status
+                  const statusColors: Record<string, string> = {
+                    PENDING: '#F59E0B', // Amarelo
+                    ACTIVE: '#3B82F6', // Azul
+                    COMPLETED: '#10B981', // Verde
+                    CANCELLED: '#EF4444', // Vermelho
+                    OVERDUE: '#F97316', // Laranja
+                    PENDING_RETURN: '#8B5CF6', // Roxo
+                  }
+
+                  return {
+                    id: rental.id,
+                    title: `${clientName} - ${equipmentNames}`,
+                    start,
+                    end,
+                    resourceId: rental.status,
+                    color: statusColors[rental.status] || '#6B7280',
+                    type: 'rental',
+                    status: rental.status,
+                    metadata: {
+                      clientName: rental.users.name,
+                      clientEmail: rental.users.email,
+                      clientPhone: rental.users.phone,
+                      equipmentCount: rental.rental_items.length,
+                      total: rental.total,
+                      equipmentNames,
+                    },
+                  }
+                })}
+                resources={Object.entries(statusConfig).map(
+                  ([status, config]) => ({
+                    id: status,
+                    name: config.label,
+                  })
+                )}
+                onEventClick={(event) => {
+                  const rental = filteredRentals.find((r) => r.id === event.id)
+                  if (rental) {
+                    setSelectedRental(rental)
+                  }
+                }}
+                defaultViewMode="weekly"
+              />
+            </AdminCard>
+          </motion.div>
+        )}
 
         {/* Lista de Locações Filtradas - Tabela */}
         {filteredRentals.length > 0 && viewMode === 'table' && (
@@ -715,28 +792,56 @@ export default function AdminRentalsPage() {
         )}
 
         {/* Mensagem quando não há locações */}
-        {!loading && filteredRentals.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mb-6"
-          >
-            <Card className="bg-white shadow-lg border-0">
-              <CardContent className="p-12 text-center">
-                <Package className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">
-                  Nenhuma locação encontrada
-                </h3>
-                <p className="text-sm text-gray-500">
-                  {statusFilter !== 'all'
-                    ? `Não há locações com status "${statusConfig[statusFilter]?.label || statusFilter}"`
-                    : 'Não há locações cadastradas no sistema'}
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        )}
+        {!loading &&
+          viewMode !== 'calendar' &&
+          filteredRentals.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mb-6"
+            >
+              <Card className="bg-white shadow-lg border-0">
+                <CardContent className="p-12 text-center">
+                  <Package className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                    Nenhuma locação encontrada
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    {statusFilter !== 'all'
+                      ? `Não há locações com status "${statusConfig[statusFilter]?.label || statusFilter}"`
+                      : 'Não há locações cadastradas no sistema'}
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+
+        {/* Mensagem quando não há locações no calendário */}
+        {!loading &&
+          viewMode === 'calendar' &&
+          filteredRentals.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mb-6"
+            >
+              <Card className="bg-white shadow-lg border-0">
+                <CardContent className="p-12 text-center">
+                  <Calendar className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                    Nenhuma locação encontrada
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    {statusFilter !== 'all'
+                      ? `Não há locações com status "${statusConfig[statusFilter]?.label || statusFilter}" para exibir no calendário`
+                      : 'Não há locações cadastradas no sistema'}
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
 
         {/* Dialog de Detalhes */}
         <Dialog.Root

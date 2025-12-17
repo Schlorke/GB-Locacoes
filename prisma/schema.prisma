@@ -267,20 +267,32 @@ model Quote {
 }
 
 model QuoteItem {
-  id          String    @id @default(cuid())
-  quoteId     String
-  equipmentId String
-  quantity    Int       @default(1)
-  days        Int       @default(1)
-  pricePerDay Decimal
-  total       Decimal
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  equipment   Equipment @relation(fields: [equipmentId], references: [id])
-  quote       Quote     @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  id              String    @id @default(cuid())
+  quoteId         String
+  equipmentId     String
+  quantity        Int       @default(1)
+  days            Int       @default(1)
+  pricePerDay     Decimal
+  total           Decimal
+  // Datas específicas deste item (definidas na página de detalhes do equipamento)
+  startDate       DateTime?
+  endDate         DateTime?
+  // Indica se finais de semana estão incluídos na contagem de dias
+  includeWeekends Boolean   @default(false)
+  // Informações de preço aplicado
+  appliedDiscount Decimal? // Desconto percentual aplicado
+  appliedPeriod   String? // Período aplicado (daily, weekly, biweekly, monthly)
+  useDirectValue  Boolean   @default(false) // Se usou valor direto ao invés de desconto
+  directValue     Decimal? // Valor direto aplicado (se useDirectValue = true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  equipment       Equipment @relation(fields: [equipmentId], references: [id])
+  quote           Quote     @relation(fields: [quoteId], references: [id], onDelete: Cascade)
 
   @@index([equipmentId])
   @@index([quoteId])
+  @@index([startDate])
+  @@index([endDate])
   @@map("quote_items")
 }
 

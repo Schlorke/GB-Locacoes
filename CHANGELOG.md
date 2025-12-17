@@ -10,6 +10,19 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Guia completo de testes para boletos Asaas**: Documentação passo a passo
+  para testar o fluxo completo de boletos Asaas no Postman/Insomnia, incluindo:
+  - Geração de boleto com exemplos de headers e body
+  - Simulação de webhooks (pago, vencido, cancelado, refund)
+  - Conciliação manual de pagamentos
+  - Verificações no painel Asaas e no banco de dados
+  - Troubleshooting completo e checklist de validação
+  - **Arquivos criados**:
+    - `docs/guides/asaas-boleto-testing.md` - Guia técnico completo
+    - `docs/guides/asaas-boleto-testing-iniciantes.md` - Guia passo a passo para
+      iniciantes
+  - **Data**: 2025-12-16
+
 - **Comandos de formatação e lint combinados**: Adicionados novos comandos npm
   para facilitar o workflow de desenvolvimento
   - `pnpm format:all` - Executa `format` e `format:md` juntos, formatando todos
@@ -27,6 +40,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     - `app/api/payments/boleto/webhook/route.ts`
     - `app/api/payments/boleto/verify/route.ts`
     - `.env.example`
+  - **Data**: 2025-12-16
+
+- **Locacoes pendentes exibem solicitacoes**: Orçamentos agora geram
+  locacoes-placeholder PENDING (não bloqueiam estoque) para aparecer em
+  `/admin/rentals`; disponibilidade ignora PENDING com orçamento não aprovado.
+  - **Arquivos Modificados**:
+    - `app/api/quotes/route.ts`
+    - `lib/equipment-availability.ts`
   - **Data**: 2025-12-16
 
 ### Fixed 🐛

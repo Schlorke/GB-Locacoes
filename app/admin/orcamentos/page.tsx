@@ -9,6 +9,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog } from '@/components/ui/dialog'
 import { ViewToggle } from '@/components/ui/view-toggle'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { toast } from 'sonner'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
@@ -21,13 +31,16 @@ import {
   FileText,
   Hash,
   Mail,
+  MapPin,
   MessageSquare,
   Package,
   Phone,
+  Truck,
   User,
   XCircle,
   LayoutGrid,
   Table,
+  Trash2,
 } from 'lucide-react'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 
@@ -48,6 +61,17 @@ interface Quote {
   totalPrice: number
   status: 'pending' | 'approved' | 'rejected'
   message?: string
+  deliveryType?: 'DELIVERY' | 'PICKUP' | null
+  deliveryAddress?: {
+    street?: string
+    number?: string
+    complement?: string
+    neighborhood?: string
+    city?: string
+    state?: string
+    zipCode?: string
+  } | null
+  deliveryFee?: number | null
   address?: {
     street: string
     city: string
@@ -60,6 +84,15 @@ interface Quote {
     id: string
     quantity: number
     days: number
+    startDate?: string | null
+    endDate?: string | null
+    includeWeekends?: boolean
+    appliedDiscount?: number | null
+    appliedPeriod?: string | null
+    useDirectValue?: boolean
+    directValue?: number | null
+    pricePerDay?: number
+    total?: number
     equipment?: {
       id: string
       name: string
@@ -112,6 +145,8 @@ function AdminQuotesPage() {
   const [valueFilter, setValueFilter] = useState<string>('all')
   const [isUpdating, setIsUpdating] = useState(false)
   const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban')
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
 
   // Controle de animação determinística para tabela (evita flick/flash e garante
   // entrada/saída escalonadas ao aplicar filtros).
@@ -254,12 +289,14 @@ function AdminQuotesPage() {
   ) => {
     try {
       setIsUpdating(true)
+      // Converter para maiúsculas conforme esperado pela API (enum QuoteStatus)
+      const statusUpperCase = newStatus.toUpperCase() as 'APPROVED' | 'REJECTED'
       const response = await fetch(`/api/admin/quotes/${quoteId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ status: statusUpperCase }),
       })
 
       if (!response.ok) {
@@ -279,6 +316,34 @@ function AdminQuotesPage() {
       })
     } finally {
       setIsUpdating(false)
+    }
+  }
+
+  const deleteQuote = async (quoteId: string) => {
+    try {
+      setIsDeleting(true)
+      const response = await fetch(`/api/admin/quotes/${quoteId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) {
+        throw new Error('Erro ao excluir orçamento')
+      }
+
+      await fetchQuotes()
+      setSelectedQuote(null)
+      setShowDeleteDialog(false)
+
+      toast.success('Sucesso!', {
+        description: 'Orçamento excluído permanentemente.',
+      })
+    } catch (error) {
+      console.error('Error deleting quote:', error)
+      toast.error('Erro', {
+        description: 'Erro ao excluir orçamento. Tente novamente.',
+      })
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -845,6 +910,132 @@ function AdminQuotesPage() {
                             </Card>
                           </div>
 
+                          {/* Tipo de Entrega/Retirada */}
+                          {(selectedQuote.deliveryType ||
+                            selectedQuote.deliveryAddress) && (
+                            <Card className="border-l-4 border-l-indigo-500">
+                              <CardHeader className="pb-3">
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                  <Truck className="w-5 h-5 text-indigo-600" />
+                                  Tipo de Entrega/Retirada
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent className="space-y-4">
+                                {selectedQuote.deliveryType && (
+                                  <div className="flex items-center gap-3">
+                                    <Badge
+                                      variant="outline"
+                                      className={
+                                        selectedQuote.deliveryType ===
+                                        'DELIVERY'
+                                          ? 'border-green-200 text-green-700 bg-green-50'
+                                          : 'border-blue-200 text-blue-700 bg-blue-50'
+                                      }
+                                    >
+                                      {selectedQuote.deliveryType === 'DELIVERY'
+                                        ? 'Entrega no Endereço'
+                                        : 'Retirada na Loja'}
+                                    </Badge>
+                                    {selectedQuote.deliveryFee &&
+                                      selectedQuote.deliveryFee > 0 && (
+                                        <span className="text-sm text-gray-600">
+                                          Taxa de entrega:{' '}
+                                          {formatCurrency(
+                                            selectedQuote.deliveryFee
+                                          )}
+                                        </span>
+                                      )}
+                                  </div>
+                                )}
+
+                                {selectedQuote.deliveryAddress &&
+                                  selectedQuote.deliveryType === 'DELIVERY' && (
+                                    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                      <div className="flex items-start gap-2 mb-3">
+                                        <MapPin className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
+                                        <div className="font-semibold text-gray-900">
+                                          Endereço de Entrega
+                                        </div>
+                                      </div>
+                                      <div className="space-y-2 text-sm text-gray-700">
+                                        {selectedQuote.deliveryAddress
+                                          .street && (
+                                          <div>
+                                            <span className="font-medium">
+                                              Logradouro:
+                                            </span>{' '}
+                                            {
+                                              selectedQuote.deliveryAddress
+                                                .street
+                                            }
+                                            {selectedQuote.deliveryAddress
+                                              .number &&
+                                              `, ${selectedQuote.deliveryAddress.number}`}
+                                            {selectedQuote.deliveryAddress
+                                              .complement &&
+                                              ` - ${selectedQuote.deliveryAddress.complement}`}
+                                          </div>
+                                        )}
+                                        {selectedQuote.deliveryAddress
+                                          .neighborhood && (
+                                          <div>
+                                            <span className="font-medium">
+                                              Bairro:
+                                            </span>{' '}
+                                            {
+                                              selectedQuote.deliveryAddress
+                                                .neighborhood
+                                            }
+                                          </div>
+                                        )}
+                                        {(selectedQuote.deliveryAddress.city ||
+                                          selectedQuote.deliveryAddress
+                                            .state) && (
+                                          <div>
+                                            <span className="font-medium">
+                                              Cidade/Estado:
+                                            </span>{' '}
+                                            {selectedQuote.deliveryAddress
+                                              .city || ''}
+                                            {selectedQuote.deliveryAddress
+                                              .city &&
+                                              selectedQuote.deliveryAddress
+                                                .state &&
+                                              ' / '}
+                                            {selectedQuote.deliveryAddress
+                                              .state || ''}
+                                          </div>
+                                        )}
+                                        {selectedQuote.deliveryAddress
+                                          .zipCode && (
+                                          <div>
+                                            <span className="font-medium">
+                                              CEP:
+                                            </span>{' '}
+                                            {
+                                              selectedQuote.deliveryAddress
+                                                .zipCode
+                                            }
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )}
+
+                                {selectedQuote.deliveryType === 'PICKUP' && (
+                                  <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                    <div className="flex items-center gap-2 text-blue-700">
+                                      <Package className="w-4 h-4" />
+                                      <span className="text-sm font-medium">
+                                        Cliente retirará os equipamentos na loja
+                                      </span>
+                                    </div>
+                                  </div>
+                                )}
+                              </CardContent>
+                            </Card>
+                          )}
+
                           {/* Equipamentos */}
                           <Card className="border-l-4 border-l-orange-500">
                             <CardHeader className="pb-3">
@@ -854,8 +1045,139 @@ function AdminQuotesPage() {
                               </CardTitle>
                             </CardHeader>
                             <CardContent>
-                              <div className="space-y-3">
-                                {Array.isArray(selectedQuote.equipments) &&
+                              <div className="space-y-4">
+                                {Array.isArray(selectedQuote.items) &&
+                                  selectedQuote.items.length > 0 &&
+                                  selectedQuote.items.map((item, index) => {
+                                    const equipment = item.equipment
+                                    if (!equipment) return null
+
+                                    // Calcular preço original (sem desconto)
+                                    const originalPrice = item.pricePerDay
+                                      ? item.pricePerDay *
+                                        item.days *
+                                        item.quantity
+                                      : 0
+                                    const finalPrice =
+                                      item.total || originalPrice
+                                    const hasDiscount =
+                                      item.appliedDiscount &&
+                                      item.appliedDiscount > 0 &&
+                                      !item.useDirectValue
+                                    const periodLabel =
+                                      item.appliedPeriod === 'daily'
+                                        ? 'Diário'
+                                        : item.appliedPeriod === 'weekly'
+                                          ? 'Semanal'
+                                          : item.appliedPeriod === 'biweekly'
+                                            ? 'Quinzenal'
+                                            : item.appliedPeriod === 'monthly'
+                                              ? 'Mensal'
+                                              : 'Diário'
+
+                                    return (
+                                      <div
+                                        key={item.id || index}
+                                        className="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3"
+                                      >
+                                        {/* Nome e Quantidade */}
+                                        <div className="flex items-start justify-between">
+                                          <div className="flex-1">
+                                            <div className="font-semibold text-gray-900 mb-1">
+                                              {equipment.name}
+                                            </div>
+                                            <div className="text-sm text-gray-600">
+                                              Quantidade: {item.quantity}x
+                                            </div>
+                                          </div>
+                                          <div className="text-right">
+                                            {hasDiscount &&
+                                              originalPrice > finalPrice && (
+                                                <div className="text-sm text-gray-500 line-through mb-1">
+                                                  {formatCurrency(
+                                                    originalPrice
+                                                  )}
+                                                </div>
+                                              )}
+                                            <div className="font-semibold text-green-600 text-lg">
+                                              {formatCurrency(finalPrice)}
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        {/* Período e Desconto */}
+                                        <div className="flex flex-wrap items-center gap-2 text-sm">
+                                          <Badge
+                                            variant="outline"
+                                            className="text-xs border-orange-200 text-orange-700 bg-orange-50"
+                                          >
+                                            {periodLabel}
+                                          </Badge>
+                                          <span className="text-gray-600">
+                                            {item.days}{' '}
+                                            {item.days === 1 ? 'dia' : 'dias'}
+                                          </span>
+                                          {hasDiscount && (
+                                            <Badge
+                                              variant="outline"
+                                              className="text-xs border-green-200 text-green-700 bg-green-50"
+                                            >
+                                              Desc. {periodLabel}: -
+                                              {item.appliedDiscount}%
+                                            </Badge>
+                                          )}
+                                          {item.useDirectValue &&
+                                            item.directValue && (
+                                              <Badge
+                                                variant="outline"
+                                                className="text-xs border-orange-200 text-orange-700 bg-orange-50"
+                                              >
+                                                Valor Fixo:{' '}
+                                                {formatCurrency(
+                                                  item.directValue
+                                                )}
+                                              </Badge>
+                                            )}
+                                        </div>
+
+                                        {/* Período de Locação */}
+                                        {item.startDate && item.endDate && (
+                                          <div className="flex items-center gap-2 text-sm text-gray-600 pt-2 border-t border-gray-200">
+                                            <Calendar className="w-4 h-4 text-gray-400" />
+                                            <span className="font-medium text-gray-700">
+                                              Período:
+                                            </span>
+                                            <span>
+                                              {formatDate(item.startDate)} até{' '}
+                                              {formatDate(item.endDate)}
+                                            </span>
+                                          </div>
+                                        )}
+
+                                        {/* Incluir finais de semana */}
+                                        {item.includeWeekends && (
+                                          <div className="flex items-center gap-2 text-sm text-green-600 pt-2 border-t border-gray-200">
+                                            <CheckCircle className="w-4 h-4" />
+                                            <span className="font-medium">
+                                              Incluir finais de semana
+                                            </span>
+                                          </div>
+                                        )}
+
+                                        {/* Preço por dia */}
+                                        {item.pricePerDay && (
+                                          <div className="text-xs text-gray-500 pt-1">
+                                            Preço por dia:{' '}
+                                            {formatCurrency(item.pricePerDay)}
+                                          </div>
+                                        )}
+                                      </div>
+                                    )
+                                  })}
+                                {/* Fallback para equipments antigo (compatibilidade) */}
+                                {(!selectedQuote.items ||
+                                  selectedQuote.items.length === 0) &&
+                                  Array.isArray(selectedQuote.equipments) &&
                                   selectedQuote.equipments.map(
                                     (equipment, index) => (
                                       <div
@@ -946,10 +1268,56 @@ function AdminQuotesPage() {
                     </div>
                   </Dialog.Footer>
                 )}
+
+                {selectedQuote?.status === 'rejected' && selectedQuote && (
+                  <Dialog.Footer>
+                    <div className="flex gap-3 w-full">
+                      <Button
+                        onClick={() => setShowDeleteDialog(true)}
+                        disabled={isDeleting}
+                        variant="destructive"
+                        size="default"
+                        className="flex-1"
+                      >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        Excluir Permanentemente
+                      </Button>
+                    </div>
+                  </Dialog.Footer>
+                )}
               </Dialog.Content>
             </Dialog.Popup>
           </Dialog.Portal>
         </Dialog.Root>
+
+        {/* Dialog de Confirmação de Exclusão */}
+        <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Excluir Orçamento Permanentemente?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Esta ação não pode ser desfeita. O orçamento de{' '}
+                <strong>{selectedQuote?.name}</strong> será excluído
+                permanentemente do sistema, incluindo todos os seus itens e
+                informações relacionadas.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>
+                Cancelar
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => selectedQuote && deleteQuote(selectedQuote.id)}
+                disabled={isDeleting}
+                className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+              >
+                {isDeleting ? 'Excluindo...' : 'Excluir Permanentemente'}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   )

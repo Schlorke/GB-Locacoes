@@ -22,11 +22,17 @@
 
 **2. 📖 CONSULTAR DOCUMENTAÇÃO DE COMPONENTES (OBRIGATÓRIO)**
 
-- [ ] Verifiquei se existe documentação em `docs/features/[componente].md`
-- [ ] Li toda a documentação do componente que vou modificar
+- [ ] Verifiquei se existe documentação em `docs/features/[componente].md` ou
+      `docs/features/[pagina].md`
+- [ ] **LI COMPLETAMENTE** a documentação do componente/página antes de fazer
+      QUALQUER atividade (alterar, debugar, corrigir, otimizar, refatorar, etc.)
+- [ ] Entendi o propósito e lógica de funcionamento documentada
+- [ ] Entendi o fluxo atual documentado
 - [ ] Verifiquei seções de "Como Usar", "Armadilhas", "Lições Aprendidas"
 - [ ] Confirmei padrões e convenções documentados
 - [ ] Verifiquei se há exemplos de código que devo seguir
+- [ ] Se não existe documentação, **PERGUNTE** ao usuário sobre o funcionamento
+      antes de fazer qualquer atividade
 
 **3. 🎯 VERIFICAR COMPONENTES EXISTENTES (OBRIGATÓRIO)**
 
@@ -51,6 +57,44 @@
 - [ ] Estou seguindo padrões e convenções estabelecidos
 - [ ] Vou documentar a mudança no CHANGELOG.md após implementar
 
+**6. 🧠 CONSULTAR CONTEXTO CRÍTICO (OBRIGATÓRIO)**
+
+- [ ] Li a seção "CONTEXTO CRÍTICO DO PROJETO" no AGENTS.md
+- [ ] Verifiquei se há informações cruciais relacionadas à minha tarefa
+- [ ] Identifiquei se minha implementação envolve informações cruciais
+- [ ] Se sim, vou documentar automaticamente após implementar
+- [ ] **SE VOU TRABALHAR COM PÁGINA/COMPONENTE**: Li completamente
+      `docs/features/[nome].md` ANTES de fazer QUALQUER atividade (alterar,
+      debugar, corrigir, otimizar, refatorar, adicionar feature, etc.)
+- [ ] **SE NÃO EXISTE DOCUMENTAÇÃO**: Perguntei ao usuário sobre o funcionamento
+      atual antes de fazer qualquer atividade
+- [ ] Tenho contexto completo sobre como a página/componente funciona
+- [ ] Após alterar, vou atualizar a documentação de lógica de funcionamento
+
+### ✅ **CHECKLIST PÓS-IMPLEMENTAÇÃO (OBRIGATÓRIO)**
+
+Após QUALQUER implementação, execute esta checklist:
+
+**1. 📝 DOCUMENTAÇÃO ATUALIZADA**
+
+- [ ] Atualizei `CHANGELOG.md` com a data real do commit
+- [ ] Criei/atualizei documentação em `docs/features/` se aplicável
+- [ ] Atualizei referências no AGENTS.md se necessário
+- [ ] Documentei lógica de funcionamento se o usuário explicou o comportamento
+
+**2. 🐛 PROBLEMAS CONHECIDOS**
+
+- [ ] Se resolvi um bug, documentei em `docs/issues/known-issues.md`
+- [ ] Incluí: causa raiz, solução, arquivos modificados, como validar
+- [ ] Adicionei seção "Armadilhas a Evitar" se aplicável
+
+**3. 🧪 VALIDAÇÃO**
+
+- [ ] Testei a funcionalidade implementada
+- [ ] Verifiquei que não quebrei funcionalidades existentes
+- [ ] Confirmei que estilos/identidade visual não foram alterados sem
+      solicitação
+
 #### **🚨 SE VOCÊ NÃO SEGUIU A CHECKLIST COMPLETA:**
 
 **PARE IMEDIATAMENTE e:**
@@ -61,18 +105,21 @@
 
 #### **📚 ARQUIVOS DE REFERÊNCIA OBRIGATÓRIOS**
 
-| Tipo de Tarefa                     | Arquivo(s) Obrigatório(s) a Ler                           |
-| ---------------------------------- | --------------------------------------------------------- |
-| **Qualquer implementação**         | `docs/issues/known-issues.md` (TODO o arquivo)            |
-| **Bug report**                     | `docs/issues/known-issues.md` + componente relacionado    |
-| **Modificar componente existente** | `docs/features/[componente].md` + código fonte            |
-| **Criar novo componente**          | `docs/features/design-system.md` + componentes similares  |
-| **Dialog/Modal**                   | `docs/features/dialog-lab.md` + `app/playground/page.tsx` |
-| **Animação**                       | `docs/issues/known-issues.md` (seções de animação)        |
-| **Responsividade**                 | `AGENTS.md` (seção Responsive Design) + `known-issues.md` |
-| **Admin pages**                    | `docs/features/admin-system.md`                           |
-| **Autocomplete/Search**            | `docs/features/autocomplete-search.md`                    |
-| **Dados cadastrais da empresa**    | `docs/internal/company/README.md` + PDF CNPJ              |
+| Tipo de Tarefa                     | Arquivo(s) Obrigatório(s) a Ler                                  |
+| ---------------------------------- | ---------------------------------------------------------------- |
+| **Qualquer implementação**         | `docs/issues/known-issues.md` (TODO o arquivo)                   |
+| **Bug report**                     | `docs/issues/known-issues.md` + componente relacionado           |
+| **Modificar componente existente** | `docs/features/[componente].md` + código fonte                   |
+| **Criar novo componente**          | `docs/features/design-system.md` + componentes similares         |
+| **Dialog/Modal**                   | `docs/features/dialog-lab.md` + `app/playground/page.tsx`        |
+| **Animação**                       | `docs/issues/known-issues.md` (seções de animação)               |
+| **Responsividade**                 | `AGENTS.md` (seção Responsive Design) + `known-issues.md`        |
+| **Admin pages**                    | `docs/features/admin-system.md`                                  |
+| **Autocomplete/Search**            | `docs/features/autocomplete-search.md`                           |
+| **Sistema de Orçamentos**          | `AGENTS.md` (seção "Sistema de Orçamentos")                      |
+| **Dados cadastrais da empresa**    | `docs/internal/company/README.md` + PDF CNPJ                     |
+| **Informação crucial**             | `AGENTS.md` (seção "CONTEXTO CRÍTICO DO PROJETO")                |
+| **Lógica de página/componente**    | `docs/features/[nome].md` + `AGENTS.md` (seção Contexto Crítico) |
 
 #### **❌ NUNCA FAÇA SEM CONSULTAR PRIMEIRO:**
 
@@ -119,6 +166,56 @@
    - Garante que você não está repetindo erros corrigidos
    - Assegura que está seguindo padrões documentados
    - Previne reintrodução de bugs conhecidos
+9. **🧠 DOCUMENTE CONTEXTO CRÍTICO**: Sempre que implementar algo que se
+   enquadre nos critérios de informação crucial:
+   - Identifique automaticamente se é crucial
+   - Documente imediatamente na seção "CONTEXTO CRÍTICO DO PROJETO"
+   - Use o formato padronizado estabelecido
+   - Garanta que futuras IAs tenham esse contexto
+   - Se tiver dúvida se é crucial → PERGUNTE ao usuário antes de documentar
+10. **📄 DOCUMENTE LÓGICA DE FUNCIONAMENTO**: Sempre que o usuário explicar
+    "como eu quero que a página/componente funcione" ou descrever o
+    comportamento esperado:
+    - **INTERPRETE ISSO COMO SINAL** de que você DEVE documentar a lógica de
+      funcionamento
+    - Documente imediatamente na seção "CONTEXTO CRÍTICO DO PROJETO" ou em
+      `docs/features/[componente].md`
+    - Inclua: propósito, fluxo de funcionamento, regras de negócio aplicadas,
+      estados e comportamentos esperados
+    - Garanta que futuras IAs tenham contexto completo sobre como a
+      página/componente funciona
+    - **NUNCA** implemente sem documentar a lógica quando o usuário explicar o
+      funcionamento desejado
+11. **🔄 CONSULTE E ATUALIZE LÓGICA SEMPRE**: Sempre que for trabalhar com uma
+    página/componente (alterar, debugar, corrigir, otimizar, refatorar, etc.):
+    - **SEMPRE** consulte primeiro
+      `docs/features/[nome-pagina-ou-componente].md`
+    - **SEMPRE** verifique se existe arquivo na pasta `docs/features/`
+    - **SEMPRE** **LEIA COMPLETAMENTE** a documentação ANTES de fazer QUALQUER
+      atividade
+    - **SEMPRE** entenda o propósito e lógica de funcionamento documentada
+    - **SEMPRE** entenda o fluxo atual documentado antes de fazer qualquer
+      mudança
+    - **SEMPRE** tenha contexto completo sobre como funciona antes de começar
+    - **SEMPRE** atualize o arquivo em `docs/features/` após fazer alterações
+    - **SEMPRE** atualize a referência no AGENTS.md se necessário
+    - **SEMPRE** reflita mudanças no comportamento esperado na documentação
+    - **SEMPRE** atualize estados, fluxos e regras se mudaram
+    - Se não houver documentação, **PERGUNTE** ao usuário sobre o funcionamento
+      atual antes de fazer qualquer atividade e **CRIE** arquivo em
+      `docs/features/` após entender
+12. **📁 DOCUMENTAÇÃO EM `docs/features/`**: Sempre que documentar lógica de
+    funcionamento de páginas/componentes:
+    - **SEMPRE** crie/atualize arquivo em
+      `docs/features/[nome-pagina-ou-componente].md`
+    - **SEMPRE** use kebab-case para nomes de arquivos (ex: `orcamento-page.md`,
+      `equipment-card.md`)
+    - **SEMPRE** adicione referência na seção "CONTEXTO CRÍTICO DO PROJETO" do
+      AGENTS.md apontando para o arquivo
+    - **SEMPRE** siga o formato padronizado estabelecido
+    - **NUNCA** documente apenas no AGENTS.md sem criar arquivo em
+      `docs/features/`
+    - **NUNCA** deixe documentação desatualizada após alterações
 
 ### 🟠 Dialogs aninhadas (Base UI)
 
@@ -241,6 +338,50 @@ documentada proativamente em `docs/` na pasta apropriada.**
         ├── 📄 README.md         # Documentação dos documentos
         └── 📄 cnpj-gustavo-barbosa-brenner.pdf  # Comprovante CNPJ
 ```
+
+### **📋 TEMPLATES OBRIGATÓRIOS PARA DOCUMENTAÇÃO**
+
+Ao criar documentação para novos componentes ou páginas em `docs/features/`,
+**SEMPRE** siga este template padrão:
+
+```markdown
+# [Nome do Componente/Página] - Documentação
+
+## 1. Propósito
+
+(Descreva o que este componente/página faz e por que existe no projeto.)
+
+## 2. Lógica de Funcionamento
+
+(Detalhe o fluxo de dados, estados, interações e regras de negócio.)
+
+## 3. Arquitetura e Dependências
+
+- Arquivos relacionados
+- Componentes que utiliza
+- APIs que consome
+
+## 4. Como Usar
+
+(Exemplos de código, props disponíveis e casos de uso.)
+
+## 5. Armadilhas a Evitar
+
+(Liste problemas comuns, usos incorretos e o que NÃO fazer.)
+
+## 6. Lições Aprendidas
+
+(Documente erros passados e suas soluções relacionadas a este componente.)
+
+## 7. Histórico de Alterações
+
+| Data       | Descrição            | Autor |
+| ---------- | -------------------- | ----- |
+| YYYY-MM-DD | Descrição da mudança | Nome  |
+```
+
+**⚠️ REGRA**: Toda nova documentação em `docs/features/` DEVE seguir este
+template.
 
 ---
 
@@ -515,6 +656,35 @@ GB-Locacoes/
 ├── design-tokens/        # Sistema de design tokens
 └── tests/                # Testes
 ```
+
+### **📊 DIAGRAMAS DE ARQUITETURA (RECOMENDADO)**
+
+Para facilitar a compreensão do sistema, utilize diagramas Mermaid quando
+documentar:
+
+- Fluxos de dados complexos
+- Relações entre componentes
+- Processos de negócio
+
+**Exemplo de uso em documentação:**
+
+```mermaid
+flowchart TD
+    A[Usuário] --> B[Hero Section]
+    B --> C[Autocomplete Search]
+    C --> D[API /equipamentos/search]
+    D --> E[Prisma Query]
+    E --> F[Supabase DB]
+    F --> E
+    E --> D
+    D --> C
+    C --> G[Sugestões Renderizadas]
+```
+
+**Onde usar:**
+
+- `docs/architecture/` - Diagramas de alto nível
+- `docs/features/[componente].md` - Diagramas específicos do componente
 
 ### **⚙️ Padrões de Desenvolvimento**
 
@@ -1151,6 +1321,7 @@ primeiro:**
 | **⚠️ Compatibilidade**         | [`docs/references/dependencies.md`](docs/references/dependencies.md)                 |
 | **📖 Navegação completa**      | [`docs/README.md`](docs/README.md)                                                   |
 | **🔧 Ferramentas para APIs**   | [`docs/guides/api-documentation-tools.md`](docs/guides/api-documentation-tools.md)   |
+| **📋 Sistema de Orçamentos**   | `AGENTS.md` (seção "Sistema de Orçamentos - Regras de Negócio Críticas")             |
 
 ---
 
@@ -1370,6 +1541,678 @@ Antes de implementar qualquer funcionalidade frontend:
 - **Type Safety**: Tipos mais seguros e específicos
 - **Error Handling**: Tratamento robusto de erros
 
+### **📋 Sistema de Orçamentos - REGRAS DE NEGÓCIO CRÍTICAS**
+
+> **⚠️ CRÍTICO**: Este sistema é fundamental para o funcionamento do negócio.
+> Entenda completamente antes de fazer alterações.
+
+#### **🎯 VISÃO GERAL DO FLUXO**
+
+O sistema de orçamentos funciona em duas etapas principais:
+
+1. **Página Pública (`/orcamento`)**: Cliente configura equipamentos e solicita
+   orçamento
+2. **Página Admin (`/admin/orcamentos`)**: Administrador visualiza, analisa e
+   aprova/rejeita orçamentos
+
+#### **📝 FLUXO COMPLETO DE ORÇAMENTO**
+
+##### **1. Configuração do Equipamento (Página de Detalhes)**
+
+**Localização**: `/equipamentos/[id]`
+
+**Componente Principal**: `SmartEquipmentPricing`
+
+**O QUE ACONTECE**:
+
+- Cliente seleciona **período de locação** usando calendário (data início e data
+  fim)
+- Cliente escolhe se **inclui finais de semana** na contagem de dias
+- Sistema calcula automaticamente:
+  - Número de dias úteis ou totais (dependendo da opção)
+  - Período aplicado (Diário, Semanal, Quinzenal, Mensal) baseado nos dias
+  - Preço final com desconto ou valor direto aplicado
+- Cliente clica em "Solicitar Orçamento" e o equipamento é adicionado ao
+  carrinho **COM**:
+  - `startDate`: Data de início da locação
+  - `endDate`: Data de fim da locação
+  - `days`: Número de dias calculados
+  - `includeWeekends`: Se finais de semana estão incluídos
+  - `selectedPeriod`: Período aplicado (daily, weekly, biweekly, monthly)
+  - `finalPrice`: Preço final calculado
+  - Todos os campos de desconto e valor direto do equipamento
+
+**🚨 REGRA CRÍTICA**: O período de locação é configurado **INDIVIDUALMENTE**
+para cada equipamento na página de detalhes. **NÃO** existe campo de período
+global no formulário de orçamentos.
+
+##### **2. Página de Orçamento (`/orcamento`)**
+
+**Localização**: `app/orcamento/page.tsx`
+
+**O QUE O CLIENTE VÊ**:
+
+- Lista de equipamentos selecionados com suas respectivas datas e períodos
+- Formulário de contato (nome, email, telefone, CPF/CNPJ, empresa)
+- Opção de tipo de entrega (Retirada na Loja / Entrega no Endereço)
+- Formulário de endereço (se entrega)
+- Cálculo de frete (se entrega)
+- Resumo com subtotal e total
+
+**O QUE O SISTEMA FAZ**:
+
+- **Validação de Disponibilidade**: Verifica se cada equipamento está disponível
+  nas datas selecionadas
+- **Sincronização de Preços**: Garante que os preços no carrinho estão
+  atualizados com o catálogo
+- **Cálculo de Frete**: Calcula opções de frete baseado no CEP de entrega
+- **Validação de Dados**: Valida CPF/CNPJ, telefone, email, endereço
+
+**🚨 REGRAS DE NEGÓCIO OBRIGATÓRIAS**:
+
+1. **Período por Item**: Cada equipamento no carrinho tem seu próprio
+   `startDate`, `endDate` e `days`
+2. **Validação de Datas**: Se um item não tem datas definidas, o sistema
+   bloqueia o envio
+3. **Disponibilidade**: Sistema valida disponibilidade de cada item nas suas
+   datas específicas
+4. **CPF ou CNPJ**: Pelo menos um deve ser preenchido
+5. **Empresa Obrigatória**: Se CNPJ é informado, empresa é obrigatória
+6. **Endereço Obrigatório**: Se tipo de entrega é DELIVERY, endereço completo é
+   obrigatório
+
+##### **3. Envio do Orçamento**
+
+**API**: `POST /api/quotes`
+
+**O QUE É ENVIADO**:
+
+```typescript
+{
+  customerName: string
+  customerEmail: string
+  customerPhone: string
+  cpf?: string
+  cnpj?: string
+  customerCompany?: string
+  message?: string
+  deliveryType?: 'DELIVERY' | 'PICKUP'
+  deliveryAddress?: AddressData
+  items: Array<{
+    equipmentId: string
+    quantity: number
+    days: number
+    startDate?: string  // ISO string - OPCIONAL mas CRÍTICO
+    endDate?: string    // ISO string - OPCIONAL mas CRÍTICO
+    includeWeekends?: boolean
+  }>
+}
+```
+
+**O QUE A API FAZ**:
+
+1. Valida todos os dados usando `QuoteRequestSchema` (Zod)
+2. Valida disponibilidade de cada item nas suas datas específicas
+3. Calcula preço inteligente para cada item usando `buildQuotePricing()`
+4. Salva no banco de dados:
+   - `Quote` (orçamento principal)
+   - `QuoteItem[]` (itens com todas as informações detalhadas)
+5. Envia email de confirmação para o cliente
+6. Cria locação placeholder (status PENDING) para aparecer em `/admin/rentals`
+
+#### **💰 SISTEMA DE PREÇOS INTELIGENTE**
+
+**Localização**: `lib/pricing.ts` e `lib/quote-pricing.ts`
+
+**COMO FUNCIONA**:
+
+1. **Determinação do Período**:
+   - Sistema verifica quantos dias foram solicitados
+   - Aplica o período correspondente:
+     - 1-6 dias → Diário
+     - 7-14 dias → Semanal
+     - 15-29 dias → Quinzenal
+     - 30+ dias → Mensal
+
+2. **Cálculo de Preço**:
+   - **Se `useDirectValue = true`**: Usa valor direto do período
+     - Exemplo: Semanal com valor direto R$ 500 → R$ 500 para 7 dias
+   - **Se `useDirectValue = false`**: Aplica desconto percentual
+     - Exemplo: Semanal com 10% desconto → Preço diário × 7 × 0.90
+
+3. **Campos no Equipamento**:
+
+   ```typescript
+   dailyDiscount?: number        // Desconto % para diário
+   weeklyDiscount?: number       // Desconto % para semanal (ex: 10)
+   biweeklyDiscount?: number    // Desconto % para quinzenal (ex: 15)
+   monthlyDiscount?: number      // Desconto % para mensal (ex: 20)
+
+   dailyDirectValue?: number     // Valor fixo para diário
+   weeklyDirectValue?: number    // Valor fixo para semanal
+   biweeklyDirectValue?: number  // Valor fixo para quinzenal
+   monthlyDirectValue?: number   // Valor fixo para mensal
+
+   dailyUseDirectValue?: boolean  // Se usa valor direto para diário
+   weeklyUseDirectValue?: boolean // Se usa valor direto para semanal
+   biweeklyUseDirectValue?: boolean
+   monthlyUseDirectValue?: boolean
+   ```
+
+#### **📊 PÁGINA ADMIN DE ORÇAMENTOS**
+
+**Localização**: `app/admin/orcamentos/page.tsx`
+
+**O QUE O ADMIN VÊ**:
+
+- Lista de todos os orçamentos (Kanban ou Tabela)
+- Filtros por status, período, valor
+- Modal de detalhes com **TODAS** as informações de cada item
+
+**INFORMAÇÕES EXIBIDAS POR ITEM** (CRÍTICO):
+
+1. ✅ **Nome do Equipamento**
+2. ✅ **Quantidade** solicitada
+3. ✅ **Dias de Locação** (específicos daquele equipamento)
+4. ✅ **Período Aplicado** (Diário, Semanal, Quinzenal, Mensal)
+5. ✅ **Desconto Aplicado** (percentual) OU **Valor Direto** aplicado
+6. ✅ **Período de Locação** (data início até data fim)
+7. ✅ **Incluir Finais de Semana** (se marcado)
+8. ✅ **Preço Original** (riscado, se houver desconto)
+9. ✅ **Preço Final** (com desconto/valor direto aplicado)
+10. ✅ **Preço por Dia**
+
+**INFORMAÇÕES DE ENTREGA/RETIRADA EXIBIDAS** (CRÍTICO):
+
+1. ✅ **Tipo de Entrega/Retirada**: Badge indicando "Entrega no Endereço"
+   (DELIVERY) ou "Retirada na Loja" (PICKUP)
+2. ✅ **Taxa de Entrega**: Exibida quando `deliveryFee` > 0
+3. ✅ **Endereço Completo** (quando DELIVERY):
+   - Logradouro, número e complemento
+   - Bairro
+   - Cidade/Estado
+   - CEP
+4. ✅ **Mensagem Informativa**: Quando PICKUP, exibe mensagem que cliente
+   retirará na loja
+
+**Estrutura de Dados no Banco**:
+
+```prisma
+model Quote {
+  // ... outros campos
+  deliveryType        DeliveryType?  // DELIVERY ou PICKUP
+  deliveryAddress     Json?          // Endereço completo (quando DELIVERY)
+  deliveryFee         Decimal?       // Taxa de entrega
+  // ... outros campos
+}
+
+model QuoteItem {
+  id              String    @id
+  quoteId         String
+  equipmentId     String
+  quantity        Int
+  days            Int
+  pricePerDay     Decimal
+  total           Decimal
+  // Datas específicas deste item
+  startDate       DateTime?
+  endDate         DateTime?
+  // Finais de semana
+  includeWeekends Boolean   @default(false)
+  // Informações de preço
+  appliedDiscount Decimal?  // Desconto % aplicado
+  appliedPeriod   String?   // daily, weekly, biweekly, monthly
+  useDirectValue  Boolean   @default(false)
+  directValue     Decimal?   // Valor direto aplicado
+}
+```
+
+**⚠️ IMPORTANTE - API Admin Quotes**:
+
+A API `/api/admin/quotes` **DEVE** retornar os seguintes campos relacionados a
+entrega:
+
+- `deliveryType`: `'DELIVERY' | 'PICKUP' | null`
+- `deliveryAddress`: Objeto JSON com estrutura:
+  ```typescript
+  {
+    street?: string
+    number?: string
+    complement?: string
+    neighborhood?: string
+    city?: string
+    state?: string
+    zipCode?: string
+  }
+  ```
+- `deliveryFee`: `number | null` (taxa de entrega em reais)
+
+**⚠️ CRÍTICO**: A API transforma `deliveryAddress` (tipo Json do Prisma) para
+objeto JavaScript. Use type guards para acessar os campos com segurança.
+
+#### **🚨 REGRAS DE NEGÓCIO CRÍTICAS**
+
+1. **Período Individual**: Cada equipamento tem seu próprio período de locação
+   configurado na página de detalhes
+2. **Sem Período Global**: Não existe campo de data início/fim global no
+   formulário de orçamentos
+3. **Validação Obrigatória**: Todos os itens devem ter datas definidas antes de
+   enviar
+4. **Disponibilidade por Item**: Sistema valida disponibilidade de cada item nas
+   suas datas específicas
+5. **Preço Inteligente**: Preço é calculado automaticamente baseado em dias e
+   período aplicado
+6. **Dados Completos**: Todos os dados de preço, desconto e período são salvos
+   por item no banco
+
+#### **📝 INFORMAÇÕES PERTINENTES PARA ORÇAMENTO**
+
+**O QUE DEVE SER CAPTURADO**:
+
+**Dados do Cliente**:
+
+- Nome completo
+- Email
+- Telefone
+- CPF (pessoa física) OU CNPJ (pessoa jurídica)
+- Empresa (obrigatório se CNPJ)
+- CEP
+- Mensagem adicional (opcional)
+
+**Dados de Entrega**:
+
+- Tipo: Retirada na Loja (PICKUP) ou Entrega (DELIVERY)
+- Endereço completo (se DELIVERY):
+  - CEP
+  - Logradouro
+  - Número
+  - Complemento
+  - Bairro
+  - Cidade
+  - Estado
+
+**Dados por Equipamento** (configurados na página de detalhes):
+
+- ID do equipamento
+- Quantidade
+- Dias de locação
+- Data de início
+- Data de fim
+- Incluir finais de semana (sim/não)
+- Período aplicado (diário/semanal/quinzenal/mensal)
+- Desconto aplicado OU valor direto aplicado
+- Preço final calculado
+
+#### **🔧 ARQUIVOS PRINCIPAIS**
+
+- **Página Pública**: `app/orcamento/page.tsx`
+- **Página Admin**: `app/admin/orcamentos/page.tsx`
+- **API Criar Orçamento**: `app/api/quotes/route.ts`
+- **API Admin Orçamentos**: `app/api/admin/quotes/route.ts`
+- **Sistema de Preços**: `lib/pricing.ts`, `lib/quote-pricing.ts`
+- **Schema**: `prisma/schema.prisma` (models `Quote` e `QuoteItem`)
+- **Validação**: `lib/validations/index.ts` (`QuoteRequestSchema`)
+- **Carrinho**: `stores/useCartStore.ts` (interface `CartItem`)
+
+#### **⚠️ ANTI-PADRÕES - NUNCA FAÇA**
+
+- ❌ **NUNCA** adicione campo de período global no formulário de orçamentos
+- ❌ **NUNCA** remova a validação de datas por item
+- ❌ **NUNCA** modifique o cálculo de preço sem entender o sistema inteligente
+- ❌ **NUNCA** remova campos de desconto/valor direto do schema
+- ❌ **NUNCA** exiba apenas quantidade e preço sem mostrar período, desconto e
+  datas
+- ❌ **NUNCA** assuma que todos os itens têm o mesmo período
+- ❌ **NUNCA** omita informações de entrega/retirada na API admin
+- ❌ **NUNCA** acesse `deliveryAddress` sem verificar se é objeto válido
+- ❌ **NUNCA** exiba endereço quando `deliveryType` for PICKUP
+
+#### **✅ SEMPRE FAÇA**
+
+- ✅ **SEMPRE** valide que cada item tem datas definidas
+- ✅ **SEMPRE** exiba todas as informações detalhadas por item no admin
+- ✅ **SEMPRE** exiba informações de entrega/retirada quando disponíveis
+- ✅ **SEMPRE** use `buildQuotePricing()` para calcular preços
+- ✅ **SEMPRE** salve todos os campos de preço por item no banco
+- ✅ **SEMPRE** valide disponibilidade usando as datas específicas de cada item
+- ✅ **SEMPRE** mantenha a estrutura de dados completa no `QuoteItem`
+- ✅ **SEMPRE** retorne `deliveryType`, `deliveryAddress` e `deliveryFee` na API
+  admin
+- ✅ **SEMPRE** use type guards ao acessar `deliveryAddress` (tipo Json do
+  Prisma)
+
+---
+
+## 🧠 **CONTEXTO CRÍTICO DO PROJETO - MEMÓRIA PERMANENTE**
+
+> **⚠️ CRÍTICO**: Esta seção contém informações fundamentais que a IA DEVE
+> sempre consultar antes de implementar qualquer funcionalidade relacionada.
+> Essas informações são cruciais para o funcionamento correto do projeto.
+
+### **📋 PROTOCOLO DE IDENTIFICAÇÃO E DOCUMENTAÇÃO AUTOMÁTICA**
+
+#### **🎯 CRITÉRIOS PARA IDENTIFICAR INFORMAÇÕES CRUCIAIS**
+
+Uma informação é considerada **CRUCIAL** e deve ser documentada automaticamente
+quando se enquadra em **QUALQUER** um dos seguintes critérios:
+
+1. **Regras de Negócio Críticas**
+   - Lógicas que afetam diretamente o funcionamento do sistema
+   - Validações obrigatórias que não podem ser ignoradas
+   - Fluxos de trabalho essenciais para operação
+
+2. **Estruturas de Dados Fundamentais**
+   - Schemas de banco de dados que não podem ser alterados sem impacto
+   - Interfaces TypeScript que são base para múltiplos componentes
+   - Formato de dados usado em APIs críticas
+
+3. **APIs e Endpoints Críticos**
+   - Endpoints que fecham contratos ou transações
+   - APIs de integração externa essenciais
+   - Webhooks que processam eventos críticos
+
+4. **Validações e Segurança Obrigatórias**
+   - Validações que previnem erros críticos
+   - Regras de segurança que protegem dados sensíveis
+   - Autenticação/autorização em fluxos críticos
+
+5. **Integrações Externas Essenciais**
+   - Gateways de pagamento
+   - Serviços de terceiros que o sistema depende
+   - APIs externas que não podem falhar
+
+6. **Fluxos de Trabalho Críticos**
+   - Processos que afetam múltiplos sistemas
+   - Workflows que geram receita ou contratos
+   - Fluxos que impactam experiência do usuário de forma crítica
+
+7. **Lógica de Funcionamento de Páginas/Componentes**
+   - Quando o usuário explicar "como eu quero que a página/componente funcione"
+   - Descrições de comportamento esperado ou fluxo de funcionamento
+   - Regras de negócio específicas de uma página/componente
+   - Estados e transições de estado importantes
+   - Interações críticas entre elementos da interface
+
+#### **📝 PROTOCOLO OBRIGATÓRIO DE DOCUMENTAÇÃO**
+
+**QUANDO IDENTIFICAR UMA INFORMAÇÃO CRUCIAL:**
+
+1. **IDENTIFICAÇÃO AUTOMÁTICA**: Durante qualquer implementação, a IA DEVE
+   avaliar se a informação se enquadra nos critérios acima
+
+2. **DOCUMENTAÇÃO IMEDIATA**: Se identificada como crucial, a IA DEVE:
+   - Adicionar a informação na seção apropriada abaixo
+   - Seguir o formato padronizado estabelecido
+   - Incluir exemplos de código quando relevante
+   - Referenciar arquivos relacionados
+
+3. **VALIDAÇÃO**: A IA DEVE perguntar ao usuário se a informação é realmente
+   crucial (quando houver dúvida)
+
+4. **ATUALIZAÇÃO**: Se uma informação crucial mudar, a IA DEVE atualizar a
+   documentação imediatamente
+
+#### **📖 FORMATO PADRONIZADO DE DOCUMENTAÇÃO**
+
+Cada informação crucial deve seguir este formato:
+
+````markdown
+### **[Nome da Funcionalidade/Sistema] - [Data de Documentação]**
+
+> **⚠️ CRÍTICO**: [Breve descrição do porquê é crucial]
+
+**Contexto:**
+
+- [O que é e por que existe]
+
+**Regras de Negócio:**
+
+- [Regra 1]
+- [Regra 2]
+
+**Estrutura de Dados:**
+
+```typescript
+// Exemplo de interface/schema
+```
+````
+
+**Lógica de Funcionamento:** (OBRIGATÓRIO para páginas/componentes)
+
+- [Como funciona o fluxo]
+- [Estados e transições]
+- [Comportamentos esperados]
+- [Interações críticas]
+
+**Arquivos Relacionados:**
+
+- `caminho/para/arquivo1.ts`
+- `caminho/para/arquivo2.ts`
+
+**Armadilhas a Evitar:**
+
+- ❌ [O que NÃO fazer]
+- ❌ [Erro comum]
+
+**Exemplo de Uso Correto:**
+
+```typescript
+// Código exemplo
+```
+
+**Última Atualização:** [Data]
+
+````
+
+### **📚 INFORMAÇÕES CRUCIAIS DOCUMENTADAS**
+
+[Esta seção será preenchida automaticamente pela IA quando identificar
+informações cruciais]
+
+### **🚨 REGRA ESPECIAL: DOCUMENTAÇÃO DE LÓGICA DE FUNCIONAMENTO**
+
+> **⚠️ CRÍTICO**: Quando o usuário explicar "como eu quero que a
+> página/componente funcione" ou descrever o comportamento esperado, a IA DEVE
+> interpretar isso como um **SINAL EXPLÍCITO** para documentar a lógica de
+> funcionamento.
+
+#### **📋 PROTOCOLO OBRIGATÓRIO**
+
+**QUANDO O USUÁRIO EXPLICAR O FUNCIONAMENTO:**
+
+1. **IDENTIFICAÇÃO DO SINAL**: Se o usuário usar frases como:
+   - "Como eu quero que funcione..."
+   - "A página deve funcionar assim..."
+   - "O comportamento esperado é..."
+   - "Quando o usuário faz X, deve acontecer Y..."
+   - Qualquer descrição de fluxo ou comportamento
+
+2. **DOCUMENTAÇÃO IMEDIATA OBRIGATÓRIA**: A IA DEVE:
+   - **PARAR** a implementação e documentar PRIMEIRO
+   - **SEMPRE** criar/atualizar arquivo em `docs/features/[nome-pagina-ou-componente].md`
+   - **SEMPRE** adicionar referência na seção "CONTEXTO CRÍTICO DO PROJETO" do
+     AGENTS.md apontando para o arquivo em `docs/features/`
+   - Documentar: propósito, fluxo completo, estados, comportamentos, regras de
+     negócio
+   - Garantir que futuras IAs tenham contexto completo
+   - **NUNCA** documente apenas no AGENTS.md sem criar arquivo em `docs/features/`
+
+3. **FORMATO ESPECÍFICO PARA LÓGICA DE FUNCIONAMENTO**:
+
+```markdown
+### **[Nome da Página/Componente] - Lógica de Funcionamento - [Data]**
+
+> **⚠️ CRÍTICO**: Lógica de funcionamento documentada conforme especificação do
+> usuário
+
+**Propósito:**
+- [Para que serve esta página/componente]
+
+**Fluxo de Funcionamento:**
+1. [Passo 1 do fluxo]
+2. [Passo 2 do fluxo]
+3. [Passo 3 do fluxo]
+
+**Estados e Transições:**
+- Estado inicial: [descrição]
+- Estado intermediário: [descrição]
+- Estado final: [descrição]
+
+**Comportamentos Esperados:**
+- Quando [ação do usuário] → [comportamento esperado]
+- Quando [condição] → [resultado]
+
+**Regras de Negócio Aplicadas:**
+- [Regra 1]
+- [Regra 2]
+
+**Interações Críticas:**
+- [Interação 1]
+- [Interação 2]
+
+**Arquivos Relacionados:**
+- `caminho/para/arquivo.tsx`
+
+**Documentação Completa:**
+- `docs/features/[nome-pagina-ou-componente].md` ← **CONSULTE SEMPRE**
+
+**Última Atualização:** [Data]
+```
+
+4. **NUNCA IMPLEMENTE SEM DOCUMENTAR**: Se o usuário explicou o funcionamento,
+   você DEVE documentar antes ou durante a implementação, NUNCA depois.
+
+5. **CONSULTA OBRIGATÓRIA ANTES DE ALTERAR**: Antes de fazer **QUALQUER**
+   alteração em uma página/componente, a IA DEVE:
+   - **SEMPRE** consultar `docs/features/[nome-pagina-ou-componente].md` primeiro
+   - **SEMPRE** verificar se existe documentação na pasta `docs/features/`
+   - **SEMPRE** ler a documentação completa antes de modificar
+   - **SEMPRE** entender o propósito e fluxo atual antes de alterar
+   - **SEMPRE** consultar a seção "CONTEXTO CRÍTICO DO PROJETO" no AGENTS.md para
+     referências
+   - Se não houver documentação, **PERGUNTE** ao usuário sobre o funcionamento
+     atual antes de alterar e **DOCUMENTE** em `docs/features/` após entender
+
+6. **ATUALIZAÇÃO OBRIGATÓRIA APÓS ALTERAR**: Sempre que fizer alterações em uma
+   página/componente que tenha lógica documentada, a IA DEVE:
+   - **SEMPRE** atualizar o arquivo em `docs/features/[nome-pagina-ou-componente].md`
+   - **SEMPRE** atualizar a referência na seção "CONTEXTO CRÍTICO DO PROJETO" se
+     necessário
+   - **SEMPRE** refletir as mudanças no comportamento esperado
+   - **SEMPRE** atualizar estados, fluxos e regras de negócio se mudaram
+   - **SEMPRE** atualizar a data de "Última Atualização"
+   - Se a alteração mudar o propósito ou fluxo principal, **DESTAQUE** isso na
+     documentação
+   - **NUNCA** deixe documentação desatualizada após fazer alterações
+
+#### **Exemplo: Sistema de Orçamentos** (já documentado)
+
+> **⚠️ CRÍTICO**: Sistema fundamental para o funcionamento do negócio. Todas as
+> regras de negócio, estruturas de dados e fluxos estão documentados na seção
+> "Sistema de Orçamentos - REGRAS DE NEGÓCIO CRÍTICAS" acima.
+
+**Referência**: Consulte a seção completa "📋 Sistema de Orçamentos - REGRAS DE
+NEGÓCIO CRÍTICAS" localizada anteriormente neste documento para todas as
+informações cruciais sobre o sistema de orçamentos.
+
+---
+
+### **🔄 PROTOCOLO DE CONSULTA OBRIGATÓRIA**
+
+**ANTES DE IMPLEMENTAR QUALQUER FUNCIONALIDADE:**
+
+1. ✅ **SEMPRE** consulte esta seção "CONTEXTO CRÍTICO DO PROJETO"
+2. ✅ **SEMPRE** verifique se há informações cruciais relacionadas à tarefa
+3. ✅ **SEMPRE** siga as regras de negócio documentadas
+4. ✅ **SEMPRE** respeite as estruturas de dados estabelecidas
+5. ✅ **SEMPRE** consulte "Armadilhas a Evitar" antes de implementar
+
+**ANTES DE FAZER QUALQUER ATIVIDADE EM UMA PÁGINA/COMPONENTE:**
+
+> **⚠️ CRÍTICO**: Esta regra se aplica a **QUALQUER** atividade: alterar, debugar,
+> corrigir, otimizar, refatorar, adicionar feature, etc.
+
+1. ✅ **SEMPRE** consulte `docs/features/[nome-pagina-ou-componente].md` PRIMEIRO
+2. ✅ **SEMPRE** verifique se existe arquivo na pasta `docs/features/`
+3. ✅ **SEMPRE** **LEIA COMPLETAMENTE** a documentação antes de fazer QUALQUER
+   atividade
+4. ✅ **SEMPRE** entenda o propósito e lógica de funcionamento documentada
+5. ✅ **SEMPRE** entenda o fluxo atual documentado
+6. ✅ **SEMPRE** tenha contexto completo sobre como funciona antes de começar
+7. ✅ **SEMPRE** verifique se sua alteração mantém ou muda o comportamento
+   documentado
+8. ✅ **SEMPRE** consulte a seção "CONTEXTO CRÍTICO DO PROJETO" no AGENTS.md
+9. ✅ **SE NÃO EXISTE DOCUMENTAÇÃO**: **PERGUNTE** ao usuário sobre o funcionamento
+   atual antes de fazer qualquer atividade
+10. ✅ **NUNCA** comece qualquer atividade sem ter lido e entendido a documentação
+
+**APÓS ALTERAR UMA PÁGINA/COMPONENTE:**
+
+1. ✅ **SEMPRE** atualize `docs/features/[nome-pagina-ou-componente].md`
+2. ✅ **SEMPRE** atualize a referência no AGENTS.md se necessário
+3. ✅ **SEMPRE** reflita mudanças no comportamento esperado
+4. ✅ **SEMPRE** atualize estados, fluxos e regras se mudaram
+5. ✅ **SEMPRE** atualize a data de "Última Atualização"
+6. ✅ **SEMPRE** garanta que a documentação está sincronizada com o código
+
+**SE A INFORMAÇÃO NÃO ESTIVER DOCUMENTADA:**
+
+- Se você identificar que uma informação é crucial mas não está documentada →
+  **DOCUMENTE IMEDIATAMENTE**
+- Se você não tiver certeza se é crucial → **PERGUNTE AO USUÁRIO**
+- Se você implementar algo que pode ser crucial → **DOCUMENTE PROATIVAMENTE**
+
+**QUANDO O USUÁRIO EXPLICAR O FUNCIONAMENTO DESEJADO:**
+
+- Se o usuário disser "como eu quero que funcione" ou descrever comportamento
+  esperado → **DOCUMENTE A LÓGICA DE FUNCIONAMENTO IMEDIATAMENTE**
+- Não implemente sem documentar primeiro a lógica explicada pelo usuário
+- Garanta que futuras IAs tenham contexto completo sobre o propósito e
+  funcionamento da página/componente
+
+**🚨 REGRA CRÍTICA: LEITURA OBRIGATÓRIA ANTES DE QUALQUER ATIVIDADE**
+
+> **⚠️ CRÍTICO**: Esta regra se aplica a **QUALQUER** atividade: alterar, debugar,
+> corrigir, otimizar, refatorar, adicionar feature, etc.
+
+**ANTES de fazer QUALQUER atividade em uma página/componente:**
+
+1. ✅ **SEMPRE** verifique se existe `docs/features/[nome-pagina-ou-componente].md`
+2. ✅ **SEMPRE** **LEIA COMPLETAMENTE** o arquivo antes de começar QUALQUER
+   atividade
+3. ✅ **SEMPRE** entenda o propósito e lógica de funcionamento documentada
+4. ✅ **SEMPRE** entenda o fluxo atual documentado
+5. ✅ **SEMPRE** tenha contexto completo sobre como funciona
+6. ✅ **SEMPRE** consulte "Armadilhas a Evitar" e "Lições Aprendidas" se
+   existirem
+7. ✅ **SE NÃO EXISTE DOCUMENTAÇÃO**: **PERGUNTE** ao usuário sobre o
+   funcionamento atual antes de fazer qualquer atividade
+8. ✅ **NUNCA** comece a trabalhar sem ler a documentação primeiro
+9. ✅ **NUNCA** assuma como funciona sem consultar `docs/features/`
+10. ✅ **NUNCA** faça qualquer atividade sem ter contexto completo
+
+**Esta regra previne alucinações e garante que você sempre tenha contexto
+completo sobre como a página/componente funciona antes de fazer qualquer
+atividade.**
+
+**🚨 REGRA CRÍTICA: LEITURA OBRIGATÓRIA ANTES DE QUALQUER ATIVIDADE**
+
+**ANTES de fazer QUALQUER atividade em uma página/componente (alterar, debugar,
+corrigir, otimizar, refatorar, adicionar feature, etc.):**
+
+1. ✅ **SEMPRE** verifique se existe `docs/features/[nome].md`
+2. ✅ **SEMPRE** **LEIA COMPLETAMENTE** o arquivo antes de começar
+3. ✅ **SEMPRE** entenda o propósito e lógica de funcionamento
+4. ✅ **SEMPRE** entenda o fluxo atual documentado
+5. ✅ **SEMPRE** consulte "Armadilhas a Evitar" e "Lições Aprendidas"
+6. ✅ **SE NÃO EXISTE**: **PERGUNTE** ao usuário sobre o funcionamento antes de
+   fazer qualquer atividade
+7. ✅ **NUNCA** comece a trabalhar sem ler a documentação primeiro
+
+**Esta regra previne alucinações e garante que você sempre tenha contexto
+completo sobre como a página/componente funciona antes de fazer qualquer
+alteração.**
+
 ---
 
 ## 🎯 **OBJETIVO FINAL**
@@ -1405,4 +2248,81 @@ documentação primeiro!
 
 ---
 
-_Última atualização: janeiro 2025 | Versão: 2.1_
+---
+
+## 🚚 **SISTEMA DE ENTREGA/RETIRADA - CONTEXTO CRÍTICO**
+
+> **⚠️ IMPLEMENTADO**: Janeiro 2025 - Informações de entrega/retirada agora são
+> exibidas na página admin de orçamentos
+
+### **📋 O QUE FOI IMPLEMENTADO**
+
+1. **API Admin Quotes** (`app/api/admin/quotes/route.ts`):
+   - ✅ Retorna `deliveryType` (DELIVERY | PICKUP | null)
+   - ✅ Retorna `deliveryAddress` (objeto JSON parseado)
+   - ✅ Retorna `deliveryFee` (taxa de entrega)
+
+2. **Interface TypeScript** (`app/admin/orcamentos/page.tsx`):
+   - ✅ Interface `Quote` atualizada com campos de entrega
+   - ✅ Type safety para `deliveryType` e `deliveryAddress`
+
+3. **Exibição no Modal de Detalhes**:
+   - ✅ Seção "Tipo de Entrega/Retirada" com badge visual
+   - ✅ Exibição de taxa de entrega quando aplicável
+   - ✅ Card completo com endereço (quando DELIVERY)
+   - ✅ Mensagem informativa (quando PICKUP)
+
+### **🔧 ESTRUTURA DE DADOS**
+
+**No Schema Prisma**:
+
+```prisma
+model Quote {
+  deliveryType        DeliveryType?  // DELIVERY ou PICKUP
+  deliveryAddress     Json?          // Endereço completo
+  deliveryFee         Decimal?       // Taxa de entrega
+}
+
+enum DeliveryType {
+  DELIVERY
+  PICKUP
+}
+````
+
+**Na API Response**:
+
+```typescript
+{
+  deliveryType: 'DELIVERY' | 'PICKUP' | null,
+  deliveryAddress: {
+    street?: string
+    number?: string
+    complement?: string
+    neighborhood?: string
+    city?: string
+    state?: string
+    zipCode?: string
+  } | null,
+  deliveryFee: number | null
+}
+```
+
+### **⚠️ REGRAS CRÍTICAS**
+
+1. **Parse do deliveryAddress**: Prisma retorna como `Json`, API deve fazer
+   parse seguro
+2. **Exibição Condicional**: Só exibir endereço quando
+   `deliveryType === 'DELIVERY'`
+3. **Type Guards**: Sempre usar type guards ao acessar `deliveryAddress`
+4. **Validação**: Endereço completo obrigatório quando
+   `deliveryType === 'DELIVERY'`
+
+### **📝 ARQUIVOS RELACIONADOS**
+
+- **API**: `app/api/admin/quotes/route.ts` (linhas 298-308)
+- **Página Admin**: `app/admin/orcamentos/page.tsx` (interface Quote + modal)
+- **Schema**: `prisma/schema.prisma` (model Quote + enum DeliveryType)
+
+---
+
+_Última atualização: janeiro 2025 | Versão: 2.3_

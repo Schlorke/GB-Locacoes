@@ -11,6 +11,13 @@ const makeSchema = () => z.object({
   days: SortOrderSchema.optional(),
   pricePerDay: SortOrderSchema.optional(),
   total: SortOrderSchema.optional(),
+  startDate: SortOrderSchema.optional(),
+  endDate: SortOrderSchema.optional(),
+  includeWeekends: SortOrderSchema.optional(),
+  appliedDiscount: SortOrderSchema.optional(),
+  appliedPeriod: SortOrderSchema.optional(),
+  useDirectValue: SortOrderSchema.optional(),
+  directValue: SortOrderSchema.optional(),
   createdAt: SortOrderSchema.optional(),
   updatedAt: SortOrderSchema.optional()
 }).strict();

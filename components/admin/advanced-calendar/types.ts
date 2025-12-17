@@ -7,7 +7,7 @@ export interface CalendarEvent {
   end: Date
   resourceId?: string
   color: string
-  type: 'delivery' | 'pickup' | 'maintenance'
+  type: 'delivery' | 'pickup' | 'maintenance' | 'rental'
   status: string
   metadata?: Record<string, unknown>
 }

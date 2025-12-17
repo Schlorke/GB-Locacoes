@@ -295,12 +295,48 @@ export async function GET(request: NextRequest) {
       totalPrice: Number(quote.total),
       status: quote.status.toLowerCase() as 'pending' | 'approved' | 'rejected',
       message: quote.message,
+      deliveryType: quote.deliveryType || null,
+      deliveryAddress: quote.deliveryAddress
+        ? typeof quote.deliveryAddress === 'object' &&
+          !Array.isArray(quote.deliveryAddress)
+          ? (quote.deliveryAddress as Record<string, unknown>)
+          : typeof quote.deliveryAddress === 'string'
+            ? (JSON.parse(quote.deliveryAddress) as Record<string, unknown>)
+            : null
+        : null,
+      deliveryFee: quote.deliveryFee ? Number(quote.deliveryFee) : null,
       createdAt: quote.createdAt.toISOString(),
       updatedAt: quote.updatedAt.toISOString(),
       items: quote.items.map((item) => ({
         id: item.id,
         quantity: item.quantity,
         days: item.days,
+        startDate:
+          'startDate' in item && item.startDate
+            ? (item.startDate as Date).toISOString()
+            : null,
+        endDate:
+          'endDate' in item && item.endDate
+            ? (item.endDate as Date).toISOString()
+            : null,
+        includeWeekends:
+          'includeWeekends' in item ? (item.includeWeekends as boolean) : false,
+        appliedDiscount:
+          'appliedDiscount' in item && item.appliedDiscount
+            ? Number(item.appliedDiscount)
+            : null,
+        appliedPeriod:
+          'appliedPeriod' in item
+            ? (item.appliedPeriod as string | null)
+            : null,
+        useDirectValue:
+          'useDirectValue' in item ? (item.useDirectValue as boolean) : false,
+        directValue:
+          'directValue' in item && item.directValue
+            ? Number(item.directValue)
+            : null,
+        pricePerDay: Number(item.pricePerDay),
+        total: Number(item.total),
         equipment: {
           id: item.equipment.id,
           name: item.equipment.name,

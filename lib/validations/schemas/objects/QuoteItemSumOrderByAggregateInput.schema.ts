@@ -7,7 +7,9 @@ const makeSchema = () => z.object({
   quantity: SortOrderSchema.optional(),
   days: SortOrderSchema.optional(),
   pricePerDay: SortOrderSchema.optional(),
-  total: SortOrderSchema.optional()
+  total: SortOrderSchema.optional(),
+  appliedDiscount: SortOrderSchema.optional(),
+  directValue: SortOrderSchema.optional()
 }).strict();
 export const QuoteItemSumOrderByAggregateInputObjectSchema: z.ZodType<Prisma.QuoteItemSumOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteItemSumOrderByAggregateInput>;
 export const QuoteItemSumOrderByAggregateInputObjectZodSchema = makeSchema();
