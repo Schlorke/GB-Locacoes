@@ -362,6 +362,108 @@ Antes de considerar uma dialog aninhada implementada corretamente:
 - **Backdrop**: Cada dialog aninhada deve ter seu próprio `Dialog.Backdrop`
 - **Portal**: Cada dialog aninhada deve ter seu próprio `Dialog.Portal`
 
+#### **✨ Overlay de destaque para dialog secundária (confirmações)**
+
+> **⚠️ CRÍTICO**: Quando a dialog secundária for de confirmação/importante (ex.:
+> "Excluir Orçamento Permanentemente?"), reforçar o destaque da filha
+> escurecendo a dialog pai ao fundo. Este padrão já está implementado em
+> `app/admin/orcamentos/page.tsx` e **DEVE** ser reutilizado em cenários
+> semelhantes.
+
+**1. Estado centralizado de dialogs aninhadas**
+
+- No componente da dialog pai, crie um estado booleano que reflita se
+  **qualquer** dialog filha está aberta:
+
+```tsx
+const [nestedDialogOpen, setNestedDialogOpen] = useState(false)
+
+useEffect(() => {
+  setNestedDialogOpen(
+    showDeleteDialog || showPriceAdjustmentDialog || showLateFeeDialog
+  )
+}, [showDeleteDialog, showPriceAdjustmentDialog, showLateFeeDialog])
+```
+
+**2. Aplicar `data-nested-parent` + overlay escurecido na dialog pai**
+
+- No `Dialog.Popup` da dialog pai, passe `data-nested-parent` baseado nesse
+  estado (padrão Base UI) **e** injete um overlay absoluto **dentro de**
+  `Dialog.Content` quando `nestedDialogOpen` for `true`:
+
+```tsx
+<Dialog.Root
+  open={!!selectedQuote}
+  onOpenChange={(open) => !open && setSelectedQuote(null)}
+>
+  <Dialog.Backdrop />
+  <Dialog.Portal>
+    <Dialog.Popup
+      variant="default"
+      data-nested-parent={nestedDialogOpen ? "" : undefined}
+      className="max-w-4xl"
+    >
+      <Dialog.Content className="relative">
+        {nestedDialogOpen && (
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-10 rounded-2xl bg-black/45"
+          />
+        )}
+        {/* Header, body, footer e dialogs filhas dentro de BodyContent */}
+      </Dialog.Content>
+    </Dialog.Popup>
+  </Dialog.Portal>
+</Dialog.Root>
+```
+
+- O overlay:
+  - Fica **acima** do conteúdo do pai (`absolute inset-0 z-10 rounded-2xl`)
+  - Usa `bg-black/45` (ou similar já utilizado no projeto) para escurecer
+  - Tem `pointer-events-none` para não bloquear cliques na dialog filha, que é
+    renderizada em um portal separado com `z-[var(--layer-dialog)]` maior.
+
+**3. Dialogs filhas continuam seguindo o padrão Base UI**
+
+- Cada dialog filha continua usando o padrão já documentado:
+
+```tsx
+<Dialog.Root open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+  <Dialog.Portal>
+    <Dialog.Backdrop />
+    <Dialog.Popup
+      variant="default"
+      className="max-w-md h-auto max-h-[70vh] md:h-auto md:max-h-[70vh]"
+    >
+      {/* Conteúdo da confirmação */}
+    </Dialog.Popup>
+  </Dialog.Portal>
+</Dialog.Root>
+```
+
+**4. Onde usar este padrão**
+
+- Sempre que houver:
+  - Dialog pai com muitos detalhes (ex.: detalhes de orçamento, ficha de
+    equipamento, editor complexo)
+  - Dialog secundária de confirmação/ação crítica (excluir, aplicar multa,
+    aprovar ajuste de valor, resetar algo irreversível)
+- O objetivo é:
+  - Escurecer e “desligar visualmente” o conteúdo da dialog pai
+  - Dar foco total à ação da dialog secundária sem perder a hierarquia Base UI
+
+**5. Referência de implementação oficial**
+
+- **Arquivo**: `app/admin/orcamentos/page.tsx`
+  - Estado centralizado: controle de `nestedDialogOpen` com `showDeleteDialog`,
+    `showPriceAdjustmentDialog`, `showLateFeeDialog`
+  - Overlay escurecido: bloco `absolute inset-0 z-10 rounded-2xl bg-black/45`
+    dentro de `Dialog.Content` do modal de detalhes
+- **Regra**: Em qualquer novo fluxo com dialogs aninhadas que precise destacar a
+  dialog secundária, **copiar exatamente** esse padrão (estado agregado +
+  `data-nested-parent` + overlay absoluto na dialog pai) em vez de inventar
+  soluções alternativas.
+
 #### **📖 DOCUMENTAÇÃO ADICIONAL**
 
 - `docs/features/dialog-lab.md` - Documentação completa do sistema de dialogs

@@ -925,7 +925,7 @@ function AdminQuotesPage() {
             <Dialog.Popup
               variant="default"
               data-nested-parent={nestedDialogOpen ? '' : undefined}
-              className="max-w-4xl"
+              className="max-w-4xl ring-0"
             >
               <Dialog.Content className="relative">
                 {nestedDialogOpen && (
