@@ -927,7 +927,13 @@ function AdminQuotesPage() {
               data-nested-parent={nestedDialogOpen ? '' : undefined}
               className="max-w-4xl"
             >
-              <Dialog.Content>
+              <Dialog.Content className="relative">
+                {nestedDialogOpen && (
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 z-10 rounded-2xl bg-black/45"
+                  />
+                )}
                 <Dialog.Header>
                   <Dialog.HeaderIcon>
                     {selectedQuote?.name?.charAt(0).toUpperCase()}

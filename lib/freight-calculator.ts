@@ -133,5 +133,3 @@ export async function calculateFreightWithAPI(
     return calculateFreight(request)
   }
 }
-
-

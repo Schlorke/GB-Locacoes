@@ -325,7 +325,17 @@ export async function POST(request: Request) {
           item.quantity
         )
 
+        // Regra especial para criação de orçamentos:
+        // - Outros motivos de indisponibilidade (ex.: falta de estoque) continuam bloqueando o envio
+        // - Equipamentos em manutenção NÃO bloqueiam a criação do orçamento,
+        //   permitindo que o admin trate o caso manualmente depois
         if (!availability.available) {
+          if (availability.reason === 'Equipamento está em manutenção') {
+            // Permitir criação do orçamento mesmo com manutenção em andamento
+            // (bloqueio real ocorrerá apenas na conversão/aprovação da locação)
+            continue
+          }
+
           return NextResponse.json(
             {
               error: `Equipamento indisponível: ${availability.reason || 'Não disponível nas datas selecionadas'}`,
