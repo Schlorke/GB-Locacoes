@@ -2,7 +2,12 @@
 
 import { AdminFilterCard } from '@/components/admin/admin-filter-card'
 import { AdminPageHeader } from '@/components/admin/admin-page-header'
+import { AdminCard } from '@/components/admin/admin-card'
 import { KanbanPipeline } from '@/components/admin/kanban-pipeline'
+import {
+  AdvancedCalendar,
+  type CalendarEvent,
+} from '@/components/admin/advanced-calendar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -46,6 +51,9 @@ interface Quote {
   email: string
   phone: string
   company?: string
+  cpf?: string | null
+  cnpj?: string | null
+  cep?: string | null
   equipments: Array<{
     id: string
     name: string
@@ -150,7 +158,12 @@ function AdminQuotesPage() {
   const [periodFilter, setPeriodFilter] = useState<string>('all')
   const [valueFilter, setValueFilter] = useState<string>('all')
   const [isUpdating, setIsUpdating] = useState(false)
-  const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban')
+  const [updatingAction, setUpdatingAction] = useState<
+    'approved' | 'rejected' | null
+  >(null)
+  const [viewMode, setViewMode] = useState<'table' | 'kanban' | 'calendar'>(
+    'kanban'
+  )
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showPriceAdjustmentDialog, setShowPriceAdjustmentDialog] =
@@ -324,6 +337,7 @@ function AdminQuotesPage() {
   ) => {
     try {
       setIsUpdating(true)
+      setUpdatingAction(newStatus)
       // Converter para maiúsculas conforme esperado pela API (enum QuoteStatus)
       const statusUpperCase = newStatus.toUpperCase() as 'APPROVED' | 'REJECTED'
       const response = await fetch(`/api/admin/quotes/${quoteId}`, {
@@ -351,6 +365,7 @@ function AdminQuotesPage() {
       })
     } finally {
       setIsUpdating(false)
+      setUpdatingAction(null)
     }
   }
 
@@ -636,10 +651,11 @@ function AdminQuotesPage() {
                 options={[
                   { value: 'kanban', label: 'Kanban', icon: LayoutGrid },
                   { value: 'table', label: 'Tabela', icon: Table },
+                  { value: 'calendar', label: 'Calendário', icon: Calendar },
                 ]}
                 value={viewMode}
                 onValueChange={(value) =>
-                  setViewMode(value as 'kanban' | 'table')
+                  setViewMode(value as 'kanban' | 'table' | 'calendar')
                 }
               />
             }
@@ -705,11 +721,23 @@ function AdminQuotesPage() {
                           <span className="text-xs font-semibold text-orange-600">
                             {formatCurrency(quoteTyped.totalPrice)}
                           </span>
-                          {quoteTyped.startDate && (
-                            <span className="text-xs text-gray-500">
-                              {formatDate(quoteTyped.startDate)}
-                            </span>
-                          )}
+                          <div className="text-right">
+                            {quoteTyped.startDate && (
+                              <span className="text-xs text-gray-500 block">
+                                {formatDate(quoteTyped.startDate)}
+                              </span>
+                            )}
+                            {quoteTyped.createdAt && (
+                              <span className="text-xs text-gray-400 block">
+                                {new Date(
+                                  quoteTyped.createdAt
+                                ).toLocaleTimeString('pt-BR', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -919,6 +947,89 @@ function AdminQuotesPage() {
           </motion.div>
         )}
 
+        {/* Visualização de Calendário */}
+        {viewMode === 'calendar' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-6"
+          >
+            <AdminCard title="Calendário de Orçamentos" variant="flat">
+              <AdvancedCalendar
+                events={filteredQuotes.map((quote): CalendarEvent => {
+                  // Obter datas do orçamento
+                  const startDateStr =
+                    quote.startDate || quote.items?.[0]?.startDate
+                  const endDateStr = quote.endDate || quote.items?.[0]?.endDate
+
+                  const start = startDateStr
+                    ? new Date(startDateStr)
+                    : new Date(quote.createdAt)
+                  const end = endDateStr ? new Date(endDateStr) : start
+
+                  const isPending = quote.status === 'pending'
+                  const createdAt = quote.createdAt
+                    ? new Date(quote.createdAt)
+                    : undefined
+
+                  // Cores baseadas no status
+                  const statusColors: Record<string, string> = {
+                    pending: '#F59E0B', // Amarelo
+                    approved: '#10B981', // Verde
+                    rejected: '#EF4444', // Vermelho
+                  }
+
+                  // Equipamentos do orçamento
+                  const equipmentNames =
+                    quote.items
+                      ?.map((item) => item.equipment?.name)
+                      .filter(Boolean)
+                      .join(', ') ||
+                    quote.equipments?.map((e) => e.name).join(', ') ||
+                    'Equipamentos'
+
+                  return {
+                    id: quote.id,
+                    title: `${quote.name} - ${equipmentNames}`,
+                    start,
+                    end,
+                    resourceId: quote.status,
+                    color: statusColors[quote.status] || '#6B7280',
+                    type: 'rental',
+                    status: quote.status,
+                    isPendingRequest: isPending,
+                    createdAt: isPending ? createdAt : undefined,
+                    metadata: {
+                      clientName: quote.name,
+                      clientEmail: quote.email,
+                      clientPhone: quote.phone,
+                      company: quote.company,
+                      equipmentCount:
+                        quote.items?.length || quote.equipments?.length || 0,
+                      total: quote.totalPrice,
+                      equipmentNames,
+                    },
+                  }
+                })}
+                resources={Object.entries(statusConfig).map(
+                  ([status, config]) => ({
+                    id: status,
+                    name: config.label,
+                  })
+                )}
+                onEventClick={(event) => {
+                  const quote = filteredQuotes.find((q) => q.id === event.id)
+                  if (quote) {
+                    setSelectedQuote(quote)
+                  }
+                }}
+                defaultViewMode="weekly"
+              />
+            </AdminCard>
+          </motion.div>
+        )}
+
         {/* Modal de Detalhes */}
         <Dialog.Root
           open={!!selectedQuote}
@@ -945,6 +1056,18 @@ function AdminQuotesPage() {
                   <Dialog.Title className="text-xl font-semibold text-gray-800">
                     Detalhes do Orçamento - {selectedQuote?.name}
                   </Dialog.Title>
+                  {selectedQuote?.createdAt && (
+                    <div className="ml-auto mr-10 flex items-center gap-2 text-sm text-gray-500">
+                      <Clock className="w-4 h-4" />
+                      <span>
+                        {formatDate(selectedQuote.createdAt)} às{' '}
+                        {new Date(selectedQuote.createdAt).toLocaleTimeString(
+                          'pt-BR',
+                          { hour: '2-digit', minute: '2-digit' }
+                        )}
+                      </span>
+                    </div>
+                  )}
                   <Dialog.CloseButton />
                 </Dialog.Header>
 
@@ -993,6 +1116,45 @@ function AdminQuotesPage() {
                                     </div>
                                     <div className="font-medium">
                                       {selectedQuote.company}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                              {selectedQuote.cpf && (
+                                <div className="flex items-center gap-3">
+                                  <FileText className="w-4 h-4 text-gray-400" />
+                                  <div>
+                                    <div className="text-sm text-gray-500">
+                                      CPF
+                                    </div>
+                                    <div className="font-medium">
+                                      {selectedQuote.cpf}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                              {selectedQuote.cnpj && (
+                                <div className="flex items-center gap-3">
+                                  <Briefcase className="w-4 h-4 text-gray-400" />
+                                  <div>
+                                    <div className="text-sm text-gray-500">
+                                      CNPJ
+                                    </div>
+                                    <div className="font-medium">
+                                      {selectedQuote.cnpj}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                              {selectedQuote.cep && (
+                                <div className="flex items-center gap-3">
+                                  <MapPin className="w-4 h-4 text-gray-400" />
+                                  <div>
+                                    <div className="text-sm text-gray-500">
+                                      CEP
+                                    </div>
+                                    <div className="font-medium">
+                                      {selectedQuote.cep}
                                     </div>
                                   </div>
                                 </div>
@@ -1851,20 +2013,6 @@ function AdminQuotesPage() {
                           <div className="flex gap-3">
                             <Button
                               onClick={() =>
-                                updateQuoteStatus(selectedQuote.id, 'approved')
-                              }
-                              disabled={isUpdating}
-                              variant="default"
-                              size="default"
-                              className="flex-1"
-                            >
-                              <CheckCircle className="w-4 h-4" />
-                              {isUpdating
-                                ? 'Aprovando...'
-                                : 'Aprovar Orçamento'}
-                            </Button>
-                            <Button
-                              onClick={() =>
                                 updateQuoteStatus(selectedQuote.id, 'rejected')
                               }
                               disabled={isUpdating}
@@ -1873,9 +2021,23 @@ function AdminQuotesPage() {
                               className="flex-1 bg-white"
                             >
                               <XCircle className="w-4 h-4" />
-                              {isUpdating
+                              {updatingAction === 'rejected'
                                 ? 'Rejeitando...'
                                 : 'Rejeitar Orçamento'}
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                updateQuoteStatus(selectedQuote.id, 'approved')
+                              }
+                              disabled={isUpdating}
+                              variant="default"
+                              size="default"
+                              className="flex-1"
+                            >
+                              <CheckCircle className="w-4 h-4" />
+                              {updatingAction === 'approved'
+                                ? 'Aprovando...'
+                                : 'Aprovar Orçamento'}
                             </Button>
                           </div>
                         )}

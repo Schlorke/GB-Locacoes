@@ -412,9 +412,21 @@ export default function AdminMaintenancePage() {
                 events={filteredMaintenances.map(
                   (maintenance): CalendarEvent => {
                     const start = parseISO(maintenance.scheduledAt)
-                    const end = maintenance.completedAt
+                    // Garante que end sempre seja depois de start e tenha duração máxima de 24 horas
+                    let end = maintenance.completedAt
                       ? parseISO(maintenance.completedAt)
                       : addHours(start, 4) // Duração padrão de 4 horas se não concluída
+
+                    // Se end for antes de start ou muito depois (mais de 24h), limita a duração
+                    if (end < start) {
+                      end = addHours(start, 4)
+                    } else {
+                      const maxEnd = addHours(start, 24)
+                      if (end > maxEnd) {
+                        end = maxEnd
+                      }
+                    }
+
                     return {
                       id: maintenance.id,
                       title: `${typeConfig[maintenance.type] ?? 'Manutenção'} - ${maintenance.equipment.name}`,

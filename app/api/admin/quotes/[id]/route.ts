@@ -343,6 +343,36 @@ export async function PATCH(
         // Remover rejectedBy se não houver usuário
         delete updateQuoteData.rejectedBy
       }
+
+      // Cancelar todas as locações relacionadas a este orçamento
+      // Usar updateMany para cancelar todas de uma vez (mais eficiente e atômico)
+      try {
+        const updateResult = await prisma.rentals.updateMany({
+          where: {
+            quoteId: params.id,
+            status: {
+              not: 'CANCELLED', // Apenas cancelar se ainda não estiver cancelada
+            },
+          },
+          data: {
+            status: 'CANCELLED',
+            updatedat: new Date(),
+          },
+        })
+
+        if (updateResult.count > 0) {
+          console.log(
+            `✅ ${updateResult.count} locação(ões) cancelada(s) devido à rejeição do orçamento ${params.id}`
+          )
+        }
+      } catch (rentalError) {
+        console.error(
+          'Erro ao cancelar locações relacionadas ao orçamento rejeitado:',
+          rentalError
+        )
+        // Não falhar a rejeição do orçamento por causa de erro ao cancelar locações
+        // (pode ser corrigido manualmente depois)
+      }
     }
 
     // Construir objeto de update de forma explícita e segura

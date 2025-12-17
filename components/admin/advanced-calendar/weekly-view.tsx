@@ -12,6 +12,9 @@ import {
   startOfDay,
   isToday,
   startOfToday,
+  endOfDay,
+  max,
+  min,
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { EventBlock } from './event-block'
@@ -45,17 +48,49 @@ export function WeeklyView({
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
 
   const getEventsForDay = (day: Date) => {
-    return events.filter((event) => isSameDay(event.start, day))
+    const dayStart = startOfDay(day)
+    const dayEnd = endOfDay(day)
+
+    return events.filter((event) => {
+      // Para eventos pendentes, usa createdAt para determinar o dia
+      if (event.isPendingRequest && event.createdAt) {
+        return event.createdAt >= dayStart && event.createdAt <= dayEnd
+      }
+      // Para outros eventos, inclui os que se sobrepõem ao dia
+      return event.start <= dayEnd && event.end >= dayStart
+    })
   }
 
-  const getEventPosition = (event: CalendarEvent) => {
-    const dayStart = startOfDay(event.start)
-    const minutesFromStart = differenceInMinutes(event.start, dayStart)
-    const duration = differenceInMinutes(event.end, event.start)
+  const getEventPosition = (event: CalendarEvent, day: Date) => {
+    const dayStart = startOfDay(day)
+    const dayEnd = endOfDay(day)
+
+    // Para eventos pendentes, posiciona pelo horário de criação com altura fixa
+    if (event.isPendingRequest && event.createdAt) {
+      const minutesFromDayStart = differenceInMinutes(event.createdAt, dayStart)
+      return {
+        top: Math.max(0, minutesFromDayStart * MINUTE_HEIGHT),
+        height: 'auto' as const, // Altura automática
+        isPending: true,
+      }
+    }
+
+    // Limita o início e fim do evento ao dia atual
+    const eventStart = max([event.start, dayStart])
+    const eventEnd = min([event.end, dayEnd])
+
+    // Calcula a posição dentro do dia (0-1439 minutos)
+    const minutesFromDayStart = differenceInMinutes(eventStart, dayStart)
+    const duration = differenceInMinutes(eventEnd, eventStart)
+
+    // Limita a altura máxima a 24 horas (1440 minutos)
+    const maxHeight = 1440 * MINUTE_HEIGHT
+    const calculatedHeight = duration * MINUTE_HEIGHT
 
     return {
-      top: minutesFromStart * MINUTE_HEIGHT,
-      height: Math.max(duration * MINUTE_HEIGHT, 30),
+      top: Math.max(0, minutesFromDayStart * MINUTE_HEIGHT),
+      height: Math.min(Math.max(calculatedHeight, 30), maxHeight),
+      isPending: false,
     }
   }
 
@@ -108,7 +143,7 @@ export function WeeklyView({
             </div>
 
             {/* Grade de Horas */}
-            <div className="relative">
+            <div className="relative h-[1440px]">
               {HOURS.map((hour) => (
                 <div
                   key={hour}
@@ -121,7 +156,7 @@ export function WeeklyView({
 
               {/* Eventos */}
               {getEventsForDay(day).map((event) => {
-                const position = getEventPosition(event)
+                const position = getEventPosition(event, day)
                 return (
                   <EventBlock
                     key={event.id}

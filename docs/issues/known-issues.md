@@ -5,6 +5,100 @@
 
 ---
 
+## 25. Botões Aprovar/Rejeitar mostravam loading simultâneo (Admin Orçamentos)
+
+### 🔴 Problema
+
+**Data da Ocorrência**: 2025-12-17 **Severidade**: Baixa (UX confusa)
+**Status**: ✅ Resolvido
+
+#### Descrição
+
+Na página `/admin/orcamentos`, ao clicar em "Rejeitar Orçamento" ou "Aprovar
+Orçamento", **ambos os botões** exibiam estado de loading simultaneamente
+("Rejeitando..." e "Aprovando..."), causando confusão visual para o usuário.
+
+#### Causa Raiz
+
+- Ambos os botões usavam o mesmo estado `isUpdating` para controlar o texto de
+  loading
+- Quando `isUpdating` era `true`, ambos os botões mudavam para o texto de
+  loading, independente de qual botão foi clicado
+
+#### Código Problemático
+
+```tsx
+// Ambos usavam isUpdating para exibir loading
+{
+  isUpdating ? "Rejeitando..." : "Rejeitar Orçamento"
+}
+{
+  isUpdating ? "Aprovando..." : "Aprovar Orçamento"
+}
+```
+
+### ✅ Solução Implementada
+
+- Adicionado novo estado `updatingAction` para rastrear qual ação está em
+  andamento (`'approved' | 'rejected' | null`)
+- Cada botão agora verifica se sua ação específica está em andamento antes de
+  mostrar loading
+- `isUpdating` continua sendo usado para desabilitar ambos os botões durante a
+  operação
+
+#### Código Corrigido
+
+```tsx
+const [updatingAction, setUpdatingAction] = useState<
+  "approved" | "rejected" | null
+>(null)
+
+// Na função updateQuoteStatus:
+setUpdatingAction(newStatus)
+// No finally:
+setUpdatingAction(null)
+
+// Nos botões:
+{
+  updatingAction === "rejected" ? "Rejeitando..." : "Rejeitar Orçamento"
+}
+{
+  updatingAction === "approved" ? "Aprovando..." : "Aprovar Orçamento"
+}
+```
+
+#### Arquivos Modificados
+
+1. `app/admin/orcamentos/page.tsx` - Linhas 160-161, 335-337, 365-366, 2019-2035
+
+#### Como Validar
+
+1. `pnpm dev`
+2. Acessar `/admin/orcamentos`
+3. Abrir um orçamento pendente
+4. Clicar em "Rejeitar Orçamento" → Apenas esse botão deve mostrar
+   "Rejeitando..."
+5. Clicar em "Aprovar Orçamento" → Apenas esse botão deve mostrar "Aprovando..."
+6. Ambos os botões devem ficar desabilitados durante a operação
+
+#### Armadilhas a Evitar
+
+- ❌ **NUNCA** use um único estado booleano para controlar loading de múltiplas
+  ações distintas
+- ❌ **NUNCA** assuma que o usuário entenderá qual ação está em andamento se
+  todos os botões mudarem
+
+#### Lições Aprendidas
+
+- ✅ Para múltiplos botões de ação, use um estado que identifique QUAL ação está
+  em andamento
+- ✅ Mantenha um estado separado para desabilitar botões (`isUpdating`) e outro
+  para identificar a ação (`updatingAction`)
+- ✅ O padrão `'action1' | 'action2' | null` é mais expressivo que múltiplos
+  booleanos
+
+---
+
 ## 24. Dialog de exclusão de orçamento travava página (Admin)
 
 ### ?? Problema

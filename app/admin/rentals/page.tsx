@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { AdminPageHeader } from '@/components/admin/admin-page-header'
 import { AdminCard } from '@/components/admin/admin-card'
-import { KanbanPipeline } from '@/components/admin/kanban-pipeline'
 import {
   AdvancedCalendar,
   type CalendarEvent,
@@ -32,7 +31,6 @@ import {
   Calendar,
   Eye,
   Search,
-  LayoutGrid,
   List,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -49,6 +47,7 @@ interface Rental {
   checkInAt?: string
   checkOutAt?: string
   notes?: string
+  createdat?: string
   users: {
     id: string
     name: string | null
@@ -70,6 +69,7 @@ interface Rental {
     id: string
     name: string
     email: string
+    status?: string // Status do orçamento para filtrar rejeitados
   }
   payments?: Array<{
     id: string
@@ -146,9 +146,7 @@ export default function AdminRentalsPage() {
   // NUNCA alterar para 'all' sem consultar o usuário
   const [statusFilter, setStatusFilter] = useState<string>('PENDING')
   const [periodFilter, setPeriodFilter] = useState<string>('all')
-  const [viewMode, setViewMode] = useState<'table' | 'kanban' | 'calendar'>(
-    'table'
-  )
+  const [viewMode, setViewMode] = useState<'table' | 'calendar'>('table')
 
   const fetchRentals = useCallback(async () => {
     try {
@@ -181,6 +179,16 @@ export default function AdminRentalsPage() {
     }
 
     const filtered = rentals.filter((rental) => {
+      // Excluir locações de orçamentos rejeitados (fallback do filtro da API)
+      if (rental.quote?.status === 'REJECTED') {
+        return false
+      }
+
+      // Excluir locações canceladas (a menos que o filtro seja explicitamente 'CANCELLED')
+      if (rental.status === 'CANCELLED' && statusFilter !== 'CANCELLED') {
+        return false
+      }
+
       const matchesSearch =
         rental.users.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         rental.users.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -279,75 +287,6 @@ export default function AdminRentalsPage() {
     )
   }
 
-  // Agrupar por status para pipeline
-  // Normalizar status (pode vir como string ou enum)
-  const rentalsByStatus = {
-    PENDING: filteredRentals.filter(
-      (r) => (r.status?.toUpperCase() || r.status) === 'PENDING'
-    ),
-    ACTIVE: filteredRentals.filter(
-      (r) => (r.status?.toUpperCase() || r.status) === 'ACTIVE'
-    ),
-    OVERDUE: filteredRentals.filter(
-      (r) => (r.status?.toUpperCase() || r.status) === 'OVERDUE'
-    ),
-    PENDING_RETURN: filteredRentals.filter(
-      (r) => (r.status?.toUpperCase() || r.status) === 'PENDING_RETURN'
-    ),
-    COMPLETED: filteredRentals.filter(
-      (r) => (r.status?.toUpperCase() || r.status) === 'COMPLETED'
-    ),
-    CANCELLED: filteredRentals.filter(
-      (r) => (r.status?.toUpperCase() || r.status) === 'CANCELLED'
-    ),
-  }
-
-  // Configuração para Kanban
-  const kanbanStatusConfig = {
-    PENDING: {
-      key: 'PENDING',
-      label: 'Pendente',
-      color: 'bg-yellow-100 text-yellow-800',
-      icon: Clock,
-      gradient: 'from-yellow-400 to-orange-500',
-    },
-    ACTIVE: {
-      key: 'ACTIVE',
-      label: 'Ativa',
-      color: 'bg-blue-100 text-blue-800',
-      icon: CheckCircle,
-      gradient: 'from-blue-400 to-cyan-500',
-    },
-    OVERDUE: {
-      key: 'OVERDUE',
-      label: 'Atrasada',
-      color: 'bg-orange-100 text-orange-800',
-      icon: AlertTriangle,
-      gradient: 'from-orange-400 to-red-500',
-    },
-    PENDING_RETURN: {
-      key: 'PENDING_RETURN',
-      label: 'Aguardando Devolução',
-      color: 'bg-purple-100 text-purple-800',
-      icon: Clock,
-      gradient: 'from-purple-400 to-pink-500',
-    },
-    COMPLETED: {
-      key: 'COMPLETED',
-      label: 'Concluída',
-      color: 'bg-green-100 text-green-800',
-      icon: CheckCircle,
-      gradient: 'from-green-400 to-emerald-500',
-    },
-    CANCELLED: {
-      key: 'CANCELLED',
-      label: 'Cancelada',
-      color: 'bg-red-100 text-red-800',
-      icon: XCircle,
-      gradient: 'from-red-400 to-rose-500',
-    },
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
@@ -408,9 +347,9 @@ export default function AdminRentalsPage() {
                   {Object.entries(statusConfig).map(([status, config]) => {
                     if (!config) return null
                     const Icon = config.icon
-                    const statusRentals =
-                      rentalsByStatus[status as keyof typeof rentalsByStatus] ||
-                      []
+                    const statusRentals = filteredRentals.filter(
+                      (r) => (r.status?.toUpperCase() || r.status) === status
+                    )
                     const isActive = statusFilter === status
 
                     return (
@@ -528,7 +467,6 @@ export default function AdminRentalsPage() {
                     <ViewToggle
                       options={[
                         { value: 'table', label: 'Tabela', icon: List },
-                        { value: 'kanban', label: 'Kanban', icon: LayoutGrid },
                         {
                           value: 'calendar',
                           label: 'Calendário',
@@ -537,7 +475,7 @@ export default function AdminRentalsPage() {
                       ]}
                       value={viewMode}
                       onValueChange={(value) =>
-                        setViewMode(value as 'table' | 'kanban' | 'calendar')
+                        setViewMode(value as 'table' | 'calendar')
                       }
                     />
                   </div>
@@ -564,6 +502,10 @@ export default function AdminRentalsPage() {
                     .map((item) => item.equipments.name)
                     .join(', ')
                   const clientName = rental.users.name || 'Cliente'
+                  const isPending = rental.status === 'PENDING'
+                  const createdAt = rental.createdat
+                    ? parseISO(rental.createdat)
+                    : undefined
 
                   // Cores baseadas no status
                   const statusColors: Record<string, string> = {
@@ -584,6 +526,9 @@ export default function AdminRentalsPage() {
                     color: statusColors[rental.status] || '#6B7280',
                     type: 'rental',
                     status: rental.status,
+                    // Para solicitações pendentes, usar altura auto e posicionar pelo horário de criação
+                    isPendingRequest: isPending,
+                    createdAt: isPending ? createdAt : undefined,
                     metadata: {
                       clientName: rental.users.name,
                       clientEmail: rental.users.email,
@@ -725,69 +670,6 @@ export default function AdminRentalsPage() {
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
-        )}
-
-        {/* Lista de Locações Filtradas - Kanban */}
-        {filteredRentals.length > 0 && viewMode === 'kanban' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mb-6"
-          >
-            <KanbanPipeline<Rental>
-              items={filteredRentals}
-              statusConfig={kanbanStatusConfig}
-              renderItem={(rental) => (
-                <Card
-                  className="mb-2 cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => setSelectedRental(rental as Rental)}
-                >
-                  <CardContent className="p-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <p className="font-semibold text-sm text-gray-900 truncate">
-                          {(rental as Rental).users.name || 'Sem nome'}
-                        </p>
-                        <Badge
-                          variant="outline"
-                          className={cn(
-                            'text-xs',
-                            statusConfig[(rental as Rental).status]?.color
-                          )}
-                        >
-                          {formatCurrency((rental as Rental).total)}
-                        </Badge>
-                      </div>
-                      <p className="text-xs text-gray-500 truncate">
-                        {(rental as Rental).users.email}
-                      </p>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
-                        <Package className="w-3 h-3" />
-                        <span>
-                          {(rental as Rental).rental_items.length} item(s)
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
-                        <Calendar className="w-3 h-3" />
-                        <span>
-                          {formatDate((rental as Rental).startdate)} -{' '}
-                          {formatDate((rental as Rental).enddate)}
-                        </span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-              onItemClick={(rental) => setSelectedRental(rental as Rental)}
-              columnsPerRow={{
-                mobile: 1,
-                tablet: 3,
-                desktop: 3,
-                xl: 6,
-              }}
-            />
           </motion.div>
         )}
 

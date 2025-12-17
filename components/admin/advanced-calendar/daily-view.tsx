@@ -9,6 +9,9 @@ import {
   differenceInMinutes,
   startOfDay,
   startOfToday,
+  endOfDay,
+  max,
+  min,
 } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { EventBlock } from './event-block'
@@ -41,18 +44,50 @@ export function DailyView({
   }, [])
 
   const dayEvents = useMemo(() => {
-    return events.filter((event) => isSameDay(event.start, date))
+    const dayStart = startOfDay(date)
+    const dayEnd = endOfDay(date)
+
+    return events.filter((event) => {
+      // Para eventos pendentes, usa createdAt para determinar o dia
+      if (event.isPendingRequest && event.createdAt) {
+        return event.createdAt >= dayStart && event.createdAt <= dayEnd
+      }
+      // Para outros eventos, inclui os que se sobrepõem ao dia
+      return event.start <= dayEnd && event.end >= dayStart
+    })
   }, [events, date])
 
   const hasResources = Boolean(resources?.length)
   const getEventPosition = (event: CalendarEvent) => {
-    const dayStart = startOfDay(event.start)
-    const minutesFromStart = differenceInMinutes(event.start, dayStart)
-    const duration = differenceInMinutes(event.end, event.start)
+    const dayStart = startOfDay(date)
+    const dayEnd = endOfDay(date)
+
+    // Para eventos pendentes, posiciona pelo horário de criação com altura fixa
+    if (event.isPendingRequest && event.createdAt) {
+      const minutesFromDayStart = differenceInMinutes(event.createdAt, dayStart)
+      return {
+        top: Math.max(0, minutesFromDayStart * MINUTE_HEIGHT),
+        height: 'auto' as const,
+        isPending: true,
+      }
+    }
+
+    // Limita o início e fim do evento ao dia atual
+    const eventStart = max([event.start, dayStart])
+    const eventEnd = min([event.end, dayEnd])
+
+    // Calcula a posição dentro do dia (0-1439 minutos)
+    const minutesFromDayStart = differenceInMinutes(eventStart, dayStart)
+    const duration = differenceInMinutes(eventEnd, eventStart)
+
+    // Limita a altura máxima a 24 horas (1440 minutos)
+    const maxHeight = 1440 * MINUTE_HEIGHT
+    const calculatedHeight = duration * MINUTE_HEIGHT
 
     return {
-      top: minutesFromStart * MINUTE_HEIGHT,
-      height: Math.max(duration * MINUTE_HEIGHT, 30),
+      top: Math.max(0, minutesFromDayStart * MINUTE_HEIGHT),
+      height: Math.min(Math.max(calculatedHeight, 30), maxHeight),
+      isPending: false,
     }
   }
 
@@ -88,7 +123,7 @@ export function DailyView({
         {resourceColumns.map((resource, index) => (
           <div
             key={resource.id}
-            className={`flex-1 min-w-[200px] ${index < resourceColumns.length - 1 ? 'border-r border-slate-200' : ''}`}
+            className={`flex-1 min-w-[150px] ${index < resourceColumns.length - 1 ? 'border-r border-slate-200' : ''}`}
           >
             {/* Header do Recurso */}
             <div className="h-12 flex items-center justify-center border-b border-slate-200 bg-slate-50 sticky top-0 z-20">
@@ -98,7 +133,7 @@ export function DailyView({
             </div>
 
             {/* Grade de Horas */}
-            <div className={`relative ${index === 0 ? '' : ''}`}>
+            <div className={`relative h-[1440px] ${index === 0 ? '' : ''}`}>
               {HOURS.map((hour) => (
                 <div
                   key={hour}

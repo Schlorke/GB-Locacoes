@@ -497,7 +497,32 @@ export default function AdminLogisticsPage() {
               <AdvancedCalendar
                 events={filteredDeliveries.map((delivery): CalendarEvent => {
                   const start = parseISO(delivery.scheduledAt)
+                  // Duração fixa de 2 horas para entregas/coletas
                   const end = addHours(start, 2)
+
+                  // Validação de segurança: garante que end sempre seja depois de start
+                  if (end < start) {
+                    // Fallback: se houver problema, usa 2 horas a partir de agora
+                    const now = new Date()
+                    return {
+                      id: delivery.id,
+                      title: `${delivery.type === 'DELIVERY' ? 'Entrega' : 'Coleta'} - ${delivery.rental.users.name || 'Cliente'}`,
+                      start: now,
+                      end: addHours(now, 2),
+                      resourceId: delivery.vehicleId ?? `type-${delivery.type}`,
+                      color:
+                        delivery.type === 'DELIVERY' ? '#3B82F6' : '#8B5CF6',
+                      type:
+                        delivery.type === 'DELIVERY' ? 'delivery' : 'pickup',
+                      status: delivery.status,
+                      metadata: {
+                        address: delivery.address,
+                        driverName: delivery.driverName,
+                        vehicleId: delivery.vehicleId,
+                      },
+                    }
+                  }
+
                   return {
                     id: delivery.id,
                     title: `${delivery.type === 'DELIVERY' ? 'Entrega' : 'Coleta'} - ${delivery.rental.users.name || 'Cliente'}`,

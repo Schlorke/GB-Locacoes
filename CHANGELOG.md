@@ -70,6 +70,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Locações pendentes de orçamentos rejeitados não aparecem mais**: A API agora
+  exclui locações de orçamentos `REJECTED` e esconde órfãs por padrão; o script
+  `pnpm db:clean:rejected-rentals` também cancela registros sem `quoteId` ou com
+  `quote` inexistente, limpando bases já afetadas.
+  - **Arquivos Modificados**:
+    - `app/api/admin/rentals/route.ts`
+    - `scripts/clean-rejected-quote-rentals.ts`
+  - **Data**: 2025-12-17
+
 - **Confirmação de exclusão de orçamento travava modal no admin**: Ao clicar em
   "Excluir Permanentemente" em orçamentos rejeitados, a confirmação ficava atrás
   do dialog Base UI e o focus trap bloqueava toda a página.

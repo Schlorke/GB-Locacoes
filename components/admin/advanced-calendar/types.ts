@@ -10,6 +10,10 @@ export interface CalendarEvent {
   type: 'delivery' | 'pickup' | 'maintenance' | 'rental'
   status: string
   metadata?: Record<string, unknown>
+  /** Data/hora de criação da solicitação (para posicionar eventos PENDING) */
+  createdAt?: Date
+  /** Se true, usa altura automática e posiciona pelo createdAt */
+  isPendingRequest?: boolean
 }
 
 export interface CalendarResource {

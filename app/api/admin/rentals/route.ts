@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 import Decimal from 'decimal.js'
+import type { Prisma } from '@prisma/client'
 
 const CreateRentalSchema = z.object({
   userId: z.string(),
@@ -40,21 +41,47 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '50')
     const skip = (page - 1) * limit
+    const includeOrphans = searchParams.get('includeOrphans') === 'true'
 
-    const where: {
-      status?: string
-      userid?: string
-      startdate?: { gte?: Date; lte?: Date }
-    } = {}
-    if (status) where.status = status
-    if (userId) where.userid = userId
-    if (startDate || endDate) {
-      where.startdate = {}
-      if (startDate) where.startdate.gte = new Date(startDate)
-      if (endDate) where.startdate.lte = new Date(endDate)
+    // Construir condições de filtro
+    const whereConditions: Prisma.rentalsWhereInput = {}
+
+    // Aplicar filtro de status se fornecido
+    if (status) {
+      whereConditions.status = status
+    } else {
+      // Se não há filtro de status, excluir locações canceladas por padrão
+      whereConditions.status = {
+        not: 'CANCELLED',
+      }
     }
 
-    const [rentals, total] = await Promise.all([
+    // Excluir locações vinculadas a orçamentos rejeitados
+    whereConditions.NOT = {
+      quote: {
+        status: 'REJECTED',
+      },
+    }
+
+    // Ocultar locações órfãs (sem quoteId) por padrão para evitar pendências
+    // criadas antes da vinculação correta do orçamento. Para depuração, usar
+    // `?includeOrphans=true`.
+    if (!includeOrphans) {
+      whereConditions.quoteId = {
+        not: null,
+      }
+    }
+
+    if (userId) whereConditions.userid = userId
+    if (startDate || endDate) {
+      whereConditions.startdate = {}
+      if (startDate) whereConditions.startdate.gte = new Date(startDate)
+      if (endDate) whereConditions.startdate.lte = new Date(endDate)
+    }
+
+    const where = whereConditions
+
+    const [allRentals, total] = await Promise.all([
       prisma.rentals.findMany({
         where,
         include: {
@@ -82,6 +109,7 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
+              status: true, // Incluir status para filtrar no frontend
             },
           },
           payments: {
@@ -110,6 +138,14 @@ export async function GET(request: NextRequest) {
       }),
       prisma.rentals.count({ where }),
     ])
+
+    // Filtro adicional no código para garantir que locações de orçamentos rejeitados/ou órfãs sejam excluídas
+    // Isso serve como fallback caso a query Prisma não funcione corretamente
+    const rentals = allRentals.filter((rental) => {
+      if (rental.quote?.status === 'REJECTED') return false
+      if (!includeOrphans && !rental.quoteId) return false
+      return true
+    })
 
     return NextResponse.json({
       rentals,

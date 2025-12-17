@@ -284,6 +284,9 @@ export async function GET(request: NextRequest) {
       email: quote.email,
       phone: quote.phone,
       company: quote.company,
+      cpf: quote.cpf || null,
+      cnpj: quote.cnpj || null,
+      cep: quote.cep || null,
       equipments: quote.items.map((item) => ({
         id: item.equipment.id,
         name: item.equipment.name,
@@ -310,14 +313,27 @@ export async function GET(request: NextRequest) {
       status: quote.status.toLowerCase() as 'pending' | 'approved' | 'rejected',
       message: quote.message,
       deliveryType: quote.deliveryType || null,
-      deliveryAddress: quote.deliveryAddress
-        ? typeof quote.deliveryAddress === 'object' &&
+      deliveryAddress: (() => {
+        if (!quote.deliveryAddress) return null
+        const addr =
+          typeof quote.deliveryAddress === 'object' &&
           !Array.isArray(quote.deliveryAddress)
-          ? (quote.deliveryAddress as Record<string, unknown>)
-          : typeof quote.deliveryAddress === 'string'
-            ? (JSON.parse(quote.deliveryAddress) as Record<string, unknown>)
-            : null
-        : null,
+            ? (quote.deliveryAddress as Record<string, unknown>)
+            : typeof quote.deliveryAddress === 'string'
+              ? (JSON.parse(quote.deliveryAddress) as Record<string, unknown>)
+              : null
+        if (!addr) return null
+        // Mapear campos em português para inglês (frontend espera inglês)
+        return {
+          street: addr.logradouro || addr.street || null,
+          number: addr.numero || addr.number || null,
+          complement: addr.complemento || addr.complement || null,
+          neighborhood: addr.bairro || addr.neighborhood || null,
+          city: addr.cidade || addr.city || null,
+          state: addr.estado || addr.state || null,
+          zipCode: addr.cep || addr.zipCode || null,
+        }
+      })(),
       deliveryFee: quote.deliveryFee ? Number(quote.deliveryFee) : null,
       createdAt: quote.createdAt.toISOString(),
       updatedAt: quote.updatedAt.toISOString(),
