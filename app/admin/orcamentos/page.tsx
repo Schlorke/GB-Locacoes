@@ -1265,16 +1265,27 @@ function AdminQuotesPage() {
                                       item.appliedDiscount &&
                                       item.appliedDiscount > 0 &&
                                       !item.useDirectValue
+                                    // Normalizar período aplicado vindo do backend.
+                                    // O campo `appliedPeriod` pode vir em inglês (daily/weekly/biweekly/monthly)
+                                    // ou já traduzido (diaria/semanal/quinzenal/mensal), pois o sistema de preços
+                                    // usa `buildQuotePricing` (emails) e o admin usa este modal.
+                                    const normalizedPeriod = (
+                                      item.appliedPeriod || ''
+                                    )
+                                      .toString()
+                                      .toLowerCase()
+
                                     const periodLabel =
-                                      item.appliedPeriod === 'daily'
-                                        ? 'Diário'
-                                        : item.appliedPeriod === 'weekly'
-                                          ? 'Semanal'
-                                          : item.appliedPeriod === 'biweekly'
-                                            ? 'Quinzenal'
-                                            : item.appliedPeriod === 'monthly'
-                                              ? 'Mensal'
-                                              : 'Diário'
+                                      normalizedPeriod === 'weekly' ||
+                                      normalizedPeriod === 'semanal'
+                                        ? 'Semanal'
+                                        : normalizedPeriod === 'biweekly' ||
+                                            normalizedPeriod === 'quinzenal'
+                                          ? 'Quinzenal'
+                                          : normalizedPeriod === 'monthly' ||
+                                              normalizedPeriod === 'mensal'
+                                            ? 'Mensal'
+                                            : 'Diário'
 
                                     return (
                                       <div
