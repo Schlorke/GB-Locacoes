@@ -80,6 +80,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     - `app/admin/orcamentos/page.tsx`
     - `components/ui/alert-dialog.tsx`
   - **Data**: 2025-12-17
+- **Sombra dos cards Rejeitado no Kanban**: Sombra aplicada nos cards da coluna
+  "Rejeitado" agora é quase imperceptível no estado normal e levemente reforçada
+  no hover, com espaçamento do contêiner para não cortar o efeito.
+  - **Causa Raiz**: A coluna usa contêiner com `overflow-y-auto`, tornando a
+    sombra sutil praticamente invisível quando o item encosta no limite.
+  - **Arquivos Modificados**:
+    - `app/admin/orcamentos/page.tsx`
+    - `components/admin/kanban-pipeline.tsx`
+  - **Data**: 2025-12-17
 
 - **Upload de avaria isolado do carrossel público**: O upload de fotos em
   "Registro de Perdas de Peças e Avarias" agora usa inputs únicos por instância,

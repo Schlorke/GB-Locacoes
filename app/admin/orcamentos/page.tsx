@@ -666,9 +666,13 @@ function AdminQuotesPage() {
               }}
               renderItem={(quote) => {
                 const quoteTyped = quote as Quote
+                const isRejected = quoteTyped.status === 'rejected'
+                const shadowClasses = isRejected
+                  ? 'shadow-sm hover:shadow-md'
+                  : 'shadow-sm hover:shadow-md'
                 return (
                   <div
-                    className="p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer transition-all shadow-sm hover:shadow-md"
+                    className={`p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer transition-all ${shadowClasses}`}
                     onClick={() => setSelectedQuote(quoteTyped)}
                   >
                     <div className="space-y-2">
