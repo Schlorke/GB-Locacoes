@@ -18,6 +18,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     automaticamente problemas e depois verificando o restante
   - **Data**: 2025-12-16
 
+- **Integracao de boletos Asaas (sandbox)**: Gateway de boleto configurado para
+  gerar e consultar cobrancas via Asaas, incluindo webhook autenticado e
+  verificador de status.
+  - **Arquivos Criados**: `lib/payment-gateways/asaas.ts`
+  - **Arquivos Modificados**:
+    - `lib/payment-gateways/boleto.ts`
+    - `app/api/payments/boleto/webhook/route.ts`
+    - `app/api/payments/boleto/verify/route.ts`
+    - `.env.example`
+  - **Data**: 2025-12-16
+
 ### Fixed 🐛
 
 - **Remoção automática de imagens do Supabase Storage**: Implementada remoção

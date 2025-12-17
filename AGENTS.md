@@ -72,6 +72,7 @@
 | **Responsividade**                 | `AGENTS.md` (seção Responsive Design) + `known-issues.md` |
 | **Admin pages**                    | `docs/features/admin-system.md`                           |
 | **Autocomplete/Search**            | `docs/features/autocomplete-search.md`                    |
+| **Dados cadastrais da empresa**    | `docs/internal/company/README.md` + PDF CNPJ              |
 
 #### **❌ NUNCA FAÇA SEM CONSULTAR PRIMEIRO:**
 
@@ -235,7 +236,10 @@ documentada proativamente em `docs/` na pasta apropriada.**
 └── 📁 internal/                  # Documentação interna
     ├── 📄 cursor-setup.md       # Setup específico Cursor
     ├── 📄 project-decisions.md  # Decisões arquiteturais
-    └── 📄 tools.md              # Ferramentas internas
+    ├── 📄 tools.md              # Ferramentas internas
+    └── 📁 company/              # 📄 Documentos oficiais da empresa
+        ├── 📄 README.md         # Documentação dos documentos
+        └── 📄 cnpj-gustavo-barbosa-brenner.pdf  # Comprovante CNPJ
 ```
 
 ---
@@ -245,6 +249,33 @@ documentada proativamente em `docs/` na pasta apropriada.**
 **GB-Locações** é uma plataforma moderna de locação de equipamentos para
 construção civil, desenvolvida com Next.js 16, TypeScript, Prisma, PostgreSQL e
 design system robusto.
+
+### **🏢 Dados Cadastrais Oficiais da Empresa**
+
+> **⚠️ IMPORTANTE**: Quando precisar de dados cadastrais oficiais da empresa
+> (CNPJ, endereço, telefone, email, atividades econômicas, etc.), consulte
+> `docs/internal/company/README.md` e o documento PDF correspondente.
+
+**Localização dos Documentos**: `docs/internal/company/`
+
+**Informações Principais Disponíveis**:
+
+- ✅ CNPJ: 34.780.330/0001-69
+- ✅ Nome Empresarial: GUSTAVO BARBOSA BRENNER
+- ✅ Nome Fantasia: GB LOCACOES E MANUTENCAO
+- ✅ Endereço completo (logradouro, número, CEP, bairro, município)
+- ✅ Contatos (email, telefone)
+- ✅ Atividades econômicas (principal e secundárias)
+- ✅ Natureza jurídica
+- ✅ Situação cadastral
+
+**Quando Consultar**:
+
+- Preencher formulários com dados oficiais
+- Gerar documentos legais ou contratos
+- Configurar integrações que precisem de dados cadastrais
+- Validar informações em sistemas externos
+- Atualizar dados em registros ou configurações
 
 ### **🏛️ Stack Tecnológico Principal**
 
@@ -256,6 +287,10 @@ design system robusto.
 - **State**: Zustand 5.0.7 + React Hook Form 7.62.0
 - **Testing**: Vitest + Testing Library + Playwright
 - **Design System**: Storybook 9.1.1 + Radix UI
+- **Pagamentos / Boleto (Asaas)**: Gateway ativo no sandbox; webhook em
+  `https://locacoesgb.com.br/api/payments/asaas/webhook` com token/assinatura;
+  env obrigatórios (`ASAAS_API_KEY`, `ASAAS_WEBHOOK_SECRET`, `ASAAS_BASE_URL`,
+  `BOLETO_GATEWAY_TYPE=asaas`). Nunca commitar `.env.local`.
 
 ### **⚠️ COMPATIBILIDADES CRÍTICAS & PROBLEMAS CONHECIDOS**
 

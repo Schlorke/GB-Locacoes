@@ -77,6 +77,14 @@ export async function POST(request: NextRequest) {
         where: { id: paymentId },
         data: { status: 'CANCELLED' },
       })
+    } else if (
+      verification.status === 'refunded' &&
+      payment.status !== 'REFUNDED'
+    ) {
+      await prisma.payment.update({
+        where: { id: paymentId },
+        data: { status: 'REFUNDED' },
+      })
     }
 
     // Buscar pagamento atualizado

@@ -285,15 +285,15 @@ export default async function EquipmentDetailPage(props: Props) {
           </div>
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5 text-white/80 text-sm mb-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 hover:text-orange-400 transition-colors duration-200 cursor-pointer">
               <Shield className="h-4 w-4 text-green-400" />
               <span>Equipamento Certificado</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 hover:text-orange-400 transition-colors duration-200 cursor-pointer">
               <Truck className="h-4 w-4 text-blue-400" />
               <span>Entrega Gratuita</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 hover:text-orange-400 transition-colors duration-200 cursor-pointer">
               <CheckCircle className="h-4 w-4 text-orange-400" />
               <span>Suporte Garantido</span>
             </div>

@@ -59,3 +59,8 @@ lighthouse-report.html
 
 *storybook.log
 storybook-static
+
+# 🔒 Documentos sensíveis da empresa
+docs/internal/company/*.pdf
+cartão*.pdf
+*.cnpj*.pdf
