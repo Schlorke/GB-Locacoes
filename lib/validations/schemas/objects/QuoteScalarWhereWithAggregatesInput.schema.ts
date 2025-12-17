@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
@@ -13,7 +12,8 @@ import { JsonNullableWithAggregatesFilterObjectSchema as JsonNullableWithAggrega
 import { DecimalNullableWithAggregatesFilterObjectSchema as DecimalNullableWithAggregatesFilterObjectSchema } from './DecimalNullableWithAggregatesFilter.schema';
 import { EnumDeliveryTypeNullableWithAggregatesFilterObjectSchema as EnumDeliveryTypeNullableWithAggregatesFilterObjectSchema } from './EnumDeliveryTypeNullableWithAggregatesFilter.schema';
 import { DeliveryTypeSchema } from '../enums/DeliveryType.schema';
-import { IntNullableWithAggregatesFilterObjectSchema as IntNullableWithAggregatesFilterObjectSchema } from './IntNullableWithAggregatesFilter.schema'
+import { IntNullableWithAggregatesFilterObjectSchema as IntNullableWithAggregatesFilterObjectSchema } from './IntNullableWithAggregatesFilter.schema';
+import { BoolNullableWithAggregatesFilterObjectSchema as BoolNullableWithAggregatesFilterObjectSchema } from './BoolNullableWithAggregatesFilter.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const quotescalarwherewithaggregatesinputSchema = z.object({
@@ -118,7 +118,33 @@ const quotescalarwherewithaggregatesinputSchema = z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'taxes' must be a Decimal",
 })]).optional().nullable(),
-  validUntil: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterObjectSchema), z.coerce.date()]).optional().nullable()
+  validUntil: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  originalTotal: z.union([z.lazy(() => DecimalNullableWithAggregatesFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'originalTotal' must be a Decimal",
+})]).optional().nullable(),
+  priceAdjustmentReason: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).optional().nullable(),
+  priceAdjustedAt: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  priceAdjustedBy: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).optional().nullable(),
+  lateFee: z.union([z.lazy(() => DecimalNullableWithAggregatesFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'lateFee' must be a Decimal",
+})]).optional().nullable(),
+  lateFeeApproved: z.union([z.lazy(() => BoolNullableWithAggregatesFilterObjectSchema), z.boolean()]).optional().nullable(),
+  lateFeeApprovedAt: z.union([z.lazy(() => DateTimeNullableWithAggregatesFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  lateFeeApprovedBy: z.union([z.lazy(() => StringNullableWithAggregatesFilterObjectSchema), z.string()]).optional().nullable(),
+  damages: z.lazy(() => JsonNullableWithAggregatesFilterObjectSchema).optional(),
+  misuse: z.lazy(() => JsonNullableWithAggregatesFilterObjectSchema).optional()
 }).strict();
 export const QuoteScalarWhereWithAggregatesInputObjectSchema: z.ZodType<Prisma.QuoteScalarWhereWithAggregatesInput> = quotescalarwherewithaggregatesinputSchema as unknown as z.ZodType<Prisma.QuoteScalarWhereWithAggregatesInput>;
 export const QuoteScalarWhereWithAggregatesInputObjectZodSchema = quotescalarwherewithaggregatesinputSchema;

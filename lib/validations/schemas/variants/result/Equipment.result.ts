@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 // prettier-ignore
 export const EquipmentResultSchema = z.object({
@@ -31,6 +30,8 @@ export const EquipmentResultSchema = z.object({
     odometer: z.number().nullable(),
     purchaseDate: z.date().nullable(),
     purchasePrice: z.number().nullable(),
+    partsLossHistory: z.unknown().nullable(),
+    partsLossCount: z.number().int().nullable(),
     cartItems: z.array(z.unknown()),
     units: z.array(z.unknown()),
     category: z.unknown(),

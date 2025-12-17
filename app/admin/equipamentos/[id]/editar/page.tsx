@@ -4,9 +4,11 @@ import React from 'react'
 
 import { EquipmentPricingSelector } from '@/components/equipment-pricing-selector'
 import { Button } from '@/components/ui/button'
+import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { CurrencyInput } from '@/components/ui/currency-input'
 import { CustomSelect, CustomSelectItem } from '@/components/ui/custom-select'
+import { HybridTooltip } from '@/components/ui/HybridTooltip'
 import { ImageUpload } from '@/components/ui/image-upload'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -15,18 +17,25 @@ import { Textarea } from '@/components/ui/textarea'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
+  Calendar as CalendarIcon,
   ChevronLeft,
   ChevronRight,
+  Info,
   Package,
+  Pencil,
   PlusCircle,
   Save,
   Trash2,
+  X,
 } from 'lucide-react'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 interface Category {
   id: string
@@ -54,6 +63,14 @@ interface FormData {
   specifications?: Record<string, string>
   // Inventory management
   maxStock: number
+  // Equipment control
+  partsLossHistory?: Array<{
+    date: string
+    description: string
+    quantity: number
+    images?: string[]
+  }>
+  partsLossCount?: number
   // Rental period configurations
   dailyDiscount: number
   weeklyDiscount: number
@@ -88,6 +105,9 @@ export default function EditarEquipamento() {
     specifications: {},
     // Inventory management
     maxStock: 1,
+    // Equipment control
+    partsLossHistory: [],
+    partsLossCount: 0,
     // Rental period configurations
     dailyDiscount: 0,
     weeklyDiscount: 0,
@@ -107,6 +127,16 @@ export default function EditarEquipamento() {
   })
   const [specKey, setSpecKey] = useState('')
   const [specValue, setSpecValue] = useState('')
+  const [newPartsLossDate, setNewPartsLossDate] = useState('')
+  const [newPartsLossSelectedDate, setNewPartsLossSelectedDate] =
+    useState<Date | null>(null)
+  const [isPartsLossCalendarOpen, setIsPartsLossCalendarOpen] = useState(false)
+  const [newPartsLossDescription, setNewPartsLossDescription] = useState('')
+  const [newPartsLossQuantity, setNewPartsLossQuantity] = useState('')
+  const [newPartsLossImages, setNewPartsLossImages] = useState<string[]>([])
+  const [editingPartsLossIndex, setEditingPartsLossIndex] = useState<
+    number | null
+  >(null)
 
   // Estados do carrossel
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -130,6 +160,18 @@ export default function EditarEquipamento() {
             specifications: equipment.specifications || {},
             // Inventory management
             maxStock: equipment.maxStock || 1,
+            // Equipment control
+            partsLossHistory:
+              equipment.partsLossHistory &&
+              typeof equipment.partsLossHistory === 'object'
+                ? (equipment.partsLossHistory as Array<{
+                    date: string
+                    description: string
+                    quantity: number
+                    images?: string[]
+                  }>)
+                : [],
+            partsLossCount: equipment.partsLossCount || 0,
             // Rental period configurations
             dailyDiscount: equipment.dailyDiscount || 0,
             weeklyDiscount: equipment.weeklyDiscount || 0,
@@ -236,6 +278,100 @@ export default function EditarEquipamento() {
       // Não fazer nada - apenas prevenir o submit
     }
   }
+
+  // Data mínima para o calendário de perdas (hoje)
+  const today = useMemo(() => {
+    const date = new Date()
+    date.setHours(0, 0, 0, 0)
+    return date
+  }, [])
+
+  // Handler para seleção de data no calendário de perdas
+  const handlePartsLossDateSelect = useCallback((date: Date | undefined) => {
+    if (date) {
+      setNewPartsLossSelectedDate(date)
+      // Converter para formato ISO (YYYY-MM-DD) para compatibilidade com o backend
+      const isoDate = format(date, 'yyyy-MM-dd')
+      setNewPartsLossDate(isoDate)
+      setIsPartsLossCalendarOpen(false)
+    }
+  }, [])
+
+  // Handler para limpar data selecionada
+  const handleClearPartsLossDate = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation()
+    setNewPartsLossSelectedDate(null)
+    setNewPartsLossDate('')
+  }, [])
+
+  // Texto do botão de data
+  const partsLossDateDisplayText = useMemo(() => {
+    if (newPartsLossSelectedDate) {
+      return format(newPartsLossSelectedDate, 'dd/MM/yyyy', { locale: ptBR })
+    }
+    return 'Selecione a data da perda'
+  }, [newPartsLossSelectedDate])
+
+  // Sincronizar newPartsLossDate com newPartsLossSelectedDate quando carregar dados
+  useEffect(() => {
+    if (newPartsLossDate && !newPartsLossSelectedDate) {
+      try {
+        const date = new Date(newPartsLossDate)
+        if (!isNaN(date.getTime())) {
+          setNewPartsLossSelectedDate(date)
+        }
+      } catch (_error) {
+        // Ignorar erro de parsing
+      }
+    }
+  }, [newPartsLossDate, newPartsLossSelectedDate])
+
+  // Função para desabilitar datas no calendário
+  const isPartsLossDateDisabled = useCallback(
+    (date: Date) => {
+      const dateToCheck = new Date(date)
+      dateToCheck.setHours(0, 0, 0, 0)
+      // Desabilitar datas futuras (apenas permitir datas passadas e hoje)
+      return dateToCheck > today
+    },
+    [today]
+  )
+
+  // Handler para iniciar edição de um registro de perda
+  const handleEditPartsLoss = useCallback(
+    (index: number) => {
+      const loss = formData.partsLossHistory?.[index]
+      if (!loss) return
+
+      // Preencher formulário com dados do registro
+      setNewPartsLossDate(loss.date)
+      try {
+        const date = new Date(loss.date)
+        if (!isNaN(date.getTime())) {
+          setNewPartsLossSelectedDate(date)
+        }
+      } catch (_error) {
+        // Ignorar erro de parsing
+      }
+      setNewPartsLossDescription(loss.description)
+      setNewPartsLossQuantity(loss.quantity.toString())
+      setNewPartsLossImages(loss.images || [])
+      setEditingPartsLossIndex(index)
+      setIsPartsLossCalendarOpen(false)
+    },
+    [formData.partsLossHistory]
+  )
+
+  // Handler para cancelar edição
+  const handleCancelEditPartsLoss = useCallback(() => {
+    setNewPartsLossDate('')
+    setNewPartsLossSelectedDate(null)
+    setNewPartsLossDescription('')
+    setNewPartsLossQuantity('')
+    setNewPartsLossImages([])
+    setEditingPartsLossIndex(null)
+    setIsPartsLossCalendarOpen(false)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -511,7 +647,7 @@ export default function EditarEquipamento() {
                           <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
                             <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center">
                               <span className="text-xs font-medium text-orange-600">
-                                3
+                                2
                               </span>
                             </div>
                             <h3 className="text-lg font-medium text-gray-900">
@@ -1135,7 +1271,7 @@ export default function EditarEquipamento() {
                     <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
                       <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
                         <span className="text-xs font-medium text-green-600">
-                          2
+                          3
                         </span>
                       </div>
                       <h3 className="text-lg font-medium text-gray-900">
@@ -1145,10 +1281,12 @@ export default function EditarEquipamento() {
 
                     <div className="min-h-[500px]">
                       <ImageUpload
+                        key="equipment-images"
                         images={formData.images}
-                        onImagesChange={(images) =>
-                          setFormData((prev) => ({ ...prev, images }))
-                        }
+                        onImagesChange={(imgs) => {
+                          // Garantir que atualiza APENAS formData.images
+                          setFormData((prev) => ({ ...prev, images: imgs }))
+                        }}
                         maxImages={5}
                         currentImageIndex={currentImageIndex}
                         onImageIndexChange={setCurrentImageIndex}
@@ -1262,6 +1400,396 @@ export default function EditarEquipamento() {
                                 Adicionar Especificação
                               </span>
                             </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Registro de Perdas de Peças e Avarias */}
+                    <div className="space-y-6 border-t border-gray-100 pt-6">
+                      <div className="flex items-center gap-2 pb-2 border-b border-gray-200">
+                        <div className="w-6 h-6 bg-red-100 rounded-full flex items-center justify-center">
+                          <span className="text-xs font-medium text-red-600">
+                            5
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-medium text-gray-900">
+                          Registro de Perdas de Peças e Avarias
+                        </h3>
+                        <HybridTooltip
+                          content="💡 Esta área permite registrar perdas de peças e avarias nos equipamentos. Essas informações são essenciais para controle de estoque, cobrança de taxas de avaria nos orçamentos e tomada de decisões sobre manutenção dos equipamentos."
+                          side="top"
+                          align="center"
+                        >
+                          <Info className="size-4 text-gray-700 cursor-help transition-colors hover:text-orange-600" />
+                        </HybridTooltip>
+                      </div>
+
+                      {/* Contador de perdas */}
+                      <div className="p-3 bg-red-50 rounded-lg border border-red-200">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="text-sm font-semibold text-red-700">
+                              Total de Perdas Registradas
+                            </div>
+                            <div className="text-2xl font-bold text-red-900 mt-1">
+                              {formData.partsLossCount || 0}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Histórico de perdas */}
+                      {formData.partsLossHistory &&
+                        formData.partsLossHistory.length > 0 && (
+                          <div className="space-y-2">
+                            <Label className="text-sm font-medium">
+                              Histórico de Perdas
+                            </Label>
+                            <div className="space-y-2 max-h-48 overflow-y-auto">
+                              {formData.partsLossHistory.map((loss, index) => (
+                                <div
+                                  key={index}
+                                  className="flex items-start justify-between p-3 bg-gray-50 rounded-lg border border-gray-200"
+                                >
+                                  <div className="flex-1">
+                                    <div className="text-sm font-medium text-gray-900">
+                                      {loss.description}
+                                    </div>
+                                    <div className="text-xs text-gray-500 mt-1">
+                                      Data:{' '}
+                                      {new Date(loss.date).toLocaleDateString(
+                                        'pt-BR'
+                                      )}{' '}
+                                      - Quantidade: {loss.quantity}
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-1 flex-shrink-0 ml-2">
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => handleEditPartsLoss(index)}
+                                      className="h-8 w-8"
+                                      title="Editar registro"
+                                    >
+                                      <Pencil className="h-4 w-4 text-blue-500" />
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => {
+                                        const newHistory =
+                                          formData.partsLossHistory?.filter(
+                                            (_, i) => i !== index
+                                          ) || []
+                                        const newCount =
+                                          (formData.partsLossCount || 0) -
+                                          loss.quantity
+                                        setFormData((prev) => ({
+                                          ...prev,
+                                          partsLossHistory: newHistory,
+                                          partsLossCount: Math.max(0, newCount),
+                                        }))
+                                        toast.success('Registro removido', {
+                                          description:
+                                            'Registro de perda removido com sucesso.',
+                                        })
+                                      }}
+                                      className="h-8 w-8"
+                                      title="Remover registro"
+                                    >
+                                      <Trash2 className="h-4 w-4 text-red-500" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                      {/* Formulário para adicionar/editar perda */}
+                      <div className="bg-white/50 border-2 border-dashed border-gray-300 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <h4 className="text-sm font-semibold text-gray-900">
+                            {editingPartsLossIndex !== null
+                              ? 'Editar Registro de Perda'
+                              : 'Adicionar Novo Registro de Perda'}
+                          </h4>
+                          {editingPartsLossIndex !== null && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={handleCancelEditPartsLoss}
+                              className="text-xs text-gray-500 hover:text-gray-700"
+                            >
+                              Cancelar Edição
+                            </Button>
+                          )}
+                        </div>
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-1 gap-3">
+                            <div>
+                              <Label
+                                htmlFor="partsLossDate"
+                                className="text-sm font-medium"
+                              >
+                                Data da Perda
+                              </Label>
+                              <div className="mt-1 space-y-2">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setIsPartsLossCalendarOpen(
+                                      !isPartsLossCalendarOpen
+                                    )
+                                  }}
+                                  className={cn(
+                                    'flex h-10 w-full items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm transition-colors overflow-hidden',
+                                    'hover:bg-gray-50',
+                                    'disabled:cursor-not-allowed disabled:opacity-50',
+                                    !newPartsLossSelectedDate
+                                      ? 'justify-center text-gray-500'
+                                      : 'justify-center relative'
+                                  )}
+                                >
+                                  {!newPartsLossSelectedDate ? (
+                                    <div className="flex items-center gap-2">
+                                      <CalendarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                                      <span className="whitespace-nowrap">
+                                        {partsLossDateDisplayText}
+                                      </span>
+                                      <CalendarIcon className="h-4 w-4 text-gray-400 flex-shrink-0" />
+                                    </div>
+                                  ) : (
+                                    <>
+                                      <span className="flex-1 text-center whitespace-nowrap">
+                                        {partsLossDateDisplayText}
+                                      </span>
+                                      <X
+                                        className="h-4 w-4 text-gray-400 hover:text-gray-600 absolute right-3"
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          handleClearPartsLossDate(e)
+                                        }}
+                                      />
+                                    </>
+                                  )}
+                                </button>
+
+                                {/* Calendário inline - aparece quando isPartsLossCalendarOpen é true */}
+                                {isPartsLossCalendarOpen && (
+                                  <div className="border border-gray-200 rounded-md bg-white p-0 shadow-md overflow-hidden max-w-full">
+                                    <Calendar
+                                      mode="single"
+                                      defaultMonth={
+                                        newPartsLossSelectedDate || today
+                                      }
+                                      month={newPartsLossSelectedDate || today}
+                                      selected={
+                                        newPartsLossSelectedDate || undefined
+                                      }
+                                      onSelect={handlePartsLossDateSelect}
+                                      numberOfMonths={1}
+                                      disabled={isPartsLossDateDisabled}
+                                      locale={ptBR}
+                                      toDate={today}
+                                      showOutsideDays={false}
+                                      includeWeekends={true}
+                                    />
+                                    <div className="border-t border-gray-200 px-3 py-2">
+                                      <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+                                        <div>
+                                          Selecione a data em que ocorreu a
+                                          perda
+                                        </div>
+                                        {newPartsLossSelectedDate && (
+                                          <div className="text-green-600 font-medium">
+                                            ✓ Data selecionada:{' '}
+                                            {partsLossDateDisplayText}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div>
+                              <Label
+                                htmlFor="partsLossDescription"
+                                className="text-sm font-medium"
+                              >
+                                Descrição da Perda
+                              </Label>
+                              <Input
+                                id="partsLossDescription"
+                                value={newPartsLossDescription}
+                                onChange={(e) =>
+                                  setNewPartsLossDescription(e.target.value)
+                                }
+                                placeholder="Ex: Perda de parafusos, peças quebradas, etc."
+                                className="mt-1 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <Label
+                                htmlFor="partsLossQuantity"
+                                className="text-sm font-medium"
+                              >
+                                Quantidade
+                              </Label>
+                              <Input
+                                id="partsLossQuantity"
+                                type="number"
+                                min="1"
+                                value={newPartsLossQuantity}
+                                onChange={(e) =>
+                                  setNewPartsLossQuantity(e.target.value)
+                                }
+                                placeholder="Ex: 5"
+                                className="mt-1 focus:border-blue-500"
+                              />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2 mb-2">
+                                <Label className="text-sm font-medium">
+                                  Fotos da Avaria/Perda (Opcional)
+                                </Label>
+                                <HybridTooltip
+                                  content={
+                                    <>
+                                      💡 Adicione até 5 fotos para documentar a
+                                      avaria ou peça perdida
+                                    </>
+                                  }
+                                  side="top"
+                                  align="center"
+                                >
+                                  <Info className="size-4 text-gray-700 cursor-help transition-colors hover:text-orange-600" />
+                                </HybridTooltip>
+                              </div>
+                              <ImageUpload
+                                key="parts-loss-images"
+                                images={newPartsLossImages}
+                                onImagesChange={(imgs) => {
+                                  // Garantir que atualiza APENAS newPartsLossImages
+                                  setNewPartsLossImages(imgs)
+                                }}
+                                maxImages={5}
+                                sectionTitle="Fotos da Avaria/Perda"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={() => {
+                                if (
+                                  newPartsLossDate &&
+                                  newPartsLossDescription.trim() &&
+                                  newPartsLossQuantity
+                                ) {
+                                  const quantity =
+                                    parseInt(newPartsLossQuantity) || 0
+                                  const newLoss = {
+                                    date: newPartsLossDate,
+                                    description: newPartsLossDescription.trim(),
+                                    quantity,
+                                    images: newPartsLossImages,
+                                  }
+
+                                  if (editingPartsLossIndex !== null) {
+                                    // Atualizar registro existente
+                                    const oldLoss =
+                                      formData.partsLossHistory?.[
+                                        editingPartsLossIndex
+                                      ]
+                                    const oldQuantity = oldLoss?.quantity || 0
+                                    const newHistory = [
+                                      ...(formData.partsLossHistory || []),
+                                    ]
+                                    newHistory[editingPartsLossIndex] = newLoss
+
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      partsLossHistory: newHistory,
+                                      partsLossCount:
+                                        (prev.partsLossCount || 0) -
+                                        oldQuantity +
+                                        quantity,
+                                    }))
+
+                                    toast.success('Registro atualizado!', {
+                                      description:
+                                        'Registro de perda atualizado com sucesso.',
+                                    })
+                                  } else {
+                                    // Adicionar novo registro
+                                    const newHistory = [
+                                      ...(formData.partsLossHistory || []),
+                                      newLoss,
+                                    ]
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      partsLossHistory: newHistory,
+                                      partsLossCount:
+                                        (prev.partsLossCount || 0) + quantity,
+                                    }))
+
+                                    toast.success('Perda registrada!', {
+                                      description:
+                                        'Registro de perda adicionado com sucesso.',
+                                    })
+                                  }
+
+                                  // Limpar formulário
+                                  setNewPartsLossDate('')
+                                  setNewPartsLossSelectedDate(null)
+                                  setNewPartsLossDescription('')
+                                  setNewPartsLossQuantity('')
+                                  setNewPartsLossImages([])
+                                  setEditingPartsLossIndex(null)
+                                  setIsPartsLossCalendarOpen(false)
+                                } else {
+                                  toast.warning('Atenção', {
+                                    description:
+                                      'Preencha todos os campos para registrar a perda.',
+                                  })
+                                }
+                              }}
+                              className="w-fit px-4 bg-transparent border-gray-200 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
+                            >
+                              {editingPartsLossIndex !== null ? (
+                                <>
+                                  <Save className="h-4 w-4 mr-2 group-hover:text-blue-500 transition-colors duration-200" />
+                                  <span className="group-hover:text-blue-500 transition-colors duration-200">
+                                    Salvar Alterações
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <PlusCircle className="h-4 w-4 mr-2 group-hover:text-red-500 transition-colors duration-200" />
+                                  <span className="group-hover:text-red-500 transition-colors duration-200">
+                                    Adicionar Registro de Perda
+                                  </span>
+                                </>
+                              )}
+                            </Button>
+                            {editingPartsLossIndex !== null && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleCancelEditPartsLoss}
+                                className="text-xs text-gray-500 hover:text-gray-700"
+                              >
+                                Cancelar
+                              </Button>
+                            )}
                           </div>
                         </div>
                       </div>

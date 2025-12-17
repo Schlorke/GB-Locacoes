@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema'
@@ -30,7 +29,8 @@ const makeSchema = () => z.object({
   hourMeter: SortOrderSchema.optional(),
   odometer: SortOrderSchema.optional(),
   purchaseDate: SortOrderSchema.optional(),
-  purchasePrice: SortOrderSchema.optional()
+  purchasePrice: SortOrderSchema.optional(),
+  partsLossCount: SortOrderSchema.optional()
 }).strict();
 export const EquipmentMaxOrderByAggregateInputObjectSchema: z.ZodType<Prisma.EquipmentMaxOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentMaxOrderByAggregateInput>;
 export const EquipmentMaxOrderByAggregateInputObjectZodSchema = makeSchema();

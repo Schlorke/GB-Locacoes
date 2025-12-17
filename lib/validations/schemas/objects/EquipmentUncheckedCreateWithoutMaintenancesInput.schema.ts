@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
@@ -114,6 +113,8 @@ const makeSchema = () => z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'purchasePrice' must be a Decimal",
 }).optional().nullable(),
+  partsLossHistory: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
+  partsLossCount: z.number().int().optional().nullable(),
   cartItems: z.lazy(() => CartItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
   units: z.lazy(() => EquipmentUnitUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),
   quoteItems: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutEquipmentInputObjectSchema).optional(),

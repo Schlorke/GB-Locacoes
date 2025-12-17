@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 export const EquipmentGroupByResultSchema = z.array(z.object({
   id: z.string(),
@@ -30,6 +29,8 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
   odometer: z.number(),
   purchaseDate: z.date(),
   purchasePrice: z.number(),
+  partsLossHistory: z.unknown(),
+  partsLossCount: z.number().int(),
   _count: z.object({
     id: z.number(),
     name: z.number(),
@@ -60,6 +61,8 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     odometer: z.number(),
     purchaseDate: z.number(),
     purchasePrice: z.number(),
+    partsLossHistory: z.number(),
+    partsLossCount: z.number(),
     cartItems: z.number(),
     units: z.number(),
     category: z.number(),
@@ -81,7 +84,8 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     depreciationRate: z.number().nullable(),
     hourMeter: z.number().nullable(),
     odometer: z.number().nullable(),
-    purchasePrice: z.number().nullable()
+    purchasePrice: z.number().nullable(),
+    partsLossCount: z.number().nullable()
   }).nullable().optional(),
   _avg: z.object({
     pricePerDay: z.number().nullable(),
@@ -97,7 +101,8 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     depreciationRate: z.number().nullable(),
     hourMeter: z.number().nullable(),
     odometer: z.number().nullable(),
-    purchasePrice: z.number().nullable()
+    purchasePrice: z.number().nullable(),
+    partsLossCount: z.number().nullable()
   }).nullable().optional(),
   _min: z.object({
     id: z.string().nullable(),
@@ -122,7 +127,8 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     hourMeter: z.number().nullable(),
     odometer: z.number().nullable(),
     purchaseDate: z.date().nullable(),
-    purchasePrice: z.number().nullable()
+    purchasePrice: z.number().nullable(),
+    partsLossCount: z.number().int().nullable()
   }).nullable().optional(),
   _max: z.object({
     id: z.string().nullable(),
@@ -147,6 +153,7 @@ export const EquipmentGroupByResultSchema = z.array(z.object({
     hourMeter: z.number().nullable(),
     odometer: z.number().nullable(),
     purchaseDate: z.date().nullable(),
-    purchasePrice: z.number().nullable()
+    purchasePrice: z.number().nullable(),
+    partsLossCount: z.number().int().nullable()
   }).nullable().optional()
 }));

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 
@@ -17,7 +16,8 @@ const makeSchema = () => z.object({
   depreciationRate: z.literal(true).optional(),
   hourMeter: z.literal(true).optional(),
   odometer: z.literal(true).optional(),
-  purchasePrice: z.literal(true).optional()
+  purchasePrice: z.literal(true).optional(),
+  partsLossCount: z.literal(true).optional()
 }).strict();
 export const EquipmentAvgAggregateInputObjectSchema: z.ZodType<Prisma.EquipmentAvgAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.EquipmentAvgAggregateInputType>;
 export const EquipmentAvgAggregateInputObjectZodSchema = makeSchema();

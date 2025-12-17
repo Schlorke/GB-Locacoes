@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { PaymentFindManySchema as PaymentFindManySchema } from '../findManyPayment.schema';
@@ -43,6 +42,16 @@ const makeSchema = () => z.object({
   subtotal: z.boolean().optional(),
   taxes: z.boolean().optional(),
   validUntil: z.boolean().optional(),
+  originalTotal: z.boolean().optional(),
+  priceAdjustmentReason: z.boolean().optional(),
+  priceAdjustedAt: z.boolean().optional(),
+  priceAdjustedBy: z.boolean().optional(),
+  lateFee: z.boolean().optional(),
+  lateFeeApproved: z.boolean().optional(),
+  lateFeeApprovedAt: z.boolean().optional(),
+  lateFeeApprovedBy: z.boolean().optional(),
+  damages: z.boolean().optional(),
+  misuse: z.boolean().optional(),
   payments: z.union([z.boolean(), z.lazy(() => PaymentFindManySchema)]).optional(),
   items: z.union([z.boolean(), z.lazy(() => QuoteItemFindManySchema)]).optional(),
   approvedByUser: z.union([z.boolean(), z.lazy(() => UserArgsObjectSchema)]).optional(),

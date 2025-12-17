@@ -2,6 +2,7 @@
 
 import * as LucideIcons from 'lucide-react'
 import {
+  AlertTriangle,
   Calendar,
   CheckCircle,
   ChevronLeft,
@@ -48,6 +49,13 @@ export interface Equipment {
   }
   images: string[]
   createdAt: string
+  partsLossHistory?: Array<{
+    date: string
+    description: string
+    quantity: number
+    images?: string[]
+  }>
+  partsLossCount?: number
 }
 
 export interface ViewEquipmentDialogProps {
@@ -102,6 +110,7 @@ export function ViewEquipmentDialog({
 }: ViewEquipmentDialogProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [isImageZoomed, setIsImageZoomed] = useState(false)
+  const [partsLossDialogOpen, setPartsLossDialogOpen] = useState(false)
 
   // Funções do carrossel
   const nextImage = useCallback(() => {
@@ -157,10 +166,17 @@ export function ViewEquipmentDialog({
   }, [isOpen, equipment, nextImage, prevImage])
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={onClose}>
-      <Dialog.Portal>
-        <Dialog.Backdrop />
-        <Dialog.Popup variant="default">
+    <>
+      <Dialog.Root
+        open={isOpen}
+        onOpenChange={onClose}
+      >
+        <Dialog.Portal>
+          <Dialog.Backdrop />
+          <Dialog.Popup
+            variant="default"
+            data-nested-parent={partsLossDialogOpen ? '' : undefined}
+          >
           <Dialog.Content>
             <Dialog.Header data-dialog-section="header">
               <Dialog.HeaderIcon>
@@ -468,6 +484,42 @@ export function ViewEquipmentDialog({
                                   </div>
                                 </div>
                               </div>
+
+                              {/* Registro de Perdas de Peças */}
+                              {(equipment.partsLossCount !== undefined &&
+                                equipment.partsLossCount > 0) ||
+                              (equipment.partsLossHistory &&
+                                equipment.partsLossHistory.length > 0) ? (
+                                <div className="pt-4 border-t border-gray-200 mt-4">
+                                  <div className="flex items-start gap-3 mb-3">
+                                    <Package className="w-4 h-4 text-red-500 mt-0.5" />
+                                    <div className="flex-1">
+                                      <div className="text-xs font-semibold text-red-700 mb-1">
+                                        Registro de Perdas de Peças
+                                      </div>
+                                      <div className="text-lg font-bold text-red-900">
+                                        {equipment.partsLossCount || 0} perda(s)
+                                        registrada(s)
+                                      </div>
+                                    </div>
+                                  </div>
+                                  {equipment.partsLossHistory &&
+                                    equipment.partsLossHistory.length > 0 && (
+                                      <>
+                                        <Button
+                                          type="button"
+                                          variant="outline"
+                                          onClick={() => setPartsLossDialogOpen(true)}
+                                          className="w-full mt-3 border-red-200 hover:bg-red-50 hover:border-red-300 text-red-700"
+                                          size="sm"
+                                        >
+                                          <AlertTriangle className="w-4 h-4 mr-2" />
+                                          Ver Detalhes das Perdas
+                                        </Button>
+                                      </>
+                                    )}
+                                </div>
+                              ) : null}
                             </div>
                           </div>
                         </div>
@@ -503,8 +555,240 @@ export function ViewEquipmentDialog({
               </div>
             </Dialog.Footer>
           </Dialog.Content>
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
+
+      {/* Dialog Nested para Detalhes das Perdas */}
+      {equipment && equipment.partsLossHistory && equipment.partsLossHistory.length > 0 && (
+        <Dialog.Root
+          open={partsLossDialogOpen}
+          onOpenChange={setPartsLossDialogOpen}
+        >
+          <Dialog.Portal>
+            <Dialog.Backdrop />
+            <Dialog.Popup variant="default" className="max-w-4xl max-h-[90vh]">
+              <Dialog.Content>
+                <Dialog.Header data-dialog-section="header">
+                  <Dialog.HeaderIcon>
+                    <AlertTriangle className="h-4 w-4" />
+                  </Dialog.HeaderIcon>
+                  <Dialog.Title className="text-xl font-semibold text-gray-800">
+                    Detalhes das Perdas de Peças e Avarias
+                  </Dialog.Title>
+                  <Dialog.CloseButton aria-label="Fechar dialog" />
+                </Dialog.Header>
+
+                <Dialog.Body>
+                  <Dialog.BodyViewport style={{ scrollbarGutter: 'stable' }}>
+                    <Dialog.BodyContent>
+                      <div className="space-y-6">
+                        {equipment.partsLossHistory.map((loss, index) => (
+                          <PartsLossDetailCard
+                            key={index}
+                            loss={loss}
+                            index={index}
+                          />
+                        ))}
+                      </div>
+                    </Dialog.BodyContent>
+                  </Dialog.BodyViewport>
+                </Dialog.Body>
+
+                <Dialog.Footer data-dialog-section="footer">
+                  <Button
+                    variant="outline"
+                    onClick={() => setPartsLossDialogOpen(false)}
+                    className="w-full"
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Fechar
+                  </Button>
+                </Dialog.Footer>
+              </Dialog.Content>
+            </Dialog.Popup>
+          </Dialog.Portal>
+        </Dialog.Root>
+      )}
+    </>
+  )
+}
+
+/**
+ * Componente para exibir detalhes de uma perda individual com carrossel de fotos
+ */
+function PartsLossDetailCard({
+  loss,
+  index,
+}: {
+  loss: {
+    date: string
+    description: string
+    quantity: number
+    images?: string[]
+  }
+  index: number
+}) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  const nextImage = useCallback(() => {
+    if (loss.images && loss.images.length > 0) {
+      setCurrentImageIndex((prev) =>
+        prev === loss.images!.length - 1 ? 0 : prev + 1
+      )
+    }
+  }, [loss.images])
+
+  const prevImage = useCallback(() => {
+    if (loss.images && loss.images.length > 0) {
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? loss.images!.length - 1 : prev - 1
+      )
+    }
+  }, [loss.images])
+
+  const goToImage = useCallback((imgIndex: number) => {
+    setCurrentImageIndex(imgIndex)
+  }, [])
+
+  useEffect(() => {
+    setCurrentImageIndex(0)
+  }, [loss])
+
+  return (
+    <div className="bg-white rounded-lg border border-slate-200 shadow-sm p-6">
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <div className="text-sm font-semibold text-slate-500 mb-1">
+            Registro #{index + 1}
+          </div>
+          <h3 className="text-lg font-bold text-red-900">{loss.description}</h3>
+        </div>
+        <Badge variant="destructive" className="flex-shrink-0">
+          Quantidade: {loss.quantity}
+        </Badge>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <div className="text-xs text-gray-500 mb-1">Data da Perda</div>
+          <div className="text-sm font-medium text-gray-900">
+            {formatDate(loss.date)}
+          </div>
+        </div>
+        <div>
+          <div className="text-xs text-gray-500 mb-1">Quantidade</div>
+          <div className="text-sm font-medium text-red-900">{loss.quantity}</div>
+        </div>
+      </div>
+
+      {loss.images && loss.images.length > 0 ? (
+        <div className="mt-4">
+          <div className="text-xs text-gray-500 mb-2">Fotos da Avaria/Perda</div>
+          <div className="relative group">
+            <div className="w-full h-64 bg-gray-100 rounded-lg overflow-hidden relative">
+              <motion.div
+                key={currentImageIndex}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                className="w-full h-full"
+              >
+                <Image
+                  src={loss.images[currentImageIndex] || ''}
+                  alt={`${loss.description} - Foto ${currentImageIndex + 1}`}
+                  width={500}
+                  height={300}
+                  className="max-w-full max-h-full object-contain"
+                />
+              </motion.div>
+
+              {loss.images.length > 1 && (
+                <>
+                  <button
+                    onClick={prevImage}
+                    aria-label="Foto anterior"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-gray-700" />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    aria-label="Próxima foto"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white/85 hover:scale-110 backdrop-blur-sm rounded-full p-2.5 shadow-md opacity-0 group-hover:opacity-80 transition-all duration-300 flex items-center justify-center z-10"
+                  >
+                    <ChevronRight className="w-5 h-5 text-gray-700" />
+                  </button>
+                </>
+              )}
+
+              {loss.images.length > 1 && (
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                  {loss.images.map((_, imgIndex) => (
+                    <motion.button
+                      key={imgIndex}
+                      onClick={() => goToImage(imgIndex)}
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                      aria-label={`Ir para foto ${imgIndex + 1}`}
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                        imgIndex === currentImageIndex
+                          ? 'bg-white shadow-lg scale-125'
+                          : 'bg-white/60 hover:bg-white/80'
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {loss.images.length > 1 && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide mt-2"
+              >
+                {loss.images.map((image, imgIndex) => (
+                  <motion.button
+                    key={imgIndex}
+                    onClick={() => goToImage(imgIndex)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-label={`Selecionar foto ${imgIndex + 1}`}
+                    className={`flex-shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                      imgIndex === currentImageIndex
+                        ? 'border-blue-500 shadow-lg ring-2 ring-blue-200'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`Thumbnail ${imgIndex + 1}`}
+                      width={64}
+                      height={48}
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </motion.button>
+                ))}
+              </motion.div>
+            )}
+
+            {loss.images.length > 1 && (
+              <div className="text-center text-xs text-gray-500 mt-2">
+                Foto {currentImageIndex + 1} de {loss.images.length}
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200 text-center">
+          <Package className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+          <p className="text-sm text-gray-500">
+            Nenhuma foto disponível para este registro
+          </p>
+        </div>
+      )}
+    </div>
   )
 }

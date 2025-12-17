@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 export const EquipmentUpdateResultSchema = z.nullable(z.object({
   id: z.string(),
@@ -30,6 +29,8 @@ export const EquipmentUpdateResultSchema = z.nullable(z.object({
   odometer: z.number().optional(),
   purchaseDate: z.date().optional(),
   purchasePrice: z.number().optional(),
+  partsLossHistory: z.unknown().optional(),
+  partsLossCount: z.number().int().optional(),
   cartItems: z.array(z.unknown()),
   units: z.array(z.unknown()),
   category: z.unknown(),

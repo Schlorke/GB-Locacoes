@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
@@ -119,7 +118,9 @@ const equipmentscalarwhereinputSchema = z.object({
   DecimalJSLikeSchema,
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'purchasePrice' must be a Decimal",
-})]).optional().nullable()
+})]).optional().nullable(),
+  partsLossHistory: z.lazy(() => JsonNullableFilterObjectSchema).optional(),
+  partsLossCount: z.union([z.lazy(() => IntNullableFilterObjectSchema), z.number().int()]).optional().nullable()
 }).strict();
 export const EquipmentScalarWhereInputObjectSchema: z.ZodType<Prisma.EquipmentScalarWhereInput> = equipmentscalarwhereinputSchema as unknown as z.ZodType<Prisma.EquipmentScalarWhereInput>;
 export const EquipmentScalarWhereInputObjectZodSchema = equipmentscalarwhereinputSchema;

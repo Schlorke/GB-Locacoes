@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 
 export const VehicleScalarFieldEnumSchema = z.enum(['id', 'plate', 'brand', 'model', 'year', 'type', 'status', 'createdAt', 'updatedAt'])

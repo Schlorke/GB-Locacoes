@@ -184,6 +184,8 @@ model Equipment {
   odometer               Decimal?        @db.Decimal
   purchaseDate           DateTime?
   purchasePrice          Decimal?        @db.Decimal
+  partsLossHistory       Json?          // Histórico de perdas de peças
+  partsLossCount         Int?            @default(0) // Contador de perdas de peças
   cartItems              CartItem[]
   units                  EquipmentUnit[]
   category               Category        @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_category")
@@ -250,6 +252,19 @@ model Quote {
   subtotal            Decimal?
   taxes               Decimal?
   validUntil          DateTime?
+  // Sistema de ajuste de valor final com justificativa
+  originalTotal       Decimal?          // Valor original completo (antes do ajuste)
+  priceAdjustmentReason String?         // Justificativa obrigatória ao editar valor
+  priceAdjustedAt     DateTime?        // Data/hora da edição do valor
+  priceAdjustedBy     String?           // ID do usuário que editou o valor
+  // Sistema de multa por atraso
+  lateFee             Decimal?          // Valor da multa calculada
+  lateFeeApproved     Boolean?          @default(false) // Se admin aprovou aplicação da multa
+  lateFeeApprovedAt   DateTime?         // Data de aprovação da multa
+  lateFeeApprovedBy   String?           // ID do admin que aprovou a multa
+  // Registro de danos e mau uso
+  damages             Json?             // Registro de danos
+  misuse              Json?             // Registro de mau uso
   payments            Payment[]
   items               QuoteItem[]
   approvedByUser      User?         @relation("ApprovedQuotes", fields: [approvedBy], references: [id])

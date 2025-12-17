@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 
@@ -37,7 +36,15 @@ const makeSchema = () => z.object({
   startDate: z.literal(true).optional(),
   subtotal: z.literal(true).optional(),
   taxes: z.literal(true).optional(),
-  validUntil: z.literal(true).optional()
+  validUntil: z.literal(true).optional(),
+  originalTotal: z.literal(true).optional(),
+  priceAdjustmentReason: z.literal(true).optional(),
+  priceAdjustedAt: z.literal(true).optional(),
+  priceAdjustedBy: z.literal(true).optional(),
+  lateFee: z.literal(true).optional(),
+  lateFeeApproved: z.literal(true).optional(),
+  lateFeeApprovedAt: z.literal(true).optional(),
+  lateFeeApprovedBy: z.literal(true).optional()
 }).strict();
 export const QuoteMaxAggregateInputObjectSchema: z.ZodType<Prisma.QuoteMaxAggregateInputType> = makeSchema() as unknown as z.ZodType<Prisma.QuoteMaxAggregateInputType>;
 export const QuoteMaxAggregateInputObjectZodSchema = makeSchema();

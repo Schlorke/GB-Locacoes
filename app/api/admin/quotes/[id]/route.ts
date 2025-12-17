@@ -8,6 +8,11 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import Decimal from 'decimal.js'
 import type { Prisma } from '@prisma/client'
+import { formatCurrency } from '@/lib/utils'
+import getResend from '@/lib/resend'
+import { generateQuoteStatusChangeEmailHTML } from '@/lib/email-templates'
+
+const resend = getResend()
 
 // Force dynamic rendering to prevent static generation issues
 export const dynamic = 'force-dynamic'
@@ -100,7 +105,14 @@ export async function PATCH(
 
     const session = await getServerSession(authOptions)
     const body = await request.json()
-    const { status, ...updateData } = body
+    const {
+      status,
+      finalTotal,
+      priceAdjustmentReason,
+      lateFee,
+      lateFeeApproved,
+      ...updateData
+    } = body
 
     const prisma = await getPrisma()
 
@@ -125,6 +137,89 @@ export async function PATCH(
     const updateQuoteData: Prisma.QuoteUncheckedUpdateInput = {
       ...updateData,
       updatedAt: new Date(),
+    }
+
+    // Sistema de ajuste de valor final com justificativa
+    if (finalTotal !== undefined) {
+      // Validar que justificativa é obrigatória
+      if (!priceAdjustmentReason || priceAdjustmentReason.trim() === '') {
+        return NextResponse.json(
+          {
+            error:
+              'Justificativa é obrigatória ao editar o valor final do orçamento',
+          },
+          { status: 400 }
+        )
+      }
+
+      // Se não existe originalTotal, usar o total atual como original
+      if (!currentQuote.originalTotal) {
+        updateQuoteData.originalTotal = currentQuote.total
+      }
+
+      // Atualizar valor final e justificativa
+      updateQuoteData.finalTotal = new Decimal(finalTotal)
+      updateQuoteData.priceAdjustmentReason = priceAdjustmentReason.trim()
+      updateQuoteData.priceAdjustedAt = new Date()
+      if (session?.user?.id) {
+        updateQuoteData.priceAdjustedBy = session.user.id
+      }
+    }
+
+    // Sistema de multa por atraso
+    if (lateFee !== undefined) {
+      updateQuoteData.lateFee = new Decimal(lateFee)
+    }
+
+    if (lateFeeApproved !== undefined) {
+      if (lateFeeApproved === true) {
+        // Validar que existe valor de multa calculado
+        const feeToApprove =
+          lateFee !== undefined
+            ? new Decimal(lateFee)
+            : currentQuote.lateFee
+              ? new Decimal(currentQuote.lateFee)
+              : null
+
+        if (!feeToApprove || feeToApprove.lte(0)) {
+          return NextResponse.json(
+            {
+              error:
+                'Não é possível aprovar multa sem valor calculado ou com valor zero',
+            },
+            { status: 400 }
+          )
+        }
+
+        updateQuoteData.lateFeeApproved = true
+        updateQuoteData.lateFeeApprovedAt = new Date()
+        if (session?.user?.id) {
+          updateQuoteData.lateFeeApprovedBy = session.user.id
+        }
+
+        // Se multa foi aprovada, adicionar ao valor final (ou criar ajuste)
+        const currentFinalTotal = currentQuote.finalTotal
+          ? new Decimal(currentQuote.finalTotal)
+          : currentQuote.originalTotal
+            ? new Decimal(currentQuote.originalTotal)
+            : new Decimal(currentQuote.total)
+
+        const newFinalTotal = currentFinalTotal.plus(feeToApprove)
+        updateQuoteData.finalTotal = newFinalTotal
+
+        // Se não há justificativa de ajuste, criar uma para a multa
+        if (!currentQuote.priceAdjustmentReason) {
+          updateQuoteData.priceAdjustmentReason = `Multa por atraso aprovada: ${formatCurrency(feeToApprove.toNumber())}`
+          updateQuoteData.priceAdjustedAt = new Date()
+          if (session?.user?.id) {
+            updateQuoteData.priceAdjustedBy = session.user.id
+          }
+        }
+      } else {
+        updateQuoteData.lateFeeApproved = false
+        updateQuoteData.lateFeeApprovedAt = null
+        updateQuoteData.lateFeeApprovedBy = null
+      }
     }
 
     // Se está aprovando o orçamento
@@ -297,6 +392,49 @@ export async function PATCH(
         },
       },
     })
+
+    // Enviar email de notificação quando status muda
+    if (
+      (status === 'APPROVED' ||
+        status === 'REJECTED' ||
+        status === 'COMPLETED') &&
+      currentQuote.status !== status &&
+      resend &&
+      process.env.FROM_EMAIL
+    ) {
+      try {
+        const emailStatus =
+          status === 'APPROVED'
+            ? 'APPROVED'
+            : status === 'REJECTED'
+              ? 'REJECTED'
+              : 'COMPLETED'
+        await resend.emails.send({
+          from: process.env.FROM_EMAIL,
+          to: currentQuote.email,
+          subject: `${
+            emailStatus === 'APPROVED'
+              ? '✅ Orçamento Aprovado'
+              : emailStatus === 'REJECTED'
+                ? '❌ Orçamento Rejeitado'
+                : '🎉 Orçamento Convertido'
+          } - GB Locações`,
+          html: generateQuoteStatusChangeEmailHTML(
+            currentQuote.name,
+            currentQuote.id,
+            emailStatus,
+            Number(quote.originalTotal || quote.total),
+            quote.finalTotal ? Number(quote.finalTotal) : null,
+            quote.priceAdjustmentReason || null,
+            quote.lateFee ? Number(quote.lateFee) : null,
+            quote.lateFeeApproved || false
+          ),
+        })
+      } catch (emailError) {
+        console.error('Failed to send status change email:', emailError)
+        // Continue - não falhar atualização por causa de email
+      }
+    }
 
     return NextResponse.json(quote)
   } catch (error) {

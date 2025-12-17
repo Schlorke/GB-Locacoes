@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
 import * as z from 'zod';
 import { QuoteIncludeObjectSchema as QuoteIncludeObjectSchema } from './objects/QuoteInclude.schema';
@@ -46,6 +45,16 @@ export const QuoteFindFirstOrThrowSelectSchema: z.ZodType<Prisma.QuoteSelect> = 
     subtotal: z.boolean().optional(),
     taxes: z.boolean().optional(),
     validUntil: z.boolean().optional(),
+    originalTotal: z.boolean().optional(),
+    priceAdjustmentReason: z.boolean().optional(),
+    priceAdjustedAt: z.boolean().optional(),
+    priceAdjustedBy: z.boolean().optional(),
+    lateFee: z.boolean().optional(),
+    lateFeeApproved: z.boolean().optional(),
+    lateFeeApprovedAt: z.boolean().optional(),
+    lateFeeApprovedBy: z.boolean().optional(),
+    damages: z.boolean().optional(),
+    misuse: z.boolean().optional(),
     payments: z.boolean().optional(),
     items: z.boolean().optional(),
     approvedByUser: z.boolean().optional(),
@@ -91,6 +100,16 @@ export const QuoteFindFirstOrThrowSelectZodSchema = z.object({
     subtotal: z.boolean().optional(),
     taxes: z.boolean().optional(),
     validUntil: z.boolean().optional(),
+    originalTotal: z.boolean().optional(),
+    priceAdjustmentReason: z.boolean().optional(),
+    priceAdjustedAt: z.boolean().optional(),
+    priceAdjustedBy: z.boolean().optional(),
+    lateFee: z.boolean().optional(),
+    lateFeeApproved: z.boolean().optional(),
+    lateFeeApprovedAt: z.boolean().optional(),
+    lateFeeApprovedBy: z.boolean().optional(),
+    damages: z.boolean().optional(),
+    misuse: z.boolean().optional(),
     payments: z.boolean().optional(),
     items: z.boolean().optional(),
     approvedByUser: z.boolean().optional(),

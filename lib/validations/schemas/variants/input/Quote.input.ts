@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { QuoteStatusSchema } from '../../enums/QuoteStatus.schema';
 import { DeliveryTypeSchema } from '../../enums/DeliveryType.schema';
@@ -39,6 +38,16 @@ export const QuoteInputSchema = z.object({
     subtotal: z.number().optional().nullable(),
     taxes: z.number().optional().nullable(),
     validUntil: z.date().optional().nullable(),
+    originalTotal: z.number().optional().nullable(),
+    priceAdjustmentReason: z.string().optional().nullable(),
+    priceAdjustedAt: z.date().optional().nullable(),
+    priceAdjustedBy: z.string().optional().nullable(),
+    lateFee: z.number().optional().nullable(),
+    lateFeeApproved: z.boolean().optional().nullable(),
+    lateFeeApprovedAt: z.date().optional().nullable(),
+    lateFeeApprovedBy: z.string().optional().nullable(),
+    damages: z.unknown().optional().nullable(),
+    misuse: z.unknown().optional().nullable(),
     payments: z.array(z.unknown()),
     items: z.array(z.unknown()),
     approvedByUser: z.unknown().optional().nullable(),

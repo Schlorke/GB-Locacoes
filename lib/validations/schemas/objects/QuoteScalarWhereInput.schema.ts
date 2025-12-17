@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
@@ -13,7 +12,8 @@ import { JsonNullableFilterObjectSchema as JsonNullableFilterObjectSchema } from
 import { DecimalNullableFilterObjectSchema as DecimalNullableFilterObjectSchema } from './DecimalNullableFilter.schema';
 import { EnumDeliveryTypeNullableFilterObjectSchema as EnumDeliveryTypeNullableFilterObjectSchema } from './EnumDeliveryTypeNullableFilter.schema';
 import { DeliveryTypeSchema } from '../enums/DeliveryType.schema';
-import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from './IntNullableFilter.schema'
+import { IntNullableFilterObjectSchema as IntNullableFilterObjectSchema } from './IntNullableFilter.schema';
+import { BoolNullableFilterObjectSchema as BoolNullableFilterObjectSchema } from './BoolNullableFilter.schema'
 
 import { DecimalJSLikeSchema, isValidDecimalInput } from '../../helpers/decimal-helpers';
 const quotescalarwhereinputSchema = z.object({
@@ -118,7 +118,33 @@ const quotescalarwhereinputSchema = z.object({
 ]).refine((v) => isValidDecimalInput(v), {
   message: "Field 'taxes' must be a Decimal",
 })]).optional().nullable(),
-  validUntil: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable()
+  validUntil: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  originalTotal: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'originalTotal' must be a Decimal",
+})]).optional().nullable(),
+  priceAdjustmentReason: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  priceAdjustedAt: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  priceAdjustedBy: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  lateFee: z.union([z.lazy(() => DecimalNullableFilterObjectSchema), z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'lateFee' must be a Decimal",
+})]).optional().nullable(),
+  lateFeeApproved: z.union([z.lazy(() => BoolNullableFilterObjectSchema), z.boolean()]).optional().nullable(),
+  lateFeeApprovedAt: z.union([z.lazy(() => DateTimeNullableFilterObjectSchema), z.coerce.date()]).optional().nullable(),
+  lateFeeApprovedBy: z.union([z.lazy(() => StringNullableFilterObjectSchema), z.string()]).optional().nullable(),
+  damages: z.lazy(() => JsonNullableFilterObjectSchema).optional(),
+  misuse: z.lazy(() => JsonNullableFilterObjectSchema).optional()
 }).strict();
 export const QuoteScalarWhereInputObjectSchema: z.ZodType<Prisma.QuoteScalarWhereInput> = quotescalarwhereinputSchema as unknown as z.ZodType<Prisma.QuoteScalarWhereInput>;
 export const QuoteScalarWhereInputObjectZodSchema = quotescalarwhereinputSchema;

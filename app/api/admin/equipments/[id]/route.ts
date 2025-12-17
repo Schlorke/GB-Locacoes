@@ -108,6 +108,8 @@ export async function PUT(
       weeklyUseDirectValue,
       biweeklyUseDirectValue,
       monthlyUseDirectValue,
+      partsLossHistory,
+      partsLossCount,
     } = body
 
     // Validação básica dos dados obrigatórios
@@ -271,6 +273,18 @@ export async function PUT(
 
     if (monthlyUseDirectValue !== undefined) {
       updateData.monthlyUseDirectValue = Boolean(monthlyUseDirectValue)
+    }
+
+    // Parts loss tracking
+    if (partsLossHistory !== undefined) {
+      updateData.partsLossHistory = partsLossHistory
+    }
+
+    if (partsLossCount !== undefined) {
+      const partsLossCountNum = parseInt(String(partsLossCount))
+      if (!isNaN(partsLossCountNum) && partsLossCountNum >= 0) {
+        updateData.partsLossCount = partsLossCountNum
+      }
     }
 
     const prisma = await getPrisma()

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
@@ -111,6 +110,32 @@ const makeSchema = () => z.object({
   message: "Field 'taxes' must be a Decimal",
 }).optional().nullable(),
   validUntil: z.coerce.date().optional().nullable(),
+  originalTotal: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'originalTotal' must be a Decimal",
+}).optional().nullable(),
+  priceAdjustmentReason: z.string().optional().nullable(),
+  priceAdjustedAt: z.coerce.date().optional().nullable(),
+  priceAdjustedBy: z.string().optional().nullable(),
+  lateFee: z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'lateFee' must be a Decimal",
+}).optional().nullable(),
+  lateFeeApproved: z.boolean().optional().nullable(),
+  lateFeeApprovedAt: z.coerce.date().optional().nullable(),
+  lateFeeApprovedBy: z.string().optional().nullable(),
+  damages: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
+  misuse: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   payments: z.lazy(() => PaymentUncheckedCreateNestedManyWithoutQuoteInputObjectSchema).optional(),
   items: z.lazy(() => QuoteItemUncheckedCreateNestedManyWithoutQuoteInputObjectSchema).optional(),
   rentals: z.lazy(() => rentalsUncheckedCreateNestedManyWithoutQuoteInputObjectSchema).optional()

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
 import * as z from 'zod';
 import { EquipmentIncludeObjectSchema as EquipmentIncludeObjectSchema } from './objects/EquipmentInclude.schema';
@@ -40,6 +39,8 @@ export const EquipmentFindFirstSelectSchema: z.ZodType<Prisma.EquipmentSelect> =
     odometer: z.boolean().optional(),
     purchaseDate: z.boolean().optional(),
     purchasePrice: z.boolean().optional(),
+    partsLossHistory: z.boolean().optional(),
+    partsLossCount: z.boolean().optional(),
     cartItems: z.boolean().optional(),
     units: z.boolean().optional(),
     category: z.boolean().optional(),
@@ -79,6 +80,8 @@ export const EquipmentFindFirstSelectZodSchema = z.object({
     odometer: z.boolean().optional(),
     purchaseDate: z.boolean().optional(),
     purchasePrice: z.boolean().optional(),
+    partsLossHistory: z.boolean().optional(),
+    partsLossCount: z.boolean().optional(),
     cartItems: z.boolean().optional(),
     units: z.boolean().optional(),
     category: z.boolean().optional(),

@@ -10,6 +10,24 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Download de PDF de orçamentos (cliente e admin)**: Implementados endpoints
+  para download de PDF de orçamentos tanto na área do cliente quanto no painel
+  administrativo.
+  - **Arquivos Criados**:
+    - `app/api/quotes/[id]/download/route.ts` - Endpoint para cliente baixar PDF
+      do próprio orçamento
+    - `app/api/admin/quotes/[id]/download/route.ts` - Endpoint para admin baixar
+      PDF de qualquer orçamento
+  - **Arquivos Modificados**:
+    - `app/area-cliente/orcamentos/page.tsx` - Adicionado botão de download de
+      PDF no modal de detalhes do orçamento
+    - `app/admin/orcamentos/page.tsx` - Adicionado botão de download de PDF no
+      modal de detalhes do orçamento
+  - **Nota**: A geração real de PDF será implementada em breve usando biblioteca
+    como `@react-pdf/renderer` ou `puppeteer`. Por enquanto, os endpoints
+    retornam JSON com os dados do orçamento.
+  - **Data**: 2025-12-17
+
 - **Guia completo de testes para boletos Asaas**: Documentação passo a passo
   para testar o fluxo completo de boletos Asaas no Postman/Insomnia, incluindo:
   - Geração de boleto com exemplos de headers e body
@@ -51,6 +69,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - **Data**: 2025-12-16
 
 ### Fixed 🐛
+
+- **Upload de avaria isolado do carrossel público**: O upload de fotos em
+  "Registro de Perdas de Peças e Avarias" agora usa inputs únicos por instância,
+  evitando que imagens de avaria sejam adicionadas ao carrossel público do
+  equipamento.
+  - **Causa Raiz**: Ambos os `ImageUpload` compartilhavam `id="file-upload"`, e
+    o botão do bloco de avarias acionava o input de imagens públicas.
+  - **Arquivos Modificados**:
+    - `components/ui/image-upload.tsx`
+    - `docs/features/equipment-parts-loss.md`
+  - **Data**: 2025-12-17
 
 - **Remoção automática de imagens do Supabase Storage**: Implementada remoção
   automática de imagens do Supabase Storage quando:

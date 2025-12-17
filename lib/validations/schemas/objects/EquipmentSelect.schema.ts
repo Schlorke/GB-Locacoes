@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { CartItemFindManySchema as CartItemFindManySchema } from '../findManyCartItem.schema';
@@ -39,6 +38,8 @@ const makeSchema = () => z.object({
   odometer: z.boolean().optional(),
   purchaseDate: z.boolean().optional(),
   purchasePrice: z.boolean().optional(),
+  partsLossHistory: z.boolean().optional(),
+  partsLossCount: z.boolean().optional(),
   cartItems: z.union([z.boolean(), z.lazy(() => CartItemFindManySchema)]).optional(),
   units: z.union([z.boolean(), z.lazy(() => EquipmentUnitFindManySchema)]).optional(),
   category: z.union([z.boolean(), z.lazy(() => CategoryArgsObjectSchema)]).optional(),

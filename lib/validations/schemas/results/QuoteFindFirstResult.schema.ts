@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 export const QuoteFindFirstResultSchema = z.nullable(z.object({
   id: z.string(),
@@ -36,6 +35,16 @@ export const QuoteFindFirstResultSchema = z.nullable(z.object({
   subtotal: z.number().optional(),
   taxes: z.number().optional(),
   validUntil: z.date().optional(),
+  originalTotal: z.number().optional(),
+  priceAdjustmentReason: z.string().optional(),
+  priceAdjustedAt: z.date().optional(),
+  priceAdjustedBy: z.string().optional(),
+  lateFee: z.number().optional(),
+  lateFeeApproved: z.boolean().optional(),
+  lateFeeApprovedAt: z.date().optional(),
+  lateFeeApprovedBy: z.string().optional(),
+  damages: z.unknown().optional(),
+  misuse: z.unknown().optional(),
   payments: z.array(z.unknown()),
   items: z.array(z.unknown()),
   approvedByUser: z.unknown().optional(),

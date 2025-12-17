@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { Prisma } from '@prisma/client';
 import Decimal from 'decimal.js';
@@ -14,6 +13,7 @@ import { NullableDecimalFieldUpdateOperationsInputObjectSchema as NullableDecima
 import { DeliveryTypeSchema } from '../enums/DeliveryType.schema';
 import { NullableEnumDeliveryTypeFieldUpdateOperationsInputObjectSchema as NullableEnumDeliveryTypeFieldUpdateOperationsInputObjectSchema } from './NullableEnumDeliveryTypeFieldUpdateOperationsInput.schema';
 import { NullableIntFieldUpdateOperationsInputObjectSchema as NullableIntFieldUpdateOperationsInputObjectSchema } from './NullableIntFieldUpdateOperationsInput.schema';
+import { NullableBoolFieldUpdateOperationsInputObjectSchema as NullableBoolFieldUpdateOperationsInputObjectSchema } from './NullableBoolFieldUpdateOperationsInput.schema';
 import { PaymentUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema as PaymentUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema } from './PaymentUncheckedUpdateManyWithoutQuoteNestedInput.schema';
 import { QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema as QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema } from './QuoteItemUncheckedUpdateManyWithoutQuoteNestedInput.schema';
 import { rentalsUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema as rentalsUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema } from './rentalsUncheckedUpdateManyWithoutQuoteNestedInput.schema'
@@ -121,6 +121,32 @@ const makeSchema = () => z.object({
   message: "Field 'taxes' must be a Decimal",
 }), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
   validUntil: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  originalTotal: z.union([z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'originalTotal' must be a Decimal",
+}), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  priceAdjustmentReason: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  priceAdjustedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  priceAdjustedBy: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  lateFee: z.union([z.union([
+  z.number(),
+  z.string(),
+  z.instanceof(Decimal),
+  z.instanceof(Prisma.Decimal),
+  DecimalJSLikeSchema,
+]).refine((v) => isValidDecimalInput(v), {
+  message: "Field 'lateFee' must be a Decimal",
+}), z.lazy(() => NullableDecimalFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  lateFeeApproved: z.union([z.boolean(), z.lazy(() => NullableBoolFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  lateFeeApprovedAt: z.union([z.coerce.date(), z.lazy(() => NullableDateTimeFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  lateFeeApprovedBy: z.union([z.string(), z.lazy(() => NullableStringFieldUpdateOperationsInputObjectSchema)]).optional().nullable(),
+  damages: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
+  misuse: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
   payments: z.lazy(() => PaymentUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema).optional(),
   items: z.lazy(() => QuoteItemUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema).optional(),
   rentals: z.lazy(() => rentalsUncheckedUpdateManyWithoutQuoteNestedInputObjectSchema).optional()

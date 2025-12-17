@@ -293,6 +293,20 @@ export async function GET(request: NextRequest) {
       startDate: quote.startDate?.toISOString() || null,
       endDate: quote.endDate?.toISOString() || null,
       totalPrice: Number(quote.total),
+      originalTotal: quote.originalTotal
+        ? Number(quote.originalTotal)
+        : quote.total
+          ? Number(quote.total)
+          : 0,
+      finalTotal: quote.finalTotal ? Number(quote.finalTotal) : null,
+      priceAdjustmentReason: quote.priceAdjustmentReason || null,
+      priceAdjustedAt: quote.priceAdjustedAt?.toISOString() || null,
+      priceAdjustedBy: quote.priceAdjustedBy || null,
+      lateFee: quote.lateFee ? Number(quote.lateFee) : null,
+      lateFeeApproved: quote.lateFeeApproved || false,
+      lateFeeApprovedAt: quote.lateFeeApprovedAt?.toISOString() || null,
+      lateFeeApprovedBy: quote.lateFeeApprovedBy || null,
+      validUntil: quote.validUntil?.toISOString() || null,
       status: quote.status.toLowerCase() as 'pending' | 'approved' | 'rejected',
       message: quote.message,
       deliveryType: quote.deliveryType || null,

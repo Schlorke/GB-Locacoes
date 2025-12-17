@@ -1546,6 +1546,17 @@ Antes de implementar qualquer funcionalidade frontend:
 > **⚠️ CRÍTICO**: Este sistema é fundamental para o funcionamento do negócio.
 > Entenda completamente antes de fazer alterações.
 
+**📚 DOCUMENTAÇÃO COMPLETA**:
+
+- **Ajuste de Valor Final**: `docs/features/quote-price-adjustment.md`
+- **Multa por Atraso**: `docs/features/late-fee-calculation.md`
+- **Perdas de Peças**: `docs/features/equipment-parts-loss.md`
+- **Bloqueio de Estoque**: `docs/features/quote-stock-blocking.md`
+- **Acompanhamento de Status**: `docs/features/quote-status-tracking.md`
+
+**⚠️ CONSULTE SEMPRE**: Antes de fazer QUALQUER alteração no sistema de
+orçamentos, leia TODA a documentação acima.
+
 #### **🎯 VISÃO GERAL DO FLUXO**
 
 O sistema de orçamentos funciona em duas etapas principais:
@@ -1789,6 +1800,137 @@ entrega:
 
 **⚠️ CRÍTICO**: A API transforma `deliveryAddress` (tipo Json do Prisma) para
 objeto JavaScript. Use type guards para acessar os campos com segurança.
+
+#### **💰 SISTEMA DE AJUSTE DE VALOR FINAL COM JUSTIFICATIVA** (NOVO - JAN 2025)
+
+> **⚠️ CRÍTICO**: Sistema que permite admin editar valor final do orçamento com
+> justificativa obrigatória. Cliente sempre vê valor original vs valor final
+> editado.
+
+**📚 DOCUMENTAÇÃO COMPLETA**: `docs/features/quote-price-adjustment.md`
+
+**REGRAS OBRIGATÓRIAS**:
+
+1. **Admin pode editar valor total** do orçamento
+2. **Justificativa é OBRIGATÓRIA** ao editar valor
+3. **Sistema salva**:
+   - `originalTotal`: Valor original completo (com todos os detalhes)
+   - `finalTotal`: Valor final editado
+   - `priceAdjustmentReason`: Justificativa obrigatória
+   - `priceAdjustedAt`: Data/hora da edição
+   - `priceAdjustedBy`: ID do usuário que editou
+4. **Cliente DEVE ver**:
+   - Valor original com breakdown completo
+   - Valor final editado
+   - Justificativa do admin
+5. **Informações NUNCA separadas**: Sempre exibir juntas
+
+**CASOS DE USO**:
+
+- Seguro e taxa de quebra/avaria (configurável nos termos)
+- Ajustes por perdas de peças (quando registrado no equipamento)
+- Ajustes por danos/mau uso
+- Ajustes por qualquer motivo do admin (sempre justificado)
+
+**API**: `PATCH /api/admin/quotes/[id]` com
+`{ finalTotal, priceAdjustmentReason }`
+
+#### **⚖️ SISTEMA DE MULTA POR ATRASO** (NOVO - JAN 2025)
+
+> **⚠️ CRÍTICO**: Sistema que calcula automaticamente multa por atraso, mas
+> requer aprovação do admin para ser aplicada.
+
+**📚 DOCUMENTAÇÃO COMPLETA**: `docs/features/late-fee-calculation.md`
+
+**REGRAS OBRIGATÓRIAS**:
+
+1. **Sistema calcula automaticamente** valor da multa baseado em:
+   - Data de término do orçamento
+   - Data atual
+   - Configuração de multa (taxa diária ou valor fixo)
+2. **Admin DEVE aprovar** aplicação da multa
+3. **Tudo discriminado** para cliente e admin:
+   - Valor calculado
+   - Dias de atraso
+   - Status de aprovação
+   - Valor final com multa (se aprovada)
+4. **Integra com ajuste de valor final**: Multa aprovada adiciona ao valor final
+
+**API**:
+
+- `POST /api/admin/quotes/[id]/calculate-late-fee`: Calcula multa
+- `PATCH /api/admin/quotes/[id]` com `{ lateFee, lateFeeApproved }`: Aprova
+  multa
+
+**Utilitário**: `lib/late-fee-calculator.ts` - Função `calculateLateFee()`
+
+#### **🔧 REGISTRO DE PERDAS DE PEÇAS** (NOVO - JAN 2025)
+
+> **⚠️ CRÍTICO**: Sistema para registrar perdas de peças dos equipamentos.
+> Essencial para controle e gerenciamento do negócio.
+
+**📚 DOCUMENTAÇÃO COMPLETA**: `docs/features/equipment-parts-loss.md`
+
+**REGRAS OBRIGATÓRIAS**:
+
+1. **Campo no admin de equipamentos** (`/admin/equipamentos/[id]/editar`)
+2. **Exibir na visualização** de equipamentos
+3. **Apenas para admins**: Informação relevante apenas para administradores
+4. **Usado para cobrar taxas** no orçamento final
+5. **Integra com ajuste de valor final**: Usado para justificar ajustes
+
+**Estrutura**:
+
+- `partsLossHistory`: Array com histórico completo (data, descrição, quantidade)
+- `partsLossCount`: Contador total de perdas
+
+**API**: `PUT /api/admin/equipments/[id]` com
+`{ partsLossHistory, partsLossCount }`
+
+#### **🔒 BLOQUEIO DE ESTOQUE** (NOVO - JAN 2025)
+
+> **⚠️ CRÍTICO**: Sistema que bloqueia estoque apenas quando orçamento é
+> aprovado, não durante criação. Previne vulnerabilidade.
+
+**📚 DOCUMENTAÇÃO COMPLETA**: `docs/features/quote-stock-blocking.md`
+
+**REGRAS OBRIGATÓRIAS**:
+
+1. **NÃO bloqueia durante criação**: Orçamentos `PENDING` não bloqueiam estoque
+2. **Bloqueia quando aprovado**: Apenas orçamentos `APPROVED` bloqueiam estoque
+3. **Validação server-side**: Sempre valida disponibilidade antes de criar
+   orçamento
+4. **Período específico**: Bloqueia apenas no período solicitado pelo cliente
+
+**Prevenção de Vulnerabilidade**:
+
+- Se bloqueasse durante criação, usuário mal intencionado poderia bloquear todos
+  os equipamentos
+- Solução: Bloqueio apenas quando aprovado pelo admin
+
+**Lógica**: `lib/equipment-availability.ts` - Verifica se orçamento está
+`APPROVED` antes de bloquear
+
+#### **📊 ACOMPANHAMENTO DE STATUS** (NOVO - JAN 2025)
+
+> **⚠️ CRÍTICO**: Sistema que permite cliente e admin acompanharem status dos
+> orçamentos com notificações.
+
+**📚 DOCUMENTAÇÃO COMPLETA**: `docs/features/quote-status-tracking.md`
+
+**REGRAS OBRIGATÓRIAS**:
+
+1. **Status do orçamento**: PENDING, APPROVED, REJECTED, COMPLETED
+2. **Notificações automáticas**: Cliente recebe confirmação e mudanças de status
+3. **Visualização para cliente**: Área do cliente (a implementar)
+4. **Visualização para admin**: Página admin com Kanban/Tabela
+
+**Status**:
+
+- `PENDING`: Aguardando análise
+- `APPROVED`: Aprovado pelo admin
+- `REJECTED`: Rejeitado pelo admin
+- `COMPLETED`: Convertido em locação
 
 #### **🚨 REGRAS DE NEGÓCIO CRÍTICAS**
 

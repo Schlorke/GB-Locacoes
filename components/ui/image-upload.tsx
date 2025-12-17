@@ -29,7 +29,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import type * as React from 'react'
-import { useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from './button'
 import { CloseButton } from './close-button'
@@ -76,6 +76,7 @@ interface ImageUploadProps {
   prevImage?: () => void
   goToImage?: (_index: number) => void
   tooltipContent?: React.ReactNode
+  sectionTitle?: string
 }
 
 interface SortableImageProps {
@@ -221,10 +222,15 @@ export function ImageUpload({
   prevImage,
   goToImage,
   tooltipContent,
+  sectionTitle = 'Preview do Equipamento',
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [urlInput, setUrlInput] = useState('')
   const [activeId, setActiveId] = useState<string | null>(null)
+  const baseId = useId().replace(/:/g, '')
+  const fileInputId = `file-upload-${baseId}`
+  const urlInputId = `url-input-${baseId}`
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -362,7 +368,7 @@ export function ImageUpload({
             <div className="flex items-center justify-between mb-4 w-full">
               <div className="flex items-center gap-1.5">
                 <h3 className="text-sm font-semibold text-slate-700">
-                  Preview do Equipamento
+                  {sectionTitle}
                 </h3>
                 {tooltipContent && (
                   <HybridTooltip content={tooltipContent}>
@@ -522,23 +528,27 @@ export function ImageUpload({
 
       {/* Upload de arquivos */}
       <div>
-        <Label htmlFor="file-upload" className="block text-sm font-medium mb-2">
+        <Label
+          htmlFor={fileInputId}
+          className="block text-sm font-medium mb-2"
+        >
           Upload de Imagens
         </Label>
         <div className="flex items-start">
           <Input
-            id="file-upload"
+            id={fileInputId}
             type="file"
             accept="image/*"
             multiple
             onChange={handleFileUpload}
             disabled={isUploading || images.length >= maxImages}
             className="hidden"
+            ref={fileInputRef}
           />
           <Button
             type="button"
             variant="outline"
-            onClick={() => document.getElementById('file-upload')?.click()}
+            onClick={() => fileInputRef.current?.click()}
             disabled={isUploading || images.length >= maxImages}
             className="w-fit px-4 bg-transparent border-gray-200 hover:bg-background hover:text-foreground hover:scale-105 hover:shadow-sm transition-all duration-300 group"
           >
@@ -584,7 +594,7 @@ export function ImageUpload({
 
       {/* URL de imagem */}
       <div>
-        <Label htmlFor="url-input" className="block text-sm font-medium mb-2">
+        <Label htmlFor={urlInputId} className="block text-sm font-medium mb-2">
           Ou adicionar por URL
         </Label>
         <div className="flex items-center gap-2">
@@ -601,7 +611,7 @@ export function ImageUpload({
             </span>
           </Button>
           <Input
-            id="url-input"
+            id={urlInputId}
             type="url"
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}

@@ -1,153 +1,96 @@
-import { prisma } from '@/lib/prisma'
 import Decimal from 'decimal.js'
 
+export interface LateFeeConfig {
+  dailyRate?: number // Taxa diária de multa (ex: 0.05 = 5% ao dia)
+  fixedAmount?: number // Valor fixo de multa
+  maxDays?: number // Número máximo de dias para calcular multa
+  minAmount?: number // Valor mínimo de multa
+  maxAmount?: number // Valor máximo de multa
+}
+
+export interface LateFeeResult {
+  fee: Decimal
+  daysLate: number
+  calculationMethod: 'daily' | 'fixed'
+  config: LateFeeConfig
+}
+
 /**
- * Calcula e aplica multa por atraso em todas as locações vencidas
- * Deve ser executado periodicamente (cron job ou scheduled task)
+ * Calcula multa por atraso baseado em configuração
+ * @param originalTotal Valor original do orçamento/locação
+ * @param endDate Data de término prevista
+ * @param currentDate Data atual (ou data de devolução)
+ * @param config Configuração de cálculo de multa
+ * @returns Resultado do cálculo de multa
  */
-export async function calculateAndApplyLateFees() {
-  try {
-    const now = new Date()
+export function calculateLateFee(
+  originalTotal: number | Decimal,
+  endDate: Date,
+  currentDate: Date = new Date(),
+  config: LateFeeConfig = {}
+): LateFeeResult {
+  const total = new Decimal(originalTotal)
+  const {
+    dailyRate = 0.02, // 2% ao dia por padrão
+    fixedAmount,
+    maxDays,
+    minAmount = 0,
+    maxAmount,
+  } = config
 
-    // Buscar locações ativas ou pendentes que estão vencidas
-    const overdueRentals = await prisma.rentals.findMany({
-      where: {
-        status: {
-          in: ['ACTIVE', 'PENDING'],
-        },
-        enddate: {
-          lt: now,
-        },
-      },
-      include: {
-        rental_items: {
-          include: {
-            equipments: true,
-          },
-        },
-      },
-    })
+  // Calcular dias de atraso
+  const daysLate = Math.max(
+    0,
+    Math.ceil(
+      (currentDate.getTime() - endDate.getTime()) / (1000 * 60 * 60 * 24)
+    )
+  )
 
-    const results = []
-
-    for (const rental of overdueRentals) {
-      const endDate = new Date(rental.enddate)
-      const daysOverdue = Math.ceil(
-        (now.getTime() - endDate.getTime()) / (1000 * 60 * 60 * 24)
-      )
-
-      if (daysOverdue <= 0) continue
-
-      // Calcular multa: 5% do valor diário por dia de atraso
-      const totalDays = Math.ceil(
-        (endDate.getTime() - new Date(rental.startdate).getTime()) /
-          (1000 * 60 * 60 * 24)
-      )
-      const dailyRate = new Decimal(rental.total).div(totalDays || 1)
-      const lateFee = dailyRate
-        .times(daysOverdue)
-        .times(0.05) // 5% por dia de atraso
-        .toNumber()
-
-      // Verificar se já existe pagamento de multa pendente
-      const existingLateFeePayment = await prisma.payment.findFirst({
-        where: {
-          rentalId: rental.id,
-          type: 'LATE_FEE',
-          status: {
-            in: ['PENDING', 'OVERDUE'],
-          },
-        },
-      })
-
-      // Atualizar locação com multa e status
-      await prisma.rentals.update({
-        where: { id: rental.id },
-        data: {
-          lateFee: lateFee,
-          status: 'OVERDUE',
-        },
-      })
-
-      // Criar pagamento para a multa se ainda não existir
-      if (!existingLateFeePayment && lateFee > 0) {
-        await prisma.payment.create({
-          data: {
-            rentalId: rental.id,
-            amount: lateFee,
-            method: 'PIX',
-            status: 'OVERDUE',
-            type: 'LATE_FEE',
-            dueDate: now,
-          },
-        })
-      }
-
-      results.push({
-        rentalId: rental.id,
-        daysOverdue,
-        lateFee,
-        updated: true,
-      })
-    }
-
+  if (daysLate <= 0) {
     return {
-      processedCount: results.length,
-      results,
+      fee: new Decimal(0),
+      daysLate: 0,
+      calculationMethod: 'daily',
+      config,
     }
-  } catch (error) {
-    console.error('Error calculating and applying late fees:', error)
-    throw error
+  }
+
+  let fee: Decimal
+
+  if (fixedAmount !== undefined) {
+    // Usar valor fixo
+    fee = new Decimal(fixedAmount)
+  } else {
+    // Calcular baseado em taxa diária
+    const daysToCalculate = maxDays ? Math.min(daysLate, maxDays) : daysLate
+    fee = total.times(dailyRate).times(daysToCalculate)
+  }
+
+  // Aplicar valor mínimo
+  if (minAmount > 0 && fee.lt(minAmount)) {
+    fee = new Decimal(minAmount)
+  }
+
+  // Aplicar valor máximo
+  if (maxAmount !== undefined && fee.gt(maxAmount)) {
+    fee = new Decimal(maxAmount)
+  }
+
+  return {
+    fee,
+    daysLate,
+    calculationMethod: fixedAmount !== undefined ? 'fixed' : 'daily',
+    config,
   }
 }
 
 /**
- * Calcula multa por atraso para uma locação específica
+ * Configuração padrão de multa por atraso
+ * Pode ser configurada nas settings do sistema
  */
-export async function calculateLateFeeForRental(rentalId: string) {
-  const rental = await prisma.rentals.findUnique({
-    where: { id: rentalId },
-    include: {
-      rental_items: {
-        include: {
-          equipments: true,
-        },
-      },
-    },
-  })
-
-  if (!rental) {
-    throw new Error('Rental not found')
-  }
-
-  const now = new Date()
-  const endDate = new Date(rental.enddate)
-
-  if (now <= endDate) {
-    return {
-      lateFee: 0,
-      daysOverdue: 0,
-      message: 'Rental is not overdue',
-    }
-  }
-
-  const daysOverdue = Math.ceil(
-    (now.getTime() - endDate.getTime()) / (1000 * 60 * 60 * 24)
-  )
-
-  const totalDays = Math.ceil(
-    (endDate.getTime() - new Date(rental.startdate).getTime()) /
-      (1000 * 60 * 60 * 24)
-  )
-  const dailyRate = new Decimal(rental.total).div(totalDays || 1)
-  const lateFee = dailyRate
-    .times(daysOverdue)
-    .times(0.05) // 5% por dia de atraso
-    .toNumber()
-
-  return {
-    lateFee,
-    daysOverdue,
-    message: 'Late fee calculated successfully',
-  }
+export const DEFAULT_LATE_FEE_CONFIG: LateFeeConfig = {
+  dailyRate: 0.02, // 2% ao dia
+  maxDays: 30, // Máximo de 30 dias para calcular
+  minAmount: 50, // Mínimo de R$ 50,00
+  maxAmount: 5000, // Máximo de R$ 5.000,00
 }

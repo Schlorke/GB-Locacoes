@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 export const QuoteAggregateResultSchema = z.object({  _count: z.object({
     id: z.number(),
@@ -36,6 +35,16 @@ export const QuoteAggregateResultSchema = z.object({  _count: z.object({
     subtotal: z.number(),
     taxes: z.number(),
     validUntil: z.number(),
+    originalTotal: z.number(),
+    priceAdjustmentReason: z.number(),
+    priceAdjustedAt: z.number(),
+    priceAdjustedBy: z.number(),
+    lateFee: z.number(),
+    lateFeeApproved: z.number(),
+    lateFeeApprovedAt: z.number(),
+    lateFeeApprovedBy: z.number(),
+    damages: z.number(),
+    misuse: z.number(),
     payments: z.number(),
     items: z.number(),
     approvedByUser: z.number(),
@@ -52,7 +61,9 @@ export const QuoteAggregateResultSchema = z.object({  _count: z.object({
     pickupFee: z.number().nullable(),
     priority: z.number().nullable(),
     subtotal: z.number().nullable(),
-    taxes: z.number().nullable()
+    taxes: z.number().nullable(),
+    originalTotal: z.number().nullable(),
+    lateFee: z.number().nullable()
   }).nullable().optional(),
   _avg: z.object({
     total: z.number().nullable(),
@@ -63,7 +74,9 @@ export const QuoteAggregateResultSchema = z.object({  _count: z.object({
     pickupFee: z.number().nullable(),
     priority: z.number().nullable(),
     subtotal: z.number().nullable(),
-    taxes: z.number().nullable()
+    taxes: z.number().nullable(),
+    originalTotal: z.number().nullable(),
+    lateFee: z.number().nullable()
   }).nullable().optional(),
   _min: z.object({
     id: z.string().nullable(),
@@ -97,7 +110,14 @@ export const QuoteAggregateResultSchema = z.object({  _count: z.object({
     startDate: z.date().nullable(),
     subtotal: z.number().nullable(),
     taxes: z.number().nullable(),
-    validUntil: z.date().nullable()
+    validUntil: z.date().nullable(),
+    originalTotal: z.number().nullable(),
+    priceAdjustmentReason: z.string().nullable(),
+    priceAdjustedAt: z.date().nullable(),
+    priceAdjustedBy: z.string().nullable(),
+    lateFee: z.number().nullable(),
+    lateFeeApprovedAt: z.date().nullable(),
+    lateFeeApprovedBy: z.string().nullable()
   }).nullable().optional(),
   _max: z.object({
     id: z.string().nullable(),
@@ -131,5 +151,12 @@ export const QuoteAggregateResultSchema = z.object({  _count: z.object({
     startDate: z.date().nullable(),
     subtotal: z.number().nullable(),
     taxes: z.number().nullable(),
-    validUntil: z.date().nullable()
+    validUntil: z.date().nullable(),
+    originalTotal: z.number().nullable(),
+    priceAdjustmentReason: z.string().nullable(),
+    priceAdjustedAt: z.date().nullable(),
+    priceAdjustedBy: z.string().nullable(),
+    lateFee: z.number().nullable(),
+    lateFeeApprovedAt: z.date().nullable(),
+    lateFeeApprovedBy: z.string().nullable()
   }).nullable().optional()});

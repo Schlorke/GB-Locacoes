@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema';
@@ -40,6 +39,8 @@ const makeSchema = () => z.object({
   odometer: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   purchaseDate: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   purchasePrice: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  partsLossHistory: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
+  partsLossCount: z.union([SortOrderSchema, z.lazy(() => SortOrderInputObjectSchema)]).optional(),
   cartItems: z.lazy(() => CartItemOrderByRelationAggregateInputObjectSchema).optional(),
   units: z.lazy(() => EquipmentUnitOrderByRelationAggregateInputObjectSchema).optional(),
   category: z.lazy(() => CategoryOrderByWithRelationInputObjectSchema).optional(),

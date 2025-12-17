@@ -167,6 +167,120 @@ async function getPrisma() {
  *             example:
  *               error: "Erro interno do servidor"
  */
+/**
+ * @openapi
+ * /api/quotes:
+ *   get:
+ *     tags: [Quotes]
+ *     summary: Lista orçamentos do cliente logado
+ *     description: |
+ *       Retorna lista de orçamentos do usuário autenticado.
+ *       Requer autenticação via sessão.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - name: userId
+ *         in: query
+ *         description: ID do usuário (opcional, usa sessão se não informado)
+ *         required: false
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lista de orçamentos do cliente
+ */
+export async function GET(request: Request) {
+  try {
+    const session = await getServerSession(authOptions)
+    const { searchParams } = new URL(request.url)
+    const userIdParam = searchParams.get('userId')
+
+    // Usar userId da query ou da sessão
+    const userId = userIdParam || session?.user?.id
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Usuário não autenticado' },
+        { status: 401 }
+      )
+    }
+
+    const prisma = await getPrisma()
+
+    // Buscar orçamentos do usuário
+    const quotes = await prisma.quote.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        items: {
+          include: {
+            equipment: {
+              select: {
+                id: true,
+                name: true,
+                pricePerDay: true,
+                images: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    // Transformar dados para formato esperado pelo frontend
+    const transformedQuotes = quotes.map((quote) => ({
+      id: quote.id,
+      name: quote.name,
+      email: quote.email,
+      phone: quote.phone,
+      totalPrice: Number(quote.total),
+      originalTotal: quote.originalTotal
+        ? Number(quote.originalTotal)
+        : quote.total
+          ? Number(quote.total)
+          : 0,
+      finalTotal: quote.finalTotal ? Number(quote.finalTotal) : null,
+      priceAdjustmentReason: quote.priceAdjustmentReason || null,
+      priceAdjustedAt: quote.priceAdjustedAt?.toISOString() || null,
+      lateFee: quote.lateFee ? Number(quote.lateFee) : null,
+      lateFeeApproved: quote.lateFeeApproved || false,
+      status: quote.status.toLowerCase() as
+        | 'pending'
+        | 'approved'
+        | 'rejected'
+        | 'completed',
+      createdAt: quote.createdAt.toISOString(),
+      updatedAt: quote.updatedAt.toISOString(),
+      validUntil: quote.validUntil?.toISOString() || null,
+      items: quote.items.map((item) => ({
+        id: item.id,
+        quantity: item.quantity,
+        days: item.days,
+        startDate: item.startDate?.toISOString() || null,
+        endDate: item.endDate?.toISOString() || null,
+        pricePerDay: Number(item.pricePerDay),
+        total: Number(item.total),
+        equipment: {
+          id: item.equipment.id,
+          name: item.equipment.name,
+        },
+      })),
+    }))
+
+    return NextResponse.json(transformedQuotes)
+  } catch (error) {
+    console.error('Error fetching quotes:', error)
+    return NextResponse.json(
+      { error: 'Erro ao buscar orçamentos' },
+      { status: 500 }
+    )
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -349,6 +463,10 @@ export async function POST(request: Request) {
       }
     }
 
+    // Calcular período de validade (7 dias a partir de agora)
+    const validUntilDate = new Date()
+    validUntilDate.setDate(validUntilDate.getDate() + 7)
+
     // Criar orcamento
     const quote = await prisma.quote.create({
       data: {
@@ -361,10 +479,12 @@ export async function POST(request: Request) {
         company: customerCompany,
         message,
         total: totalAmount,
+        originalTotal: totalAmount, // Salvar valor original completo
         status: 'PENDING', // Fixed: using correct enum value
         userId: userId || undefined, // Associar com usuário logado se houver
         startDate: globalStartDate,
         endDate: globalEndDate,
+        validUntil: validUntilDate, // Período de validade (7 dias)
         deliveryType: deliveryType || undefined,
         deliveryAddress: deliveryAddress
           ? {
@@ -450,7 +570,7 @@ export async function POST(request: Request) {
       // Não falhar a criação do orçamento; apenas logar.
     }
 
-    // Enviar email com informações completas de desconto/período
+    // Enviar email para admin com informações completas de desconto/período
     if (resend && process.env.FROM_EMAIL) {
       try {
         await resend.emails.send({
@@ -474,7 +594,76 @@ export async function POST(request: Request) {
           ),
         })
       } catch (emailError) {
-        console.error('Failed to send email:', emailError)
+        console.error('Failed to send admin email:', emailError)
+        // Continue - orçamento já foi criado
+      }
+    }
+
+    // Enviar email de confirmação para o cliente
+    if (resend && process.env.FROM_EMAIL) {
+      try {
+        // Criar email simples de confirmação de recebimento
+        await resend.emails.send({
+          from: process.env.FROM_EMAIL,
+          to: customerEmail,
+          subject: '✅ Orçamento Recebido - GB Locações',
+          html: `
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+              <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Orçamento Recebido - GB Locações</title>
+              </head>
+              <body style="margin: 0; padding: 0; background: #f1f5f9; font-family: 'Arial', sans-serif;">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #f1f5f9; padding: 20px;">
+                  <tr>
+                    <td align="center">
+                      <table width="680" cellpadding="0" cellspacing="0" border="0" style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); max-width: 680px;">
+                        <tr>
+                          <td style="background: linear-gradient(135deg, #334155 0%, #475569 100%); padding: 40px 30px;">
+                            <div style="font-size: 28px; font-weight: 700; color: #ffffff;">GB Locações</div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding: 40px 30px;">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                              <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+                              <h1 style="font-size: 24px; font-weight: 700; color: #1e293b; margin: 0 0 12px 0;">Orçamento Recebido!</h1>
+                              <p style="font-size: 16px; color: #64748b; margin: 0;">Olá, ${customerName}!</p>
+                            </div>
+                            <div style="background: #f8fafc; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                              <p style="font-size: 16px; color: #1e293b; margin: 0 0 16px 0;">Recebemos sua solicitação de orçamento e entraremos em contato em breve!</p>
+                              <div style="font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 8px;">ID do Orçamento</div>
+                              <div style="font-size: 18px; font-weight: 700; color: #1e293b; font-family: monospace;">#${quote.id.slice(-8).toUpperCase()}</div>
+                            </div>
+                            <div style="background: #f0fdf4; border-left: 4px solid #10b981; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+                              <div style="font-size: 16px; font-weight: 600; color: #166534; margin-bottom: 8px;">Valor do Orçamento</div>
+                              <div style="font-size: 28px; font-weight: 700; color: #15803d;">${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalAmount)}</div>
+                            </div>
+                            <div style="text-align: center; margin-top: 32px;">
+                              <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://locacoesgb.com.br'}/area-cliente/orcamentos" style="display: inline-block; background: #ea580c; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px;">Acompanhar Orçamento</a>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="background: #f8fafc; padding: 24px 30px; text-align: center;">
+                            <p style="font-size: 12px; color: #64748b; margin: 0;">GB Locações - Equipamentos para Construção Civil</p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+              </body>
+            </html>
+          `,
+        })
+      } catch (emailError) {
+        console.error(
+          'Failed to send confirmation email to client:',
+          emailError
+        )
         // Continue - orçamento já foi criado
       }
     }

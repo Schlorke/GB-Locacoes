@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-// import { useSession } from 'next-auth/react'
+import { useState, useEffect, useCallback } from 'react'
+import { useSession } from 'next-auth/react'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card'
 import { ClientAreaBadge } from '@/components/ui/client-area-badge'
 import { SearchBar } from '@/components/ui/search-bar'
+import { Dialog } from '@/components/ui/dialog'
 import {
   FileText,
   Calendar,
@@ -21,49 +22,49 @@ import {
   Plus,
   CheckCircle,
   XCircle,
+  DollarSign,
+  Package,
 } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+import { formatCurrency, formatDate } from '@/lib/utils'
+import { toast } from 'sonner'
+import React from 'react'
+import { Badge } from '@/components/ui/badge'
 
 // Types
-type OrcamentoStatus = 'pending' | 'approved' | 'rejected'
+type OrcamentoStatus = 'pending' | 'approved' | 'rejected' | 'completed'
 
 interface Orcamento {
   id: string
-  data: string
+  name: string
+  email: string
+  phone: string
+  totalPrice: number
+  originalTotal?: number
+  finalTotal?: number | null
+  priceAdjustmentReason?: string | null
+  priceAdjustedAt?: string | null
+  lateFee?: number | null
+  lateFeeApproved?: boolean
   status: OrcamentoStatus
-  equipamentos: string[]
-  valor: number
-  periodo: string
+  createdAt: string
+  updatedAt: string
+  validUntil?: string | null
+  items?: Array<{
+    id: string
+    quantity: number
+    days: number
+    startDate?: string | null
+    endDate?: string | null
+    pricePerDay: number
+    total: number
+    equipment: {
+      id: string
+      name: string
+    }
+  }>
 }
-
-// Mock data para orçamentos
-const mockOrcamentos: Orcamento[] = [
-  {
-    id: '001',
-    data: '2024-01-15',
-    status: 'approved',
-    equipamentos: ['Escavadeira', 'Retroescavadeira'],
-    valor: 2850.0,
-    periodo: '7 dias',
-  },
-  {
-    id: '002',
-    data: '2024-01-10',
-    status: 'pending',
-    equipamentos: ['Betoneira', 'Martelo Pneumático'],
-    valor: 1420.0,
-    periodo: '3 dias',
-  },
-  {
-    id: '003',
-    data: '2024-01-05',
-    status: 'rejected',
-    equipamentos: ['Guindaste'],
-    valor: 4200.0,
-    periodo: '14 dias',
-  },
-]
 
 const statusConfig: Record<
   OrcamentoStatus,
@@ -92,19 +93,59 @@ const statusConfig: Record<
     icon: XCircle,
     dotColor: 'bg-red-500',
   },
+  completed: {
+    label: 'Concluído',
+    color: 'bg-blue-100 text-blue-800',
+    icon: CheckCircle,
+    dotColor: 'bg-blue-500',
+  },
 }
 
 export default function OrcamentosPage() {
-  // const { data: session } = useSession()
-  // TODO: Use session data for user-specific quotes
+  const { data: session } = useSession()
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedOrcamento, setSelectedOrcamento] = useState<Orcamento | null>(
+    null
+  )
 
-  const filteredOrcamentos = mockOrcamentos.filter((orcamento) => {
+  const fetchOrcamentos = useCallback(async () => {
+    try {
+      setLoading(true)
+      const response = await fetch('/api/quotes?userId=' + session?.user?.id)
+      if (response.ok) {
+        const data = await response.json()
+        setOrcamentos(Array.isArray(data) ? data : data.quotes || [])
+      } else {
+        toast.error('Erro', {
+          description: 'Erro ao carregar orçamentos.',
+        })
+      }
+    } catch (error) {
+      console.error('Error fetching quotes:', error)
+      toast.error('Erro', {
+        description: 'Erro ao carregar orçamentos.',
+      })
+    } finally {
+      setLoading(false)
+    }
+  }, [session?.user?.id])
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchOrcamentos()
+    }
+  }, [session, fetchOrcamentos])
+
+  const filteredOrcamentos = orcamentos.filter((orcamento) => {
     const matchesSearch =
-      orcamento.equipamentos.some((eq) =>
-        eq.toLowerCase().includes(searchTerm.toLowerCase())
-      ) || orcamento.id.includes(searchTerm)
+      orcamento.items?.some((item) =>
+        item.equipment.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ) ||
+      orcamento.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      orcamento.name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus =
       statusFilter === 'all' || orcamento.status === statusFilter
     return matchesSearch && matchesStatus
@@ -201,7 +242,14 @@ export default function OrcamentosPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-4 pb-8 md:p-6 lg:p-8 relative !pt-0 z-0">
-                {filteredOrcamentos.length > 0 ? (
+                {loading ? (
+                  <div className="text-center py-16">
+                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
+                    <p className="text-gray-500 mt-4">
+                      Carregando orçamentos...
+                    </p>
+                  </div>
+                ) : filteredOrcamentos.length > 0 ? (
                   <div className="space-y-6">
                     {filteredOrcamentos.map((orcamento) => {
                       const StatusIcon = statusConfig[orcamento.status].icon
@@ -226,6 +274,7 @@ export default function OrcamentosPage() {
                               <Button
                                 size="sm"
                                 variant="outline"
+                                onClick={() => setSelectedOrcamento(orcamento)}
                                 className="flex-1 md:flex-none min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200"
                               >
                                 <Eye className="h-4 w-4 mr-1" />
@@ -251,9 +300,7 @@ export default function OrcamentosPage() {
                                 style={{ fontSize: '0.9rem' }}
                               >
                                 <Calendar className="h-4 w-4 text-gray-400" />
-                                {new Date(orcamento.data).toLocaleDateString(
-                                  'pt-BR'
-                                )}
+                                {formatDate(orcamento.createdAt)}
                               </p>
                             </div>
                             <div className="space-y-2">
@@ -264,19 +311,42 @@ export default function OrcamentosPage() {
                                 className="text-sm font-medium text-gray-900 leading-relaxed break-words"
                                 style={{ fontSize: '0.9rem' }}
                               >
-                                {orcamento.equipamentos.join(', ')}
+                                {orcamento.items
+                                  ?.map((item) => item.equipment.name)
+                                  .join(', ') || 'N/A'}
                               </p>
                             </div>
                             <div className="space-y-2">
                               <p className="text-gray-500 text-xs font-semibold uppercase tracking-wide">
                                 Valor Total
                               </p>
-                              <p
-                                className="text-sm font-bold text-green-600 leading-relaxed"
-                                style={{ fontSize: '0.9rem' }}
-                              >
-                                R$ {orcamento.valor.toFixed(2)}
-                              </p>
+                              {orcamento.finalTotal &&
+                              orcamento.finalTotal !==
+                                orcamento.originalTotal ? (
+                                <div>
+                                  <p
+                                    className="text-xs text-gray-500 line-through leading-relaxed"
+                                    style={{ fontSize: '0.8rem' }}
+                                  >
+                                    {formatCurrency(
+                                      orcamento.originalTotal || 0
+                                    )}
+                                  </p>
+                                  <p
+                                    className="text-sm font-bold text-amber-600 leading-relaxed"
+                                    style={{ fontSize: '0.9rem' }}
+                                  >
+                                    {formatCurrency(orcamento.finalTotal)}
+                                  </p>
+                                </div>
+                              ) : (
+                                <p
+                                  className="text-sm font-bold text-green-600 leading-relaxed"
+                                  style={{ fontSize: '0.9rem' }}
+                                >
+                                  {formatCurrency(orcamento.totalPrice)}
+                                </p>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -302,6 +372,274 @@ export default function OrcamentosPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Modal de Detalhes do Orçamento */}
+      <Dialog.Root
+        open={!!selectedOrcamento}
+        onOpenChange={(open) => !open && setSelectedOrcamento(null)}
+      >
+        <Dialog.Backdrop />
+        <Dialog.Portal>
+          <Dialog.Popup variant="default" className="max-w-4xl">
+            <Dialog.Content>
+              <Dialog.Header>
+                <Dialog.HeaderIcon>
+                  <FileText className="w-5 h-5" />
+                </Dialog.HeaderIcon>
+                <Dialog.Title className="text-xl font-semibold text-gray-800">
+                  Detalhes do Orçamento - #{selectedOrcamento?.id}
+                </Dialog.Title>
+                <Dialog.CloseButton />
+              </Dialog.Header>
+
+              <Dialog.Body>
+                <Dialog.BodyViewport>
+                  <Dialog.BodyContent>
+                    {selectedOrcamento && (
+                      <div className="space-y-6">
+                        {/* Status e Informações Básicas */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <Card className="border-l-4 border-l-blue-500">
+                            <CardHeader className="pb-3">
+                              <CardTitle className="flex items-center gap-2 text-lg">
+                                <Clock className="w-5 h-5 text-blue-600" />
+                                Status do Orçamento
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <ClientAreaBadge
+                                className={
+                                  statusConfig[selectedOrcamento.status].color
+                                }
+                              >
+                                {React.createElement(
+                                  statusConfig[selectedOrcamento.status].icon,
+                                  { className: 'h-3 w-3 mr-1' }
+                                )}
+                                {statusConfig[selectedOrcamento.status].label}
+                              </ClientAreaBadge>
+                              {selectedOrcamento.validUntil && (
+                                <p className="text-xs text-gray-500 mt-2">
+                                  Válido até:{' '}
+                                  {formatDate(selectedOrcamento.validUntil)}
+                                </p>
+                              )}
+                            </CardContent>
+                          </Card>
+
+                          <Card className="border-l-4 border-l-green-500">
+                            <CardHeader className="pb-3">
+                              <CardTitle className="flex items-center gap-2 text-lg">
+                                <Calendar className="w-5 h-5 text-green-600" />
+                                Data de Criação
+                              </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <p className="font-medium">
+                                {formatDate(selectedOrcamento.createdAt)}
+                              </p>
+                            </CardContent>
+                          </Card>
+                        </div>
+
+                        {/* Valores do Orçamento */}
+                        <Card className="border-l-4 border-l-amber-500">
+                          <CardHeader className="pb-3">
+                            <CardTitle className="flex items-center gap-2 text-lg">
+                              <DollarSign className="w-5 h-5 text-amber-600" />
+                              Valores do Orçamento
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            {/* Valor Original */}
+                            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                              <div className="text-sm font-semibold text-gray-700 mb-2">
+                                Valor Original
+                              </div>
+                              <div className="text-2xl font-bold text-gray-900">
+                                {formatCurrency(
+                                  selectedOrcamento.originalTotal ||
+                                    selectedOrcamento.totalPrice ||
+                                    0
+                                )}
+                              </div>
+                              <div className="text-xs text-gray-500 mt-1">
+                                Valor calculado automaticamente com base nos
+                                equipamentos, períodos e descontos
+                              </div>
+                            </div>
+
+                            {/* Valor Final Editado */}
+                            {selectedOrcamento.finalTotal &&
+                              selectedOrcamento.finalTotal !==
+                                (selectedOrcamento.originalTotal ||
+                                  selectedOrcamento.totalPrice) && (
+                                <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+                                  <div className="text-sm font-semibold text-amber-700 mb-2">
+                                    Valor Final Editado
+                                  </div>
+                                  <div className="text-2xl font-bold text-amber-900">
+                                    {formatCurrency(
+                                      selectedOrcamento.finalTotal
+                                    )}
+                                  </div>
+                                  {selectedOrcamento.priceAdjustmentReason && (
+                                    <div className="mt-3 p-3 bg-white rounded border border-amber-200">
+                                      <div className="text-xs font-semibold text-amber-700 mb-1">
+                                        Justificativa do Ajuste:
+                                      </div>
+                                      <div className="text-sm text-amber-900">
+                                        {
+                                          selectedOrcamento.priceAdjustmentReason
+                                        }
+                                      </div>
+                                      {selectedOrcamento.priceAdjustedAt && (
+                                        <div className="text-xs text-amber-600 mt-2">
+                                          Ajustado em:{' '}
+                                          {new Date(
+                                            selectedOrcamento.priceAdjustedAt
+                                          ).toLocaleString('pt-BR')}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+
+                            {/* Multa por Atraso */}
+                            {selectedOrcamento.lateFee &&
+                              selectedOrcamento.lateFee > 0 && (
+                                <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                                  <div className="flex items-center justify-between mb-2">
+                                    <div className="text-sm font-semibold text-red-700">
+                                      Multa por Atraso
+                                    </div>
+                                    {selectedOrcamento.lateFeeApproved ? (
+                                      <Badge className="bg-green-100 text-green-800 border-green-200">
+                                        Aprovada
+                                      </Badge>
+                                    ) : (
+                                      <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                                        Pendente Aprovação
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <div className="text-xl font-bold text-red-900">
+                                    {formatCurrency(selectedOrcamento.lateFee)}
+                                  </div>
+                                </div>
+                              )}
+                          </CardContent>
+                        </Card>
+
+                        {/* Itens do Orçamento */}
+                        {selectedOrcamento.items &&
+                          selectedOrcamento.items.length > 0 && (
+                            <Card className="border-l-4 border-l-purple-500">
+                              <CardHeader className="pb-3">
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                  <Package className="w-5 h-5 text-purple-600" />
+                                  Equipamentos Solicitados
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent className="space-y-4">
+                                {selectedOrcamento.items.map((item) => (
+                                  <div
+                                    key={item.id}
+                                    className="p-4 bg-gray-50 rounded-lg border border-gray-200"
+                                  >
+                                    <div className="flex items-start justify-between mb-2">
+                                      <div>
+                                        <div className="font-semibold text-gray-900">
+                                          {item.equipment.name}
+                                        </div>
+                                        <div className="text-sm text-gray-600 mt-1">
+                                          Quantidade: {item.quantity} -{' '}
+                                          {item.days} dia(s)
+                                        </div>
+                                      </div>
+                                      <div className="text-right">
+                                        <div className="font-semibold text-green-600">
+                                          {formatCurrency(item.total)}
+                                        </div>
+                                        <div className="text-xs text-gray-500">
+                                          {formatCurrency(item.pricePerDay)}/dia
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {item.startDate && item.endDate && (
+                                      <div className="text-xs text-gray-500 mt-2 pt-2 border-t border-gray-200">
+                                        Período: {formatDate(item.startDate)}{' '}
+                                        até {formatDate(item.endDate)}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </CardContent>
+                            </Card>
+                          )}
+                      </div>
+                    )}
+                  </Dialog.BodyContent>
+                </Dialog.BodyViewport>
+              </Dialog.Body>
+
+              <Dialog.Footer>
+                <div className="flex gap-3 w-full">
+                  <Button
+                    variant="outline"
+                    onClick={() => setSelectedOrcamento(null)}
+                    className="flex-1"
+                  >
+                    Fechar
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={async () => {
+                      if (!selectedOrcamento) return
+                      try {
+                        const response = await fetch(
+                          `/api/quotes/${selectedOrcamento.id}/download`
+                        )
+                        if (response.ok) {
+                          const blob = await response.blob()
+                          const url = window.URL.createObjectURL(blob)
+                          const a = document.createElement('a')
+                          a.href = url
+                          a.download = `orcamento-${selectedOrcamento.id}.pdf`
+                          document.body.appendChild(a)
+                          a.click()
+                          window.URL.revokeObjectURL(url)
+                          document.body.removeChild(a)
+                          toast.success('Download iniciado!', {
+                            description: 'PDF do orçamento sendo baixado.',
+                          })
+                        } else {
+                          const data = await response.json()
+                          toast.info('Em breve', {
+                            description:
+                              data.message ||
+                              'Download de PDF será implementado em breve.',
+                          })
+                        }
+                      } catch (error) {
+                        console.error('Error downloading PDF:', error)
+                        toast.error('Erro', {
+                          description: 'Erro ao baixar PDF do orçamento.',
+                        })
+                      }
+                    }}
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Baixar PDF
+                  </Button>
+                </div>
+              </Dialog.Footer>
+            </Dialog.Content>
+          </Dialog.Popup>
+        </Dialog.Portal>
+      </Dialog.Root>
     </div>
   )
 }

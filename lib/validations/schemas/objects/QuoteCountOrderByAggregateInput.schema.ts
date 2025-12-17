@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { SortOrderSchema } from '../enums/SortOrder.schema'
@@ -38,7 +37,17 @@ const makeSchema = () => z.object({
   startDate: SortOrderSchema.optional(),
   subtotal: SortOrderSchema.optional(),
   taxes: SortOrderSchema.optional(),
-  validUntil: SortOrderSchema.optional()
+  validUntil: SortOrderSchema.optional(),
+  originalTotal: SortOrderSchema.optional(),
+  priceAdjustmentReason: SortOrderSchema.optional(),
+  priceAdjustedAt: SortOrderSchema.optional(),
+  priceAdjustedBy: SortOrderSchema.optional(),
+  lateFee: SortOrderSchema.optional(),
+  lateFeeApproved: SortOrderSchema.optional(),
+  lateFeeApprovedAt: SortOrderSchema.optional(),
+  lateFeeApprovedBy: SortOrderSchema.optional(),
+  damages: SortOrderSchema.optional(),
+  misuse: SortOrderSchema.optional()
 }).strict();
 export const QuoteCountOrderByAggregateInputObjectSchema: z.ZodType<Prisma.QuoteCountOrderByAggregateInput> = makeSchema() as unknown as z.ZodType<Prisma.QuoteCountOrderByAggregateInput>;
 export const QuoteCountOrderByAggregateInputObjectZodSchema = makeSchema();

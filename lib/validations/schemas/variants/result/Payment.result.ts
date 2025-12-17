@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any */
 import * as z from 'zod';
 import { PaymentMethodSchema } from '../../enums/PaymentMethod.schema';
 import { PaymentStatusSchema } from '../../enums/PaymentStatus.schema';

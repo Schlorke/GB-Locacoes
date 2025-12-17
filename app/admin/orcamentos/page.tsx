@@ -41,7 +41,13 @@ import {
   LayoutGrid,
   Table,
   Trash2,
+  DollarSign,
+  AlertTriangle,
+  Edit,
+  Download,
 } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 
 interface Quote {
@@ -80,6 +86,16 @@ interface Quote {
   }
   createdAt: string
   updatedAt: string
+  originalTotal?: number
+  finalTotal?: number | null
+  priceAdjustmentReason?: string | null
+  priceAdjustedAt?: string | null
+  priceAdjustedBy?: string | null
+  lateFee?: number | null
+  lateFeeApproved?: boolean
+  lateFeeApprovedAt?: string | null
+  lateFeeApprovedBy?: string | null
+  validUntil?: string | null
   items?: Array<{
     id: string
     quantity: number
@@ -147,6 +163,17 @@ function AdminQuotesPage() {
   const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban')
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [showPriceAdjustmentDialog, setShowPriceAdjustmentDialog] =
+    useState(false)
+  const [showLateFeeDialog, setShowLateFeeDialog] = useState(false)
+  const [priceAdjustmentValue, setPriceAdjustmentValue] = useState('')
+  const [priceAdjustmentReason, setPriceAdjustmentReason] = useState('')
+  const [isAdjustingPrice, setIsAdjustingPrice] = useState(false)
+  const [isCalculatingLateFee, setIsCalculatingLateFee] = useState(false)
+  const [calculatedLateFee, setCalculatedLateFee] = useState<{
+    lateFee: number
+    daysLate: number
+  } | null>(null)
 
   // Controle de animação determinística para tabela (evita flick/flash e garante
   // entrada/saída escalonadas ao aplicar filtros).
@@ -344,6 +371,137 @@ function AdminQuotesPage() {
       })
     } finally {
       setIsDeleting(false)
+    }
+  }
+
+  const adjustQuotePrice = async (quoteId: string) => {
+    if (!priceAdjustmentReason.trim()) {
+      toast.error('Erro de Validação', {
+        description: 'Justificativa é obrigatória ao editar o valor final.',
+      })
+      return
+    }
+
+    const finalValue = Number.parseFloat(priceAdjustmentValue)
+    if (isNaN(finalValue) || finalValue < 0) {
+      toast.error('Erro de Validação', {
+        description:
+          'Valor final deve ser um número válido maior ou igual a zero.',
+      })
+      return
+    }
+
+    try {
+      setIsAdjustingPrice(true)
+      const response = await fetch(`/api/admin/quotes/${quoteId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          finalTotal: finalValue,
+          priceAdjustmentReason: priceAdjustmentReason.trim(),
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erro ao ajustar valor')
+      }
+
+      await fetchQuotes()
+      // Atualizar quote selecionado
+      const updatedQuote = await response.json()
+      setSelectedQuote(updatedQuote as Quote)
+      setShowPriceAdjustmentDialog(false)
+      setPriceAdjustmentValue('')
+      setPriceAdjustmentReason('')
+
+      toast.success('Sucesso!', {
+        description: 'Valor final ajustado com sucesso!',
+      })
+    } catch (error) {
+      console.error('Error adjusting quote price:', error)
+      toast.error('Erro', {
+        description:
+          error instanceof Error
+            ? error.message
+            : 'Erro ao ajustar valor final. Tente novamente.',
+      })
+    } finally {
+      setIsAdjustingPrice(false)
+    }
+  }
+
+  const calculateLateFee = async (quoteId: string) => {
+    try {
+      setIsCalculatingLateFee(true)
+      const response = await fetch(
+        `/api/admin/quotes/${quoteId}/calculate-late-fee`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error('Erro ao calcular multa')
+      }
+
+      const data = await response.json()
+      setCalculatedLateFee({
+        lateFee: data.lateFee,
+        daysLate: data.daysLate,
+      })
+      setShowLateFeeDialog(true)
+    } catch (error) {
+      console.error('Error calculating late fee:', error)
+      toast.error('Erro', {
+        description: 'Erro ao calcular multa por atraso. Tente novamente.',
+      })
+    } finally {
+      setIsCalculatingLateFee(false)
+    }
+  }
+
+  const approveLateFee = async (quoteId: string) => {
+    if (!calculatedLateFee) return
+
+    try {
+      setIsUpdating(true)
+      const response = await fetch(`/api/admin/quotes/${quoteId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lateFee: calculatedLateFee.lateFee,
+          lateFeeApproved: true,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Erro ao aprovar multa')
+      }
+
+      await fetchQuotes()
+      const updatedQuote = await response.json()
+      setSelectedQuote(updatedQuote as Quote)
+      setShowLateFeeDialog(false)
+      setCalculatedLateFee(null)
+
+      toast.success('Sucesso!', {
+        description: 'Multa por atraso aprovada e aplicada ao orçamento!',
+      })
+    } catch (error) {
+      console.error('Error approving late fee:', error)
+      toast.error('Erro', {
+        description: 'Erro ao aprovar multa. Tente novamente.',
+      })
+    } finally {
+      setIsUpdating(false)
     }
   }
 
@@ -896,14 +1054,39 @@ function AdminQuotesPage() {
                                 <div className="flex items-center justify-between">
                                   {getStatusBadge(selectedQuote.status)}
                                   <div className="text-right">
-                                    <div className="text-2xl font-bold text-green-600">
-                                      {formatCurrency(
-                                        selectedQuote.totalPrice || 0
-                                      )}
-                                    </div>
-                                    <div className="text-sm text-gray-500">
-                                      Valor Total
-                                    </div>
+                                    {selectedQuote.finalTotal &&
+                                    selectedQuote.finalTotal !==
+                                      (selectedQuote.originalTotal ||
+                                        selectedQuote.totalPrice) ? (
+                                      <>
+                                        <div className="text-xs text-gray-500 line-through mb-1">
+                                          {formatCurrency(
+                                            selectedQuote.originalTotal ||
+                                              selectedQuote.totalPrice ||
+                                              0
+                                          )}
+                                        </div>
+                                        <div className="text-2xl font-bold text-amber-600">
+                                          {formatCurrency(
+                                            selectedQuote.finalTotal
+                                          )}
+                                        </div>
+                                        <div className="text-xs text-amber-600 font-medium">
+                                          Valor Final Editado
+                                        </div>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div className="text-2xl font-bold text-green-600">
+                                          {formatCurrency(
+                                            selectedQuote.totalPrice || 0
+                                          )}
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                          Valor Total
+                                        </div>
+                                      </>
+                                    )}
                                   </div>
                                 </div>
                               </CardContent>
@@ -1214,6 +1397,122 @@ function AdminQuotesPage() {
                             </CardContent>
                           </Card>
 
+                          {/* Valor Original vs Valor Final Editado */}
+                          {(selectedQuote.originalTotal ||
+                            selectedQuote.finalTotal ||
+                            selectedQuote.priceAdjustmentReason) && (
+                            <Card className="border-l-4 border-l-amber-500">
+                              <CardHeader className="pb-3">
+                                <CardTitle className="flex items-center gap-2 text-lg">
+                                  <Package className="w-5 h-5 text-amber-600" />
+                                  Valores do Orçamento
+                                </CardTitle>
+                              </CardHeader>
+                              <CardContent className="space-y-4">
+                                {/* Valor Original */}
+                                <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                  <div className="text-sm font-semibold text-gray-700 mb-2">
+                                    Valor Original
+                                  </div>
+                                  <div className="text-2xl font-bold text-gray-900">
+                                    {formatCurrency(
+                                      selectedQuote.originalTotal ||
+                                        selectedQuote.totalPrice ||
+                                        0
+                                    )}
+                                  </div>
+                                  <div className="text-xs text-gray-500 mt-1">
+                                    Valor calculado automaticamente com base nos
+                                    equipamentos, períodos e descontos
+                                  </div>
+                                </div>
+
+                                {/* Valor Final Editado */}
+                                {selectedQuote.finalTotal &&
+                                  selectedQuote.finalTotal !==
+                                    (selectedQuote.originalTotal ||
+                                      selectedQuote.totalPrice) && (
+                                    <div className="p-4 bg-amber-50 rounded-lg border border-amber-200">
+                                      <div className="text-sm font-semibold text-amber-700 mb-2">
+                                        Valor Final Editado
+                                      </div>
+                                      <div className="text-2xl font-bold text-amber-900">
+                                        {formatCurrency(
+                                          selectedQuote.finalTotal
+                                        )}
+                                      </div>
+                                      {selectedQuote.priceAdjustmentReason && (
+                                        <div className="mt-3 p-3 bg-white rounded border border-amber-200">
+                                          <div className="text-xs font-semibold text-amber-700 mb-1">
+                                            Justificativa do Ajuste:
+                                          </div>
+                                          <div className="text-sm text-amber-900">
+                                            {
+                                              selectedQuote.priceAdjustmentReason
+                                            }
+                                          </div>
+                                          {selectedQuote.priceAdjustedAt && (
+                                            <div className="text-xs text-amber-600 mt-2">
+                                              Ajustado em:{' '}
+                                              {new Date(
+                                                selectedQuote.priceAdjustedAt
+                                              ).toLocaleString('pt-BR')}
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                {/* Multa por Atraso */}
+                                {selectedQuote.lateFee &&
+                                  selectedQuote.lateFee > 0 && (
+                                    <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+                                      <div className="flex items-center justify-between mb-2">
+                                        <div className="text-sm font-semibold text-red-700">
+                                          Multa por Atraso Calculada
+                                        </div>
+                                        {selectedQuote.lateFeeApproved ? (
+                                          <Badge className="bg-green-100 text-green-800 border-green-200">
+                                            Aprovada
+                                          </Badge>
+                                        ) : (
+                                          <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                                            Pendente Aprovação
+                                          </Badge>
+                                        )}
+                                      </div>
+                                      <div className="text-xl font-bold text-red-900">
+                                        {formatCurrency(selectedQuote.lateFee)}
+                                      </div>
+                                      {selectedQuote.lateFeeApprovedAt && (
+                                        <div className="text-xs text-red-600 mt-2">
+                                          Aprovada em:{' '}
+                                          {new Date(
+                                            selectedQuote.lateFeeApprovedAt
+                                          ).toLocaleString('pt-BR')}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                {/* Período de Validade */}
+                                {selectedQuote.validUntil && (
+                                  <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                                    <div className="text-xs font-semibold text-blue-700 mb-1">
+                                      Válido até:
+                                    </div>
+                                    <div className="text-sm text-blue-900">
+                                      {new Date(
+                                        selectedQuote.validUntil
+                                      ).toLocaleDateString('pt-BR')}
+                                    </div>
+                                  </div>
+                                )}
+                              </CardContent>
+                            </Card>
+                          )}
+
                           {/* Mensagem */}
                           {selectedQuote.message && (
                             <Card className="border-l-4 border-l-indigo-500">
@@ -1238,36 +1537,137 @@ function AdminQuotesPage() {
                   </Dialog.BodyViewport>
                 </Dialog.Body>
 
-                {selectedQuote?.status === 'pending' && selectedQuote && (
-                  <Dialog.Footer>
-                    <div className="flex gap-3 w-full">
-                      <Button
-                        onClick={() =>
-                          updateQuoteStatus(selectedQuote.id, 'approved')
-                        }
-                        disabled={isUpdating}
-                        variant="default"
-                        size="default"
-                        className="flex-1"
-                      >
-                        <CheckCircle className="w-4 h-4" />
-                        {isUpdating ? 'Aprovando...' : 'Aprovar Orçamento'}
-                      </Button>
-                      <Button
-                        onClick={() =>
-                          updateQuoteStatus(selectedQuote.id, 'rejected')
-                        }
-                        disabled={isUpdating}
-                        variant="outline"
-                        size="default"
-                        className="flex-1 bg-white"
-                      >
-                        <XCircle className="w-4 h-4" />
-                        {isUpdating ? 'Rejeitando...' : 'Rejeitar Orçamento'}
-                      </Button>
-                    </div>
-                  </Dialog.Footer>
-                )}
+                {/* Ações para orçamentos pendentes ou aprovados */}
+                {(selectedQuote?.status === 'pending' ||
+                  selectedQuote?.status === 'approved') &&
+                  selectedQuote && (
+                    <Dialog.Footer>
+                      <div className="flex flex-col gap-3 w-full">
+                        {/* Botões principais para status pendente */}
+                        {selectedQuote.status === 'pending' && (
+                          <div className="flex gap-3">
+                            <Button
+                              onClick={() =>
+                                updateQuoteStatus(selectedQuote.id, 'approved')
+                              }
+                              disabled={isUpdating}
+                              variant="default"
+                              size="default"
+                              className="flex-1"
+                            >
+                              <CheckCircle className="w-4 h-4" />
+                              {isUpdating
+                                ? 'Aprovando...'
+                                : 'Aprovar Orçamento'}
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                updateQuoteStatus(selectedQuote.id, 'rejected')
+                              }
+                              disabled={isUpdating}
+                              variant="outline"
+                              size="default"
+                              className="flex-1 bg-white"
+                            >
+                              <XCircle className="w-4 h-4" />
+                              {isUpdating
+                                ? 'Rejeitando...'
+                                : 'Rejeitar Orçamento'}
+                            </Button>
+                          </div>
+                        )}
+
+                        {/* Botões de ações administrativas */}
+                        <div className="flex gap-3 border-t pt-3">
+                          <Button
+                            onClick={() => {
+                              const originalValue =
+                                selectedQuote.originalTotal ||
+                                selectedQuote.totalPrice ||
+                                0
+                              setPriceAdjustmentValue(
+                                selectedQuote.finalTotal
+                                  ? selectedQuote.finalTotal.toString()
+                                  : originalValue.toString()
+                              )
+                              setPriceAdjustmentReason(
+                                selectedQuote.priceAdjustmentReason || ''
+                              )
+                              setShowPriceAdjustmentDialog(true)
+                            }}
+                            disabled={isAdjustingPrice}
+                            variant="outline"
+                            size="sm"
+                            className="flex-1"
+                          >
+                            <Edit className="w-4 h-4 mr-2" />
+                            Ajustar Valor Final
+                          </Button>
+                          {selectedQuote.endDate &&
+                            new Date(selectedQuote.endDate) < new Date() && (
+                              <Button
+                                onClick={() =>
+                                  calculateLateFee(selectedQuote.id)
+                                }
+                                disabled={isCalculatingLateFee}
+                                variant="outline"
+                                size="sm"
+                                className="flex-1"
+                              >
+                                <AlertTriangle className="w-4 h-4 mr-2" />
+                                {isCalculatingLateFee
+                                  ? 'Calculando...'
+                                  : 'Calcular Multa'}
+                              </Button>
+                            )}
+                          <Button
+                            onClick={async () => {
+                              if (!selectedQuote) return
+                              try {
+                                const response = await fetch(
+                                  `/api/admin/quotes/${selectedQuote.id}/download`
+                                )
+                                if (response.ok) {
+                                  const blob = await response.blob()
+                                  const url = window.URL.createObjectURL(blob)
+                                  const a = document.createElement('a')
+                                  a.href = url
+                                  a.download = `orcamento-${selectedQuote.id}.pdf`
+                                  document.body.appendChild(a)
+                                  a.click()
+                                  window.URL.revokeObjectURL(url)
+                                  document.body.removeChild(a)
+                                  toast.success('Download iniciado!', {
+                                    description:
+                                      'PDF do orçamento sendo baixado.',
+                                  })
+                                } else {
+                                  const data = await response.json()
+                                  toast.info('Em breve', {
+                                    description:
+                                      data.message ||
+                                      'Download de PDF será implementado em breve.',
+                                  })
+                                }
+                              } catch (error) {
+                                console.error('Error downloading PDF:', error)
+                                toast.error('Erro', {
+                                  description:
+                                    'Erro ao baixar PDF do orçamento.',
+                                })
+                              }
+                            }}
+                            variant="outline"
+                            size="sm"
+                            className="flex-1"
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            Baixar PDF
+                          </Button>
+                        </div>
+                      </div>
+                    </Dialog.Footer>
+                  )}
 
                 {selectedQuote?.status === 'rejected' && selectedQuote && (
                   <Dialog.Footer>
@@ -1316,6 +1716,157 @@ function AdminQuotesPage() {
                 {isDeleting ? 'Excluindo...' : 'Excluir Permanentemente'}
               </AlertDialogAction>
             </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Dialog de Ajuste de Valor Final */}
+        <AlertDialog
+          open={showPriceAdjustmentDialog}
+          onOpenChange={setShowPriceAdjustmentDialog}
+        >
+          <AlertDialogContent className="max-w-md">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex items-center gap-2">
+                <DollarSign className="w-5 h-5" />
+                Ajustar Valor Final do Orçamento
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Edite o valor final do orçamento. A justificativa é obrigatória
+                e será exibida para o cliente junto com o valor original e o
+                valor final editado.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <div className="space-y-4 py-4">
+              <div>
+                <Label htmlFor="original-value">Valor Original</Label>
+                <Input
+                  id="original-value"
+                  value={formatCurrency(
+                    selectedQuote?.originalTotal ||
+                      selectedQuote?.totalPrice ||
+                      0
+                  )}
+                  readOnly
+                  className="mt-1 bg-gray-50"
+                />
+              </div>
+              <div>
+                <Label htmlFor="final-value">
+                  Valor Final Editado <span className="text-red-500">*</span>
+                </Label>
+                <Input
+                  id="final-value"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={priceAdjustmentValue}
+                  onChange={(e) => setPriceAdjustmentValue(e.target.value)}
+                  placeholder="0.00"
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="adjustment-reason">
+                  Justificativa do Ajuste{' '}
+                  <span className="text-red-500">*</span>
+                </Label>
+                <Textarea
+                  id="adjustment-reason"
+                  value={priceAdjustmentReason}
+                  onChange={(e) => setPriceAdjustmentReason(e.target.value)}
+                  placeholder="Ex: Taxa de quebra/avaria, ajuste por perdas de peças, etc."
+                  rows={4}
+                  className="mt-1"
+                  required
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Esta justificativa será exibida para o cliente junto com o
+                  valor original e o valor final editado.
+                </p>
+              </div>
+            </div>
+            <AlertDialogFooter>
+              <AlertDialogCancel
+                disabled={isAdjustingPrice}
+                onClick={() => {
+                  setPriceAdjustmentValue('')
+                  setPriceAdjustmentReason('')
+                }}
+              >
+                Cancelar
+              </AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() =>
+                  selectedQuote && adjustQuotePrice(selectedQuote.id)
+                }
+                disabled={
+                  isAdjustingPrice ||
+                  !priceAdjustmentValue ||
+                  !priceAdjustmentReason.trim()
+                }
+                className="bg-orange-600 hover:bg-orange-700"
+              >
+                {isAdjustingPrice ? 'Ajustando...' : 'Ajustar Valor'}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+        {/* Dialog de Cálculo e Aprovação de Multa */}
+        <AlertDialog
+          open={showLateFeeDialog}
+          onOpenChange={setShowLateFeeDialog}
+        >
+          <AlertDialogContent className="max-w-md">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                Multa por Atraso
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                {calculatedLateFee ? (
+                  <div className="space-y-2">
+                    <p>
+                      Multa calculada automaticamente baseada no atraso de{' '}
+                      <strong>{calculatedLateFee.daysLate} dia(s)</strong>.
+                    </p>
+                    <p>
+                      Valor calculado:{' '}
+                      <strong className="text-red-600">
+                        {formatCurrency(calculatedLateFee.lateFee)}
+                      </strong>
+                    </p>
+                    <p className="text-sm text-gray-600 mt-3">
+                      Ao aprovar, a multa será adicionada ao valor final do
+                      orçamento e uma justificativa será criada automaticamente.
+                    </p>
+                  </div>
+                ) : (
+                  'Calculando multa por atraso...'
+                )}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            {calculatedLateFee && (
+              <AlertDialogFooter>
+                <AlertDialogCancel
+                  disabled={isUpdating}
+                  onClick={() => {
+                    setCalculatedLateFee(null)
+                  }}
+                >
+                  Cancelar
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() =>
+                    selectedQuote && approveLateFee(selectedQuote.id)
+                  }
+                  disabled={isUpdating}
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  {isUpdating ? 'Aprovando...' : 'Aprovar e Aplicar Multa'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            )}
           </AlertDialogContent>
         </AlertDialog>
       </div>
