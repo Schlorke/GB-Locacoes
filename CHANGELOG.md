@@ -70,6 +70,12 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Hover dos botões \"Ver Detalhes\" no admin**: Ajustado CSS global para que
+  os botões `admin-action-button` mantenham fundo branco e permitam `scale`
+  suave no hover, evitando que regras `!important` anulem `hover:scale-105`.
+  - **Arquivos Modificados**: `app/globals.css`
+  - **Data**: 2025-12-17
+
 - **Locações pendentes de orçamentos rejeitados não aparecem mais**: A API agora
   exclui locações de orçamentos `REJECTED` e esconde órfãs por padrão; o script
   `pnpm db:clean:rejected-rentals` também cancela registros sem `quoteId` ou com

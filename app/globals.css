@@ -469,8 +469,14 @@ a.header-action-button.text-orange-600,
 
 .admin-action-button.view-button:hover,
 .admin-action-button.edit-button:hover {
-  background-color: rgb(241 245 249) !important; /* slate-100 */
+  background-color: rgb(243 244 246) !important; /* gray-100 */
   color: rgb(51 65 85) !important;
+  transform: none !important;
+}
+
+.admin-action-button.rentals-view-button:hover {
+  background-color: rgb(255 255 255) !important; /* white */
+  color: rgb(234 88 12) !important; /* orange-600 */
   transform: none !important;
 }
 

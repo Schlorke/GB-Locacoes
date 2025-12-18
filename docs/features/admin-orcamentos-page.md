@@ -127,6 +127,8 @@ const [nestedDialogOpen, setNestedDialogOpen] = useState(false)
 - ❌ **NUNCA** renderize dialogs aninhadas fora do `Dialog.BodyContent`
 - ❌ **NUNCA** esqueça de sincronizar `nestedDialogOpen` com as dialogs filhas
 - ❌ **NUNCA** omita informações de entrega/retirada no modal de detalhes
+- ❌ **NÃO** sobrescreva hovers de `admin-action-button`: manter fundo branco e
+  permitir `scale` suave para feedback visual
 
 ## 6. Lições Aprendidas
 

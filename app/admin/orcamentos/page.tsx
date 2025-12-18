@@ -915,7 +915,7 @@ function AdminQuotesPage() {
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => setSelectedQuote(quote)}
-                                  className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-opacity"
+                                  className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-all"
                                 >
                                   <Eye className="w-4 h-4 mr-2" />
                                   Ver Detalhes

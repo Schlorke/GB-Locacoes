@@ -5,6 +5,52 @@
 
 ---
 
+## 26. Hover do botao "Ver Detalhes" sem escala (Admin Orcamentos)
+
+### 🤔 Problema
+
+**Data da Ocorrencia**: 2025-12-17 **Severidade**: Baixa (UX) **Status**: ✅
+Resolvido
+
+#### Descricao
+
+- O botao "Ver Detalhes" na visao Tabela de `/admin/orcamentos` e nos cards
+  admin nao aplicava escala suave no hover e mantinha fundo acinzentado.
+- O efeito de `hover:scale-105` configurado no componente era sobrescrito,
+  deixando a interacao sem feedback visual.
+
+#### Causa Raiz
+
+- Regras globais em `app/globals.css` para
+  `.admin-action-button.view-button:hover` usavam `transform: none` e
+  `background-color: rgb(241 245 249)` com `!important`, anulando as classes do
+  Tailwind definidas no botao.
+
+### ✅ Solucao Implementada
+
+- Ajustado o hover global para usar fundo branco e permitir transform,
+  garantindo que `hover:scale-105` e `transition-all` aplicados no componente
+  funcionem com animacao suave.
+
+#### Arquivos Modificados
+
+1. `app/globals.css`
+
+#### Como Validar
+
+1. `pnpm dev`
+2. Acessar `/admin/orcamentos` em modo **Tabela** e `/admin/categorias`.
+3. Passar o mouse sobre qualquer botao "Ver Detalhes":
+   - Fundo fica branco.
+   - Escala 1.05 ocorre com transicao suave.
+
+#### Armadilhas a Evitar
+
+- Nao reintroduzir `transform: none` ou fundo cinza nas regras de hover dos
+  botoes de acao.
+- Evitar `!important` que sobrescreva utilitarios `hover:scale-*` ou
+  `hover:bg-*` aplicados diretamente nos componentes.
+
 ## 25. Botões Aprovar/Rejeitar mostravam loading simultâneo (Admin Orçamentos)
 
 ### 🔴 Problema
