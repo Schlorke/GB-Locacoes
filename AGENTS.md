@@ -3,6 +3,61 @@
 > **ARQUIVO CRÍTICO**: Este é o primeiro arquivo que toda IA deve ler ao
 > interagir com o projeto GB-Locações
 
+---
+
+## 🚨🚨🚨 **REGRA ZERO - LEIA ANTES DE TUDO** 🚨🚨🚨
+
+> **⛔ PARE AGORA E LEIA ISTO ANTES DE FAZER QUALQUER COISA**
+
+### **O PROCESSO É OBRIGATÓRIO PARA QUALQUER ALTERAÇÃO**
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  ⚠️  TAMANHO DA TAREFA NÃO IMPORTA - O PROCESSO É SEMPRE O MESMO  ⚠️   │
+│                                                                         │
+│  • Correção de 1 linha? → SIGA O PROCESSO COMPLETO                     │
+│  • Ajuste de texto? → SIGA O PROCESSO COMPLETO                         │
+│  • Bug "simples"? → SIGA O PROCESSO COMPLETO                           │
+│  • Tarefa "trivial"? → SIGA O PROCESSO COMPLETO                        │
+│                                                                         │
+│  NÃO EXISTE EXCEÇÃO. VELOCIDADE NÃO JUSTIFICA PULAR ETAPAS.            │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### **REASONING_EFFORT BAIXO ≠ PULAR DOCUMENTAÇÃO**
+
+- `reasoning_effort` controla **profundidade de raciocínio**, NÃO o processo
+- Mesmo com `reasoning_effort: 1`, você DEVE:
+  - ✅ Consultar `docs/issues/known-issues.md` ANTES
+  - ✅ Verificar `docs/features/[componente].md` ANTES
+  - ✅ Documentar em `known-issues.md` DEPOIS
+  - ✅ Criar/atualizar `docs/features/` DEPOIS
+
+### **FLUXO OBRIGATÓRIO RESUMIDO**
+
+```
+ANTES DE CODIFICAR:
+├── 1. Ler docs/issues/known-issues.md
+├── 2. Ler docs/features/[componente].md (se existir)
+└── 3. Se não existir documentação → PERGUNTE ao usuário
+
+DEPOIS DE CODIFICAR:
+├── 1. Documentar bug/solução em docs/issues/known-issues.md
+├── 2. Criar/atualizar docs/features/[componente].md
+└── 3. Atualizar CHANGELOG.md
+```
+
+### **❌ ERRO REAL COMETIDO (DEZ 2025) - NUNCA REPETIR**
+
+**O que aconteceu**: IA recebeu tarefa "simples" (corrigir loading de 2 botões).
+Pulou toda documentação porque "era só 4 linhas de código".
+
+**Resultado**: Usuário precisou cobrar manualmente a documentação.
+
+**Lição**: **NÃO EXISTE TAREFA PEQUENA DEMAIS PARA DOCUMENTAR.**
+
+---
+
 ## 📚 **DOCUMENTAÇÃO COMO FONTE DE VERDADE ABSOLUTA**
 
 ### 🚨 **CHECKLIST OBRIGATÓRIO ANTES DE QUALQUER IMPLEMENTAÇÃO**
@@ -2675,4 +2730,46 @@ enum DeliveryType {
 
 ---
 
-_Última atualização: janeiro 2025 | Versão: 2.3_
+## 🚨 **RESUMO RÁPIDO - COLE NA SUA MEMÓRIA** 🚨
+
+> **Para IAs que querem "ir direto ao código"**: PARE. Leia isto.
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                    PROCESSO OBRIGATÓRIO - SEM EXCEÇÕES                    ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║  ANTES DE QUALQUER ALTERAÇÃO (mesmo 1 linha):                            ║
+║  ┌─────────────────────────────────────────────────────────────────────┐ ║
+║  │ 1. Ler docs/issues/known-issues.md                                  │ ║
+║  │ 2. Ler docs/features/[componente].md                                │ ║
+║  │ 3. Se não existe docs → PERGUNTAR ao usuário                        │ ║
+║  └─────────────────────────────────────────────────────────────────────┘ ║
+║                                                                           ║
+║  DEPOIS DE QUALQUER ALTERAÇÃO (mesmo 1 linha):                           ║
+║  ┌─────────────────────────────────────────────────────────────────────┐ ║
+║  │ 1. Documentar em docs/issues/known-issues.md (se bug)               │ ║
+║  │ 2. Criar/atualizar docs/features/[componente].md                    │ ║
+║  │ 3. Atualizar CHANGELOG.md                                           │ ║
+║  └─────────────────────────────────────────────────────────────────────┘ ║
+║                                                                           ║
+║  ❌ "É só uma correção pequena" → NÃO É DESCULPA                         ║
+║  ❌ "reasoning_effort é baixo" → NÃO É DESCULPA                          ║
+║  ❌ "O usuário quer rápido" → NÃO É DESCULPA                             ║
+║  ❌ "São só 4 linhas" → NÃO É DESCULPA                                   ║
+║                                                                           ║
+║  ✅ O PROCESSO É O MESMO PARA QUALQUER TAMANHO DE TAREFA                 ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+### **🔴 ERRO DOCUMENTADO - DEZEMBRO 2025**
+
+Uma IA pulou o processo porque a tarefa "era simples" (corrigir loading de 2
+botões). Resultado: usuário teve que cobrar documentação manualmente.
+
+**A lição está registrada. Não repita o erro.**
+
+---
+
+_Última atualização: dezembro 2025 | Versão: 2.4_
