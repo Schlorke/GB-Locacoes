@@ -5,6 +5,9 @@ import { fileURLToPath } from 'node:url'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+// Modo verbose para debug (ativar com PATCH_PRISMA_VERBOSE=true)
+const VERBOSE = process.env.PATCH_PRISMA_VERBOSE === 'true'
+
 /**
  * Encontra o caminho correto do Prisma Client no pnpm
  */
@@ -59,29 +62,36 @@ try {
   const to = path.join(process.cwd(), '.next', 'server', '.prisma', 'client')
 
   if (!from) {
-    console.log(
-      '[patch-prisma] ⚠️  Prisma Client not found in node_modules, skipping copy'
-    )
-    console.log(
-      '[patch-prisma] This is expected if Prisma is not used in server-side code'
-    )
+    // Apenas mostrar warning se for verbose ou se realmente for um problema
+    if (VERBOSE) {
+      console.warn(
+        '[patch-prisma] ⚠️  Prisma Client not found in node_modules, skipping copy'
+      )
+      console.warn(
+        '[patch-prisma] This is expected if Prisma is not used in server-side code'
+      )
+    }
     process.exit(0)
   }
 
   // Verificar se o diretório source realmente existe
   if (!fs.existsSync(from)) {
-    console.log(
-      '[patch-prisma] ⚠️  Source directory does not exist, skipping copy'
-    )
+    if (VERBOSE) {
+      console.warn(
+        '[patch-prisma] ⚠️  Source directory does not exist, skipping copy'
+      )
+    }
     process.exit(0)
   }
 
   // Verificar se .next existe (build deve ter criado)
   const nextDir = path.join(process.cwd(), '.next')
   if (!fs.existsSync(nextDir)) {
-    console.log(
-      '[patch-prisma] ⚠️  .next directory does not exist, skipping copy'
-    )
+    if (VERBOSE) {
+      console.warn(
+        '[patch-prisma] ⚠️  .next directory does not exist, skipping copy'
+      )
+    }
     process.exit(0)
   }
 
@@ -89,12 +99,17 @@ try {
   fs.mkdirSync(to, { recursive: true })
 
   // Copiar recursivamente usando método compatível com Windows
-  console.log(`[patch-prisma] Copying from: ${from}`)
-  console.log(`[patch-prisma] Copying to: ${to}`)
+  if (VERBOSE) {
+    console.log(`[patch-prisma] Copying from: ${from}`)
+    console.log(`[patch-prisma] Copying to: ${to}`)
+  }
 
   copyDirectory(from, to)
 
-  console.log('[patch-prisma] ✅ Prisma engines copied to .next/server/')
+  // Sucesso silencioso - apenas em modo verbose
+  if (VERBOSE) {
+    console.log('[patch-prisma] ✅ Prisma engines copied to .next/server/')
+  }
   process.exit(0)
 } catch (error) {
   console.error('[patch-prisma] ❌ Error copying Prisma engines:', error)

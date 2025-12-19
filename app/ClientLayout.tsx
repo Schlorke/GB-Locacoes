@@ -24,21 +24,42 @@ export default function ClientLayout({
       return // Early return para SSR - não fazer nada no servidor
     }
 
+    // Interceptar console.warn de forma mais robusta
     const originalWarn = console.warn
+    const originalError = console.error
+
+    const shouldSuppress = (message: string): boolean => {
+      const lowerMessage = message.toLowerCase()
+      return (
+        (lowerMessage.includes('[deprecated]') ||
+          lowerMessage.includes('deprecated')) &&
+        (lowerMessage.includes('default export') ||
+          lowerMessage.includes('default export is deprecated')) &&
+        lowerMessage.includes('zustand')
+      )
+    }
+
     console.warn = (...args: unknown[]) => {
       const message = String(args[0] || '')
       // Suprimir apenas o warning específico do Zustand
-      if (
-        message.includes('[DEPRECATED] Default export is deprecated') &&
-        message.includes('zustand')
-      ) {
+      if (shouldSuppress(message)) {
         return // Não exibir este warning
       }
       originalWarn.apply(console, args)
     }
 
+    // Também verificar console.error caso o warning seja emitido como erro
+    console.error = (...args: unknown[]) => {
+      const message = String(args[0] || '')
+      if (shouldSuppress(message)) {
+        return // Não exibir este warning
+      }
+      originalError.apply(console, args)
+    }
+
     return () => {
       console.warn = originalWarn
+      console.error = originalError
     }
   }, [])
 

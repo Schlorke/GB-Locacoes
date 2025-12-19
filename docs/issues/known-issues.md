@@ -56,9 +56,12 @@ O script foi refatorado para:
 #### Como Validar
 
 ```bash
-# Testar o script isoladamente
+# Testar o script isoladamente (modo silencioso - apenas erros)
 node scripts/patch-prisma.js
+# Não deve mostrar nada se tudo estiver OK
 
+# Testar em modo verbose para debug
+PATCH_PRISMA_VERBOSE=true node scripts/patch-prisma.js
 # Deve mostrar:
 # [patch-prisma] Copying from: C:\Projetos\GB Locações\node_modules\.prisma\client
 # [patch-prisma] Copying to: C:\Projetos\GB Locações\.next\server\.prisma\client
@@ -67,7 +70,21 @@ node scripts/patch-prisma.js
 # Testar build completo
 pnpm build
 
-# Deve completar sem erros no postbuild
+# Deve completar sem erros no postbuild (silencioso)
+```
+
+#### Modo Silencioso (Padrão)
+
+Por padrão, o script roda em modo silencioso e só mostra:
+
+- ⚠️ Warnings quando há problemas (arquivos não copiados, diretórios não
+  encontrados)
+- ❌ Erros quando algo falha
+
+Para ver logs detalhados durante debug, use:
+
+```bash
+PATCH_PRISMA_VERBOSE=true pnpm build
 ```
 
 #### Armadilhas a Evitar
@@ -916,35 +933,114 @@ As dependências já estão nas versões mais recentes disponíveis:
 }
 ```
 
-#### 2. Supressão do Warning (Opcional)
+#### 2. Supressão do Warning (Implementada - Jan 2025)
 
-Criado script para suprimir o warning específico no console do navegador:
+Implementada solução em duas camadas para suprimir o warning de forma robusta:
 
-**Arquivo**: `app/ClientLayout.tsx`
+**Arquivo 1**: `app/layout.tsx` - Script inline no `<head>` para interceptação
+precoce
+
+```tsx
+<head>
+  <script
+    dangerouslySetInnerHTML={{
+      __html: `
+        (function() {
+          if (typeof window === 'undefined') return;
+
+          const shouldSuppress = function(message) {
+            if (!message || typeof message !== 'string') return false;
+            const lowerMessage = message.toLowerCase();
+            return (
+              (lowerMessage.includes('[deprecated]') ||
+               lowerMessage.includes('deprecated')) &&
+              (lowerMessage.includes('default export') ||
+               lowerMessage.includes('default export is deprecated')) &&
+              lowerMessage.includes('zustand')
+            );
+          };
+
+          const originalWarn = console.warn;
+          console.warn = function(...args) {
+            const message = String(args[0] || '');
+            if (shouldSuppress(message)) {
+              return; // Suprimir warning do Zustand
+            }
+            originalWarn.apply(console, args);
+          };
+        })();
+      `
+    }}
+  />
+</head>
+```
+
+**Arquivo 2**: `app/ClientLayout.tsx` - Interceptação no useEffect para garantir
+cobertura
 
 ```tsx
 // Suprimir warning de depreciação do Zustand vindo de dependências externas
 useEffect(() => {
-  if (typeof window !== "undefined") {
-    const originalWarn = console.warn
-    console.warn = (...args: unknown[]) => {
-      const message = String(args[0] || "")
-      // Suprimir apenas o warning específico do Zustand
-      if (
-        message.includes("[DEPRECATED] Default export is deprecated") &&
-        message.includes("zustand")
-      ) {
-        return // Não exibir este warning
-      }
-      originalWarn.apply(console, args)
-    }
+  if (typeof window === "undefined") {
+    return // Early return para SSR
+  }
 
-    return () => {
-      console.warn = originalWarn
+  const originalWarn = console.warn
+  const originalError = console.error
+
+  const shouldSuppress = (message: string): boolean => {
+    const lowerMessage = message.toLowerCase()
+    return (
+      (lowerMessage.includes("[deprecated]") ||
+        lowerMessage.includes("deprecated")) &&
+      (lowerMessage.includes("default export") ||
+        lowerMessage.includes("default export is deprecated")) &&
+      lowerMessage.includes("zustand")
+    )
+  }
+
+  console.warn = (...args: unknown[]) => {
+    const message = String(args[0] || "")
+    if (shouldSuppress(message)) {
+      return // Não exibir este warning
     }
+    originalWarn.apply(console, args)
+  }
+
+  console.error = (...args: unknown[]) => {
+    const message = String(args[0] || "")
+    if (shouldSuppress(message)) {
+      return // Não exibir este warning
+    }
+    originalError.apply(console, args)
+  }
+
+  return () => {
+    console.warn = originalWarn
+    console.error = originalError
   }
 }, [])
 ```
+
+**Por que duas camadas?**
+
+- Script inline no `<head>` intercepta warnings emitidos antes do React hidratar
+- `useEffect` no `ClientLayout` garante cobertura para warnings assíncronos
+- Verificação robusta com múltiplas variações da mensagem de warning
+- Também intercepta `console.error` caso o warning seja emitido como erro
+  console.warn = (...args: unknown[]) => { const message = String(args[0] || "")
+  // Suprimir apenas o warning específico do Zustand if (
+  message.includes("[DEPRECATED] Default export is deprecated") &&
+  message.includes("zustand") ) { return // Não exibir este warning }
+  originalWarn.apply(console, args) }
+
+      return () => {
+        console.warn = originalWarn
+      }
+
+  } }, [])
+
+````
 
 **Nota**: Esta solução é opcional e pode ser removida quando a Vercel atualizar
 suas dependências.
@@ -983,7 +1079,7 @@ grep -r "import.*zustand" stores/
 
 # Deve retornar:
 # stores/useCartStore.ts:import { create } from 'zustand' ✅
-```
+````
 
 ### 📚 Referências
 

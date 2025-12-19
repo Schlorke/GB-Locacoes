@@ -133,6 +133,39 @@ export default function RootLayout({
       className={`${inter.variable} ${jost.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Suprimir warning de depreciação do Zustand vindo de dependências da Vercel */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                if (typeof window === 'undefined') return;
+
+                const shouldSuppress = function(message) {
+                  if (!message || typeof message !== 'string') return false;
+                  const lowerMessage = message.toLowerCase();
+                  return (
+                    (lowerMessage.includes('[deprecated]') ||
+                     lowerMessage.includes('deprecated')) &&
+                    (lowerMessage.includes('default export') ||
+                     lowerMessage.includes('default export is deprecated')) &&
+                    lowerMessage.includes('zustand')
+                  );
+                };
+
+                const originalWarn = console.warn;
+                console.warn = function(...args) {
+                  const message = String(args[0] || '');
+                  if (shouldSuppress(message)) {
+                    return; // Suprimir warning do Zustand
+                  }
+                  originalWarn.apply(console, args);
+                };
+              })();
+            `,
+          }}
+        />
+      </head>
       <body
         className="min-h-screen bg-background font-sans antialiased"
         suppressHydrationWarning
