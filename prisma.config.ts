@@ -10,6 +10,6 @@ export default defineConfig({
   },
   datasource: {
     url: env('DATABASE_URL'),
-    // shadowDatabaseUrl: process.env.DIRECT_URL, // Disabled for Supabase production
+    // directUrl é configurado no schema.prisma, não aqui
   },
 })

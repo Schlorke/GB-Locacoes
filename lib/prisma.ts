@@ -13,17 +13,22 @@ if (!connectionString) {
   throw new Error('DATABASE_URL is not set')
 }
 
+// Detectar se está usando Transaction Pooler (porta 6543) ou Session Pooler (porta 5432)
+const isTransactionPooler = connectionString.includes(':6543/')
+
 // Criar pool compartilhado para serverless (Vercel)
-// Isso evita "max clients reached" ao reutilizar conexões
-// IMPORTANTE: Em produção também precisa usar global para compartilhar entre requisições
+// Transaction Pooler (6543) suporta mais conexões mas não prepared statements
+// Session Pooler (5432) suporta prepared statements mas tem limite menor
 const pool =
   global.__pool ||
   new Pool({
     connectionString,
     // Configurações otimizadas para serverless
-    max: 1, // Máximo de 1 conexão por instância serverless
+    max: isTransactionPooler ? 2 : 1, // Transaction Pooler pode ter mais conexões
     idleTimeoutMillis: 30000, // Fechar conexões ociosas após 30s
     connectionTimeoutMillis: 10000, // Timeout de conexão de 10s
+    // Desabilitar prepared statements se usando Transaction Pooler
+    statement_timeout: isTransactionPooler ? 0 : undefined,
   })
 
 // SEMPRE salvar no global (tanto dev quanto produção) para compartilhar pool

@@ -215,13 +215,42 @@ docker-compose logs -f app
 
 #### **Supabase (Recomendado)**
 
+> **⚠️ CRÍTICO**: Para aplicações serverless (Vercel), use **Transaction Pooler
+> (porta 6543)** conforme recomendação oficial do Supabase e Prisma.
+
 ```bash
 # 1. Criar projeto no Supabase
-# 2. Configurar variáveis
+# 2. Configurar variáveis (ver abaixo)
 # 3. Executar migrations
 pnpm db:push
 pnpm db:seed
 ```
+
+#### **Configuração de Connection Strings (Supabase + Prisma)**
+
+**✅ PRODUÇÃO (Serverless - Vercel):**
+
+```bash
+# ✅ Transaction Pooler (porta 6543) - RECOMENDADO oficialmente
+DATABASE_URL="postgresql://postgres.PROJECT_REF:PASSWORD@aws-1-sa-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connect_timeout=15"
+
+# ✅ Direct Connection (porta 5432) - Para migrations
+DIRECT_URL="postgresql://postgres:PASSWORD@db.PROJECT_REF.supabase.co:5432/postgres"
+```
+
+**✅ DESENVOLVIMENTO LOCAL:**
+
+```bash
+# ✅ Direct Connection (mais rápido para desenvolvimento)
+DATABASE_URL="postgresql://postgres:PASSWORD@db.PROJECT_REF.supabase.co:5432/postgres"
+DIRECT_URL="postgresql://postgres:PASSWORD@db.PROJECT_REF.supabase.co:5432/postgres"
+```
+
+**📚 Referências Oficiais:**
+
+- [Supabase: Connection Pooling](https://supabase.com/docs/guides/database/connecting-to-postgres#connection-pooler)
+- [Prisma: Supabase Integration](https://www.prisma.io/docs/orm/overview/databases/supabase)
+- [Supabase: Prisma Guide](https://supabase.com/docs/guides/database/prisma)
 
 #### **PostgreSQL Self-hosted**
 

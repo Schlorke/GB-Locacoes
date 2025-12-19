@@ -866,7 +866,7 @@ grep -r "SpeedInsights" app/
 
 ### 🔄 Status de Atualização
 
-- **Última verificação**: Janeiro 2025
+- **Última verificação**: 2025-12-19
 - **Versão atual**: `@vercel/speed-insights@1.3.1`
 - **Ação recomendada**:
   1. Verificar se está habilitado no dashboard da Vercel
@@ -881,7 +881,7 @@ grep -r "SpeedInsights" app/
 ### 🎯 Problema
 
 **Data da Ocorrência**: Janeiro 2025 **Severidade**: Baixa (Warning de console)
-**Status**: ✅ Documentado (Aguardando atualização da Vercel)
+**Status**: ✅ Mitigado (warning suprimido; aguardando atualização da Vercel)
 
 #### Descrição
 
@@ -933,117 +933,75 @@ As dependências já estão nas versões mais recentes disponíveis:
 }
 ```
 
-#### 2. Supressão do Warning (Implementada - Jan 2025)
+#### 2. Supressão do Warning (Atualizado - 2025-12-19)
 
 Implementada solução em duas camadas para suprimir o warning de forma robusta:
 
-**Arquivo 1**: `app/layout.tsx` - Script inline no `<head>` para interceptação
-precoce
+**Arquivo 1**: `app/layout.tsx` - Script no `<head>` com
+`strategy="beforeInteractive"` para rodar antes do script de instrumentação da
+Vercel
 
 ```tsx
-<head>
-  <script
-    dangerouslySetInnerHTML={{
-      __html: `
-        (function() {
-          if (typeof window === 'undefined') return;
+<Script id="suppress-zustand-warning" strategy="beforeInteractive">
+  {`
+    (function() {
+      if (typeof window === 'undefined') return;
+      if (window.__gbSuppressZustandWarning__) return;
 
-          const shouldSuppress = function(message) {
-            if (!message || typeof message !== 'string') return false;
-            const lowerMessage = message.toLowerCase();
-            return (
-              (lowerMessage.includes('[deprecated]') ||
-               lowerMessage.includes('deprecated')) &&
-              (lowerMessage.includes('default export') ||
-               lowerMessage.includes('default export is deprecated')) &&
-              lowerMessage.includes('zustand')
-            );
-          };
+      window.__gbSuppressZustandWarning__ = true;
 
-          const originalWarn = console.warn;
-          console.warn = function(...args) {
-            const message = String(args[0] || '');
-            if (shouldSuppress(message)) {
-              return; // Suprimir warning do Zustand
-            }
-            originalWarn.apply(console, args);
-          };
-        })();
-      `
-    }}
-  />
-</head>
+      const shouldSuppress = function(message) {
+        if (!message || typeof message !== 'string') return false;
+        const lowerMessage = message.toLowerCase();
+        return (
+          (lowerMessage.includes('[deprecated]') ||
+           lowerMessage.includes('deprecated')) &&
+          (lowerMessage.includes('default export') ||
+           lowerMessage.includes('default export is deprecated')) &&
+          lowerMessage.includes('zustand')
+        );
+      };
+
+      const originalWarn = console.warn;
+      const originalError = console.error;
+
+      console.warn = function(...args) {
+        const message = String(args[0] || '');
+        if (shouldSuppress(message)) {
+          return; // Suprimir warning do Zustand
+        }
+        originalWarn.apply(console, args);
+      };
+
+      console.error = function(...args) {
+        const message = String(args[0] || '');
+        if (shouldSuppress(message)) {
+          return; // Suprimir warning do Zustand
+        }
+        originalError.apply(console, args);
+      };
+    })();
+  `}
+</Script>
 ```
 
-**Arquivo 2**: `app/ClientLayout.tsx` - Interceptação no useEffect para garantir
-cobertura
+- Executa antes do script `instrument.*` da Vercel, evitando que o warning
+  apareça mesmo no carregamento inicial
+- Flag `__gbSuppressZustandWarning__` impede reatribuir `console` em remounts
 
-```tsx
-// Suprimir warning de depreciação do Zustand vindo de dependências externas
-useEffect(() => {
-  if (typeof window === "undefined") {
-    return // Early return para SSR
-  }
+**Arquivo 2**: `app/ClientLayout.tsx` - Interceptação no `useEffect` para
+warnings assíncronos e como fallback no client
 
-  const originalWarn = console.warn
-  const originalError = console.error
-
-  const shouldSuppress = (message: string): boolean => {
-    const lowerMessage = message.toLowerCase()
-    return (
-      (lowerMessage.includes("[deprecated]") ||
-        lowerMessage.includes("deprecated")) &&
-      (lowerMessage.includes("default export") ||
-        lowerMessage.includes("default export is deprecated")) &&
-      lowerMessage.includes("zustand")
-    )
-  }
-
-  console.warn = (...args: unknown[]) => {
-    const message = String(args[0] || "")
-    if (shouldSuppress(message)) {
-      return // Não exibir este warning
-    }
-    originalWarn.apply(console, args)
-  }
-
-  console.error = (...args: unknown[]) => {
-    const message = String(args[0] || "")
-    if (shouldSuppress(message)) {
-      return // Não exibir este warning
-    }
-    originalError.apply(console, args)
-  }
-
-  return () => {
-    console.warn = originalWarn
-    console.error = originalError
-  }
-}, [])
-```
+- Mantém cobertura para logs disparados após a hidratação do React
+- Restaura `console.warn`/`console.error` no cleanup do efeito
 
 **Por que duas camadas?**
 
-- Script inline no `<head>` intercepta warnings emitidos antes do React hidratar
-- `useEffect` no `ClientLayout` garante cobertura para warnings assíncronos
-- Verificação robusta com múltiplas variações da mensagem de warning
-- Também intercepta `console.error` caso o warning seja emitido como erro
-  console.warn = (...args: unknown[]) => { const message = String(args[0] || "")
-  // Suprimir apenas o warning específico do Zustand if (
-  message.includes("[DEPRECATED] Default export is deprecated") &&
-  message.includes("zustand") ) { return // Não exibir este warning }
-  originalWarn.apply(console, args) }
-
-      return () => {
-        console.warn = originalWarn
-      }
-
-  } }, [])
-
-````
-
-**Nota**: Esta solução é opcional e pode ser removida quando a Vercel atualizar
-suas dependências.
+- `beforeInteractive` captura o warning logo no carregamento da Vercel
+  Analytics/Speed Insights
+- `useEffect` garante que warns/erros assíncronos também sejam suprimidos
+- Não toca nas dependências da Vercel; apenas suprime o ruído de console até o
+  upstream corrigir
 
 ### 🎯 Resultado
 
@@ -1079,7 +1037,7 @@ grep -r "import.*zustand" stores/
 
 # Deve retornar:
 # stores/useCartStore.ts:import { create } from 'zustand' ✅
-````
+```
 
 ### 📚 Referências
 

@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next' // ✅ Vercel Analytics
 import { SpeedInsights } from '@vercel/speed-insights/next' // ✅ Importado aqui
 import type { Metadata } from 'next'
 import { Inter, Jost } from 'next/font/google'
+import Script from 'next/script'
 import React from 'react'
 import ClientLayout from './ClientLayout'
 import './globals.css'
@@ -135,36 +136,47 @@ export default function RootLayout({
     >
       <head>
         {/* Suprimir warning de depreciação do Zustand vindo de dependências da Vercel */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                if (typeof window === 'undefined') return;
+        <Script id="suppress-zustand-warning" strategy="beforeInteractive">
+          {`
+            (function() {
+              if (typeof window === 'undefined') return;
+              if (window.__gbSuppressZustandWarning__) return;
 
-                const shouldSuppress = function(message) {
-                  if (!message || typeof message !== 'string') return false;
-                  const lowerMessage = message.toLowerCase();
-                  return (
-                    (lowerMessage.includes('[deprecated]') ||
-                     lowerMessage.includes('deprecated')) &&
-                    (lowerMessage.includes('default export') ||
-                     lowerMessage.includes('default export is deprecated')) &&
-                    lowerMessage.includes('zustand')
-                  );
-                };
+              window.__gbSuppressZustandWarning__ = true;
 
-                const originalWarn = console.warn;
-                console.warn = function(...args) {
-                  const message = String(args[0] || '');
-                  if (shouldSuppress(message)) {
-                    return; // Suprimir warning do Zustand
-                  }
-                  originalWarn.apply(console, args);
-                };
-              })();
-            `,
-          }}
-        />
+              const shouldSuppress = function(message) {
+                if (!message || typeof message !== 'string') return false;
+                const lowerMessage = message.toLowerCase();
+                return (
+                  (lowerMessage.includes('[deprecated]') ||
+                   lowerMessage.includes('deprecated')) &&
+                  (lowerMessage.includes('default export') ||
+                   lowerMessage.includes('default export is deprecated')) &&
+                  lowerMessage.includes('zustand')
+                );
+              };
+
+              const originalWarn = console.warn;
+              const originalError = console.error;
+
+              console.warn = function(...args) {
+                const message = String(args[0] || '');
+                if (shouldSuppress(message)) {
+                  return; // Suprimir warning do Zustand
+                }
+                originalWarn.apply(console, args);
+              };
+
+              console.error = function(...args) {
+                const message = String(args[0] || '');
+                if (shouldSuppress(message)) {
+                  return; // Suprimir warning do Zustand
+                }
+                originalError.apply(console, args);
+              };
+            })();
+          `}
+        </Script>
       </head>
       <body
         className="min-h-screen bg-background font-sans antialiased"

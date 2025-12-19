@@ -21,6 +21,51 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Configuração incorreta do Supabase para serverless (Vercel) - CRÍTICO**:
+  Corrigida configuração de `DATABASE_URL` que estava causando erros "Max
+  clients reached" em produção.
+  - **Causa**: Documentação local desatualizada recomendava Session Pooler
+    (porta 5432) com `connection_limit=1`, que é inadequado para ambientes
+    serverless (Vercel) devido ao limite baixo de conexões simultâneas.
+  - **Solução**:
+    - Atualizado para usar **Transaction Pooler (porta 6543)** conforme
+      recomendação oficial do Supabase e Prisma para serverless
+    - Removido `connection_limit=1` que estava causando exaustão do pool
+    - Configurado `DIRECT_URL` corretamente para migrations
+    - Atualizado `schema.prisma` e `prisma.config.ts` para usar `directUrl`
+    - Documentação corrigida em `docs/guides/supabase-timeout-fix.md` e
+      `docs/getting-started/deployment.md`
+  - **Recomendação Oficial**:
+    - **Produção (Serverless)**: Transaction Pooler (porta 6543) com
+      `?pgbouncer=true`
+    - **Migrations**: Direct Connection (porta 5432) via `DIRECT_URL`
+    - **Desenvolvimento**: Direct Connection (porta 5432) sem pooler
+  - **Arquivos Modificados**:
+    - `prisma/schema.prisma` (adicionado `directUrl`)
+    - `prisma.config.ts` (habilitado `directUrl`)
+    - `docs/guides/supabase-timeout-fix.md` (corrigida recomendação)
+    - `docs/getting-started/deployment.md` (adicionada seção sobre Supabase)
+  - **Referências Oficiais**:
+    - [Supabase: Connection Pooling](https://supabase.com/docs/guides/database/connecting-to-postgres#connection-pooler)
+    - [Prisma: Supabase Integration](https://www.prisma.io/docs/orm/overview/databases/supabase)
+    - [Supabase: Prisma Guide](https://supabase.com/docs/guides/database/prisma)
+  - **Data**: 2025-12-19
+
+- **Warning de depreciação do default export do Zustand (Vercel Analytics/Speed
+  Insights)**: Warning agora é suprimido antes da hidratação; código do projeto
+  segue usando import { create }.
+  - **Causa**: @vercel/analytics e @vercel/speed-insights ainda importam Zustand
+    via default export em seus scripts de instrumentação, disparando o warning
+    nos navegadores.
+  - **Solução**: - Script global movido para ext/script com
+    strategy="beforeInteractive" em pp/layout.tsx, interceptando
+    console.warn/console.error antes do script instrument.\* da Vercel. -
+    Mantido fallback em pp/ClientLayout.tsx para warnings assíncronos; sem
+    alteração em dependências ou stores. - Documentação do problema atualizada
+    em docs/issues/known-issues.md.
+  - **Arquivos Modificados**: pp/layout.tsx, docs/issues/known-issues.md
+  - **Data**: 2025-12-19
+
 - **Build falhando com erro 3221226505 no postbuild (patch-prisma.js)**:
   Corrigido problema crítico onde o build falhava na etapa `postbuild` com
   código de erro `3221226505` no Windows.

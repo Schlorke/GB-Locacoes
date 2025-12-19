@@ -39,29 +39,60 @@ clientVersion: 6.18.0
 
 ---
 
-## ✅ Solução 1: Aumentar Timeout (RÁPIDO)
+## ✅ Solução 1: Configuração Correta para Serverless (Vercel)
 
-### **1.1. Editar `.env.local`:**
+> **⚠️ IMPORTANTE**: Para aplicações serverless (Vercel), a recomendação
+> **OFICIAL** do Supabase e Prisma é usar o **Transaction Pooler (porta 6543)**,
+> não o Session Pooler (porta 5432).
 
-**❌ Antes:**
+### **1.1. Configuração para Produção (Serverless):**
+
+**✅ CORRETO (Recomendação Oficial Supabase + Prisma):**
 
 ```env
-DATABASE_URL="postgresql://postgres:password@aws-0-us-east-1.pooler.supabase.com:5432/postgres?pgbouncer=true"
+# ✅ PRODUÇÃO - Transaction Pooler (porta 6543) - RECOMENDADO para serverless
+DATABASE_URL="postgresql://postgres.PROJECT_REF:PASSWORD@aws-1-sa-east-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connect_timeout=15"
+
+# ✅ MIGRATIONS - Conexão direta (porta 5432)
+DIRECT_URL="postgresql://postgres:PASSWORD@db.PROJECT_REF.supabase.co:5432/postgres"
 ```
 
-**✅ Depois:**
+**❌ ERRADO (Session Pooler - causa "Max clients reached" em serverless):**
 
 ```env
-DATABASE_URL="postgresql://postgres:password@aws-0-us-east-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connect_timeout=15&connection_limit=1"
+# ❌ NÃO USE em produção serverless
+DATABASE_URL="postgresql://postgres.PROJECT_REF:PASSWORD@aws-1-sa-east-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connect_timeout=15&connection_limit=1"
+```
+
+### **1.2. Configuração para Desenvolvimento Local:**
+
+**✅ DESENVOLVIMENTO - Direct Connection (mais rápido):**
+
+```env
+# ✅ DESENVOLVIMENTO - Direct Connection (sem pooler)
+DATABASE_URL="postgresql://postgres:PASSWORD@db.PROJECT_REF.supabase.co:5432/postgres"
+DIRECT_URL="postgresql://postgres:PASSWORD@db.PROJECT_REF.supabase.co:5432/postgres"
 ```
 
 ### **Parâmetros:**
 
-| Parâmetro          | Valor  | Descrição                             |
-| ------------------ | ------ | ------------------------------------- |
-| `connect_timeout`  | `15`   | Aguarda 15s (suficiente para acordar) |
-| `pgbouncer`        | `true` | Usa connection pooling                |
-| `connection_limit` | `1`    | Evita múltiplas conexões              |
+| Parâmetro         | Valor    | Descrição                                                                   |
+| ----------------- | -------- | --------------------------------------------------------------------------- |
+| `connect_timeout` | `15`     | Aguarda 15s (suficiente para acordar)                                       |
+| `pgbouncer`       | `true`   | **OBRIGATÓRIO** para Transaction Pooler (6543)                              |
+| **Porta**         | **6543** | **Transaction Pooler** (recomendado para serverless)                        |
+| **Porta**         | **5432** | Session Pooler (NÃO recomendado para serverless) ou Direct Connection (dev) |
+
+### **⚠️ Por que Transaction Pooler (6543) para Serverless?**
+
+1. **Mais conexões simultâneas**: Transaction Pooler suporta muito mais conexões
+   que Session Pooler
+2. **Recomendação oficial**: Tanto Supabase quanto Prisma recomendam porta 6543
+   para serverless
+3. **Evita "Max clients reached"**: Session Pooler (5432) tem limite muito baixo
+   para ambientes serverless
+4. **Limitação**: Transaction Pooler não suporta prepared statements (mas Prisma
+   funciona normalmente)
 
 ### **1.2. Reiniciar servidor:**
 
