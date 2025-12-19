@@ -337,6 +337,7 @@ export async function GET(request: NextRequest) {
       deliveryFee: quote.deliveryFee ? Number(quote.deliveryFee) : null,
       createdAt: quote.createdAt.toISOString(),
       updatedAt: quote.updatedAt.toISOString(),
+      rejectedAt: quote.rejectedAt?.toISOString() || null,
       items: quote.items.map((item) => ({
         id: item.id,
         quantity: item.quantity,

@@ -84,6 +84,7 @@ interface Quote {
   }
   createdAt: string
   updatedAt: string
+  rejectedAt?: string | null
   originalTotal?: number
   finalTotal?: number | null
   priceAdjustmentReason?: string | null
@@ -764,26 +765,29 @@ function AdminQuotesPage() {
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
               <CardContent className="relative z-10 p-0">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
+                <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                  <table className="w-full border-collapse">
                     <thead>
-                      <tr className="border-b border-gray-100 bg-gray-50/50">
-                        <th className="text-left p-4 font-semibold text-gray-700">
+                      <tr className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100/50 sticky top-0 z-10 backdrop-blur-sm">
+                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[20%]">
                           Cliente
                         </th>
-                        <th className="text-left p-4 font-semibold text-gray-700">
+                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[15%]">
                           Equipamentos
                         </th>
-                        <th className="text-left p-4 font-semibold text-gray-700">
+                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[15%]">
                           Período
                         </th>
-                        <th className="text-left p-4 font-semibold text-gray-700">
+                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[12%]">
                           Valor Total
                         </th>
-                        <th className="text-left p-4 font-semibold text-gray-700">
+                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[10%]">
                           Status
                         </th>
-                        <th className="text-left p-4 font-semibold text-gray-700">
+                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[15%]">
+                          Data
+                        </th>
+                        <th className="text-right p-3 font-semibold text-gray-700 text-sm w-[13%]">
                           Ações
                         </th>
                       </tr>
@@ -843,86 +847,144 @@ function AdminQuotesPage() {
                               initial="hidden"
                               animate="show"
                               exit="exit"
-                              className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors group"
+                              className="border-b border-gray-100 hover:bg-gray-50/70 transition-colors group"
                             >
-                              <td className="p-4">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold shrink-0">
+                              <td className="p-3">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold text-xs shrink-0">
                                     {quote.name?.charAt(0).toUpperCase()}
                                   </div>
-                                  <div>
-                                    <div className="font-medium text-gray-900">
+                                  <div className="min-w-0 flex-1">
+                                    <div className="font-medium text-gray-900 text-sm truncate">
                                       {quote.name}
                                     </div>
-                                    <div className="text-sm text-gray-500">
+                                    <div className="text-xs text-gray-500 truncate">
                                       {quote.email}
                                     </div>
                                     {quote.company && (
-                                      <div className="text-xs text-gray-400 flex items-center gap-1 mt-1">
-                                        <Building className="w-3 h-3" />
-                                        {quote.company}
+                                      <div className="text-xs text-gray-400 flex items-center gap-1 mt-0.5 truncate">
+                                        <Building className="w-3 h-3 shrink-0" />
+                                        <span className="truncate">
+                                          {quote.company}
+                                        </span>
                                       </div>
                                     )}
                                   </div>
                                 </div>
                               </td>
-                              <td className="p-4">
-                                <div className="flex items-center gap-2">
-                                  <Package className="w-4 h-4 text-gray-400" />
-                                  <span className="text-sm font-medium">
-                                    {Array.isArray(quote.equipments)
-                                      ? quote.equipments.length
-                                      : 0}{' '}
-                                    equipamentos
-                                  </span>
+                              <td className="p-3">
+                                <div className="flex items-start gap-1.5 min-w-0">
+                                  <Package className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
+                                  <div className="min-w-0 flex-1">
+                                    <span className="text-xs font-medium text-gray-900">
+                                      {Array.isArray(quote.equipments)
+                                        ? quote.equipments.length
+                                        : quote.items?.length || 0}{' '}
+                                      {(Array.isArray(quote.equipments)
+                                        ? quote.equipments.length
+                                        : quote.items?.length || 0) === 1
+                                        ? 'item'
+                                        : 'itens'}
+                                    </span>
+                                    {quote.items && quote.items.length > 0 && (
+                                      <div className="text-xs text-gray-500 mt-0.5 line-clamp-1">
+                                        {quote.items
+                                          .slice(0, 1)
+                                          .map(
+                                            (item) =>
+                                              item.equipment?.name ||
+                                              'Equipamento'
+                                          )
+                                          .filter(Boolean)
+                                          .join(', ')}
+                                        {quote.items.length > 1 && '...'}
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
                               </td>
-                              <td className="p-4">
-                                <div className="text-sm">
+                              <td className="p-3">
+                                <div className="text-xs min-w-0">
                                   {quote.startDate && quote.endDate ? (
                                     <>
-                                      <div className="flex items-center gap-1 text-gray-600">
-                                        <Calendar className="w-3 h-3" />
-                                        {formatDate(quote.startDate)}
+                                      <div className="flex items-center gap-1 text-gray-700 font-medium truncate">
+                                        <Calendar className="w-3 h-3 shrink-0" />
+                                        <span className="truncate">
+                                          {formatDate(quote.startDate)}
+                                        </span>
                                       </div>
-                                      <div className="text-gray-500 ml-4">
+                                      <div className="text-gray-500 text-xs ml-4 mt-0.5 truncate">
                                         até {formatDate(quote.endDate)}
                                       </div>
                                     </>
                                   ) : quote.items &&
                                     quote.items.length > 0 &&
                                     quote.items[0]?.days ? (
-                                    <div className="text-gray-500">
+                                    <div className="text-gray-600 font-medium text-xs">
                                       {quote.items[0].days}{' '}
                                       {quote.items[0].days === 1
                                         ? 'dia'
                                         : 'dias'}
                                     </div>
                                   ) : (
-                                    <div className="text-gray-400 italic">
-                                      Período não definido
+                                    <div className="text-gray-400 italic text-xs">
+                                      Não definido
                                     </div>
                                   )}
                                 </div>
                               </td>
-                              <td className="p-4">
-                                <span className="font-semibold text-lg text-green-600">
-                                  {formatCurrency(quote.totalPrice || 0)}
-                                </span>
+                              <td className="p-3">
+                                <div className="flex flex-col">
+                                  <span className="font-semibold text-sm text-green-600">
+                                    {formatCurrency(quote.totalPrice || 0)}
+                                  </span>
+                                  {quote.finalTotal &&
+                                    quote.finalTotal !== quote.totalPrice && (
+                                      <span className="text-xs text-gray-500 mt-0.5 truncate">
+                                        Ajustado:{' '}
+                                        {formatCurrency(quote.finalTotal)}
+                                      </span>
+                                    )}
+                                </div>
                               </td>
-                              <td className="p-4">
-                                {getStatusBadge(quote.status)}
+                              <td className="p-3">
+                                <div className="scale-90 origin-left">
+                                  {getStatusBadge(quote.status)}
+                                </div>
                               </td>
-                              <td className="p-4">
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => setSelectedQuote(quote)}
-                                  className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-all"
-                                >
-                                  <Eye className="w-4 h-4 mr-2" />
-                                  Ver Detalhes
-                                </Button>
+                              <td className="p-3">
+                                <div className="flex flex-col gap-0.5 text-xs">
+                                  <div className="text-gray-600 truncate">
+                                    <span className="font-medium">Criado:</span>{' '}
+                                    {formatDate(quote.createdAt)}
+                                  </div>
+                                  {quote.status === 'rejected' &&
+                                    quote.rejectedAt && (
+                                      <div className="text-red-600 truncate">
+                                        <span className="font-medium">
+                                          Rej:
+                                        </span>{' '}
+                                        {formatDate(quote.rejectedAt)}
+                                      </div>
+                                    )}
+                                  {quote.status === 'approved' && (
+                                    <div className="text-green-600 text-xs">
+                                      Aprovado
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="p-3">
+                                <div className="flex justify-end gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => setSelectedQuote(quote)}
+                                    className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-all h-7 px-2 text-xs"
+                                  >
+                                    <Eye className="w-3.5 h-3.5" />
+                                  </Button>
+                                </div>
                               </td>
                             </motion.tr>
                           ))}
@@ -932,17 +994,22 @@ function AdminQuotesPage() {
 
                   {(!Array.isArray(tableQuotes) ||
                     tableQuotes.length === 0) && (
-                    <div className="text-center py-12">
-                      <div className="text-gray-400 mb-4">
-                        <FileText className="w-12 h-12 mx-auto mb-3" />
-                        <p className="text-lg font-medium">
-                          Nenhum orçamento encontrado
-                        </p>
-                        <p className="text-sm">
-                          Tente ajustar os filtros ou aguarde novos orçamentos
-                        </p>
-                      </div>
-                    </div>
+                    <tr>
+                      <td colSpan={7} className="p-12">
+                        <div className="text-center">
+                          <div className="text-gray-400 mb-4">
+                            <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                            <p className="text-lg font-medium text-gray-600 mb-2">
+                              Nenhum orçamento encontrado
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              Tente ajustar os filtros ou aguarde novos
+                              orçamentos
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
                   )}
                 </div>
               </CardContent>
@@ -961,20 +1028,46 @@ function AdminQuotesPage() {
             <AdminCard title="Calendário de Orçamentos" variant="flat">
               <AdvancedCalendar
                 events={filteredQuotes.map((quote): CalendarEvent => {
-                  // Obter datas do orçamento
-                  const startDateStr =
-                    quote.startDate || quote.items?.[0]?.startDate
-                  const endDateStr = quote.endDate || quote.items?.[0]?.endDate
-
-                  const start = startDateStr
-                    ? new Date(startDateStr)
-                    : new Date(quote.createdAt)
-                  const end = endDateStr ? new Date(endDateStr) : start
-
                   const isPending = quote.status === 'pending'
-                  const createdAt = quote.createdAt
-                    ? new Date(quote.createdAt)
-                    : undefined
+                  const isRejected = quote.status === 'rejected'
+
+                  // Para orçamentos rejeitados, usar rejectedAt ou updatedAt
+                  // Para pendentes, usar createdAt
+                  // Para aprovados, usar startDate/endDate
+                  let start: Date
+                  let end: Date
+                  let createdAt: Date | undefined
+
+                  if (isRejected) {
+                    // Orçamentos rejeitados: usar apenas o horário de rejeição
+                    const rejectedDate = quote.rejectedAt
+                      ? new Date(quote.rejectedAt)
+                      : quote.updatedAt
+                        ? new Date(quote.updatedAt)
+                        : new Date(quote.createdAt)
+                    start = rejectedDate
+                    end = rejectedDate // Mesmo horário (altura auto)
+                    createdAt = rejectedDate
+                  } else if (isPending) {
+                    // Orçamentos pendentes: usar createdAt
+                    const createdDate = quote.createdAt
+                      ? new Date(quote.createdAt)
+                      : new Date()
+                    start = createdDate
+                    end = createdDate // Mesmo horário (altura auto)
+                    createdAt = createdDate
+                  } else {
+                    // Orçamentos aprovados: usar startDate/endDate
+                    const startDateStr =
+                      quote.startDate || quote.items?.[0]?.startDate
+                    const endDateStr =
+                      quote.endDate || quote.items?.[0]?.endDate
+
+                    start = startDateStr
+                      ? new Date(startDateStr)
+                      : new Date(quote.createdAt)
+                    end = endDateStr ? new Date(endDateStr) : start
+                  }
 
                   // Cores baseadas no status
                   const statusColors: Record<string, string> = {
@@ -1001,8 +1094,8 @@ function AdminQuotesPage() {
                     color: statusColors[quote.status] || '#6B7280',
                     type: 'rental',
                     status: quote.status,
-                    isPendingRequest: isPending,
-                    createdAt: isPending ? createdAt : undefined,
+                    isPendingRequest: isPending || isRejected, // Rejeitados também usam altura auto
+                    createdAt: isPending || isRejected ? createdAt : undefined,
                     metadata: {
                       clientName: quote.name,
                       clientEmail: quote.email,

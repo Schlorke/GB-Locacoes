@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo, useRef, useLayoutEffect } from 'react'
 import {
   format,
   startOfWeek,
@@ -19,6 +19,9 @@ import {
 import { ptBR } from 'date-fns/locale'
 import { EventBlock } from './event-block'
 import { TimeIndicator } from './time-indicator'
+import { AllDaySection, getAllDayEvents } from './all-day-section'
+import { calculateEventPositions } from './event-overlap-manager'
+import { QuickCreateDialog } from './quick-create-dialog'
 import { HOUR_SLOT_HEIGHT, MINUTE_HEIGHT } from './constants'
 import type { CalendarEvent } from './types'
 
@@ -27,6 +30,7 @@ interface WeeklyViewProps {
   events: CalendarEvent[]
   onEventClick?: (_event: CalendarEvent) => void
   onDateClick?: (_date: Date) => void
+  onCreateEvent?: (_event: Partial<CalendarEvent>) => void
 }
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i) // 00:00 at\u00e9 23:00
@@ -36,23 +40,57 @@ export function WeeklyView({
   events,
   onEventClick,
   onDateClick,
+  onCreateEvent,
 }: WeeklyViewProps) {
   const [currentTime, setCurrentTime] = useState(new Date())
+  const [quickCreateOpen, setQuickCreateOpen] = useState(false)
+  const [quickCreateDate, setQuickCreateDate] = useState<Date | null>(null)
+  const [quickCreateTime, setQuickCreateTime] = useState<Date | null>(null)
+  const columnRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  const [columnWidths, setColumnWidths] = useState<Map<string, number>>(
+    new Map()
+  )
+
+  const weekStart = startOfWeek(date, { weekStartsOn: 1 }) // Começa na segunda
+  const weekDays = useMemo(
+    () => Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
+    [weekStart]
+  )
+
+  // Mede a largura real das colunas
+  useLayoutEffect(() => {
+    const updateWidths = () => {
+      const newWidths = new Map<string, number>()
+      columnRefs.current.forEach((el, key) => {
+        if (el) {
+          newWidths.set(key, el.clientWidth)
+        }
+      })
+      setColumnWidths(newWidths)
+    }
+
+    updateWidths()
+    window.addEventListener('resize', updateWidths)
+    return () => window.removeEventListener('resize', updateWidths)
+  }, [weekDays])
 
   useEffect(() => {
     const interval = setInterval(() => setCurrentTime(new Date()), 60000)
     return () => clearInterval(interval)
   }, [])
 
-  const weekStart = startOfWeek(date, { weekStartsOn: 1 }) // Começa na segunda
-  const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
+  // Separa eventos all-day dos eventos do time-grid
+  const allDayEvents = useMemo(() => getAllDayEvents(events), [events])
 
-  const getEventsForDay = (day: Date) => {
+  const getTimeGridEventsForDay = (day: Date) => {
     const dayStart = startOfDay(day)
     const dayEnd = endOfDay(day)
 
     return events.filter((event) => {
-      // Para eventos pendentes, usa createdAt para determinar o dia
+      // Exclui eventos all-day/multi-day
+      if (event.isAllDay || event.isMultiDay) return false
+
+      // Para eventos pendentes ou rejeitados, usa createdAt para determinar o dia
       if (event.isPendingRequest && event.createdAt) {
         return event.createdAt >= dayStart && event.createdAt <= dayEnd
       }
@@ -61,11 +99,19 @@ export function WeeklyView({
     })
   }
 
+  const handleSlotClick = (day: Date, hour: number) => {
+    const clickedTime = setHours(setMinutes(day, 0), hour)
+    setQuickCreateDate(day)
+    setQuickCreateTime(clickedTime)
+    setQuickCreateOpen(true)
+    onDateClick?.(clickedTime)
+  }
+
   const getEventPosition = (event: CalendarEvent, day: Date) => {
     const dayStart = startOfDay(day)
     const dayEnd = endOfDay(day)
 
-    // Para eventos pendentes, posiciona pelo horário de criação com altura fixa
+    // Para eventos pendentes ou rejeitados, posiciona pelo horário de criação com altura auto
     if (event.isPendingRequest && event.createdAt) {
       const minutesFromDayStart = differenceInMinutes(event.createdAt, dayStart)
       return {
@@ -120,7 +166,7 @@ export function WeeklyView({
       </div>
 
       {/* Colunas dos Dias */}
-      <div className="flex-1 flex min-w-[700px]">
+      <div className="flex-1 flex">
         {weekDays.map((day, index) => (
           <div
             key={day.toISOString()}
@@ -142,30 +188,55 @@ export function WeeklyView({
               </span>
             </div>
 
+            {/* Seção All-Day */}
+            <AllDaySection
+              date={day}
+              events={allDayEvents}
+              onEventClick={onEventClick}
+            />
+
             {/* Grade de Horas */}
-            <div className="relative h-[1440px]">
+            <div
+              ref={(el) => {
+                if (el) columnRefs.current.set(day.toISOString(), el)
+              }}
+              className="relative h-[1440px]"
+            >
               {HOURS.map((hour) => (
                 <div
                   key={hour}
                   className="h-[60px] border-b border-slate-100 hover:bg-gray-50/50 cursor-pointer transition-colors"
-                  onClick={() =>
-                    onDateClick?.(setHours(setMinutes(day, 0), hour))
-                  }
+                  onClick={() => handleSlotClick(day, hour)}
                 />
               ))}
 
-              {/* Eventos */}
-              {getEventsForDay(day).map((event) => {
-                const position = getEventPosition(event, day)
-                return (
-                  <EventBlock
-                    key={event.id}
-                    event={event}
-                    style={position}
-                    onClick={() => onEventClick?.(event)}
-                  />
+              {/* Eventos do Time-Grid com Overlap Manager */}
+              {(() => {
+                const timeGridEvents = getTimeGridEventsForDay(day)
+                const containerWidth =
+                  columnWidths.get(day.toISOString()) || 200
+                const positions = calculateEventPositions(
+                  timeGridEvents,
+                  day,
+                  containerWidth
                 )
-              })}
+
+                return positions.map((pos) => {
+                  const position = getEventPosition(pos.event, day)
+                  return (
+                    <EventBlock
+                      key={pos.event.id}
+                      event={pos.event}
+                      style={{
+                        ...position,
+                        left: pos.left,
+                        width: pos.width,
+                      }}
+                      onClick={() => onEventClick?.(pos.event)}
+                    />
+                  )
+                })
+              })()}
 
               {/* Linha do Tempo Atual */}
               {isSameDay(currentTime, day) && (
@@ -178,6 +249,17 @@ export function WeeklyView({
           </div>
         ))}
       </div>
+
+      {/* Quick Create Dialog */}
+      {quickCreateDate && quickCreateTime && (
+        <QuickCreateDialog
+          open={quickCreateOpen}
+          onOpenChange={setQuickCreateOpen}
+          defaultDate={quickCreateDate}
+          defaultStartTime={quickCreateTime}
+          onCreate={onCreateEvent}
+        />
+      )}
     </div>
   )
 }

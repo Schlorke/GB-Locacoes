@@ -12,10 +12,28 @@ interface EventBlockProps {
     height: number | 'auto'
     left?: number
     right?: number
+    width?: number
     isPending?: boolean
   }
   onClick?: () => void
   className?: string
+}
+
+type DensityLevel = 'very-small' | 'medium' | 'large'
+
+function getDensityLevel(height: number | 'auto'): DensityLevel {
+  if (height === 'auto') return 'medium'
+  if (height < 28) return 'very-small'
+  if (height <= 56) return 'medium'
+  return 'large'
+}
+
+function formatEventTitle(event: CalendarEvent): string {
+  // Formato: "Preventiva — Betoneira 320L"
+  if (event.equipmentName) {
+    return `${event.title} — ${event.equipmentName}`
+  }
+  return event.title
 }
 
 export function EventBlock({
@@ -24,8 +42,10 @@ export function EventBlock({
   onClick,
   className,
 }: EventBlockProps) {
-  const isPending = style.isPending || style.height === 'auto'
+  const isRejected = event.status === 'rejected'
+  const isPending = style.isPending || style.height === 'auto' || isRejected
   const heightValue = isPending ? 'auto' : Math.max(style.height as number, 30)
+  const densityLevel = getDensityLevel(heightValue)
 
   // Determina posicionamento horizontal de forma segura
   // Sempre usa left + width para evitar conflitos de posicionamento
@@ -42,10 +62,19 @@ export function EventBlock({
 
   // Sempre usa left + width para garantir posicionamento correto
   positionStyle.left = `${leftMargin}px`
-  positionStyle.width = `calc(100% - ${leftMargin + rightMargin}px)`
+
+  // Todos os eventos ocupam toda a largura disponível da coluna
+  positionStyle.width = style.width
+    ? `${style.width}px`
+    : `calc(100% - ${leftMargin + rightMargin}px)`
 
   // Z-index baseado no ID do evento para ordem consistente
   positionStyle.zIndex = 10 + (parseInt(event.id.slice(-2), 16) % 10)
+
+  const formattedTitle = formatEventTitle(event)
+
+  // Determina qual meta mostrar (status OU cliente/obra, não os dois)
+  const metaToShow = event.status || event.clientName || event.equipmentName
 
   return (
     <div
@@ -56,42 +85,72 @@ export function EventBlock({
       style={positionStyle}
       onClick={onClick}
     >
+      {/* Título - sempre presente */}
       <div
-        className="text-xs font-medium text-gray-900 leading-tight"
+        className={cn(
+          'text-xs font-medium text-gray-900 leading-tight',
+          (densityLevel === 'very-small' || isRejected) && 'truncate'
+        )}
         style={{
-          display: '-webkit-box',
-          WebkitLineClamp:
-            typeof heightValue === 'number' && heightValue < 60 ? 1 : 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          wordBreak: 'break-word',
-          overflowWrap: 'anywhere',
+          ...(densityLevel === 'very-small' || isRejected
+            ? {
+                // Para eventos rejeitados ou muito pequenos: ellipsis simples
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                maxWidth: '100%',
+              }
+            : {
+                // Para outros: multi-line com clamp
+                display: '-webkit-box',
+                WebkitLineClamp: densityLevel === 'medium' ? 2 : 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                wordBreak: 'break-word',
+                overflowWrap: 'anywhere',
+              }),
         }}
       >
-        {event.title}
+        {formattedTitle}
       </div>
-      {isPending && event.createdAt ? (
-        <div className="text-xs text-gray-600 mt-1 leading-tight truncate">
-          <span className="font-medium">
-            {format(event.createdAt, 'HH:mm', { locale: ptBR })}
-          </span>
-          <span className="text-gray-400 ml-1">
-            (
-            {formatDistanceToNow(event.createdAt, {
-              locale: ptBR,
-              addSuffix: true,
-            })}
-            )
-          </span>
-        </div>
-      ) : (
-        typeof style.height === 'number' &&
-        style.height > 40 && (
-          <div className="text-xs text-gray-600 mt-1 leading-tight whitespace-nowrap truncate">
-            {format(event.start, 'HH:mm', { locale: ptBR })} -{' '}
-            {format(event.end, 'HH:mm', { locale: ptBR })}
-          </div>
-        )
+
+      {/* Conteúdo adicional baseado na densidade */}
+      {densityLevel !== 'very-small' && (
+        <>
+          {/* Tempo - quando couber (médio e grande) */}
+          {(isPending || isRejected) && event.createdAt ? (
+            <div className="text-xs text-gray-600 mt-0.5 leading-tight truncate">
+              <span className="font-medium">
+                {format(event.createdAt, 'HH:mm', { locale: ptBR })}
+              </span>
+              {isRejected && (
+                <span className="text-gray-400 ml-1">(Rejeitado)</span>
+              )}
+              {!isRejected && (
+                <span className="text-gray-400 ml-1">
+                  (
+                  {formatDistanceToNow(event.createdAt, {
+                    locale: ptBR,
+                    addSuffix: true,
+                  })}
+                  )
+                </span>
+              )}
+            </div>
+          ) : (
+            <div className="text-xs text-gray-600 mt-0.5 leading-tight truncate">
+              {format(event.start, 'HH:mm', { locale: ptBR })} -{' '}
+              {format(event.end, 'HH:mm', { locale: ptBR })}
+            </div>
+          )}
+
+          {/* Meta - apenas para grande (>56px) ou rejeitados */}
+          {(densityLevel === 'large' || isRejected) && metaToShow && (
+            <div className="text-xs text-gray-500 mt-0.5 leading-tight truncate">
+              {event.status || event.clientName || event.equipmentName}
+            </div>
+          )}
+        </>
       )}
     </div>
   )

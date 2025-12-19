@@ -1,11 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { addDays, addWeeks, addMonths, startOfDay } from 'date-fns'
 import { CalendarHeader } from './calendar-header'
 import { DailyView } from './daily-view'
 import { WeeklyView } from './weekly-view'
 import { MonthlyView } from './monthly-view'
+import { TimelineView } from './timeline-view'
+import { EventDetailsPanel } from './event-details-panel'
+import {
+  CalendarFilters,
+  applyFilters,
+  type CalendarFiltersState,
+  DEFAULT_FILTERS,
+} from './calendar-filters'
 import type { ViewMode, CalendarEvent, CalendarResource } from './types'
 
 export interface AdvancedCalendarProps {
@@ -14,9 +22,18 @@ export interface AdvancedCalendarProps {
   onEventClick?: (_event: CalendarEvent) => void
   onDateClick?: (_date: Date) => void
   onEventDrop?: (_eventId: string, _newStart: Date, _newEnd: Date) => void
+  onCreateEvent?: (_event: Partial<CalendarEvent>) => void
+  onEditEvent?: (_event: CalendarEvent) => void
+  onRescheduleEvent?: (_event: CalendarEvent) => void
+  onCompleteEvent?: (_event: CalendarEvent) => void
+  onCancelEvent?: (_event: CalendarEvent) => void
+  onOpenEquipment?: (_equipmentId?: string) => void
+  onOpenRental?: (_rentalId: string) => void
+  onOpenRoute?: (_event: CalendarEvent) => void
   defaultViewMode?: ViewMode
   defaultDate?: Date
   className?: string
+  showFilters?: boolean
 }
 
 export function AdvancedCalendar({
@@ -25,13 +42,31 @@ export function AdvancedCalendar({
   onEventClick,
   onDateClick,
   onEventDrop: _onEventDrop,
+  onCreateEvent,
+  onEditEvent,
+  onRescheduleEvent,
+  onCompleteEvent,
+  onCancelEvent,
+  onOpenEquipment,
+  onOpenRental,
+  onOpenRoute,
   defaultViewMode = 'weekly',
   defaultDate,
   className,
+  showFilters = false,
 }: AdvancedCalendarProps) {
   const [viewMode, setViewMode] = useState<ViewMode>(defaultViewMode)
   const [currentDate, setCurrentDate] = useState<Date>(
     defaultDate ? startOfDay(defaultDate) : startOfDay(new Date())
+  )
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
+  const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false)
+  const [filters, setFilters] = useState<CalendarFiltersState>(DEFAULT_FILTERS)
+
+  // Aplica filtros aos eventos
+  const filteredEvents = useMemo(
+    () => applyFilters(events, filters),
+    [events, filters]
   )
 
   const handleNavigate = (direction: 'prev' | 'next' | 'today') => {
@@ -51,47 +86,100 @@ export function AdvancedCalendar({
       case 'monthly':
         setCurrentDate((prev) => addMonths(prev, modifier))
         break
+      case 'timeline':
+        setCurrentDate((prev) => addWeeks(prev, modifier))
+        break
     }
   }
 
+  const handleEventClick = (event: CalendarEvent) => {
+    setSelectedEvent(event)
+    setIsDetailsPanelOpen(true)
+    onEventClick?.(event)
+  }
+
+  const handleDateClick = (date: Date) => {
+    setCurrentDate(date)
+    onDateClick?.(date)
+  }
+
   return (
-    <div
-      className={`flex flex-col bg-white rounded-lg border border-slate-200 overflow-hidden ${className || ''}`}
-    >
-      <CalendarHeader
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        currentDate={currentDate}
-        onNavigate={handleNavigate}
-      />
-      <div className="flex-1 overflow-auto min-h-[500px]">
-        {viewMode === 'daily' && (
-          <DailyView
-            date={currentDate}
-            events={events}
-            resources={resources}
-            onEventClick={onEventClick}
-            onDateClick={onDateClick}
-          />
+    <>
+      <div
+        className={`flex flex-col bg-white rounded-lg border border-slate-200 overflow-hidden ${className || ''}`}
+      >
+        <CalendarHeader
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          currentDate={currentDate}
+          onNavigate={handleNavigate}
+        />
+
+        {showFilters && (
+          <div className="px-4 py-3 border-b border-slate-200">
+            <CalendarFilters
+              events={events}
+              resources={resources}
+              filters={filters}
+              onFiltersChange={setFilters}
+            />
+          </div>
         )}
-        {viewMode === 'weekly' && (
-          <WeeklyView
-            date={currentDate}
-            events={events}
-            onEventClick={onEventClick}
-            onDateClick={onDateClick}
-          />
-        )}
-        {viewMode === 'monthly' && (
-          <MonthlyView
-            date={currentDate}
-            events={events}
-            onEventClick={onEventClick}
-            onDateClick={onDateClick}
-          />
-        )}
+
+        <div className="flex-1 overflow-auto min-h-[500px]">
+          {viewMode === 'daily' && (
+            <DailyView
+              date={currentDate}
+              events={filteredEvents}
+              resources={resources}
+              onEventClick={handleEventClick}
+              onDateClick={handleDateClick}
+              onCreateEvent={onCreateEvent}
+            />
+          )}
+          {viewMode === 'weekly' && (
+            <WeeklyView
+              date={currentDate}
+              events={filteredEvents}
+              onEventClick={handleEventClick}
+              onDateClick={handleDateClick}
+              onCreateEvent={onCreateEvent}
+            />
+          )}
+          {viewMode === 'monthly' && (
+            <MonthlyView
+              date={currentDate}
+              events={filteredEvents}
+              onEventClick={handleEventClick}
+              onDateClick={handleDateClick}
+            />
+          )}
+          {viewMode === 'timeline' && (
+            <TimelineView
+              date={currentDate}
+              events={filteredEvents}
+              resources={resources}
+              onEventClick={handleEventClick}
+              onDateClick={handleDateClick}
+            />
+          )}
+        </div>
       </div>
-    </div>
+
+      {/* Event Details Panel */}
+      <EventDetailsPanel
+        event={selectedEvent}
+        open={isDetailsPanelOpen}
+        onOpenChange={setIsDetailsPanelOpen}
+        onEdit={onEditEvent}
+        onReschedule={onRescheduleEvent}
+        onComplete={onCompleteEvent}
+        onCancel={onCancelEvent}
+        onOpenEquipment={onOpenEquipment}
+        onOpenRental={onOpenRental}
+        onOpenRoute={onOpenRoute}
+      />
+    </>
   )
 }
 

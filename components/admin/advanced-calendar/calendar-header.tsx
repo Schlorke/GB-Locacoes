@@ -8,6 +8,7 @@ import {
   Calendar,
   GanttChartSquare,
   Columns3,
+  Layers,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ViewToggle } from '@/components/ui/view-toggle'
@@ -24,6 +25,7 @@ const viewOptions = [
   { value: 'daily', label: 'Diário', icon: Columns3 },
   { value: 'weekly', label: 'Semanal', icon: GanttChartSquare },
   { value: 'monthly', label: 'Calendário', icon: Calendar },
+  { value: 'timeline', label: 'Equipamentos', icon: Layers },
 ]
 
 export function CalendarHeader({
@@ -42,6 +44,8 @@ export function CalendarHeader({
         return `Semana de ${format(weekStart, 'dd MMM', { locale: ptBR })} – ${format(weekEnd, 'dd MMM, yyyy', { locale: ptBR })}`
       }
       case 'monthly':
+        return format(currentDate, 'MMMM yyyy', { locale: ptBR })
+      case 'timeline':
         return format(currentDate, 'MMMM yyyy', { locale: ptBR })
       default:
         return format(currentDate, 'MMMM yyyy', { locale: ptBR })

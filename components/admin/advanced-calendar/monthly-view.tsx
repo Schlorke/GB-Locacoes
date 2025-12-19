@@ -13,6 +13,8 @@ import {
   isToday,
 } from 'date-fns'
 import { cn } from '@/lib/utils'
+import { EventPopover } from './event-popover'
+import { AllDaySectionMonthly } from './all-day-section'
 import type { CalendarEvent } from './types'
 
 interface MonthlyViewProps {
@@ -47,8 +49,12 @@ export function MonthlyView({
     return days
   }, [date])
 
-  const getEventsForDay = (day: Date) => {
-    return events.filter((event) => isSameDay(event.start, day))
+  const getTimeGridEventsForDay = (day: Date) => {
+    return events.filter((event) => {
+      // Apenas eventos que não são all-day/multi-day
+      if (event.isAllDay || event.isMultiDay) return false
+      return isSameDay(event.start, day)
+    })
   }
 
   return (
@@ -68,7 +74,6 @@ export function MonthlyView({
       {/* Grade do Calendário */}
       <div className="flex-1 grid grid-cols-7 auto-rows-fr">
         {calendarDays.map((day) => {
-          const dayEvents = getEventsForDay(day)
           const isCurrentMonth = isSameMonth(day, date)
           const isCurrentDay = isToday(day)
 
@@ -94,29 +99,51 @@ export function MonthlyView({
                 </span>
               </div>
 
-              {/* Eventos do Dia */}
-              <div className="space-y-1">
-                {dayEvents.slice(0, 3).map((event) => (
-                  <div
-                    key={event.id}
-                    className="text-xs px-2 py-1 rounded truncate cursor-pointer hover:opacity-80 transition-opacity border-l-2"
-                    style={{
-                      backgroundColor: event.color + '20',
-                      borderLeftColor: event.color,
-                      color: '#1f2937',
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation()
+              {/* Eventos All-Day/Multi-Day */}
+              <AllDaySectionMonthly
+                day={day}
+                events={events}
+                onEventClick={onEventClick}
+                maxVisible={2}
+              />
+
+              {/* Eventos do Time-Grid */}
+              <div className="space-y-1 mt-1">
+                {getTimeGridEventsForDay(day)
+                  .slice(0, 3)
+                  .map((event) => (
+                    <div
+                      key={event.id}
+                      className="text-xs px-2 py-1 rounded truncate cursor-pointer hover:opacity-80 transition-opacity border-l-2"
+                      style={{
+                        backgroundColor: event.color + '20',
+                        borderLeftColor: event.color,
+                        color: '#1f2937',
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onEventClick?.(event)
+                      }}
+                    >
+                      {event.title}
+                    </div>
+                  ))}
+                {getTimeGridEventsForDay(day).length > 3 && (
+                  <EventPopover
+                    events={getTimeGridEventsForDay(day).slice(3)}
+                    date={day}
+                    onEventClick={(event) => {
                       onEventClick?.(event)
                     }}
-                  >
-                    {event.title}
-                  </div>
-                ))}
-                {dayEvents.length > 3 && (
-                  <div className="text-xs text-gray-600 px-2 font-medium">
-                    +{dayEvents.length - 3} mais
-                  </div>
+                    trigger={
+                      <div
+                        className="text-xs text-gray-600 px-2 font-medium cursor-pointer hover:text-gray-900 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        +{getTimeGridEventsForDay(day).length - 3} mais
+                      </div>
+                    }
+                  />
                 )}
               </div>
             </div>

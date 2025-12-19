@@ -1,4 +1,4 @@
-export type ViewMode = 'daily' | 'weekly' | 'monthly'
+export type ViewMode = 'daily' | 'weekly' | 'monthly' | 'timeline'
 
 export interface CalendarEvent {
   id: string
@@ -14,6 +14,18 @@ export interface CalendarEvent {
   createdAt?: Date
   /** Se true, usa altura automática e posiciona pelo createdAt */
   isPendingRequest?: boolean
+  /** Indica se é evento all-day */
+  isAllDay?: boolean
+  /** Indica se é evento multi-day (locações/orçamentos) */
+  isMultiDay?: boolean
+  /** Nome do cliente (para hierarquia) */
+  clientName?: string
+  /** Nome do equipamento (para hierarquia) */
+  equipmentName?: string
+  /** Nome do técnico */
+  technicianName?: string
+  /** Checklist de manutenção */
+  checklist?: string[]
 }
 
 export interface CalendarResource {
