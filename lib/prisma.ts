@@ -15,6 +15,7 @@ if (!connectionString) {
 
 // Criar pool compartilhado para serverless (Vercel)
 // Isso evita "max clients reached" ao reutilizar conexões
+// IMPORTANTE: Em produção também precisa usar global para compartilhar entre requisições
 const pool =
   global.__pool ||
   new Pool({
@@ -25,9 +26,8 @@ const pool =
     connectionTimeoutMillis: 10000, // Timeout de conexão de 10s
   })
 
-if (process.env.NODE_ENV !== 'production') {
-  global.__pool = pool
-}
+// SEMPRE salvar no global (tanto dev quanto produção) para compartilhar pool
+global.__pool = pool
 
 const adapter = new PrismaPg(pool)
 
@@ -38,9 +38,8 @@ const prisma =
     adapter,
   })
 
-if (process.env.NODE_ENV !== 'production') {
-  global.__prisma = prisma
-}
+// SEMPRE salvar no global para compartilhar instância entre requisições serverless
+global.__prisma = prisma
 
 // Função de verificação de conexão
 export async function checkDatabaseConnection(): Promise<{
