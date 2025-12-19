@@ -27,22 +27,45 @@ export default function ClientLayout({
     // Interceptar console.warn de forma mais robusta
     const originalWarn = console.warn
     const originalError = console.error
+    const originalLog = console.log
 
-    const shouldSuppress = (message: string): boolean => {
-      const lowerMessage = message.toLowerCase()
-      return (
-        (lowerMessage.includes('[deprecated]') ||
-          lowerMessage.includes('deprecated')) &&
-        (lowerMessage.includes('default export') ||
-          lowerMessage.includes('default export is deprecated')) &&
-        lowerMessage.includes('zustand')
-      )
+    const shouldSuppress = (...args: unknown[]): boolean => {
+      // Converte todos os argumentos para string e junta
+      const fullMessage = args
+        .map((arg) => {
+          if (typeof arg === 'string') return arg
+          if (typeof arg === 'object' && arg !== null) {
+            try {
+              return JSON.stringify(arg)
+            } catch {
+              return String(arg)
+            }
+          }
+          return String(arg)
+        })
+        .join(' ')
+        .toLowerCase()
+
+      // Verifica múltiplos padrões para capturar todas as variações
+      const patterns = [
+        '[deprecated]',
+        'deprecated',
+        'default export',
+        'default export is deprecated',
+        'import { create }',
+        'zustand',
+      ]
+
+      // Deve conter pelo menos 3 dos padrões para ser o warning do Zustand
+      const matches = patterns.filter((pattern) =>
+        fullMessage.includes(pattern)
+      ).length
+
+      return matches >= 3 && fullMessage.includes('zustand')
     }
 
     console.warn = (...args: unknown[]) => {
-      const message = String(args[0] || '')
-      // Suprimir apenas o warning específico do Zustand
-      if (shouldSuppress(message)) {
+      if (shouldSuppress(...args)) {
         return // Não exibir este warning
       }
       originalWarn.apply(console, args)
@@ -50,16 +73,24 @@ export default function ClientLayout({
 
     // Também verificar console.error caso o warning seja emitido como erro
     console.error = (...args: unknown[]) => {
-      const message = String(args[0] || '')
-      if (shouldSuppress(message)) {
+      if (shouldSuppress(...args)) {
         return // Não exibir este warning
       }
       originalError.apply(console, args)
     }
 
+    // Alguns warnings podem vir como console.log
+    console.log = (...args: unknown[]) => {
+      if (shouldSuppress(...args)) {
+        return // Não exibir este warning
+      }
+      originalLog.apply(console, args)
+    }
+
     return () => {
       console.warn = originalWarn
       console.error = originalError
+      console.log = originalLog
     }
   }, [])
 

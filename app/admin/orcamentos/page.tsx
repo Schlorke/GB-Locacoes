@@ -688,47 +688,50 @@ function AdminQuotesPage() {
                   : 'shadow-sm hover:shadow-md'
                 return (
                   <div
-                    className={`p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer transition-all ${shadowClasses}`}
+                    className={`p-4 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer transition-all ${shadowClasses}`}
                     onClick={() => setSelectedQuote(quoteTyped)}
                   >
-                    <div className="space-y-2">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <p className="font-medium text-sm text-gray-900">
-                            {quoteTyped.name}
+                    <div className="space-y-3">
+                      {/* Informações do Cliente */}
+                      <div className="space-y-1.5">
+                        <p className="font-semibold text-sm text-gray-900 leading-tight">
+                          {quoteTyped.name}
+                        </p>
+                        <p className="text-xs text-gray-500 leading-relaxed">
+                          {quoteTyped.email}
+                        </p>
+                        {quoteTyped.company && (
+                          <p className="text-xs text-gray-400 leading-relaxed">
+                            {quoteTyped.company}
                           </p>
-                          <p className="text-xs text-gray-500">
-                            {quoteTyped.email}
-                          </p>
-                          {quoteTyped.company && (
-                            <p className="text-xs text-gray-400 mt-1">
-                              {quoteTyped.company}
-                            </p>
-                          )}
-                        </div>
+                        )}
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-600">
-                        <Package className="w-3 h-3" />
-                        <span>
+
+                      {/* Equipamentos */}
+                      <div className="flex items-center gap-2 text-xs text-gray-600 pt-1">
+                        <Package className="w-3.5 h-3.5 flex-shrink-0" />
+                        <span className="leading-relaxed">
                           {Array.isArray(quoteTyped.equipments)
                             ? quoteTyped.equipments.length
                             : quoteTyped.items?.length || 0}{' '}
                           equipamento(s)
                         </span>
                       </div>
+
+                      {/* Preço e Data */}
                       {quoteTyped.totalPrice && (
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-semibold text-orange-600">
+                        <div className="flex items-end justify-between pt-2 border-t border-gray-200">
+                          <span className="text-sm font-bold text-orange-600 leading-none">
                             {formatCurrency(quoteTyped.totalPrice)}
                           </span>
-                          <div className="text-right">
+                          <div className="text-right space-y-0.5">
                             {quoteTyped.startDate && (
-                              <span className="text-xs text-gray-500 block">
+                              <span className="text-xs text-gray-500 block leading-tight">
                                 {formatDate(quoteTyped.startDate)}
                               </span>
                             )}
                             {quoteTyped.createdAt && (
-                              <span className="text-xs text-gray-400 block">
+                              <span className="text-xs text-gray-400 block leading-tight">
                                 {new Date(
                                   quoteTyped.createdAt
                                 ).toLocaleTimeString('pt-BR', {

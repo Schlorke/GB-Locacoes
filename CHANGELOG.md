@@ -10,6 +10,77 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Atualização de dependências**: Atualizados pacotes para versões mais
+  recentes
+  - `@types/node`: 24.10.4 → 25.0.3 (devDependency)
+  - `react-resizable-panels`: 3.0.6 → 4.0.8
+    - **Breaking Changes**: API atualizada na versão 4.x
+      - `PanelGroup` → `Group`
+      - `PanelResizeHandle` → `Separator`
+    - **Arquivos Modificados**: `components/ui/resizable.tsx`
+  - **Migração Base UI**: `@base-ui-components/react@1.0.0-rc.0` (deprecated) →
+    `@base-ui/react@^1.0.0`
+    - Resolvido problema de depreciação do pacote antigo
+    - Atualizada importação em `components/ui/dialog.tsx`
+    - API do Dialog mantida compatível, sem breaking changes
+    - **Arquivos Modificados**: `package.json`, `components/ui/dialog.tsx`
+  - **Não atualizado**: `tailwindcss@3.4.17` (mantido conforme diretrizes do
+    projeto)
+  - **Validação**: Componentes `resizable.tsx` e `dialog.tsx` testados e
+    funcionando corretamente
+  - **Data**: 2025-12-19
+
+### Added ✨
+
+- **Documentação completa do Sistema de Calendário Avançado**: Criada
+  documentação detalhada explicando os três modos de visualização (Diário,
+  Semanal e Mensal), onde estão implementados, para que servem e o que
+  controlam.
+  - **Arquivo Criado**: `docs/features/advanced-calendar-system.md`
+  - **Conteúdo**:
+    - Descrição técnica completa das três visualizações
+    - Localização de todas as implementações (4 páginas admin)
+    - Propósito e controle de cada visualização
+    - Exemplos de uso por página
+    - Funcionalidades técnicas avançadas
+    - Roadmap de funcionalidades futuras
+  - **Páginas Documentadas**:
+    - `/admin/maintenance` - Calendário de Manutenções
+    - `/admin/logistics` - Calendário de Logística
+    - `/admin/rentals` - Calendário de Locações
+    - `/admin/orcamentos` - Calendário de Orçamentos
+  - **Data**: 2025-01-XX
+
+### Fixed 🐛
+
+- **Equipamento bloqueado incorretamente por manutenção agendada**: Corrigida a
+  lógica de verificação de disponibilidade que bloqueava equipamentos mesmo
+  quando a manutenção agendada não interferia com o período de locação
+  solicitado. Agora o sistema verifica se a data da manutenção realmente
+  conflita com as datas de locação antes de bloquear.
+  - **Causa**: A função `isEquipmentInMaintenance` verificava apenas se havia
+    manutenção agendada, sem considerar o período de locação solicitado.
+  - **Solução**:
+    - Modificada `isEquipmentInMaintenance` para aceitar período de locação
+      opcional
+    - Manutenções `IN_PROGRESS` sempre bloqueiam o equipamento
+    - Manutenções `SCHEDULED` só bloqueiam se a data agendada está dentro do
+      período de locação
+  - **Arquivos Modificados**:
+    - `lib/maintenance-automation.ts` (lógica de verificação de conflito)
+    - `lib/equipment-availability.ts` (passa período para verificação)
+  - **Data**: 2025-01-XX
+
+### Changed 🔄
+
+- **Melhoria na detecção do warning de depreciação do Zustand**: Aprimorada a
+  lógica de supressão do warning do Zustand para capturar mensagens em múltiplos
+  formatos (string, objetos, arrays) e interceptar também `console.log`. A
+  detecção agora usa sistema de padrões múltiplos para maior precisão.
+  - **Arquivos Modificados**: `app/layout.tsx`, `app/ClientLayout.tsx`,
+    `docs/issues/known-issues.md`
+  - **Data**: 2025-01-XX
+
 - **Script patch-prisma.js em modo silencioso**: O script agora roda
   silenciosamente por padrão, mostrando apenas warnings e erros. Logs
   informativos de sucesso foram removidos para manter o output do build mais
@@ -18,6 +89,22 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - **Arquivos Modificados**: `scripts/patch-prisma.js`,
     `docs/issues/known-issues.md`
   - **Data**: 2025-01-XX
+
+- **Atualização de dependências (Next/React/Prisma/Vitest)**: Atualizados
+  pacotes core e ferramentas para versões estáveis, respeitando bloqueios
+  documentados.
+  - **Pacotes**: `next` 16.1.0, `react`/`react-dom` 19.2.3, `@prisma/client` e
+    `prisma` 7.2.0 (+ `@prisma/adapter-pg` 7.2.0), `@eslint/js` 9.39.2,
+    `@typescript-eslint/*` 8.50.0, `eslint-config-next` 16.1.0, `@vitest/*`
+    4.0.16, `lucide-react` 0.562.0, `three`/`@types/three` 0.182.0,
+    `markdownlint-cli` 0.47.0, `next-openapi-gen` 0.9.0, `lenis` 1.3.16.
+  - **Mantido por compatibilidade**: `@base-ui-components/react` (pedido do
+    usuário), `tailwindcss` 3.4.17 (bloqueio), `react-resizable-panels` 3.x
+    (major sem validação), `@types/node` 24.x.
+  - **Validação**: `pnpm run build -- --webpack` ✅ (Turbopack falha no Windows
+    por falta de privilégio de symlink) e `pnpm test` ✅ (testes de contrato
+    pulam sem servidor ativo).
+  - **Data**: 2025-12-19
 
 ### Fixed 🐛
 

@@ -144,35 +144,65 @@ export default function RootLayout({
 
               window.__gbSuppressZustandWarning__ = true;
 
-              const shouldSuppress = function(message) {
-                if (!message || typeof message !== 'string') return false;
-                const lowerMessage = message.toLowerCase();
-                return (
-                  (lowerMessage.includes('[deprecated]') ||
-                   lowerMessage.includes('deprecated')) &&
-                  (lowerMessage.includes('default export') ||
-                   lowerMessage.includes('default export is deprecated')) &&
-                  lowerMessage.includes('zustand')
-                );
+              const shouldSuppress = function(...args) {
+                // Converte todos os argumentos para string e junta
+                const fullMessage = args
+                  .map(arg => {
+                    if (typeof arg === 'string') return arg;
+                    if (typeof arg === 'object' && arg !== null) {
+                      try {
+                        return JSON.stringify(arg);
+                      } catch {
+                        return String(arg);
+                      }
+                    }
+                    return String(arg);
+                  })
+                  .join(' ')
+                  .toLowerCase();
+
+                // Verifica múltiplos padrões para capturar todas as variações
+                const patterns = [
+                  '[deprecated]',
+                  'deprecated',
+                  'default export',
+                  'default export is deprecated',
+                  'import { create }',
+                  'zustand'
+                ];
+
+                // Deve conter pelo menos 3 dos padrões para ser o warning do Zustand
+                const matches = patterns.filter(pattern =>
+                  fullMessage.includes(pattern)
+                ).length;
+
+                return matches >= 3 && fullMessage.includes('zustand');
               };
 
               const originalWarn = console.warn;
               const originalError = console.error;
+              const originalLog = console.log;
 
               console.warn = function(...args) {
-                const message = String(args[0] || '');
-                if (shouldSuppress(message)) {
+                if (shouldSuppress(...args)) {
                   return; // Suprimir warning do Zustand
                 }
                 originalWarn.apply(console, args);
               };
 
               console.error = function(...args) {
-                const message = String(args[0] || '');
-                if (shouldSuppress(message)) {
+                if (shouldSuppress(...args)) {
                   return; // Suprimir warning do Zustand
                 }
                 originalError.apply(console, args);
+              };
+
+              // Alguns warnings podem vir como console.log
+              console.log = function(...args) {
+                if (shouldSuppress(...args)) {
+                  return; // Suprimir warning do Zustand
+                }
+                originalLog.apply(console, args);
               };
             })();
           `}

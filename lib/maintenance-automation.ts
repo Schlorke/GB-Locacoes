@@ -243,19 +243,150 @@ export async function canStartMaintenance(
 }
 
 /**
- * Verifica se equipamento está em manutenção
+ * Retorna informações detalhadas sobre manutenções que podem bloquear o equipamento
  */
-export async function isEquipmentInMaintenance(
-  equipmentId: string
-): Promise<boolean> {
-  const activeMaintenance = await prisma.maintenance.findFirst({
+export async function getMaintenanceBlockingInfo(
+  equipmentId: string,
+  rentalStartDate?: Date,
+  rentalEndDate?: Date
+): Promise<{
+  isBlocked: boolean
+  reason?: string
+  maintenance?: {
+    id: string
+    status: string
+    scheduledAt: Date
+    type: string
+  }
+}> {
+  if (!rentalStartDate || !rentalEndDate) {
+    const activeMaintenance = await prisma.maintenance.findFirst({
+      where: {
+        equipmentId,
+        status: {
+          in: ['SCHEDULED', 'IN_PROGRESS'],
+        },
+      },
+    })
+
+    if (activeMaintenance) {
+      return {
+        isBlocked: true,
+        reason: `Manutenção ${activeMaintenance.status === 'IN_PROGRESS' ? 'em andamento' : 'agendada'}`,
+        maintenance: {
+          id: activeMaintenance.id,
+          status: activeMaintenance.status,
+          scheduledAt: activeMaintenance.scheduledAt,
+          type: activeMaintenance.type,
+        },
+      }
+    }
+
+    return { isBlocked: false }
+  }
+
+  // Verificar manutenções em progresso
+  const inProgressMaintenance = await prisma.maintenance.findFirst({
     where: {
       equipmentId,
-      status: {
-        in: ['SCHEDULED', 'IN_PROGRESS'],
+      status: 'IN_PROGRESS',
+    },
+  })
+
+  if (inProgressMaintenance) {
+    return {
+      isBlocked: true,
+      reason: 'Manutenção em andamento',
+      maintenance: {
+        id: inProgressMaintenance.id,
+        status: inProgressMaintenance.status,
+        scheduledAt: inProgressMaintenance.scheduledAt,
+        type: inProgressMaintenance.type,
+      },
+    }
+  }
+
+  // Verificar manutenções agendadas que interferem
+  const conflictingMaintenance = await prisma.maintenance.findFirst({
+    where: {
+      equipmentId,
+      status: 'SCHEDULED',
+      scheduledAt: {
+        gte: rentalStartDate,
+        lte: rentalEndDate,
       },
     },
   })
 
-  return !!activeMaintenance
+  if (conflictingMaintenance) {
+    return {
+      isBlocked: true,
+      reason: `Manutenção agendada para ${conflictingMaintenance.scheduledAt.toLocaleDateString('pt-BR')} interfere com o período de locação`,
+      maintenance: {
+        id: conflictingMaintenance.id,
+        status: conflictingMaintenance.status,
+        scheduledAt: conflictingMaintenance.scheduledAt,
+        type: conflictingMaintenance.type,
+      },
+    }
+  }
+
+  return { isBlocked: false }
+}
+
+/**
+ * Verifica se equipamento está em manutenção
+ * @param equipmentId - ID do equipamento
+ * @param rentalStartDate - Data de início da locação (opcional)
+ * @param rentalEndDate - Data de fim da locação (opcional)
+ * @returns true se o equipamento está em manutenção que interfere com o período
+ */
+export async function isEquipmentInMaintenance(
+  equipmentId: string,
+  rentalStartDate?: Date,
+  rentalEndDate?: Date
+): Promise<boolean> {
+  // Se não há período de locação especificado, verifica se há manutenção ativa
+  if (!rentalStartDate || !rentalEndDate) {
+    const activeMaintenance = await prisma.maintenance.findFirst({
+      where: {
+        equipmentId,
+        status: {
+          in: ['SCHEDULED', 'IN_PROGRESS'],
+        },
+      },
+    })
+
+    return !!activeMaintenance
+  }
+
+  // Verificar manutenções em progresso - sempre bloqueiam
+  const inProgressMaintenance = await prisma.maintenance.findFirst({
+    where: {
+      equipmentId,
+      status: 'IN_PROGRESS',
+    },
+  })
+
+  if (inProgressMaintenance) {
+    return true
+  }
+
+  // Verificar manutenções agendadas que interferem com o período de locação
+  // Uma manutenção agendada bloqueia se a data agendada está dentro do período de locação
+  // Usamos comparação direta de datas (sem normalizar) para ser mais preciso
+  const conflictingMaintenance = await prisma.maintenance.findFirst({
+    where: {
+      equipmentId,
+      status: 'SCHEDULED',
+      scheduledAt: {
+        // Manutenção agendada que interfere com o período de locação
+        // Se está agendada dentro do período (inclusive nas bordas), bloqueia
+        gte: rentalStartDate,
+        lte: rentalEndDate,
+      },
+    },
+  })
+
+  return !!conflictingMaintenance
 }

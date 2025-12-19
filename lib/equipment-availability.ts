@@ -1,5 +1,8 @@
 import { prisma } from '@/lib/prisma'
-import { isEquipmentInMaintenance } from './maintenance-automation'
+import {
+  isEquipmentInMaintenance,
+  getMaintenanceBlockingInfo,
+} from './maintenance-automation'
 
 /**
  * Calcula disponibilidade de equipamento considerando:
@@ -36,8 +39,12 @@ export async function calculateEquipmentAvailability(
 
   const maxStock = equipment.maxStock || 1
 
-  // Verificar se equipamento está em manutenção
-  const inMaintenance = await isEquipmentInMaintenance(equipmentId)
+  // Verificar se equipamento está em manutenção que interfere com o período
+  const inMaintenance = await isEquipmentInMaintenance(
+    equipmentId,
+    startDate,
+    endDate
+  )
 
   // Se estiver em manutenção, não está disponível
   if (inMaintenance) {
@@ -128,9 +135,16 @@ export async function isEquipmentAvailableForRental(
   )
 
   if (availability.blockedByMaintenance) {
+    // Obter informações detalhadas sobre a manutenção que está bloqueando
+    const maintenanceInfo = await getMaintenanceBlockingInfo(
+      equipmentId,
+      startDate,
+      endDate
+    )
+
     return {
       available: false,
-      reason: 'Equipamento está em manutenção',
+      reason: maintenanceInfo.reason || 'Equipamento está em manutenção',
     }
   }
 

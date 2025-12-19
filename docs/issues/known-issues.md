@@ -5,6 +5,170 @@
 
 ---
 
+## 31. Equipamento bloqueado incorretamente por manutenção agendada
+
+### ✅ Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-01-XX **Severidade**: 🔴 CRÍTICA (Bloqueava criação
+de orçamentos) **Status**: ✅ Resolvido
+
+#### Descricao
+
+Ao tentar criar um orçamento, o sistema retornava erro "Equipamento
+indisponível: Equipamento está em manutenção" mesmo quando a manutenção estava
+agendada para uma data futura que não interferia com o período de locação
+solicitado.
+
+#### Sintomas
+
+- ❌ Erro ao criar orçamento: "Equipamento indisponível: Equipamento está em
+  manutenção"
+- ❌ Equipamentos bloqueados mesmo quando manutenção não interfere com período
+  de locação
+- ❌ Manutenções agendadas para o futuro bloqueavam locações no presente
+
+#### Causa Raiz
+
+A função `isEquipmentInMaintenance` verificava apenas se havia manutenção com
+status `SCHEDULED` ou `IN_PROGRESS`, sem considerar se a manutenção realmente
+interferia com o período de locação solicitado. Isso fazia com que qualquer
+manutenção agendada bloqueasse o equipamento completamente, mesmo para locações
+que aconteciam antes da manutenção.
+
+**Código Problemático:**
+
+```typescript
+// lib/maintenance-automation.ts - ANTES
+export async function isEquipmentInMaintenance(
+  equipmentId: string
+): Promise<boolean> {
+  const activeMaintenance = await prisma.maintenance.findFirst({
+    where: {
+      equipmentId,
+      status: {
+        in: ["SCHEDULED", "IN_PROGRESS"]
+      }
+    }
+  })
+
+  return !!activeMaintenance // ❌ Bloqueava sempre, sem verificar período
+}
+```
+
+### ✅ Solucao Implementada
+
+#### 1. Modificada função para aceitar período de locação
+
+```typescript
+// lib/maintenance-automation.ts - DEPOIS
+export async function isEquipmentInMaintenance(
+  equipmentId: string,
+  rentalStartDate?: Date,
+  rentalEndDate?: Date
+): Promise<boolean> {
+  // Se não há período especificado, verifica se há manutenção ativa
+  if (!rentalStartDate || !rentalEndDate) {
+    const activeMaintenance = await prisma.maintenance.findFirst({
+      where: {
+        equipmentId,
+        status: {
+          in: ["SCHEDULED", "IN_PROGRESS"]
+        }
+      }
+    })
+    return !!activeMaintenance
+  }
+
+  // Manutenções em progresso sempre bloqueiam
+  const inProgressMaintenance = await prisma.maintenance.findFirst({
+    where: {
+      equipmentId,
+      status: "IN_PROGRESS"
+    }
+  })
+
+  if (inProgressMaintenance) {
+    return true
+  }
+
+  // Manutenções agendadas só bloqueiam se interferem com o período
+  const conflictingMaintenance = await prisma.maintenance.findFirst({
+    where: {
+      equipmentId,
+      status: "SCHEDULED",
+      scheduledAt: {
+        gte: rentalStartDate,
+        lte: rentalEndDate
+      }
+    }
+  })
+
+  return !!conflictingMaintenance
+}
+```
+
+#### 2. Atualizada chamada em `equipment-availability.ts`
+
+```typescript
+// lib/equipment-availability.ts
+const inMaintenance = await isEquipmentInMaintenance(
+  equipmentId,
+  startDate, // ✅ Passa período de locação
+  endDate
+)
+```
+
+#### Arquivos Modificados
+
+1. `lib/maintenance-automation.ts` - Lógica de verificação de conflito
+2. `lib/equipment-availability.ts` - Passa período para verificação
+
+#### Como Funciona Agora
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Cliente solicita orçamento para período 10/01 - 20/01  │
+│ 2. Sistema verifica manutenções                           │
+│ 3. Se manutenção IN_PROGRESS → Bloqueia sempre            │
+│ 4. Se manutenção SCHEDULED para 15/01 → Bloqueia (dentro) │
+│ 5. Se manutenção SCHEDULED para 25/01 → NÃO bloqueia      │
+│ 6. Orçamento criado com sucesso ✅                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Como Validar
+
+```bash
+# 1. Criar manutenção agendada para data futura
+# 2. Tentar criar orçamento para período anterior
+# 3. Deve funcionar normalmente (não bloquear)
+
+# 4. Criar orçamento para período que inclui data da manutenção
+# 5. Deve bloquear corretamente
+```
+
+#### Armadilhas a Evitar
+
+- ❌ **NUNCA** bloquear equipamento apenas por ter manutenção agendada sem
+  verificar período
+- ❌ **NUNCA** ignorar o período de locação na verificação de disponibilidade
+- ✅ **SEMPRE** verificar se a data da manutenção interfere com o período
+  solicitado
+- ✅ **SEMPRE** bloquear se manutenção está `IN_PROGRESS` (em andamento)
+
+#### Lições Aprendidas
+
+1. **Verificações de disponibilidade devem considerar período**: Não basta
+   verificar se há manutenção, é preciso verificar se interfere
+2. **Manutenções em progresso sempre bloqueiam**: Diferente de manutenções
+   agendadas
+3. **Manutenções agendadas são condicionais**: Só bloqueiam se interferem com o
+   período
+4. **Sempre passar contexto completo**: Funções de verificação devem receber
+   todas as informações necessárias
+
+---
+
 ## 30. Prisma 7.1.0 - Erro "datasource property url is no longer supported"
 
 ### ✅ Problema RESOLVIDO
@@ -1153,7 +1317,7 @@ As dependências já estão nas versões mais recentes disponíveis:
 }
 ```
 
-#### 2. Supressão do Warning (Atualizado - 2025-12-19)
+#### 2. Supressão do Warning (Atualizado - 2025-01-XX)
 
 Implementada solução em duas camadas para suprimir o warning de forma robusta:
 
@@ -1170,35 +1334,65 @@ Vercel
 
       window.__gbSuppressZustandWarning__ = true;
 
-      const shouldSuppress = function(message) {
-        if (!message || typeof message !== 'string') return false;
-        const lowerMessage = message.toLowerCase();
-        return (
-          (lowerMessage.includes('[deprecated]') ||
-           lowerMessage.includes('deprecated')) &&
-          (lowerMessage.includes('default export') ||
-           lowerMessage.includes('default export is deprecated')) &&
-          lowerMessage.includes('zustand')
-        );
+      const shouldSuppress = function(...args) {
+        // Converte todos os argumentos para string e junta
+        const fullMessage = args
+          .map(arg => {
+            if (typeof arg === 'string') return arg;
+            if (typeof arg === 'object' && arg !== null) {
+              try {
+                return JSON.stringify(arg);
+              } catch {
+                return String(arg);
+              }
+            }
+            return String(arg);
+          })
+          .join(' ')
+          .toLowerCase();
+
+        // Verifica múltiplos padrões para capturar todas as variações
+        const patterns = [
+          '[deprecated]',
+          'deprecated',
+          'default export',
+          'default export is deprecated',
+          'import { create }',
+          'zustand'
+        ];
+
+        // Deve conter pelo menos 3 dos padrões para ser o warning do Zustand
+        const matches = patterns.filter(pattern =>
+          fullMessage.includes(pattern)
+        ).length;
+
+        return matches >= 3 && fullMessage.includes('zustand');
       };
 
       const originalWarn = console.warn;
       const originalError = console.error;
+      const originalLog = console.log;
 
       console.warn = function(...args) {
-        const message = String(args[0] || '');
-        if (shouldSuppress(message)) {
+        if (shouldSuppress(...args)) {
           return; // Suprimir warning do Zustand
         }
         originalWarn.apply(console, args);
       };
 
       console.error = function(...args) {
-        const message = String(args[0] || '');
-        if (shouldSuppress(message)) {
+        if (shouldSuppress(...args)) {
           return; // Suprimir warning do Zustand
         }
         originalError.apply(console, args);
+      };
+
+      // Alguns warnings podem vir como console.log
+      console.log = function(...args) {
+        if (shouldSuppress(...args)) {
+          return; // Suprimir warning do Zustand
+        }
+        originalLog.apply(console, args);
       };
     })();
   `}
@@ -1208,12 +1402,17 @@ Vercel
 - Executa antes do script `instrument.*` da Vercel, evitando que o warning
   apareça mesmo no carregamento inicial
 - Flag `__gbSuppressZustandWarning__` impede reatribuir `console` em remounts
+- **Melhorias (2025-01-XX)**:
+  - Detecta mensagens em múltiplos formatos (string, objetos, arrays)
+  - Intercepta também `console.log` (alguns warnings podem vir por esse canal)
+  - Usa sistema de padrões múltiplos para maior precisão na detecção
 
 **Arquivo 2**: `app/ClientLayout.tsx` - Interceptação no `useEffect` para
 warnings assíncronos e como fallback no client
 
 - Mantém cobertura para logs disparados após a hidratação do React
-- Restaura `console.warn`/`console.error` no cleanup do efeito
+- Restaura `console.warn`/`console.error`/`console.log` no cleanup do efeito
+- Usa a mesma lógica melhorada de detecção por padrões múltiplos
 
 **Por que duas camadas?**
 
