@@ -18,6 +18,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import * as SelectPrimitive from '@radix-ui/react-select'
+import { Check } from 'lucide-react'
 import { AddressForm, type AddressData } from '@/components/ui/address-form'
 import { toast } from 'sonner'
 import { validateCPF, validateCNPJ } from '@/lib/utils/validation'
@@ -139,6 +141,45 @@ function QuotePage() {
     Record<string, string>
   >({})
   const hasSyncedCartPricing = useRef(false)
+  const scrollUnlockInitialized = useRef(false)
+
+  // Neutraliza o scroll-lock do Radix (RemoveScroll) que injeta data-scroll-locked no body
+  useEffect(() => {
+    if (scrollUnlockInitialized.current || typeof document === 'undefined')
+      return
+    scrollUnlockInitialized.current = true
+
+    const unlock = () => {
+      const body = document.body
+      if (body.hasAttribute('data-scroll-locked')) {
+        body.removeAttribute('data-scroll-locked')
+      }
+      body.style.pointerEvents = ''
+      body.style.overflow = ''
+      body.style.position = ''
+      body.style.marginRight = ''
+      body.style.paddingRight = ''
+      body.style.setProperty('--removed-body-scroll-bar-size', '0')
+
+      document
+        .querySelectorAll(
+          'style[data-rs], style[data-rs-scroll], style[data-rs-scrollbar]'
+        )
+        .forEach((node) => node.parentElement?.removeChild(node))
+    }
+
+    const observer = new MutationObserver(unlock)
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['data-scroll-locked', 'style'],
+    })
+
+    unlock()
+
+    return () => {
+      observer.disconnect()
+    }
+  })
 
   // Helper para formatar datas (trata Date ou string do localStorage)
   const formatDate = useCallback((date: Date | string | undefined): string => {
@@ -1522,23 +1563,32 @@ function QuotePage() {
                           </div>
                         ) : (
                           <Select
+                            modal={false}
                             value={selectedFreight || undefined}
                             onValueChange={setSelectedFreight}
                           >
-                            <SelectTrigger className="mt-1">
+                            <SelectTrigger className="mt-1 h-auto min-h-[3.5rem] py-3 px-4 [&>span]:line-clamp-none [&>span]:block [&>span]:w-full">
                               <SelectValue placeholder="Selecione uma opção de frete" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="min-w-[var(--radix-select-trigger-width)]">
                               {freightOptions.map((option) => (
-                                <SelectItem key={option.id} value={option.id}>
-                                  <div className="flex flex-col">
-                                    <span className="font-medium">
-                                      {option.name}
-                                    </span>
-                                    <span className="text-xs text-gray-500">
-                                      {option.company} -{' '}
-                                      {formatCurrency(option.price)} -{' '}
-                                      {option.deliveryTime}
+                                <SelectItem
+                                  key={option.id}
+                                  value={option.id}
+                                  className="py-3 pl-4 pr-2 [&>span:first-child]:hidden"
+                                >
+                                  <div className="flex flex-col gap-1.5 w-full">
+                                    <div className="flex items-center gap-2">
+                                      <span className="font-semibold text-sm leading-tight">
+                                        {option.name}
+                                      </span>
+                                      <SelectPrimitive.ItemIndicator className="inline-flex items-center justify-center flex-shrink-0">
+                                        <Check className="h-4 w-4 text-orange-600" />
+                                      </SelectPrimitive.ItemIndicator>
+                                    </div>
+                                    <span className="text-sm text-gray-600 leading-tight text-left">
+                                      {option.company} •{' '}
+                                      {formatCurrency(option.price)}
                                     </span>
                                   </div>
                                 </SelectItem>

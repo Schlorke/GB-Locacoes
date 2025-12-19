@@ -5,6 +5,158 @@
 
 ---
 
+## 28. Build falhando com erro 3221226505 no postbuild (patch-prisma.js)
+
+### ✅ Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-01-XX **Severidade**: Alta (Build quebrado)
+**Status**: ✅ Resolvido
+
+#### Descricao
+
+O build do projeto estava falhando na etapa `postbuild` com o código de erro
+`3221226505`:
+
+```bash
+> gb-locacoes@0.1.0 postbuild C:\Projetos\GB Locações
+> node scripts/patch-prisma.js
+
+ELIFECYCLE  Command failed with exit code 3221226505.
+```
+
+#### Causa Raiz
+
+O código de erro `3221226505` no Windows indica um problema de execução ou
+acesso de arquivos. O script `patch-prisma.js` estava usando `fs.cpSync()` que
+pode falhar silenciosamente no Windows quando:
+
+1. Há arquivos bloqueados ou em uso
+2. Caminhos muito longos (problema comum no Windows)
+3. Problemas de permissões
+4. O método `fs.cpSync` não lida bem com erros individuais durante a cópia
+
+#### Solucao Implementada
+
+O script foi refatorado para:
+
+1. **Encontrar o caminho correto do Prisma Client** - compatível com npm, yarn e
+   pnpm
+2. **Usar função `copyDirectory` customizada** - trata erros individuais de
+   arquivos
+3. **Melhor tratamento de erros** - não falha o build, apenas registra warnings
+4. **Logging detalhado** - mostra caminhos sendo copiados para debug
+5. **Verificacoes de seguranca** - verifica se diretorios existem antes de
+   copiar
+
+#### Arquivos Modificados
+
+1. `scripts/patch-prisma.js` - Refatorado completamente com copia recursiva
+   robusta
+
+#### Como Validar
+
+```bash
+# Testar o script isoladamente
+node scripts/patch-prisma.js
+
+# Deve mostrar:
+# [patch-prisma] Copying from: C:\Projetos\GB Locações\node_modules\.prisma\client
+# [patch-prisma] Copying to: C:\Projetos\GB Locações\.next\server\.prisma\client
+# [patch-prisma] ✅ Prisma engines copied to .next/server/
+
+# Testar build completo
+pnpm build
+
+# Deve completar sem erros no postbuild
+```
+
+#### Armadilhas a Evitar
+
+- **NUNCA** usar `fs.cpSync` diretamente sem tratamento de erros individuais
+- **SEMPRE** verificar se diretorios existem antes de copiar
+- **SEMPRE** usar `process.exit(0)` no final para nao quebrar o build
+- **NAO** assumir que o caminho do Prisma Client é sempre
+  `node_modules/.prisma/client` (pnpm usa estrutura diferente)
+
+---
+
+## 27. Select de frete travava scroll e criava barra branca (Orcamento)
+
+### ✅ Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-12-18 **Severidade**: Alta (UX crítico) **Status**:
+✅ Resolvido
+
+#### Descricao
+
+Ao abrir o dropdown de opcoes de frete em `/orcamento`:
+
+- **Barra branca invisivel** aparecia na lateral direita, empurrando todo o
+  conteudo para a esquerda
+- **Scroll vertical bloqueado** - impossivel rolar a pagina enquanto o select
+  estava aberto
+- **Deformacao visual** - pagina de orcamentos ficava desalinhada
+
+#### Causa Raiz
+
+O Radix Select com `modal={false}` ainda acionava o `RemoveScroll` que:
+
+1. Adicionava `data-scroll-locked="1"` ao body
+2. Criava um wrapper `[data-radix-scroll-lock-wrapper]` que gerava a barra
+   branca
+3. Aplicava `margin-right: 10px !important` via variavel CSS
+   `--removed-body-scroll-bar-size`
+4. Bloqueava interacoes com `pointer-events: none`
+
+### ✅ Solucao Implementada
+
+#### 1. CSS com alta especificidade (`app/globals.css`)
+
+- Seletor `body.min-h-screen.bg-background[data-scroll-locked]` para maior
+  especificidade
+- Forca `--removed-body-scroll-bar-size: 0 !important` (variavel que controla o
+  margin-right)
+- Zera todos os margins e paddings com `!important`
+- Define wrapper como `display: contents !important` para tornar transparente
+
+#### 2. JavaScript com `setProperty` + `!important` (`components/ui/select.tsx`)
+
+- Remove wrapper de scroll lock completamente (move filhos de volta ao body)
+- Remove `data-scroll-locked` do body
+- Usa `setProperty(prop, value, 'important')` para sobrescrever estilos inline
+  do Radix
+- Executa a cada 10ms enquanto o select esta aberto (necessario para
+  sobrescrever continuamente)
+
+#### Arquivos Modificados
+
+1. `components/ui/select.tsx` - Logica de remocao de scroll lock (refatorado e
+   limpo)
+2. `app/globals.css` - Regras CSS preventivas (consolidadas)
+
+#### Como Validar
+
+1. `pnpm dev`
+2. Acessar `/orcamento` e preencher CEP para mostrar opcoes de frete
+3. Abrir o select de opcoes de frete
+4. **Verificar**:
+   - ✅ Nao aparece barra branca na lateral direita
+   - ✅ Scroll vertical funciona normalmente
+   - ✅ Conteudo nao desloca para a esquerda
+   - ✅ DevTools mostra `margin-right: 0` no body (nao `10px`)
+
+#### Armadilhas a Evitar
+
+- **NUNCA** remover a variavel `--removed-body-scroll-bar-size: 0` do CSS - esta
+  e a chave para impedir o margin-right
+- **NUNCA** remover o intervalo de 10ms do JavaScript - necessario para
+  sobrescrever o Radix continuamente
+- **SEMPRE** usar `modal={false}` em selects publicos
+- **NAO** remover o `setProperty` com `'important'` - CSS normal nao sobrescreve
+  os estilos inline do Radix
+
+---
+
 ## 26. Hover do botao "Ver Detalhes" sem escala (Admin Orcamentos)
 
 ### 🤔 Problema

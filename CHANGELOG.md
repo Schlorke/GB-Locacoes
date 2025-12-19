@@ -8,6 +8,49 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Fixed 🐛
+
+- **Build falhando com erro 3221226505 no postbuild (patch-prisma.js)**:
+  Corrigido problema crítico onde o build falhava na etapa `postbuild` com
+  código de erro `3221226505` no Windows.
+  - **Causa**: O script `patch-prisma.js` usava `fs.cpSync()` que falha
+    silenciosamente no Windows quando há arquivos bloqueados, caminhos longos ou
+    problemas de permissões. O método não lida bem com erros individuais durante
+    a cópia.
+  - **Solução**:
+    - Refatorado para usar função `copyDirectory` customizada que trata erros
+      individuais de arquivos
+    - Adicionada detecção automática do caminho correto do Prisma Client
+      (compatível com npm, yarn e pnpm)
+    - Melhor tratamento de erros com logging detalhado
+    - Verificações de segurança antes de copiar arquivos
+  - **Arquivos Modificados**:
+    - `scripts/patch-prisma.js` - Refatorado completamente com cópia recursiva
+      robusta
+    - `docs/issues/known-issues.md` - Documentação detalhada do problema e
+      solução
+  - **Data**: 2025-12-18
+
+- **Select de frete bloqueava scroll e criava barra branca**: Corrigido problema
+  crítico onde o dropdown de opções de frete em `/orcamento` bloqueava o scroll
+  vertical da página e adicionava uma barra branca invisível que deslocava todo
+  o conteúdo para a esquerda.
+  - **Causa**: Radix Select acionava `RemoveScroll` mesmo com `modal={false}`,
+    adicionando `data-scroll-locked="1"` ao body e criando wrapper que aplicava
+    `margin-right: 10px` via variável `--removed-body-scroll-bar-size`
+  - **Solução**:
+    - CSS com alta especificidade para neutralizar `data-scroll-locked` e forçar
+      `--removed-body-scroll-bar-size: 0`
+    - JavaScript que remove o wrapper de scroll lock e usa `setProperty` com
+      `!important` para sobrescrever estilos inline do Radix
+    - Execução contínua (10ms) enquanto select está aberto
+  - **Arquivos Modificados**:
+    - `components/ui/select.tsx` - Lógica de remoção de scroll lock
+    - `app/globals.css` - Regras CSS preventivas
+    - `docs/issues/known-issues.md` - Documentação detalhada do problema e
+      solução
+  - **Data**: 2025-12-18
+
 ### Added ✨
 
 - **Download de PDF de orçamentos (cliente e admin)**: Implementados endpoints
@@ -69,6 +112,16 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - **Data**: 2025-12-16
 
 ### Fixed 🐛
+
+- **Select de frete em `/orcamento` nao bloqueia mais o scroll nem cria faixa
+  branca**: O `Select` do design system passa a abrir em modo nao modal por
+  padrao, evitando `RemoveScroll` no `body` e mantendo o dropdown alinhado sem
+  faixas laterais; CSS global neutraliza `body[data-scroll-locked]` para remover
+  padding/margin extra e liberar o scroll.
+  - **Arquivos Modificados**: `components/ui/select.tsx`, `app/globals.css`,
+    `docs/issues/known-issues.md`, `docs/features/orcamento-page.md`,
+    `AGENTS.md`
+  - **Data**: 2025-12-18
 
 - **Hover dos botões \"Ver Detalhes\" no admin**: Ajustado CSS global para que
   os botões `admin-action-button` mantenham fundo branco e permitam `scale`

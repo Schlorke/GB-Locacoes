@@ -255,6 +255,44 @@ section,
 }
 
 /* ================================ */
+/* FIX: Scroll lock do Radix Select */
+/* ================================ */
+/* Prevenir bloqueio de scroll quando Select não-modal está aberto
+   Solução para o problema do wrapper scroll-lock que causa barra branca e deslocamento lateral */
+body.min-h-screen.bg-background[data-scroll-locked],
+body[data-scroll-locked] {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+  position: static !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: auto !important;
+  --removed-body-scroll-bar-size: 0 !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  height: auto !important;
+  overscroll-behavior: auto !important;
+}
+
+/* Remover wrapper de scroll lock que causa a barra branca */
+body > [data-radix-scroll-lock-wrapper],
+[data-radix-scroll-lock-wrapper] {
+  all: unset !important;
+  display: contents !important;
+}
+
+/* Garantir que o wrapper não adicione padding/margin */
+body:has([data-radix-scroll-lock-wrapper]) {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* ================================ */
 /* 7. FORMULÁRIOS E INPUTS          */
 /* ================================ */
 
@@ -1339,6 +1377,51 @@ body.min-h-screen {
 
 .overflow-hidden {
   overflow: hidden !important;
+}
+
+/* Neutraliza scroll-lock do Radix RemoveScroll em dropdowns (ex.: Select de frete) */
+/* REGRA COM ALTA ESPECIFICIDADE PARA SOBRESCREVER RADIX */
+body.min-h-screen.bg-background[data-scroll-locked],
+body[data-scroll-locked] {
+  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+  position: static !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  pointer-events: auto !important;
+  --removed-body-scroll-bar-size: 0 !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  height: auto !important;
+  overscroll-behavior: auto !important;
+}
+
+/* Remover wrapper de scroll lock que causa a barra branca */
+body > [data-radix-scroll-lock-wrapper],
+[data-radix-scroll-lock-wrapper] {
+  all: unset !important;
+  display: contents !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+  overflow: visible !important;
+  position: static !important;
+}
+
+/* Garantir que o wrapper não adicione padding/margin */
+body:has([data-radix-scroll-lock-wrapper]) {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
 }
 
 html.overflow-hidden,

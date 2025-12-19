@@ -8,7 +8,7 @@ interface ApiCategory {
   id: string
   name: string
   description?: string
-  icon?: keyof typeof LucideIcons
+  icon: keyof typeof LucideIcons
   iconColor?: string
   bgColor?: string
   fontColor?: string
