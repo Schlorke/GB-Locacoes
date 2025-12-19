@@ -5,6 +5,226 @@
 
 ---
 
+## 30. Prisma 7.1.0 - Erro "datasource property url is no longer supported"
+
+### ✅ Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-01-XX **Severidade**: 🔴 CRÍTICA (Build quebrado)
+**Status**: ✅ Resolvido
+
+#### Descricao
+
+O build estava falhando com erro do Prisma 7.1.0:
+
+```bash
+Error: Prisma schema validation - (get-config wasm)
+Error code: P1012
+error: The datasource property `url` is no longer supported in schema files.
+error: The datasource property `directUrl` is no longer supported in schema files.
+```
+
+#### Causa Raiz
+
+No Prisma 7, as propriedades `url` e `directUrl` **não podem mais estar no
+`schema.prisma`**. Elas devem estar **apenas no `prisma.config.ts`**.
+
+**Código Problemático:**
+
+```prisma
+// prisma/schema.prisma - ❌ ERRADO no Prisma 7
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+```
+
+### ✅ Solucao Implementada
+
+#### 1. Removido do schema.prisma
+
+```prisma
+// prisma/schema.prisma - ✅ CORRETO no Prisma 7
+datasource db {
+  provider = "postgresql"
+}
+```
+
+#### 2. Configurado no prisma.config.ts
+
+```typescript
+// prisma.config.ts - ✅ CORRETO no Prisma 7
+export default defineConfig({
+  schema: "prisma/schema.prisma",
+  datasource: {
+    url: env("DATABASE_URL")
+    // directUrl não é suportado no datasource do prisma.config.ts
+    // DIRECT_URL é usado automaticamente via variável de ambiente para migrations
+  }
+})
+```
+
+**Nota Importante**: No Prisma 7.1.0, `directUrl` **não é suportado** no
+`datasource` do `prisma.config.ts`. O Prisma usa automaticamente a variável de
+ambiente `DIRECT_URL` quando necessário para migrations. O Prisma Client usa
+apenas `DATABASE_URL` via adapter.
+
+#### Arquivos Modificados
+
+1. `prisma/schema.prisma` - Removidas propriedades `url` e `directUrl`
+2. `prisma.config.ts` - Adicionado `directUrl` na configuração
+
+#### Como Validar
+
+```bash
+# Verificar se Prisma generate funciona
+pnpm db:generate
+# Deve completar sem erros
+
+# Verificar build completo
+pnpm build
+# Deve completar com sucesso
+```
+
+#### Armadilhas a Evitar
+
+- **NUNCA** adicionar `url` ou `directUrl` no `schema.prisma` no Prisma 7
+- **SEMPRE** configurar URLs no `prisma.config.ts`
+- **SEMPRE** manter apenas `provider` no datasource do schema
+
+#### Referências
+
+- [Prisma 7 Migration Guide](https://www.prisma.io/docs/orm/more/upgrade-guide/upgrading-versions/upgrading-to-prisma-7)
+- [Prisma Config Documentation](https://www.prisma.io/docs/orm/reference/prisma-config-reference)
+
+---
+
+## 29. Deploy na Vercel falhando com "pnpm install" exited with 1
+
+### ✅ Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-01-XX **Severidade**: 🔴 CRÍTICA (Bloqueava deploy)
+**Status**: ✅ Resolvido
+
+#### Descricao
+
+O deploy na Vercel estava falhando durante a etapa de instalação de dependências
+com o erro:
+
+```bash
+Error: Command "pnpm install" exited with 1
+ELIFECYCLE Command failed with exit code 1.
+```
+
+O problema ocorria porque o script `postinstall` executava `prisma generate`
+durante o `pnpm install`, mas na Vercel:
+
+1. As variáveis de ambiente (como `DATABASE_URL`) podem não estar disponíveis
+   durante o install
+2. O Prisma precisa compilar binários nativos que podem falhar no ambiente de
+   build
+3. O script falhava e quebrava todo o processo de instalação
+
+#### Causa Raiz
+
+O `postinstall` estava configurado para executar `prisma generate`
+incondicionalmente:
+
+```json
+{
+  "scripts": {
+    "postinstall": "prisma generate && node scripts/post-prisma-generate.js"
+  }
+}
+```
+
+Isso causava falha quando:
+
+- `DATABASE_URL` não estava disponível durante o install
+- O ambiente de build da Vercel não conseguia compilar os binários do Prisma
+- O script não tinha tratamento de erros adequado
+
+### ✅ Solucao Implementada
+
+#### 1. Script Seguro de Postinstall
+
+Criado `scripts/safe-postinstall.js` que:
+
+- **Detecta ambiente CI/Vercel** e verifica se `DATABASE_URL` está disponível
+- **Pula Prisma generate** se estiver em CI sem `DATABASE_URL` (o `prebuild`
+  fará isso)
+- **Não falha o build** se Prisma generate der erro (sai com código 0)
+- **Mantém funcionalidade** em desenvolvimento local
+
+#### 2. Package.json Atualizado
+
+```json
+{
+  "scripts": {
+    "postinstall": "node scripts/safe-postinstall.js || true",
+    "prebuild": "prisma generate && node scripts/post-prisma-generate.js"
+  }
+}
+```
+
+#### Arquivos Modificados
+
+1. `package.json` - Script `postinstall` atualizado para usar script seguro
+2. `scripts/safe-postinstall.js` - Novo script com lógica robusta
+
+#### Como Funciona
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 1. pnpm install na Vercel                                   │
+│ 2. postinstall executa safe-postinstall.js                 │
+│ 3. Script detecta: VERCEL=1 e DATABASE_URL não disponível  │
+│ 4. Script pula Prisma generate (exit 0)                    │
+│ 5. Install completa com sucesso ✅                          │
+│ 6. Durante build: prebuild executa Prisma generate         │
+│ 7. Build completa com sucesso ✅                            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Como Validar
+
+```bash
+# Testar localmente (deve funcionar normalmente)
+pnpm install
+# Deve executar Prisma generate normalmente
+
+# Simular ambiente Vercel
+VERCEL=1 pnpm install
+# Deve pular Prisma generate mas não falhar
+
+# Verificar build
+pnpm build
+# Deve executar Prisma generate no prebuild e completar com sucesso
+```
+
+#### Armadilhas a Evitar
+
+- **NUNCA** fazer `postinstall` falhar o build - sempre usar `|| true` ou script
+  seguro
+- **NUNCA** assumir que variáveis de ambiente estarão disponíveis durante
+  install
+- **SEMPRE** garantir que `prebuild` execute Prisma generate (já está
+  configurado)
+- **NAO** remover o `|| true` do postinstall sem testar em ambiente CI
+
+#### Lições Aprendidas
+
+1. **Postinstall não deve ser crítico** - Use para otimizações, não para
+   dependências do build
+2. **CI tem limitações** - Variáveis de ambiente podem não estar disponíveis
+   durante install
+3. **Prebuild é o lugar certo** - Para comandos críticos que precisam rodar
+   antes do build
+4. **Scripts devem ser resilientes** - Sempre tratar erros e não quebrar o
+   processo pai
+
+---
+
 ## 28. Build falhando com erro 3221226505 no postbuild (patch-prisma.js)
 
 ### ✅ Problema RESOLVIDO

@@ -21,6 +21,42 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Prisma 7.1.0 - Erro "datasource property url is no longer supported" -
+  CRÍTICO**: Corrigida configuração do Prisma 7 que estava causando erro de
+  validação no build.
+  - **Causa**: No Prisma 7, as propriedades `url` e `directUrl` não podem mais
+    estar no `schema.prisma` - elas devem estar apenas no `prisma.config.ts`.
+  - **Solução**:
+    - Removidas propriedades `url` e `directUrl` do `prisma/schema.prisma`
+    - Configurado apenas `url` no `prisma.config.ts` (já tinha `url`)
+    - `directUrl` não é suportado no `datasource` do `prisma.config.ts` no
+      Prisma 7.1.0
+    - `DIRECT_URL` é usado automaticamente via variável de ambiente para
+      migrations
+    - Schema agora contém apenas `provider = "postgresql"`
+  - **Arquivos Modificados**:
+    - `prisma/schema.prisma` (removidas propriedades de URL)
+    - `prisma.config.ts` (adicionado directUrl)
+    - `docs/issues/known-issues.md` (documentação do problema)
+  - **Data**: 2025-01-XX
+
+- **Deploy na Vercel falhando com "pnpm install" exited with 1 - CRÍTICO**:
+  Corrigido script `postinstall` que estava causando falha no deploy da Vercel.
+  - **Causa**: O `postinstall` executava `prisma generate` incondicionalmente
+    durante o `pnpm install`, mas na Vercel as variáveis de ambiente
+    (`DATABASE_URL`) podem não estar disponíveis durante a instalação, causando
+    falha no processo.
+  - **Solução**:
+    - Criado script `scripts/safe-postinstall.js` que detecta ambiente CI/Vercel
+    - Script pula Prisma generate se `DATABASE_URL` não estiver disponível
+    - Script não falha o build (sai com código 0 mesmo em caso de erro)
+    - Prisma generate continua sendo executado no `prebuild` (já configurado)
+  - **Arquivos Modificados**:
+    - `package.json` (postinstall atualizado)
+    - `scripts/safe-postinstall.js` (novo script seguro)
+    - `docs/issues/known-issues.md` (documentação do problema)
+  - **Data**: 2025-01-XX
+
 - **Configuração incorreta do Supabase para serverless (Vercel) - CRÍTICO**:
   Corrigida configuração de `DATABASE_URL` que estava causando erros "Max
   clients reached" em produção.

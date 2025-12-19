@@ -7,7 +7,7 @@
     "prebuild": "prisma generate && node scripts/post-prisma-generate.js",
     "build": "next build",
     "postbuild": "node scripts/patch-prisma.js",
-    "postinstall": "prisma generate && node scripts/post-prisma-generate.js",
+    "postinstall": "node scripts/safe-postinstall.js || true",
     "check:equipments": "node scripts/check-equipments.mjs",
     "check:supabase": "node scripts/check-supabase-performance.js",
     "diagnose:supabase": "node scripts/supabase-diagnostics.js",
