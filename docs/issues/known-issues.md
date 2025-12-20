@@ -5,6 +5,59 @@
 
 ---
 
+## 32. Altura inconsistente no cabecalho da timeline (Equipamentos)
+
+### ? Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-12-19 **Severidade**: Baixa (UI) **Status**: ?
+Resolvido
+
+#### Descricao
+
+Na visao Timeline (Equipamentos) do calendario avancado, a linha do cabecalho de
+dias tinha altura diferente das linhas de recursos, e a ultima linha parecia
+mais alta por falta de separacao visual. Alem disso, havia uma linha residual
+fina no fim da lista e um pequeno espaco no rodape (altura da barra horizontal).
+
+#### Sintomas
+
+- Cabecalho (SEG/TER/...) com altura diferente das linhas de recursos
+- Ultima linha aparenta ficar maior por falta de borda inferior
+- Linha residual fina no fim da lista
+- Espaco pequeno (~7px) abaixo da ultima linha
+
+#### Causa Raiz
+
+- Cabecalho com altura fixa de 48px enquanto as linhas usam 60px
+- Borda final sem controle consistente, causando percepcao de espaco extra ou
+  linha residual no fim
+- `overflow-x-auto` no grid reservava altura para scrollbar horizontal
+
+### ? Solucao Implementada
+
+- Padronizada a altura do cabecalho e das linhas com a mesma constante
+- Borda inferior aplicada nas linhas com `last:border-b-0` para evitar linha
+  residual no fim
+- Grid da timeline agora usa `overflow-x-hidden` para evitar a reserva de altura
+  no rodape
+
+#### Arquivos Modificados
+
+1. `components/admin/advanced-calendar/timeline-view.tsx`
+
+#### Como Validar
+
+1. Abrir a visao "Equipamentos" do calendario avancado
+2. Confirmar que a linha do cabecalho tem a mesma altura das linhas
+3. Verificar que a ultima linha nao aparenta altura extra e nao ha espaco no
+   rodape
+
+#### Armadilhas a Evitar
+
+- Alterar altura do cabecalho sem ajustar a altura das linhas
+- Remover `last:border-b-0` e reintroduzir a linha residual no fim
+- Reintroduzir `overflow-x-auto` no grid e voltar o espaco extra no rodape
+
 ## 31. Equipamento bloqueado incorretamente por manutenção agendada
 
 ### ✅ Problema RESOLVIDO

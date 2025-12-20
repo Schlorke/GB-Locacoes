@@ -18,6 +18,19 @@ import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { CalendarEvent, CalendarResource } from './types'
 
+// Mapeamento de dias da semana para abreviações (getDay() retorna 0=domingo, 1=segunda, etc.)
+const WEEKDAY_ABBREVIATIONS: Record<number, string> = {
+  0: 'DOM', // Domingo
+  1: 'SEG', // Segunda
+  2: 'TER', // Terça
+  3: 'QUA', // Quarta
+  4: 'QUI', // Quinta
+  5: 'SEX', // Sexta
+  6: 'SAB', // Sábado
+}
+const TIMELINE_ROW_HEIGHT = 60
+const TIMELINE_HEADER_HEIGHT = TIMELINE_ROW_HEIGHT
+
 interface TimelineViewProps {
   date: Date
   events: CalendarEvent[]
@@ -185,7 +198,7 @@ export function TimelineView({
   }
 
   return (
-    <div className="flex flex-col bg-white min-h-[500px] h-full">
+    <div className="flex flex-col bg-white min-h-[490px]">
       {/* Controles de Zoom e Navegação */}
       <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
         <div className="flex items-center gap-2">
@@ -234,60 +247,91 @@ export function TimelineView({
       </div>
 
       {/* Timeline Container */}
-      <div className="flex-1 overflow-hidden flex">
+      <div
+        className="flex"
+        style={{
+          height: 'fit-content',
+          minHeight: 0,
+        }}
+      >
         {/* Lista de Recursos (Sticky) */}
         <div
           className="flex-shrink-0 border-r border-slate-200 bg-slate-50 overflow-y-auto"
-          style={{ width: 'fit-content', minWidth: 'fit-content' }}
+          style={{
+            width: 'fit-content',
+            minWidth: 'fit-content',
+            height: 'fit-content',
+            padding: 0,
+            paddingBottom: 0,
+            margin: 0,
+            marginBottom: 0,
+          }}
         >
           <div
             className="sticky top-0 bg-slate-50 border-b border-slate-200 z-10"
-            style={{ height: '48px' }}
+            style={{
+              height: TIMELINE_HEADER_HEIGHT,
+              minHeight: TIMELINE_HEADER_HEIGHT,
+              maxHeight: TIMELINE_HEADER_HEIGHT,
+            }}
           >
-            <div className="h-full flex items-center px-3 whitespace-nowrap">
-              <h3 className="text-sm font-semibold text-gray-700">
+            <div className="flex h-full w-full flex-col justify-center items-center px-3">
+              <div className="text-sm font-semibold text-gray-700 whitespace-nowrap leading-none">
                 Equipamentos
-              </h3>
+              </div>
             </div>
           </div>
-          <div>
-            {timelineResources.map((resource) => (
-              <div
-                key={resource.id}
-                className="px-3 flex items-center border-b border-slate-200 whitespace-nowrap"
-                style={{
-                  height: '60px',
-                  minHeight: '60px',
-                }}
-              >
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-3 h-3 rounded-full flex-shrink-0"
-                    style={{
-                      backgroundColor:
-                        events.find((e) => e.resourceId === resource.id)
-                          ?.color || '#ea580c',
-                    }}
-                  />
-                  <span className="text-sm font-medium text-gray-900">
-                    {resource.name}
-                  </span>
+          <div style={{ padding: 0, margin: 0 }}>
+            {timelineResources.map((resource) => {
+              return (
+                <div
+                  key={resource.id}
+                  className="px-3 flex items-center whitespace-nowrap border-b border-slate-200 last:border-b-0"
+                  style={{
+                    height: TIMELINE_ROW_HEIGHT,
+                    minHeight: TIMELINE_ROW_HEIGHT,
+                    maxHeight: TIMELINE_ROW_HEIGHT,
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-3 h-3 rounded-full flex-shrink-0"
+                      style={{
+                        backgroundColor:
+                          events.find((e) => e.resourceId === resource.id)
+                            ?.color || '#ea580c',
+                      }}
+                    />
+                    <span className="text-sm font-medium text-gray-900">
+                      {resource.name}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
 
         {/* Timeline Grid */}
         <div
           ref={scrollContainerRef}
-          className="flex-1 overflow-x-auto overflow-y-auto"
+          className="flex-1 min-w-0 overflow-x-hidden"
+          style={{
+            height: 'fit-content',
+            overflowY: 'visible',
+            minHeight: 0,
+            flexShrink: 1,
+          }}
         >
-          <div className="relative w-full">
+          <div className="relative w-full overflow-x-hidden">
             {/* Header da Timeline */}
             <div
               className="sticky top-0 bg-white border-b border-slate-200 z-20"
-              style={{ height: '48px' }}
+              style={{
+                height: TIMELINE_HEADER_HEIGHT,
+                minHeight: TIMELINE_HEADER_HEIGHT,
+                maxHeight: TIMELINE_HEADER_HEIGHT,
+              }}
             >
               <div className="flex h-full w-full">
                 {visiblePeriod.days.map((day) => (
@@ -295,9 +339,11 @@ export function TimelineView({
                     key={day.toISOString()}
                     className="flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center"
                   >
-                    <div className="text-xs font-semibold text-gray-600 uppercase">
-                      {format(day, 'EEE', { locale: ptBR })}
-                    </div>
+                    {zoom !== 'month' && (
+                      <div className="text-xs font-semibold text-gray-600 uppercase">
+                        {WEEKDAY_ABBREVIATIONS[day.getDay()]}
+                      </div>
+                    )}
                     <div className="text-sm font-bold text-gray-900">
                       {format(day, 'd')}
                     </div>
@@ -307,17 +353,22 @@ export function TimelineView({
             </div>
 
             {/* Swimlanes */}
-            <div className="relative">
+            <div className="relative" style={{ padding: 0, margin: 0 }}>
               {timelineResources.map((resource) => {
                 const resourceEvents = getEventsForResource(resource.id)
 
                 return (
                   <div
                     key={resource.id}
-                    className="relative border-b border-slate-200"
+                    className="relative border-b border-slate-200 last:border-b-0"
                     style={{
-                      height: '60px',
-                      minHeight: '60px',
+                      height: TIMELINE_ROW_HEIGHT,
+                      minHeight: TIMELINE_ROW_HEIGHT,
+                      maxHeight: TIMELINE_ROW_HEIGHT,
+                      paddingTop: 0,
+                      paddingBottom: 0,
+                      marginTop: 0,
+                      marginBottom: 0,
                     }}
                   >
                     {/* Eventos na Swimlane */}

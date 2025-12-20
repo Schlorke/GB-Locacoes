@@ -126,7 +126,7 @@ export function AdvancedCalendar({
           </div>
         )}
 
-        <div className="flex-1 overflow-auto min-h-[500px]">
+        <div className="flex-1 overflow-auto min-h-[490px] h-[490px]">
           {viewMode === 'daily' && (
             <DailyView
               date={currentDate}

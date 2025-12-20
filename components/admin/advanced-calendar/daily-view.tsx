@@ -64,13 +64,35 @@ export function DailyView({
           newWidths.set(key, el.clientWidth)
         }
       })
-      setColumnWidths(newWidths)
+
+      // Só atualiza se os valores realmente mudaram
+      setColumnWidths((prevWidths) => {
+        let hasChanged = false
+        if (prevWidths.size !== newWidths.size) {
+          hasChanged = true
+        } else {
+          for (const [key, value] of newWidths) {
+            if (prevWidths.get(key) !== value) {
+              hasChanged = true
+              break
+            }
+          }
+        }
+        return hasChanged ? newWidths : prevWidths
+      })
     }
 
-    updateWidths()
+    // Usa requestAnimationFrame para evitar atualizações durante o render
+    const rafId = requestAnimationFrame(() => {
+      updateWidths()
+    })
+
     window.addEventListener('resize', updateWidths)
-    return () => window.removeEventListener('resize', updateWidths)
-  }, [resourceColumns])
+    return () => {
+      cancelAnimationFrame(rafId)
+      window.removeEventListener('resize', updateWidths)
+    }
+  }, [date, resourceColumns.length]) // Depende de date e length, não do array em si
 
   useEffect(() => {
     const interval = setInterval(() => setCurrentTime(new Date()), 60000)

@@ -4,10 +4,10 @@
 
 O **Sistema de Calendário Avançado** (`AdvancedCalendar`) é um componente
 robusto e flexível implementado no projeto GB-Locações para visualização
-temporal de eventos operacionais. Ele oferece três modos de visualização
-distintos (Diário, Semanal e Mensal) que permitem aos administradores gerenciar
-e monitorar diferentes aspectos das operações da empresa de locação de
-equipamentos.
+temporal de eventos operacionais. Ele oferece quatro modos de visualização
+distintos (Diário, Semanal, Mensal e Timeline/Equipamentos) que permitem aos
+administradores gerenciar e monitorar diferentes aspectos das operações da
+empresa de locação de equipamentos.
 
 ---
 
@@ -50,7 +50,7 @@ O sistema de calendário está implementado nas seguintes páginas administrativ
 
 ---
 
-## 🎨 Os Três Modos de Visualização
+## 🎨 Os Quatro Modos de Visualização
 
 ### 1. 📆 **VISÃO DIÁRIA** (`daily`)
 
@@ -198,6 +198,30 @@ O sistema de calendário está implementado nas seguintes páginas administrativ
 - **Botão "Hoje"**: Retorna para o mês atual
 - **Título**: Mostra mês e ano (ex.: "janeiro 2025")
 
+### 4. 🧭 **VISÃO TIMELINE** (`timeline`) - **"EQUIPAMENTOS"**
+
+#### **Características Técnicas**
+
+- **Linhas por recurso**: cada equipamento em uma swimlane fixa
+- **Altura padrão**: 60px por linha, incluindo o cabeçalho
+- **Cabeçalho alinhado**: altura do cabeçalho igual às linhas para manter a
+  grade consistente
+- **Período variável**: suporta zoom diário, semanal e mensal na timeline
+
+#### **Notas de Layout**
+
+- **Altura sincronizada**: manter `TIMELINE_HEADER_HEIGHT` igual a
+  `TIMELINE_ROW_HEIGHT` para evitar desalinhamento
+- **Separação visual**: linhas usam `border-b` com `last:border-b-0` para evitar
+  linha residual no fim
+- **Scroll horizontal**: manter `overflow-x-hidden` no grid para evitar espaco
+  extra no rodape
+
+#### **Casos de Uso**
+
+- ✅ **Disponibilidade por equipamento**: visão rápida de bloqueios e reservas
+- ✅ **Planejamento operacional**: comparação de recursos lado a lado
+
 ---
 
 ## 🎛️ Componente Principal: `AdvancedCalendar`
@@ -211,6 +235,7 @@ components/admin/advanced-calendar/
 ├── daily-view.tsx         # Visão diária
 ├── weekly-view.tsx        # Visão semanal
 ├── monthly-view.tsx       # Visão mensal
+├── timeline-view.tsx      # Visão timeline (equipamentos)
 ├── event-block.tsx        # Bloco de evento individual
 ├── time-indicator.tsx     # Linha do tempo atual
 ├── types.ts               # Definições TypeScript
@@ -226,7 +251,7 @@ interface AdvancedCalendarProps {
   onEventClick?: (event) => void // Callback ao clicar em evento
   onDateClick?: (date) => void // Callback ao clicar em data/hora
   onEventDrop?: (id, start, end) => void // Drag & drop (futuro)
-  defaultViewMode?: ViewMode // Modo padrão: 'daily' | 'weekly' | 'monthly'
+  defaultViewMode?: ViewMode // Modo padrão: 'daily' | 'weekly' | 'monthly' | 'timeline'
   defaultDate?: Date // Data inicial
   className?: string // Classes CSS adicionais
 }
@@ -464,8 +489,8 @@ Quando há múltiplos recursos (ex.: equipamentos):
 
 ### **O Que São os Calendários?**
 
-Três visualizações temporais (Diário, Semanal, Mensal) que permitem visualizar
-eventos operacionais em diferentes granularidades.
+Quatro visualizações temporais (Diário, Semanal, Mensal, Timeline/Equipamentos)
+que permitem visualizar eventos operacionais em diferentes granularidades.
 
 ### **Onde Estão?**
 

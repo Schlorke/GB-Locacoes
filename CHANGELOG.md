@@ -53,6 +53,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Timeline (Equipamentos) com altura consistente**: Cabeçalho e linhas de
+  recursos/swinlanes agora usam a mesma altura, evitando discrepâncias visuais;
+  `overflow-x-hidden` no grid evita espaço extra no rodapé.
+  - **Arquivos Modificados**:
+    `components/admin/advanced-calendar/timeline-view.tsx`,
+    `docs/issues/known-issues.md`, `docs/features/advanced-calendar-system.md`
+  - **Data**: 2025-12-19
+
 - **Equipamento bloqueado incorretamente por manutenção agendada**: Corrigida a
   lógica de verificação de disponibilidade que bloqueava equipamentos mesmo
   quando a manutenção agendada não interferia com o período de locação

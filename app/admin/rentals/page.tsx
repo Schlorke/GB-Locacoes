@@ -279,7 +279,8 @@ export default function AdminRentalsPage() {
     return (
       <Badge
         variant="outline"
-        className={`${config.color} flex items-center gap-1.5 font-medium`}
+        className={`${config.color} flex items-center gap-1.5 font-medium border-b-0`}
+        style={{ borderBottom: 'none' }}
       >
         <Icon className="w-3.5 h-3.5" />
         {config.label}
@@ -367,9 +368,10 @@ export default function AdminRentalsPage() {
                           }
                         }}
                         className={cn(
-                          'group flex flex-col items-center justify-center gap-2 p-6 md:p-4 rounded-lg border transition-all duration-300 relative',
+                          'group flex flex-col items-center justify-center gap-2 px-6 py-4 md:px-4 md:py-3 rounded-lg border transition-all duration-300 relative',
                           'bg-transparent hover:bg-background border-gray-200 shadow-md hover:shadow-lg',
-                          isActive && 'shadow-lg'
+                          isActive && 'shadow-lg',
+                          status === 'PENDING_RETURN' && '!pb-2'
                         )}
                         title={`Ver locações ${config.label.toLowerCase()}`}
                         aria-label={`Filtrar por ${config.label}`}
@@ -401,7 +403,9 @@ export default function AdminRentalsPage() {
                             'text-sm md:text-xs font-medium text-center leading-tight transition-all duration-300',
                             isActive
                               ? 'text-orange-600 font-semibold'
-                              : 'text-gray-700 group-hover:text-orange-600'
+                              : 'text-gray-700 group-hover:text-orange-600',
+                            status === 'PENDING_RETURN' &&
+                              '!mb-0 !pb-0 !leading-none'
                           )}
                         >
                           {config.label}
