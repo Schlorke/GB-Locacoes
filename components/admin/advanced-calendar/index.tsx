@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react'
 import { addDays, addWeeks, addMonths, startOfDay } from 'date-fns'
 import { CalendarHeader } from './calendar-header'
 import { DailyView } from './daily-view'
-import { WeeklyView } from './weekly-view'
 import { MonthlyView } from './monthly-view'
 import { TimelineView } from './timeline-view'
 import { EventDetailsPanel } from './event-details-panel'
@@ -126,7 +125,7 @@ export function AdvancedCalendar({
           </div>
         )}
 
-        <div className="flex-1 overflow-auto min-h-[490px] h-[490px]">
+        <div className="flex-1 flex flex-col h-full overflow-hidden">
           {viewMode === 'daily' && (
             <DailyView
               date={currentDate}
@@ -138,12 +137,12 @@ export function AdvancedCalendar({
             />
           )}
           {viewMode === 'weekly' && (
-            <WeeklyView
+            <TimelineView
               date={currentDate}
               events={filteredEvents}
+              resources={resources}
               onEventClick={handleEventClick}
               onDateClick={handleDateClick}
-              onCreateEvent={onCreateEvent}
             />
           )}
           {viewMode === 'monthly' && (

@@ -53,6 +53,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Timeline (Equipamentos) com linhas preenchendo a altura do bloco**: Linhas e
+  swimlanes agora expandem para ocupar a altura disponivel quando ha poucos
+  recursos, mantendo altura minima de 60px.
+  - **Arquivos Modificados**:
+    `components/admin/advanced-calendar/timeline-view.tsx`,
+    `docs/issues/known-issues.md`, `docs/features/advanced-calendar-system.md`
+  - **Data**: 2025-12-20
+
 - **Timeline (Equipamentos) com altura consistente**: Cabeçalho e linhas de
   recursos/swinlanes agora usam a mesma altura, evitando discrepâncias visuais;
   `overflow-x-hidden` no grid evita espaço extra no rodapé.

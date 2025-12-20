@@ -5,6 +5,52 @@
 
 ---
 
+## 33. Linhas da timeline nao preenchiam a altura do bloco
+
+### ? Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-12-20 **Severidade**: Baixa (UI) **Status**: ?
+Resolvido
+
+#### Descricao
+
+Na visao Timeline (Equipamentos) do calendario avancado, quando havia poucos
+recursos, as linhas ficavam com altura fixa (60px) e sobrava espaco vazio no
+bloco. O objetivo era fazer as linhas ocuparem 100% da altura disponivel.
+
+#### Sintomas
+
+- Com poucos recursos, a area abaixo das linhas ficava vazia
+- As linhas nao esticavam para preencher o container
+
+#### Causa Raiz
+
+- As swimlanes e a lista de recursos usavam `height` fixo com
+  `TIMELINE_ROW_HEIGHT`
+- O container nao distribuia o espaco livre entre as linhas
+
+### ? Solucao Implementada
+
+- Linhas passaram a ser distribuidas por CSS Grid com `minmax(60px, 1fr)`,
+  permitindo expandir quando ha espaco livre
+- Grid usa o mesmo template de linhas na lista e nas swimlanes para manter
+  alinhamento e scroll quando necessario
+
+#### Arquivos Modificados
+
+1. `components/admin/advanced-calendar/timeline-view.tsx`
+
+#### Como Validar
+
+1. Abrir a visao "Equipamentos" do calendario avancado com poucos recursos
+2. Confirmar que as linhas preenchem toda a altura do bloco, sem area vazia
+3. Adicionar mais recursos e verificar que o scroll continua funcionando
+
+#### Armadilhas a Evitar
+
+- Voltar a usar `height` fixo nas linhas, impedindo o preenchimento do container
+- Remover o template `minmax(60px, 1fr)` e perder a distribuicao de altura
+
 ## 32. Altura inconsistente no cabecalho da timeline (Equipamentos)
 
 ### ? Problema RESOLVIDO

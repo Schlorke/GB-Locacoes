@@ -203,15 +203,18 @@ O sistema de calendário está implementado nas seguintes páginas administrativ
 #### **Características Técnicas**
 
 - **Linhas por recurso**: cada equipamento em uma swimlane fixa
-- **Altura padrão**: 60px por linha, incluindo o cabeçalho
+- **Altura base**: 60px por linha (minimo), incluindo o cabecalho; as linhas
+  expandem para preencher a altura disponivel quando ha poucos recursos
 - **Cabeçalho alinhado**: altura do cabeçalho igual às linhas para manter a
   grade consistente
 - **Período variável**: suporta zoom diário, semanal e mensal na timeline
 
 #### **Notas de Layout**
 
-- **Altura sincronizada**: manter `TIMELINE_HEADER_HEIGHT` igual a
-  `TIMELINE_ROW_HEIGHT` para evitar desalinhamento
+- **Altura sincronizada**: manter `TIMELINE_HEADER_HEIGHT` como altura base e
+  `TIMELINE_ROW_HEIGHT` como minimo das linhas para evitar desalinhamento,
+  permitindo expansao quando houver espaco livre; a distribuicao usa
+  `minmax(60px, 1fr)` para preencher o bloco
 - **Separação visual**: linhas usam `border-b` com `last:border-b-0` para evitar
   linha residual no fim
 - **Scroll horizontal**: manter `overflow-x-hidden` no grid para evitar espaco

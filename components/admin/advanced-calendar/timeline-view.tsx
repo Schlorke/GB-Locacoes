@@ -1,18 +1,7 @@
 'use client'
 
-import { useMemo, useState, useRef } from 'react'
-import {
-  format,
-  startOfWeek,
-  addDays,
-  addWeeks,
-  addMonths,
-  startOfDay,
-  endOfDay,
-  startOfMonth,
-  endOfMonth,
-  isSameDay,
-} from 'date-fns'
+import { useMemo, useRef } from 'react'
+import { format, startOfWeek, addDays, addWeeks, isSameDay } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -39,8 +28,6 @@ interface TimelineViewProps {
   onDateClick?: (_date: Date) => void
 }
 
-type TimelineZoom = 'day' | 'week' | 'month'
-
 export function TimelineView({
   date,
   events,
@@ -48,49 +35,17 @@ export function TimelineView({
   onEventClick,
   onDateClick,
 }: TimelineViewProps) {
-  const [zoom, setZoom] = useState<TimelineZoom>('week')
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
-  // Calcula o período visível baseado no zoom
+  // Calcula o período visível (sempre semanal)
   const visiblePeriod = useMemo(() => {
-    switch (zoom) {
-      case 'day':
-        return {
-          start: startOfDay(date),
-          end: endOfDay(date),
-          days: [date],
-        }
-      case 'week': {
-        const weekStart = startOfWeek(date, { weekStartsOn: 1 })
-        return {
-          start: weekStart,
-          end: addDays(weekStart, 6),
-          days: Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
-        }
-      }
-      case 'month': {
-        const monthStart = startOfMonth(date)
-        const monthEnd = endOfMonth(date)
-        const days: Date[] = []
-        let current = monthStart
-        while (current <= monthEnd) {
-          days.push(current)
-          current = addDays(current, 1)
-        }
-        return {
-          start: monthStart,
-          end: monthEnd,
-          days,
-        }
-      }
-      default:
-        return {
-          start: date,
-          end: date,
-          days: [date],
-        }
+    const weekStart = startOfWeek(date, { weekStartsOn: 1 })
+    return {
+      start: weekStart,
+      end: addDays(weekStart, 6),
+      days: Array.from({ length: 7 }, (_, i) => addDays(weekStart, i)),
     }
-  }, [date, zoom])
+  }, [date])
 
   // Extrai recursos únicos dos eventos
   const timelineResources = useMemo(() => {
@@ -115,6 +70,11 @@ export function TimelineView({
       a.name.localeCompare(b.name)
     )
   }, [resources, events])
+
+  const timelineRowTemplate = `repeat(${Math.max(
+    timelineResources.length,
+    1
+  )}, minmax(${TIMELINE_ROW_HEIGHT}px, 1fr))`
 
   // Calcula posição e largura dos eventos na timeline
   const getEventPosition = (event: CalendarEvent) => {
@@ -183,24 +143,14 @@ export function TimelineView({
 
   const handleNavigate = (direction: 'prev' | 'next') => {
     const newDate =
-      direction === 'prev'
-        ? zoom === 'day'
-          ? addDays(date, -1)
-          : zoom === 'week'
-            ? addWeeks(date, -1)
-            : addMonths(date, -1)
-        : zoom === 'day'
-          ? addDays(date, 1)
-          : zoom === 'week'
-            ? addWeeks(date, 1)
-            : addMonths(date, 1)
+      direction === 'prev' ? addWeeks(date, -1) : addWeeks(date, 1)
     onDateClick?.(newDate)
   }
 
   return (
-    <div className="flex flex-col bg-white min-h-[490px]">
-      {/* Controles de Zoom e Navegação */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50">
+    <div className="flex flex-col bg-white h-full">
+      {/* Controles de Navegação */}
+      <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50 flex-shrink-0">
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
@@ -221,54 +171,14 @@ export function TimelineView({
             {format(visiblePeriod.end, 'dd MMM yyyy', { locale: ptBR })}
           </span>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant={zoom === 'day' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setZoom('day')}
-          >
-            Dia
-          </Button>
-          <Button
-            variant={zoom === 'week' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setZoom('week')}
-          >
-            Semana
-          </Button>
-          <Button
-            variant={zoom === 'month' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setZoom('month')}
-          >
-            Mês
-          </Button>
-        </div>
       </div>
 
       {/* Timeline Container */}
-      <div
-        className="flex"
-        style={{
-          height: 'fit-content',
-          minHeight: 0,
-        }}
-      >
+      <div className="flex overflow-hidden h-full">
         {/* Lista de Recursos (Sticky) */}
-        <div
-          className="flex-shrink-0 border-r border-slate-200 bg-slate-50 overflow-y-auto"
-          style={{
-            width: 'fit-content',
-            minWidth: 'fit-content',
-            height: 'fit-content',
-            padding: 0,
-            paddingBottom: 0,
-            margin: 0,
-            marginBottom: 0,
-          }}
-        >
+        <div className="flex-shrink-0 border-r border-slate-200 bg-slate-50 h-full flex flex-col overflow-hidden">
           <div
-            className="sticky top-0 bg-slate-50 border-b border-slate-200 z-10"
+            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-10"
             style={{
               height: TIMELINE_HEADER_HEIGHT,
               minHeight: TIMELINE_HEADER_HEIGHT,
@@ -281,79 +191,78 @@ export function TimelineView({
               </div>
             </div>
           </div>
-          <div style={{ padding: 0, margin: 0 }}>
-            {timelineResources.map((resource) => {
-              return (
-                <div
-                  key={resource.id}
-                  className="px-3 flex items-center whitespace-nowrap border-b border-slate-200 last:border-b-0"
-                  style={{
-                    height: TIMELINE_ROW_HEIGHT,
-                    minHeight: TIMELINE_ROW_HEIGHT,
-                    maxHeight: TIMELINE_ROW_HEIGHT,
-                  }}
-                >
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-3 h-3 rounded-full flex-shrink-0"
-                      style={{
-                        backgroundColor:
-                          events.find((e) => e.resourceId === resource.id)
-                            ?.color || '#ea580c',
-                      }}
-                    />
-                    <span className="text-sm font-medium text-gray-900">
-                      {resource.name}
-                    </span>
+          <div className="flex-1 overflow-y-auto min-h-0">
+            <div
+              className="grid min-h-full"
+              style={{ gridTemplateRows: timelineRowTemplate }}
+            >
+              {timelineResources.map((resource) => {
+                return (
+                  <div
+                    key={resource.id}
+                    className="px-3 flex items-center whitespace-nowrap border-b border-slate-200 last:border-b-0"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-3 h-3 rounded-full flex-shrink-0"
+                        style={{
+                          backgroundColor:
+                            events.find((e) => e.resourceId === resource.id)
+                              ?.color || '#ea580c',
+                        }}
+                      />
+                      <span className="text-sm font-medium text-gray-900">
+                        {resource.name}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
         </div>
 
         {/* Timeline Grid */}
         <div
           ref={scrollContainerRef}
-          className="flex-1 min-w-0 overflow-x-hidden"
-          style={{
-            height: 'fit-content',
-            overflowY: 'visible',
-            minHeight: 0,
-            flexShrink: 1,
-          }}
+          className="flex-1 min-w-0 h-full flex flex-col overflow-hidden"
         >
-          <div className="relative w-full overflow-x-hidden">
-            {/* Header da Timeline */}
+          {/* Header da Timeline */}
+          <div
+            className="flex-shrink-0 bg-white border-b border-slate-200 z-20"
+            style={{
+              height: TIMELINE_HEADER_HEIGHT,
+              minHeight: TIMELINE_HEADER_HEIGHT,
+              maxHeight: TIMELINE_HEADER_HEIGHT,
+            }}
+          >
+            <div className="flex h-full w-full">
+              {visiblePeriod.days.map((day) => (
+                <div
+                  key={day.toISOString()}
+                  className="flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center"
+                >
+                  <div className="text-xs font-semibold text-gray-600 uppercase">
+                    {WEEKDAY_ABBREVIATIONS[day.getDay()]}
+                  </div>
+                  <div className="text-sm font-bold text-gray-900">
+                    {format(day, 'd')}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Swimlanes Container */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0">
             <div
-              className="sticky top-0 bg-white border-b border-slate-200 z-20"
+              className="relative grid min-h-full"
               style={{
-                height: TIMELINE_HEADER_HEIGHT,
-                minHeight: TIMELINE_HEADER_HEIGHT,
-                maxHeight: TIMELINE_HEADER_HEIGHT,
+                gridTemplateRows: timelineRowTemplate,
+                padding: 0,
+                margin: 0,
               }}
             >
-              <div className="flex h-full w-full">
-                {visiblePeriod.days.map((day) => (
-                  <div
-                    key={day.toISOString()}
-                    className="flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center"
-                  >
-                    {zoom !== 'month' && (
-                      <div className="text-xs font-semibold text-gray-600 uppercase">
-                        {WEEKDAY_ABBREVIATIONS[day.getDay()]}
-                      </div>
-                    )}
-                    <div className="text-sm font-bold text-gray-900">
-                      {format(day, 'd')}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Swimlanes */}
-            <div className="relative" style={{ padding: 0, margin: 0 }}>
               {timelineResources.map((resource) => {
                 const resourceEvents = getEventsForResource(resource.id)
 
@@ -362,9 +271,7 @@ export function TimelineView({
                     key={resource.id}
                     className="relative border-b border-slate-200 last:border-b-0"
                     style={{
-                      height: TIMELINE_ROW_HEIGHT,
                       minHeight: TIMELINE_ROW_HEIGHT,
-                      maxHeight: TIMELINE_ROW_HEIGHT,
                       paddingTop: 0,
                       paddingBottom: 0,
                       marginTop: 0,
