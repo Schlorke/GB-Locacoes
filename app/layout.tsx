@@ -99,7 +99,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: description,
       images: [
         {
-          url: 'https://locacoesgb.com.br/GB%20Locações.png',
+          url: 'https://locacoesgb.com.br/gb-locacoes-og.png',
           width: 1200,
           height: 630,
           alt: 'GB Locações - Locação de Equipamentos para Construção Civil',
@@ -113,7 +113,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: description,
       images: [
         {
-          url: 'https://locacoesgb.com.br/GB%20Locações.png',
+          url: 'https://locacoesgb.com.br/gb-locacoes-og.png',
           alt: 'GB Locações - Locação de Equipamentos para Construção Civil',
         },
       ],
@@ -127,6 +127,11 @@ export async function generateMetadata(): Promise<Metadata> {
     other: {
       'theme-color': '#334155', // Cor do status bar para iOS/Android
       'apple-mobile-web-app-status-bar-style': 'light-content',
+      // Meta tags específicas do LinkedIn para garantir compatibilidade
+      'og:image:secure_url': 'https://locacoesgb.com.br/gb-locacoes-og.png',
+      'og:image:width': '1200',
+      'og:image:height': '630',
+      'og:image:type': 'image/png',
     },
   }
 }
