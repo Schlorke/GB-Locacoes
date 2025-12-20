@@ -8,7 +8,6 @@ import {
   Calendar,
   GanttChartSquare,
   Columns3,
-  Layers,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ViewToggle } from '@/components/ui/view-toggle'
@@ -25,7 +24,6 @@ const viewOptions = [
   { value: 'daily', label: 'Diário', icon: Columns3 },
   { value: 'weekly', label: 'Semanal', icon: GanttChartSquare },
   { value: 'monthly', label: 'Calendário', icon: Calendar },
-  { value: 'timeline', label: 'Equipamentos', icon: Layers },
 ]
 
 export function CalendarHeader({
@@ -53,22 +51,20 @@ export function CalendarHeader({
   }
 
   return (
-    <div className="flex flex-col gap-4 px-4 py-3 border-b border-slate-200 bg-white">
+    <div className="flex flex-col gap-4 px-4 py-3 border-b border-slate-200 bg-slate-50">
       <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 sm:gap-2 w-full">
         <div className="flex items-center gap-2">
           <Button
-            variant="ghost"
-            size="icon"
+            variant="outline"
+            size="sm"
             onClick={() => onNavigate('prev')}
-            className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
           >
             <ChevronLeft className="w-5 h-5" />
           </Button>
           <Button
-            variant="ghost"
-            size="icon"
+            variant="outline"
+            size="sm"
             onClick={() => onNavigate('next')}
-            className="text-gray-600 hover:text-gray-900 hover:bg-gray-100"
           >
             <ChevronRight className="w-5 h-5" />
           </Button>

@@ -64,7 +64,7 @@ export function MonthlyView({
         {WEEKDAYS.map((day) => (
           <div
             key={day}
-            className="py-3 text-center text-sm font-semibold text-gray-700"
+            className="py-3 text-center text-sm font-semibold text-gray-700 border-r border-slate-200 last:border-r-0"
           >
             {day}
           </div>
@@ -73,15 +73,17 @@ export function MonthlyView({
 
       {/* Grade do Calendário */}
       <div className="flex-1 grid grid-cols-7 auto-rows-fr">
-        {calendarDays.map((day) => {
+        {calendarDays.map((day, index) => {
           const isCurrentMonth = isSameMonth(day, date)
           const isCurrentDay = isToday(day)
+          const isLastColumn = (index + 1) % 7 === 0
 
           return (
             <div
               key={day.toISOString()}
               className={cn(
-                'min-h-[120px] p-2 border-b border-r border-slate-100 cursor-pointer hover:bg-gray-50/50 transition-colors',
+                'min-h-[120px] p-2 border-b border-r border-slate-200 cursor-pointer hover:bg-gray-50/50 transition-colors',
+                isLastColumn && 'border-r-0',
                 !isCurrentMonth && 'opacity-40 bg-slate-50/30'
               )}
               onClick={() => onDateClick?.(day)}

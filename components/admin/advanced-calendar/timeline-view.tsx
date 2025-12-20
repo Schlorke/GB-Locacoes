@@ -1,10 +1,8 @@
 'use client'
 
 import { useMemo, useRef } from 'react'
-import { format, startOfWeek, addDays, addWeeks, isSameDay } from 'date-fns'
+import { format, startOfWeek, addDays, isSameDay } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { CalendarEvent, CalendarResource } from './types'
 
 // Mapeamento de dias da semana para abreviações (getDay() retorna 0=domingo, 1=segunda, etc.)
@@ -33,7 +31,7 @@ export function TimelineView({
   events,
   resources,
   onEventClick,
-  onDateClick,
+  onDateClick: _onDateClick,
 }: TimelineViewProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -141,38 +139,8 @@ export function TimelineView({
     })
   }
 
-  const handleNavigate = (direction: 'prev' | 'next') => {
-    const newDate =
-      direction === 'prev' ? addWeeks(date, -1) : addWeeks(date, 1)
-    onDateClick?.(newDate)
-  }
-
   return (
     <div className="flex flex-col bg-white h-full">
-      {/* Controles de Navegação */}
-      <div className="flex items-center justify-between p-4 border-b border-slate-200 bg-slate-50 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleNavigate('prev')}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleNavigate('next')}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-          <span className="text-sm font-medium text-gray-700 px-2">
-            {format(visiblePeriod.start, 'dd MMM', { locale: ptBR })} -{' '}
-            {format(visiblePeriod.end, 'dd MMM yyyy', { locale: ptBR })}
-          </span>
-        </div>
-      </div>
-
       {/* Timeline Container */}
       <div className="flex overflow-hidden h-full">
         {/* Lista de Recursos (Sticky) */}
@@ -229,7 +197,7 @@ export function TimelineView({
         >
           {/* Header da Timeline */}
           <div
-            className="flex-shrink-0 bg-white border-b border-slate-200 z-20"
+            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-20"
             style={{
               height: TIMELINE_HEADER_HEIGHT,
               minHeight: TIMELINE_HEADER_HEIGHT,
@@ -240,7 +208,7 @@ export function TimelineView({
               {visiblePeriod.days.map((day) => (
                 <div
                   key={day.toISOString()}
-                  className="flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center"
+                  className="flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center bg-slate-50"
                 >
                   <div className="text-xs font-semibold text-gray-600 uppercase">
                     {WEEKDAY_ABBREVIATIONS[day.getDay()]}
