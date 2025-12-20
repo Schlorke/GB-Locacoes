@@ -99,10 +99,11 @@ export async function generateMetadata(): Promise<Metadata> {
       description: description,
       images: [
         {
-          url: '/og-image.jpg',
+          url: 'https://locacoesgb.com.br/GB%20Locações.png',
           width: 1200,
           height: 630,
           alt: 'GB Locações - Locação de Equipamentos para Construção Civil',
+          type: 'image/png',
         },
       ],
     },
@@ -110,7 +111,14 @@ export async function generateMetadata(): Promise<Metadata> {
       card: 'summary_large_image',
       title: title,
       description: description,
-      images: ['/og-image.jpg'],
+      images: [
+        {
+          url: 'https://locacoesgb.com.br/GB%20Locações.png',
+          alt: 'GB Locações - Locação de Equipamentos para Construção Civil',
+        },
+      ],
+      creator: '@locacoesgb',
+      site: '@locacoesgb',
     },
     verification: {
       google: 'google-site-verification-code',
