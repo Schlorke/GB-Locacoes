@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import {
   format,
   startOfMonth,
@@ -38,6 +38,10 @@ export function MonthlyView({
   onDateClick,
   onColumnClick,
 }: MonthlyViewProps) {
+  const [hoveredColumnIndex, setHoveredColumnIndex] = useState<number | null>(
+    null
+  )
+
   const calendarDays = useMemo(() => {
     const monthStart = startOfMonth(date)
     const monthEnd = endOfMonth(date)
@@ -64,7 +68,7 @@ export function MonthlyView({
   }
 
   return (
-    <div className="flex flex-col bg-white min-h-[500px]">
+    <div className="flex flex-col bg-white min-h-[500px] relative">
       {/* Header dos Dias da Semana */}
       <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
         {WEEKDAYS.map((day, index) => {
@@ -81,6 +85,8 @@ export function MonthlyView({
             <div
               key={day}
               className="py-3 text-center text-sm font-semibold text-gray-700 border-r border-slate-200 last:border-r-0 cursor-pointer hover:bg-orange-50 transition-colors group"
+              onMouseEnter={() => setHoveredColumnIndex(index)}
+              onMouseLeave={() => setHoveredColumnIndex(null)}
               onClick={() => {
                 onColumnClick?.(
                   `weekday-${index}`,
@@ -98,7 +104,7 @@ export function MonthlyView({
       </div>
 
       {/* Grade do Calendário */}
-      <div className="flex-1 grid grid-cols-7 auto-rows-fr">
+      <div className="flex-1 grid grid-cols-7 auto-rows-fr relative">
         {calendarDays.map((day, index) => {
           const isCurrentMonth = isSameMonth(day, date)
           const isCurrentDay = isToday(day)
@@ -175,6 +181,27 @@ export function MonthlyView({
                 )}
               </div>
             </div>
+          )
+        })}
+
+        {/* Overlays de Colunas Verticais para Hover - Um para cada dia da semana */}
+        {WEEKDAYS.map((_day, index) => {
+          const columnWidth = 100 / 7
+          const left = (index * 100) / 7
+
+          return (
+            <div
+              key={`overlay-${index}`}
+              className="absolute top-0 bottom-0 pointer-events-none transition-colors z-10"
+              style={{
+                left: `${left}%`,
+                width: `${columnWidth}%`,
+                backgroundColor:
+                  hoveredColumnIndex === index
+                    ? 'rgba(254, 243, 199, 0.3)'
+                    : 'transparent',
+              }}
+            />
           )
         })}
       </div>

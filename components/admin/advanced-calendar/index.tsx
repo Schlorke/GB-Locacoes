@@ -99,6 +99,14 @@ export function AdvancedCalendar({
   }
 
   const handleEventClick = (event: CalendarEvent) => {
+    // Para eventos do tipo 'rental', apenas chama o callback sem abrir o sidebar right
+    // O dialog da página será aberto pelo callback onEventClick
+    if (event.type === 'rental') {
+      onEventClick?.(event)
+      return
+    }
+
+    // Para outros tipos de evento, abre o sidebar right (EventDetailsPanel)
     setSelectedEvent(event)
     setIsDetailsPanelOpen(true)
     onEventClick?.(event)
