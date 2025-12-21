@@ -301,7 +301,6 @@ function AdminQuotesPage() {
 
     const next = Array.isArray(filteredQuotes) ? filteredQuotes : []
     setTableQuotes(next)
-     
   }, [filteredQuotes])
 
   useEffect(() => {
