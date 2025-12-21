@@ -5,6 +5,71 @@
 
 ---
 
+## 34. Borda preta (focus ring) no botão de fechar do Dialog
+
+### ✅ Problema RESOLVIDO
+
+**Data da Ocorrência**: 2025-12-20 **Severidade**: Baixa (UI) **Status**: ✅
+Resolvido
+
+#### Descrição
+
+Quando o dialog era aberto, o botão de fechar (DialogClose) exibia uma borda
+preta ao redor ao receber foco, causando uma experiência visual indesejada. O
+usuário já havia documentado anteriormente que não deseja focus rings em botões
+sem seu conhecimento ou consentimento.
+
+#### Sintomas
+
+- Borda preta aparecendo ao redor do botão de fechar quando o dialog era aberto
+- Focus ring visível no botão DialogClose
+- Experiência visual inconsistente com as preferências do usuário
+
+#### Causa Raiz
+
+- O `CLOSE_BUTTON_BASE_CLASSES` no componente `dialog.tsx` não incluía estilos
+  para remover o focus ring
+- Falta de regras CSS globais específicas para remover focus ring de botões de
+  dialog
+- O navegador/Tailwind aplicava o focus ring padrão
+
+### ✅ Solução Implementada
+
+- Adicionado `focus:outline-none focus:ring-0` ao `CLOSE_BUTTON_BASE_CLASSES` em
+  `components/ui/dialog.tsx`
+- Criadas regras CSS globais em `app/globals.css` para remover focus ring de
+  botões de fechar do dialog
+- Regras específicas para botões com `aria-label` contendo "Fechar", "fechar",
+  "Close" ou "close"
+- Regras adicionais para botões posicionados no canto superior direito do dialog
+  header
+
+#### Arquivos Modificados
+
+1. `components/ui/dialog.tsx` - Adicionado `focus:outline-none focus:ring-0` ao
+   `CLOSE_BUTTON_BASE_CLASSES`
+2. `app/globals.css` - Adicionadas regras globais para remover focus ring de
+   botões de dialog
+
+#### Como Validar
+
+1. Abrir qualquer dialog no sistema
+2. Verificar que o botão de fechar não exibe borda preta ao receber foco
+3. Confirmar que não há focus ring visível em nenhum estado do botão
+
+#### Armadilhas a Evitar
+
+- **NUNCA** adicionar focus ring em botões sem consentimento explícito do
+  usuário
+- **NUNCA** remover os estilos `focus:outline-none focus:ring-0` do
+  `CLOSE_BUTTON_BASE_CLASSES`
+- **NUNCA** adicionar estilos de focus ring em botões de dialog sem consultar o
+  usuário primeiro
+- **SEMPRE** seguir as preferências do usuário documentadas sobre focus rings em
+  botões
+
+---
+
 ## 33. Linhas da timeline nao preenchiam a altura do bloco
 
 ### ? Problema RESOLVIDO

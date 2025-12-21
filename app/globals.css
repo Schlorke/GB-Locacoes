@@ -482,6 +482,41 @@ a.header-action-button.text-orange-600,
     0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
+/* Botão de fechar do Dialog - SEM focus ring (conforme preferência do usuário) */
+/* Remove focus ring de todos os botões dentro do header do dialog */
+[data-baseui-dialog-popup] button[class*='absolute'][class*='right-4'][class*='top-4'],
+[data-baseui-dialog-popup] button[class*='absolute'][class*='right-4'][class*='top-4']:focus,
+[data-baseui-dialog-popup] button[class*='absolute'][class*='right-4'][class*='top-4']:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  ring: 0 !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-offset-width: 0 !important;
+}
+
+/* Regra adicional para garantir que qualquer botão de fechar não tenha focus ring */
+button[aria-label*='Fechar'],
+button[aria-label*='fechar'],
+button[aria-label*='Close'],
+button[aria-label*='close'] {
+  outline: none !important;
+}
+
+button[aria-label*='Fechar']:focus,
+button[aria-label*='Fechar']:focus-visible,
+button[aria-label*='fechar']:focus,
+button[aria-label*='fechar']:focus-visible,
+button[aria-label*='Close']:focus,
+button[aria-label*='Close']:focus-visible,
+button[aria-label*='close']:focus,
+button[aria-label*='close']:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  ring: 0 !important;
+  --tw-ring-width: 0 !important;
+  --tw-ring-offset-width: 0 !important;
+}
+
 /* Botões padrão admin */
 .admin-button {
   transition: all 0.3s ease-in-out !important;

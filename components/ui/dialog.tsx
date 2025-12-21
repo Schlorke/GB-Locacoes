@@ -22,7 +22,7 @@ const HEADER_BASE_CLASSES =
 const HEADER_ICON_BASE_CLASSES =
   'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-slate-600 to-slate-700 text-white shadow-sm'
 const CLOSE_BUTTON_BASE_CLASSES =
-  'absolute right-4 top-4 inline-flex h-6 w-6 items-center justify-center rounded-lg disabled:pointer-events-none disabled:opacity-50 transition-all duration-300 text-slate-400 hover:text-slate-600 hover:bg-white [&>svg]:h-4 [&>svg]:w-4'
+  'absolute right-4 top-4 inline-flex h-6 w-6 items-center justify-center rounded-lg disabled:pointer-events-none disabled:opacity-50 transition-all duration-300 text-slate-400 hover:text-slate-600 hover:bg-white focus:outline-none focus:ring-0 [&>svg]:h-4 [&>svg]:w-4'
 const BODY_BASE_CLASSES = 'flex-1 min-h-0'
 const BODY_VIEWPORT_BASE_CLASSES =
   'h-full w-full overflow-y-auto overflow-x-hidden'

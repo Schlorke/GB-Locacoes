@@ -157,14 +157,11 @@ export function TimelineView({
         {/* Lista de Recursos (Sticky) */}
         <div className="flex-shrink-0 border-r border-slate-200 bg-slate-50 h-full flex flex-col overflow-hidden">
           <div
-            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-10 cursor-pointer transition-colors group/header"
+            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-10 cursor-pointer hover:bg-orange-50 transition-colors group/header"
             style={{
               height: TIMELINE_HEADER_HEIGHT,
               minHeight: TIMELINE_HEADER_HEIGHT,
               maxHeight: TIMELINE_HEADER_HEIGHT,
-              backgroundColor: isHeaderHovered
-                ? 'rgba(254, 243, 199, 0.5)'
-                : 'transparent',
             }}
             onMouseEnter={() => setIsHeaderHovered(true)}
             onMouseLeave={() => setIsHeaderHovered(false)}
@@ -208,13 +205,7 @@ export function TimelineView({
                 return (
                   <div
                     key={resource.id}
-                    className="px-3 flex items-center whitespace-nowrap border-b border-slate-200 last:border-b-0 cursor-pointer transition-colors group/resource"
-                    style={{
-                      backgroundColor:
-                        hoveredResourceId === resource.id
-                          ? 'rgba(254, 243, 199, 0.5)'
-                          : 'transparent',
-                    }}
+                    className="px-3 flex items-center whitespace-nowrap border-b border-slate-200 last:border-b-0 cursor-pointer hover:bg-orange-50 transition-colors group/resource"
                     onMouseEnter={() => setHoveredResourceId(resource.id)}
                     onMouseLeave={() => setHoveredResourceId(null)}
                     onClick={() => {
