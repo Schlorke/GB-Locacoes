@@ -280,28 +280,28 @@ export default function AdminDashboard() {
     purple: '#8b5cf6',
   }
 
-  // Dados para gráfico de rosca (status) - Usando variações de laranja
+  // Dados para gráfico de rosca (status) - Cores semânticas
   const statusChartData = stats
     ? [
         {
           name: 'Pendentes',
           value: stats.pendingQuotes,
-          color: '#fdba74', // orange-300
+          color: '#ea580c', // orange-600 (laranja)
         },
         {
           name: 'Aprovados',
           value: stats.approvedQuotes,
-          color: '#f97316', // orange-500
+          color: '#22c55e', // green-500 (verde)
         },
         {
           name: 'Rejeitados',
           value: stats.rejectedQuotes,
-          color: '#9a3412', // orange-800
+          color: '#ef4444', // red-500 (vermelho)
         },
         {
           name: 'Concluídos',
           value: stats.completedQuotes,
-          color: '#ea580c', // orange-600
+          color: '#3b82f6', // blue-500 (azul)
         },
       ].filter((item) => item.value > 0)
     : []

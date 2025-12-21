@@ -129,9 +129,9 @@ const statusConfig: Record<
   pending: {
     key: 'pending',
     label: 'Pendente',
-    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    color: 'bg-orange-100 text-orange-800 border-orange-200',
     icon: Clock,
-    gradient: 'from-yellow-400 to-orange-500',
+    gradient: 'from-orange-400 to-orange-500',
   },
   approved: {
     key: 'approved',
@@ -1020,9 +1020,9 @@ function AdminQuotesPage() {
 
                   // Cores baseadas no status
                   const statusColors: Record<string, string> = {
-                    pending: '#F59E0B', // Amarelo
-                    approved: '#10B981', // Verde
-                    rejected: '#EF4444', // Vermelho
+                    pending: '#ea580c', // Laranja (orange-600)
+                    approved: '#22c55e', // Verde (green-500)
+                    rejected: '#ef4444', // Vermelho (red-500)
                   }
 
                   // Equipamentos do orçamento

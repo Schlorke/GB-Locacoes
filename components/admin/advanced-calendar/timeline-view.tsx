@@ -18,6 +18,14 @@ const WEEKDAY_ABBREVIATIONS: Record<number, string> = {
 const TIMELINE_ROW_HEIGHT = 60
 const TIMELINE_HEADER_HEIGHT = TIMELINE_ROW_HEIGHT
 
+// Mapeamento de cores por status
+const STATUS_COLORS: Record<string, string> = {
+  pending: '#ea580c', // Laranja (orange-600)
+  approved: '#22c55e', // Verde (green-500)
+  rejected: '#ef4444', // Vermelho (red-500)
+  completed: '#3b82f6', // Azul (blue-500)
+}
+
 interface TimelineViewProps {
   date: Date
   events: CalendarEvent[]
@@ -53,7 +61,16 @@ export function TimelineView({
   // Extrai recursos únicos dos eventos
   const timelineResources = useMemo(() => {
     if (resources && resources.length > 0) {
-      return resources
+      // Ordena os recursos mantendo a ordem: pending, approved, rejected
+      const statusOrder = ['pending', 'approved', 'rejected', 'completed']
+      return [...resources].sort((a, b) => {
+        const aIndex = statusOrder.indexOf(a.id)
+        const bIndex = statusOrder.indexOf(b.id)
+        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex
+        if (aIndex !== -1) return -1
+        if (bIndex !== -1) return 1
+        return a.name.localeCompare(b.name)
+      })
     }
 
     // Extrai recursos dos eventos
@@ -84,13 +101,16 @@ export function TimelineView({
     const periodStart = visiblePeriod.start.getTime()
     const periodEnd = visiblePeriod.end.getTime()
 
-    // Para eventos rejeitados, usar a data de rejeição e ocupar toda a largura do dia
-    if (event.status === 'rejected' && event.createdAt) {
-      const rejectedDate = event.createdAt
+    // Para eventos rejeitados ou pendentes, usar a data de criação e ocupar toda a largura do dia
+    if (
+      (event.status === 'rejected' || event.status === 'pending') &&
+      event.createdAt
+    ) {
+      const eventDate = event.createdAt
 
       // Encontra o índice do dia na timeline
       const dayIndex = visiblePeriod.days.findIndex((day) =>
-        isSameDay(day, rejectedDate)
+        isSameDay(day, eventDate)
       )
 
       if (dayIndex === -1) return null
@@ -129,8 +149,11 @@ export function TimelineView({
     return events.filter((event) => {
       if (event.resourceId !== resourceId) return false
 
-      // Para eventos rejeitados, verifica se a data de rejeição está no período visível
-      if (event.status === 'rejected' && event.createdAt) {
+      // Para eventos rejeitados ou pendentes, verifica se a data de criação está no período visível
+      if (
+        (event.status === 'rejected' || event.status === 'pending') &&
+        event.createdAt
+      ) {
         return visiblePeriod.days.some((day) =>
           isSameDay(day, event.createdAt!)
         )
@@ -167,8 +190,11 @@ export function TimelineView({
             onClick={() => {
               // Coleta todos os eventos da semana visivel (todos os equipamentos)
               const weekEvents = events.filter((event) => {
-                // Para eventos rejeitados, verifica se a data de rejeicao esta no periodo visivel
-                if (event.status === 'rejected' && event.createdAt) {
+                // Para eventos rejeitados ou pendentes, verifica se a data de criação está no período visível
+                if (
+                  (event.status === 'rejected' || event.status === 'pending') &&
+                  event.createdAt
+                ) {
                   return visiblePeriod.days.some((day) =>
                     isSameDay(day, event.createdAt!)
                   )
@@ -207,7 +233,11 @@ export function TimelineView({
                 const isDayHighlighted = isEquipmentHovered
                 // Calcula eventos para este dia
                 const dayEvents = events.filter((event) => {
-                  if (event.status === 'rejected' && event.createdAt) {
+                  if (
+                    (event.status === 'rejected' ||
+                      event.status === 'pending') &&
+                    event.createdAt
+                  ) {
                     return isSameDay(day, event.createdAt)
                   }
                   return (
@@ -294,8 +324,10 @@ export function TimelineView({
                       className="w-3 h-3 rounded-full flex-shrink-0"
                       style={{
                         backgroundColor:
+                          STATUS_COLORS[resource.id] ||
                           events.find((e) => e.resourceId === resource.id)
-                            ?.color || '#ea580c',
+                            ?.color ||
+                          '#ea580c',
                       }}
                     />
                     <span
@@ -344,8 +376,10 @@ export function TimelineView({
                           onEventClick?.(event)
                         }}
                         title={
-                          event.status === 'rejected' && event.createdAt
-                            ? `${event.title} - ${format(event.createdAt, 'HH:mm', { locale: ptBR })} (Rejeitado)`
+                          (event.status === 'rejected' ||
+                            event.status === 'pending') &&
+                          event.createdAt
+                            ? `${event.title} - ${format(event.createdAt, 'HH:mm', { locale: ptBR })} (${event.status === 'rejected' ? 'Rejeitado' : 'Pendente'})`
                             : `${event.title} - ${format(event.start, 'HH:mm', { locale: ptBR })} - ${format(event.end, 'HH:mm', { locale: ptBR })}`
                         }
                       >
@@ -353,12 +387,18 @@ export function TimelineView({
                           {event.title}
                         </div>
                         <div className="text-xs text-gray-600 truncate">
-                          {event.status === 'rejected' && event.createdAt ? (
+                          {(event.status === 'rejected' ||
+                            event.status === 'pending') &&
+                          event.createdAt ? (
                             <>
                               {format(event.createdAt, 'HH:mm', {
                                 locale: ptBR,
                               })}{' '}
-                              (Rejeitado)
+                              (
+                              {event.status === 'rejected'
+                                ? 'Rejeitado'
+                                : 'Pendente'}
+                              )
                             </>
                           ) : (
                             <>
