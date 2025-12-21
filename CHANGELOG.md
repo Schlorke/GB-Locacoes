@@ -99,7 +99,9 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 - **Timeline semanal com hover por peer**: Headers dos dias e recursos na
   sidebar agora aplicam `peer`/`peer-hover` para destacar colunas/linhas
-  correspondentes, sem impacto nas visäes di ria e mensal.
+  correspondentes, com background laranja consistente ao alternar entre
+  `bg-slate-50` e `bg-orange-50`; o hover em "Equipamentos" ativa o destaque
+  global da semana, sem impacto nas visäes di ria e mensal.
   - **Arquivos Modificados**:
     `components/admin/advanced-calendar/timeline-view.tsx`,
     `docs/issues/known-issues.md`, `docs/features/advanced-calendar-system.md`

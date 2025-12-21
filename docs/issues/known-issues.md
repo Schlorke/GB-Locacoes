@@ -23,6 +23,7 @@ background laranja nas colunas/linhas correspondentes.
 - Hover em "SEG 15", "TER 16" nao destacava a coluna inteira
 - Hover em recursos da sidebar (Pendente/Aprovado/Rejeitado) nao destacava a
   linha correspondente
+- Hover em "Equipamentos" nao destacava todos os dias e recursos
 - Apenas o background do proprio header/linha respondia ao hover
 
 #### Causa Raiz
@@ -30,6 +31,8 @@ background laranja nas colunas/linhas correspondentes.
 - Headers e swimlanes estavam em containers separados, impedindo o `peer` de
   afetar as colunas/linhas
 - Overlays e linhas usavam `backgroundColor` inline que sobrepunha `peer-hover`
+- `bg-slate-50` permanecia junto com `bg-orange-50`, e a ordem das classes
+  mantinha o fundo cinza em alguns estados
 
 ### ✅ Solucao Implementada
 
@@ -38,6 +41,9 @@ background laranja nas colunas/linhas correspondentes.
 - Lista de recursos e swimlanes agora compartilham a mesma grade, garantindo
   hover sincronizado por linha
 - Removidos estados de hover e estilos inline conflitantes
+- Hover no header "Equipamentos" agora ativa destaque global de dias e recursos
+- Classes de background agora alternam entre `bg-slate-50` e `bg-orange-50`,
+  evitando conflito de estilos
 
 #### Arquivos Modificados
 
@@ -52,6 +58,7 @@ background laranja nas colunas/linhas correspondentes.
    na coluna
 3. Passar o mouse sobre um recurso da sidebar e confirmar o highlight na linha
 4. Confirmar que diario e mensal nao foram afetados
+5. Passar o mouse sobre "Equipamentos" e confirmar o destaque em toda a grade
 
 #### Armadilhas a Evitar
 

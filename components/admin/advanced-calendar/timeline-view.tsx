@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { format, startOfWeek, addDays, isSameDay } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import type { CalendarEvent, CalendarResource } from './types'
@@ -39,6 +39,7 @@ export function TimelineView({
   onDateClick: _onDateClick,
   onColumnClick,
 }: TimelineViewProps) {
+  const [isEquipmentHovered, setIsEquipmentHovered] = useState(false)
   // Calcula o período visível (sempre semanal)
   const visiblePeriod = useMemo(() => {
     const weekStart = startOfWeek(date, { weekStartsOn: 1 })
@@ -143,7 +144,6 @@ export function TimelineView({
     })
   }
 
-
   return (
     <div className="flex flex-col bg-white h-full">
       <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0">
@@ -156,12 +156,14 @@ export function TimelineView({
         >
           {/* Header da Lista de Recursos */}
           <div
-            className="sticky top-0 flex h-full w-full flex-col justify-center items-center px-3 border-b border-r border-slate-200 bg-slate-50 cursor-pointer transition-colors group"
+            className="sticky top-0 flex h-full w-full flex-col justify-center items-center px-3 border-b border-r border-slate-200 bg-slate-50 cursor-pointer transition-colors group hover:bg-orange-50"
             style={{
               height: TIMELINE_HEADER_HEIGHT,
               minHeight: TIMELINE_HEADER_HEIGHT,
               maxHeight: TIMELINE_HEADER_HEIGHT,
             }}
+            onMouseEnter={() => setIsEquipmentHovered(true)}
+            onMouseLeave={() => setIsEquipmentHovered(false)}
             onClick={() => {
               // Coleta todos os eventos da semana visivel (todos os equipamentos)
               const weekEvents = events.filter((event) => {
@@ -202,6 +204,7 @@ export function TimelineView({
               {visiblePeriod.days.map((day, dayIndex) => {
                 const isLastDay = dayIndex === visiblePeriod.days.length - 1
                 const dayBorderClass = isLastDay ? 'border-r-0' : 'border-r'
+                const isDayHighlighted = isEquipmentHovered
                 // Calcula eventos para este dia
                 const dayEvents = events.filter((event) => {
                   if (event.status === 'rejected' && event.createdAt) {
@@ -216,7 +219,9 @@ export function TimelineView({
                 return (
                   <div key={day.toISOString()} className="flex-1 relative">
                     <div
-                      className={`peer sticky top-0 flex flex-col items-center justify-center border-b border-slate-200 bg-slate-50 cursor-pointer transition-colors group hover:bg-orange-50 ${dayBorderClass}`}
+                      className={`peer sticky top-0 flex flex-col items-center justify-center border-b border-slate-200 cursor-pointer transition-colors group hover:bg-orange-50 ${dayBorderClass} ${
+                        isDayHighlighted ? 'bg-orange-50' : 'bg-slate-50'
+                      }`}
                       style={{
                         height: TIMELINE_HEADER_HEIGHT,
                         minHeight: TIMELINE_HEADER_HEIGHT,
@@ -230,15 +235,29 @@ export function TimelineView({
                         )
                       }}
                     >
-                      <div className="text-xs font-semibold uppercase text-gray-600 transition-colors group-hover:text-orange-600">
+                      <div
+                        className={`text-xs font-semibold uppercase transition-colors ${
+                          isDayHighlighted
+                            ? 'text-orange-600'
+                            : 'text-gray-600 group-hover:text-orange-600'
+                        }`}
+                      >
                         {WEEKDAY_ABBREVIATIONS[day.getDay()]}
                       </div>
-                      <div className="text-sm font-bold text-gray-900 transition-colors group-hover:text-orange-600">
+                      <div
+                        className={`text-sm font-bold transition-colors ${
+                          isDayHighlighted
+                            ? 'text-orange-600'
+                            : 'text-gray-900 group-hover:text-orange-600'
+                        }`}
+                      >
                         {format(day, 'd')}
                       </div>
                     </div>
                     <div
-                      className="absolute inset-x-0 bottom-0 peer-hover:bg-orange-50/30 transition-colors"
+                      className={`absolute inset-x-0 bottom-0 peer-hover:bg-orange-50/30 transition-colors ${
+                        isDayHighlighted ? 'bg-orange-50/30' : ''
+                      }`}
                       style={{ top: TIMELINE_HEADER_HEIGHT }}
                     />
                   </div>
@@ -252,11 +271,14 @@ export function TimelineView({
             const resourceEvents = getEventsForResource(resource.id)
             const isLastRow = index === timelineResources.length - 1
             const rowBorderClass = isLastRow ? 'border-b-0' : 'border-b'
+            const isResourceHighlighted = isEquipmentHovered
 
             return (
               <div key={resource.id} className="contents">
                 <div
-                  className={`peer px-3 flex items-center whitespace-nowrap border-r border-slate-200 cursor-pointer transition-colors bg-slate-50 hover:bg-orange-50 group ${rowBorderClass}`}
+                  className={`peer px-3 flex items-center whitespace-nowrap border-r border-slate-200 cursor-pointer transition-colors hover:bg-orange-50 group ${rowBorderClass} ${
+                    isResourceHighlighted ? 'bg-orange-50' : 'bg-slate-50'
+                  }`}
                   style={{
                     gridColumn: 1,
                     gridRow: index + 2,
@@ -276,14 +298,22 @@ export function TimelineView({
                             ?.color || '#ea580c',
                       }}
                     />
-                    <span className="text-sm font-medium text-gray-900 transition-colors group-hover:text-orange-600">
+                    <span
+                      className={`text-sm font-medium transition-colors ${
+                        isResourceHighlighted
+                          ? 'text-orange-600'
+                          : 'text-gray-900 group-hover:text-orange-600'
+                      }`}
+                    >
                       {resource.name}
                     </span>
                   </div>
                 </div>
 
                 <div
-                  className={`relative cursor-pointer transition-colors hover:bg-orange-50/30 peer-hover:bg-orange-50/30 ${rowBorderClass} border-slate-200`}
+                  className={`relative cursor-pointer transition-colors hover:bg-orange-50/30 peer-hover:bg-orange-50/30 ${rowBorderClass} border-slate-200 ${
+                    isResourceHighlighted ? 'bg-orange-50/30' : ''
+                  }`}
                   style={{
                     gridColumn: 2,
                     gridRow: index + 2,
@@ -332,8 +362,8 @@ export function TimelineView({
                             </>
                           ) : (
                             <>
-                              {format(event.start, 'HH:mm', { locale: ptBR })}{' '}
-                              - {format(event.end, 'HH:mm', { locale: ptBR })}
+                              {format(event.start, 'HH:mm', { locale: ptBR })} -{' '}
+                              {format(event.end, 'HH:mm', { locale: ptBR })}
                             </>
                           )}
                         </div>

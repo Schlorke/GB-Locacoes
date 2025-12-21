@@ -558,6 +558,8 @@ Feedback visual laranja para melhor UX:
 - **Coluna Completa** (Diária): Background laranja suave (`bg-orange-50/30`)
 - **Swimlanes** (Timeline): Background laranja suave (`bg-orange-50/30`)
   aplicado via `peer`/`peer-hover` entre headers/recursos e linhas/colunas
+- **Header "Equipamentos" (Timeline)**: Hover destaca todos os dias e recursos
+  para indicar a visao agregada da semana
 
 #### **Estrutura do Sidebar**
 
