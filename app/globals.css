@@ -484,9 +484,12 @@ a.header-action-button.text-orange-600,
 
 /* Botão de fechar do Dialog - SEM focus ring (conforme preferência do usuário) */
 /* Remove focus ring de todos os botões dentro do header do dialog */
-[data-baseui-dialog-popup] button[class*='absolute'][class*='right-4'][class*='top-4'],
-[data-baseui-dialog-popup] button[class*='absolute'][class*='right-4'][class*='top-4']:focus,
-[data-baseui-dialog-popup] button[class*='absolute'][class*='right-4'][class*='top-4']:focus-visible {
+[data-baseui-dialog-popup]
+  button[class*='absolute'][class*='right-4'][class*='top-4'],
+[data-baseui-dialog-popup]
+  button[class*='absolute'][class*='right-4'][class*='top-4']:focus,
+[data-baseui-dialog-popup]
+  button[class*='absolute'][class*='right-4'][class*='top-4']:focus-visible {
   outline: none !important;
   box-shadow: none !important;
   ring: 0 !important;

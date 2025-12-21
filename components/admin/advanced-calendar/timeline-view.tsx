@@ -258,9 +258,6 @@ export function TimelineView({
               height: TIMELINE_HEADER_HEIGHT,
               minHeight: TIMELINE_HEADER_HEIGHT,
               maxHeight: TIMELINE_HEADER_HEIGHT,
-              backgroundColor: isHeaderHovered
-                ? 'rgba(254, 243, 199, 0.3)'
-                : 'transparent',
             }}
           >
             <div className="flex h-full w-full relative">
