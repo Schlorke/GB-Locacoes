@@ -22,6 +22,11 @@ interface MonthlyViewProps {
   events: CalendarEvent[]
   onEventClick?: (_event: CalendarEvent) => void
   onDateClick?: (_date: Date) => void
+  onColumnClick?: (
+    _columnId: string,
+    _columnName: string,
+    _events: CalendarEvent[]
+  ) => void
 }
 
 const WEEKDAYS = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
@@ -31,6 +36,7 @@ export function MonthlyView({
   events,
   onEventClick,
   onDateClick,
+  onColumnClick,
 }: MonthlyViewProps) {
   const calendarDays = useMemo(() => {
     const monthStart = startOfMonth(date)
@@ -61,14 +67,34 @@ export function MonthlyView({
     <div className="flex flex-col bg-white min-h-[500px]">
       {/* Header dos Dias da Semana */}
       <div className="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
-        {WEEKDAYS.map((day) => (
-          <div
-            key={day}
-            className="py-3 text-center text-sm font-semibold text-gray-700 border-r border-slate-200 last:border-r-0"
-          >
-            {day}
-          </div>
-        ))}
+        {WEEKDAYS.map((day, index) => {
+          // Calcula eventos para este dia da semana em todo o mês
+          const weekdayEvents = events.filter((event) => {
+            const eventWeekday = event.start.getDay()
+            const targetWeekday = (index + 1) % 7 // Ajuste para índice correto (seg=1, dom=0)
+            return (
+              eventWeekday === targetWeekday && isSameMonth(event.start, date)
+            )
+          })
+
+          return (
+            <div
+              key={day}
+              className="py-3 text-center text-sm font-semibold text-gray-700 border-r border-slate-200 last:border-r-0 cursor-pointer hover:bg-orange-50 transition-colors group"
+              onClick={() => {
+                onColumnClick?.(
+                  `weekday-${index}`,
+                  `Todos os ${day} do mês`,
+                  weekdayEvents
+                )
+              }}
+            >
+              <span className="group-hover:text-orange-600 transition-colors">
+                {day}
+              </span>
+            </div>
+          )
+        })}
       </div>
 
       {/* Grade do Calendário */}

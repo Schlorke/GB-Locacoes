@@ -29,6 +29,11 @@ interface DailyViewProps {
   onEventClick?: (_event: CalendarEvent) => void
   onDateClick?: (_date: Date) => void
   onCreateEvent?: (_event: Partial<CalendarEvent>) => void
+  onColumnClick?: (
+    _columnId: string,
+    _columnName: string,
+    _events: CalendarEvent[]
+  ) => void
 }
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i) // 00:00 at\u00e9 23:00
@@ -40,6 +45,7 @@ export function DailyView({
   onEventClick,
   onDateClick,
   onCreateEvent,
+  onColumnClick,
 }: DailyViewProps) {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [quickCreateOpen, setQuickCreateOpen] = useState(false)
@@ -190,8 +196,16 @@ export function DailyView({
             className={`flex-1 ${index < resourceColumns.length - 1 ? 'border-r border-slate-200' : ''}`}
           >
             {/* Header do Recurso */}
-            <div className="h-12 flex items-center justify-center border-b border-slate-200 bg-slate-50 sticky top-0 z-20">
-              <span className="text-sm font-medium text-gray-900">
+            <div
+              className="peer h-12 flex items-center justify-center border-b border-slate-200 bg-slate-50 sticky top-0 z-20 cursor-pointer hover:bg-orange-50 transition-colors group"
+              onClick={() => {
+                const columnEvents = timeGridEvents.filter(
+                  (event) => !hasResources || event.resourceId === resource.id
+                )
+                onColumnClick?.(resource.id, resource.name, columnEvents)
+              }}
+            >
+              <span className="text-sm font-medium text-gray-900 group-hover:text-orange-600 transition-colors">
                 {resource.name}
               </span>
             </div>
@@ -210,7 +224,7 @@ export function DailyView({
               ref={(el) => {
                 if (el) columnRefs.current.set(resource.id, el)
               }}
-              className={`relative h-[1440px] ${index === 0 ? '' : ''}`}
+              className={`relative h-[1440px] peer-hover:bg-orange-50/30 transition-colors ${index === 0 ? '' : ''}`}
             >
               {HOURS.map((hour) => (
                 <div

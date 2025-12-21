@@ -519,5 +519,142 @@ que permitem visualizar eventos operacionais em diferentes granularidades.
 
 ---
 
-**Última Atualização**: Janeiro 2025 **Versão do Componente**: 1.0 **Status**:
+## 🎯 Sidebar de Eventos por Coluna (Column Events Panel)
+
+### **O Que É?**
+
+O **Column Events Panel** é um componente Sheet (sidebar) que exibe todos os
+eventos de uma coluna específica do calendário, oferecendo uma visão agregada e
+organizada dos eventos.
+
+### **Propósito**
+
+Esta funcionalidade foi implementada para resolver a redundância entre Dialog e
+Sidebar, criando uma hierarquia clara:
+
+- **Dialog** (`EventDetailsPanel`): Detalhes de 1 evento individual
+- **Sidebar** (`ColumnEventsPanel`): Lista de N eventos de uma coluna
+
+### **Como Funciona?**
+
+#### **Ativação do Sidebar**
+
+O sidebar é ativado ao **clicar no header (cabeçalho) de uma coluna**:
+
+- **Visão Diária**: Clicar em "Pendente", "Aprovado", "Rejeitado" mostra todos
+  os eventos dessa categoria
+- **Visão Semanal**: Clicar em "SEG 15", "TER 16", etc. mostra todos os eventos
+  daquele dia
+- **Visão Mensal**: Clicar em "Seg", "Ter", "Qua", etc. mostra todos os eventos
+  daquele dia da semana no mês
+
+#### **Hover Effects**
+
+Feedback visual laranja para melhor UX:
+
+- **Header da Coluna**:
+  - Background: `bg-orange-50`
+  - Texto: `text-orange-600`
+- **Coluna Completa** (Diária): Background laranja suave (`bg-orange-50/30`)
+- **Swimlanes** (Timeline): Background laranja suave (`bg-orange-50/20`)
+
+#### **Estrutura do Sidebar**
+
+```
+┌─────────────────────────────────────┐
+│ ← [Nome da Coluna] (X eventos)      │ ← Header com contador
+├─────────────────────────────────────┤
+│ ┌─────────────────────────────────┐ │
+│ │ 🟠 Pendente                     │ │ ← Card de Evento
+│ │ Cliente: João Silva             │ │
+│ │ Equipamento: Compressor 10PCM   │ │
+│ │ 📅 19 Dez, 08:00 - 12:00        │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ ┌─────────────────────────────────┐ │
+│ │ 🟢 Aprovado                     │ │
+│ │ Cliente: Maria Santos           │ │
+│ │ Equipamento: Betoneira 400L     │ │
+│ │ 📅 19 Dez, 13:00 - 17:00        │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ ... (scroll para mais eventos)      │
+└─────────────────────────────────────┘
+```
+
+### **Funcionalidades**
+
+- ✅ **Lista Ordenada**: Eventos organizados por horário de início
+- ✅ **Cards Clicáveis**: Clicar em um evento abre o Dialog com detalhes
+  completos
+- ✅ **Badges de Status**: Cores semânticas (pendente, aprovado, rejeitado,
+  concluído)
+- ✅ **Empty State**: Mensagem quando não há eventos na coluna
+- ✅ **Scroll Interno**: Suporte para muitos eventos
+- ✅ **Informações Compactas**: Cliente, equipamento, horário, duração
+- ✅ **Contador de Eventos**: Exibição clara do total de eventos
+
+### **Casos de Uso**
+
+#### **Cenário 1: Visão Diária - Categoria "Pendente"**
+
+1. Administrador visualiza calendário diário de orçamentos
+2. Vê vários eventos na coluna "Pendente"
+3. Clica no header "Pendente"
+4. Sidebar abre mostrando TODOS os orçamentos pendentes do dia
+5. Pode revisar rapidamente todos os pendentes
+6. Clica em um específico para ver detalhes e tomar ação
+
+#### **Cenário 2: Visão Semanal - Dia "SEX 19"**
+
+1. Administrador visualiza calendário semanal de logística
+2. Passa o mouse sobre a coluna "SEX 19" (efeito laranja)
+3. Clica no header da coluna
+4. Sidebar abre mostrando todas as entregas/coletas da sexta-feira
+5. Pode planejar a rota do dia vendo todos os eventos juntos
+6. Clica em uma entrega específica para ver endereço e detalhes
+
+#### **Cenário 3: Visão Mensal - Todas as Segundas**
+
+1. Administrador visualiza calendário mensal de manutenções
+2. Clica no header "Seg" (dia da semana)
+3. Sidebar mostra todas as manutenções agendadas para segundas-feiras no mês
+4. Identifica padrões e carga de trabalho
+5. Pode reorganizar se houver sobrecarga em alguma segunda específica
+
+### **Benefícios**
+
+- 🎯 **Organização**: Visão clara de todos os eventos de uma coluna
+- ⚡ **Eficiência**: Acesso rápido a múltiplos eventos
+- 🔍 **Análise**: Facilita identificação de padrões e volumes
+- 🎨 **UX Aprimorada**: Separação clara entre visão individual e agregada
+- 📊 **Gestão**: Melhor controle sobre categorias, dias ou períodos específicos
+
+### **Implementação Técnica**
+
+- **Arquivo**: `components/admin/advanced-calendar/column-events-panel.tsx`
+- **Tipo**: Sheet (Radix UI Dialog adaptado para sidebar)
+- **Props**:
+  - `columnId`: ID da coluna
+  - `columnName`: Nome exibido no header
+  - `events`: Array de eventos filtrados
+  - `open`/`onOpenChange`: Controle de visibilidade
+  - `onEventClick`: Handler para clicar em evento (abre Dialog)
+  - `viewMode`: Modo de visualização atual (daily, weekly, monthly)
+
+### **Interação com EventDetailsPanel**
+
+O fluxo de interação é:
+
+1. **Clique no Header da Coluna** → Abre `ColumnEventsPanel` (lista de eventos)
+2. **Clique em Evento da Lista** → Fecha `ColumnEventsPanel` + Abre
+   `EventDetailsPanel` (detalhes)
+3. **Clique Direto em Evento no Calendário** → Abre `EventDetailsPanel`
+   (detalhes)
+
+Isso elimina a redundância anterior e cria uma hierarquia intuitiva.
+
+---
+
+**Última Atualização**: Dezembro 2025 **Versão do Componente**: 2.0 **Status**:
 ✅ Implementado e Funcional

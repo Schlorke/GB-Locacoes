@@ -24,6 +24,11 @@ interface TimelineViewProps {
   resources?: CalendarResource[]
   onEventClick?: (_event: CalendarEvent) => void
   onDateClick?: (_date: Date) => void
+  onColumnClick?: (
+    _columnId: string,
+    _columnName: string,
+    _events: CalendarEvent[]
+  ) => void
 }
 
 export function TimelineView({
@@ -32,6 +37,7 @@ export function TimelineView({
   resources,
   onEventClick,
   onDateClick: _onDateClick,
+  onColumnClick,
 }: TimelineViewProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -193,7 +199,7 @@ export function TimelineView({
         {/* Timeline Grid */}
         <div
           ref={scrollContainerRef}
-          className="flex-1 min-w-0 h-full flex flex-col overflow-hidden"
+          className="flex-1 min-w-0 h-full flex flex-col overflow-hidden group/timeline"
         >
           {/* Header da Timeline */}
           <div
@@ -205,24 +211,44 @@ export function TimelineView({
             }}
           >
             <div className="flex h-full w-full">
-              {visiblePeriod.days.map((day) => (
-                <div
-                  key={day.toISOString()}
-                  className="flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center bg-slate-50"
-                >
-                  <div className="text-xs font-semibold text-gray-600 uppercase">
-                    {WEEKDAY_ABBREVIATIONS[day.getDay()]}
+              {visiblePeriod.days.map((day) => {
+                // Calcula eventos para este dia
+                const dayEvents = events.filter((event) => {
+                  if (event.status === 'rejected' && event.createdAt) {
+                    return isSameDay(day, event.createdAt)
+                  }
+                  return (
+                    event.start.getTime() <= day.getTime() + 86400000 &&
+                    event.end.getTime() >= day.getTime()
+                  )
+                })
+
+                return (
+                  <div
+                    key={day.toISOString()}
+                    className="peer flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center bg-slate-50 cursor-pointer hover:bg-orange-50 transition-colors group"
+                    onClick={() => {
+                      onColumnClick?.(
+                        day.toISOString(),
+                        format(day, "EEEE, dd 'de' MMM", { locale: ptBR }),
+                        dayEvents
+                      )
+                    }}
+                  >
+                    <div className="text-xs font-semibold text-gray-600 uppercase group-hover:text-orange-600 transition-colors">
+                      {WEEKDAY_ABBREVIATIONS[day.getDay()]}
+                    </div>
+                    <div className="text-sm font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
+                      {format(day, 'd')}
+                    </div>
                   </div>
-                  <div className="text-sm font-bold text-gray-900">
-                    {format(day, 'd')}
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
 
           {/* Swimlanes Container */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 peer-hover:bg-orange-50/20 transition-colors">
             <div
               className="relative grid min-h-full"
               style={{

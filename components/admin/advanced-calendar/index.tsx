@@ -7,6 +7,7 @@ import { DailyView } from './daily-view'
 import { MonthlyView } from './monthly-view'
 import { TimelineView } from './timeline-view'
 import { EventDetailsPanel } from './event-details-panel'
+import { ColumnEventsPanel } from './column-events-panel'
 import {
   CalendarFilters,
   applyFilters,
@@ -61,6 +62,12 @@ export function AdvancedCalendar({
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null)
   const [isDetailsPanelOpen, setIsDetailsPanelOpen] = useState(false)
   const [filters, setFilters] = useState<CalendarFiltersState>(DEFAULT_FILTERS)
+  const [selectedColumn, setSelectedColumn] = useState<{
+    id: string
+    name: string
+    events: CalendarEvent[]
+  } | null>(null)
+  const [isColumnPanelOpen, setIsColumnPanelOpen] = useState(false)
 
   // Aplica filtros aos eventos
   const filteredEvents = useMemo(
@@ -102,6 +109,15 @@ export function AdvancedCalendar({
     onDateClick?.(date)
   }
 
+  const handleColumnClick = (
+    columnId: string,
+    columnName: string,
+    columnEvents: CalendarEvent[]
+  ) => {
+    setSelectedColumn({ id: columnId, name: columnName, events: columnEvents })
+    setIsColumnPanelOpen(true)
+  }
+
   return (
     <>
       <div
@@ -134,6 +150,7 @@ export function AdvancedCalendar({
               onEventClick={handleEventClick}
               onDateClick={handleDateClick}
               onCreateEvent={onCreateEvent}
+              onColumnClick={handleColumnClick}
             />
           )}
           {viewMode === 'weekly' && (
@@ -143,6 +160,7 @@ export function AdvancedCalendar({
               resources={resources}
               onEventClick={handleEventClick}
               onDateClick={handleDateClick}
+              onColumnClick={handleColumnClick}
             />
           )}
           {viewMode === 'monthly' && (
@@ -151,6 +169,7 @@ export function AdvancedCalendar({
               events={filteredEvents}
               onEventClick={handleEventClick}
               onDateClick={handleDateClick}
+              onColumnClick={handleColumnClick}
             />
           )}
           {viewMode === 'timeline' && (
@@ -160,6 +179,7 @@ export function AdvancedCalendar({
               resources={resources}
               onEventClick={handleEventClick}
               onDateClick={handleDateClick}
+              onColumnClick={handleColumnClick}
             />
           )}
         </div>
@@ -177,6 +197,20 @@ export function AdvancedCalendar({
         onOpenEquipment={onOpenEquipment}
         onOpenRental={onOpenRental}
         onOpenRoute={onOpenRoute}
+      />
+
+      {/* Column Events Panel - NOVO */}
+      <ColumnEventsPanel
+        columnId={selectedColumn?.id || null}
+        columnName={selectedColumn?.name || ''}
+        events={selectedColumn?.events || []}
+        open={isColumnPanelOpen}
+        onOpenChange={setIsColumnPanelOpen}
+        onEventClick={(event) => {
+          handleEventClick(event)
+          setIsColumnPanelOpen(false) // Fecha sidebar ao abrir dialog
+        }}
+        viewMode={viewMode}
       />
     </>
   )

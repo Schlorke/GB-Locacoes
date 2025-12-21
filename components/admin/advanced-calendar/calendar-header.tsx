@@ -23,7 +23,7 @@ interface CalendarHeaderProps {
 const viewOptions = [
   { value: 'daily', label: 'Diário', icon: Columns3 },
   { value: 'weekly', label: 'Semanal', icon: GanttChartSquare },
-  { value: 'monthly', label: 'Calendário', icon: Calendar },
+  { value: 'monthly', label: 'Mensal', icon: Calendar },
 ]
 
 export function CalendarHeader({

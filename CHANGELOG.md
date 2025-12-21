@@ -8,6 +8,50 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added ✨
+
+- **Column Events Panel - Sidebar de Eventos por Coluna**: Implementado novo
+  componente de sidebar para visualização agregada de eventos do calendário
+  - **Componente Criado**:
+    `components/admin/advanced-calendar/column-events-panel.tsx`
+  - **Funcionalidades**:
+    - Clique no header de coluna abre sidebar com todos os eventos daquela
+      coluna
+    - Lista ordenada de eventos com cards compactos (cliente, equipamento,
+      horário, status)
+    - Cards clicáveis que abrem o Dialog de detalhes individuais
+    - Empty state quando não há eventos
+    - Contador de eventos no header
+    - Badges de status com cores semânticas
+  - **Hover Effects Implementados**:
+    - Header de coluna com background laranja (`bg-orange-50`) e texto laranja
+      (`text-orange-600`)
+    - Coluna completa (visão diária) com background laranja suave
+      (`bg-orange-50/30`)
+    - Swimlanes (visão timeline) com background laranja suave
+      (`bg-orange-50/20`)
+  - **Arquivos Modificados**:
+    - `components/admin/advanced-calendar/index.tsx` - Estado e handlers para
+      sidebar
+    - `components/admin/advanced-calendar/daily-view.tsx` - onClick e hover em
+      colunas
+    - `components/admin/advanced-calendar/timeline-view.tsx` - onClick e hover
+      em dias
+    - `components/admin/advanced-calendar/monthly-view.tsx` - onClick e hover em
+      dias da semana
+  - **Documentação Atualizada**: `docs/features/advanced-calendar-system.md`
+  - **Benefícios**:
+    - Elimina redundância entre Dialog e Sidebar
+    - Hierarquia clara: Dialog = 1 evento, Sidebar = N eventos de uma coluna
+    - Melhor organização e controle sobre categorias/períodos
+    - UX aprimorada com feedback visual laranja (identidade visual do projeto)
+  - **Casos de Uso**:
+    - Visão Diária: Ver todos os orçamentos "Pendentes" / "Aprovados" /
+      "Rejeitados"
+    - Visão Semanal: Ver todas as entregas de "SEX 19" ou "TER 16"
+    - Visão Mensal: Ver todas as manutenções das "Segundas" do mês
+  - **Data**: 2025-12-21
+
 ### Changed 🔄
 
 - **Atualização de dependências**: Atualizados pacotes para versões mais
