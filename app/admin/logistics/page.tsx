@@ -602,7 +602,7 @@ export default function AdminLogisticsPage() {
                       {filteredDeliveries.map((delivery) => (
                         <tr
                           key={delivery.id}
-                          className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
+                          className="border-b border-gray-50 hover:bg-orange-50 transition-colors"
                         >
                           <td className="p-4">
                             <div>

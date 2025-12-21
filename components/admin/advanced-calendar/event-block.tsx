@@ -145,10 +145,22 @@ export function EventBlock({
           )}
 
           {/* Meta - apenas para grande (>56px) ou rejeitados */}
-          {(densityLevel === 'large' || isRejected) && metaToShow && (
-            <div className="text-xs text-gray-500 mt-0.5 leading-tight truncate">
-              {event.status || event.clientName || event.equipmentName}
-            </div>
+          {(densityLevel === 'large' || isRejected) && (
+            <>
+              {isRejected ? (
+                (event.clientName || event.equipmentName) && (
+                  <div className="text-xs text-gray-500 mt-0.5 leading-tight truncate">
+                    {event.clientName || event.equipmentName}
+                  </div>
+                )
+              ) : (
+                metaToShow && (
+                  <div className="text-xs text-gray-500 mt-0.5 leading-tight truncate">
+                    {event.status || event.clientName || event.equipmentName}
+                  </div>
+                )
+              )}
+            </>
           )}
         </>
       )}

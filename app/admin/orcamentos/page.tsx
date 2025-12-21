@@ -793,7 +793,7 @@ function AdminQuotesPage() {
                               ease: 'easeOut',
                               delay: index * 0.055,
                             }}
-                            className="border-b border-gray-100 transition-colors group"
+                            className="border-b border-gray-100 transition-colors group hover:bg-orange-50"
                             style={{
                               backgroundColor:
                                 hoveredRowId === quote.id

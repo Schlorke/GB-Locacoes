@@ -1365,7 +1365,7 @@ export default function AdminDashboard() {
                                 duration: 0.3,
                                 ease: 'easeOut',
                               }}
-                              className="hover:bg-gray-50 transition-colors duration-200"
+                              className="hover:bg-orange-50 transition-colors duration-200"
                             >
                               <TableCell className="p-4">
                                 <div className="flex items-center gap-3">

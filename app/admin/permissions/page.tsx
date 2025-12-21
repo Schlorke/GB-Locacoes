@@ -251,7 +251,7 @@ export default function AdminPermissionsPage() {
                     return (
                       <tr
                         key={module.id}
-                        className="border-b border-gray-100 hover:bg-gray-50"
+                        className="border-b border-gray-100 hover:bg-orange-50 transition-colors"
                       >
                         <td className="p-4">
                           <div className="flex items-center gap-3">

@@ -604,7 +604,7 @@ export default function AdminRentalsPage() {
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: 20 }}
                             transition={{ delay: index * 0.05 }}
-                            className="border-b border-gray-50 hover:bg-gray-100 transition-colors group"
+                            className="border-b border-gray-50 hover:bg-orange-50 transition-colors group"
                           >
                             <td className="p-4">
                               <div className="flex items-center gap-3">

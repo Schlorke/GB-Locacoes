@@ -515,7 +515,7 @@ export default function AdminMaintenancePage() {
                       {filteredMaintenances.map((maintenance) => (
                         <tr
                           key={maintenance.id}
-                          className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors"
+                          className="border-b border-gray-50 hover:bg-orange-50 transition-colors"
                         >
                           <td className="p-4">
                             <div className="font-medium text-gray-900">

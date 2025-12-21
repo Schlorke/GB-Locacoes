@@ -580,7 +580,7 @@ export default function AdminFinancialPage() {
                     {filteredReceivables.map((receivable) => (
                       <tr
                         key={receivable.id}
-                        className="border-b border-gray-100 hover:bg-gray-50"
+                        className="border-b border-gray-100 hover:bg-orange-50 transition-colors"
                       >
                         <td className="p-4">
                           <div>
