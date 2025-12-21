@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { format, startOfWeek, addDays, isSameDay } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import type { CalendarEvent, CalendarResource } from './types'
@@ -40,6 +40,7 @@ export function TimelineView({
   onColumnClick,
 }: TimelineViewProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [hoveredDayIndex, setHoveredDayIndex] = useState<number | null>(null)
 
   // Calcula o período visível (sempre semanal)
   const visiblePeriod = useMemo(() => {
@@ -199,7 +200,7 @@ export function TimelineView({
         {/* Timeline Grid */}
         <div
           ref={scrollContainerRef}
-          className="flex-1 min-w-0 h-full flex flex-col overflow-hidden group/timeline"
+          className="flex-1 min-w-0 h-full flex flex-col overflow-hidden relative"
         >
           {/* Header da Timeline */}
           <div
@@ -210,8 +211,8 @@ export function TimelineView({
               maxHeight: TIMELINE_HEADER_HEIGHT,
             }}
           >
-            <div className="flex h-full w-full">
-              {visiblePeriod.days.map((day) => {
+            <div className="flex h-full w-full relative">
+              {visiblePeriod.days.map((day, dayIndex) => {
                 // Calcula eventos para este dia
                 const dayEvents = events.filter((event) => {
                   if (event.status === 'rejected' && event.createdAt) {
@@ -223,10 +224,21 @@ export function TimelineView({
                   )
                 })
 
+                // Calcula a posição e largura da coluna para o overlay
+                const periodStart = visiblePeriod.start.getTime()
+                const periodEnd = visiblePeriod.end.getTime()
+                const dayStart = day.getTime()
+                const dayEnd = day.getTime() + 86400000
+                const totalDuration = periodEnd - periodStart
+                const left = ((dayStart - periodStart) / totalDuration) * 100
+                const width = (86400000 / totalDuration) * 100
+
                 return (
                   <div
                     key={day.toISOString()}
-                    className="peer flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center bg-slate-50 cursor-pointer hover:bg-orange-50 transition-colors group"
+                    className="flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center bg-slate-50 cursor-pointer hover:bg-orange-50 transition-colors group/header"
+                    onMouseEnter={() => setHoveredDayIndex(dayIndex)}
+                    onMouseLeave={() => setHoveredDayIndex(null)}
                     onClick={() => {
                       onColumnClick?.(
                         day.toISOString(),
@@ -235,10 +247,10 @@ export function TimelineView({
                       )
                     }}
                   >
-                    <div className="text-xs font-semibold text-gray-600 uppercase group-hover:text-orange-600 transition-colors">
+                    <div className="text-xs font-semibold text-gray-600 uppercase group-hover/header:text-orange-600 transition-colors">
                       {WEEKDAY_ABBREVIATIONS[day.getDay()]}
                     </div>
-                    <div className="text-sm font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
+                    <div className="text-sm font-bold text-gray-900 group-hover/header:text-orange-600 transition-colors">
                       {format(day, 'd')}
                     </div>
                   </div>
@@ -247,8 +259,8 @@ export function TimelineView({
             </div>
           </div>
 
-          {/* Swimlanes Container */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 peer-hover:bg-orange-50/20 transition-colors">
+          {/* Swimlanes Container - Estrutura Original */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 relative">
             <div
               className="relative grid min-h-full"
               style={{
@@ -272,7 +284,7 @@ export function TimelineView({
                       marginBottom: 0,
                     }}
                   >
-                    {/* Eventos na Swimlane */}
+                    {/* Eventos na Swimlane - Posicionamento Original (podem se estender por múltiplos dias) */}
                     {resourceEvents.map((event) => {
                       const position = getEventPosition(event)
                       if (!position) return null
@@ -280,7 +292,7 @@ export function TimelineView({
                       return (
                         <div
                           key={event.id}
-                          className="absolute top-1 bottom-1 rounded-md cursor-pointer hover:opacity-90 transition-opacity border-l-2 px-2 py-1 overflow-hidden"
+                          className="absolute top-1 bottom-1 rounded-md cursor-pointer hover:opacity-90 transition-opacity border-l-2 px-2 py-1 overflow-hidden z-20"
                           style={{
                             left: position.left,
                             width: position.width,
@@ -320,6 +332,29 @@ export function TimelineView({
                 )
               })}
             </div>
+
+            {/* Overlays de Colunas Verticais para Hover - Um para cada dia */}
+            {visiblePeriod.days.map((day, dayIndex) => {
+              // Calcula posição baseada no índice (mesma lógica dos headers com flex-1)
+              const totalDays = visiblePeriod.days.length
+              const columnWidth = 100 / totalDays
+              const left = (dayIndex * 100) / totalDays
+
+              return (
+                <div
+                  key={`overlay-${day.toISOString()}`}
+                  className="absolute top-0 bottom-0 pointer-events-none transition-colors z-10"
+                  style={{
+                    left: `${left}%`,
+                    width: `${columnWidth}%`,
+                    backgroundColor:
+                      hoveredDayIndex === dayIndex
+                        ? 'rgba(254, 243, 199, 0.3)'
+                        : 'transparent',
+                  }}
+                />
+              )
+            })}
           </div>
         </div>
       </div>
