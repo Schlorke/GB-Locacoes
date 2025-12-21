@@ -97,6 +97,14 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Timeline semanal com hover por peer**: Headers dos dias e recursos na
+  sidebar agora aplicam `peer`/`peer-hover` para destacar colunas/linhas
+  correspondentes, sem impacto nas visäes di ria e mensal.
+  - **Arquivos Modificados**:
+    `components/admin/advanced-calendar/timeline-view.tsx`,
+    `docs/issues/known-issues.md`, `docs/features/advanced-calendar-system.md`
+  - **Data**: 2025-12-21
+
 - **Timeline (Equipamentos) com linhas preenchendo a altura do bloco**: Linhas e
   swimlanes agora expandem para ocupar a altura disponivel quando ha poucos
   recursos, mantendo altura minima de 60px.

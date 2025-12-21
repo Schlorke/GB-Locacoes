@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import { useMemo } from 'react'
 import { format, startOfWeek, addDays, isSameDay } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import type { CalendarEvent, CalendarResource } from './types'
@@ -39,13 +39,6 @@ export function TimelineView({
   onDateClick: _onDateClick,
   onColumnClick,
 }: TimelineViewProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const [hoveredDayIndex, setHoveredDayIndex] = useState<number | null>(null)
-  const [hoveredResourceId, setHoveredResourceId] = useState<string | null>(
-    null
-  )
-  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
-
   // Calcula o período visível (sempre semanal)
   const visiblePeriod = useMemo(() => {
     const weekStart = startOfWeek(date, { weekStartsOn: 1 })
@@ -150,34 +143,35 @@ export function TimelineView({
     })
   }
 
+
   return (
     <div className="flex flex-col bg-white h-full">
-      {/* Timeline Container */}
-      <div className="flex overflow-hidden h-full">
-        {/* Lista de Recursos (Sticky) */}
-        <div className="flex-shrink-0 border-r border-slate-200 bg-slate-50 h-full flex flex-col overflow-hidden">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0">
+        <div
+          className="grid min-h-full"
+          style={{
+            gridTemplateColumns: 'max-content 1fr',
+            gridTemplateRows: `${TIMELINE_HEADER_HEIGHT}px ${timelineRowTemplate}`,
+          }}
+        >
+          {/* Header da Lista de Recursos */}
           <div
-            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-10 cursor-pointer transition-colors group/header"
+            className="sticky top-0 flex h-full w-full flex-col justify-center items-center px-3 border-b border-r border-slate-200 bg-slate-50 cursor-pointer transition-colors group"
             style={{
               height: TIMELINE_HEADER_HEIGHT,
               minHeight: TIMELINE_HEADER_HEIGHT,
               maxHeight: TIMELINE_HEADER_HEIGHT,
-              backgroundColor: isHeaderHovered
-                ? 'rgba(254, 243, 199, 0.3)'
-                : undefined,
             }}
-            onMouseEnter={() => setIsHeaderHovered(true)}
-            onMouseLeave={() => setIsHeaderHovered(false)}
             onClick={() => {
-              // Coleta todos os eventos da semana visível (todos os equipamentos)
+              // Coleta todos os eventos da semana visivel (todos os equipamentos)
               const weekEvents = events.filter((event) => {
-                // Para eventos rejeitados, verifica se a data de rejeição está no período visível
+                // Para eventos rejeitados, verifica se a data de rejeicao esta no periodo visivel
                 if (event.status === 'rejected' && event.createdAt) {
                   return visiblePeriod.days.some((day) =>
                     isSameDay(day, event.createdAt!)
                   )
                 }
-                // Para outros eventos, verifica se o evento se sobrepõe ao período visível
+                // Para outros eventos, verifica se o evento se sobrepoe ao periodo visivel
                 return (
                   event.start.getTime() <= visiblePeriod.end.getTime() &&
                   event.end.getTime() >= visiblePeriod.start.getTime()
@@ -191,77 +185,23 @@ export function TimelineView({
               )
             }}
           >
-            <div className="flex h-full w-full flex-col justify-center items-center px-3">
-              <div className="text-sm font-semibold text-gray-700 whitespace-nowrap leading-none group-hover/header:text-orange-600 transition-colors">
-                Equipamentos
-              </div>
+            <div className="text-sm font-semibold text-gray-700 whitespace-nowrap leading-none group-hover:text-orange-600 transition-colors">
+              Equipamentos
             </div>
           </div>
-          <div className="flex-1 overflow-y-auto min-h-0">
-            <div
-              className="grid min-h-full"
-              style={{ gridTemplateRows: timelineRowTemplate }}
-            >
-              {timelineResources.map((resource) => {
-                const resourceEvents = getEventsForResource(resource.id)
 
-                return (
-                  <div
-                    key={resource.id}
-                    className="px-3 flex items-center whitespace-nowrap border-b border-slate-200 last:border-b-0 cursor-pointer transition-colors group/resource"
-                    style={{
-                      backgroundColor:
-                        hoveredResourceId === resource.id
-                          ? 'rgba(254, 243, 199, 0.3)'
-                          : undefined,
-                    }}
-                    onMouseEnter={() => setHoveredResourceId(resource.id)}
-                    onMouseLeave={() => setHoveredResourceId(null)}
-                    onClick={() => {
-                      // Coleta todos os eventos deste recurso para a semana visível
-                      onColumnClick?.(
-                        resource.id,
-                        resource.name,
-                        resourceEvents
-                      )
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-3 h-3 rounded-full flex-shrink-0"
-                        style={{
-                          backgroundColor:
-                            events.find((e) => e.resourceId === resource.id)
-                              ?.color || '#ea580c',
-                        }}
-                      />
-                      <span className="text-sm font-medium text-gray-900 group-hover/resource:text-orange-600 transition-colors">
-                        {resource.name}
-                      </span>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Timeline Grid */}
-        <div
-          ref={scrollContainerRef}
-          className="flex-1 min-w-0 h-full flex flex-col overflow-hidden relative"
-        >
-          {/* Header da Timeline */}
+          {/* Camada de Colunas (Headers + Hover) */}
           <div
-            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-20 transition-colors"
+            className="relative"
             style={{
-              height: TIMELINE_HEADER_HEIGHT,
-              minHeight: TIMELINE_HEADER_HEIGHT,
-              maxHeight: TIMELINE_HEADER_HEIGHT,
+              gridColumn: 2,
+              gridRow: '1 / -1',
             }}
           >
-            <div className="flex h-full w-full relative">
+            <div className="flex h-full w-full">
               {visiblePeriod.days.map((day, dayIndex) => {
+                const isLastDay = dayIndex === visiblePeriod.days.length - 1
+                const dayBorderClass = isLastDay ? 'border-r-0' : 'border-r'
                 // Calcula eventos para este dia
                 const dayEvents = events.filter((event) => {
                   if (event.status === 'rejected' && event.createdAt) {
@@ -273,168 +213,137 @@ export function TimelineView({
                   )
                 })
 
-                // Variáveis calculadas para uso futuro (mantidas para referência)
-                // const periodStart = visiblePeriod.start.getTime()
-                // const periodEnd = visiblePeriod.end.getTime()
-                // const dayStart = day.getTime()
-
                 return (
-                  <div
-                    key={day.toISOString()}
-                    className="flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center bg-slate-50 cursor-pointer transition-colors group/header"
-                    style={{
-                      backgroundColor:
-                        isHeaderHovered || hoveredDayIndex === dayIndex
-                          ? 'rgba(254, 243, 199, 0.3)'
-                          : undefined,
-                    }}
-                    onMouseEnter={() => setHoveredDayIndex(dayIndex)}
-                    onMouseLeave={() => setHoveredDayIndex(null)}
-                    onClick={() => {
-                      onColumnClick?.(
-                        day.toISOString(),
-                        format(day, "EEEE, dd 'de' MMM", { locale: ptBR }),
-                        dayEvents
-                      )
-                    }}
-                  >
+                  <div key={day.toISOString()} className="flex-1 relative">
                     <div
-                      className={`text-xs font-semibold uppercase transition-colors ${
-                        isHeaderHovered
-                          ? 'text-orange-600'
-                          : 'text-gray-600 group-hover/header:text-orange-600'
-                      }`}
+                      className={`peer sticky top-0 flex flex-col items-center justify-center border-b border-slate-200 bg-slate-50 cursor-pointer transition-colors group hover:bg-orange-50 ${dayBorderClass}`}
+                      style={{
+                        height: TIMELINE_HEADER_HEIGHT,
+                        minHeight: TIMELINE_HEADER_HEIGHT,
+                        maxHeight: TIMELINE_HEADER_HEIGHT,
+                      }}
+                      onClick={() => {
+                        onColumnClick?.(
+                          day.toISOString(),
+                          format(day, "EEEE, dd 'de' MMM", { locale: ptBR }),
+                          dayEvents
+                        )
+                      }}
                     >
-                      {WEEKDAY_ABBREVIATIONS[day.getDay()]}
+                      <div className="text-xs font-semibold uppercase text-gray-600 transition-colors group-hover:text-orange-600">
+                        {WEEKDAY_ABBREVIATIONS[day.getDay()]}
+                      </div>
+                      <div className="text-sm font-bold text-gray-900 transition-colors group-hover:text-orange-600">
+                        {format(day, 'd')}
+                      </div>
                     </div>
                     <div
-                      className={`text-sm font-bold transition-colors ${
-                        isHeaderHovered
-                          ? 'text-orange-600'
-                          : 'text-gray-900 group-hover/header:text-orange-600'
-                      }`}
-                    >
-                      {format(day, 'd')}
-                    </div>
+                      className="absolute inset-x-0 bottom-0 peer-hover:bg-orange-50/30 transition-colors"
+                      style={{ top: TIMELINE_HEADER_HEIGHT }}
+                    />
                   </div>
                 )
               })}
             </div>
           </div>
 
-          {/* Swimlanes Container - Estrutura Original */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 relative">
-            <div
-              className="relative grid min-h-full"
-              style={{
-                gridTemplateRows: timelineRowTemplate,
-                padding: 0,
-                margin: 0,
-              }}
-            >
-              {timelineResources.map((resource) => {
-                const resourceEvents = getEventsForResource(resource.id)
+          {/* Linhas de Recursos */}
+          {timelineResources.map((resource, index) => {
+            const resourceEvents = getEventsForResource(resource.id)
+            const isLastRow = index === timelineResources.length - 1
+            const rowBorderClass = isLastRow ? 'border-b-0' : 'border-b'
 
-                return (
-                  <div
-                    key={resource.id}
-                    className="relative border-b border-slate-200 last:border-b-0 cursor-pointer transition-colors"
-                    style={{
-                      minHeight: TIMELINE_ROW_HEIGHT,
-                      paddingTop: 0,
-                      paddingBottom: 0,
-                      marginTop: 0,
-                      marginBottom: 0,
-                      backgroundColor:
-                        hoveredResourceId === resource.id
-                          ? 'rgba(254, 243, 199, 0.3)'
-                          : 'transparent',
-                    }}
-                    onMouseEnter={() => setHoveredResourceId(resource.id)}
-                    onMouseLeave={() => setHoveredResourceId(null)}
-                    onClick={() => {
-                      onColumnClick?.(
-                        resource.id,
-                        resource.name,
-                        resourceEvents
-                      )
-                    }}
-                  >
-                    {/* Eventos na Swimlane - Posicionamento Original (podem se estender por múltiplos dias) */}
-                    {resourceEvents.map((event) => {
-                      const position = getEventPosition(event)
-                      if (!position) return null
-
-                      return (
-                        <div
-                          key={event.id}
-                          className="absolute top-1 bottom-1 rounded-md cursor-pointer hover:opacity-90 transition-opacity border-l-2 px-2 py-1 overflow-hidden z-20"
-                          style={{
-                            left: position.left,
-                            width: position.width,
-                            backgroundColor: event.color + '20',
-                            borderLeftColor: event.color,
-                            minWidth: '60px',
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            onEventClick?.(event)
-                          }}
-                          title={
-                            event.status === 'rejected' && event.createdAt
-                              ? `${event.title} - ${format(event.createdAt, 'HH:mm', { locale: ptBR })} (Rejeitado)`
-                              : `${event.title} - ${format(event.start, 'HH:mm', { locale: ptBR })} - ${format(event.end, 'HH:mm', { locale: ptBR })}`
-                          }
-                        >
-                          <div className="text-xs font-medium text-gray-900 truncate">
-                            {event.title}
-                          </div>
-                          <div className="text-xs text-gray-600 truncate">
-                            {event.status === 'rejected' && event.createdAt ? (
-                              <>
-                                {format(event.createdAt, 'HH:mm', {
-                                  locale: ptBR,
-                                })}{' '}
-                                (Rejeitado)
-                              </>
-                            ) : (
-                              <>
-                                {format(event.start, 'HH:mm', { locale: ptBR })}{' '}
-                                - {format(event.end, 'HH:mm', { locale: ptBR })}
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                )
-              })}
-            </div>
-
-            {/* Overlays de Colunas Verticais para Hover - Um para cada dia */}
-            {visiblePeriod.days.map((day, dayIndex) => {
-              // Calcula posição baseada no índice (mesma lógica dos headers com flex-1)
-              const totalDays = visiblePeriod.days.length
-              const columnWidth = 100 / totalDays
-              const left = (dayIndex * 100) / totalDays
-
-              return (
+            return (
+              <div key={resource.id} className="contents">
                 <div
-                  key={`overlay-${day.toISOString()}`}
-                  className="absolute top-0 bottom-0 pointer-events-none transition-colors z-10"
+                  className={`peer px-3 flex items-center whitespace-nowrap border-r border-slate-200 cursor-pointer transition-colors bg-slate-50 hover:bg-orange-50 group ${rowBorderClass}`}
                   style={{
-                    left: `${left}%`,
-                    width: `${columnWidth}%`,
-                    backgroundColor:
-                      hoveredDayIndex === dayIndex
-                        ? 'rgba(254, 243, 199, 0.3)'
-                        : 'transparent',
+                    gridColumn: 1,
+                    gridRow: index + 2,
+                    minHeight: TIMELINE_ROW_HEIGHT,
                   }}
-                />
-              )
-            })}
-          </div>
+                  onClick={() => {
+                    // Coleta todos os eventos deste recurso para a semana visivel
+                    onColumnClick?.(resource.id, resource.name, resourceEvents)
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-3 h-3 rounded-full flex-shrink-0"
+                      style={{
+                        backgroundColor:
+                          events.find((e) => e.resourceId === resource.id)
+                            ?.color || '#ea580c',
+                      }}
+                    />
+                    <span className="text-sm font-medium text-gray-900 transition-colors group-hover:text-orange-600">
+                      {resource.name}
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  className={`relative cursor-pointer transition-colors hover:bg-orange-50/30 peer-hover:bg-orange-50/30 ${rowBorderClass} border-slate-200`}
+                  style={{
+                    gridColumn: 2,
+                    gridRow: index + 2,
+                    minHeight: TIMELINE_ROW_HEIGHT,
+                  }}
+                  onClick={() => {
+                    onColumnClick?.(resource.id, resource.name, resourceEvents)
+                  }}
+                >
+                  {/* Eventos na Swimlane - Posicionamento Original (podem se estender por multiplos dias) */}
+                  {resourceEvents.map((event) => {
+                    const position = getEventPosition(event)
+                    if (!position) return null
+
+                    return (
+                      <div
+                        key={event.id}
+                        className="absolute top-1 bottom-1 rounded-md cursor-pointer hover:opacity-90 transition-opacity border-l-2 px-2 py-1 overflow-hidden"
+                        style={{
+                          left: position.left,
+                          width: position.width,
+                          backgroundColor: event.color + '20',
+                          borderLeftColor: event.color,
+                          minWidth: '60px',
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onEventClick?.(event)
+                        }}
+                        title={
+                          event.status === 'rejected' && event.createdAt
+                            ? `${event.title} - ${format(event.createdAt, 'HH:mm', { locale: ptBR })} (Rejeitado)`
+                            : `${event.title} - ${format(event.start, 'HH:mm', { locale: ptBR })} - ${format(event.end, 'HH:mm', { locale: ptBR })}`
+                        }
+                      >
+                        <div className="text-xs font-medium text-gray-900 truncate">
+                          {event.title}
+                        </div>
+                        <div className="text-xs text-gray-600 truncate">
+                          {event.status === 'rejected' && event.createdAt ? (
+                            <>
+                              {format(event.createdAt, 'HH:mm', {
+                                locale: ptBR,
+                              })}{' '}
+                              (Rejeitado)
+                            </>
+                          ) : (
+                            <>
+                              {format(event.start, 'HH:mm', { locale: ptBR })}{' '}
+                              - {format(event.end, 'HH:mm', { locale: ptBR })}
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

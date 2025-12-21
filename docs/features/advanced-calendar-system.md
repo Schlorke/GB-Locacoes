@@ -556,7 +556,8 @@ Feedback visual laranja para melhor UX:
   - Background: `bg-orange-50`
   - Texto: `text-orange-600`
 - **Coluna Completa** (Diária): Background laranja suave (`bg-orange-50/30`)
-- **Swimlanes** (Timeline): Background laranja suave (`bg-orange-50/20`)
+- **Swimlanes** (Timeline): Background laranja suave (`bg-orange-50/30`)
+  aplicado via `peer`/`peer-hover` entre headers/recursos e linhas/colunas
 
 #### **Estrutura do Sidebar**
 

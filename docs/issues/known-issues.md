@@ -5,6 +5,62 @@
 
 ---
 
+## 35. Hover laranja da timeline semanal nao reagia ao peer
+
+### ✅ Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-12-21 **Severidade**: Baixa (UI) **Status**: ✅
+Resolvido
+
+#### Descricao
+
+Na visao semanal (TimelineView) do calendario avancado, o hover esperado com
+`peer`/`peer-hover` nos headers de dias e na lista de recursos nao aplicava o
+background laranja nas colunas/linhas correspondentes.
+
+#### Sintomas
+
+- Hover em "SEG 15", "TER 16" nao destacava a coluna inteira
+- Hover em recursos da sidebar (Pendente/Aprovado/Rejeitado) nao destacava a
+  linha correspondente
+- Apenas o background do proprio header/linha respondia ao hover
+
+#### Causa Raiz
+
+- Headers e swimlanes estavam em containers separados, impedindo o `peer` de
+  afetar as colunas/linhas
+- Overlays e linhas usavam `backgroundColor` inline que sobrepunha `peer-hover`
+
+### ✅ Solucao Implementada
+
+- Reestruturado o layout da `TimelineView` para usar uma grade unica com camada
+  de colunas, permitindo `peer`/`peer-hover` entre header e overlay
+- Lista de recursos e swimlanes agora compartilham a mesma grade, garantindo
+  hover sincronizado por linha
+- Removidos estados de hover e estilos inline conflitantes
+
+#### Arquivos Modificados
+
+1. `components/admin/advanced-calendar/timeline-view.tsx`
+2. `docs/features/advanced-calendar-system.md`
+3. `CHANGELOG.md`
+
+#### Como Validar
+
+1. Abrir o calendario avancado na visao semanal
+2. Passar o mouse sobre um header de dia (SEG/TER/...) e confirmar o highlight
+   na coluna
+3. Passar o mouse sobre um recurso da sidebar e confirmar o highlight na linha
+4. Confirmar que diario e mensal nao foram afetados
+
+#### Armadilhas a Evitar
+
+- Voltar a separar headers/linhas em containers diferentes e perder o
+  `peer-hover`
+- Reintroduzir estilos inline de background que sobrescrevam o hover
+
+---
+
 ## 34. Borda preta (focus ring) no botão de fechar do Dialog
 
 ### ✅ Problema RESOLVIDO
