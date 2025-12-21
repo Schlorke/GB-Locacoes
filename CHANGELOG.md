@@ -8,6 +8,62 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Changed 🔄
+
+- **Validação de Campos Obrigatórios com Toasts Informativas**: Adicionadas
+  toasts informativas para todos os campos obrigatórios nos formulários de
+  orçamento
+  - **Campos Validados**:
+    - **Nome Completo**: Validação com toast informativa
+    - **Telefone**: Validação com toast informativa
+    - **E-mail**: Validação com toast informativa
+    - **Período de Locação**: Validação com toast informativa (apenas no
+      QuoteForm)
+  - **Comportamento**: Quando o usuário tentar enviar uma solicitação sem
+    preencher campos obrigatórios, será exibida uma única toast informativa
+    listando TODOS os campos faltantes de uma vez
+  - **Ações**:
+    - Toast informativa (info) única mostrando todos os campos faltantes
+      separados por vírgula
+    - Duração de 6 segundos para permitir leitura completa
+    - Foco automático no primeiro campo faltante
+    - Scroll suave até o primeiro campo que precisa ser preenchido
+  - **Implementação**:
+    - Validação coletiva: todos os campos obrigatórios são verificados antes de
+      mostrar qualquer toast
+    - Validações no início da função `handleSubmit` antes de outras validações
+    - Validações nos métodos `onSubmit` e `handleWhatsAppSubmit` do componente
+      `QuoteForm`
+    - Validações no `onClick` do botão de submit e no `onSubmit` do formulário
+    - Validações na função `nextStep` do `QuoteForm` quando usuário tenta
+      avançar de etapa
+    - Removidos atributos `required` dos inputs HTML para evitar validação
+      nativa que bloqueia o JavaScript
+    - Adicionado `noValidate` no form para garantir que a validação JavaScript
+      seja executada
+  - **Arquivos modificados**: `components/quote-form.tsx`,
+    `app/orcamento/page.tsx`
+  - **Data**: 2025-01-22
+
+- **Sistema de Manutenção Temporariamente Desabilitado**: Desabilitada
+  temporariamente a validação de manutenção que bloqueava locações de
+  equipamentos
+  - **Motivo**: Sistema de manutenção ainda não está completo, causando erros ao
+    solicitar equipamentos
+  - **Alterações**:
+    - Verificação de manutenção comentada em `lib/equipment-availability.ts`
+    - Função `isEquipmentInMaintenance` desabilitada temporariamente
+    - Função `getMaintenanceBlockingInfo` desabilitada temporariamente
+  - **Script de Limpeza**: Criado `scripts/remove-maintenance-records.ts` para
+    remover registros de manutenção do banco de dados
+    - Comando: `pnpm db:clean:maintenance` ou
+      `npx tsx scripts/remove-maintenance-records.ts`
+    - Removidos 18 registros de manutenção agendada que estavam bloqueando
+      locações
+  - **TODO**: Reativar verificação quando o sistema de manutenção estiver
+    completo
+  - **Data**: 2025-12-21
+
 ### Added ✨
 
 - **Column Events Panel - Sidebar de Eventos por Coluna**: Implementado novo

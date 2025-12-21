@@ -1,8 +1,9 @@
 import { prisma } from '@/lib/prisma'
-import {
-  isEquipmentInMaintenance,
-  getMaintenanceBlockingInfo,
-} from './maintenance-automation'
+// TODO: Reativar quando o sistema de manutenção estiver completo
+// import {
+//   isEquipmentInMaintenance,
+//   getMaintenanceBlockingInfo,
+// } from './maintenance-automation'
 
 /**
  * Calcula disponibilidade de equipamento considerando:
@@ -39,23 +40,27 @@ export async function calculateEquipmentAvailability(
 
   const maxStock = equipment.maxStock || 1
 
+  // TEMPORARIAMENTE DESABILITADO: Verificação de manutenção
+  // TODO: Reativar quando o sistema de manutenção estiver completo
   // Verificar se equipamento está em manutenção que interfere com o período
-  const inMaintenance = await isEquipmentInMaintenance(
-    equipmentId,
-    startDate,
-    endDate
-  )
+  // const inMaintenance = await isEquipmentInMaintenance(
+  //   equipmentId,
+  //   startDate,
+  //   endDate
+  // )
 
   // Se estiver em manutenção, não está disponível
-  if (inMaintenance) {
-    return {
-      available: false,
-      availableQuantity: 0,
-      totalQuantity: maxStock,
-      blockedByMaintenance: true,
-      blockedByRentals: 0,
-    }
-  }
+  // if (inMaintenance) {
+  //   return {
+  //     available: false,
+  //     availableQuantity: 0,
+  //     totalQuantity: maxStock,
+  //     blockedByMaintenance: true,
+  //     blockedByRentals: 0,
+  //   }
+  // }
+
+  const inMaintenance = false // Temporariamente desabilitado
 
   // Buscar locações ativas no período
   const activeRentals = await prisma.rental_items.findMany({
@@ -134,19 +139,21 @@ export async function isEquipmentAvailableForRental(
     endDate
   )
 
-  if (availability.blockedByMaintenance) {
-    // Obter informações detalhadas sobre a manutenção que está bloqueando
-    const maintenanceInfo = await getMaintenanceBlockingInfo(
-      equipmentId,
-      startDate,
-      endDate
-    )
+  // TEMPORARIAMENTE DESABILITADO: Verificação de manutenção
+  // TODO: Reativar quando o sistema de manutenção estiver completo
+  // if (availability.blockedByMaintenance) {
+  //   // Obter informações detalhadas sobre a manutenção que está bloqueando
+  //   const maintenanceInfo = await getMaintenanceBlockingInfo(
+  //     equipmentId,
+  //     startDate,
+  //     endDate
+  //   )
 
-    return {
-      available: false,
-      reason: maintenanceInfo.reason || 'Equipamento está em manutenção',
-    }
-  }
+  //   return {
+  //     available: false,
+  //     reason: maintenanceInfo.reason || 'Equipamento está em manutenção',
+  //   }
+  // }
 
   if (availability.availableQuantity < requestedQuantity) {
     return {

@@ -615,6 +615,44 @@ function QuotePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // Validação de TODOS os campos obrigatórios (validação dupla para segurança)
+    const missingFields: string[] = []
+    const fieldIds: string[] = []
+
+    if (!formData.name || !formData.name.trim()) {
+      missingFields.push('Nome Completo')
+      fieldIds.push('name')
+    }
+
+    if (!formData.phone || !formData.phone.trim()) {
+      missingFields.push('Telefone')
+      fieldIds.push('phone')
+    }
+
+    if (!formData.email || !formData.email.trim()) {
+      missingFields.push('E-mail')
+      fieldIds.push('email')
+    }
+
+    // Se há campos faltantes, mostrar toast informativa
+    if (missingFields.length > 0) {
+      const fieldsList = missingFields.join(', ')
+      toast.info('Campos Obrigatórios', {
+        description: `Por favor, preencha os seguintes campos antes de enviar: ${fieldsList}.`,
+        duration: 6000,
+      })
+
+      // Focar no primeiro campo faltante
+      if (fieldIds.length > 0) {
+        const firstField = document.getElementById(fieldIds[0]!)
+        if (firstField) {
+          firstField.focus()
+          firstField.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }
+      return
+    }
+
     // Validação: pelo menos um dos campos CPF ou CNPJ deve ser preenchido
     if (!formData.cpf.trim() && !formData.cnpj.trim()) {
       toast.error('Erro de Validação', {
@@ -1390,8 +1428,55 @@ function QuotePage() {
               <CardContent className="relative z-10 p-4 sm:p-6 lg:p-6 pt-0">
                 <form
                   id="quote-form"
-                  onSubmit={handleSubmit}
+                  onSubmit={(e) => {
+                    e.preventDefault()
+
+                    // Validação de TODOS os campos obrigatórios
+                    const missingFields: string[] = []
+                    const fieldIds: string[] = []
+
+                    if (!formData.name || !formData.name.trim()) {
+                      missingFields.push('Nome Completo')
+                      fieldIds.push('name')
+                    }
+
+                    if (!formData.phone || !formData.phone.trim()) {
+                      missingFields.push('Telefone')
+                      fieldIds.push('phone')
+                    }
+
+                    if (!formData.email || !formData.email.trim()) {
+                      missingFields.push('E-mail')
+                      fieldIds.push('email')
+                    }
+
+                    // Se há campos faltantes, mostrar toast informativa
+                    if (missingFields.length > 0) {
+                      const fieldsList = missingFields.join(', ')
+                      toast.info('Campos Obrigatórios', {
+                        description: `Por favor, preencha os seguintes campos antes de enviar: ${fieldsList}.`,
+                        duration: 6000,
+                      })
+
+                      // Focar no primeiro campo faltante
+                      if (fieldIds.length > 0) {
+                        const firstField = document.getElementById(fieldIds[0]!)
+                        if (firstField) {
+                          firstField.focus()
+                          firstField.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center',
+                          })
+                        }
+                      }
+                      return
+                    }
+
+                    // Se passou nas validações, chama o handleSubmit normal
+                    void handleSubmit(e)
+                  }}
                   className="space-y-4"
+                  noValidate
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -1406,7 +1491,6 @@ function QuotePage() {
                             name: e.target.value,
                           }))
                         }
-                        required
                         className="mt-1"
                       />
                     </div>
@@ -1416,7 +1500,6 @@ function QuotePage() {
                         id="phone"
                         value={formData.phone}
                         onChange={handlePhoneChange}
-                        required
                         className="mt-1"
                         placeholder="(51) 99999-9999"
                         maxLength={15}
@@ -1462,7 +1545,6 @@ function QuotePage() {
                             email: e.target.value,
                           }))
                         }
-                        required
                         className="mt-1"
                         placeholder="seu@email.com"
                       />
@@ -1818,6 +1900,50 @@ function QuotePage() {
                         className="w-full hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2"
                         size="lg"
                         disabled={isSubmitting}
+                        onClick={(e) => {
+                          // Validação de TODOS os campos obrigatórios ANTES do submit
+                          const missingFields: string[] = []
+                          const fieldIds: string[] = []
+
+                          if (!formData.name || !formData.name.trim()) {
+                            missingFields.push('Nome Completo')
+                            fieldIds.push('name')
+                          }
+
+                          if (!formData.phone || !formData.phone.trim()) {
+                            missingFields.push('Telefone')
+                            fieldIds.push('phone')
+                          }
+
+                          if (!formData.email || !formData.email.trim()) {
+                            missingFields.push('E-mail')
+                            fieldIds.push('email')
+                          }
+
+                          // Se há campos faltantes, mostrar toast informativa
+                          if (missingFields.length > 0) {
+                            e.preventDefault()
+                            const fieldsList = missingFields.join(', ')
+                            toast.info('Campos Obrigatórios', {
+                              description: `Por favor, preencha os seguintes campos antes de enviar: ${fieldsList}.`,
+                              duration: 6000,
+                            })
+
+                            // Focar no primeiro campo faltante
+                            if (fieldIds.length > 0) {
+                              const firstField = document.getElementById(
+                                fieldIds[0]!
+                              )
+                              if (firstField) {
+                                firstField.focus()
+                                firstField.scrollIntoView({
+                                  behavior: 'smooth',
+                                  block: 'center',
+                                })
+                              }
+                            }
+                          }
+                        }}
                       >
                         {isSubmitting ? (
                           <>

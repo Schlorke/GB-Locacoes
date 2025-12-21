@@ -138,6 +138,38 @@ export default function QuoteForm({
     const fieldsToValidate = getFieldsForStep(currentStep)
     const isStepValid = await trigger(fieldsToValidate)
 
+    if (!isStepValid) {
+      // Validação de TODOS os campos da etapa atual
+      const currentData = watch()
+      const missingFields: string[] = []
+
+      if (currentStep === 1) {
+        if (!currentData.customerName || !currentData.customerName.trim()) {
+          missingFields.push('Nome Completo')
+        }
+        if (!currentData.customerEmail || !currentData.customerEmail.trim()) {
+          missingFields.push('E-mail')
+        }
+        if (!currentData.customerPhone || !currentData.customerPhone.trim()) {
+          missingFields.push('Telefone')
+        }
+      } else if (currentStep === 2) {
+        if (!currentData.rentalDays || currentData.rentalDays < 1) {
+          missingFields.push('Período de Locação')
+        }
+      }
+
+      // Se há campos faltantes, mostrar toast informativa
+      if (missingFields.length > 0) {
+        const fieldsList = missingFields.join(', ')
+        toast.info('Campos Obrigatórios', {
+          description: `Por favor, preencha os seguintes campos antes de continuar: ${fieldsList}.`,
+          duration: 6000,
+        })
+      }
+      return
+    }
+
     if (isStepValid && currentStep < totalSteps) {
       setCurrentStep(currentStep + 1)
     }
@@ -163,6 +195,41 @@ export default function QuoteForm({
   }
 
   const onSubmit = async (data: QuoteFormData) => {
+    // Validação de TODOS os campos obrigatórios
+    const missingFields: string[] = []
+    let targetStep = 1
+
+    if (!data.customerName || !data.customerName.trim()) {
+      missingFields.push('Nome Completo')
+      targetStep = 1
+    }
+
+    if (!data.customerEmail || !data.customerEmail.trim()) {
+      missingFields.push('E-mail')
+      targetStep = 1
+    }
+
+    if (!data.customerPhone || !data.customerPhone.trim()) {
+      missingFields.push('Telefone')
+      targetStep = 1
+    }
+
+    if (!data.rentalDays || data.rentalDays < 1) {
+      missingFields.push('Período de Locação')
+      targetStep = 2
+    }
+
+    // Se há campos faltantes, mostrar toast informativa
+    if (missingFields.length > 0) {
+      const fieldsList = missingFields.join(', ')
+      toast.info('Campos Obrigatórios', {
+        description: `Por favor, preencha os seguintes campos antes de enviar: ${fieldsList}.`,
+        duration: 6000,
+      })
+      setCurrentStep(targetStep)
+      return
+    }
+
     try {
       const response = await fetch('/api/orcamentos', {
         method: 'POST',
@@ -231,15 +298,38 @@ export default function QuoteForm({
   const handleWhatsAppSubmit = () => {
     const data = watchedData
 
-    // Validação: campos obrigatórios
-    if (
-      !data.customerName.trim() ||
-      !data.customerEmail.trim() ||
-      !data.customerPhone.trim()
-    ) {
-      toast.error('Erro de Validação', {
-        description: 'Por favor, preencha todos os campos obrigatórios.',
+    // Validação de TODOS os campos obrigatórios
+    const missingFields: string[] = []
+    let targetStep = 1
+
+    if (!data.customerName || !data.customerName.trim()) {
+      missingFields.push('Nome Completo')
+      targetStep = 1
+    }
+
+    if (!data.customerEmail || !data.customerEmail.trim()) {
+      missingFields.push('E-mail')
+      targetStep = 1
+    }
+
+    if (!data.customerPhone || !data.customerPhone.trim()) {
+      missingFields.push('Telefone')
+      targetStep = 1
+    }
+
+    if (!data.rentalDays || data.rentalDays < 1) {
+      missingFields.push('Período de Locação')
+      targetStep = 2
+    }
+
+    // Se há campos faltantes, mostrar toast informativa
+    if (missingFields.length > 0) {
+      const fieldsList = missingFields.join(', ')
+      toast.info('Campos Obrigatórios', {
+        description: `Por favor, preencha os seguintes campos antes de enviar: ${fieldsList}.`,
+        duration: 6000,
       })
+      setCurrentStep(targetStep)
       return
     }
 

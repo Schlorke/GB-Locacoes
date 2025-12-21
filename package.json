@@ -28,6 +28,7 @@
     "db:seed:phones": "tsx scripts/seed-company-phones.ts",
     "db:clean:quotes": "tsx scripts/clean-quotes.ts",
     "db:clean:rejected-rentals": "tsx scripts/clean-rejected-quote-rentals.ts",
+    "db:clean:maintenance": "tsx scripts/remove-maintenance-records.ts",
     "db:studio": "prisma studio",
     "dev": "next dev --turbopack",
     "dev:network": "next dev --turbopack -H 0.0.0.0",
