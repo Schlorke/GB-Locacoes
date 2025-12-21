@@ -19,6 +19,19 @@ const buttonVariants = cva(
           'bg-secondary text-secondary-foreground shadow-md hover:bg-secondary/80 hover:scale-105 hover:shadow-lg transition-all duration-200',
         ghost:
           'border border-transparent hover:text-orange-600 hover:scale-105 transition-all duration-200',
+        /**
+         * Variante ghost-white: Para botões em ambientes com background escuro
+         * que precisam de claridade para se destacar.
+         *
+         * REGRAS DE USO:
+         * ✅ Usar para botões de "visualizar" (Eye) e "editar" (Edit)
+         * ❌ NUNCA usar para botões de "close" (fechar)
+         *
+         * Aplicar quando o botão está em contexto com background escuro
+         * e precisa de contraste visual (hover bg white + text orange).
+         */
+        'ghost-white':
+          'border border-transparent hover:bg-white hover:text-orange-600 hover:scale-105 transition-[background-color,color,transform] duration-200 ease-in-out',
         reset:
           // ⚠️⚠️⚠️ CRÍTICO - REGRAS OBRIGATÓRIAS - NUNCA VIOLAR ⚠️⚠️⚠️
           // ============================================================

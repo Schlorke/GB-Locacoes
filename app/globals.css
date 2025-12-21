@@ -534,20 +534,40 @@ button[aria-label*='close']:focus-visible {
 }
 
 /* Botões de ação admin (Eye/Edit/Trash) */
-.admin-action-button {
+.admin-action-button:not(.ghost-white-variant) {
   transition: all 0.2s ease-in-out !important;
 }
 
-.admin-action-button.view-button,
+.admin-action-button.view-button:not(.ghost-white-variant),
 .admin-action-button.edit-button {
   color: rgb(51 65 85) !important; /* slate-700 */
 }
 
-.admin-action-button.view-button:hover,
+.admin-action-button.view-button:not(.ghost-white-variant):hover,
 .admin-action-button.edit-button:hover {
   background-color: rgb(243 244 246) !important; /* gray-100 */
   color: rgb(51 65 85) !important;
   transform: none !important;
+}
+
+/* Variante ghost-white: hover bg white e text orange - transições sincronizadas */
+.admin-action-button.view-button.ghost-white-variant {
+  transition:
+    opacity 0.2s ease-in-out,
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    transform 0.2s ease-in-out !important;
+}
+
+.admin-action-button.view-button.ghost-white-variant:hover {
+  background-color: rgb(255 255 255) !important; /* white */
+  color: rgb(234 88 12) !important; /* orange-600 */
+  transform: none !important;
+}
+
+.admin-action-button.view-button.ghost-white-variant:hover svg {
+  color: rgb(234 88 12) !important; /* orange-600 */
+  transition: color 0.2s ease-in-out !important;
 }
 
 .admin-action-button.rentals-view-button:hover {

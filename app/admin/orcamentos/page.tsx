@@ -167,6 +167,7 @@ function AdminQuotesPage() {
   )
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [hoveredRowId, setHoveredRowId] = useState<string | null>(null)
   const [showPriceAdjustmentDialog, setShowPriceAdjustmentDialog] =
     useState(false)
   const [showLateFeeDialog, setShowLateFeeDialog] = useState(false)
@@ -792,7 +793,15 @@ function AdminQuotesPage() {
                               ease: 'easeOut',
                               delay: index * 0.055,
                             }}
-                            className="border-b border-gray-100 hover:bg-gray-50/70 transition-colors group"
+                            className="border-b border-gray-100 transition-colors group"
+                            style={{
+                              backgroundColor:
+                                hoveredRowId === quote.id
+                                  ? 'rgba(254, 243, 199, 0.3)'
+                                  : undefined,
+                            }}
+                            onMouseEnter={() => setHoveredRowId(quote.id)}
+                            onMouseLeave={() => setHoveredRowId(null)}
                           >
                             <td className="p-3">
                               <div className="flex items-center gap-2 min-w-0">
@@ -918,10 +927,10 @@ function AdminQuotesPage() {
                             <td className="p-3">
                               <div className="flex justify-end gap-1">
                                 <Button
-                                  variant="ghost"
+                                  variant="ghost-white"
                                   size="sm"
                                   onClick={() => setSelectedQuote(quote)}
-                                  className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-all h-7 px-2 text-xs"
+                                  className="admin-action-button view-button ghost-white-variant opacity-0 group-hover:opacity-100 h-7 px-2 text-xs"
                                 >
                                   <Eye className="w-3.5 h-3.5" />
                                 </Button>
@@ -1776,6 +1785,7 @@ function AdminQuotesPage() {
                               >
                                 <Dialog.Content>
                                   <Dialog.Header className="flex-col items-start gap-1 pb-3">
+                                    <Dialog.CloseButton />
                                     <Dialog.Title className="text-lg font-semibold text-gray-900">
                                       Excluir Orçamento Permanentemente?
                                     </Dialog.Title>
