@@ -41,6 +41,10 @@ export function TimelineView({
 }: TimelineViewProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [hoveredDayIndex, setHoveredDayIndex] = useState<number | null>(null)
+  const [hoveredResourceId, setHoveredResourceId] = useState<string | null>(
+    null
+  )
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false)
 
   // Calcula o período visível (sempre semanal)
   const visiblePeriod = useMemo(() => {
@@ -153,15 +157,42 @@ export function TimelineView({
         {/* Lista de Recursos (Sticky) */}
         <div className="flex-shrink-0 border-r border-slate-200 bg-slate-50 h-full flex flex-col overflow-hidden">
           <div
-            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-10"
+            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-10 cursor-pointer transition-colors group/header"
             style={{
               height: TIMELINE_HEADER_HEIGHT,
               minHeight: TIMELINE_HEADER_HEIGHT,
               maxHeight: TIMELINE_HEADER_HEIGHT,
+              backgroundColor: isHeaderHovered
+                ? 'rgba(254, 243, 199, 0.5)'
+                : 'transparent',
+            }}
+            onMouseEnter={() => setIsHeaderHovered(true)}
+            onMouseLeave={() => setIsHeaderHovered(false)}
+            onClick={() => {
+              // Coleta todos os eventos da semana visível (todos os equipamentos)
+              const weekEvents = events.filter((event) => {
+                // Para eventos rejeitados, verifica se a data de rejeição está no período visível
+                if (event.status === 'rejected' && event.createdAt) {
+                  return visiblePeriod.days.some((day) =>
+                    isSameDay(day, event.createdAt!)
+                  )
+                }
+                // Para outros eventos, verifica se o evento se sobrepõe ao período visível
+                return (
+                  event.start.getTime() <= visiblePeriod.end.getTime() &&
+                  event.end.getTime() >= visiblePeriod.start.getTime()
+                )
+              })
+
+              onColumnClick?.(
+                'all-equipments',
+                'Todos os Equipamentos - Semana',
+                weekEvents
+              )
             }}
           >
             <div className="flex h-full w-full flex-col justify-center items-center px-3">
-              <div className="text-sm font-semibold text-gray-700 whitespace-nowrap leading-none">
+              <div className="text-sm font-semibold text-gray-700 whitespace-nowrap leading-none group-hover/header:text-orange-600 transition-colors">
                 Equipamentos
               </div>
             </div>
@@ -172,10 +203,28 @@ export function TimelineView({
               style={{ gridTemplateRows: timelineRowTemplate }}
             >
               {timelineResources.map((resource) => {
+                const resourceEvents = getEventsForResource(resource.id)
+
                 return (
                   <div
                     key={resource.id}
-                    className="px-3 flex items-center whitespace-nowrap border-b border-slate-200 last:border-b-0"
+                    className="px-3 flex items-center whitespace-nowrap border-b border-slate-200 last:border-b-0 cursor-pointer transition-colors group/resource"
+                    style={{
+                      backgroundColor:
+                        hoveredResourceId === resource.id
+                          ? 'rgba(254, 243, 199, 0.5)'
+                          : 'transparent',
+                    }}
+                    onMouseEnter={() => setHoveredResourceId(resource.id)}
+                    onMouseLeave={() => setHoveredResourceId(null)}
+                    onClick={() => {
+                      // Coleta todos os eventos deste recurso para a semana visível
+                      onColumnClick?.(
+                        resource.id,
+                        resource.name,
+                        resourceEvents
+                      )
+                    }}
                   >
                     <div className="flex items-center gap-2">
                       <div
@@ -186,7 +235,7 @@ export function TimelineView({
                               ?.color || '#ea580c',
                         }}
                       />
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-gray-900 group-hover/resource:text-orange-600 transition-colors">
                         {resource.name}
                       </span>
                     </div>
@@ -204,11 +253,14 @@ export function TimelineView({
         >
           {/* Header da Timeline */}
           <div
-            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-20"
+            className="flex-shrink-0 bg-slate-50 border-b border-slate-200 z-20 transition-colors"
             style={{
               height: TIMELINE_HEADER_HEIGHT,
               minHeight: TIMELINE_HEADER_HEIGHT,
               maxHeight: TIMELINE_HEADER_HEIGHT,
+              backgroundColor: isHeaderHovered
+                ? 'rgba(254, 243, 199, 0.3)'
+                : 'transparent',
             }}
           >
             <div className="flex h-full w-full relative">
@@ -224,19 +276,20 @@ export function TimelineView({
                   )
                 })
 
-                // Calcula a posição e largura da coluna para o overlay
-                const periodStart = visiblePeriod.start.getTime()
-                const periodEnd = visiblePeriod.end.getTime()
-                const dayStart = day.getTime()
-                const dayEnd = day.getTime() + 86400000
-                const totalDuration = periodEnd - periodStart
-                const left = ((dayStart - periodStart) / totalDuration) * 100
-                const width = (86400000 / totalDuration) * 100
+                // Variáveis calculadas para uso futuro (mantidas para referência)
+                // const periodStart = visiblePeriod.start.getTime()
+                // const periodEnd = visiblePeriod.end.getTime()
+                // const dayStart = day.getTime()
 
                 return (
                   <div
                     key={day.toISOString()}
                     className="flex-1 border-r border-slate-200 last:border-r-0 flex flex-col justify-center items-center bg-slate-50 cursor-pointer hover:bg-orange-50 transition-colors group/header"
+                    style={{
+                      backgroundColor: isHeaderHovered
+                        ? 'rgba(254, 243, 199, 0.5)'
+                        : undefined,
+                    }}
                     onMouseEnter={() => setHoveredDayIndex(dayIndex)}
                     onMouseLeave={() => setHoveredDayIndex(null)}
                     onClick={() => {
@@ -275,13 +328,26 @@ export function TimelineView({
                 return (
                   <div
                     key={resource.id}
-                    className="relative border-b border-slate-200 last:border-b-0"
+                    className="relative border-b border-slate-200 last:border-b-0 cursor-pointer transition-colors"
                     style={{
                       minHeight: TIMELINE_ROW_HEIGHT,
                       paddingTop: 0,
                       paddingBottom: 0,
                       marginTop: 0,
                       marginBottom: 0,
+                      backgroundColor:
+                        hoveredResourceId === resource.id
+                          ? 'rgba(254, 243, 199, 0.3)'
+                          : 'transparent',
+                    }}
+                    onMouseEnter={() => setHoveredResourceId(resource.id)}
+                    onMouseLeave={() => setHoveredResourceId(null)}
+                    onClick={() => {
+                      onColumnClick?.(
+                        resource.id,
+                        resource.name,
+                        resourceEvents
+                      )
                     }}
                   >
                     {/* Eventos na Swimlane - Posicionamento Original (podem se estender por múltiplos dias) */}
@@ -300,7 +366,10 @@ export function TimelineView({
                             borderLeftColor: event.color,
                             minWidth: '60px',
                           }}
-                          onClick={() => onEventClick?.(event)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onEventClick?.(event)
+                          }}
                           title={
                             event.status === 'rejected' && event.createdAt
                               ? `${event.title} - ${format(event.createdAt, 'HH:mm', { locale: ptBR })} (Rejeitado)`

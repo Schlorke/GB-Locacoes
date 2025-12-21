@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Dialog } from '@/components/ui/dialog'
 import { ViewToggle } from '@/components/ui/view-toggle'
 import { toast } from 'sonner'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   Briefcase,
   Building,
@@ -183,7 +183,6 @@ function AdminQuotesPage() {
   // Controle de animação determinística para tabela (evita flick/flash e garante
   // entrada/saída escalonadas ao aplicar filtros).
   const [tableQuotes, setTableQuotes] = useState<Quote[]>([])
-  const pendingTableQuotesRef = useRef<Quote[] | null>(null)
   const didInitTableQuotesRef = useRef(false)
 
   const fetchQuotes = useCallback(async () => {
@@ -301,18 +300,8 @@ function AdminQuotesPage() {
     }
 
     const next = Array.isArray(filteredQuotes) ? filteredQuotes : []
-    const prev = tableQuotes
-
-    // Se não havia nada renderizado, apenas renderiza o novo conjunto.
-    if (prev.length === 0) {
-      setTableQuotes(next)
-      return
-    }
-
-    pendingTableQuotesRef.current = next
-    // Esvaziar dispara exit animations no AnimatePresence.
-    setTableQuotes([])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setTableQuotes(next)
+     
   }, [filteredQuotes])
 
   useEffect(() => {
@@ -793,202 +782,154 @@ function AdminQuotesPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      <AnimatePresence
-                        mode="wait"
-                        onExitComplete={() => {
-                          const pending = pendingTableQuotesRef.current
-                          if (pending) {
-                            pendingTableQuotesRef.current = null
-                            setTableQuotes(pending)
-                          }
-                        }}
-                      >
-                        {Array.isArray(tableQuotes) &&
-                          tableQuotes.map((quote, index) => (
-                            <motion.tr
-                              key={quote.id}
-                              custom={{ index }}
-                              variants={{
-                                hidden: ({
-                                  index: idx,
-                                }: {
-                                  index: number
-                                }) => ({
-                                  opacity: 0,
-                                  // Entrada garantida da esquerda para a direita.
-                                  x: -32,
-                                  transition: {
-                                    duration: 0.22,
-                                    ease: 'easeOut',
-                                    delay: idx * 0.05,
-                                  },
-                                }),
-                                show: ({ index: idx }: { index: number }) => ({
-                                  opacity: 1,
-                                  x: 0,
-                                  transition: {
-                                    duration: 0.24,
-                                    ease: 'easeOut',
-                                    delay: idx * 0.055,
-                                  },
-                                }),
-                                exit: ({ index: idx }: { index: number }) => ({
-                                  opacity: 0,
-                                  // Saida leve para a direita para evitar percepcao invertida.
-                                  x: 18,
-                                  transition: {
-                                    duration: 0.18,
-                                    ease: 'easeIn',
-                                    // Stagger normal na saída (primeiro sai primeiro, de cima para baixo)
-                                    delay: idx * 0.04,
-                                  },
-                                }),
-                              }}
-                              initial="hidden"
-                              animate="show"
-                              exit="exit"
-                              className="border-b border-gray-100 hover:bg-gray-50/70 transition-colors group"
-                            >
-                              <td className="p-3">
-                                <div className="flex items-center gap-2 min-w-0">
-                                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold text-xs shrink-0">
-                                    {quote.name?.charAt(0).toUpperCase()}
-                                  </div>
-                                  <div className="min-w-0 flex-1">
-                                    <div className="font-medium text-gray-900 text-sm truncate">
-                                      {quote.name}
-                                    </div>
-                                    <div className="text-xs text-gray-500 truncate">
-                                      {quote.email}
-                                    </div>
-                                    {quote.company && (
-                                      <div className="text-xs text-gray-400 flex items-center gap-1 mt-0.5 truncate">
-                                        <Building className="w-3 h-3 shrink-0" />
-                                        <span className="truncate">
-                                          {quote.company}
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
+                      {Array.isArray(tableQuotes) &&
+                        tableQuotes.map((quote, index) => (
+                          <motion.tr
+                            key={quote.id}
+                            initial={{ opacity: 0, x: -32 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{
+                              duration: 0.24,
+                              ease: 'easeOut',
+                              delay: index * 0.055,
+                            }}
+                            className="border-b border-gray-100 hover:bg-gray-50/70 transition-colors group"
+                          >
+                            <td className="p-3">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold text-xs shrink-0">
+                                  {quote.name?.charAt(0).toUpperCase()}
                                 </div>
-                              </td>
-                              <td className="p-3">
-                                <div className="flex items-start gap-1.5 min-w-0">
-                                  <Package className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
-                                  <div className="min-w-0 flex-1">
-                                    <span className="text-xs font-medium text-gray-900">
-                                      {Array.isArray(quote.equipments)
-                                        ? quote.equipments.length
-                                        : quote.items?.length || 0}{' '}
-                                      {(Array.isArray(quote.equipments)
-                                        ? quote.equipments.length
-                                        : quote.items?.length || 0) === 1
-                                        ? 'item'
-                                        : 'itens'}
-                                    </span>
-                                    {quote.items && quote.items.length > 0 && (
-                                      <div className="text-xs text-gray-500 mt-0.5 line-clamp-1">
-                                        {quote.items
-                                          .slice(0, 1)
-                                          .map(
-                                            (item) =>
-                                              item.equipment?.name ||
-                                              'Equipamento'
-                                          )
-                                          .filter(Boolean)
-                                          .join(', ')}
-                                        {quote.items.length > 1 && '...'}
-                                      </div>
-                                    )}
+                                <div className="min-w-0 flex-1">
+                                  <div className="font-medium text-gray-900 text-sm truncate">
+                                    {quote.name}
                                   </div>
-                                </div>
-                              </td>
-                              <td className="p-3">
-                                <div className="text-xs min-w-0">
-                                  {quote.startDate && quote.endDate ? (
-                                    <>
-                                      <div className="flex items-center gap-1 text-gray-700 font-medium truncate">
-                                        <Calendar className="w-3 h-3 shrink-0" />
-                                        <span className="truncate">
-                                          {formatDate(quote.startDate)}
-                                        </span>
-                                      </div>
-                                      <div className="text-gray-500 text-xs ml-4 mt-0.5 truncate">
-                                        até {formatDate(quote.endDate)}
-                                      </div>
-                                    </>
-                                  ) : quote.items &&
-                                    quote.items.length > 0 &&
-                                    quote.items[0]?.days ? (
-                                    <div className="text-gray-600 font-medium text-xs">
-                                      {quote.items[0].days}{' '}
-                                      {quote.items[0].days === 1
-                                        ? 'dia'
-                                        : 'dias'}
-                                    </div>
-                                  ) : (
-                                    <div className="text-gray-400 italic text-xs">
-                                      Não definido
-                                    </div>
-                                  )}
-                                </div>
-                              </td>
-                              <td className="p-3">
-                                <div className="flex flex-col">
-                                  <span className="font-semibold text-sm text-green-600">
-                                    {formatCurrency(quote.totalPrice || 0)}
-                                  </span>
-                                  {quote.finalTotal &&
-                                    quote.finalTotal !== quote.totalPrice && (
-                                      <span className="text-xs text-gray-500 mt-0.5 truncate">
-                                        Ajustado:{' '}
-                                        {formatCurrency(quote.finalTotal)}
+                                  <div className="text-xs text-gray-500 truncate">
+                                    {quote.email}
+                                  </div>
+                                  {quote.company && (
+                                    <div className="text-xs text-gray-400 flex items-center gap-1 mt-0.5 truncate">
+                                      <Building className="w-3 h-3 shrink-0" />
+                                      <span className="truncate">
+                                        {quote.company}
                                       </span>
-                                    )}
-                                </div>
-                              </td>
-                              <td className="p-3">
-                                <div className="scale-90 origin-left">
-                                  {getStatusBadge(quote.status)}
-                                </div>
-                              </td>
-                              <td className="p-3">
-                                <div className="flex flex-col gap-0.5 text-xs">
-                                  <div className="text-gray-600 truncate">
-                                    <span className="font-medium">Criado:</span>{' '}
-                                    {formatDate(quote.createdAt)}
-                                  </div>
-                                  {quote.status === 'rejected' &&
-                                    quote.rejectedAt && (
-                                      <div className="text-red-600 truncate">
-                                        <span className="font-medium">
-                                          Rej:
-                                        </span>{' '}
-                                        {formatDate(quote.rejectedAt)}
-                                      </div>
-                                    )}
-                                  {quote.status === 'approved' && (
-                                    <div className="text-green-600 text-xs">
-                                      Aprovado
                                     </div>
                                   )}
                                 </div>
-                              </td>
-                              <td className="p-3">
-                                <div className="flex justify-end gap-1">
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => setSelectedQuote(quote)}
-                                    className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-all h-7 px-2 text-xs"
-                                  >
-                                    <Eye className="w-3.5 h-3.5" />
-                                  </Button>
+                              </div>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex items-start gap-1.5 min-w-0">
+                                <Package className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
+                                <div className="min-w-0 flex-1">
+                                  <span className="text-xs font-medium text-gray-900">
+                                    {Array.isArray(quote.equipments)
+                                      ? quote.equipments.length
+                                      : quote.items?.length || 0}{' '}
+                                    {(Array.isArray(quote.equipments)
+                                      ? quote.equipments.length
+                                      : quote.items?.length || 0) === 1
+                                      ? 'item'
+                                      : 'itens'}
+                                  </span>
+                                  {quote.items && quote.items.length > 0 && (
+                                    <div className="text-xs text-gray-500 mt-0.5 line-clamp-1">
+                                      {quote.items
+                                        .slice(0, 1)
+                                        .map(
+                                          (item) =>
+                                            item.equipment?.name ||
+                                            'Equipamento'
+                                        )
+                                        .filter(Boolean)
+                                        .join(', ')}
+                                      {quote.items.length > 1 && '...'}
+                                    </div>
+                                  )}
                                 </div>
-                              </td>
-                            </motion.tr>
-                          ))}
-                      </AnimatePresence>
+                              </div>
+                            </td>
+                            <td className="p-3">
+                              <div className="text-xs min-w-0">
+                                {quote.startDate && quote.endDate ? (
+                                  <>
+                                    <div className="flex items-center gap-1 text-gray-700 font-medium truncate">
+                                      <Calendar className="w-3 h-3 shrink-0" />
+                                      <span className="truncate">
+                                        {formatDate(quote.startDate)}
+                                      </span>
+                                    </div>
+                                    <div className="text-gray-500 text-xs ml-4 mt-0.5 truncate">
+                                      até {formatDate(quote.endDate)}
+                                    </div>
+                                  </>
+                                ) : quote.items &&
+                                  quote.items.length > 0 &&
+                                  quote.items[0]?.days ? (
+                                  <div className="text-gray-600 font-medium text-xs">
+                                    {quote.items[0].days}{' '}
+                                    {quote.items[0].days === 1 ? 'dia' : 'dias'}
+                                  </div>
+                                ) : (
+                                  <div className="text-gray-400 italic text-xs">
+                                    Não definido
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex flex-col">
+                                <span className="font-semibold text-sm text-green-600">
+                                  {formatCurrency(quote.totalPrice || 0)}
+                                </span>
+                                {quote.finalTotal &&
+                                  quote.finalTotal !== quote.totalPrice && (
+                                    <span className="text-xs text-gray-500 mt-0.5 truncate">
+                                      Ajustado:{' '}
+                                      {formatCurrency(quote.finalTotal)}
+                                    </span>
+                                  )}
+                              </div>
+                            </td>
+                            <td className="p-3">
+                              <div className="scale-90 origin-left">
+                                {getStatusBadge(quote.status)}
+                              </div>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex flex-col gap-0.5 text-xs">
+                                <div className="text-gray-600 truncate">
+                                  <span className="font-medium">Criado:</span>{' '}
+                                  {formatDate(quote.createdAt)}
+                                </div>
+                                {quote.status === 'rejected' &&
+                                  quote.rejectedAt && (
+                                    <div className="text-red-600 truncate">
+                                      <span className="font-medium">Rej:</span>{' '}
+                                      {formatDate(quote.rejectedAt)}
+                                    </div>
+                                  )}
+                                {quote.status === 'approved' && (
+                                  <div className="text-green-600 text-xs">
+                                    Aprovado
+                                  </div>
+                                )}
+                              </div>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex justify-end gap-1">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setSelectedQuote(quote)}
+                                  className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-all h-7 px-2 text-xs"
+                                >
+                                  <Eye className="w-3.5 h-3.5" />
+                                </Button>
+                              </div>
+                            </td>
+                          </motion.tr>
+                        ))}
                     </tbody>
                   </table>
 

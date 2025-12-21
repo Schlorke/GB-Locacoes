@@ -5,7 +5,6 @@ import { ptBR } from 'date-fns/locale'
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet'
@@ -116,12 +115,12 @@ export function ColumnEventsPanel({
               <SheetTitle className="text-xl font-semibold text-gray-900 break-words">
                 {columnName}
               </SheetTitle>
-              <SheetDescription className="mt-1">
+              <div className="mt-2">
                 <Badge variant="outline" className="gap-1.5">
                   <FileText className="h-3 w-3" />
                   {events.length} {events.length === 1 ? 'evento' : 'eventos'}
                 </Badge>
-              </SheetDescription>
+              </div>
             </div>
           </div>
         </SheetHeader>
