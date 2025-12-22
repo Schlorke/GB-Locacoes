@@ -42,6 +42,7 @@ import {
   Download,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
+import { CurrencyInput } from '@/components/ui/currency-input'
 import { Label } from '@/components/ui/label'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 
@@ -172,7 +173,7 @@ function AdminQuotesPage() {
     useState(false)
   const [showLateFeeDialog, setShowLateFeeDialog] = useState(false)
   const [nestedDialogOpen, setNestedDialogOpen] = useState(false)
-  const [priceAdjustmentValue, setPriceAdjustmentValue] = useState('')
+  const [priceAdjustmentValue, setPriceAdjustmentValue] = useState<number>(0)
   const [priceAdjustmentReason, setPriceAdjustmentReason] = useState('')
   const [isAdjustingPrice, setIsAdjustingPrice] = useState(false)
   const [isCalculatingLateFee, setIsCalculatingLateFee] = useState(false)
@@ -316,7 +317,7 @@ function AdminQuotesPage() {
       setShowPriceAdjustmentDialog(false)
       setShowLateFeeDialog(false)
       setCalculatedLateFee(null)
-      setPriceAdjustmentValue('')
+      setPriceAdjustmentValue(0)
       setPriceAdjustmentReason('')
     }
   }, [selectedQuote])
@@ -395,7 +396,7 @@ function AdminQuotesPage() {
       return
     }
 
-    const finalValue = Number.parseFloat(priceAdjustmentValue)
+    const finalValue = priceAdjustmentValue
     if (isNaN(finalValue) || finalValue < 0) {
       toast.error('Erro de Validação', {
         description:
@@ -427,7 +428,7 @@ function AdminQuotesPage() {
       const updatedQuote = await response.json()
       setSelectedQuote(updatedQuote as Quote)
       setShowPriceAdjustmentDialog(false)
-      setPriceAdjustmentValue('')
+      setPriceAdjustmentValue(0)
       setPriceAdjustmentReason('')
 
       toast.success('Sucesso!', {
@@ -754,29 +755,29 @@ function AdminQuotesPage() {
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-gray-50/40"></div>
 
               <CardContent className="relative z-10 p-0">
-                <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                  <table className="w-full border-collapse">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
                     <thead>
-                      <tr className="border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100/50 sticky top-0 z-10 backdrop-blur-sm">
-                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[20%]">
+                      <tr className="border-b border-gray-100 bg-gray-50/50">
+                        <th className="text-left p-4 font-semibold text-gray-700">
                           Cliente
                         </th>
-                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[15%]">
+                        <th className="text-left p-4 font-semibold text-gray-700">
                           Equipamentos
                         </th>
-                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[15%]">
+                        <th className="text-left p-4 font-semibold text-gray-700">
                           Período
                         </th>
-                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[12%]">
+                        <th className="text-left p-4 font-semibold text-gray-700">
                           Valor Total
                         </th>
-                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[10%]">
+                        <th className="text-left p-4 font-semibold text-gray-700">
                           Status
                         </th>
-                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[15%]">
+                        <th className="text-left p-4 font-semibold text-gray-700">
                           Data
                         </th>
-                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[13%]">
+                        <th className="text-left p-4 font-semibold text-gray-700">
                           Ações
                         </th>
                       </tr>
@@ -803,141 +804,89 @@ function AdminQuotesPage() {
                             onMouseEnter={() => setHoveredRowId(quote.id)}
                             onMouseLeave={() => setHoveredRowId(null)}
                           >
-                            <td className="p-3">
-                              <div className="flex items-center gap-2 min-w-0">
-                                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold text-xs shrink-0">
+                            <td className="p-4">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold flex-shrink-0">
                                   {quote.name?.charAt(0).toUpperCase()}
                                 </div>
-                                <div className="min-w-0 flex-1">
-                                  <div className="font-medium text-gray-900 text-sm truncate">
+                                <div>
+                                  <div className="font-medium text-gray-900">
                                     {quote.name}
                                   </div>
-                                  <div className="text-xs text-gray-500 truncate">
+                                  <div className="text-sm text-gray-500">
                                     {quote.email}
                                   </div>
                                   {quote.company && (
-                                    <div className="text-xs text-gray-400 flex items-center gap-1 mt-0.5 truncate">
-                                      <Building className="w-3 h-3 shrink-0" />
-                                      <span className="truncate">
-                                        {quote.company}
-                                      </span>
+                                    <div className="text-xs text-gray-400 flex items-center gap-1 mt-1">
+                                      <Building className="w-3 h-3" />
+                                      {quote.company}
                                     </div>
                                   )}
                                 </div>
                               </div>
                             </td>
-                            <td className="p-3">
-                              <div className="flex items-start gap-1.5 min-w-0">
-                                <Package className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
-                                <div className="min-w-0 flex-1">
-                                  <span className="text-xs font-medium text-gray-900">
-                                    {Array.isArray(quote.equipments)
-                                      ? quote.equipments.length
-                                      : quote.items?.length || 0}{' '}
-                                    {(Array.isArray(quote.equipments)
-                                      ? quote.equipments.length
-                                      : quote.items?.length || 0) === 1
-                                      ? 'item'
-                                      : 'itens'}
-                                  </span>
-                                  {quote.items && quote.items.length > 0 && (
-                                    <div className="text-xs text-gray-500 mt-0.5 line-clamp-1">
-                                      {quote.items
-                                        .slice(0, 1)
-                                        .map(
-                                          (item) =>
-                                            item.equipment?.name ||
-                                            'Equipamento'
-                                        )
-                                        .filter(Boolean)
-                                        .join(', ')}
-                                      {quote.items.length > 1 && '...'}
-                                    </div>
-                                  )}
-                                </div>
+                            <td className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Package className="w-4 h-4 text-gray-400" />
+                                <span className="text-sm font-medium">
+                                  {Array.isArray(quote.equipments)
+                                    ? quote.equipments.length
+                                    : quote.items?.length || 0}{' '}
+                                  equipamento(s)
+                                </span>
                               </div>
                             </td>
-                            <td className="p-3">
-                              <div className="text-xs min-w-0">
+                            <td className="p-4">
+                              <div className="text-sm">
                                 {quote.startDate && quote.endDate ? (
                                   <>
-                                    <div className="flex items-center gap-1 text-gray-700 font-medium truncate">
-                                      <Calendar className="w-3 h-3 shrink-0" />
-                                      <span className="truncate">
-                                        {formatDate(quote.startDate)}
-                                      </span>
+                                    <div className="flex items-center gap-1 text-gray-600">
+                                      <Calendar className="w-3 h-3" />
+                                      {formatDate(quote.startDate)}
                                     </div>
-                                    <div className="text-gray-500 text-xs ml-4 mt-0.5 truncate">
+                                    <div className="text-gray-500 ml-4">
                                       até {formatDate(quote.endDate)}
                                     </div>
                                   </>
                                 ) : quote.items &&
                                   quote.items.length > 0 &&
                                   quote.items[0]?.days ? (
-                                  <div className="text-gray-600 font-medium text-xs">
+                                  <div className="text-gray-600 font-medium">
                                     {quote.items[0].days}{' '}
                                     {quote.items[0].days === 1 ? 'dia' : 'dias'}
                                   </div>
                                 ) : (
-                                  <div className="text-gray-400 italic text-xs">
+                                  <div className="text-gray-400 italic">
                                     Não definido
                                   </div>
                                 )}
                               </div>
                             </td>
-                            <td className="p-3">
-                              <div className="flex flex-col">
-                                <span className="font-semibold text-sm text-green-600">
-                                  {formatCurrency(quote.totalPrice || 0)}
-                                </span>
-                                {quote.finalTotal &&
-                                  quote.finalTotal !== quote.totalPrice && (
-                                    <span className="text-xs text-gray-500 mt-0.5 truncate">
-                                      Ajustado:{' '}
-                                      {formatCurrency(quote.finalTotal)}
-                                    </span>
-                                  )}
-                              </div>
+                            <td className="p-4">
+                              <span className="font-semibold text-lg text-green-600">
+                                {formatCurrency(quote.totalPrice || 0)}
+                              </span>
                             </td>
-                            <td className="p-3">
-                              <div className="scale-90 origin-left">
-                                {getStatusBadge(quote.status)}
-                              </div>
+                            <td className="p-4">
+                              {getStatusBadge(quote.status)}
                             </td>
-                            <td className="p-3 w-[15%]">
-                              <div className="flex flex-col gap-0.5 text-xs whitespace-nowrap">
-                                <div className="text-gray-600 truncate">
-                                  <span className="font-medium">Criado:</span>{' '}
-                                  {formatDate(quote.createdAt)}
-                                </div>
-                                {quote.status === 'rejected' &&
-                                  quote.rejectedAt && (
-                                    <div className="text-red-600 truncate">
-                                      <span className="font-medium">Rej:</span>{' '}
-                                      {formatDate(quote.rejectedAt)}
-                                    </div>
-                                  )}
-                                {quote.status === 'approved' && (
-                                  <div className="text-green-600 text-xs truncate">
-                                    Aprovado
-                                  </div>
+                            <td className="p-4">
+                              <div className="text-sm text-gray-600">
+                                {new Date(quote.createdAt).toLocaleDateString(
+                                  'pt-BR'
                                 )}
                               </div>
                             </td>
-                            <td className="p-3 text-left w-[13%]">
-                              <div className="flex justify-start gap-1">
-                                <Button
-                                  variant="ghost-white"
-                                  size="sm"
-                                  onClick={() => setSelectedQuote(quote)}
-                                  className="admin-action-button view-button ghost-white-variant opacity-0 group-hover:opacity-100 h-7 px-2 text-xs transition-opacity"
-                                >
-                                  <Eye className="w-3.5 h-3.5" />
-                                  <span className="hidden sm:inline">
-                                    Visualizar Orçamento
-                                  </span>
-                                </Button>
-                              </div>
+                            <td className="p-4">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setSelectedQuote(quote)}
+                                className="admin-action-button view-button opacity-0 group-hover:opacity-100 transition-all"
+                              >
+                                <Eye className="w-4 h-4 mr-2" />
+                                Ver Detalhes
+                              </Button>
                             </td>
                           </motion.tr>
                         ))}
@@ -1846,10 +1795,15 @@ function AdminQuotesPage() {
                               >
                                 <Dialog.Content>
                                   <Dialog.Header className="flex-col items-start gap-2">
-                                    <Dialog.Title className="flex items-center gap-2 text-xl font-semibold text-gray-900">
-                                      <DollarSign className="w-5 h-5" />
-                                      Ajustar Valor Final do Orçamento
-                                    </Dialog.Title>
+                                    <Dialog.CloseButton />
+                                    <div className="flex items-center gap-3">
+                                      <Dialog.HeaderIcon>
+                                        <DollarSign className="w-4 h-4" />
+                                      </Dialog.HeaderIcon>
+                                      <Dialog.Title className="text-xl font-semibold text-gray-900">
+                                        Ajustar Valor Final do Orçamento
+                                      </Dialog.Title>
+                                    </div>
                                     <Dialog.Description className="text-sm text-gray-600">
                                       Edite o valor final do orçamento. A
                                       justificativa é obrigatória e será exibida
@@ -1882,18 +1836,14 @@ function AdminQuotesPage() {
                                               *
                                             </span>
                                           </Label>
-                                          <Input
+                                          <CurrencyInput
                                             id="final-value"
-                                            type="number"
-                                            step="0.01"
-                                            min="0"
                                             value={priceAdjustmentValue}
-                                            onChange={(e) =>
+                                            onValueChange={(value) =>
                                               setPriceAdjustmentValue(
-                                                e.target.value
+                                                value || 0
                                               )
                                             }
-                                            placeholder="0.00"
                                             className="mt-1"
                                           />
                                         </div>
@@ -1926,20 +1876,21 @@ function AdminQuotesPage() {
                                       </Dialog.BodyContent>
                                     </Dialog.BodyViewport>
                                   </Dialog.Body>
-                                  <Dialog.Footer className="flex-col-reverse sm:flex-row gap-3">
+                                  <Dialog.Footer className="flex flex-col-reverse sm:flex-row gap-3">
                                     <Button
                                       variant="outline"
                                       disabled={isAdjustingPrice}
                                       onClick={() => {
-                                        setPriceAdjustmentValue('')
+                                        setPriceAdjustmentValue(0)
                                         setPriceAdjustmentReason('')
                                         setShowPriceAdjustmentDialog(false)
                                       }}
-                                      className="w-full sm:w-auto"
+                                      className="w-full"
                                     >
                                       Cancelar
                                     </Button>
                                     <Button
+                                      variant="default"
                                       onClick={() =>
                                         selectedQuote &&
                                         adjustQuotePrice(selectedQuote.id)
@@ -1947,9 +1898,10 @@ function AdminQuotesPage() {
                                       disabled={
                                         isAdjustingPrice ||
                                         !priceAdjustmentValue ||
+                                        priceAdjustmentValue <= 0 ||
                                         !priceAdjustmentReason.trim()
                                       }
-                                      className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white"
+                                      className="w-full"
                                     >
                                       {isAdjustingPrice
                                         ? 'Ajustando...'
@@ -2101,8 +2053,8 @@ function AdminQuotesPage() {
                                 0
                               setPriceAdjustmentValue(
                                 selectedQuote.finalTotal
-                                  ? selectedQuote.finalTotal.toString()
-                                  : originalValue.toString()
+                                  ? Number(selectedQuote.finalTotal)
+                                  : originalValue
                               )
                               setPriceAdjustmentReason(
                                 selectedQuote.priceAdjustmentReason || ''

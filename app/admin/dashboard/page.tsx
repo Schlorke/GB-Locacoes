@@ -186,10 +186,10 @@ const statusStatsCards = [
     title: 'Pendentes',
     value: (stats: DashboardStats | null) => stats?.pendingQuotes || 0,
     icon: Clock,
-    borderColor: 'bg-yellow-500',
-    iconBg: 'bg-yellow-100',
-    iconColor: 'text-yellow-600',
-    valueColor: 'text-yellow-600',
+    borderColor: 'bg-orange-500',
+    iconBg: 'bg-orange-100',
+    iconColor: 'text-orange-600',
+    valueColor: 'text-orange-600',
   },
   {
     title: 'Aprovados',
@@ -286,7 +286,7 @@ export default function AdminDashboard() {
         {
           name: 'Pendentes',
           value: stats.pendingQuotes,
-          color: '#ea580c', // orange-600 (laranja)
+          color: '#f97316', // orange-500 (laranja mais claro)
         },
         {
           name: 'Aprovados',

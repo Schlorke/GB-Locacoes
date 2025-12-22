@@ -348,7 +348,8 @@ export default function AdminRentalsPage() {
                   {Object.entries(statusConfig).map(([status, config]) => {
                     if (!config) return null
                     const Icon = config.icon
-                    const statusRentals = filteredRentals.filter(
+                    // Contagem total de itens deste status (sem filtros adicionais)
+                    const totalStatusRentals = rentals.filter(
                       (r) => (r.status?.toUpperCase() || r.status) === status
                     )
                     const isActive = statusFilter === status
@@ -368,21 +369,20 @@ export default function AdminRentalsPage() {
                           }
                         }}
                         className={cn(
-                          'group flex flex-col items-center justify-center gap-2 px-6 py-4 md:px-4 md:py-3 rounded-lg border transition-all duration-300 relative',
+                          'group flex flex-col items-center justify-center gap-2 px-6 py-4 md:px-4 rounded-lg border transition-all duration-300 relative',
                           'bg-transparent hover:bg-background border-gray-200 shadow-md hover:shadow-lg',
-                          isActive && 'shadow-lg',
-                          status === 'PENDING_RETURN' && '!pb-2'
+                          isActive && 'shadow-lg'
                         )}
                         title={`Ver locações ${config.label.toLowerCase()}`}
                         aria-label={`Filtrar por ${config.label}`}
                       >
-                        {/* Badge com contador */}
-                        {statusRentals.length > 0 && (
+                        {/* Badge com contador - sempre visível quando houver itens */}
+                        {totalStatusRentals.length > 0 && (
                           <Badge
                             variant="secondary"
                             className="absolute top-2 right-2 text-xs"
                           >
-                            {statusRentals.length}
+                            {totalStatusRentals.length}
                           </Badge>
                         )}
 
@@ -403,9 +403,7 @@ export default function AdminRentalsPage() {
                             'text-sm md:text-xs font-medium text-center leading-tight transition-all duration-300',
                             isActive
                               ? 'text-orange-600 font-semibold'
-                              : 'text-gray-700 group-hover:text-orange-600',
-                            status === 'PENDING_RETURN' &&
-                              '!mb-0 !pb-0 !leading-none'
+                              : 'text-gray-700 group-hover:text-orange-600'
                           )}
                         >
                           {config.label}

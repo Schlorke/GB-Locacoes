@@ -127,6 +127,19 @@ das suas perguntas está nestes documentos.
 - **Z-Index**: Use os tokens `--layer-*` definidos em `app/globals.css`. Nunca
   invente valores numéricos.
 
+### 🚨 Regras Críticas de Botões
+
+**NUNCA ASSUMA CORES DE BOTÕES**. Sempre consulte `components/ui/button.tsx`:
+
+- **Botões de Confirmação/Salvar**: Use `variant="default"` (resulta em
+  `bg-slate-700`)
+- **Botões de Cancelar**: Use `variant="outline"`
+- **NUNCA** adicione classes customizadas de cor (`bg-blue-600`,
+  `bg-orange-600`, etc.) sem consultar primeiro o componente Button e a
+  documentação
+- **SEMPRE** verifique exemplos existentes no projeto antes de criar novos
+  botões
+
 ---
 
 ## 7. 🏛️ Stack Tecnológico (Resumo)
