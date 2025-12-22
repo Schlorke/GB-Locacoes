@@ -776,7 +776,7 @@ function AdminQuotesPage() {
                         <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[15%]">
                           Data
                         </th>
-                        <th className="text-right p-3 font-semibold text-gray-700 text-sm w-[13%]">
+                        <th className="text-left p-3 font-semibold text-gray-700 text-sm w-[13%]">
                           Ações
                         </th>
                       </tr>
@@ -904,8 +904,8 @@ function AdminQuotesPage() {
                                 {getStatusBadge(quote.status)}
                               </div>
                             </td>
-                            <td className="p-3">
-                              <div className="flex flex-col gap-0.5 text-xs">
+                            <td className="p-3 w-[15%]">
+                              <div className="flex flex-col gap-0.5 text-xs whitespace-nowrap">
                                 <div className="text-gray-600 truncate">
                                   <span className="font-medium">Criado:</span>{' '}
                                   {formatDate(quote.createdAt)}
@@ -918,21 +918,24 @@ function AdminQuotesPage() {
                                     </div>
                                   )}
                                 {quote.status === 'approved' && (
-                                  <div className="text-green-600 text-xs">
+                                  <div className="text-green-600 text-xs truncate">
                                     Aprovado
                                   </div>
                                 )}
                               </div>
                             </td>
-                            <td className="p-3">
-                              <div className="flex justify-end gap-1">
+                            <td className="p-3 text-left w-[13%]">
+                              <div className="flex justify-start gap-1">
                                 <Button
                                   variant="ghost-white"
                                   size="sm"
                                   onClick={() => setSelectedQuote(quote)}
-                                  className="admin-action-button view-button ghost-white-variant opacity-0 group-hover:opacity-100 h-7 px-2 text-xs"
+                                  className="admin-action-button view-button ghost-white-variant opacity-0 group-hover:opacity-100 h-7 px-2 text-xs transition-opacity"
                                 >
                                   <Eye className="w-3.5 h-3.5" />
+                                  <span className="hidden sm:inline">
+                                    Visualizar Orçamento
+                                  </span>
                                 </Button>
                               </div>
                             </td>

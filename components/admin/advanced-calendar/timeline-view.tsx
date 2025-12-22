@@ -20,7 +20,7 @@ const TIMELINE_HEADER_HEIGHT = TIMELINE_ROW_HEIGHT
 
 // Mapeamento de cores por status
 const STATUS_COLORS: Record<string, string> = {
-  pending: '#ea580c', // Laranja (orange-600)
+  pending: '#f97316', // Laranja (orange-500) - mais claro para diferenciar do vermelho
   approved: '#22c55e', // Verde (green-500)
   rejected: '#ef4444', // Vermelho (red-500)
   completed: '#3b82f6', // Azul (blue-500)
@@ -327,7 +327,7 @@ export function TimelineView({
                           STATUS_COLORS[resource.id] ||
                           events.find((e) => e.resourceId === resource.id)
                             ?.color ||
-                          '#ea580c',
+                          '#f97316',
                       }}
                     />
                     <span
