@@ -107,11 +107,17 @@ export function TimelineView({
 
     // Para eventos rejeitados ou pendentes (minúsculas ou maiúsculas), usar a data de criação e ocupar toda a largura do dia
     if (
-      ((event.status === 'rejected' || event.status === 'pending' || event.status === 'PENDING' || event.status === 'REJECTED') &&
-      event.createdAt) ||
+      ((event.status === 'rejected' ||
+        event.status === 'pending' ||
+        event.status === 'PENDING' ||
+        event.status === 'REJECTED') &&
+        event.createdAt) ||
       event.isPendingRequest
     ) {
       const eventDate = event.createdAt
+
+      // Verifica se eventDate existe antes de usar
+      if (!eventDate) return null
 
       // Encontra o índice do dia na timeline
       const dayIndex = visiblePeriod.days.findIndex((day) =>
@@ -226,8 +232,11 @@ export function TimelineView({
 
       // Para eventos rejeitados ou pendentes (minúsculas ou maiúsculas), verifica se a data de criação está no período visível
       if (
-        ((event.status === 'rejected' || event.status === 'pending' || event.status === 'PENDING' || event.status === 'REJECTED') &&
-        event.createdAt) ||
+        ((event.status === 'rejected' ||
+          event.status === 'pending' ||
+          event.status === 'PENDING' ||
+          event.status === 'REJECTED') &&
+          event.createdAt) ||
         event.isPendingRequest
       ) {
         return visiblePeriod.days.some((day) =>
@@ -274,20 +283,28 @@ export function TimelineView({
       const EVENT_HEIGHT = 50 // Altura de cada evento
       const EVENT_GAP = 6 // Espaço entre eventos (aumentado para melhor visualização)
       const BASE_PADDING = 8 // Padding top + bottom (4px cada)
-      const calculatedHeight = BASE_PADDING + (maxStackedEvents * EVENT_HEIGHT) + ((maxStackedEvents - 1) * EVENT_GAP)
+      const calculatedHeight =
+        BASE_PADDING +
+        maxStackedEvents * EVENT_HEIGHT +
+        (maxStackedEvents - 1) * EVENT_GAP
 
       // Usa no mínimo a altura padrão, mas aumenta se necessário
-      rowHeights.set(resource.id, Math.max(TIMELINE_ROW_HEIGHT, calculatedHeight))
+      rowHeights.set(
+        resource.id,
+        Math.max(TIMELINE_ROW_HEIGHT, calculatedHeight)
+      )
     })
 
     return rowHeights
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timelineResources, events, visiblePeriod])
 
-  const timelineRowTemplate = timelineResources.map((resource) => {
-    const height = calculateRowHeights.get(resource.id) || TIMELINE_ROW_HEIGHT
-    return `${height}px`
-  }).join(' ')
+  const timelineRowTemplate = timelineResources
+    .map((resource) => {
+      const height = calculateRowHeights.get(resource.id) || TIMELINE_ROW_HEIGHT
+      return `${height}px`
+    })
+    .join(' ')
 
   return (
     <div className="flex flex-col bg-white h-full">
@@ -314,8 +331,11 @@ export function TimelineView({
               const weekEvents = events.filter((event) => {
                 // Para eventos rejeitados ou pendentes (minúsculas ou maiúsculas), verifica se a data de criação está no período visível
                 if (
-                  ((event.status === 'rejected' || event.status === 'pending' || event.status === 'PENDING' || event.status === 'REJECTED') &&
-                  event.createdAt) ||
+                  ((event.status === 'rejected' ||
+                    event.status === 'pending' ||
+                    event.status === 'PENDING' ||
+                    event.status === 'REJECTED') &&
+                    event.createdAt) ||
                   event.isPendingRequest
                 ) {
                   return visiblePeriod.days.some((day) =>
@@ -361,7 +381,7 @@ export function TimelineView({
                       event.status === 'pending' ||
                       event.status === 'PENDING' ||
                       event.status === 'REJECTED') &&
-                    event.createdAt) ||
+                      event.createdAt) ||
                     event.isPendingRequest
                   ) {
                     return isSameDay(day, event.createdAt!)
@@ -428,7 +448,8 @@ export function TimelineView({
             const isLastRow = index === timelineResources.length - 1
             const rowBorderClass = isLastRow ? 'border-b-0' : 'border-b'
             const isResourceHighlighted = isEquipmentHovered
-            const rowHeight = calculateRowHeights.get(resource.id) || TIMELINE_ROW_HEIGHT
+            const rowHeight =
+              calculateRowHeights.get(resource.id) || TIMELINE_ROW_HEIGHT
 
             return (
               <div key={resource.id} className="contents">
@@ -487,9 +508,8 @@ export function TimelineView({
                   {/* Eventos na Swimlane - Posicionamento com empilhamento */}
                   {(() => {
                     // Calcula posições empilhadas para todos os eventos deste recurso
-                    const stackedPositions = getStackedEventPositions(
-                      resourceEvents
-                    )
+                    const stackedPositions =
+                      getStackedEventPositions(resourceEvents)
 
                     return resourceEvents.map((event) => {
                       const position = stackedPositions.get(event)
@@ -508,49 +528,50 @@ export function TimelineView({
                             borderLeftColor: event.color,
                             minWidth: '60px',
                           }}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          onEventClick?.(event)
-                        }}
-                        title={
-                          ((event.status === 'rejected' ||
-                            event.status === 'pending' ||
-                            event.status === 'PENDING' ||
-                            event.status === 'REJECTED') &&
-                          event.createdAt) ||
-                          event.isPendingRequest
-                            ? `${event.title} - ${format(event.createdAt!, 'HH:mm', { locale: ptBR })} (${event.status === 'rejected' || event.status === 'REJECTED' ? 'Rejeitado' : 'Pendente'})`
-                            : `${event.title} - ${format(event.start, 'HH:mm', { locale: ptBR })} - ${format(event.end, 'HH:mm', { locale: ptBR })}`
-                        }
-                      >
-                        <div className="text-xs font-medium text-gray-900 truncate">
-                          {event.title}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onEventClick?.(event)
+                          }}
+                          title={
+                            ((event.status === 'rejected' ||
+                              event.status === 'pending' ||
+                              event.status === 'PENDING' ||
+                              event.status === 'REJECTED') &&
+                              event.createdAt) ||
+                            event.isPendingRequest
+                              ? `${event.title} - ${format(event.createdAt!, 'HH:mm', { locale: ptBR })} (${event.status === 'rejected' || event.status === 'REJECTED' ? 'Rejeitado' : 'Pendente'})`
+                              : `${event.title} - ${format(event.start, 'HH:mm', { locale: ptBR })} - ${format(event.end, 'HH:mm', { locale: ptBR })}`
+                          }
+                        >
+                          <div className="text-xs font-medium text-gray-900 truncate">
+                            {event.title}
+                          </div>
+                          <div className="text-xs text-gray-600 truncate">
+                            {((event.status === 'rejected' ||
+                              event.status === 'pending' ||
+                              event.status === 'PENDING' ||
+                              event.status === 'REJECTED') &&
+                              event.createdAt) ||
+                            event.isPendingRequest ? (
+                              <>
+                                {format(event.createdAt!, 'HH:mm', {
+                                  locale: ptBR,
+                                })}{' '}
+                                (
+                                {event.status === 'rejected' ||
+                                event.status === 'REJECTED'
+                                  ? 'Rejeitado'
+                                  : 'Pendente'}
+                                )
+                              </>
+                            ) : (
+                              <>
+                                {format(event.start, 'HH:mm', { locale: ptBR })}{' '}
+                                - {format(event.end, 'HH:mm', { locale: ptBR })}
+                              </>
+                            )}
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-600 truncate">
-                          {(((event.status === 'rejected' ||
-                            event.status === 'pending' ||
-                            event.status === 'PENDING' ||
-                            event.status === 'REJECTED') &&
-                          event.createdAt) ||
-                          event.isPendingRequest) ? (
-                            <>
-                              {format(event.createdAt!, 'HH:mm', {
-                                locale: ptBR,
-                              })}{' '}
-                              (
-                              {event.status === 'rejected' || event.status === 'REJECTED'
-                                ? 'Rejeitado'
-                                : 'Pendente'}
-                              )
-                            </>
-                          ) : (
-                            <>
-                              {format(event.start, 'HH:mm', { locale: ptBR })} -{' '}
-                              {format(event.end, 'HH:mm', { locale: ptBR })}
-                            </>
-                          )}
-                        </div>
-                      </div>
                       )
                     })
                   })()}

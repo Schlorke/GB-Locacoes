@@ -11,24 +11,30 @@ exibe resumo final (itens + frete).
 
 1. Itens do carrinho vem de `useCartStore` e sao exibidos com quantidade, datas
    e precos inteligentes (`calculateIntelligentPrice` / `getPricingConfig`).
-2. Ao montar, a pagina reidrata os itens via `hydrateItems` com dados atuais de
+2. Quando um item nao possui `startDate`/`endDate`, a pagina calcula e exibe um
+   periodo estimado a partir da data da solicitacao, respeitando
+   `includeWeekends` (se false, inicia no proximo dia util e conta apenas dias
+   uteis).
+3. Quando um item possui `startDate` e o usuario ajusta `days`, o `endDate` e
+   recalculado a partir da data de inicio, respeitando `includeWeekends`.
+4. Ao montar, a pagina reidrata os itens via `hydrateItems` com dados atuais de
    `/api/equipments` (ver `docs/features/cart-pricing-sync.md`), preservando
    quantidade e dias.
-3. Formulario de contato controla estado local (`formData`) e preenche
+5. Formulario de contato controla estado local (`formData`) e preenche
    nome/email se o usuario estiver logado (`useSession`).
-4. `deliveryType`:
+6. `deliveryType`:
    - `PICKUP`: esconde endereco e frete.
    - `DELIVERY`: renderiza `AddressForm` e, com CEP valido/endereco definido,
      chama `calculateFreight` para montar `freightOptions`.
-5. Dropdown de frete usa o `Select` do design system em modo nao modal
+7. Dropdown de frete usa o `Select` do design system em modo nao modal
    (`modal={false}` por padrao). A neutralizacao do scroll-lock do Radix em
    `app/globals.css` (regra `body[data-scroll-locked]`) + guard no
    `app/orcamento/page.tsx` (remove `data-scroll-locked` e styles `data-rs*`)
    garantem que o dropdown nao insira padding/margin extra nem bloqueie o scroll
    global. Cada opcao exibe nome, transportadora e preco formatado.
-6. Resumo (sidebar sticky) soma subtotais calculados pelo pricing inteligente e
+8. Resumo (sidebar sticky) soma subtotais calculados pelo pricing inteligente e
    inclui o valor da opcao de frete selecionada.
-7. Envio do orcamento posta para `/api/quotes` com itens, dados de contato,
+9. Envio do orcamento posta para `/api/quotes` com itens, dados de contato,
    `deliveryType`, endereco (quando `DELIVERY`) e opcao de frete escolhida.
    Opcionalmente abre WhatsApp via `convertFormDataToWhatsApp` /
    `openWhatsAppQuote`. Ao concluir, limpa o carrinho (`clearCart`).
@@ -76,6 +82,8 @@ exibe resumo final (itens + frete).
 
 ## 7. Historico de Alteracoes
 
-| Data       | Descricao                                                  | Autor    |
-| ---------- | ---------------------------------------------------------- | -------- |
-| 2025-12-18 | Documentada logica da pagina e correcao do select de frete | IA Codex |
+| Data       | Descricao                                                                   | Autor    |
+| ---------- | --------------------------------------------------------------------------- | -------- |
+| 2025-12-22 | Ajuste de dias recalcula o endDate para itens com datas                     | IA Codex |
+| 2025-12-22 | Datas estimadas sem calendario e confirmacao antecipada de finais de semana | IA Codex |
+| 2025-12-18 | Documentada logica da pagina e correcao do select de frete                  | IA Codex |

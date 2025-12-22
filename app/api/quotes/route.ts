@@ -7,6 +7,7 @@ import { generateQuoteEmailHTML } from '@/lib/email-templates'
 import { buildQuotePricing } from '@/lib/quote-pricing'
 import { isEquipmentAvailableForRental } from '@/lib/equipment-availability'
 import { calculateFreight } from '@/lib/freight-calculator'
+import { getAutoRentalDateRange } from '@/lib/rental-date-utils'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
@@ -395,14 +396,14 @@ export async function POST(request: Request) {
             ? new Date(item.endDate)
             : item.endDate
       } else {
-        // Calcular automaticamente: início = dia da solicitação (00:00:00)
-        itemStartDate = new Date(requestDateTime)
-        itemStartDate.setHours(0, 0, 0, 0) // Início do dia da solicitação
-        // Fim = início + número de dias (subtrair 1 porque o dia inicial já conta)
-        itemEndDate = new Date(itemStartDate)
-        itemEndDate.setDate(itemEndDate.getDate() + days - 1)
-        // Definir hora de fim para 23:59:59 do último dia para facilitar controle
-        itemEndDate.setHours(23, 59, 59, 999)
+        const autoDates = getAutoRentalDateRange({
+          requestDate: requestDateTime,
+          days,
+          includeWeekends: item.includeWeekends || false,
+        })
+
+        itemStartDate = autoDates.startDate
+        itemEndDate = autoDates.endDate
       }
 
       quoteItems.push({

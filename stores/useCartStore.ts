@@ -5,6 +5,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
 import { sanitizeCartItemPricing } from '@/lib/pricing'
+import { getAutoRentalDateRange } from '@/lib/rental-date-utils'
 
 export interface CartItem {
   equipmentId: string
@@ -30,6 +31,8 @@ export interface CartItem {
   endDate?: Date
   // Indica se finais de semana estão incluídos na contagem de dias
   includeWeekends?: boolean
+  // Marca se a preferencia de finais de semana foi confirmada pelo usuario
+  includeWeekendsConfirmed?: boolean
   // Descontos percentuais
   dailyDiscount?: number
   weeklyDiscount?: number
@@ -109,16 +112,43 @@ export const useCartStore = create<CartState>()(
 
       updateItemDays: (equipmentId, days) =>
         set((state) => ({
-          items: state.items.map((i) =>
-            i.equipmentId === equipmentId ? { ...i, days } : i
-          ),
+          items: state.items.map((i) => {
+            if (i.equipmentId !== equipmentId) {
+              return i
+            }
+
+            const safeDays = Math.max(1, Number(days) || 1)
+            if (!i.startDate) {
+              return { ...i, days: safeDays }
+            }
+
+            const startDate =
+              i.startDate instanceof Date ? i.startDate : new Date(i.startDate)
+            if (Number.isNaN(startDate.getTime())) {
+              return { ...i, days: safeDays }
+            }
+
+            const { startDate: normalizedStartDate, endDate } =
+              getAutoRentalDateRange({
+                requestDate: startDate,
+                days: safeDays,
+                includeWeekends: i.includeWeekends ?? false,
+              })
+
+            return {
+              ...i,
+              days: safeDays,
+              startDate: normalizedStartDate,
+              endDate,
+            }
+          }),
         })),
 
       updateItemIncludeWeekends: (equipmentId, includeWeekends) =>
         set((state) => ({
           items: state.items.map((i) =>
             i.equipmentId === equipmentId
-              ? { ...i, includeWeekends }
+              ? { ...i, includeWeekends, includeWeekendsConfirmed: true }
               : i
           ),
         })),

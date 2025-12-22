@@ -1,9 +1,21 @@
 'use client'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogHeaderIcon,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
+import { CloseButton } from '@/components/ui/close-button'
 import { useCartStore, type CartItem } from '@/stores/useCartStore'
 import { useRouter } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 export interface PricingOption {
   id: string
@@ -46,6 +58,9 @@ interface SmartQuoteButtonProps {
   selectedDays?: number
   /** Indica se finais de semana estão incluídos na contagem de dias */
   includeWeekends?: boolean
+  /** Marca se a preferência de finais de semana já foi confirmada */
+  weekendSelectionConfirmed?: boolean
+  onWeekendSelectionConfirm?: (_includeWeekends: boolean) => void
   className?: string
   size?: 'sm' | 'lg' | 'default'
   variant?:
@@ -87,6 +102,8 @@ export function SmartQuoteButton({
   endDate,
   selectedDays,
   includeWeekends = false,
+  weekendSelectionConfirmed = false,
+  onWeekendSelectionConfirm,
   className,
   size = 'lg',
   variant = 'default',
@@ -94,20 +111,56 @@ export function SmartQuoteButton({
 }: SmartQuoteButtonProps) {
   const { addItem } = useCartStore()
   const router = useRouter()
+  const [isWeekendDialogOpen, setIsWeekendDialogOpen] = useState(false)
 
-  const handleQuoteRequest = useCallback(() => {
-    if (!isAvailable) return
+  const finalizeAdd = useCallback(
+    (includeWeekendSelection: boolean) => {
+      // Calcular dias: usar selectedDays se disponível, senão usar multiplier do período
+      const days = selectedDays || selectedPeriod.multiplier
 
-    // Calcular dias: usar selectedDays se disponível, senão usar multiplier do período
-    const days = selectedDays || selectedPeriod.multiplier
+      // Preparar dados do equipamento selecionado
+      const equipmentForQuote: CartItem = {
+        equipmentId,
+        equipmentName,
+        pricePerDay,
+        quantity: 1,
+        days,
+        selectedPeriod,
+        finalPrice,
+        maxStock,
+        description,
+        category,
+        images,
+        dailyDiscount,
+        weeklyDiscount,
+        biweeklyDiscount,
+        monthlyDiscount,
+        // Campos de valor direto
+        dailyDirectValue,
+        weeklyDirectValue,
+        biweeklyDirectValue,
+        monthlyDirectValue,
+        // Campos de controle de método de preço
+        dailyUseDirectValue,
+        weeklyUseDirectValue,
+        biweeklyUseDirectValue,
+        monthlyUseDirectValue,
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
+        includeWeekends: includeWeekendSelection,
+        includeWeekendsConfirmed: true,
+      }
 
-    // Preparar dados do equipamento selecionado
-    const equipmentForQuote: CartItem = {
+      // Adicionar ao carrinho
+      addItem(equipmentForQuote)
+
+      // Navegar para página de orçamento
+      router.push('/orcamento')
+    },
+    [
       equipmentId,
       equipmentName,
       pricePerDay,
-      quantity: 1,
-      days,
       selectedPeriod,
       finalPrice,
       maxStock,
@@ -118,56 +171,50 @@ export function SmartQuoteButton({
       weeklyDiscount,
       biweeklyDiscount,
       monthlyDiscount,
-      // Campos de valor direto
       dailyDirectValue,
       weeklyDirectValue,
       biweeklyDirectValue,
       monthlyDirectValue,
-      // Campos de controle de método de preço
       dailyUseDirectValue,
       weeklyUseDirectValue,
       biweeklyUseDirectValue,
       monthlyUseDirectValue,
-      startDate: startDate || undefined,
-      endDate: endDate || undefined,
-      includeWeekends,
+      startDate,
+      endDate,
+      selectedDays,
+      addItem,
+      router,
+    ]
+  )
+
+  const handleQuoteRequest = useCallback(() => {
+    if (!isAvailable) return
+
+    const hasExplicitDates = Boolean(startDate && endDate)
+    if (!hasExplicitDates && !weekendSelectionConfirmed) {
+      setIsWeekendDialogOpen(true)
+      return
     }
 
-    // Adicionar ao carrinho
-    addItem(equipmentForQuote)
-
-    // Navegar para página de orçamento
-    router.push('/orcamento')
+    finalizeAdd(includeWeekends)
   }, [
-    equipmentId,
-    equipmentName,
-    pricePerDay,
-    selectedPeriod,
-    finalPrice,
     isAvailable,
-    maxStock,
-    description,
-    category,
-    images,
-    dailyDiscount,
-    weeklyDiscount,
-    biweeklyDiscount,
-    monthlyDiscount,
-    dailyDirectValue,
-    weeklyDirectValue,
-    biweeklyDirectValue,
-    monthlyDirectValue,
-    dailyUseDirectValue,
-    weeklyUseDirectValue,
-    biweeklyUseDirectValue,
-    monthlyUseDirectValue,
     startDate,
     endDate,
-    selectedDays,
     includeWeekends,
-    addItem,
-    router,
+    weekendSelectionConfirmed,
+    finalizeAdd,
   ])
+
+  const handleWeekendConfirmation = (includeWeekendSelection: boolean) => {
+    onWeekendSelectionConfirm?.(includeWeekendSelection)
+    setIsWeekendDialogOpen(false)
+    finalizeAdd(includeWeekendSelection)
+  }
+
+  const handleWeekendCancel = () => {
+    setIsWeekendDialogOpen(false)
+  }
 
   if (!isAvailable) {
     return (
@@ -178,13 +225,65 @@ export function SmartQuoteButton({
   }
 
   return (
-    <Button
-      size={size}
-      variant={variant}
-      className={className}
-      onClick={handleQuoteRequest}
-    >
-      {children}
-    </Button>
+    <>
+      <Button
+        size={size}
+        variant={variant}
+        className={className}
+        onClick={handleQuoteRequest}
+      >
+        {children}
+      </Button>
+
+      <AlertDialog
+        open={isWeekendDialogOpen}
+        onOpenChange={(open) => {
+          if (!open) {
+            handleWeekendCancel()
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader className="relative pr-8">
+            <CloseButton
+              size="sm"
+              variant="ghostWhite"
+              className="absolute right-4 top-4"
+              onClick={handleWeekendCancel}
+              aria-label="Fechar dialog"
+            />
+            <AlertDialogHeaderIcon />
+            <AlertDialogTitle>Incluir finais de semana?</AlertDialogTitle>
+          </AlertDialogHeader>
+          <div className="p-4 md:p-6">
+            <AlertDialogDescription>
+              Você está solicitando locação de <strong>{equipmentName}</strong>{' '}
+              sem ter selecionado datas específicas no calendário.
+              <br />
+              <br />
+              <strong>
+                Deseja incluir os finais de semana na contagem de dias?
+              </strong>
+              <br />
+              <br />
+              <span className="text-sm text-muted-foreground">
+                • <strong>Sim:</strong> Sábados e domingos serão contados como
+                dias de locação
+                <br />• <strong>Não:</strong> Apenas dias úteis (segunda a
+                sexta) serão contados
+              </span>
+            </AlertDialogDescription>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => handleWeekendConfirmation(false)}>
+              Não, apenas dias úteis
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={() => handleWeekendConfirmation(true)}>
+              Sim, incluir finais de semana
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
 }

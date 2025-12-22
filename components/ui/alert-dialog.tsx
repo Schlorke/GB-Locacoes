@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
+import { AlertTriangle } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
@@ -37,7 +38,7 @@ const AlertDialogContent = React.forwardRef<
       data-dialog-content
       ref={ref}
       className={cn(
-        'fixed left-[50%] top-[50%] z-[var(--layer-dialog)] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
+        'fixed left-[50%] top-[50%] z-[var(--layer-dialog)] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-0 border bg-background shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg overflow-hidden',
         className
       )}
       {...props}
@@ -52,7 +53,7 @@ const AlertDialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'flex flex-col space-y-2 text-center sm:text-left',
+      'relative flex flex-shrink-0 items-start gap-3 p-4 md:p-6 border-b border-gray-100 rounded-t-2xl bg-gradient-to-r from-slate-50 to-slate-100',
       className
     )}
     {...props}
@@ -60,13 +61,29 @@ const AlertDialogHeader = ({
 )
 AlertDialogHeader.displayName = 'AlertDialogHeader'
 
+const AlertDialogHeaderIcon = ({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-slate-600 to-slate-700 text-white shadow-sm',
+      className
+    )}
+    {...props}
+  >
+    <AlertTriangle className="h-4 w-4" />
+  </div>
+)
+AlertDialogHeaderIcon.displayName = 'AlertDialogHeaderIcon'
+
 const AlertDialogFooter = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
+      'p-4 md:p-6 border-t bg-gray-50 rounded-b-2xl flex-shrink-0 w-full max-w-full flex flex-col-reverse sm:flex-row gap-2 items-stretch',
       className
     )}
     {...props}
@@ -80,7 +97,7 @@ const AlertDialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Title
     ref={ref}
-    className={cn('text-lg font-semibold', className)}
+    className={cn('text-lg font-semibold text-left flex-1 pr-8', className)}
     {...props}
   />
 ))
@@ -105,7 +122,7 @@ const AlertDialogAction = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Action
     ref={ref}
-    className={cn(buttonVariants(), className)}
+    className={cn(buttonVariants(), 'h-full w-full sm:flex-1', className)}
     {...props}
   />
 ))
@@ -119,7 +136,7 @@ const AlertDialogCancel = React.forwardRef<
     ref={ref}
     className={cn(
       buttonVariants({ variant: 'outline' }),
-      'mt-2 sm:mt-0',
+      'h-full w-full sm:flex-1',
       className
     )}
     {...props}
@@ -134,6 +151,7 @@ export {
   AlertDialogTrigger,
   AlertDialogContent,
   AlertDialogHeader,
+  AlertDialogHeaderIcon,
   AlertDialogFooter,
   AlertDialogTitle,
   AlertDialogDescription,

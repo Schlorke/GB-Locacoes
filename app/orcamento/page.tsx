@@ -30,8 +30,10 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
+  AlertDialogHeaderIcon,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { CloseButton } from '@/components/ui/close-button'
 import { validateCPF, validateCNPJ } from '@/lib/utils/validation'
 import { calculateFreight, type FreightOption } from '@/lib/freight-calculator'
 import {
@@ -39,6 +41,7 @@ import {
   getPricingConfig,
   sanitizeCartItemPricing,
 } from '@/lib/pricing'
+import { getAutoRentalDateRange } from '@/lib/rental-date-utils'
 import { formatCurrency } from '@/lib/utils'
 import { convertFormDataToWhatsApp, openWhatsAppQuote } from '@/lib/whatsapp'
 import { useCartStore, type CartItem } from '@/stores/useCartStore'
@@ -153,6 +156,7 @@ function QuotePage() {
   >({})
   const hasSyncedCartPricing = useRef(false)
   const scrollUnlockInitialized = useRef(false)
+  const requestReferenceDate = useRef(new Date())
   // Estado para controlar confirmação de finais de semana
   const [pendingWeekendConfirmation, setPendingWeekendConfirmation] = useState<{
     equipmentId: string
@@ -206,6 +210,31 @@ function QuotePage() {
     if (isNaN(dateObj.getTime())) return ''
     return format(dateObj, 'dd/MM/yyyy', { locale: ptBR })
   }, [])
+
+  const resolveDateRange = (equipment: CartItem) => {
+    if (equipment.startDate && equipment.endDate) {
+      const startDate =
+        equipment.startDate instanceof Date
+          ? equipment.startDate
+          : new Date(equipment.startDate)
+      const endDate =
+        equipment.endDate instanceof Date
+          ? equipment.endDate
+          : new Date(equipment.endDate)
+
+      return { startDate, endDate, isAuto: false }
+    }
+
+    const days = Number(equipment.days) || 1
+    const includeWeekends = equipment.includeWeekends ?? false
+    const { startDate, endDate } = getAutoRentalDateRange({
+      requestDate: requestReferenceDate.current,
+      days,
+      includeWeekends,
+    })
+
+    return { startDate, endDate, isAuto: true }
+  }
 
   // Função para formatar telefone brasileiro
   const formatPhoneNumber = (value: string) => {
@@ -733,13 +762,12 @@ function QuotePage() {
 
     // Validação: Verificar se há equipamentos sem datas selecionadas
     // Isso acontece quando o usuário não usou o calendário na página de detalhes
-    // Se não há datas, o usuário não fez uma escolha consciente sobre o período de locação,
-    // então devemos confirmar se deseja incluir finais de semana
-    // Se o usuário selecionou datas no calendário, ele já fez uma escolha consciente
+    // Se não há datas e a preferência de finais de semana não foi confirmada,
+    // devemos confirmar antes de enviar
     const itemsNeedingWeekendConfirmation = selectedEquipments.filter((eq) => {
-      // Não tem datas específicas (não usou calendário para selecionar período)
       const hasNoDates = !eq.startDate || !eq.endDate
-      return hasNoDates
+      const needsConfirmation = !eq.includeWeekendsConfirmed
+      return hasNoDates && needsConfirmation
     })
 
     if (itemsNeedingWeekendConfirmation.length > 0) {
@@ -1073,6 +1101,7 @@ function QuotePage() {
                       <AnimatePresence mode="popLayout">
                         {displayedItems.map((equipment) => {
                           const imageUrl = getEquipmentImage(equipment)
+                          const displayRange = resolveDateRange(equipment)
                           // Verificar se o item está sendo removido
                           const isRemoving =
                             'isRemoving' in equipment
@@ -1275,25 +1304,24 @@ function QuotePage() {
                                       })()}
                                     </div>
                                     {/* Informações de datas e finais de semana */}
-                                    {(equipment.startDate ||
-                                      equipment.endDate ||
-                                      equipment.includeWeekends) && (
+                                    {displayRange && (
                                       <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-1.5 sm:gap-x-3 sm:gap-y-1 mt-3">
-                                        {equipment.startDate &&
-                                          equipment.endDate && (
-                                            <div className="flex items-center gap-2 text-xs text-gray-600">
-                                              <span className="font-medium text-gray-700">
-                                                Período:
+                                        <div className="flex items-center gap-2 text-xs text-gray-600">
+                                          <span className="font-medium text-gray-700">
+                                            Período:
+                                          </span>
+                                          <span>
+                                            {formatDate(displayRange.startDate)}{' '}
+                                            até{' '}
+                                            {formatDate(displayRange.endDate)}
+                                            {displayRange.isAuto && (
+                                              <span className="text-[10px] text-gray-500">
+                                                {' '}
+                                                (previsto)
                                               </span>
-                                              <span>
-                                                {formatDate(
-                                                  equipment.startDate
-                                                )}{' '}
-                                                até{' '}
-                                                {formatDate(equipment.endDate)}
-                                              </span>
-                                            </div>
-                                          )}
+                                            )}
+                                          </span>
+                                        </div>
                                         {equipment.includeWeekends && (
                                           <div className="flex items-center gap-1.5 text-xs">
                                             <span className="text-green-600 font-semibold">
@@ -1808,134 +1836,140 @@ function QuotePage() {
               <CardContent className="relative z-10 space-y-4 p-4 sm:p-6 lg:p-6 pt-0">
                 {selectedEquipments.length > 0 ? (
                   <>
-                    {selectedEquipments.map((equipment, index) => (
-                      <div
-                        key={`summary-${equipment.equipmentId}-${index}`}
-                        className="space-y-1 pb-3"
-                      >
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1 pr-2">
-                            <p className="font-medium text-gray-900 text-sm leading-tight">
-                              {equipment.equipmentName}
-                            </p>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              <span className="text-sm text-gray-600 font-medium">
-                                Qtd: {equipment.quantity}x
-                              </span>
+                    {selectedEquipments.map((equipment, index) => {
+                      const displayRange = resolveDateRange(equipment)
+
+                      return (
+                        <div
+                          key={`summary-${equipment.equipmentId}-${index}`}
+                          className="space-y-1 pb-3"
+                        >
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1 pr-2">
+                              <p className="font-medium text-gray-900 text-sm leading-tight">
+                                {equipment.equipmentName}
+                              </p>
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                <span className="text-sm text-gray-600 font-medium">
+                                  Qtd: {equipment.quantity}x
+                                </span>
+                                {(() => {
+                                  const pricingConfig = getPricingConfig(
+                                    equipment,
+                                    equipment.days
+                                  )
+                                  const actualPeriodLabel =
+                                    pricingConfig.period === 'daily'
+                                      ? 'Diário'
+                                      : pricingConfig.period === 'weekly'
+                                        ? 'Semanal'
+                                        : pricingConfig.period === 'biweekly'
+                                          ? 'Quinzenal'
+                                          : pricingConfig.period === 'monthly'
+                                            ? 'Mensal'
+                                            : 'Diário'
+                                  const showDiscount =
+                                    !pricingConfig.useDirectValue &&
+                                    (pricingConfig.discount || 0) > 0
+                                  const showDirect =
+                                    pricingConfig.useDirectValue && true
+
+                                  return (
+                                    <>
+                                      <span className="text-sm text-gray-400">
+                                        ·
+                                      </span>
+                                      <span className="text-sm text-orange-600 font-medium">
+                                        {actualPeriodLabel}
+                                        {showDirect ? ' – valor direto' : ''}
+                                      </span>
+                                      <span className="text-sm text-gray-400">
+                                        ·
+                                      </span>
+                                      <span className="text-sm text-gray-600 font-medium">
+                                        {equipment.days} dias
+                                      </span>
+                                      {showDirect ? (
+                                        <span className="text-sm text-orange-700 font-semibold">
+                                          Valor direto:{' '}
+                                          {formatCurrency(
+                                            pricingConfig.directValue || 0
+                                          )}
+                                          {pricingConfig.multiplier > 1
+                                            ? ` / ${pricingConfig.multiplier} dias`
+                                            : ''}
+                                        </span>
+                                      ) : showDiscount ? (
+                                        <span className="text-sm text-green-600 font-semibold">
+                                          Desc. {actualPeriodLabel}: -
+                                          {pricingConfig.discount}%
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )
+                                })()}
+                              </div>
+                              {/* Informações de datas e finais de semana */}
+                              {displayRange && (
+                                <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-1.5 sm:gap-x-3 sm:gap-y-1 mt-1">
+                                  <div className="text-xs text-gray-600">
+                                    {formatDate(displayRange.startDate)} até{' '}
+                                    {formatDate(displayRange.endDate)}
+                                    {displayRange.isAuto && (
+                                      <span className="text-[10px] text-gray-500">
+                                        {' '}
+                                        (previsto)
+                                      </span>
+                                    )}
+                                  </div>
+                                  {equipment.includeWeekends && (
+                                    <div className="flex items-center gap-1.5 text-xs">
+                                      <span className="text-green-600 font-semibold">
+                                        ✓
+                                      </span>
+                                      <span className="text-gray-600 font-medium">
+                                        Incluir finais de semana
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                            <div className="text-right">
                               {(() => {
                                 const pricingConfig = getPricingConfig(
                                   equipment,
                                   equipment.days
                                 )
-                                const actualPeriodLabel =
-                                  pricingConfig.period === 'daily'
-                                    ? 'Diário'
-                                    : pricingConfig.period === 'weekly'
-                                      ? 'Semanal'
-                                      : pricingConfig.period === 'biweekly'
-                                        ? 'Quinzenal'
-                                        : pricingConfig.period === 'monthly'
-                                          ? 'Mensal'
-                                          : 'Diário'
+                                const finalPrice = calculateSubtotal(equipment)
                                 const showDiscount =
                                   !pricingConfig.useDirectValue &&
                                   (pricingConfig.discount || 0) > 0
-                                const showDirect =
-                                  pricingConfig.useDirectValue && true
+                                // Só calcular originalPrice se realmente for mostrar (desconto, não valor direto)
+                                const originalPrice = showDiscount
+                                  ? Number(equipment.pricePerDay) *
+                                    equipment.days *
+                                    equipment.quantity
+                                  : 0
 
                                 return (
-                                  <>
-                                    <span className="text-sm text-gray-400">
-                                      •
-                                    </span>
-                                    <span className="text-sm text-orange-600 font-medium">
-                                      {actualPeriodLabel}
-                                      {showDirect ? ' · valor direto' : ''}
-                                    </span>
-                                    <span className="text-sm text-gray-400">
-                                      •
-                                    </span>
-                                    <span className="text-sm text-gray-600 font-medium">
-                                      {equipment.days} dias
-                                    </span>
-                                    {showDirect ? (
-                                      <span className="text-sm text-orange-700 font-semibold">
-                                        Valor direto:{' '}
-                                        {formatCurrency(
-                                          pricingConfig.directValue || 0
-                                        )}
-                                        {pricingConfig.multiplier > 1
-                                          ? ` / ${pricingConfig.multiplier} dias`
-                                          : ''}
-                                      </span>
-                                    ) : showDiscount ? (
-                                      <span className="text-sm text-green-600 font-semibold">
-                                        Desc. {actualPeriodLabel}: -
-                                        {pricingConfig.discount}%
-                                      </span>
-                                    ) : null}
-                                  </>
+                                  <div>
+                                    {showDiscount && originalPrice > 0 && (
+                                      <div className="text-sm text-gray-500 line-through">
+                                        {formatCurrency(originalPrice)}
+                                      </div>
+                                    )}
+                                    <div className="font-semibold text-green-600 text-base">
+                                      {formatCurrency(finalPrice)}
+                                    </div>
+                                  </div>
                                 )
                               })()}
                             </div>
-                            {/* Informações de datas e finais de semana */}
-                            {(equipment.startDate ||
-                              equipment.endDate ||
-                              equipment.includeWeekends) && (
-                              <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-1.5 sm:gap-x-3 sm:gap-y-1 mt-1">
-                                {equipment.startDate && equipment.endDate && (
-                                  <div className="text-xs text-gray-600">
-                                    {formatDate(equipment.startDate)} até{' '}
-                                    {formatDate(equipment.endDate)}
-                                  </div>
-                                )}
-                                {equipment.includeWeekends && (
-                                  <div className="flex items-center gap-1.5 text-xs">
-                                    <span className="text-green-600 font-semibold">
-                                      ✓
-                                    </span>
-                                    <span className="text-gray-600 font-medium">
-                                      Incluir finais de semana
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                          <div className="text-right">
-                            {(() => {
-                              const pricingConfig = getPricingConfig(
-                                equipment,
-                                equipment.days
-                              )
-                              const finalPrice = calculateSubtotal(equipment)
-                              const showDiscount =
-                                !pricingConfig.useDirectValue &&
-                                (pricingConfig.discount || 0) > 0
-                              // Só calcular originalPrice se realmente for mostrar (desconto, não valor direto)
-                              const originalPrice = showDiscount
-                                ? Number(equipment.pricePerDay) *
-                                  equipment.days *
-                                  equipment.quantity
-                                : 0
-
-                              return (
-                                <div>
-                                  {showDiscount && originalPrice > 0 && (
-                                    <div className="text-sm text-gray-500 line-through">
-                                      {formatCurrency(originalPrice)}
-                                    </div>
-                                  )}
-                                  <div className="font-semibold text-green-600 text-base">
-                                    {formatCurrency(finalPrice)}
-                                  </div>
-                                </div>
-                              )
-                            })()}
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    })}
 
                     <Separator />
 
@@ -2066,27 +2100,40 @@ function QuotePage() {
         }}
       >
         <AlertDialogContent>
-          <AlertDialogHeader>
+          <AlertDialogHeader className="relative pr-8">
+            <CloseButton
+              size="sm"
+              variant="ghostWhite"
+              className="absolute right-4 top-4"
+              onClick={handleWeekendConfirmationCancel}
+              aria-label="Fechar dialog"
+            />
+            <AlertDialogHeaderIcon />
             <AlertDialogTitle>Incluir finais de semana?</AlertDialogTitle>
+          </AlertDialogHeader>
+          <div className="p-4 md:p-6">
             <AlertDialogDescription>
               Você está solicitando locação de{' '}
               <strong>
-                {pendingWeekendConfirmation?.equipmentName || 'este equipamento'}
+                {pendingWeekendConfirmation?.equipmentName ||
+                  'este equipamento'}
               </strong>{' '}
               sem ter selecionado datas específicas no calendário.
               <br />
               <br />
-              <strong>Deseja incluir os finais de semana na contagem de dias?</strong>
+              <strong>
+                Deseja incluir os finais de semana na contagem de dias?
+              </strong>
               <br />
               <br />
               <span className="text-sm text-muted-foreground">
-                • <strong>Sim:</strong> Sábados e domingos serão contados como dias de
-                locação
-                <br />• <strong>Não:</strong> Apenas dias úteis (segunda a sexta) serão
-                contados
+                • <strong>Sim:</strong> Sábados e domingos serão contados como
+                dias de locação
+                <br />• <strong>Não:</strong> Apenas dias úteis (segunda a
+                sexta) serão contados
               </span>
             </AlertDialogDescription>
-          </AlertDialogHeader>
+          </div>
           <AlertDialogFooter>
             <AlertDialogCancel onClick={handleWeekendConfirmationCancel}>
               Não, apenas dias úteis

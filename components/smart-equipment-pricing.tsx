@@ -103,6 +103,7 @@ export function SmartEquipmentPricing({
   // Estado para incluir ou não finais de semana na locação
   // Por padrão, apenas dias úteis (seg-sex) são considerados
   const [includeWeekends, setIncludeWeekends] = useState(false)
+  const [includeWeekendsTouched, setIncludeWeekendsTouched] = useState(false)
 
   // Refs para controlar exibição das toasts - resetam a cada reload da página (incluindo Ctrl+F5)
   // Quando o usuário recarrega a página (F5, Ctrl+F5, ou fecha/abre a aba), as toasts podem aparecer novamente
@@ -582,7 +583,10 @@ export function SmartEquipmentPricing({
           <Checkbox
             id="include-weekends"
             checked={includeWeekends}
-            onCheckedChange={(checked) => setIncludeWeekends(checked === true)}
+            onCheckedChange={(checked) => {
+              setIncludeWeekendsTouched(true)
+              setIncludeWeekends(checked === true)
+            }}
             className="data-[state=checked]:bg-orange-600 data-[state=checked]:border-orange-600"
           />
           <Label
@@ -702,6 +706,11 @@ export function SmartEquipmentPricing({
             endDate={endDate}
             selectedDays={selectedDays}
             includeWeekends={includeWeekends}
+            weekendSelectionConfirmed={includeWeekendsTouched}
+            onWeekendSelectionConfirm={(value) => {
+              setIncludeWeekends(value)
+              setIncludeWeekendsTouched(true)
+            }}
             variant="gradient"
             className="w-full bg-[linear-gradient(to_right,#f97316,#ea580c,#f97316)] bg-[length:200%_100%] bg-left hover:bg-right transition-[background-position,transform,box-shadow] duration-500 ease-in-out"
           />
@@ -737,6 +746,11 @@ export function SmartEquipmentPricing({
             biweeklyUseDirectValue={biweeklyUseDirectValue}
             monthlyUseDirectValue={monthlyUseDirectValue}
             includeWeekends={includeWeekends}
+            weekendSelectionConfirmed={includeWeekendsTouched}
+            onWeekendSelectionConfirm={(value) => {
+              setIncludeWeekends(value)
+              setIncludeWeekendsTouched(true)
+            }}
             variant="gradient"
             className="w-full bg-[linear-gradient(to_right,#f97316,#ea580c,#f97316)] bg-[length:200%_100%] bg-left hover:bg-right transition-[background-position,transform,box-shadow] duration-500 ease-in-out"
           />

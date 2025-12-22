@@ -5,6 +5,140 @@
 
 ---
 
+## 37. Dias alterados no orcamento nao atualizavam o fim do periodo
+
+### ? Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-12-22 **Severidade**: Alta (Regras de negocio)
+**Status**: ? Resolvido
+
+#### Descricao
+
+Quando o usuario alterava o numero de dias no `/orcamento` para um item que ja
+possuia `startDate`/`endDate` definidos pelo calendario, o fim do periodo
+permanecia com a data antiga. Isso gerava divergencia entre `days` e o intervalo
+exibido/enviado para a API.
+
+#### Sintomas
+
+- Campo "Dias" atualizado, mas o texto "Periodo: DD/MM/YYYY ate DD/MM/YYYY"
+  mantinha a data final antiga
+- Payload enviado para `/api/quotes` carregava `days` diferente do `endDate`
+- Validacao de disponibilidade e resumo exibiam um periodo inconsistente
+
+#### Causa Raiz
+
+- `updateItemDays` no `useCartStore` atualizava apenas `days`, sem recalcular
+  `endDate`
+- `resolveDateRange` em `/orcamento` prioriza `startDate`/`endDate` quando
+  existem
+
+### ? Solucao Implementada
+
+- `updateItemDays` passou a recalcular `endDate` (e normalizar `startDate`)
+  quando o item possui data inicial, usando `getAutoRentalDateRange` com base na
+  data de inicio e na preferencia de finais de semana
+- A pagina de orcamento passou a documentar que ajustes em `days` mantem o
+  periodo sincronizado
+
+#### Arquivos Modificados
+
+1. `stores/useCartStore.ts`
+2. `docs/features/orcamento-page.md`
+3. `CHANGELOG.md`
+
+#### Como Validar
+
+1. Adicione um item ao carrinho com datas selecionadas no calendario (ex.:
+   22/12/2025 a 31/12/2025)
+2. Em `/orcamento`, altere o campo "Dias" para um valor maior (ex.: 59)
+3. Confirme que o periodo exibido atualiza a data final conforme os dias
+4. Envie o orcamento e verifique que `startDate`/`endDate` correspondem ao novo
+   periodo
+
+#### Armadilhas a Evitar
+
+- Atualizar `days` sem sincronizar `endDate`
+- Exibir datas salvas quando os dias ja foram alterados no carrinho
+
+---
+
+## 36. Datas automáticas ignoravam finais de semana quando não havia calendário
+
+### ✅ Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-12-22 **Severidade**: Alta (Regras de negócio)
+**Status**: ✅ Resolvido
+
+#### Descrição
+
+Quando o usuário não selecionava datas no calendário da página de detalhes, o
+sistema calculava start/end automaticamente a partir do dia da solicitação, mas
+ignorava a preferência de finais de semana. Isso podia iniciar em sábado/domingo
+mesmo com `includeWeekends=false` e gerava períodos corridos. Além disso, a
+confirmação de finais de semana ocorria apenas na página de orçamento e itens
+sem datas não exibiam um período estimado.
+
+#### Sintomas
+
+- Itens adicionados sem calendário não exibiam datas de início/fim no orçamento
+- Solicitações feitas no fim de semana com `includeWeekends=false` iniciavam no
+  próprio fim de semana
+- Contagem de dias ignorava finais de semana mesmo quando o usuário não
+  pretendia incluir
+- Confirmação de finais de semana aparecia apenas no submit do orçamento
+
+#### Causa Raiz
+
+- A lógica de datas automáticas em `POST /api/quotes` somava dias corridos sem
+  considerar `includeWeekends`
+- Não existia flag de confirmação da preferência de finais de semana no carrinho
+- A UI não calculava/exibia período estimado quando não havia calendário
+
+### ✅ Solução Implementada
+
+- Confirmação de finais de semana movida para o detalhe do equipamento antes de
+  adicionar ao carrinho
+- Introduzida flag `includeWeekendsConfirmed` no carrinho para evitar
+  confirmações duplicadas
+- Nova util `getAutoRentalDateRange` calcula datas automáticas respeitando
+  `includeWeekends` e pula fins de semana quando necessário
+- Página `/orcamento` passou a exibir período estimado quando não há datas
+  explícitas
+
+#### Arquivos Modificados
+
+1. `components/smart-quote-button.tsx`
+2. `components/smart-equipment-pricing.tsx`
+3. `stores/useCartStore.ts`
+4. `lib/rental-date-utils.ts`
+5. `app/api/quotes/route.ts`
+6. `app/orcamento/page.tsx`
+7. `docs/features/quote-system.md`
+8. `docs/features/orcamento-page.md`
+9. `CHANGELOG.md`
+
+#### Como Validar
+
+1. Na página de detalhes, não selecione datas no calendário e clique em
+   "Solicitar Orçamento"
+2. Confirme **Não** para finais de semana e verifique no `/orcamento` a data de
+   início no próximo dia útil
+3. Repita confirmando **Sim** e confira que o período conta dias corridos,
+   incluindo fim de semana
+4. Se selecionar datas no calendário, confirme que o dialog não aparece e o
+   período exibido respeita a seleção
+
+#### Armadilhas a Evitar
+
+- Remover `includeWeekendsConfirmed` e reintroduzir confirmação tardia no
+  `/orcamento`
+- Voltar a calcular datas automáticas sem considerar `includeWeekends`
+- Exibir apenas o número de dias sem período estimado quando não houver
+  calendário
+
+---
+
 ## 35. Hover laranja da timeline semanal nao reagia ao peer
 
 ### ✅ Problema RESOLVIDO

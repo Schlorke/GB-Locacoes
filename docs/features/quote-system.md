@@ -46,6 +46,13 @@ Página Admin de Orçamentos (/admin/orcamentos)
 - Cliente seleciona **período de locação** usando calendário (data início e data
   fim)
 - Cliente escolhe se **inclui finais de semana** na contagem de dias
+- **Confirmação obrigatória**: se o cliente não selecionar datas no calendário,
+  o sistema confirma a preferência de finais de semana antes de adicionar ao
+  carrinho
+- **Datas automáticas**: sem calendário, o período é calculado a partir da data
+  da solicitação; se `includeWeekends=false` e a solicitação for em
+  sábado/domingo, o início passa para o próximo dia útil e a contagem considera
+  apenas dias úteis
 - Sistema calcula automaticamente:
   - Número de dias úteis ou totais (dependendo da opção)
   - Período aplicado (Diário, Semanal, Quinzenal, Mensal) baseado nos dias

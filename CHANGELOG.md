@@ -64,6 +64,15 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
     completo
   - **Data**: 2025-12-21
 
+### Fixed 🐛
+
+- **Sincronizacao do periodo ao ajustar dias no orcamento**: quando um item com
+  `startDate` tem o campo `days` alterado, o `endDate` e recalculado com base na
+  data de inicio e na preferencia de finais de semana.
+  - **Arquivos modificados**: `stores/useCartStore.ts`,
+    `docs/features/orcamento-page.md`
+  - **Data**: 2025-12-22
+
 ### Added ✨
 
 - **Column Events Panel - Sidebar de Eventos por Coluna**: Implementado novo
@@ -152,6 +161,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
   - **Data**: 2025-01-XX
 
 ### Fixed 🐛
+
+- **Datas automáticas e finais de semana**: Confirmação de finais de semana
+  ocorre antes de adicionar ao carrinho quando não há calendário, datas
+  automáticas passam a respeitar `includeWeekends` e o orçamento exibe período
+  estimado para itens sem datas.
+  - **Arquivos Modificados**: `components/smart-quote-button.tsx`,
+    `components/smart-equipment-pricing.tsx`, `stores/useCartStore.ts`,
+    `lib/rental-date-utils.ts`, `app/api/quotes/route.ts`,
+    `app/orcamento/page.tsx`, `docs/issues/known-issues.md`,
+    `docs/features/quote-system.md`, `docs/features/orcamento-page.md`
+  - **Data**: 2025-12-22
 
 - **Timeline semanal com hover por peer**: Headers dos dias e recursos na
   sidebar agora aplicam `peer`/`peer-hover` para destacar colunas/linhas

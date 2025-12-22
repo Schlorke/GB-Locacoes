@@ -43,8 +43,14 @@ export function EventBlock({
   className,
 }: EventBlockProps) {
   const isRejected = event.status === 'rejected' || event.status === 'REJECTED'
-  const isPendingStatus = event.status === 'pending' || event.status === 'PENDING'
-  const isPending = style.isPending || style.height === 'auto' || isRejected || isPendingStatus || event.isPendingRequest
+  const isPendingStatus =
+    event.status === 'pending' || event.status === 'PENDING'
+  const isPending =
+    style.isPending ||
+    style.height === 'auto' ||
+    isRejected ||
+    isPendingStatus ||
+    event.isPendingRequest
   const heightValue = isPending ? 'auto' : Math.max(style.height as number, 30)
   const densityLevel = getDensityLevel(heightValue)
 
