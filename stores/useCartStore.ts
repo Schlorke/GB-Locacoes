@@ -53,6 +53,10 @@ interface CartState {
   removeItem: (_equipmentId: string) => void
   updateItemQuantity: (_equipmentId: string, _quantity: number) => void
   updateItemDays: (_equipmentId: string, _days: number) => void
+  updateItemIncludeWeekends: (
+    _equipmentId: string,
+    _includeWeekends: boolean
+  ) => void
   hydrateItems: (_items: CartItem[]) => void
   clearCart: () => void
   getItemCount: () => number
@@ -107,6 +111,15 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           items: state.items.map((i) =>
             i.equipmentId === equipmentId ? { ...i, days } : i
+          ),
+        })),
+
+      updateItemIncludeWeekends: (equipmentId, includeWeekends) =>
+        set((state) => ({
+          items: state.items.map((i) =>
+            i.equipmentId === equipmentId
+              ? { ...i, includeWeekends }
+              : i
           ),
         })),
 

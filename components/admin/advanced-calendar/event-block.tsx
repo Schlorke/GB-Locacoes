@@ -42,8 +42,9 @@ export function EventBlock({
   onClick,
   className,
 }: EventBlockProps) {
-  const isRejected = event.status === 'rejected'
-  const isPending = style.isPending || style.height === 'auto' || isRejected
+  const isRejected = event.status === 'rejected' || event.status === 'REJECTED'
+  const isPendingStatus = event.status === 'pending' || event.status === 'PENDING'
+  const isPending = style.isPending || style.height === 'auto' || isRejected || isPendingStatus || event.isPendingRequest
   const heightValue = isPending ? 'auto' : Math.max(style.height as number, 30)
   const densityLevel = getDensityLevel(heightValue)
 
@@ -69,7 +70,10 @@ export function EventBlock({
     : `calc(100% - ${leftMargin + rightMargin}px)`
 
   // Z-index baseado no ID do evento para ordem consistente
-  positionStyle.zIndex = 10 + (parseInt(event.id.slice(-2), 16) % 10)
+  // Garantir que sempre seja um número válido, mesmo se o ID for inválido
+  const idSuffix = event.id.slice(-2)
+  const parsedId = parseInt(idSuffix, 16)
+  positionStyle.zIndex = isNaN(parsedId) ? 10 : 10 + (parsedId % 10)
 
   const formattedTitle = formatEventTitle(event)
 

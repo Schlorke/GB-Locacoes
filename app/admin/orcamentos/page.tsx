@@ -972,7 +972,7 @@ function AdminQuotesPage() {
 
                   // Cores baseadas no status
                   const statusColors: Record<string, string> = {
-                    pending: '#ea580c', // Laranja (orange-600)
+                    pending: '#F97316', // Laranja (orange-500) - padrão universal
                     approved: '#22c55e', // Verde (green-500)
                     rejected: '#ef4444', // Vermelho (red-500)
                   }

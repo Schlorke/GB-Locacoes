@@ -32,6 +32,7 @@ import {
   Eye,
   Search,
   List,
+  Building,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { parseISO } from 'date-fns'
@@ -69,6 +70,7 @@ interface Rental {
     id: string
     name: string
     email: string
+    company?: string
     status?: string // Status do orçamento para filtrar rejeitados
   }
   payments?: Array<{
@@ -98,9 +100,9 @@ const statusConfig: Record<
 > = {
   PENDING: {
     label: 'Pendente',
-    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    color: 'bg-orange-100 text-orange-800 border-orange-200',
     icon: Clock,
-    gradient: 'from-yellow-400 to-orange-500',
+    gradient: 'from-orange-400 to-orange-500',
   },
   ACTIVE: {
     label: 'Ativa',
@@ -122,9 +124,9 @@ const statusConfig: Record<
   },
   OVERDUE: {
     label: 'Atrasada',
-    color: 'bg-orange-100 text-orange-800 border-orange-200',
+    color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
     icon: AlertTriangle,
-    gradient: 'from-orange-400 to-red-500',
+    gradient: 'from-yellow-400 to-orange-300',
   },
   PENDING_RETURN: {
     label: 'Aguardando Devolução',
@@ -193,6 +195,9 @@ export default function AdminRentalsPage() {
         rental.users.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         rental.users.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         rental.users.phone?.includes(searchTerm) ||
+        rental.quote?.company
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
         rental.id.toLowerCase().includes(searchTerm.toLowerCase())
 
       const matchesStatus =
@@ -389,7 +394,7 @@ export default function AdminRentalsPage() {
                         {/* Ícone */}
                         <div
                           className={cn(
-                            'p-2 rounded-lg bg-gradient-to-br transition-all duration-300',
+                            'p-2 rounded-lg bg-gradient-to-br transition-all duration-300 flex items-center justify-center',
                             config.gradient,
                             isActive && 'scale-110'
                           )}
@@ -421,7 +426,7 @@ export default function AdminRentalsPage() {
                     <div className="relative flex-1 w-full md:w-auto">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                       <Input
-                        placeholder="Buscar por cliente, email, telefone..."
+                        placeholder="Buscar por cliente, email, telefone, empresa..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-9 border-gray-200 focus:border-blue-500 focus:outline-blue-500 focus:outline-2 focus:ring-0 transition-all duration-200"
@@ -498,8 +503,6 @@ export default function AdminRentalsPage() {
             <AdminCard title="Calendário de Locações" variant="flat">
               <AdvancedCalendar
                 events={filteredRentals.map((rental): CalendarEvent => {
-                  const start = parseISO(rental.startdate)
-                  const end = parseISO(rental.enddate)
                   const equipmentNames = rental.rental_items
                     .map((item) => item.equipments.name)
                     .join(', ')
@@ -509,13 +512,24 @@ export default function AdminRentalsPage() {
                     ? parseISO(rental.createdat)
                     : undefined
 
+                  // Para pendentes, usar apenas o momento da solicitação (não o período solicitado)
+                  // Para outros status, usar o período de locação (quando o equipamento está sendo usado)
+                  const start =
+                    isPending && createdAt
+                      ? createdAt
+                      : parseISO(rental.startdate)
+                  const end =
+                    isPending && createdAt
+                      ? createdAt
+                      : parseISO(rental.enddate)
+
                   // Cores baseadas no status
                   const statusColors: Record<string, string> = {
-                    PENDING: '#F59E0B', // Amarelo
+                    PENDING: '#F97316', // Laranja (orange-500) - padrão universal
                     ACTIVE: '#3B82F6', // Azul
                     COMPLETED: '#10B981', // Verde
                     CANCELLED: '#EF4444', // Vermelho
-                    OVERDUE: '#F97316', // Laranja
+                    OVERDUE: '#FBBF24', // Amarelo meio laranja (yellow-400/amber-400)
                     PENDING_RETURN: '#8B5CF6', // Roxo
                   }
 
@@ -621,6 +635,12 @@ export default function AdminRentalsPage() {
                                     <div className="text-xs text-gray-400 flex items-center gap-1 mt-1">
                                       <Phone className="w-3 h-3" />
                                       {rental.users.phone}
+                                    </div>
+                                  )}
+                                  {rental.quote?.company && (
+                                    <div className="text-xs text-gray-400 flex items-center gap-1 mt-1">
+                                      <Building className="w-3 h-3" />
+                                      {rental.quote.company}
                                     </div>
                                   )}
                                 </div>

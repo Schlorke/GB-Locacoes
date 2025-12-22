@@ -18,12 +18,21 @@ const WEEKDAY_ABBREVIATIONS: Record<number, string> = {
 const TIMELINE_ROW_HEIGHT = 60
 const TIMELINE_HEADER_HEIGHT = TIMELINE_ROW_HEIGHT
 
-// Mapeamento de cores por status
+// Mapeamento de cores por status (suporta minúsculas e maiúsculas)
 const STATUS_COLORS: Record<string, string> = {
-  pending: '#f97316', // Laranja (orange-500) - mais claro para diferenciar do vermelho
+  // Status em minúsculas (orçamentos)
+  pending: '#F97316', // Laranja (orange-500) - padrão universal para pendente
   approved: '#22c55e', // Verde (green-500)
   rejected: '#ef4444', // Vermelho (red-500)
   completed: '#3b82f6', // Azul (blue-500)
+  overdue: '#FBBF24', // Amarelo meio laranja (amber-400) - para atrasadas
+  // Status em maiúsculas (locações)
+  PENDING: '#F97316', // Laranja (orange-500) - padrão universal para pendente
+  ACTIVE: '#3B82F6', // Azul (blue-500) - para ativa
+  COMPLETED: '#10B981', // Verde (green-500) - para concluída
+  CANCELLED: '#EF4444', // Vermelho (red-500)
+  OVERDUE: '#FBBF24', // Amarelo meio laranja (amber-400) - para atrasadas
+  PENDING_RETURN: '#8B5CF6', // Roxo
 }
 
 interface TimelineViewProps {
@@ -91,20 +100,16 @@ export function TimelineView({
     )
   }, [resources, events])
 
-  const timelineRowTemplate = `repeat(${Math.max(
-    timelineResources.length,
-    1
-  )}, minmax(${TIMELINE_ROW_HEIGHT}px, 1fr))`
-
-  // Calcula posição e largura dos eventos na timeline
-  const getEventPosition = (event: CalendarEvent) => {
+  // Calcula posição base de um evento (sem empilhamento)
+  const getBaseEventPosition = (event: CalendarEvent) => {
     const periodStart = visiblePeriod.start.getTime()
     const periodEnd = visiblePeriod.end.getTime()
 
-    // Para eventos rejeitados ou pendentes, usar a data de criação e ocupar toda a largura do dia
+    // Para eventos rejeitados ou pendentes (minúsculas ou maiúsculas), usar a data de criação e ocupar toda a largura do dia
     if (
-      (event.status === 'rejected' || event.status === 'pending') &&
-      event.createdAt
+      ((event.status === 'rejected' || event.status === 'pending' || event.status === 'PENDING' || event.status === 'REJECTED') &&
+      event.createdAt) ||
+      event.isPendingRequest
     ) {
       const eventDate = event.createdAt
 
@@ -120,8 +125,9 @@ export function TimelineView({
       const left = dayIndex * dayWidth
 
       return {
-        left: `${left}%`,
-        width: `${dayWidth}%`,
+        left,
+        width: dayWidth,
+        dayIndex,
       }
     }
 
@@ -138,10 +144,79 @@ export function TimelineView({
     const left = ((eventStart - periodStart) / totalDuration) * 100
     const width = (eventDuration / totalDuration) * 100
 
+    // Encontra o índice do dia para eventos normais
+    const dayIndex = visiblePeriod.days.findIndex((day) => {
+      const dayStart = day.getTime()
+      const dayEnd = dayStart + 86400000 // 24 horas
+      return eventStart < dayEnd && eventEnd > dayStart
+    })
+
     return {
-      left: `${left}%`,
-      width: `${width}%`,
+      left,
+      width,
+      dayIndex: dayIndex !== -1 ? dayIndex : 0,
     }
+  }
+
+  // Calcula posições empilhadas verticalmente para eventos sobrepostos
+  // No Gantt, eventos no mesmo dia devem ser empilhados um embaixo do outro (verticalmente)
+  // Cada evento ocupa 100% da largura do dia, mas tem posição top diferente
+  const getStackedEventPositions = (events: CalendarEvent[]) => {
+    // Calcula posições base para todos os eventos
+    const eventPositions = new Map<
+      CalendarEvent,
+      { left: number; width: number; dayIndex: number } | null
+    >()
+    events.forEach((event) => {
+      eventPositions.set(event, getBaseEventPosition(event))
+    })
+
+    // Agrupa eventos por dia para empilhar apenas os que estão no mesmo dia
+    const eventsByDay = new Map<number, CalendarEvent[]>()
+    eventPositions.forEach((position, event) => {
+      if (position) {
+        const dayIndex = position.dayIndex
+        if (!eventsByDay.has(dayIndex)) {
+          eventsByDay.set(dayIndex, [])
+        }
+        eventsByDay.get(dayIndex)!.push(event)
+      }
+    })
+
+    // Para cada dia, ordena eventos por horário (mais cedo primeiro) e empilha verticalmente
+    const stackedPositions = new Map<
+      CalendarEvent,
+      { left: string; width: string; top?: string; height?: string }
+    >()
+
+    eventsByDay.forEach((dayEvents, dayIndex) => {
+      // Ordena eventos por horário de criação (para pendentes) ou início (para outros)
+      const sortedEvents = [...dayEvents].sort((a, b) => {
+        const aTime = a.createdAt?.getTime() || a.start.getTime()
+        const bTime = b.createdAt?.getTime() || b.start.getTime()
+        return aTime - bTime
+      })
+
+      const dayWidth = 100 / visiblePeriod.days.length
+      const dayLeft = dayIndex * dayWidth
+      const EVENT_HEIGHT = 50 // Altura de cada evento
+      const EVENT_GAP = 6 // Espaço entre eventos (deve corresponder ao usado no cálculo de altura)
+      const TOP_PADDING = 4 // Padding do topo
+
+      sortedEvents.forEach((event, index) => {
+        // Cada evento ocupa 100% da largura do dia
+        // Todos os eventos têm altura fixa e são empilhados verticalmente com gap visível
+
+        stackedPositions.set(event, {
+          left: `${dayLeft}%`,
+          width: `${dayWidth}%`,
+          top: `${TOP_PADDING + index * (EVENT_HEIGHT + EVENT_GAP)}px`,
+          height: `${EVENT_HEIGHT}px`,
+        })
+      })
+    })
+
+    return stackedPositions
   }
 
   // Filtra eventos por recurso
@@ -149,10 +224,11 @@ export function TimelineView({
     return events.filter((event) => {
       if (event.resourceId !== resourceId) return false
 
-      // Para eventos rejeitados ou pendentes, verifica se a data de criação está no período visível
+      // Para eventos rejeitados ou pendentes (minúsculas ou maiúsculas), verifica se a data de criação está no período visível
       if (
-        (event.status === 'rejected' || event.status === 'pending') &&
-        event.createdAt
+        ((event.status === 'rejected' || event.status === 'pending' || event.status === 'PENDING' || event.status === 'REJECTED') &&
+        event.createdAt) ||
+        event.isPendingRequest
       ) {
         return visiblePeriod.days.some((day) =>
           isSameDay(day, event.createdAt!)
@@ -166,6 +242,52 @@ export function TimelineView({
       )
     })
   }
+
+  // Calcula altura necessária para cada linha baseada no número máximo de eventos empilhados
+  const calculateRowHeights = useMemo(() => {
+    const rowHeights = new Map<string, number>()
+
+    timelineResources.forEach((resource) => {
+      const resourceEvents = getEventsForResource(resource.id)
+
+      // Agrupa eventos por dia para contar quantos eventos estão empilhados em cada dia
+      const eventsByDay = new Map<number, CalendarEvent[]>()
+
+      resourceEvents.forEach((event) => {
+        const position = getBaseEventPosition(event)
+        if (position) {
+          const dayIndex = position.dayIndex
+          if (!eventsByDay.has(dayIndex)) {
+            eventsByDay.set(dayIndex, [])
+          }
+          eventsByDay.get(dayIndex)!.push(event)
+        }
+      })
+
+      // Encontra o número máximo de eventos empilhados em qualquer dia
+      let maxStackedEvents = 1
+      eventsByDay.forEach((dayEvents) => {
+        maxStackedEvents = Math.max(maxStackedEvents, dayEvents.length)
+      })
+
+      // Calcula altura necessária: altura base + (número de eventos empilhados - 1) * altura de cada evento
+      const EVENT_HEIGHT = 50 // Altura de cada evento
+      const EVENT_GAP = 6 // Espaço entre eventos (aumentado para melhor visualização)
+      const BASE_PADDING = 8 // Padding top + bottom (4px cada)
+      const calculatedHeight = BASE_PADDING + (maxStackedEvents * EVENT_HEIGHT) + ((maxStackedEvents - 1) * EVENT_GAP)
+
+      // Usa no mínimo a altura padrão, mas aumenta se necessário
+      rowHeights.set(resource.id, Math.max(TIMELINE_ROW_HEIGHT, calculatedHeight))
+    })
+
+    return rowHeights
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timelineResources, events, visiblePeriod])
+
+  const timelineRowTemplate = timelineResources.map((resource) => {
+    const height = calculateRowHeights.get(resource.id) || TIMELINE_ROW_HEIGHT
+    return `${height}px`
+  }).join(' ')
 
   return (
     <div className="flex flex-col bg-white h-full">
@@ -190,10 +312,11 @@ export function TimelineView({
             onClick={() => {
               // Coleta todos os eventos da semana visivel (todos os equipamentos)
               const weekEvents = events.filter((event) => {
-                // Para eventos rejeitados ou pendentes, verifica se a data de criação está no período visível
+                // Para eventos rejeitados ou pendentes (minúsculas ou maiúsculas), verifica se a data de criação está no período visível
                 if (
-                  (event.status === 'rejected' || event.status === 'pending') &&
-                  event.createdAt
+                  ((event.status === 'rejected' || event.status === 'pending' || event.status === 'PENDING' || event.status === 'REJECTED') &&
+                  event.createdAt) ||
+                  event.isPendingRequest
                 ) {
                   return visiblePeriod.days.some((day) =>
                     isSameDay(day, event.createdAt!)
@@ -234,11 +357,14 @@ export function TimelineView({
                 // Calcula eventos para este dia
                 const dayEvents = events.filter((event) => {
                   if (
-                    (event.status === 'rejected' ||
-                      event.status === 'pending') &&
-                    event.createdAt
+                    ((event.status === 'rejected' ||
+                      event.status === 'pending' ||
+                      event.status === 'PENDING' ||
+                      event.status === 'REJECTED') &&
+                    event.createdAt) ||
+                    event.isPendingRequest
                   ) {
-                    return isSameDay(day, event.createdAt)
+                    return isSameDay(day, event.createdAt!)
                   }
                   return (
                     event.start.getTime() <= day.getTime() + 86400000 &&
@@ -302,6 +428,7 @@ export function TimelineView({
             const isLastRow = index === timelineResources.length - 1
             const rowBorderClass = isLastRow ? 'border-b-0' : 'border-b'
             const isResourceHighlighted = isEquipmentHovered
+            const rowHeight = calculateRowHeights.get(resource.id) || TIMELINE_ROW_HEIGHT
 
             return (
               <div key={resource.id} className="contents">
@@ -312,7 +439,8 @@ export function TimelineView({
                   style={{
                     gridColumn: 1,
                     gridRow: index + 2,
-                    minHeight: TIMELINE_ROW_HEIGHT,
+                    minHeight: rowHeight,
+                    height: rowHeight,
                   }}
                   onClick={() => {
                     // Coleta todos os eventos deste recurso para a semana visivel
@@ -343,43 +471,55 @@ export function TimelineView({
                 </div>
 
                 <div
-                  className={`relative cursor-pointer transition-colors hover:bg-orange-50/30 peer-hover:bg-orange-50/30 ${rowBorderClass} border-slate-200 ${
+                  className={`relative cursor-pointer transition-colors hover:bg-orange-50/30 peer-hover:bg-orange-50/30 ${rowBorderClass} border-slate-200 overflow-hidden ${
                     isResourceHighlighted ? 'bg-orange-50/30' : ''
                   }`}
                   style={{
                     gridColumn: 2,
                     gridRow: index + 2,
-                    minHeight: TIMELINE_ROW_HEIGHT,
+                    minHeight: rowHeight,
+                    height: rowHeight,
                   }}
                   onClick={() => {
                     onColumnClick?.(resource.id, resource.name, resourceEvents)
                   }}
                 >
-                  {/* Eventos na Swimlane - Posicionamento Original (podem se estender por multiplos dias) */}
-                  {resourceEvents.map((event) => {
-                    const position = getEventPosition(event)
-                    if (!position) return null
+                  {/* Eventos na Swimlane - Posicionamento com empilhamento */}
+                  {(() => {
+                    // Calcula posições empilhadas para todos os eventos deste recurso
+                    const stackedPositions = getStackedEventPositions(
+                      resourceEvents
+                    )
 
-                    return (
-                      <div
-                        key={event.id}
-                        className="absolute top-1 bottom-1 rounded-md cursor-pointer hover:opacity-90 transition-opacity border-l-2 px-2 py-1 overflow-hidden"
-                        style={{
-                          left: position.left,
-                          width: position.width,
-                          backgroundColor: event.color + '20',
-                          borderLeftColor: event.color,
-                          minWidth: '60px',
-                        }}
+                    return resourceEvents.map((event) => {
+                      const position = stackedPositions.get(event)
+                      if (!position) return null
+
+                      return (
+                        <div
+                          key={event.id}
+                          className="absolute rounded-md cursor-pointer hover:opacity-90 transition-opacity border-l-2 px-2 py-1 overflow-hidden"
+                          style={{
+                            left: position.left,
+                            width: position.width,
+                            top: position.top || '4px',
+                            height: position.height || '50px',
+                            backgroundColor: event.color + '20',
+                            borderLeftColor: event.color,
+                            minWidth: '60px',
+                          }}
                         onClick={(e) => {
                           e.stopPropagation()
                           onEventClick?.(event)
                         }}
                         title={
-                          (event.status === 'rejected' ||
-                            event.status === 'pending') &&
-                          event.createdAt
-                            ? `${event.title} - ${format(event.createdAt, 'HH:mm', { locale: ptBR })} (${event.status === 'rejected' ? 'Rejeitado' : 'Pendente'})`
+                          ((event.status === 'rejected' ||
+                            event.status === 'pending' ||
+                            event.status === 'PENDING' ||
+                            event.status === 'REJECTED') &&
+                          event.createdAt) ||
+                          event.isPendingRequest
+                            ? `${event.title} - ${format(event.createdAt!, 'HH:mm', { locale: ptBR })} (${event.status === 'rejected' || event.status === 'REJECTED' ? 'Rejeitado' : 'Pendente'})`
                             : `${event.title} - ${format(event.start, 'HH:mm', { locale: ptBR })} - ${format(event.end, 'HH:mm', { locale: ptBR })}`
                         }
                       >
@@ -387,15 +527,18 @@ export function TimelineView({
                           {event.title}
                         </div>
                         <div className="text-xs text-gray-600 truncate">
-                          {(event.status === 'rejected' ||
-                            event.status === 'pending') &&
-                          event.createdAt ? (
+                          {(((event.status === 'rejected' ||
+                            event.status === 'pending' ||
+                            event.status === 'PENDING' ||
+                            event.status === 'REJECTED') &&
+                          event.createdAt) ||
+                          event.isPendingRequest) ? (
                             <>
-                              {format(event.createdAt, 'HH:mm', {
+                              {format(event.createdAt!, 'HH:mm', {
                                 locale: ptBR,
                               })}{' '}
                               (
-                              {event.status === 'rejected'
+                              {event.status === 'rejected' || event.status === 'REJECTED'
                                 ? 'Rejeitado'
                                 : 'Pendente'}
                               )
@@ -408,8 +551,9 @@ export function TimelineView({
                           )}
                         </div>
                       </div>
-                    )
-                  })}
+                      )
+                    })
+                  })()}
                 </div>
               </div>
             )

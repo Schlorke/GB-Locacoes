@@ -109,6 +109,7 @@ export async function GET(request: NextRequest) {
               id: true,
               name: true,
               email: true,
+              company: true,
               status: true, // Incluir status para filtrar no frontend
             },
           },

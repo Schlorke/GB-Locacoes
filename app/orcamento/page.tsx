@@ -22,6 +22,16 @@ import * as SelectPrimitive from '@radix-ui/react-select'
 import { Check } from 'lucide-react'
 import { AddressForm, type AddressData } from '@/components/ui/address-form'
 import { toast } from 'sonner'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { validateCPF, validateCNPJ } from '@/lib/utils/validation'
 import { calculateFreight, type FreightOption } from '@/lib/freight-calculator'
 import {
@@ -100,6 +110,7 @@ function QuotePage() {
     removeItem,
     updateItemQuantity,
     updateItemDays,
+    updateItemIncludeWeekends,
     hydrateItems,
     clearCart,
   } = useCartStore()
@@ -142,6 +153,13 @@ function QuotePage() {
   >({})
   const hasSyncedCartPricing = useRef(false)
   const scrollUnlockInitialized = useRef(false)
+  // Estado para controlar confirmação de finais de semana
+  const [pendingWeekendConfirmation, setPendingWeekendConfirmation] = useState<{
+    equipmentId: string
+    equipmentName: string
+  } | null>(null)
+  const [pendingSubmitEvent, setPendingSubmitEvent] =
+    useState<React.FormEvent | null>(null)
 
   // Neutraliza o scroll-lock do Radix (RemoveScroll) que injeta data-scroll-locked no body
   useEffect(() => {
@@ -684,13 +702,14 @@ function QuotePage() {
       return
     }
 
-    // Validação: Verificar se todos os equipamentos têm datas definidas
-    const itemsWithoutDates = selectedEquipments.filter(
-      (eq) => !eq.startDate || !eq.endDate
+    // Validação: Verificar se todos os equipamentos têm pelo menos o número de dias definido
+    // Datas específicas (startDate/endDate) são opcionais - se não existirem, usa-se apenas o campo days
+    const itemsWithoutPeriod = selectedEquipments.filter(
+      (eq) => !eq.days || eq.days < 1
     )
-    if (itemsWithoutDates.length > 0) {
+    if (itemsWithoutPeriod.length > 0) {
       toast.error('Erro de Validação', {
-        description: `Alguns equipamentos não têm período de locação definido. Por favor, configure as datas na página de detalhes de cada equipamento.`,
+        description: `Alguns equipamentos não têm período de locação definido. Por favor, defina o número de dias para cada equipamento.`,
       })
       return
     }
@@ -708,6 +727,34 @@ function QuotePage() {
       toast.error('Erro de Disponibilidade', {
         description:
           'Um ou mais equipamentos não estão disponíveis nas datas selecionadas.',
+      })
+      return
+    }
+
+    // Validação: Verificar se há equipamentos sem datas selecionadas
+    // Isso acontece quando o usuário não usou o calendário na página de detalhes
+    // Se não há datas, o usuário não fez uma escolha consciente sobre o período de locação,
+    // então devemos confirmar se deseja incluir finais de semana
+    // Se o usuário selecionou datas no calendário, ele já fez uma escolha consciente
+    const itemsNeedingWeekendConfirmation = selectedEquipments.filter((eq) => {
+      // Não tem datas específicas (não usou calendário para selecionar período)
+      const hasNoDates = !eq.startDate || !eq.endDate
+      return hasNoDates
+    })
+
+    if (itemsNeedingWeekendConfirmation.length > 0) {
+      // Mostrar toast informativo e então abrir dialog de confirmação
+      const firstItem = itemsNeedingWeekendConfirmation[0]!
+      toast.info('Confirmação Necessária', {
+        description: `Precisamos confirmar se o uso aos finais de semana está incluído para "${firstItem.equipmentName}".`,
+        duration: 4000,
+      })
+
+      // Guardar o evento de submit para continuar depois da confirmação
+      setPendingSubmitEvent(e)
+      setPendingWeekendConfirmation({
+        equipmentId: firstItem.equipmentId,
+        equipmentName: firstItem.equipmentName,
       })
       return
     }
@@ -822,6 +869,44 @@ function QuotePage() {
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  // Handler para confirmar uso em finais de semana
+  const handleWeekendConfirmation = async (includeWeekends: boolean) => {
+    if (!pendingWeekendConfirmation) return
+
+    const equipmentId = pendingWeekendConfirmation.equipmentId
+    const submitEvent = pendingSubmitEvent
+
+    // Atualizar o item no carrinho com a escolha do usuário
+    updateItemIncludeWeekends(equipmentId, includeWeekends)
+
+    // Limpar estado de confirmação pendente
+    setPendingWeekendConfirmation(null)
+    setPendingSubmitEvent(null)
+
+    // Se havia um submit pendente, tentar novamente após um pequeno delay
+    // para garantir que o estado do carrinho foi atualizado
+    if (submitEvent) {
+      // Aguardar um frame para garantir que o estado foi atualizado
+      await new Promise((resolve) => setTimeout(resolve, 150))
+      // Criar um novo evento simulado para evitar problemas de recursão
+      const syntheticEvent = {
+        ...submitEvent,
+        preventDefault: () => {},
+      } as React.FormEvent
+      void handleSubmit(syntheticEvent)
+    }
+  }
+
+  // Handler para cancelar confirmação de finais de semana
+  const handleWeekendConfirmationCancel = () => {
+    setPendingWeekendConfirmation(null)
+    setPendingSubmitEvent(null)
+    toast.info('Confirmação cancelada', {
+      description:
+        'Por favor, confirme se deseja incluir finais de semana antes de enviar a solicitação.',
+    })
   }
 
   const _handleWhatsAppSubmit = () => {
@@ -1970,6 +2055,51 @@ function QuotePage() {
           </motion.div>
         </div>
       </div>
+
+      {/* Dialog de confirmação de finais de semana */}
+      <AlertDialog
+        open={pendingWeekendConfirmation !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            handleWeekendConfirmationCancel()
+          }
+        }}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Incluir finais de semana?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Você está solicitando locação de{' '}
+              <strong>
+                {pendingWeekendConfirmation?.equipmentName || 'este equipamento'}
+              </strong>{' '}
+              sem ter selecionado datas específicas no calendário.
+              <br />
+              <br />
+              <strong>Deseja incluir os finais de semana na contagem de dias?</strong>
+              <br />
+              <br />
+              <span className="text-sm text-muted-foreground">
+                • <strong>Sim:</strong> Sábados e domingos serão contados como dias de
+                locação
+                <br />• <strong>Não:</strong> Apenas dias úteis (segunda a sexta) serão
+                contados
+              </span>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleWeekendConfirmationCancel}>
+              Não, apenas dias úteis
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleWeekendConfirmation(true)}
+              className="bg-orange-600 hover:bg-orange-700"
+            >
+              Sim, incluir finais de semana
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

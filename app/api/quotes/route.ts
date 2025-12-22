@@ -336,33 +336,24 @@ export async function POST(request: Request) {
       }
     }
 
-    // Calcular datas globais para o quote (usar a primeira data encontrada ou calcular)
-    let globalStartDate: Date | undefined = undefined
-    let globalEndDate: Date | undefined = undefined
-
-    for (const item of items) {
-      if (item.startDate && item.endDate) {
-        const itemStartDate =
-          typeof item.startDate === 'string'
-            ? new Date(item.startDate)
-            : item.startDate
-        const itemEndDate =
-          typeof item.endDate === 'string'
-            ? new Date(item.endDate)
-            : item.endDate
-
-        if (!globalStartDate || itemStartDate < globalStartDate) {
-          globalStartDate = itemStartDate
-        }
-        if (!globalEndDate || itemEndDate > globalEndDate) {
-          globalEndDate = itemEndDate
-        }
-      }
-    }
-
-    // Calcular total
+    // Calcular total e processar items
+    // Data/hora da solicitação - usado quando não há datas específicas
+    const requestDateTime = new Date()
     let totalAmount = 0
-    const quoteItems = []
+    const quoteItems: Array<{
+      equipmentId: string
+      quantity: number
+      days: number
+      pricePerDay: number
+      total: number
+      startDate: Date
+      endDate: Date
+      includeWeekends: boolean
+      appliedDiscount: number | null
+      appliedPeriod: string | null
+      useDirectValue: boolean
+      directValue: number | null
+    }> = []
 
     const prisma = await getPrisma()
 
@@ -389,17 +380,30 @@ export async function POST(request: Request) {
 
       totalAmount += total
 
-      // Converter datas do item se existirem
-      const itemStartDate = item.startDate
-        ? typeof item.startDate === 'string'
-          ? new Date(item.startDate)
-          : item.startDate
-        : undefined
-      const itemEndDate = item.endDate
-        ? typeof item.endDate === 'string'
-          ? new Date(item.endDate)
-          : item.endDate
-        : undefined
+      // Converter datas do item se existirem, caso contrário calcular automaticamente
+      // Se não há datas, usar data/hora da solicitação como início e calcular fim baseado em dias
+      let itemStartDate: Date
+      let itemEndDate: Date
+
+      if (item.startDate && item.endDate) {
+        itemStartDate =
+          typeof item.startDate === 'string'
+            ? new Date(item.startDate)
+            : item.startDate
+        itemEndDate =
+          typeof item.endDate === 'string'
+            ? new Date(item.endDate)
+            : item.endDate
+      } else {
+        // Calcular automaticamente: início = dia da solicitação (00:00:00)
+        itemStartDate = new Date(requestDateTime)
+        itemStartDate.setHours(0, 0, 0, 0) // Início do dia da solicitação
+        // Fim = início + número de dias (subtrair 1 porque o dia inicial já conta)
+        itemEndDate = new Date(itemStartDate)
+        itemEndDate.setDate(itemEndDate.getDate() + days - 1)
+        // Definir hora de fim para 23:59:59 do último dia para facilitar controle
+        itemEndDate.setHours(23, 59, 59, 999)
+      }
 
       quoteItems.push({
         equipmentId: item.equipmentId,
@@ -440,6 +444,33 @@ export async function POST(request: Request) {
         periodMultiplier: pricingConfig.multiplier || 1,
       })
     }
+
+    // Calcular datas globais para o quote a partir dos items processados
+    let globalStartDate: Date | undefined = undefined
+    let globalEndDate: Date | undefined = undefined
+
+    for (const quoteItem of quoteItems) {
+      if (!globalStartDate || quoteItem.startDate < globalStartDate) {
+        globalStartDate = quoteItem.startDate
+      }
+      if (!globalEndDate || quoteItem.endDate > globalEndDate) {
+        globalEndDate = quoteItem.endDate
+      }
+    }
+
+    // Se ainda não há datas globais (não deveria acontecer), usar data atual como fallback
+    if (!globalStartDate) {
+      globalStartDate = new Date(requestDateTime)
+      globalStartDate.setHours(0, 0, 0, 0)
+    }
+    if (!globalEndDate) {
+      const maxDays = Math.max(...items.map((item) => item.days || 1))
+      globalEndDate = new Date(requestDateTime)
+      globalEndDate.setHours(0, 0, 0, 0)
+      globalEndDate.setDate(globalEndDate.getDate() + maxDays - 1)
+      globalEndDate.setHours(23, 59, 59, 999) // Fim do último dia
+    }
+
     // Calcular frete se necessário
     let deliveryFee: number | undefined = undefined
     let pickupFee: number | undefined = undefined
