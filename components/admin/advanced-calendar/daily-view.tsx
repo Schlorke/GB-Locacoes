@@ -34,6 +34,7 @@ interface DailyViewProps {
     _columnName: string,
     _events: CalendarEvent[]
   ) => void
+  fixedColumnWidth?: boolean // Para padronizar largura das colunas (ex: manutenção)
 }
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i) // 00:00 at\u00e9 23:00
@@ -46,6 +47,7 @@ export function DailyView({
   onDateClick,
   onCreateEvent,
   onColumnClick,
+  fixedColumnWidth = false,
 }: DailyViewProps) {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [quickCreateOpen, setQuickCreateOpen] = useState(false)
@@ -166,10 +168,16 @@ export function DailyView({
   }
 
   return (
-    <div className="flex bg-white min-h-[500px]">
+    <div
+      className={`flex bg-white min-h-[500px] ${fixedColumnWidth ? 'relative' : ''}`}
+    >
       {/* Coluna de Horas */}
-      <div className="w-16 flex-shrink-0 border-r border-slate-200 bg-slate-50">
-        <div className="h-12 border-b border-slate-200" />{' '}
+      <div
+        className={`w-16 flex-shrink-0 border-r border-slate-200 bg-slate-50 ${fixedColumnWidth ? 'sticky left-0 z-30' : ''}`}
+      >
+        <div
+          className={`h-12 border-b border-slate-200 ${fixedColumnWidth ? 'sticky top-0 z-40 bg-slate-50' : ''}`}
+        />{' '}
         {/* Espaço para header */}
         {HOURS.map((hour) => (
           <div key={hour} className="h-[60px] relative">
@@ -189,91 +197,186 @@ export function DailyView({
       </div>
 
       {/* Colunas de Recursos */}
-      <div className="flex-1 flex">
-        {resourceColumns.map((resource, index) => (
-          <div
-            key={resource.id}
-            className={`flex-1 ${index < resourceColumns.length - 1 ? 'border-r border-slate-200' : ''}`}
-          >
-            {/* Header do Recurso */}
-            <div
-              className="peer h-12 flex items-center justify-center border-b border-slate-200 bg-slate-50 sticky top-0 z-20 cursor-pointer hover:bg-orange-50 transition-colors group"
-              onClick={() => {
-                const columnEvents = timeGridEvents.filter(
-                  (event) => !hasResources || event.resourceId === resource.id
-                )
-                onColumnClick?.(resource.id, resource.name, columnEvents)
-              }}
-            >
-              <span className="text-sm font-medium text-gray-900 group-hover:text-orange-600 transition-colors">
-                {resource.name}
-              </span>
-            </div>
-
-            {/* Seção All-Day (apenas na primeira coluna) */}
-            {index === 0 && (
-              <AllDaySection
-                date={date}
-                events={allDayEvents}
-                onEventClick={onEventClick}
-              />
-            )}
-
-            {/* Grade de Horas */}
-            <div
-              ref={(el) => {
-                if (el) columnRefs.current.set(resource.id, el)
-              }}
-              className={`relative h-[1440px] peer-hover:bg-orange-50/30 transition-colors ${index === 0 ? '' : ''}`}
-            >
-              {HOURS.map((hour) => (
+      {fixedColumnWidth ? (
+        <div className="flex-1 overflow-x-auto overflow-y-visible">
+          <div className="flex min-w-max">
+            {resourceColumns.map((resource, index) => (
+              <div
+                key={resource.id}
+                className={`w-[200px] flex-shrink-0 ${index < resourceColumns.length - 1 ? 'border-r border-slate-200' : ''}`}
+              >
+                {/* Header do Recurso */}
                 <div
-                  key={hour}
-                  className="h-[60px] border-b border-slate-100 hover:bg-gray-50/50 cursor-pointer transition-colors"
-                  onClick={() => handleSlotClick(hour)}
-                />
-              ))}
+                  className="peer h-12 flex items-center justify-center border-b border-slate-200 bg-slate-50 sticky top-0 z-20 cursor-pointer hover:bg-orange-50 transition-colors group px-2"
+                  onClick={() => {
+                    const columnEvents = timeGridEvents.filter(
+                      (event) =>
+                        !hasResources || event.resourceId === resource.id
+                    )
+                    onColumnClick?.(resource.id, resource.name, columnEvents)
+                  }}
+                >
+                  <span
+                    className="text-sm font-medium text-gray-900 group-hover:text-orange-600 transition-colors truncate w-full text-center"
+                    title={resource.name}
+                  >
+                    {resource.name}
+                  </span>
+                </div>
 
-              {/* Eventos do Time-Grid com Overlap Manager */}
-              {(() => {
-                const resourceEvents = timeGridEvents.filter(
-                  (event) => !hasResources || event.resourceId === resource.id
-                )
-                const containerWidth = columnWidths.get(resource.id) || 200
-                const positions = calculateEventPositions(
-                  resourceEvents,
-                  date,
-                  containerWidth
-                )
+                {/* Seção All-Day (apenas na primeira coluna) */}
+                {index === 0 && (
+                  <AllDaySection
+                    date={date}
+                    events={allDayEvents}
+                    onEventClick={onEventClick}
+                  />
+                )}
 
-                return positions.map((pos) => {
-                  const position = getEventPosition(pos.event)
-                  return (
-                    <EventBlock
-                      key={pos.event.id}
-                      event={pos.event}
-                      style={{
-                        ...position,
-                        left: pos.left,
-                        width: pos.width,
-                      }}
-                      onClick={onEventClick}
+                {/* Grade de Horas */}
+                <div
+                  ref={(el) => {
+                    if (el) columnRefs.current.set(resource.id, el)
+                  }}
+                  className={`relative h-[1440px] peer-hover:bg-orange-50/30 transition-colors`}
+                >
+                  {HOURS.map((hour) => (
+                    <div
+                      key={hour}
+                      className="h-[60px] border-b border-slate-100 hover:bg-gray-50/50 cursor-pointer transition-colors"
+                      onClick={() => handleSlotClick(hour)}
                     />
-                  )
-                })
-              })()}
+                  ))}
 
-              {/* Linha do Tempo Atual */}
-              {isSameDay(currentTime, date) && (
-                <TimeIndicator
-                  currentTime={currentTime}
-                  hourSlotHeight={HOUR_SLOT_HEIGHT}
+                  {/* Eventos do Time-Grid com Overlap Manager */}
+                  {(() => {
+                    const resourceEvents = timeGridEvents.filter(
+                      (event) =>
+                        !hasResources || event.resourceId === resource.id
+                    )
+                    const containerWidth = columnWidths.get(resource.id) || 200
+                    const positions = calculateEventPositions(
+                      resourceEvents,
+                      date,
+                      containerWidth
+                    )
+
+                    return positions.map((pos) => {
+                      const position = getEventPosition(pos.event)
+                      return (
+                        <EventBlock
+                          key={pos.event.id}
+                          event={pos.event}
+                          style={{
+                            ...position,
+                            left: pos.left,
+                            width: pos.width,
+                          }}
+                          onClick={onEventClick}
+                        />
+                      )
+                    })
+                  })()}
+
+                  {/* Linha do Tempo Atual */}
+                  {isSameDay(currentTime, date) && (
+                    <TimeIndicator
+                      currentTime={currentTime}
+                      hourSlotHeight={HOUR_SLOT_HEIGHT}
+                    />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="flex-1 flex">
+          {resourceColumns.map((resource, index) => (
+            <div
+              key={resource.id}
+              className={`flex-1 ${index < resourceColumns.length - 1 ? 'border-r border-slate-200' : ''}`}
+            >
+              {/* Header do Recurso */}
+              <div
+                className="peer h-12 flex items-center justify-center border-b border-slate-200 bg-slate-50 sticky top-0 z-20 cursor-pointer hover:bg-orange-50 transition-colors group"
+                onClick={() => {
+                  const columnEvents = timeGridEvents.filter(
+                    (event) => !hasResources || event.resourceId === resource.id
+                  )
+                  onColumnClick?.(resource.id, resource.name, columnEvents)
+                }}
+              >
+                <span className="text-sm font-medium text-gray-900 group-hover:text-orange-600 transition-colors">
+                  {resource.name}
+                </span>
+              </div>
+
+              {/* Seção All-Day (apenas na primeira coluna) */}
+              {index === 0 && (
+                <AllDaySection
+                  date={date}
+                  events={allDayEvents}
+                  onEventClick={onEventClick}
                 />
               )}
+
+              {/* Grade de Horas */}
+              <div
+                ref={(el) => {
+                  if (el) columnRefs.current.set(resource.id, el)
+                }}
+                className={`relative h-[1440px] peer-hover:bg-orange-50/30 transition-colors`}
+              >
+                {HOURS.map((hour) => (
+                  <div
+                    key={hour}
+                    className="h-[60px] border-b border-slate-100 hover:bg-gray-50/50 cursor-pointer transition-colors"
+                    onClick={() => handleSlotClick(hour)}
+                  />
+                ))}
+
+                {/* Eventos do Time-Grid com Overlap Manager */}
+                {(() => {
+                  const resourceEvents = timeGridEvents.filter(
+                    (event) => !hasResources || event.resourceId === resource.id
+                  )
+                  const containerWidth = columnWidths.get(resource.id) || 200
+                  const positions = calculateEventPositions(
+                    resourceEvents,
+                    date,
+                    containerWidth
+                  )
+
+                  return positions.map((pos) => {
+                    const position = getEventPosition(pos.event)
+                    return (
+                      <EventBlock
+                        key={pos.event.id}
+                        event={pos.event}
+                        style={{
+                          ...position,
+                          left: pos.left,
+                          width: pos.width,
+                        }}
+                        onClick={onEventClick}
+                      />
+                    )
+                  })
+                })()}
+
+                {/* Linha do Tempo Atual */}
+                {isSameDay(currentTime, date) && (
+                  <TimeIndicator
+                    currentTime={currentTime}
+                    hourSlotHeight={HOUR_SLOT_HEIGHT}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Quick Create Dialog */}
       {quickCreateTime && (

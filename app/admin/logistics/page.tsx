@@ -33,6 +33,7 @@ import {
   MapPin,
   Search,
   Edit,
+  Eye,
   CheckCircle,
   XCircle,
   User,
@@ -602,7 +603,7 @@ export default function AdminLogisticsPage() {
                       {filteredDeliveries.map((delivery) => (
                         <tr
                           key={delivery.id}
-                          className="border-b border-gray-50 hover:bg-orange-50 transition-colors"
+                          className="border-b border-gray-50 hover:bg-orange-50 transition-colors group"
                         >
                           <td className="p-4">
                             <div>
@@ -644,6 +645,18 @@ export default function AdminLogisticsPage() {
                           </td>
                           <td className="p-4">
                             <div className="flex items-center gap-2">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setSelectedDelivery(delivery)
+                                  setIsEditing(false)
+                                }}
+                                className="admin-action-button rentals-view-button opacity-0 group-hover:opacity-100 transition-all"
+                              >
+                                <Eye className="w-4 h-4 mr-2" />
+                                Ver Detalhes
+                              </Button>
                               <Button
                                 variant="ghost"
                                 size="sm"

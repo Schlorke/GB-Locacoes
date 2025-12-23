@@ -15,7 +15,7 @@ import { motion } from 'framer-motion'
 import {
   Wrench,
   Search,
-  Edit,
+  Eye,
   CheckCircle,
   Calendar,
   Clock,
@@ -469,6 +469,7 @@ export default function AdminMaintenancePage() {
                   }
                 }}
                 defaultViewMode="weekly"
+                fixedColumnWidth={true}
               />
             </AdminCard>
           </motion.div>
@@ -515,7 +516,7 @@ export default function AdminMaintenancePage() {
                       {filteredMaintenances.map((maintenance) => (
                         <tr
                           key={maintenance.id}
-                          className="border-b border-gray-50 hover:bg-orange-50 transition-colors"
+                          className="border-b border-gray-50 hover:bg-orange-50 transition-colors group"
                         >
                           <td className="p-4">
                             <div className="font-medium text-gray-900">
@@ -558,8 +559,9 @@ export default function AdminMaintenancePage() {
                               onClick={() =>
                                 setSelectedMaintenance(maintenance)
                               }
+                              className="admin-action-button rentals-view-button opacity-0 group-hover:opacity-100 transition-all"
                             >
-                              <Edit className="w-4 h-4 mr-2" />
+                              <Eye className="w-4 h-4 mr-2" />
                               Ver Detalhes
                             </Button>
                           </td>

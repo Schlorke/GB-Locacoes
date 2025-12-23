@@ -34,6 +34,7 @@ export interface AdvancedCalendarProps {
   defaultDate?: Date
   className?: string
   showFilters?: boolean
+  fixedColumnWidth?: boolean // Para padronizar largura das colunas no modo diário
 }
 
 export function AdvancedCalendar({
@@ -54,6 +55,7 @@ export function AdvancedCalendar({
   defaultDate,
   className,
   showFilters = false,
+  fixedColumnWidth = false,
 }: AdvancedCalendarProps) {
   const [viewMode, setViewMode] = useState<ViewMode>(defaultViewMode)
   const [currentDate, setCurrentDate] = useState<Date>(
@@ -99,9 +101,9 @@ export function AdvancedCalendar({
   }
 
   const handleEventClick = (event: CalendarEvent) => {
-    // Para eventos do tipo 'rental', apenas chama o callback sem abrir o sidebar right
+    // Para eventos do tipo 'rental' ou 'maintenance', apenas chama o callback sem abrir o sidebar right
     // O dialog da página será aberto pelo callback onEventClick
-    if (event.type === 'rental') {
+    if (event.type === 'rental' || event.type === 'maintenance') {
       onEventClick?.(event)
       return
     }
@@ -149,7 +151,9 @@ export function AdvancedCalendar({
           </div>
         )}
 
-        <div className="flex-1 flex flex-col h-full overflow-hidden">
+        <div
+          className={`flex-1 flex flex-col h-full ${viewMode === 'daily' && fixedColumnWidth ? 'overflow-x-auto' : 'overflow-hidden'}`}
+        >
           {viewMode === 'daily' && (
             <DailyView
               date={currentDate}
@@ -159,6 +163,7 @@ export function AdvancedCalendar({
               onDateClick={handleDateClick}
               onCreateEvent={onCreateEvent}
               onColumnClick={handleColumnClick}
+              fixedColumnWidth={fixedColumnWidth}
             />
           )}
           {viewMode === 'weekly' && (
