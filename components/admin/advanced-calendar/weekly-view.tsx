@@ -254,7 +254,7 @@ export function WeeklyView({
                         left: pos.left,
                         width: pos.width,
                       }}
-                      onClick={() => onEventClick?.(pos.event)}
+                      onClick={onEventClick}
                     />
                   )
                 })

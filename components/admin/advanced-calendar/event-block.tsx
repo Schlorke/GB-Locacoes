@@ -16,7 +16,7 @@ interface EventBlockProps {
     width?: number
     isPending?: boolean
   }
-  onClick?: () => void
+  onClick?: (event: CalendarEvent) => void
   className?: string
 }
 
@@ -49,12 +49,13 @@ export function EventBlock({
       <div
         className={cn(
           'absolute rounded-md px-2 py-1',
-          'bg-white/80 backdrop-blur-sm text-black text-xs font-semibold',
+          'bg-white/90 backdrop-blur-sm text-black text-xs font-semibold',
           'flex items-center justify-center',
           'cursor-pointer transition-all duration-200',
           'shadow-md border border-slate-300/50',
           'peer-hover:text-orange-600',
-          'hover:bg-white/90 hover:text-orange-600',
+          'hover:bg-white hover:text-orange-600',
+          'data-[state=open]:bg-white data-[state=open]:text-orange-600',
           'z-50' // Z-index mais alto: acima da linha do tempo (z-40)
         )}
         style={{
@@ -132,7 +133,7 @@ export function EventBlock({
         className
       )}
       style={positionStyle}
-      onClick={onClick}
+      onClick={() => onClick?.(event)}
     >
       {/* Título - sempre presente */}
       <div

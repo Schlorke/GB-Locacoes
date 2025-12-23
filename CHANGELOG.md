@@ -66,6 +66,17 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Clique em eventos do popover agregado abre dialog corretamente**: Ajustado o
+  repasse do `CalendarEvent` para garantir que a dialog de detalhes abra quando
+  um evento e selecionado no popover "+N".
+  - **Arquivos Modificados**:
+    `components/admin/advanced-calendar/event-block.tsx`,
+    `components/admin/advanced-calendar/daily-view.tsx`,
+    `components/admin/advanced-calendar/weekly-view.tsx`,
+    `components/admin/advanced-calendar/aggregated-events-popover.tsx`,
+    `docs/issues/known-issues.md`, `docs/features/advanced-calendar-system.md`
+  - **Data**: 2025-12-23
+
 - **Scroll Vertical nas Colunas Kanban**: Corrigido problema onde os blocos de
   orçamentos nas visualizações kanban ultrapassavam a altura do componente
   quando havia muitos itens

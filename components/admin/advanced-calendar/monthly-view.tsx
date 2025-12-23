@@ -11,6 +11,8 @@ import {
   isSameMonth,
   isSameDay,
   isToday,
+  startOfDay,
+  endOfDay,
 } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { EventPopover } from './event-popover'
@@ -118,12 +120,26 @@ export function MonthlyView({
                 {columnDays.map((day) => {
                   const isCurrentMonth = isSameMonth(day, date)
                   const isCurrentDay = isToday(day)
+                  const timeGridEvents = getTimeGridEventsForDay(day)
+                  const allDayEventCount = events.filter((event) => {
+                    if (!event.isAllDay && !event.isMultiDay) return false
+                    const dayStart = startOfDay(day)
+                    const dayEnd = endOfDay(day)
+                    return event.start <= dayEnd && event.end >= dayStart
+                  }).length
+                  const totalEventsCount =
+                    timeGridEvents.length + allDayEventCount
+                  const maxVisibleEvents = 3
+                  const remainingEventsCount =
+                    totalEventsCount > maxVisibleEvents
+                      ? totalEventsCount - maxVisibleEvents
+                      : 0
 
                   return (
                     <div
                       key={day.toISOString()}
                       className={cn(
-                        'min-h-[120px] p-2 border-b border-slate-200 cursor-pointer transition-colors hover:bg-gray-50/50',
+                        'h-[120px] p-2 border-b border-slate-200 cursor-pointer transition-colors hover:bg-gray-50/50 overflow-hidden flex flex-col',
                         !isCurrentMonth && 'opacity-40'
                       )}
                       style={{
@@ -133,7 +149,7 @@ export function MonthlyView({
                       }}
                       onClick={() => onDateClick?.(day)}
                     >
-                      <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center justify-between mb-1 flex-shrink-0">
                         <span
                           className={cn(
                             'text-sm',
@@ -144,54 +160,73 @@ export function MonthlyView({
                         >
                           {format(day, 'd')}
                         </span>
-                      </div>
-
-                      {/* Eventos All-Day/Multi-Day */}
-                      <AllDaySectionMonthly
-                        day={day}
-                        events={events}
-                        onEventClick={onEventClick}
-                        maxVisible={2}
-                      />
-
-                      {/* Eventos do Time-Grid */}
-                      <div className="space-y-1 mt-1">
-                        {getTimeGridEventsForDay(day)
-                          .slice(0, 3)
-                          .map((event) => (
-                            <div
-                              key={event.id}
-                              className="text-xs px-2 py-1 rounded truncate cursor-pointer hover:opacity-80 transition-opacity border-l-2"
-                              style={{
-                                backgroundColor: event.color + '20',
-                                borderLeftColor: event.color,
-                                color: '#1f2937',
-                              }}
-                              onClick={(e) => {
-                                e.stopPropagation()
-                                onEventClick?.(event)
-                              }}
-                            >
-                              {event.title}
-                            </div>
-                          ))}
-                        {getTimeGridEventsForDay(day).length > 3 && (
+                        {remainingEventsCount > 0 && (
                           <EventPopover
-                            events={getTimeGridEventsForDay(day).slice(3)}
+                            events={[
+                              ...events
+                                .filter((event) => {
+                                  if (!event.isAllDay && !event.isMultiDay)
+                                    return false
+                                  const dayStart = startOfDay(day)
+                                  const dayEnd = endOfDay(day)
+                                  return (
+                                    event.start <= dayEnd &&
+                                    event.end >= dayStart
+                                  )
+                                })
+                                .slice(2),
+                              ...timeGridEvents.slice(maxVisibleEvents - 2),
+                            ]}
                             date={day}
                             onEventClick={(event) => {
                               onEventClick?.(event)
                             }}
                             trigger={
                               <div
-                                className="text-xs text-gray-600 px-2 font-medium cursor-pointer hover:text-gray-900 transition-colors"
+                                className="text-xs text-gray-600 px-2 py-0.5 font-medium cursor-pointer hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
                                 onClick={(e) => e.stopPropagation()}
                               >
-                                +{getTimeGridEventsForDay(day).length - 3} mais
+                                +{remainingEventsCount} mais
                               </div>
                             }
                           />
                         )}
+                      </div>
+
+                      <div className="flex-1 overflow-hidden flex flex-col gap-1">
+                        {/* Eventos All-Day/Multi-Day */}
+                        <AllDaySectionMonthly
+                          day={day}
+                          events={events}
+                          onEventClick={onEventClick}
+                          maxVisible={2}
+                        />
+
+                        {/* Eventos do Time-Grid */}
+                        <div className="space-y-1 flex-shrink-0">
+                          {timeGridEvents
+                            .slice(
+                              0,
+                              maxVisibleEvents - Math.min(allDayEventCount, 2)
+                            )
+                            .map((event) => (
+                              <div
+                                key={event.id}
+                                className="text-xs px-2 py-1 rounded truncate cursor-pointer hover:opacity-80 transition-opacity border-l-2"
+                                style={{
+                                  backgroundColor: event.color + '20',
+                                  borderLeftColor: event.color,
+                                  color: '#1f2937',
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  onEventClick?.(event)
+                                }}
+                              >
+                                {event.title}
+                              </div>
+                            ))}
+                        </div>
                       </div>
                     </div>
                   )

@@ -156,10 +156,9 @@ export function AllDaySectionMonthly({
   }
 
   const visibleEvents = allDayEvents.slice(0, maxVisible)
-  const remainingCount = allDayEvents.length - maxVisible
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-1 flex-shrink-0">
       {visibleEvents.map((event) => (
         <div
           key={event.id}
@@ -169,16 +168,14 @@ export function AllDaySectionMonthly({
             borderLeftColor: event.color,
             color: '#1f2937',
           }}
-          onClick={() => onEventClick?.(event)}
+          onClick={(e) => {
+            e.stopPropagation()
+            onEventClick?.(event)
+          }}
         >
           {event.title}
         </div>
       ))}
-      {remainingCount > 0 && (
-        <div className="text-xs text-gray-600 px-2 font-medium">
-          +{remainingCount} mais
-        </div>
-      )}
     </div>
   )
 }

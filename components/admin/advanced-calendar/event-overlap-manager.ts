@@ -111,7 +111,8 @@ export function calculateEventPositions(
     const margin = 2
     const totalMargin = margin * 2 * visibleCount
     const availableWidth = containerWidth - totalMargin
-    const columnWidth = Math.max(availableWidth / visibleCount, 120) // Largura mínima de 120px por coluna
+    // Remove largura mínima fixa para permitir responsividade total
+    const columnWidth = availableWidth / visibleCount
 
     group.events.forEach((event, index) => {
       if (index < MAX_VISIBLE_COLUMNS) {
@@ -136,8 +137,12 @@ export function calculateEventPositions(
         // CORREÇÃO: Posiciona o badge DENTRO da última coluna visível
         const lastColumnLeft =
           (MAX_VISIBLE_COLUMNS - 1) * (columnWidth + margin * 2) + margin
-        const indicatorWidth = 50 // Badge compacto
-        const indicatorLeft = lastColumnLeft + columnWidth - indicatorWidth - 4 // 4px margem direita
+        // Largura do indicador proporcional: mínimo 40px, máximo 50px, ou metade da coluna
+        const indicatorWidth = Math.min(50, Math.max(40, columnWidth / 2))
+        const indicatorLeft = Math.max(
+          lastColumnLeft,
+          lastColumnLeft + columnWidth - indicatorWidth - 4
+        ) // 4px margem direita
 
         positions.push({
           event: {

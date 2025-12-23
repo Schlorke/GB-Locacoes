@@ -3,6 +3,7 @@
 import { CalendarEvent } from './types'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { useState } from 'react'
 import {
   Popover,
   PopoverContent,
@@ -22,8 +23,20 @@ export function AggregatedEventsPopover({
   date,
   onEventClick,
 }: AggregatedEventsPopoverProps) {
+  const [open, setOpen] = useState(false)
+
+  const handleEventClick = (event: CalendarEvent) => {
+    // Fecha o popover e aguarda um frame antes de executar o onClick
+    setOpen(false)
+
+    // Usa setTimeout para garantir que o popover fecha antes da dialog abrir
+    setTimeout(() => {
+      onEventClick?.(event)
+    }, 100)
+  }
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>
       <PopoverContent className="w-80 max-h-96 overflow-y-auto" align="start">
         <div className="space-y-2">
@@ -34,8 +47,11 @@ export function AggregatedEventsPopover({
             {events.map((event) => (
               <div
                 key={event.id}
-                className="p-2 rounded hover:bg-gray-100 cursor-pointer transition-colors"
-                onClick={() => onEventClick?.(event)}
+                className="p-2 rounded hover:bg-orange-50 hover:text-orange-600 cursor-pointer transition-all duration-200"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleEventClick(event)
+                }}
               >
                 <div className="flex items-start gap-2">
                   <div
@@ -61,4 +77,3 @@ export function AggregatedEventsPopover({
     </Popover>
   )
 }
-

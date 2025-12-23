@@ -5,6 +5,64 @@
 
 ---
 
+## 38. Clique em eventos do popover agregado nao abre dialog
+
+### ? Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-12-23 **Severidade**: Alta (UI/UX) **Status**: ?
+Resolvido
+
+#### Descricao
+
+Quando o usuario clicava em um evento dentro do popover agregado ("+N"), o
+popover fechava mas a dialog de detalhes nao abria, mesmo com o clique direto no
+EventBlock funcionando.
+
+#### Sintomas
+
+- Popover abre e lista eventos
+- Clique no evento fecha o popover mas nao abre a dialog
+- Logs indicavam onEventClick chamado
+- Clique direto no calendario abria a dialog normalmente
+
+#### Causa Raiz
+
+- `EventBlock.onClick` aceitava `() => void`, enquanto o popover chama
+  `onEventClick(event)`
+- Daily/Weekly passavam um closure que capturava o evento agregador, ignorando o
+  evento clicado no popover
+
+### ? Solucao Implementada
+
+- `EventBlock` agora recebe `onClick?: (event: CalendarEvent) => void` e repassa
+  o evento clicado
+- Daily/Weekly repassam `onEventClick` diretamente para o `EventBlock`
+- Logs de debug removidos do `AggregatedEventsPopover`
+
+#### Arquivos Modificados
+
+1. `components/admin/advanced-calendar/event-block.tsx`
+2. `components/admin/advanced-calendar/daily-view.tsx`
+3. `components/admin/advanced-calendar/weekly-view.tsx`
+4. `components/admin/advanced-calendar/aggregated-events-popover.tsx`
+5. `docs/features/advanced-calendar-system.md`
+6. `CHANGELOG.md`
+
+#### Como Validar
+
+1. Criar 4+ eventos simultaneos para gerar badge "+N"
+2. Clicar no badge e selecionar um evento no popover
+3. Confirmar que o popover fecha e a dialog abre com o evento correto
+4. Confirmar que clique direto em um EventBlock continua abrindo a dialog
+
+#### Armadilhas a Evitar
+
+- Voltar `EventBlock.onClick` para `() => void` ou criar closures que ignoram o
+  evento clicado
+- Passar handlers que capturam o evento agregador em vez do evento individual
+
+---
+
 ## 37. Dias alterados no orcamento nao atualizavam o fim do periodo
 
 ### ? Problema RESOLVIDO

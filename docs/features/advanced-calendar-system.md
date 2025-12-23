@@ -278,6 +278,13 @@ interface CalendarEvent {
 }
 ```
 
+### **Clique em Eventos (EventBlock e Popover Agregado)**
+
+- `onEventClick` sempre recebe o `CalendarEvent` clicado, seja no bloco direto
+  ou na lista do popover agregado
+- Evite closures que capturem o evento agregador; repasse o evento real do
+  clique
+
 ---
 
 ## 🎯 Propósito e Controle
