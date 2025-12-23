@@ -26,6 +26,10 @@ export interface CalendarEvent {
   technicianName?: string
   /** Checklist de manutenção */
   checklist?: string[]
+  /** Identifica o badge agregador "+N mais" */
+  isAggregatedIndicator?: boolean
+  /** Lista de eventos ocultos (para popover) */
+  aggregatedEvents?: CalendarEvent[]
 }
 
 export interface CalendarResource {

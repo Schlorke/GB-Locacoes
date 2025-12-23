@@ -141,7 +141,7 @@ export function KanbanPipeline<T extends KanbanItem>({
                 </Badge>
               </div>
               <div
-                className="space-y-2 max-h-[600px] overflow-visible pr-2 py-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-orange-500 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-orange-600 [&::-webkit-scrollbar-button]:bg-orange-500"
+                className="space-y-2 max-h-[600px] overflow-y-auto pr-2 py-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-orange-500 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-orange-600 [&::-webkit-scrollbar-button]:bg-orange-500"
                 style={{
                   scrollbarWidth: 'thin',
                   scrollbarColor: 'rgb(249 115 22) transparent',

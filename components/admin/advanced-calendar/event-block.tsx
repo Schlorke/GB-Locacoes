@@ -4,6 +4,7 @@ import { format, formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { cn } from '@/lib/utils'
 import type { CalendarEvent } from './types'
+import { AggregatedEventsPopover } from './aggregated-events-popover'
 
 interface EventBlockProps {
   event: CalendarEvent
@@ -42,6 +43,42 @@ export function EventBlock({
   onClick,
   className,
 }: EventBlockProps) {
+  // Renderização especial para badge agregador "+N mais"
+  if (event.isAggregatedIndicator && event.aggregatedEvents) {
+    const badgeElement = (
+      <div
+        className={cn(
+          'absolute rounded-md px-2 py-1',
+          'bg-slate-600/90 text-white text-xs font-semibold',
+          'flex items-center justify-center',
+          'cursor-pointer hover:bg-slate-700 transition-colors',
+          'shadow-md border border-slate-500',
+          'z-30' // Z-index alto para ficar acima dos eventos
+        )}
+        style={{
+          top: `${style.top}px`,
+          left: `${style.left}px`,
+          width: `${style.width}px`,
+          height: '32px', // Altura compacta fixa
+          bottom: '4px',
+        }}
+        title={`${event.aggregatedEvents.length} eventos adicionais`}
+      >
+        {event.title}
+      </div>
+    )
+
+    return (
+      <AggregatedEventsPopover
+        trigger={badgeElement}
+        events={event.aggregatedEvents}
+        date={event.createdAt || event.start}
+        onEventClick={onClick}
+      />
+    )
+  }
+
+  // Renderização normal para eventos regulares
   const isRejected = event.status === 'rejected' || event.status === 'REJECTED'
   const isPendingStatus =
     event.status === 'pending' || event.status === 'PENDING'

@@ -127,24 +127,34 @@ export function calculateEventPositions(
       }
     })
 
-    // Se há mais eventos que o limite, adiciona um agregador
+    // Se há mais eventos que o limite, adiciona um agregador compacto
     if (groupSize > MAX_VISIBLE_COLUMNS) {
       const aggregatedCount = groupSize - MAX_VISIBLE_COLUMNS
-      const firstAggregatedEvent = group.events[MAX_VISIBLE_COLUMNS]
-      if (firstAggregatedEvent) {
+      const lastVisibleEvent = group.events[MAX_VISIBLE_COLUMNS - 1]
+
+      if (lastVisibleEvent) {
+        // CORREÇÃO: Posiciona o badge DENTRO da última coluna visível
+        const lastColumnLeft =
+          (MAX_VISIBLE_COLUMNS - 1) * (columnWidth + margin * 2) + margin
+        const indicatorWidth = 50 // Badge compacto
+        const indicatorLeft = lastColumnLeft + columnWidth - indicatorWidth - 4 // 4px margem direita
+
         positions.push({
           event: {
-            ...firstAggregatedEvent,
-            title: `+${aggregatedCount} mais`,
-            id: firstAggregatedEvent.id || `aggregated-${Date.now()}`,
+            ...lastVisibleEvent,
+            id: `aggregated-${group.startTime.getTime()}`,
+            title: `+${aggregatedCount}`,
+            isAggregatedIndicator: true, // Nova flag
+            aggregatedEvents: group.events.slice(MAX_VISIBLE_COLUMNS), // Eventos ocultos
           },
-          left: MAX_VISIBLE_COLUMNS * (columnWidth + margin * 2) + margin,
-          width: columnWidth,
-          column: MAX_VISIBLE_COLUMNS,
-          totalColumns: visibleCount + 1,
+          left: indicatorLeft,
+          width: indicatorWidth,
+          column: MAX_VISIBLE_COLUMNS - 1, // Mesma coluna do último evento
+          totalColumns: visibleCount, // NÃO adiciona coluna extra
           isAggregated: true,
         })
       }
+
       // Marca todos os eventos agregados como processados
       group.events.slice(MAX_VISIBLE_COLUMNS).forEach((e) => {
         processedEvents.add(e.id)

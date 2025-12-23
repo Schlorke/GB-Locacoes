@@ -66,6 +66,19 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Scroll Vertical nas Colunas Kanban**: Corrigido problema onde os blocos de
+  orçamentos nas visualizações kanban ultrapassavam a altura do componente
+  quando havia muitos itens
+  - **Problema**: As colunas (Pendente, Aprovado, Rejeitado) não tinham scroll
+    vertical configurado, fazendo com que os cartões ultrapassassem o limite
+    visual quando havia muitos orçamentos
+  - **Solução**: Alterado `overflow-visible` para `overflow-y-auto` no container
+    dos itens, mantendo a altura máxima de 600px
+  - **Estilização**: Mantida a scrollbar customizada laranja para consistência
+    visual com o design system
+  - **Arquivos modificados**: `components/admin/kanban-pipeline.tsx`
+  - **Data**: 2025-01-22
+
 - **Sincronizacao do periodo ao ajustar dias no orcamento**: quando um item com
   `startDate` tem o campo `days` alterado, o `endDate` e recalculado com base na
   data de inicio e na preferencia de finais de semana.
