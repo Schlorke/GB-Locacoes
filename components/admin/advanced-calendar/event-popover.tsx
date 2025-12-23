@@ -38,6 +38,7 @@ export function EventPopover({
         className={cn('w-80 p-0', className)}
         align="start"
         side="bottom"
+        onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <div className="p-4 border-b border-slate-200">
           <h3 className="text-sm font-semibold text-gray-900 capitalize">
@@ -54,7 +55,7 @@ export function EventPopover({
                 key={event.id}
                 className={cn(
                   'w-full text-left px-3 py-2 rounded-md text-sm transition-colors',
-                  'hover:bg-orange-50/30 focus:bg-orange-50/30 focus:outline-none',
+                  'hover:bg-orange-50 focus:bg-orange-50 focus:outline-none',
                   'flex items-start gap-3 group'
                 )}
                 onClick={() => onEventClick?.(event)}

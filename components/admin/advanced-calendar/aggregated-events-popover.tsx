@@ -14,7 +14,7 @@ interface AggregatedEventsPopoverProps {
   trigger: React.ReactNode
   events: CalendarEvent[]
   date: Date
-  onEventClick?: (event: CalendarEvent) => void
+  onEventClick?: (_event: CalendarEvent) => void
 }
 
 export function AggregatedEventsPopover({

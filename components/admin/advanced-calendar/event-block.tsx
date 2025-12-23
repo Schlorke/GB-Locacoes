@@ -16,7 +16,7 @@ interface EventBlockProps {
     width?: number
     isPending?: boolean
   }
-  onClick?: (event: CalendarEvent) => void
+  onClick?: (_event: CalendarEvent) => void
   className?: string
 }
 
