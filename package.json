@@ -268,7 +268,9 @@
       "glob": "^11.0.3",
       "rimraf": "^6.0.1",
       "node-domexception": "npm:@types/node@*",
-      "baseline-browser-mapping": "^2.9.2"
+      "baseline-browser-mapping": "^2.9.2",
+      "axios": "^1.12.0",
+      "cookie": "^0.7.0"
     },
     "onlyBuiltDependencies": [
       "@prisma/client",
