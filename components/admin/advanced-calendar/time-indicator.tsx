@@ -27,7 +27,7 @@ export function TimeIndicator({
 
   return (
     <div
-      className="absolute left-0 right-0 z-10 pointer-events-none"
+      className="absolute left-0 right-0 z-40 pointer-events-none"
       style={{ top: Math.max(0, lineTopPosition) }}
     >
       {/* Container flex: bloco à esquerda, linha à direita */}

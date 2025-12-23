@@ -252,7 +252,7 @@ console.log(document.querySelector('[data-aggregated="true"]'))
 
 ## 📝 Relatório de Teste (Preencher Após Validação)
 
-**Data de Teste:** **_/_**/2025 **Testado por:** ******\_\_\_******
+**Data de Teste:** **_/_**/2025 **Testado por:** **\*\***\_\_\_**\*\***
 
 ### Teste 1: 4 Eventos Simultâneos
 

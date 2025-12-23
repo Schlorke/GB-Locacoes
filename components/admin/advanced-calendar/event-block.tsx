@@ -49,11 +49,13 @@ export function EventBlock({
       <div
         className={cn(
           'absolute rounded-md px-2 py-1',
-          'bg-slate-600/90 text-white text-xs font-semibold',
+          'bg-white/80 backdrop-blur-sm text-black text-xs font-semibold',
           'flex items-center justify-center',
-          'cursor-pointer hover:bg-slate-700 transition-colors',
-          'shadow-md border border-slate-500',
-          'z-30' // Z-index alto para ficar acima dos eventos
+          'cursor-pointer transition-all duration-200',
+          'shadow-md border border-slate-300/50',
+          'peer-hover:text-orange-600',
+          'hover:bg-white/90 hover:text-orange-600',
+          'z-50' // Z-index mais alto: acima da linha do tempo (z-40)
         )}
         style={{
           top: `${style.top}px`,
