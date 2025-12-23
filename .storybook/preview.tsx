@@ -4,11 +4,12 @@ import React from 'react'
 import '../app/globals.css'
 
 // Configurar fontes do projeto (mesma configuração do layout.tsx)
+// Desabilitado preload para evitar erros durante build do Storybook
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
-  preload: true,
+  preload: false, // Desabilitado para evitar erro de build
   fallback: ['system-ui', 'arial'],
 })
 
@@ -16,7 +17,7 @@ const jost = Jost({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-jost',
-  preload: true,
+  preload: false, // Desabilitado para evitar erro de build
   fallback: ['Georgia', 'serif'],
   adjustFontFallback: false,
 })
