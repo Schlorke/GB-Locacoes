@@ -8,6 +8,34 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added ✨
+
+- **Verificação de Autenticação ao Solicitar Orçamento**: Implementada
+  verificação de autenticação no fluxo de solicitação de orçamento de
+  equipamentos
+  - **Comportamento**:
+    - Quando o usuário clica em "Solicitar Orçamento Grátis" na página de
+      detalhes do equipamento, o sistema verifica se está logado
+    - Se **não estiver logado**: mostra toast informativa e redireciona para a
+      página de login
+    - Se **estiver logado**: prossegue normalmente com o fluxo de orçamento
+  - **Toast Informativa**: Mensagem clara explicando que o login é necessário
+    para solicitar orçamentos
+  - **Redirecionamento Inteligente (callbackUrl)**:
+    - A URL da página atual é preservada como `callbackUrl`
+    - Após login/cadastro, o usuário é redirecionado de volta para a página do
+      equipamento que estava visualizando
+    - Funciona tanto para login com credenciais quanto para login social
+      (Google/Facebook)
+  - **Dialog de Finais de Semana**: Só aparece quando o usuário está logado e
+    não selecionou datas no calendário
+  - **Arquivos Modificados**:
+    - `components/smart-quote-button.tsx` - Verificação de autenticação
+    - `app/login/page.tsx` - Suporte a callbackUrl
+    - `app/cadastro/page.tsx` - Suporte a callbackUrl
+    - `app/auth/callback/page.tsx` - Redirecionamento com callbackUrl
+  - **Data**: 2025-12-24
+
 ### Changed 🔄
 
 - **Validação de Campos Obrigatórios com Toasts Informativas**: Adicionadas

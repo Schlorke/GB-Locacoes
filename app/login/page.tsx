@@ -19,7 +19,7 @@ import { AlertTriangle, Eye, EyeOff } from 'lucide-react'
 import { getSession, signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useState, type FormEvent } from 'react'
+import { Suspense, useCallback, useEffect, useState, type FormEvent } from 'react'
 
 function LoginForm() {
   const router = useRouter()
@@ -30,23 +30,45 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
+  // Obter callbackUrl dos searchParams (para redirecionamento após login)
+  const callbackUrl = searchParams.get('callbackUrl')
+
+  // Função para redirecionar após login bem-sucedido
+  const redirectAfterLogin = useCallback(
+    (userEmail: string, userRole?: string) => {
+      // Se houver um callbackUrl válido, redirecionar para ele
+      if (callbackUrl) {
+        const decodedUrl = decodeURIComponent(callbackUrl)
+        // Verificar se é uma URL interna válida (não permitir redirecionamento externo)
+        if (decodedUrl.startsWith('/') && !decodedUrl.startsWith('//')) {
+          router.replace(decodedUrl)
+          return
+        }
+      }
+
+      // Redirecionamento padrão baseado no role
+      const isAdmin =
+        userEmail === 'admin@gblocacoes.com.br' || userRole === 'ADMIN'
+
+      if (isAdmin) {
+        router.replace('/admin/dashboard')
+      } else {
+        router.replace('/area-cliente')
+      }
+    },
+    [callbackUrl, router]
+  )
+
   // Check if user is already authenticated
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const session = await getSession()
         if (session?.user) {
-          // Verificar se é admin baseado no email ou role
-          const isAdmin =
-            session.user?.email === 'admin@gblocacoes.com.br' ||
-            session.user?.role === 'ADMIN'
-
-          // Usar replace em vez de push para evitar histórico de navegação
-          if (isAdmin) {
-            router.replace('/admin/dashboard')
-          } else {
-            router.replace('/area-cliente')
-          }
+          redirectAfterLogin(
+            session.user.email || '',
+            session.user.role as string | undefined
+          )
         }
       } catch (error) {
         console.error('Erro ao verificar sessão:', error)
@@ -58,7 +80,7 @@ function LoginForm() {
     if (!isLoading) {
       checkAuth()
     }
-  }, [router, isLoading])
+  }, [isLoading, redirectAfterLogin])
 
   // Handle URL error parameters
   useEffect(() => {
@@ -98,17 +120,8 @@ function LoginForm() {
       if (result?.error) {
         setError('Credenciais inválidas. Verifique seu email e senha.')
       } else if (result?.ok) {
-        // Verificar se é admin baseado no email
-        const isAdmin = email === 'admin@gblocacoes.com.br'
-
-        // Usar replace em vez de push para evitar histórico de navegação
-        if (isAdmin) {
-          router.replace('/admin/dashboard')
-        } else {
-          router.replace('/area-cliente')
-        }
-
-        // Não chamar router.refresh() aqui para evitar conflitos
+        // Usar a função de redirecionamento que suporta callbackUrl
+        redirectAfterLogin(email)
       } else {
         setError('Ocorreu um erro desconhecido. Tente novamente.')
       }
@@ -126,7 +139,7 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 md:-mt-[96px]">
-      <div className="flex min-h-screen items-center justify-center px-4 pb-8 md:px-6 md:pt-24 md:pb-8 xl:px-4 xl:py-20">
+      <div className="flex min-h-screen items-center justify-center  px-4 pb-8 md:px-6 md:pt-24 md:pb-8 lg:mt-3 xl:px-4 xl:py-20">
         {/* Container do login centralizado */}
         <div className="w-full pt-5 max-w-md relative z-10">
           <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in">
@@ -255,7 +268,11 @@ function LoginForm() {
                 <SocialLoginButtons
                   isLoading={isLoading}
                   onError={handleSocialError}
-                  callbackUrl="/auth/callback"
+                  callbackUrl={
+                    callbackUrl
+                      ? `/auth/callback?callbackUrl=${encodeURIComponent(callbackUrl)}`
+                      : '/auth/callback'
+                  }
                 />
 
                 {/* Links de navegação */}
@@ -263,7 +280,11 @@ function LoginForm() {
                   <div className="text-sm text-slate-600">
                     Não tem uma conta?{' '}
                     <Link
-                      href="/cadastro"
+                      href={
+                        callbackUrl
+                          ? `/cadastro?callbackUrl=${encodeURIComponent(callbackUrl)}`
+                          : '/cadastro'
+                      }
                       className="text-slate-700 hover:text-slate-900 font-medium underline"
                     >
                       Cadastre-se

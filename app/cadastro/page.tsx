@@ -14,11 +14,15 @@ import { Label } from '@/components/ui/label'
 import { AlertTriangle, Eye, EyeOff } from 'lucide-react'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useState, type FormEvent } from 'react'
 
 function CadastroForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Obter callbackUrl dos searchParams (para redirecionamento após login)
+  const callbackUrl = searchParams.get('callbackUrl')
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -146,8 +150,11 @@ function CadastroForm() {
       const data = await response.json()
 
       if (response.ok) {
-        // Redirecionar para login com mensagem de sucesso
-        router.push('/login?registered=true')
+        // Redirecionar para login com mensagem de sucesso, preservando callbackUrl
+        const loginUrl = callbackUrl
+          ? `/login?registered=true&callbackUrl=${encodeURIComponent(callbackUrl)}`
+          : '/login?registered=true'
+        router.push(loginUrl)
       } else {
         setError(data.error || 'Erro ao criar conta')
         setIsLoading(false)
@@ -164,7 +171,11 @@ function CadastroForm() {
     setError(null)
 
     try {
-      await signIn(provider, { callbackUrl: '/auth/callback' })
+      // Preservar callbackUrl no redirecionamento do OAuth
+      const authCallbackUrl = callbackUrl
+        ? `/auth/callback?callbackUrl=${encodeURIComponent(callbackUrl)}`
+        : '/auth/callback'
+      await signIn(provider, { callbackUrl: authCallbackUrl })
     } catch (err) {
       console.error('Social login error:', err)
       setError('Falha ao fazer login com ' + provider)
@@ -475,7 +486,7 @@ function CadastroForm() {
                     variant="outline"
                     onClick={() => handleSocialLogin('google')}
                     disabled={isLoading}
-                    className="h-12 px-4 py-2 border-slate-300 hover:bg-slate-50"
+                    className="h-12 px-4 py-2 border-slate-300"
                   >
                     <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                       <path
@@ -502,7 +513,7 @@ function CadastroForm() {
                     variant="outline"
                     onClick={() => handleSocialLogin('facebook')}
                     disabled={isLoading}
-                    className="h-12 px-4 py-2 border-slate-300 hover:bg-slate-50"
+                    className="h-12 px-4 py-2 border-slate-300"
                   >
                     <svg
                       className="w-4 h-4 mr-2"
@@ -520,7 +531,11 @@ function CadastroForm() {
                   <div className="text-sm text-slate-600">
                     Já tem uma conta?{' '}
                     <Link
-                      href="/login"
+                      href={
+                        callbackUrl
+                          ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}`
+                          : '/login'
+                      }
                       className="text-slate-700 hover:text-slate-900 font-medium underline"
                     >
                       Faça login

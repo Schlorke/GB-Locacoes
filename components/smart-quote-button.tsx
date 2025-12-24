@@ -13,8 +13,10 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { CloseButton } from '@/components/ui/close-button'
+import { toast } from '@/hooks/use-toast-sonner'
 import { useCartStore, type CartItem } from '@/stores/useCartStore'
-import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
 export interface PricingOption {
@@ -111,7 +113,12 @@ export function SmartQuoteButton({
 }: SmartQuoteButtonProps) {
   const { addItem } = useCartStore()
   const router = useRouter()
+  const pathname = usePathname()
+  const { data: session, status } = useSession()
   const [isWeekendDialogOpen, setIsWeekendDialogOpen] = useState(false)
+
+  // Verificar se o usuário está autenticado
+  const isAuthenticated = status === 'authenticated' && session?.user
 
   const finalizeAdd = useCallback(
     (includeWeekendSelection: boolean) => {
@@ -190,6 +197,24 @@ export function SmartQuoteButton({
   const handleQuoteRequest = useCallback(() => {
     if (!isAvailable) return
 
+    // Verificar autenticação PRIMEIRO
+    // Se o usuário não estiver logado, redirecionar para login
+    if (!isAuthenticated) {
+      // Mostrar toast informativo
+      toast.info('Login necessário', {
+        description:
+          'Para solicitar um orçamento, você precisa estar logado. Faça login ou cadastre-se para continuar.',
+        position: 'top-right',
+        duration: 5000,
+      })
+
+      // Redirecionar para login com callbackUrl para voltar à página atual
+      const callbackUrl = encodeURIComponent(pathname)
+      router.push(`/login?callbackUrl=${callbackUrl}`)
+      return
+    }
+
+    // Usuário está logado - verificar se precisa mostrar dialog de finais de semana
     const hasExplicitDates = Boolean(startDate && endDate)
     if (!hasExplicitDates && !weekendSelectionConfirmed) {
       setIsWeekendDialogOpen(true)
@@ -199,6 +224,9 @@ export function SmartQuoteButton({
     finalizeAdd(includeWeekends)
   }, [
     isAvailable,
+    isAuthenticated,
+    pathname,
+    router,
     startDate,
     endDate,
     includeWeekends,

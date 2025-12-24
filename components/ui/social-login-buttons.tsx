@@ -50,7 +50,7 @@ export function SocialLoginButtons({
         variant="outline"
         onClick={() => handleSocialLogin('google')}
         disabled={isLoading || loadingProvider === 'google'}
-        className={`${buttonHeight} px-4 py-2 border-slate-300 hover:bg-slate-50 ${
+        className={`${buttonHeight} px-4 py-2 border-slate-300 ${
           loadingProvider === 'google' ? 'opacity-75' : ''
         }`}
       >
@@ -92,7 +92,7 @@ export function SocialLoginButtons({
         variant="outline"
         onClick={() => handleSocialLogin('facebook')}
         disabled={isLoading || loadingProvider === 'facebook'}
-        className={`${buttonHeight} px-4 py-2 border-slate-300 hover:bg-slate-50 ${
+        className={`${buttonHeight} px-4 py-2 border-slate-300 ${
           loadingProvider === 'facebook' ? 'opacity-75' : ''
         }`}
       >

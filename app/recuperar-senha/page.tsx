@@ -93,19 +93,17 @@ export default function RecuperarSenhaPage() {
                         setEmail('')
                       }}
                       variant="outline"
-                      className="w-full h-12 border-slate-300 hover:bg-slate-50"
+                      className="w-full h-12 border-slate-300"
                     >
                       Enviar Novamente
                     </Button>
 
-                    <Link href="/login">
-                      <Button
-                        variant="ghost"
-                        className="w-full h-12 text-slate-600 hover:text-slate-800 hover:bg-slate-50"
-                      >
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Voltar ao Login
-                      </Button>
+                    <Link
+                      href="/login"
+                      className="inline-flex items-center justify-center w-full h-12 text-sm text-slate-600 hover:text-orange-600 hover:underline transition-colors duration-200"
+                    >
+                      <ArrowLeft className="h-4 w-4 mr-2" />
+                      Voltar ao Login
                     </Link>
                   </div>
                 </div>
@@ -123,8 +121,8 @@ export default function RecuperarSenhaPage() {
         <div className="w-full max-w-md relative z-10">
           <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden">
             <CardHeader className="text-center space-y-3 py-6 px-6">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white shadow-xl">
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-60"></div>
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white shadow-xl relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-60 pointer-events-none"></div>
                 <span className="text-2xl font-bold tracking-tight relative z-10">
                   GB
                 </span>
@@ -181,7 +179,9 @@ export default function RecuperarSenhaPage() {
 
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none"
+                  variant="gradient"
+                  size="lg"
+                  className="w-full text-sm bg-[linear-gradient(to_right,#f97316,#ea580c,#f97316)] bg-[length:200%_100%] bg-left hover:bg-right shadow-md hover:scale-105 hover:shadow-lg transition-[background-position,transform,box-shadow] duration-500 ease-in-out"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -196,14 +196,12 @@ export default function RecuperarSenhaPage() {
               </form>
 
               <div className="text-center pt-4">
-                <Link href="/login">
-                  <Button
-                    variant="ghost"
-                    className="text-slate-600 hover:text-slate-800 hover:bg-slate-50"
-                  >
-                    <ArrowLeft className="h-4 w-4 mr-2" />
-                    Voltar ao Login
-                  </Button>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center text-sm text-slate-600 hover:text-orange-600 hover:underline transition-colors duration-200"
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Voltar ao Login
                 </Link>
               </div>
             </CardContent>

@@ -1,12 +1,41 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect } from 'react'
 
 export default function AuthCallback() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Obter callbackUrl dos searchParams
+  const callbackUrl = searchParams.get('callbackUrl')
+
+  // Função para redirecionar após login bem-sucedido
+  const redirectAfterLogin = useCallback(
+    (userEmail: string, userRole?: string) => {
+      // Se houver um callbackUrl válido, redirecionar para ele
+      if (callbackUrl) {
+        const decodedUrl = decodeURIComponent(callbackUrl)
+        // Verificar se é uma URL interna válida (não permitir redirecionamento externo)
+        if (decodedUrl.startsWith('/') && !decodedUrl.startsWith('//')) {
+          router.replace(decodedUrl)
+          return
+        }
+      }
+
+      // Redirecionamento padrão baseado no role
+      const isAdmin = userEmail === 'admin@gblocacoes.com.br' || userRole === 'ADMIN'
+
+      if (isAdmin) {
+        router.replace('/admin/dashboard')
+      } else {
+        router.replace('/area-cliente')
+      }
+    },
+    [callbackUrl, router]
+  )
 
   useEffect(() => {
     if (status === 'loading') {
@@ -19,19 +48,12 @@ export default function AuthCallback() {
     }
 
     if (session?.user) {
-      // Verificar se é admin baseado no email ou role
-      const isAdmin =
-        session.user?.email === 'admin@gblocacoes.com.br' ||
-        session.user?.role === 'ADMIN'
-
-      // Redirecionar baseado no role
-      if (isAdmin) {
-        router.replace('/admin/dashboard')
-      } else {
-        router.replace('/area-cliente')
-      }
+      redirectAfterLogin(
+        session.user.email || '',
+        session.user.role as string | undefined
+      )
     }
-  }, [session, status, router])
+  }, [session, status, router, redirectAfterLogin])
 
   return (
     <div className="flex h-screen items-center justify-center bg-slate-50">

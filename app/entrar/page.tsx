@@ -117,7 +117,7 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 md:-mt-[96px]">
-      <div className="flex min-h-screen items-center justify-center px-4 pb-8 md:px-6 md:pt-24 md:pb-8 xl:px-4 xl:py-20">
+      <div className="flex min-h-screen items-center justify-center  px-4 pb-8 md:px-6 md:pt-24 md:pb-8 lg:mt-3 xl:px-4 xl:py-20">
         {/* Container do login centralizado */}
         <div className="w-full pt-5 max-w-md relative z-10">
           <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in">
@@ -258,7 +258,7 @@ function LoginForm() {
                     variant="outline"
                     onClick={() => handleSocialLogin('google')}
                     disabled={isLoading}
-                    className="h-12 px-4 py-2 border-slate-300 hover:bg-slate-50"
+                    className="h-12 px-4 py-2 border-slate-300"
                   >
                     <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
                       <path
@@ -285,7 +285,7 @@ function LoginForm() {
                     variant="outline"
                     onClick={() => handleSocialLogin('facebook')}
                     disabled={isLoading}
-                    className="h-12 px-4 py-2 border-slate-300 hover:bg-slate-50"
+                    className="h-12 px-4 py-2 border-slate-300"
                   >
                     <svg
                       className="w-4 h-4 mr-2"
