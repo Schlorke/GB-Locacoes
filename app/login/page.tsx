@@ -251,7 +251,7 @@ function LoginForm() {
                   <div className="pt-1">
                     <Button
                       type="submit"
-                      className="w-full h-12 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white font-semibold text-sm shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:transform-none rounded-md"
+                      className="w-full h-12 bg-slate-700 hover:bg-slate-600 border border-slate-700 hover:border-slate-600 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 disabled:transform-none rounded-md"
                       disabled={isLoading}
                       aria-label="Entrar no Sistema"
                     >
@@ -291,7 +291,7 @@ function LoginForm() {
                           ? `/cadastro?callbackUrl=${encodeURIComponent(callbackUrl)}`
                           : '/cadastro'
                       }
-                      className="text-slate-700 hover:text-slate-900 font-medium underline"
+                      className="text-slate-700 hover:text-orange-600 font-medium underline transition-colors duration-200"
                     >
                       Cadastre-se
                     </Link>
@@ -299,7 +299,7 @@ function LoginForm() {
                   <div className="text-sm text-slate-600">
                     <Link
                       href="/recuperar-senha"
-                      className="text-slate-700 hover:text-slate-900 font-medium underline"
+                      className="text-slate-700 hover:text-orange-600 font-medium underline transition-colors duration-200"
                     >
                       Esqueceu sua senha?
                     </Link>
