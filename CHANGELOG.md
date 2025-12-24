@@ -94,6 +94,16 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Fixed 🐛
 
+- **Recuperacao de senha com pagina de reset e envio de email**: fluxo completo
+  para redefinir senha via link.
+  - **Problema**: email nao era enviado em dev e a rota `/reset-password` nao
+    existia
+  - **Solucao**: envio habilitado quando Resend esta configurado e nova pagina
+    de redefinicao
+  - **Arquivos modificados**: `app/api/auth/forgot-password/route.ts`,
+    `app/reset-password/page.tsx`, `docs/features/password-recovery-system.md`
+  - **Data**: 2025-12-24
+
 - **Clique em eventos do popover agregado abre dialog corretamente**: Ajustado o
   repasse do `CalendarEvent` para garantir que a dialog de detalhes abra quando
   um evento e selecionado no popover "+N".

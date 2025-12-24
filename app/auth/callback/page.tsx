@@ -2,9 +2,9 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect } from 'react'
+import { Suspense, useCallback, useEffect } from 'react'
 
-export default function AuthCallback() {
+function AuthCallbackContent() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -26,7 +26,8 @@ export default function AuthCallback() {
       }
 
       // Redirecionamento padrão baseado no role
-      const isAdmin = userEmail === 'admin@gblocacoes.com.br' || userRole === 'ADMIN'
+      const isAdmin =
+        userEmail === 'admin@gblocacoes.com.br' || userRole === 'ADMIN'
 
       if (isAdmin) {
         router.replace('/admin/dashboard')
@@ -65,5 +66,24 @@ export default function AuthCallback() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function AuthCallback() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center bg-slate-50">
+          <div className="text-center">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-orange-500 border-t-transparent mx-auto"></div>
+            <p className="mt-6 text-slate-700 font-medium text-lg">
+              Carregando...
+            </p>
+          </div>
+        </div>
+      }
+    >
+      <AuthCallbackContent />
+    </Suspense>
   )
 }

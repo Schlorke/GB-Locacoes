@@ -19,7 +19,13 @@ import { AlertTriangle, Eye, EyeOff } from 'lucide-react'
 import { getSession, signIn } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useCallback, useEffect, useState, type FormEvent } from 'react'
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useState,
+  type FormEvent,
+} from 'react'
 
 function LoginForm() {
   const router = useRouter()

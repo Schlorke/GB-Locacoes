@@ -5,6 +5,57 @@
 
 ---
 
+## 39. Recuperacao de senha nao enviava email e pagina de reset inexistente
+
+### ? Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-12-24 **Severidade**: Alta (Auth) **Status**: ?
+Resolvido
+
+#### Descricao
+
+A pagina `/recuperar-senha` retornava sucesso, mas o email nao era enviado em
+ambiente local e o link apontava para `/reset-password`, que nao existia.
+
+#### Sintomas
+
+- Mensagem de "Email enviado" sem recebimento de email
+- Link de recuperacao retornava 404
+- Token criado sem UI para redefinir senha
+
+#### Causa Raiz
+
+- Envio de email condicionado a `NODE_ENV === 'production'`
+- Rota `/reset-password` nao implementada
+
+### ? Solucao Implementada
+
+- Email de recuperacao enviado quando `RESEND_API_KEY` e `FROM_EMAIL` estao
+  configurados
+- Criada pagina `/reset-password` com formulario de nova senha e confirmacao
+- Fluxo conectado ao endpoint `/api/auth/reset-password`
+
+#### Arquivos Modificados
+
+1. `app/api/auth/forgot-password/route.ts`
+2. `app/reset-password/page.tsx`
+3. `docs/features/password-recovery-system.md`
+4. `docs/issues/known-issues.md`
+5. `CHANGELOG.md`
+
+#### Como Validar
+
+1. Solicitar recuperacao em `/recuperar-senha` com email valido
+2. Confirmar recebimento do link `/reset-password?token=...`
+3. Redefinir a senha e fazer login
+
+#### Armadilhas a Evitar
+
+- Reintroduzir bloqueio de email fora de producao
+- Alterar a rota do link sem atualizar o template do email
+
+---
+
 ## 38. Clique em eventos do popover agregado nao abre dialog
 
 ### ? Problema RESOLVIDO

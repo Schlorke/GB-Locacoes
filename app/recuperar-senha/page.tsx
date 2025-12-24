@@ -59,8 +59,8 @@ export default function RecuperarSenhaPage() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 -mt-[100px] md:-mt-[96px]">
         <div className="flex min-h-screen items-center justify-center px-4 pt-[120px] md:pt-0">
           <div className="w-full max-w-md relative z-10">
-            <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden">
-              <CardHeader className="text-center space-y-3 py-6 px-6">
+            <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in">
+              <CardHeader className="text-center space-y-3 py-6 px-6 animate-fade-in-up">
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 via-green-600 to-green-700 text-white shadow-xl">
                   <CheckCircle className="h-8 w-8" />
                 </div>
@@ -119,8 +119,8 @@ export default function RecuperarSenhaPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 -mt-[100px] md:-mt-[96px]">
       <div className="flex min-h-screen items-center justify-center px-4 pt-[120px] md:pt-0">
         <div className="w-full max-w-md relative z-10">
-          <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden">
-            <CardHeader className="text-center space-y-3 py-6 px-6">
+          <Card className="w-full shadow-2xl border-0 bg-white/95 backdrop-blur-sm rounded-2xl overflow-hidden animate-scale-in">
+            <CardHeader className="text-center space-y-3 py-6 px-6 animate-fade-in-up">
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 text-white shadow-xl relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-60 pointer-events-none"></div>
                 <span className="text-2xl font-bold tracking-tight relative z-10">
