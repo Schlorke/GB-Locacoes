@@ -52,7 +52,7 @@ const statusConfig: Record<
 > = {
   PENDING: {
     label: 'Pendente',
-    color: 'bg-yellow-100 text-yellow-800',
+    color: 'bg-orange-100 text-orange-800',
     icon: Clock,
     statusKey: 'pending',
   },

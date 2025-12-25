@@ -8,6 +8,37 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Changed 🔄
+
+- **Reorganização do Card "Meu Carrinho" no Dashboard**: Layout do card de
+  carrinho melhorado para agrupar itens e total
+  - Itens do carrinho agora ficam DENTRO do bloco laranja de "Total Estimado"
+  - Cards de itens com fundo branco e borda laranja para melhor contraste
+  - Botões "Ver Carrinho" e "Adicionar Mais" sempre fixos na parte inferior
+  - Separador visual entre lista de itens e total com borda laranja
+  - **Arquivo Modificado**: `app/area-cliente/page.tsx`
+  - **Data**: 2025-12-25
+
+- **Refatoração das Páginas de Locações para Seguir o Design System**: Páginas
+  `locacoes/page.tsx` e `locacoes/[id]/page.tsx` refatoradas para consistência
+  visual
+  - **Problema**: As páginas de locações (Minhas Locações e Detalhes da Locação)
+    não seguiam o design system estabelecido nas outras páginas da área do
+    cliente (orçamentos, histórico)
+  - **Correções Aplicadas**:
+    - Adicionada Hero Section com gradiente laranja consistente e onda SVG
+    - Botão "Voltar" movido para dentro do Hero Section
+    - Implementado componente `SearchBar` para filtros de busca e status
+    - Substituído `Badge` por `ClientAreaBadge` para consistência
+    - Cards refatorados com gradientes de background e sombras consistentes
+    - Stats badges integrados na Hero Section em vez de cards separados
+    - Animações motion consistentes com delay escalonado
+    - Layout responsivo seguindo padrões mobile-first do projeto
+  - **Arquivos Modificados**:
+    - `app/area-cliente/locacoes/page.tsx` - Lista de locações
+    - `app/area-cliente/locacoes/[id]/page.tsx` - Detalhes da locação
+  - **Data**: 2025-12-25
+
 ### Added ✨
 
 - **Verificação de Autenticação ao Solicitar Orçamento**: Implementada

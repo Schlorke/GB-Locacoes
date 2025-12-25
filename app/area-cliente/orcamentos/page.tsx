@@ -77,7 +77,7 @@ const statusConfig: Record<
 > = {
   pending: {
     label: 'Pendente',
-    color: 'bg-yellow-100 text-yellow-800',
+    color: 'bg-orange-100 text-orange-800',
     icon: Clock,
     dotColor: 'bg-yellow-500',
   },
@@ -519,7 +519,7 @@ export default function OrcamentosPage() {
                                         Aprovada
                                       </Badge>
                                     ) : (
-                                      <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                                      <Badge className="bg-orange-100 text-orange-800 border-orange-200">
                                         Pendente Aprovação
                                       </Badge>
                                     )}

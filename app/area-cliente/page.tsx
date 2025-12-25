@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -23,10 +24,14 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import Link from 'next/link'
-import { useCartStore } from '@/stores/useCartStore'
+import { useCartStore, type CartItem } from '@/stores/useCartStore'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { format } from 'date-fns'
+import { ptBR } from 'date-fns/locale'
+import { getAutoRentalDateRange } from '@/lib/rental-date-utils'
+import { getPricingConfig, calculateIntelligentPrice } from '@/lib/pricing'
 
 interface Rental {
   id: string
@@ -62,7 +67,7 @@ const statusConfig: Record<
 > = {
   PENDING: {
     label: 'Pendente',
-    color: 'bg-yellow-100 text-yellow-800',
+    color: 'bg-orange-100 text-orange-800',
     icon: Clock,
   },
   ACTIVE: {
@@ -84,10 +89,11 @@ const statusConfig: Record<
 
 export default function AreaClientePage() {
   const { data: session } = useSession()
-  const { getItemCount, getTotalPrice } = useCartStore()
+  const { getItemCount, getTotalPrice, items: cartItems } = useCartStore()
   const [rentals, setRentals] = useState<Rental[]>([])
   const [loading, setLoading] = useState(true)
   const [quotesCount, setQuotesCount] = useState(0)
+  const requestReferenceDate = useRef(new Date())
 
   useEffect(() => {
     if (session?.user) {
@@ -152,6 +158,61 @@ export default function AreaClientePage() {
     } catch {
       return 'Data inválida'
     }
+  }
+
+  // Helper para formatar datas do carrinho (trata Date ou string do localStorage)
+  const formatCartDate = useCallback(
+    (date: Date | string | undefined): string => {
+      if (!date) return ''
+      const dateObj = typeof date === 'string' ? new Date(date) : date
+      if (isNaN(dateObj.getTime())) return ''
+      return format(dateObj, 'dd/MM/yyyy', { locale: ptBR })
+    },
+    []
+  )
+
+  const resolveDateRange = (equipment: CartItem) => {
+    if (equipment.startDate && equipment.endDate) {
+      const startDate =
+        equipment.startDate instanceof Date
+          ? equipment.startDate
+          : new Date(equipment.startDate)
+      const endDate =
+        equipment.endDate instanceof Date
+          ? equipment.endDate
+          : new Date(equipment.endDate)
+
+      return { startDate, endDate, isAuto: false }
+    }
+
+    const days = Number(equipment.days) || 1
+    const includeWeekends = equipment.includeWeekends ?? false
+    const { startDate, endDate } = getAutoRentalDateRange({
+      requestDate: requestReferenceDate.current,
+      days,
+      includeWeekends,
+    })
+
+    return { startDate, endDate, isAuto: true }
+  }
+
+  const calculateSubtotal = (equipment: CartItem) => {
+    const quantity = Number(equipment.quantity) || 1
+    const days = Number(equipment.days) || 1
+    const intelligentPrice = calculateIntelligentPrice(equipment, days)
+    return intelligentPrice * quantity
+  }
+
+  const getEquipmentImage = (equipment: CartItem) => {
+    if (
+      equipment.images &&
+      equipment.images.length > 0 &&
+      equipment.images[0] &&
+      equipment.images[0].trim() !== ''
+    ) {
+      return equipment.images[0]
+    }
+    return `/placeholder.svg?height=60&width=60&text=${encodeURIComponent(equipment.equipmentName)}`
   }
 
   const activeRentals = rentals.filter(
@@ -296,7 +357,7 @@ export default function AreaClientePage() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             {/* Meu Carrinho - Layout com Botões no Fundo */}
-            <Card className="relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full border-0">
+            <Card className="relative overflow-visible bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col h-full border-0">
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
@@ -305,41 +366,125 @@ export default function AreaClientePage() {
                   Meu Carrinho
                 </CardTitle>
               </CardHeader>
-              <CardContent className="relative z-10 pb-8 pt-0 flex flex-col flex-1">
+              <CardContent className="relative z-10 p-6 lg:px-6 pt-0 pb-8 flex flex-col flex-1 overflow-visible">
                 {getItemCount() > 0 ? (
-                  <div className="flex flex-col flex-1 min-h-0">
-                    {/* Área central com total estimado */}
-                    <div className="flex flex-col flex-1 justify-center pt-0 text-center py-8">
-                      <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
-                        <div className="text-center">
-                          <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-1">
-                            Total estimado
+                  <div className="flex flex-col flex-1 min-h-0 overflow-visible">
+                    {/* Bloco unificado com itens e total */}
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-md flex-1 overflow-visible">
+                      {/* Lista de itens do carrinho - padding para sombras */}
+                      <div className="space-y-4 p-5 max-h-[300px] overflow-y-auto">
+                        {cartItems.map((equipment, index) => {
+                          const displayRange = resolveDateRange(equipment)
+                          const pricingConfig = getPricingConfig(
+                            equipment,
+                            equipment.days
+                          )
+                          const actualPeriodLabel =
+                            pricingConfig.period === 'daily'
+                              ? 'Diário'
+                              : pricingConfig.period === 'weekly'
+                                ? 'Semanal'
+                                : pricingConfig.period === 'biweekly'
+                                  ? 'Quinzenal'
+                                  : pricingConfig.period === 'monthly'
+                                    ? 'Mensal'
+                                    : 'Diário'
+                          const finalPrice = calculateSubtotal(equipment)
+
+                          return (
+                            <div
+                              key={`cart-item-${equipment.equipmentId}-${index}`}
+                              className="flex gap-3 p-4 bg-gray-50 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+                            >
+                              {/* Thumbnail */}
+                              <div className="flex-shrink-0">
+                                <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-gray-100">
+                                  <Image
+                                    src={getEquipmentImage(equipment)}
+                                    alt={equipment.equipmentName}
+                                    fill
+                                    className="object-cover"
+                                    sizes="56px"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Detalhes */}
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-gray-900 text-sm leading-tight mb-1">
+                                  {equipment.equipmentName}
+                                </p>
+                                <div className="flex flex-wrap gap-1 mb-1">
+                                  <span className="text-xs text-gray-600 font-medium">
+                                    Qtd: {equipment.quantity}x
+                                  </span>
+                                  <span className="text-xs text-gray-400">
+                                    ·
+                                  </span>
+                                  <span className="text-xs text-orange-600 font-medium">
+                                    {actualPeriodLabel}
+                                  </span>
+                                  <span className="text-xs text-gray-400">
+                                    ·
+                                  </span>
+                                  <span className="text-xs text-gray-600 font-medium">
+                                    {equipment.days} dias
+                                  </span>
+                                </div>
+                                {displayRange && (
+                                  <div className="text-xs text-gray-600 mb-1">
+                                    {formatCartDate(displayRange.startDate)} até{' '}
+                                    {formatCartDate(displayRange.endDate)}
+                                    {displayRange.isAuto && (
+                                      <span className="text-[10px] text-gray-500">
+                                        {' '}
+                                        (previsto)
+                                      </span>
+                                    )}
+                                  </div>
+                                )}
+                                <div className="text-sm font-semibold text-green-600">
+                                  {formatCurrency(finalPrice)}
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+
+                      {/* Total estimado - Separador e valor */}
+                      <div className="border-t-2 border-orange-200 mx-5 pt-3 pb-5">
+                        <div className="flex justify-between items-center">
+                          <p className="text-sm font-semibold text-orange-700 uppercase tracking-wide">
+                            Total Estimado
                           </p>
-                          <p className="text-3xl md:text-3xl font-bold text-orange-600 leading-none">
-                            R$ {getTotalPrice().toFixed(2)}
+                          <p className="text-xl md:text-2xl font-bold text-orange-600">
+                            {formatCurrency(getTotalPrice())}
                           </p>
                         </div>
                       </div>
                     </div>
+
                     {/* Botões fixos na parte inferior */}
-                    <div className="flex flex-col sm:flex-row justify-center gap-2 ">
+                    <div className="flex flex-col sm:flex-row justify-center gap-2 mt-6">
                       <Button
                         size="default"
                         asChild
                         className="w-full sm:flex-1 h-10"
                       >
                         <Link href="/orcamento">
-                          <ShoppingCart className="h-4 w-4 " />
+                          <ShoppingCart className="h-4 w-4 mr-2" />
                           Ver Carrinho
                         </Link>
                       </Button>
                       <Button
                         size="default"
+                        variant="outline"
                         asChild
-                        className="w-full sm:flex-1 h-10 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200"
+                        className="w-full sm:flex-1 h-10 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200 hover:border-gray-200 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0"
                       >
                         <Link href="/equipamentos">
-                          <Plus className="h-4 w-4 " />
+                          <Plus className="h-4 w-4 mr-2" />
                           Adicionar Mais
                         </Link>
                       </Button>
@@ -357,11 +502,11 @@ export default function AreaClientePage() {
                       </div>
                     </div>
                     {/* Botão fixo na parte inferior */}
-                    <div className="flex justify-center px-4">
+                    <div className="flex justify-center mt-auto">
                       <Button
                         size="default"
                         asChild
-                        className="w-full max-w-xs h-10 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200"
+                        className="w-full h-10 bg-white text-gray-900 hover:bg-white hover:text-orange-600 border border-gray-200 hover:border-gray-200 focus:ring-0 focus:ring-offset-0 focus-visible:ring-0"
                       >
                         <Link href="/equipamentos">
                           <Plus className="h-4 w-4" />
@@ -391,73 +536,79 @@ export default function AreaClientePage() {
                     <Clock className="h-8 w-8 text-gray-300 animate-spin" />
                   </div>
                 ) : activeRentals.length > 0 ? (
-                  <div className="flex flex-col flex-1 min-h-0 space-y-3">
-                    {activeRentals.slice(0, 3).map((rental) => {
-                      const StatusIcon =
-                        statusConfig[rental.status]?.icon || Clock
-                      return (
-                        <div
-                          key={rental.id}
-                          className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-300 transition-colors"
-                        >
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="flex-1">
-                              <p className="font-semibold text-gray-900">
-                                {rental.rental_items[0]?.equipments.name ||
-                                  'Equipamento'}
-                                {rental.rental_items.length > 1 &&
-                                  ` +${rental.rental_items.length - 1}`}
-                              </p>
-                              <p className="text-sm text-gray-500">
-                                {formatDate(rental.startdate)} -{' '}
-                                {formatDate(rental.enddate)}
-                              </p>
-                            </div>
-                            <Badge
-                              variant="outline"
-                              className={cn(
-                                'text-xs',
-                                statusConfig[rental.status]?.color
-                              )}
-                            >
-                              <StatusIcon className="w-3 h-3 mr-1" />
-                              {statusConfig[rental.status]?.label}
-                            </Badge>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-green-600">
-                              {formatCurrency(rental.total)}
-                            </span>
-                            <Button variant="ghost" size="sm" asChild>
-                              <Link
-                                href={`/area-cliente/locacoes/${rental.id}`}
+                  <div className="flex flex-col flex-1 min-h-0">
+                    {/* Lista de locações - pode crescer */}
+                    <div className="space-y-3 flex-1 min-h-0">
+                      {activeRentals.slice(0, 3).map((rental) => {
+                        const StatusIcon =
+                          statusConfig[rental.status]?.icon || Clock
+                        return (
+                          <div
+                            key={rental.id}
+                            className="p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300"
+                          >
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex-1">
+                                <p className="font-semibold text-gray-900">
+                                  {rental.rental_items[0]?.equipments.name ||
+                                    'Equipamento'}
+                                  {rental.rental_items.length > 1 &&
+                                    ` +${rental.rental_items.length - 1}`}
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                  {formatDate(rental.startdate)} -{' '}
+                                  {formatDate(rental.enddate)}
+                                </p>
+                              </div>
+                              <Badge
+                                variant="outline"
+                                className={cn(
+                                  'text-xs',
+                                  statusConfig[rental.status]?.color
+                                )}
                               >
-                                <Eye className="w-4 h-4 mr-1" />
-                                Ver
-                              </Link>
-                            </Button>
+                                <StatusIcon className="w-3 h-3 mr-1" />
+                                {statusConfig[rental.status]?.label}
+                              </Badge>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-green-600">
+                                {formatCurrency(rental.total)}
+                              </span>
+                              <Button variant="ghost" size="sm" asChild>
+                                <Link
+                                  href={`/area-cliente/locacoes/${rental.id}`}
+                                >
+                                  <Eye className="w-4 h-4 mr-1" />
+                                  Ver
+                                </Link>
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      )
-                    })}
-                    {activeRentals.length > 3 && (
-                      <Button variant="outline" className="w-full" asChild>
-                        <Link href="/area-cliente/locacoes">
-                          Ver todas as locações ({rentals.length})
-                        </Link>
-                      </Button>
-                    )}
-                    {activeRentals.length <= 3 && rentals.length > 3 && (
-                      <Button variant="outline" className="w-full" asChild>
-                        <Link href="/area-cliente/locacoes">
-                          Ver todas as locações ({rentals.length})
-                        </Link>
-                      </Button>
-                    )}
+                        )
+                      })}
+                    </div>
+                    {/* Botão fixo na parte inferior */}
+                    <div className="mt-auto pt-4">
+                      {activeRentals.length > 3 && (
+                        <Button variant="outline" className="w-full" asChild>
+                          <Link href="/area-cliente/locacoes">
+                            Ver todas as locações ({rentals.length})
+                          </Link>
+                        </Button>
+                      )}
+                      {activeRentals.length <= 3 && rentals.length > 3 && (
+                        <Button variant="outline" className="w-full" asChild>
+                          <Link href="/area-cliente/locacoes">
+                            Ver todas as locações ({rentals.length})
+                          </Link>
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-col flex-1 min-h-0">
-                    <div className="flex flex-col flex-1 justify-center items-center text-center px-4 py-8">
+                    <div className="flex flex-col flex-1 justify-center items-center text-center py-8">
                       <div className="space-y-4">
                         <Package className="h-12 w-12 md:h-14 md:w-14 text-gray-300 mx-auto" />
                         <p className="text-base md:text-lg font-medium text-gray-500">
