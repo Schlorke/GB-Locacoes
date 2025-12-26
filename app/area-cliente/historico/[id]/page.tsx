@@ -29,6 +29,7 @@ import {
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { RentalTimeline } from '@/components/client/rental-timeline'
+import { usePublicSettings } from '@/hooks/use-public-settings'
 
 interface Rental {
   id: string
@@ -125,6 +126,16 @@ export default function RentalDetailsPage() {
   const router = useRouter()
   const [rental, setRental] = useState<Rental | null>(null)
   const [loading, setLoading] = useState(true)
+  const { settings } = usePublicSettings()
+
+  // Formata telefone para formato tel: (remove caracteres especiais e adiciona +55)
+  const formatPhoneForTel = (phone: string): string => {
+    const cleanPhone = phone.replace(/\D/g, '')
+    if (cleanPhone.startsWith('55')) {
+      return `+${cleanPhone}`
+    }
+    return `+55${cleanPhone}`
+  }
 
   const fetchRental = useCallback(async () => {
     try {
@@ -808,7 +819,9 @@ export default function RentalDetailsPage() {
                       className="w-full bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-medium rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200"
                       asChild
                     >
-                      <Link href={`tel:+5551999999999`}>
+                      <Link
+                        href={`tel:${formatPhoneForTel(settings.whatsappNumber)}`}
+                      >
                         <Phone className="w-4 h-4 mr-2" />
                         Entrar em Contato
                       </Link>
