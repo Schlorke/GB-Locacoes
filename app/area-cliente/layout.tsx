@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Loader2 } from 'lucide-react'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 export default function AreaClienteLayout({
   children,
@@ -28,6 +29,7 @@ export default function AreaClienteLayout({
   const router = useRouter()
   const pathname = usePathname()
   const [unreadNotifications, setUnreadNotifications] = useState(0)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     // Só redirecionar se não estiver carregando e não houver sessão
@@ -68,30 +70,52 @@ export default function AreaClienteLayout({
     }
   }, [])
 
-  // Ajustar scroll quando navegando de páginas externas
+  // Altura do header fixo (top bar ~40px + main header 64px = 104px)
+  const HEADER_HEIGHT = 104
+
+  // Função para fazer scroll para o banner com retry
+  const scrollToBanner = (maxRetries = 10, delay = 50) => {
+    let retries = 0
+
+    const tryScroll = () => {
+      const element = document.getElementById('dashboard-banner')
+      if (element) {
+        const elementPosition = element.offsetTop
+        const offsetPosition = elementPosition - HEADER_HEIGHT
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth',
+        })
+        return true
+      }
+
+      retries++
+      if (retries < maxRetries) {
+        setTimeout(tryScroll, delay)
+      }
+      return false
+    }
+
+    // Primeiro aguardar um frame para garantir que o DOM está pronto
+    requestAnimationFrame(() => {
+      setTimeout(tryScroll, delay)
+    })
+  }
+
+  // Ajustar scroll quando o pathname muda (navegação entre páginas)
+  // Apenas no modo mobile
   useEffect(() => {
+    if (!isMobile) return // Não fazer scroll no desktop
+
     const adjustScrollAfterLoad = sessionStorage.getItem(
       'adjustScrollAfterLoad'
     )
     if (adjustScrollAfterLoad) {
       sessionStorage.removeItem('adjustScrollAfterLoad')
-
-      // Aguardar um pouco para garantir que a página carregou completamente
-      setTimeout(() => {
-        const element = document.getElementById(adjustScrollAfterLoad)
-        if (element) {
-          const headerHeight = 84 // Altura do header fixo
-          const elementPosition = element.offsetTop
-          const offsetPosition = elementPosition - headerHeight
-
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth',
-          })
-        }
-      }, 100)
+      scrollToBanner()
     }
-  }, [])
+  }, [pathname, isMobile]) // Re-executa quando o pathname muda ou quando isMobile muda
 
   if (status === 'loading') {
     return (
@@ -211,15 +235,19 @@ export default function AreaClienteLayout({
                               : 'text-gray-700 hover:bg-gray-50 hover:text-orange-600'
                           }`}
                           onClick={(e) => {
-                            // Se for a mesma página, fazer scroll suave para o topo
+                            // Apenas fazer scroll no modo mobile
+                            if (!isMobile) return
+
+                            // Se for a mesma página, fazer scroll suave para o banner
                             if (item.href === pathname) {
                               e.preventDefault()
-                              // Simplesmente fazer scroll para o topo da página
-                              // O padding-top já compensa o header fixo
-                              window.scrollTo({
-                                top: 0,
-                                behavior: 'smooth',
-                              })
+                              scrollToBanner(1, 0) // Imediato, sem retry
+                            } else {
+                              // Navegando para outra página: marcar para ajustar scroll após carregar
+                              sessionStorage.setItem(
+                                'adjustScrollAfterLoad',
+                                'dashboard-banner'
+                              )
                             }
                           }}
                         >

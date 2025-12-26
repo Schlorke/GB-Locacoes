@@ -229,7 +229,10 @@ export default function HistoricoPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-[84px] sm:pt-0">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden w-screen -ml-4 sm:w-full sm:ml-0">
+      <section
+        id="dashboard-banner"
+        className="relative bg-gradient-to-br from-orange-600 via-orange-700 to-orange-800 text-white overflow-hidden w-screen -ml-4 sm:w-full sm:ml-0"
+      >
         {/* Elementos animados de background removidos nesta seção da área do cliente */}
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">

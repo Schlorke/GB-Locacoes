@@ -126,6 +126,27 @@ export default function AreaClientePage() {
   )
   const requestReferenceDate = useRef(new Date())
 
+  const fetchQuotesCount = useCallback(async () => {
+    try {
+      // Fetch quotes from the quotes API (authenticated user)
+      const response = await fetch('/api/quotes?userId=' + session?.user?.id)
+      if (response.ok) {
+        const data = await response.json()
+        // If it's an array, count it; otherwise try to get count from response
+        if (Array.isArray(data)) {
+          setQuotesCount(data.length)
+        } else if (data.quotes && Array.isArray(data.quotes)) {
+          setQuotesCount(data.quotes.length)
+        } else if (typeof data.count === 'number') {
+          setQuotesCount(data.count)
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching quotes count:', error)
+      // Don't show error to user, just keep default 0
+    }
+  }, [session?.user?.id])
+
   useEffect(() => {
     if (session?.user) {
       fetchRentals()
@@ -142,7 +163,7 @@ export default function AreaClientePage() {
         }
       }
     }
-  }, [session])
+  }, [session, fetchQuotesCount])
 
   const fetchRentals = async () => {
     try {
@@ -158,27 +179,6 @@ export default function AreaClientePage() {
       setRentals([])
     } finally {
       setLoading(false)
-    }
-  }
-
-  const fetchQuotesCount = async () => {
-    try {
-      // Fetch quotes from the quotes API
-      const response = await fetch('/api/orcamentos')
-      if (response.ok) {
-        const data = await response.json()
-        // If it's an array, count it; otherwise try to get count from response
-        if (Array.isArray(data)) {
-          setQuotesCount(data.length)
-        } else if (data.quotes && Array.isArray(data.quotes)) {
-          setQuotesCount(data.quotes.length)
-        } else if (typeof data.count === 'number') {
-          setQuotesCount(data.count)
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching quotes count:', error)
-      // Don't show error to user, just keep default 0
     }
   }
 
@@ -673,7 +673,7 @@ export default function AreaClientePage() {
 
             {/* Minhas Locações - Layout com Lista */}
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col h-full border-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-50"></div>
+              <div className="absolute inset-0 bg-white"></div>
               <CardHeader className="relative z-10 pb-6 md:pb-8">
                 <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
                   <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg text-white">
