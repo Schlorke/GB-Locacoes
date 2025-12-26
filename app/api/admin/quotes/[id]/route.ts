@@ -111,6 +111,7 @@ export async function PATCH(
       priceAdjustmentReason,
       lateFee,
       lateFeeApproved,
+      rejectionReason,
       ...updateData
     } = body
 
@@ -337,6 +338,9 @@ export async function PATCH(
     if (status === 'REJECTED' && currentQuote.status !== 'REJECTED') {
       updateQuoteData.status = 'REJECTED'
       updateQuoteData.rejectedAt = new Date()
+      if (rejectionReason && rejectionReason.trim()) {
+        updateQuoteData.rejectionReason = rejectionReason.trim()
+      }
       if (session?.user?.id) {
         updateQuoteData.rejectedBy = session.user.id
       } else {
@@ -401,6 +405,9 @@ export async function PATCH(
     if (updateQuoteData.rejectedBy) {
       cleanUpdateData.rejectedBy = updateQuoteData.rejectedBy
     }
+    if (updateQuoteData.rejectionReason) {
+      cleanUpdateData.rejectionReason = updateQuoteData.rejectionReason
+    }
     if (updateQuoteData.convertedToRentalId) {
       cleanUpdateData.convertedToRentalId = updateQuoteData.convertedToRentalId
     }
@@ -457,7 +464,8 @@ export async function PATCH(
             quote.finalTotal ? Number(quote.finalTotal) : null,
             quote.priceAdjustmentReason || null,
             quote.lateFee ? Number(quote.lateFee) : null,
-            quote.lateFeeApproved || false
+            quote.lateFeeApproved || false,
+            quote.rejectionReason || null
           ),
         })
       } catch (emailError) {

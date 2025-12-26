@@ -44,6 +44,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { CurrencyInput } from '@/components/ui/currency-input'
 import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Suspense, useCallback, useEffect, useRef, useState } from 'react'
 
 interface Quote {
@@ -86,6 +87,7 @@ interface Quote {
   createdAt: string
   updatedAt: string
   rejectedAt?: string | null
+  rejectionReason?: string | null
   originalTotal?: number
   finalTotal?: number | null
   priceAdjustmentReason?: string | null
@@ -181,6 +183,9 @@ function AdminQuotesPage() {
     lateFee: number
     daysLate: number
   } | null>(null)
+  const [showRejectDialog, setShowRejectDialog] = useState(false)
+  const [rejectWithReason, setRejectWithReason] = useState(false)
+  const [rejectionReason, setRejectionReason] = useState('')
 
   // Controle de animação determinística para tabela (evita flick/flash e garante
   // entrada/saída escalonadas ao aplicar filtros).
@@ -307,9 +312,17 @@ function AdminQuotesPage() {
 
   useEffect(() => {
     setNestedDialogOpen(
-      showDeleteDialog || showPriceAdjustmentDialog || showLateFeeDialog
+      showDeleteDialog ||
+        showPriceAdjustmentDialog ||
+        showLateFeeDialog ||
+        showRejectDialog
     )
-  }, [showDeleteDialog, showPriceAdjustmentDialog, showLateFeeDialog])
+  }, [
+    showDeleteDialog,
+    showPriceAdjustmentDialog,
+    showLateFeeDialog,
+    showRejectDialog,
+  ])
 
   useEffect(() => {
     if (!selectedQuote) {
@@ -319,24 +332,36 @@ function AdminQuotesPage() {
       setCalculatedLateFee(null)
       setPriceAdjustmentValue(0)
       setPriceAdjustmentReason('')
+      setShowRejectDialog(false)
+      setRejectWithReason(false)
+      setRejectionReason('')
     }
   }, [selectedQuote])
 
   const updateQuoteStatus = async (
     quoteId: string,
-    newStatus: 'approved' | 'rejected'
+    newStatus: 'approved' | 'rejected',
+    rejectionReason?: string
   ) => {
     try {
       setIsUpdating(true)
       setUpdatingAction(newStatus)
       // Converter para maiúsculas conforme esperado pela API (enum QuoteStatus)
       const statusUpperCase = newStatus.toUpperCase() as 'APPROVED' | 'REJECTED'
+      const body: { status: string; rejectionReason?: string } = {
+        status: statusUpperCase,
+      }
+
+      if (newStatus === 'rejected' && rejectionReason) {
+        body.rejectionReason = rejectionReason
+      }
+
       const response = await fetch(`/api/admin/quotes/${quoteId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ status: statusUpperCase }),
+        body: JSON.stringify(body),
       })
 
       if (!response.ok) {
@@ -345,6 +370,9 @@ function AdminQuotesPage() {
 
       await fetchQuotes()
       setSelectedQuote(null)
+      setShowRejectDialog(false)
+      setRejectWithReason(false)
+      setRejectionReason('')
 
       toast.success('Sucesso!', {
         description: `Orçamento ${newStatus === 'approved' ? 'aprovado' : 'rejeitado'} com sucesso!`,
@@ -357,6 +385,19 @@ function AdminQuotesPage() {
     } finally {
       setIsUpdating(false)
       setUpdatingAction(null)
+    }
+  }
+
+  const handleRejectClick = () => {
+    setShowRejectDialog(true)
+    setRejectWithReason(false)
+    setRejectionReason('')
+  }
+
+  const handleConfirmReject = () => {
+    if (selectedQuote) {
+      const reason = rejectWithReason ? rejectionReason : undefined
+      updateQuoteStatus(selectedQuote.id, 'rejected', reason)
     }
   }
 
@@ -890,28 +931,27 @@ function AdminQuotesPage() {
                             </td>
                           </motion.tr>
                         ))}
+                      {(!Array.isArray(tableQuotes) ||
+                        tableQuotes.length === 0) && (
+                        <tr>
+                          <td colSpan={7} className="p-12">
+                            <div className="text-center">
+                              <div className="text-gray-400 mb-4">
+                                <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                                <p className="text-lg font-medium text-gray-600 mb-2">
+                                  Nenhum orçamento encontrado
+                                </p>
+                                <p className="text-sm text-gray-500">
+                                  Tente ajustar os filtros ou aguarde novos
+                                  orçamentos
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
-
-                  {(!Array.isArray(tableQuotes) ||
-                    tableQuotes.length === 0) && (
-                    <tr>
-                      <td colSpan={7} className="p-12">
-                        <div className="text-center">
-                          <div className="text-gray-400 mb-4">
-                            <FileText className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                            <p className="text-lg font-medium text-gray-600 mb-2">
-                              Nenhum orçamento encontrado
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              Tente ajustar os filtros ou aguarde novos
-                              orçamentos
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
                 </div>
               </CardContent>
             </Card>
@@ -1270,6 +1310,32 @@ function AdminQuotesPage() {
                                     )}
                                   </div>
                                 </div>
+                                {/* Motivo da Rejeição */}
+                                {selectedQuote.status === 'rejected' &&
+                                  selectedQuote.rejectionReason &&
+                                  selectedQuote.rejectionReason.trim() && (
+                                    <div className="mt-4 pt-4 border-t border-gray-200">
+                                      <div className="flex items-start gap-2">
+                                        <XCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                                        <div className="flex-1">
+                                          <div className="text-xs font-semibold text-red-700 mb-1">
+                                            Motivo da Rejeição
+                                          </div>
+                                          <div className="text-sm text-red-900 leading-relaxed">
+                                            {selectedQuote.rejectionReason}
+                                          </div>
+                                          {selectedQuote.rejectedAt && (
+                                            <div className="text-xs text-red-600 mt-2">
+                                              Rejeitado em:{' '}
+                                              {new Date(
+                                                selectedQuote.rejectedAt
+                                              ).toLocaleString('pt-BR')}
+                                            </div>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
                               </CardContent>
                             </Card>
                           </div>
@@ -1784,6 +1850,101 @@ function AdminQuotesPage() {
                           </Dialog.Root>
 
                           <Dialog.Root
+                            open={showRejectDialog}
+                            onOpenChange={setShowRejectDialog}
+                          >
+                            <Dialog.Portal>
+                              <Dialog.Backdrop />
+                              <Dialog.Popup
+                                variant="default"
+                                className="max-w-md h-auto max-h-[70vh] md:h-auto md:max-h-[70vh]"
+                              >
+                                <Dialog.Content>
+                                  <Dialog.Header className="flex-col items-start gap-1 pb-3">
+                                    <Dialog.CloseButton />
+                                    <Dialog.Title className="text-lg font-semibold text-gray-900">
+                                      Rejeitar Orçamento?
+                                    </Dialog.Title>
+                                  </Dialog.Header>
+                                  <Dialog.Body className="flex-none">
+                                    <Dialog.BodyViewport className="max-h-[50vh] overflow-y-auto">
+                                      <Dialog.BodyContent className="space-y-4 py-2">
+                                        <p className="text-sm text-gray-600">
+                                          Tem certeza que deseja rejeitar o
+                                          orçamento de{' '}
+                                          <strong>{selectedQuote?.name}</strong>
+                                          ? Esta ação enviará um email ao
+                                          cliente informando sobre a rejeição.
+                                        </p>
+                                        <div className="flex items-start gap-3 pt-2">
+                                          <Checkbox
+                                            id="reject-with-reason"
+                                            checked={rejectWithReason}
+                                            onCheckedChange={(checked) =>
+                                              setRejectWithReason(
+                                                checked === true
+                                              )
+                                            }
+                                            className="mt-1 data-[state=checked]:bg-slate-700 data-[state=checked]:border-slate-700"
+                                          />
+                                          <div className="flex-1 space-y-2">
+                                            <Label
+                                              htmlFor="reject-with-reason"
+                                              className="text-sm font-medium text-gray-900 cursor-pointer"
+                                            >
+                                              Adicionar motivo da rejeição
+                                            </Label>
+                                            {rejectWithReason && (
+                                              <Textarea
+                                                placeholder="Digite o motivo da rejeição do orçamento..."
+                                                value={rejectionReason}
+                                                onChange={(e) =>
+                                                  setRejectionReason(
+                                                    e.target.value
+                                                  )
+                                                }
+                                                className="min-h-[100px] resize-none border-gray-200"
+                                              />
+                                            )}
+                                          </div>
+                                        </div>
+                                      </Dialog.BodyContent>
+                                    </Dialog.BodyViewport>
+                                  </Dialog.Body>
+                                  <Dialog.Footer className="flex flex-row gap-3">
+                                    <Button
+                                      variant="outline"
+                                      onClick={() => {
+                                        setShowRejectDialog(false)
+                                        setRejectWithReason(false)
+                                        setRejectionReason('')
+                                      }}
+                                      disabled={isUpdating}
+                                      className="flex-1"
+                                    >
+                                      Cancelar
+                                    </Button>
+                                    <Button
+                                      variant="default"
+                                      onClick={handleConfirmReject}
+                                      disabled={
+                                        isUpdating ||
+                                        (rejectWithReason &&
+                                          !rejectionReason.trim())
+                                      }
+                                      className="flex-1"
+                                    >
+                                      {updatingAction === 'rejected'
+                                        ? 'Rejeitando...'
+                                        : 'Confirmar Rejeição'}
+                                    </Button>
+                                  </Dialog.Footer>
+                                </Dialog.Content>
+                              </Dialog.Popup>
+                            </Dialog.Portal>
+                          </Dialog.Root>
+
+                          <Dialog.Root
                             open={showPriceAdjustmentDialog}
                             onOpenChange={setShowPriceAdjustmentDialog}
                           >
@@ -2013,9 +2174,7 @@ function AdminQuotesPage() {
                         {selectedQuote.status === 'pending' && (
                           <div className="flex gap-3">
                             <Button
-                              onClick={() =>
-                                updateQuoteStatus(selectedQuote.id, 'rejected')
-                              }
+                              onClick={handleRejectClick}
                               disabled={isUpdating}
                               variant="outline"
                               size="default"
@@ -2069,7 +2228,8 @@ function AdminQuotesPage() {
                             <Edit className="w-4 h-4 mr-2" />
                             Ajustar Valor Final
                           </Button>
-                          {selectedQuote.endDate &&
+                          {selectedQuote.status === 'approved' &&
+                            selectedQuote.endDate &&
                             new Date(selectedQuote.endDate) < new Date() && (
                               <Button
                                 onClick={() =>

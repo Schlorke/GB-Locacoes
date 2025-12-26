@@ -685,7 +685,8 @@ export function generateQuoteStatusChangeEmailHTML(
   finalTotal: number | null,
   priceAdjustmentReason: string | null,
   lateFee: number | null,
-  lateFeeApproved: boolean
+  lateFeeApproved: boolean,
+  rejectionReason?: string | null
 ): string {
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat('pt-BR', {
@@ -851,9 +852,20 @@ export function generateQuoteStatusChangeEmailHTML(
                     </table>
 
                     ${
+                      status === 'REJECTED' && rejectionReason
+                        ? `
+                    <div style="font-size: 14px; font-weight: 700; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; margin-top: 24px;">📋 Motivo da Rejeição</div>
+                    <div style="background: #fef2f2; border: 2px solid #fecaca; border-radius: 12px; padding: 18px 20px; font-size: 13px; color: #991b1b; line-height: 1.7;">
+                      ${rejectionReason}
+                    </div>
+                    `
+                        : ''
+                    }
+
+                    ${
                       priceAdjustmentReason
                         ? `
-                    <div style="font-size: 14px; font-weight: 700; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">📝 Justificativa do Ajuste</div>
+                    <div style="font-size: 14px; font-weight: 700; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; margin-top: 24px;">📝 Justificativa do Ajuste</div>
                     <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 18px 20px; font-size: 13px; color: #1f2933; line-height: 1.7;">
                       ${priceAdjustmentReason}
                     </div>
@@ -862,7 +874,11 @@ export function generateQuoteStatusChangeEmailHTML(
                     }
 
                     <div style="margin-top: 28px; font-size: 12px; color: #64748b; line-height: 1.7;">
-                      Se tiver qualquer dúvida sobre os valores ou o status do seu orçamento, você pode responder diretamente a este email e nossa equipe terá prazer em ajudar.
+                      ${
+                        status === 'REJECTED'
+                          ? 'Se tiver qualquer dúvida sobre a rejeição do seu orçamento, você pode responder diretamente a este email e nossa equipe terá prazer em ajudar.'
+                          : 'Se tiver qualquer dúvida sobre os valores ou o status do seu orçamento, você pode responder diretamente a este email e nossa equipe terá prazer em ajudar.'
+                      }
                     </div>
                   </td>
                 </tr>

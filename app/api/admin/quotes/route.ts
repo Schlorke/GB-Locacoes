@@ -310,6 +310,8 @@ export async function GET(request: NextRequest) {
       lateFeeApprovedAt: quote.lateFeeApprovedAt?.toISOString() || null,
       lateFeeApprovedBy: quote.lateFeeApprovedBy || null,
       validUntil: quote.validUntil?.toISOString() || null,
+      rejectedAt: quote.rejectedAt?.toISOString() || null,
+      rejectionReason: quote.rejectionReason || null,
       status: quote.status.toLowerCase() as 'pending' | 'approved' | 'rejected',
       message: quote.message,
       deliveryType: quote.deliveryType || null,
@@ -337,7 +339,6 @@ export async function GET(request: NextRequest) {
       deliveryFee: quote.deliveryFee ? Number(quote.deliveryFee) : null,
       createdAt: quote.createdAt.toISOString(),
       updatedAt: quote.updatedAt.toISOString(),
-      rejectedAt: quote.rejectedAt?.toISOString() || null,
       items: quote.items.map((item) => ({
         id: item.id,
         quantity: item.quantity,
