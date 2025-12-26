@@ -61,9 +61,10 @@ export function CustomSelect({
     const updatePosition = () => {
       if (isOpen && buttonRef.current) {
         const rect = buttonRef.current.getBoundingClientRect()
+        // Para position: fixed, usamos coordenadas da viewport (sem scrollY/scrollX)
         setDropdownPosition({
-          top: rect.bottom + window.scrollY + 4,
-          left: rect.left + window.scrollX,
+          top: rect.bottom + 4,
+          left: rect.left,
           width: rect.width,
         })
       }
@@ -177,7 +178,7 @@ export function CustomSelect({
           createPortal(
             <div
               id="dropdown-content"
-              className="fixed z-[var(--layer-popover)] rounded-md border bg-white shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 overflow-hidden"
+              className="fixed z-[25] rounded-md border bg-white shadow-xl animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 overflow-hidden"
               style={{
                 top: dropdownPosition.top,
                 left: dropdownPosition.left,

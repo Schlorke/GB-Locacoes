@@ -6,9 +6,10 @@ import { prisma } from '@/lib/prisma'
 // GET - Obter detalhes de uma locação específica do cliente
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await getServerSession(authOptions)
     if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -16,7 +17,7 @@ export async function GET(
 
     const rental = await prisma.rentals.findFirst({
       where: {
-        id: params.id,
+        id: id,
         userid: session.user.id, // Garantir que é do cliente logado
       },
       include: {
@@ -77,6 +78,50 @@ export async function GET(
     return NextResponse.json({ rental })
   } catch (error) {
     console.error('Error fetching rental:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}
+
+// DELETE - Remover locação do histórico do cliente
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params
+    const session = await getServerSession(authOptions)
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Verificar se a locação pertence ao cliente logado
+    const rental = await prisma.rentals.findFirst({
+      where: {
+        id: id,
+        userid: session.user.id,
+      },
+    })
+
+    if (!rental) {
+      return NextResponse.json(
+        { error: 'Rental not found or unauthorized' },
+        { status: 404 }
+      )
+    }
+
+    // Deletar a locação (isso também remove os itens relacionados por cascade)
+    await prisma.rentals.delete({
+      where: { id: id },
+    })
+
+    return NextResponse.json({
+      message: 'Locação removida do histórico com sucesso',
+    })
+  } catch (error) {
+    console.error('Error deleting rental:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

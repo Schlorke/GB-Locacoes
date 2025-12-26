@@ -261,7 +261,7 @@ export default function RentalDetailsPage() {
             <Button
               variant="ghost"
               onClick={() => router.push('/area-cliente/historico')}
-              className="mb-4 text-white hover:bg-white/10"
+              className="mb-4 text-white hover:text-white hover:scale-100 hover:underline"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar para Histórico

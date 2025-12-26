@@ -283,7 +283,7 @@ export default function OrcamentosPage() {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                className="flex-1 md:flex-none min-w-0 bg-white hover:bg-white text-gray-900 hover:text-blue-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200"
+                                className="flex-1 md:flex-none min-w-0 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold text-sm rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200"
                               >
                                 <Download className="h-4 w-4 mr-1" />
                                 PDF

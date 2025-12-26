@@ -8,6 +8,25 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+### Added ✨
+
+- **Sistema de Atividade Recente no Dashboard do Cliente**: Implementada
+  funcionalidade completa para exibir atividades recentes do cliente
+  - Nova API `/api/client/activities` que busca e agrega atividades do cliente
+  - Exibe orçamentos criados, aprovados e rejeitados
+  - Mostra locações iniciadas, concluídas e atualizadas
+  - Lista pagamentos realizados
+  - Formatação de data relativa ("há X minutos/horas/dias")
+  - Ícones e cores específicas para cada tipo de atividade
+  - Links clicáveis para páginas relacionadas (orçamentos, histórico de
+    locações)
+  - Design responsivo e consistente com o restante do dashboard
+  - **Arquivos Criados**:
+    - `app/api/client/activities/route.ts` - API para buscar atividades recentes
+  - **Arquivos Modificados**:
+    - `app/area-cliente/page.tsx` - Componente de atividade recente implementado
+  - **Data**: 2025-12-25
+
 ### Changed 🔄
 
 - **Eliminação completa da página `/area-cliente/locacoes` e consolidação em

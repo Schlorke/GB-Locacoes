@@ -22,6 +22,10 @@ import {
   Eye,
   CheckCircle,
   AlertTriangle,
+  DollarSign,
+  XCircle,
+  ArrowRight,
+  X,
 } from 'lucide-react'
 import Link from 'next/link'
 import { useCartStore, type CartItem } from '@/stores/useCartStore'
@@ -55,6 +59,27 @@ interface Rental {
     status: string
     method: string
   }>
+}
+
+interface Activity {
+  id: string
+  type:
+    | 'quote_created'
+    | 'quote_approved'
+    | 'quote_rejected'
+    | 'rental_created'
+    | 'rental_completed'
+    | 'payment_made'
+    | 'rental_updated'
+  title: string
+  description: string
+  timestamp: string
+  link?: string
+  metadata?: {
+    amount?: number
+    status?: string
+    itemCount?: number
+  }
 }
 
 const statusConfig: Record<
@@ -93,12 +118,28 @@ export default function AreaClientePage() {
   const [rentals, setRentals] = useState<Rental[]>([])
   const [loading, setLoading] = useState(true)
   const [quotesCount, setQuotesCount] = useState(0)
+  const [activities, setActivities] = useState<Activity[]>([])
+  const [activitiesLoading, setActivitiesLoading] = useState(true)
+  const [dismissedActivities, setDismissedActivities] = useState<Set<string>>(
+    new Set()
+  )
   const requestReferenceDate = useRef(new Date())
 
   useEffect(() => {
     if (session?.user) {
       fetchRentals()
       fetchQuotesCount()
+      fetchActivities()
+      // Carregar atividades removidas do localStorage
+      const stored = localStorage.getItem('gb-locacoes-dismissed-activities')
+      if (stored) {
+        try {
+          const dismissed = JSON.parse(stored)
+          setDismissedActivities(new Set(dismissed))
+        } catch {
+          // Ignorar erro de parsing
+        }
+      }
     }
   }, [session])
 
@@ -140,6 +181,22 @@ export default function AreaClientePage() {
     }
   }
 
+  const fetchActivities = async () => {
+    try {
+      setActivitiesLoading(true)
+      const response = await fetch('/api/client/activities?limit=10')
+      if (response.ok) {
+        const data = await response.json()
+        setActivities(data.activities || [])
+      }
+    } catch (error) {
+      console.error('Error fetching activities:', error)
+      setActivities([])
+    } finally {
+      setActivitiesLoading(false)
+    }
+  }
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -158,6 +215,85 @@ export default function AreaClientePage() {
     } catch {
       return 'Data inválida'
     }
+  }
+
+  const formatRelativeTime = (dateString: string) => {
+    try {
+      const date = new Date(dateString)
+      const now = new Date()
+      const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+
+      if (diffInSeconds < 60) {
+        return 'há alguns segundos'
+      } else if (diffInSeconds < 3600) {
+        const minutes = Math.floor(diffInSeconds / 60)
+        return `há ${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`
+      } else if (diffInSeconds < 86400) {
+        const hours = Math.floor(diffInSeconds / 3600)
+        return `há ${hours} ${hours === 1 ? 'hora' : 'horas'}`
+      } else if (diffInSeconds < 604800) {
+        const days = Math.floor(diffInSeconds / 86400)
+        return `há ${days} ${days === 1 ? 'dia' : 'dias'}`
+      } else {
+        return formatDate(dateString)
+      }
+    } catch {
+      return 'Data inválida'
+    }
+  }
+
+  const getActivityIcon = (type: Activity['type']) => {
+    switch (type) {
+      case 'quote_created':
+        return FileText
+      case 'quote_approved':
+        return CheckCircle
+      case 'quote_rejected':
+        return XCircle
+      case 'rental_created':
+        return Package
+      case 'rental_completed':
+        return CheckCircle
+      case 'payment_made':
+        return DollarSign
+      case 'rental_updated':
+        return Clock
+      default:
+        return Clock
+    }
+  }
+
+  const getActivityColor = (type: Activity['type']) => {
+    switch (type) {
+      case 'quote_created':
+        return 'text-blue-600 bg-blue-100'
+      case 'quote_approved':
+        return 'text-green-600 bg-green-100'
+      case 'quote_rejected':
+        return 'text-red-600 bg-red-100'
+      case 'rental_created':
+        return 'text-purple-600 bg-purple-100'
+      case 'rental_completed':
+        return 'text-green-600 bg-green-100'
+      case 'payment_made':
+        return 'text-emerald-600 bg-emerald-100'
+      case 'rental_updated':
+        return 'text-orange-600 bg-orange-100'
+      default:
+        return 'text-gray-600 bg-gray-100'
+    }
+  }
+
+  const dismissActivity = (activityId: string) => {
+    const newDismissed = new Set(dismissedActivities)
+    newDismissed.add(activityId)
+    setDismissedActivities(newDismissed)
+    // Salvar no localStorage
+    localStorage.setItem(
+      'gb-locacoes-dismissed-activities',
+      JSON.stringify(Array.from(newDismissed))
+    )
+    toast.success('Atividade removida do histórico')
   }
 
   // Helper para formatar datas do carrinho (trata Date ou string do localStorage)
@@ -656,12 +792,91 @@ export default function AreaClientePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative pb-8 z-10 pt-0">
-                <div className="text-center flex flex-col flex-1 justify-center py-16">
-                  <Clock className="h-16 w-16 text-gray-300 mx-auto mt-[0.78rem] mb-[0.5rem]" />
-                  <p className="text-[18px] font-2x1 text-gray-500">
-                    Nenhuma atividade recente
-                  </p>
-                </div>
+                {activitiesLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Clock className="h-8 w-8 text-gray-300 animate-spin" />
+                  </div>
+                ) : activities.length > 0 ? (
+                  <div className="space-y-3">
+                    {activities
+                      .filter(
+                        (activity) => !dismissedActivities.has(activity.id)
+                      )
+                      .map((activity) => {
+                        const Icon = getActivityIcon(activity.type)
+                        const colorClass = getActivityColor(activity.type)
+                        const ActivityContent = (
+                          <div className="group relative p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+                            {/* Seta à esquerda do botão close, centralizada verticalmente */}
+                            {activity.link && (
+                              <ArrowRight className="absolute right-8 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-hover:text-orange-600 transition-all duration-300 flex-shrink-0 z-10" />
+                            )}
+                            {/* Botão de fechar no canto superior direito */}
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                dismissActivity(activity.id)
+                              }}
+                              className="absolute right-2 top-2 inline-flex h-5 w-5 items-center justify-center rounded-lg disabled:pointer-events-none disabled:opacity-50 transition-all duration-300 text-slate-400 hover:text-slate-600 hover:bg-white focus:outline-none focus:ring-0 opacity-0 group-hover:opacity-100 z-10"
+                              aria-label="Remover atividade"
+                            >
+                              <X className="h-3.5 w-3.5" />
+                            </button>
+                            <div className="flex items-start gap-3">
+                              <div
+                                className={cn(
+                                  'p-2 rounded-lg flex-shrink-0',
+                                  colorClass
+                                )}
+                              >
+                                <Icon className="h-4 w-4" />
+                              </div>
+                              <div className="flex-1 min-w-0 pr-12">
+                                <div className="flex items-start justify-between gap-2 mb-1">
+                                  <p className="font-semibold text-gray-900 text-sm flex-1">
+                                    {activity.title}
+                                  </p>
+                                  {activity.metadata?.amount && (
+                                    <span className="text-sm font-bold text-green-600 flex-shrink-0">
+                                      {formatCurrency(activity.metadata.amount)}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-sm text-gray-600 mb-2">
+                                  {activity.description}
+                                </p>
+                                <div className="flex items-center">
+                                  <span className="text-xs text-gray-500">
+                                    {formatRelativeTime(activity.timestamp)}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )
+
+                        return activity.link ? (
+                          <Link
+                            key={activity.id}
+                            href={activity.link}
+                            className="block"
+                          >
+                            {ActivityContent}
+                          </Link>
+                        ) : (
+                          <div key={activity.id}>{ActivityContent}</div>
+                        )
+                      })}
+                  </div>
+                ) : (
+                  <div className="text-center flex flex-col flex-1 justify-center py-16">
+                    <Clock className="h-16 w-16 text-gray-300 mx-auto mt-[0.78rem] mb-[0.5rem]" />
+                    <p className="text-[18px] font-2x1 text-gray-500">
+                      Nenhuma atividade recente
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </motion.div>
