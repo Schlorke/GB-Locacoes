@@ -43,6 +43,7 @@ interface Rental {
   enddate: string
   total: number
   status: string
+  createdat?: string | Date | null
   rental_items: Array<{
     id: string
     quantity: number
@@ -214,6 +215,21 @@ export default function AreaClientePage() {
       })
     } catch {
       return 'Data inválida'
+    }
+  }
+
+  const formatDateTime = (dateString: string | Date | null | undefined) => {
+    if (!dateString) return ''
+    try {
+      const date =
+        typeof dateString === 'string' ? new Date(dateString) : dateString
+      if (isNaN(date.getTime())) return ''
+      return date.toLocaleTimeString('pt-BR', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    } catch {
+      return ''
     }
   }
 
@@ -506,9 +522,9 @@ export default function AreaClientePage() {
                 {getItemCount() > 0 ? (
                   <div className="flex flex-col flex-1 min-h-0 overflow-visible">
                     {/* Bloco unificado com itens e total */}
-                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-md flex-1 overflow-visible">
+                    <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-md flex-1 flex flex-col min-h-0 overflow-visible">
                       {/* Lista de itens do carrinho - padding para sombras */}
-                      <div className="space-y-4 p-5 max-h-[300px] overflow-y-auto">
+                      <div className="space-y-4 p-5 flex-1 overflow-y-auto min-h-0">
                         {cartItems.map((equipment, index) => {
                           const displayRange = resolveDateRange(equipment)
                           const pricingConfig = getPricingConfig(
@@ -588,8 +604,8 @@ export default function AreaClientePage() {
                         })}
                       </div>
 
-                      {/* Total estimado - Separador e valor */}
-                      <div className="border-t-2 border-orange-200 mx-5 pt-3 pb-5">
+                      {/* Total estimado - Separador e valor - Fixo na parte inferior */}
+                      <div className="border-t-2 border-orange-200 mx-5 pt-3 pb-5 mt-auto">
                         <div className="flex justify-between items-center">
                           <p className="text-sm font-semibold text-orange-700 uppercase tracking-wide">
                             Total Estimado
@@ -695,6 +711,12 @@ export default function AreaClientePage() {
                                   {formatDate(rental.startdate)} -{' '}
                                   {formatDate(rental.enddate)}
                                 </p>
+                                {rental.createdat && (
+                                  <p className="text-xs text-gray-400 mt-1">
+                                    Solicitado às{' '}
+                                    {formatDateTime(rental.createdat)}
+                                  </p>
+                                )}
                               </div>
                               <Badge
                                 variant="outline"
@@ -745,6 +767,14 @@ export default function AreaClientePage() {
                           </Link>
                         </Button>
                       )}
+                      {/* Botão sempre visível para acessar o histórico completo */}
+                      {activeRentals.length <= 3 && rentals.length <= 3 && (
+                        <Button variant="outline" className="w-full" asChild>
+                          <Link href="/area-cliente/historico">
+                            Ver Histórico Completo
+                          </Link>
+                        </Button>
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -757,8 +787,19 @@ export default function AreaClientePage() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex justify-center">
+                    <div className="flex flex-col gap-2 justify-center">
                       <Button size="default" asChild className="w-full h-10">
+                        <Link href="/area-cliente/historico">
+                          <Clock className="h-4 w-4 mr-2" />
+                          Ver Histórico
+                        </Link>
+                      </Button>
+                      <Button
+                        size="default"
+                        variant="outline"
+                        asChild
+                        className="w-full h-10"
+                      >
                         <Link href="/equipamentos">
                           <Plus className="h-4 w-4 mr-2" />
                           Alugar Equipamentos
