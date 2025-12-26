@@ -341,8 +341,8 @@ export default function NotificacoesPage() {
       </section>
 
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
-      <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
-        <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24 overflow-visible">
+        <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-visible">
           {/* Lista de Notificações */}
           <motion.div
             className="mb-8"

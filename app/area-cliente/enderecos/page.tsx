@@ -186,8 +186,8 @@ export default function EnderecosPage() {
       </section>
 
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
-      <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
-        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24 overflow-visible">
+        <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-visible">
           {/* Seções Principais - Layout Proporcional à linha superior */}
           <motion.div
             className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8"
