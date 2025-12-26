@@ -743,12 +743,113 @@ function QuotePage() {
       return
     }
 
-    // Validação: Se tipo é DELIVERY, deve ter endereço
-    if (formData.deliveryType === 'DELIVERY' && !formData.deliveryAddress) {
-      toast.error('Erro de Validação', {
-        description: 'Endereço de entrega é obrigatório para entrega.',
+    // Validação: Tipo de entrega é obrigatório
+    if (!formData.deliveryType) {
+      toast.info('Tipo de Entrega Obrigatório', {
+        description:
+          'Por favor, selecione o tipo de entrega (Retirada na Loja ou Entrega no Endereço) antes de enviar a solicitação.',
+        duration: 6000,
       })
+      // Focar no campo de tipo de entrega
+      const deliveryTypeField = document.querySelector(
+        '[role="combobox"][aria-controls*="radix"]'
+      )
+      if (deliveryTypeField) {
+        ;(deliveryTypeField as HTMLElement).focus()
+        deliveryTypeField.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        })
+      }
       return
+    }
+
+    // Validação: Se tipo é DELIVERY, deve ter endereço completo
+    if (formData.deliveryType === 'DELIVERY') {
+      if (!formData.deliveryAddress) {
+        toast.info('Endereço Obrigatório', {
+          description:
+            'Por favor, preencha todos os campos do endereço de entrega (CEP, Logradouro, Número, Bairro, Cidade e Estado).',
+          duration: 6000,
+        })
+        // Focar no primeiro campo de endereço (CEP)
+        const cepField = document.getElementById('cep')
+        if (cepField) {
+          cepField.focus()
+          cepField.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+        return
+      }
+
+      // Validar campos obrigatórios do endereço
+      const missingAddressFields: string[] = []
+      const addressFieldIds: string[] = []
+
+      if (
+        !formData.deliveryAddress.cep ||
+        !formData.deliveryAddress.cep.trim()
+      ) {
+        missingAddressFields.push('CEP')
+        addressFieldIds.push('cep')
+      }
+
+      if (
+        !formData.deliveryAddress.logradouro ||
+        !formData.deliveryAddress.logradouro.trim()
+      ) {
+        missingAddressFields.push('Logradouro')
+        addressFieldIds.push('logradouro')
+      }
+
+      if (
+        !formData.deliveryAddress.numero ||
+        !formData.deliveryAddress.numero.trim()
+      ) {
+        missingAddressFields.push('Número')
+        addressFieldIds.push('numero')
+      }
+
+      if (
+        !formData.deliveryAddress.bairro ||
+        !formData.deliveryAddress.bairro.trim()
+      ) {
+        missingAddressFields.push('Bairro')
+        addressFieldIds.push('bairro')
+      }
+
+      if (
+        !formData.deliveryAddress.cidade ||
+        !formData.deliveryAddress.cidade.trim()
+      ) {
+        missingAddressFields.push('Cidade')
+        addressFieldIds.push('cidade')
+      }
+
+      if (
+        !formData.deliveryAddress.estado ||
+        !formData.deliveryAddress.estado.trim()
+      ) {
+        missingAddressFields.push('Estado')
+        addressFieldIds.push('estado')
+      }
+
+      if (missingAddressFields.length > 0) {
+        const fieldsList = missingAddressFields.join(', ')
+        toast.info('Campos de Endereço Obrigatórios', {
+          description: `Por favor, preencha os seguintes campos do endereço antes de enviar: ${fieldsList}.`,
+          duration: 6000,
+        })
+
+        // Focar no primeiro campo faltante
+        if (addressFieldIds.length > 0) {
+          const firstField = document.getElementById(addressFieldIds[0]!)
+          if (firstField) {
+            firstField.focus()
+            firstField.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+        }
+        return
+      }
     }
 
     // Validação: Verificar disponibilidade se houver erros
@@ -1683,7 +1784,8 @@ function QuotePage() {
                   <div>
                     <Label className="flex items-center gap-2 mb-2">
                       <Truck className="h-4 w-4" />
-                      Tipo de Entrega/Retirada
+                      Tipo de Entrega/Retirada{' '}
+                      <span className="text-red-500">*</span>
                     </Label>
                     <Select
                       value={formData.deliveryType}

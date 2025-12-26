@@ -359,7 +359,7 @@ export default function OrcamentosPage() {
                     <p className="text-gray-500 text-lg mb-4">
                       Nenhum orçamento encontrado
                     </p>
-                    <Button asChild size="default">
+                    <Button asChild variant="outline" size="default">
                       <Link href="/orcamento">
                         <Plus className="h-4 w-4 mr-2" />
                         Solicitar Primeiro Orçamento

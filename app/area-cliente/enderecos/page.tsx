@@ -239,7 +239,7 @@ export default function EnderecosPage() {
                       const primaryAddress = addresses.find((a) => a.isPrimary)!
                       return (
                         <div className="flex flex-col flex-1 justify-between">
-                          <div className="bg-gray-50 rounded-xl p-6 mb-6">
+                          <div className="group p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300 mb-6">
                             <div className="flex items-center gap-2 mb-2">
                               <MapPin className="h-5 w-5 text-gray-600" />
                               <span className="font-bold text-gray-900">

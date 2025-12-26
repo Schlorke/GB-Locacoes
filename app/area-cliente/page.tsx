@@ -441,7 +441,7 @@ export default function AreaClientePage() {
             </Link>
 
             {/* Card Orçamentos - Padrão Histórico */}
-            <Link href="/orcamento" className="flex-2 h-full">
+            <Link href="/area-cliente/orcamentos" className="flex-2 h-full">
               <div className="relative overflow-hidden h-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 group cursor-pointer bg-white/95">
                 <div className="p-6 h-full flex flex-col">
                   <div className="flex items-start justify-between h-full">

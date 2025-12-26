@@ -444,7 +444,7 @@ export default function HistoricoPage() {
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
             >
               <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl z-0 border-0">
                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
