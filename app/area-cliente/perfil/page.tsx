@@ -149,7 +149,7 @@ export default function PerfilPage() {
                   </div>
                   <Button
                     onClick={() => setIsEditing(!isEditing)}
-                    className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl border"
+                    className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200 hover:border-gray-200"
                   >
                     <Edit className="h-4 w-4 mr-2" />
                     {isEditing ? 'Cancelar' : 'Editar'}

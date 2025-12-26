@@ -163,7 +163,8 @@ function NotificationCard({
                 <Button
                   asChild
                   size="sm"
-                  className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-0 hover:scale-100 min-w-[80px]"
+                  variant="outline"
+                  className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200 hover:border-gray-200 min-w-[80px]"
                   onClick={() => onMarkAsRead(notification.id)}
                 >
                   <Link href={notification.actionUrl}>
@@ -175,8 +176,9 @@ function NotificationCard({
               {!notification.isRead && (
                 <Button
                   size="sm"
+                  variant="outline"
                   onClick={handleMarkAsRead}
-                  className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-0 hover:scale-100 min-w-[80px]"
+                  className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg border-gray-200 hover:border-gray-200 min-w-[80px]"
                 >
                   <Check className="h-4 w-4 mr-1" />
                   Lido
@@ -184,8 +186,9 @@ function NotificationCard({
               )}
               <Button
                 size="sm"
+                variant="outline"
                 onClick={() => onDelete(notification.id)}
-                className="bg-white hover:bg-red-50 hover:text-red-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg w-10 h-10 p-0 text-red-600 border-0 hover:scale-100 flex items-center justify-center"
+                className="bg-white hover:bg-red-50 hover:text-red-600 font-semibold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg w-10 h-10 p-0 text-red-600 border-gray-200 hover:border-gray-200 flex items-center justify-center"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

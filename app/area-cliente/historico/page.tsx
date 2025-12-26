@@ -371,7 +371,7 @@ export default function HistoricoPage() {
                             className="w-full sm:w-auto sm:flex-1 min-w-0 inline-flex items-center justify-center gap-2 px-4 py-2 bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-medium rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl group border border-gray-200"
                             asChild
                           >
-                            <Link href={`/area-cliente/locacoes/${rental.id}`}>
+                            <Link href={`/area-cliente/historico/${rental.id}`}>
                               <Eye className="h-4 w-4" />
                               Ver Detalhes
                               <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />

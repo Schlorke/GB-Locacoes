@@ -10,6 +10,30 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Changed 🔄
 
+- **Eliminação completa da página `/area-cliente/locacoes` e consolidação em
+  `/area-cliente/historico`**: A página `/area-cliente/locacoes` foi
+  completamente removida e toda funcionalidade foi consolidada em
+  `/area-cliente/historico`
+  - Página `/area-cliente/locacoes/page.tsx` foi deletada
+  - Rota dinâmica `/area-cliente/locacoes/[id]` foi movida para
+    `/area-cliente/historico/[id]`
+  - Todos os links foram atualizados para usar `/area-cliente/historico` e
+    `/area-cliente/historico/[id]`
+  - Layout atualizado para reconhecer `/area-cliente/historico/[id]` como página
+    ativa
+  - Pasta `app/area-cliente/locacoes` foi completamente removida do projeto
+  - **Arquivos Modificados**:
+    - `app/area-cliente/historico/[id]/page.tsx` - Nova rota de detalhes (movida
+      de locacoes)
+    - `app/area-cliente/page.tsx` - Links atualizados
+    - `app/area-cliente/historico/page.tsx` - Links atualizados
+    - `app/area-cliente/layout.tsx` - Reconhecimento de rota atualizado
+  - **Arquivos Deletados**:
+    - `app/area-cliente/locacoes/page.tsx`
+    - `app/area-cliente/locacoes/[id]/page.tsx`
+    - Pasta `app/area-cliente/locacoes/` completa
+  - **Data**: 2025-12-25
+
 - **Reorganização do Card "Meu Carrinho" no Dashboard**: Layout do card de
   carrinho melhorado para agrupar itens e total
   - Itens do carrinho agora ficam DENTRO do bloco laranja de "Total Estimado"

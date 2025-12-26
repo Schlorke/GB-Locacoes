@@ -144,7 +144,9 @@ export default function AreaClienteLayout({
       href: '/area-cliente/historico',
       icon: Clock,
       label: 'Histórico',
-      isActive: pathname === '/area-cliente/historico',
+      isActive:
+        pathname === '/area-cliente/historico' ||
+        pathname.startsWith('/area-cliente/historico/'),
     },
     {
       href: '/area-cliente/enderecos',

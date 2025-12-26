@@ -133,7 +133,7 @@ export default function RentalDetailsPage() {
       if (!response.ok) {
         if (response.status === 404) {
           toast.error('Locação não encontrada')
-          router.push('/area-cliente/locacoes')
+          router.push('/area-cliente/historico')
           return
         }
         throw new Error('Erro ao carregar locação')
@@ -144,7 +144,7 @@ export default function RentalDetailsPage() {
     } catch (error) {
       console.error('Error fetching rental:', error)
       toast.error('Erro ao carregar locação')
-      router.push('/area-cliente/locacoes')
+      router.push('/area-cliente/historico')
     } finally {
       setLoading(false)
     }
@@ -260,11 +260,11 @@ export default function RentalDetailsPage() {
           >
             <Button
               variant="ghost"
-              onClick={() => router.push('/area-cliente/locacoes')}
+              onClick={() => router.push('/area-cliente/historico')}
               className="mb-4 text-white hover:bg-white/10"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Voltar para Locações
+              Voltar para Histórico
             </Button>
             <div className="text-center space-y-4">
               <h1 className="text-3xl font-bold leading-tight">
@@ -331,7 +331,7 @@ export default function RentalDetailsPage() {
                     {rental.rental_items.map((item) => (
                       <div
                         key={item.id}
-                        className="p-4 bg-gray-50 rounded-xl border border-gray-200"
+                        className="p-4 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -382,7 +382,7 @@ export default function RentalDetailsPage() {
                   </CardHeader>
                   <CardContent className="relative z-10 pt-0">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                      <div className="p-4 bg-gray-50 rounded-xl shadow hover:shadow-lg transition-all duration-300">
                         <p className="text-sm text-gray-500 mb-1">
                           Data de Início
                         </p>
@@ -390,7 +390,7 @@ export default function RentalDetailsPage() {
                           {formatDateShort(rental.startdate)}
                         </p>
                       </div>
-                      <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                      <div className="p-4 bg-gray-50 rounded-xl shadow hover:shadow-lg transition-all duration-300">
                         <p className="text-sm text-gray-500 mb-1">
                           Data de Término
                         </p>
@@ -618,7 +618,7 @@ export default function RentalDetailsPage() {
                       {rental.payments.map((payment) => (
                         <div
                           key={payment.id}
-                          className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-200"
+                          className="flex items-center justify-between p-4 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300"
                         >
                           <div>
                             <p className="font-semibold text-gray-900">
@@ -667,7 +667,7 @@ export default function RentalDetailsPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="relative z-10 pt-0 space-y-4">
-                    <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                    <div className="p-4 bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                       <p className="text-sm text-gray-500 mb-1">Total</p>
                       <p className="text-2xl font-bold text-green-600">
                         {formatCurrency(rental.total)}
@@ -681,7 +681,7 @@ export default function RentalDetailsPage() {
                         </p>
                       </div>
                     )}
-                    <div className="p-4 bg-orange-50 rounded-xl border border-orange-200">
+                    <div className="p-4 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
                       <p className="text-sm text-orange-700 mb-1">
                         Total a Pagar
                       </p>

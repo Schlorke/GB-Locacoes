@@ -545,7 +545,7 @@ export default function AreaClientePage() {
                         return (
                           <div
                             key={rental.id}
-                            className="p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300"
+                            className="group p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300"
                           >
                             <div className="flex items-start justify-between mb-2">
                               <div className="flex-1">
@@ -575,11 +575,16 @@ export default function AreaClientePage() {
                               <span className="font-bold text-green-600">
                                 {formatCurrency(rental.total)}
                               </span>
-                              <Button variant="ghost" size="sm" asChild>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                asChild
+                                className="admin-action-button rentals-view-button opacity-0 group-hover:opacity-100 transition-all hover:shadow-md"
+                              >
                                 <Link
-                                  href={`/area-cliente/locacoes/${rental.id}`}
+                                  href={`/area-cliente/historico/${rental.id}`}
                                 >
-                                  <Eye className="w-4 h-4 mr-1" />
+                                  <Eye className="w-4 h-4 mr-2" />
                                   Ver
                                 </Link>
                               </Button>
@@ -592,14 +597,14 @@ export default function AreaClientePage() {
                     <div className="mt-auto pt-4">
                       {activeRentals.length > 3 && (
                         <Button variant="outline" className="w-full" asChild>
-                          <Link href="/area-cliente/locacoes">
+                          <Link href="/area-cliente/historico">
                             Ver todas as locações ({rentals.length})
                           </Link>
                         </Button>
                       )}
                       {activeRentals.length <= 3 && rentals.length > 3 && (
                         <Button variant="outline" className="w-full" asChild>
-                          <Link href="/area-cliente/locacoes">
+                          <Link href="/area-cliente/historico">
                             Ver todas as locações ({rentals.length})
                           </Link>
                         </Button>

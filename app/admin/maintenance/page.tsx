@@ -559,7 +559,7 @@ export default function AdminMaintenancePage() {
                               onClick={() =>
                                 setSelectedMaintenance(maintenance)
                               }
-                              className="admin-action-button rentals-view-button opacity-0 group-hover:opacity-100 transition-all"
+                              className="admin-action-button rentals-view-button opacity-0 group-hover:opacity-100 transition-all hover:shadow-md"
                             >
                               <Eye className="w-4 h-4 mr-2" />
                               Ver Detalhes
