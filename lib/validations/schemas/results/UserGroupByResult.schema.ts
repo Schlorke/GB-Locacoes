@@ -33,7 +33,8 @@ export const UserGroupByResultSchema = z.array(z.object({
     rejectedQuotes: z.number(),
     quotes: z.number(),
     rentals: z.number(),
-    sessions: z.number()
+    sessions: z.number(),
+    notifications: z.number()
   }).optional(),
   _min: z.object({
     id: z.string().nullable(),

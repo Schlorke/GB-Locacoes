@@ -298,3 +298,16 @@ export { PermissionDeleteManyResultSchema } from './PermissionDeleteManyResult.s
 export { PermissionAggregateResultSchema } from './PermissionAggregateResult.schema';
 export { PermissionGroupByResultSchema } from './PermissionGroupByResult.schema';
 export { PermissionCountResultSchema } from './PermissionCountResult.schema';
+export { NotificationFindUniqueResultSchema } from './NotificationFindUniqueResult.schema';
+export { NotificationFindFirstResultSchema } from './NotificationFindFirstResult.schema';
+export { NotificationFindManyResultSchema } from './NotificationFindManyResult.schema';
+export { NotificationCreateResultSchema } from './NotificationCreateResult.schema';
+export { NotificationCreateManyResultSchema } from './NotificationCreateManyResult.schema';
+export { NotificationUpdateResultSchema } from './NotificationUpdateResult.schema';
+export { NotificationUpdateManyResultSchema } from './NotificationUpdateManyResult.schema';
+export { NotificationUpsertResultSchema } from './NotificationUpsertResult.schema';
+export { NotificationDeleteResultSchema } from './NotificationDeleteResult.schema';
+export { NotificationDeleteManyResultSchema } from './NotificationDeleteManyResult.schema';
+export { NotificationAggregateResultSchema } from './NotificationAggregateResult.schema';
+export { NotificationGroupByResultSchema } from './NotificationGroupByResult.schema';
+export { NotificationCountResultSchema } from './NotificationCountResult.schema';

@@ -27,3 +27,4 @@ export { DriverInputSchema } from './Driver.input';
 export { ContractInputSchema } from './Contract.input';
 export { AuditLogInputSchema } from './AuditLog.input';
 export { PermissionInputSchema } from './Permission.input';
+export { NotificationInputSchema } from './Notification.input';

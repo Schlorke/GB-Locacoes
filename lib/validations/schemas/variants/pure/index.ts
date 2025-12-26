@@ -27,3 +27,4 @@ export { DriverModelSchema } from './Driver.pure';
 export { ContractModelSchema } from './Contract.pure';
 export { AuditLogModelSchema } from './AuditLog.pure';
 export { PermissionModelSchema } from './Permission.pure';
+export { NotificationModelSchema } from './Notification.pure';

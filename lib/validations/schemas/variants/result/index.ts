@@ -27,3 +27,4 @@ export { DriverResultSchema } from './Driver.result';
 export { ContractResultSchema } from './Contract.result';
 export { AuditLogResultSchema } from './AuditLog.result';
 export { PermissionResultSchema } from './Permission.result';
+export { NotificationResultSchema } from './Notification.result';

@@ -234,6 +234,25 @@ export async function PATCH(
         delete updateQuoteData.approvedBy
       }
 
+      // Gerar notificação para o cliente
+      if (currentQuote.userId) {
+        try {
+          const { NotificationService } =
+            await import('@/lib/notification-service')
+          await NotificationService.createQuoteApproved(
+            currentQuote.userId,
+            params.id,
+            finalTotal ? Number(finalTotal) : undefined
+          )
+        } catch (notificationError) {
+          console.error(
+            'Erro ao criar notificação de orçamento aprovado:',
+            notificationError
+          )
+          // Não falhar a aprovação por causa de erro na notificação
+        }
+      }
+
       // Se já não foi convertido, converter automaticamente para locação
       if (
         !currentQuote.convertedToRentalId &&
@@ -346,6 +365,25 @@ export async function PATCH(
       } else {
         // Remover rejectedBy se não houver usuário
         delete updateQuoteData.rejectedBy
+      }
+
+      // Gerar notificação para o cliente
+      if (currentQuote.userId) {
+        try {
+          const { NotificationService } =
+            await import('@/lib/notification-service')
+          await NotificationService.createQuoteRejected(
+            currentQuote.userId,
+            params.id,
+            rejectionReason
+          )
+        } catch (notificationError) {
+          console.error(
+            'Erro ao criar notificação de orçamento rejeitado:',
+            notificationError
+          )
+          // Não falhar a rejeição por causa de erro na notificação
+        }
       }
 
       // Cancelar todas as locações relacionadas a este orçamento

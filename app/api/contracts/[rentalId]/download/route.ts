@@ -6,7 +6,7 @@ import { prisma } from '@/lib/prisma'
 // GET - Download de contrato
 export async function GET(
   request: NextRequest,
-  { params }: { params: { rentalId: string } }
+  { params }: { params: Promise<{ rentalId: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -14,10 +14,12 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { rentalId } = await params
+
     // Buscar locação e contrato
     const rental = await prisma.rentals.findFirst({
       where: {
-        id: params.rentalId,
+        id: rentalId,
         userid: session.user.id, // Garantir que é do cliente logado ou admin
       },
       include: {
@@ -49,7 +51,7 @@ export async function GET(
             Cookie: request.headers.get('cookie') || '',
           },
           body: JSON.stringify({
-            rentalId: params.rentalId,
+            rentalId,
           }),
         }
       )
@@ -63,7 +65,7 @@ export async function GET(
 
       // Buscar contrato gerado
       const updatedRental = await prisma.rentals.findUnique({
-        where: { id: params.rentalId },
+        where: { id: rentalId },
         include: { contract: true },
       })
 
@@ -79,7 +81,7 @@ export async function GET(
         return new NextResponse(updatedRental.contract.content, {
           headers: {
             'Content-Type': 'text/html; charset=utf-8',
-            'Content-Disposition': `attachment; filename="contrato-${params.rentalId}.html"`,
+            'Content-Disposition': `attachment; filename="contrato-${rentalId}.html"`,
           },
         })
       }
@@ -104,7 +106,7 @@ export async function GET(
       return new NextResponse(contract.content, {
         headers: {
           'Content-Type': 'text/html; charset=utf-8',
-          'Content-Disposition': `attachment; filename="contrato-${params.rentalId}.html"`,
+          'Content-Disposition': `attachment; filename="contrato-${rentalId}.html"`,
         },
       })
     }

@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-// import { useSession } from 'next-auth/react'
-import { useNotifications } from '@/hooks/use-notifications'
+import { useNotifications, type Notification } from '@/hooks/use-notifications'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -20,74 +19,22 @@ import {
   CheckCircle,
   AlertCircle,
   Trash2,
+  CheckCheck,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-
-// Mock data para notificações
-const mockNotifications = [
-  {
-    id: '1',
-    title: 'Orçamento Aprovado',
-    message: 'Seu orçamento #ORD-001 foi aprovado e está pronto para locação.',
-    type: 'quote' as const,
-    priority: 'high' as const,
-    isRead: false,
-    createdAt: '2024-01-20T10:30:00Z',
-    actionUrl: '/area-cliente/orcamentos',
-  },
-  {
-    id: '2',
-    title: 'Equipamento Disponível',
-    message:
-      'A Betoneira 400L que você solicitou está disponível para retirada.',
-    type: 'equipment' as const,
-    priority: 'medium' as const,
-    isRead: false,
-    createdAt: '2024-01-19T14:20:00Z',
-    actionUrl: '/equipamentos/betoneira-400l',
-  },
-  {
-    id: '3',
-    title: 'Pagamento Processado',
-    message: 'Pagamento de R$ 350,00 processado com sucesso.',
-    type: 'payment' as const,
-    priority: 'low' as const,
-    isRead: true,
-    createdAt: '2024-01-18T16:45:00Z',
-  },
-  {
-    id: '4',
-    title: 'Manutenção Programada',
-    message: 'Sistema em manutenção programada hoje das 02:00 às 04:00.',
-    type: 'system' as const,
-    priority: 'medium' as const,
-    isRead: true,
-    createdAt: '2024-01-17T08:00:00Z',
-  },
-]
-
-interface Notification {
-  id: string
-  title: string
-  message: string
-  type: 'budget' | 'equipment' | 'system' | 'quote' | 'payment'
-  priority: 'high' | 'medium' | 'low'
-  isRead: boolean
-  actionUrl?: string
-  createdAt: string
-}
+import { NotificationType } from '@prisma/client'
 
 interface NotificationCardProps {
   notification: Notification
   onMarkAsRead: (_id: string) => void
   onDelete: (_id: string) => void
   getNotificationIcon: (
-    _type: string
+    _type: NotificationType
   ) => React.ComponentType<{ className?: string }>
-  getTypeLabel: (_type: string) => string
-  formatTimeAgo: (_date: string) => string
+  getTypeLabel: (_type: NotificationType) => string
+  formatTimeAgo: (_date: Date) => string
 }
 
 // Componente de notificação individual com animação controlada
@@ -201,50 +148,50 @@ function NotificationCard({
 }
 
 export default function NotificacoesPage() {
-  // const { data: session } = useSession()
-  // TODO: Use session data for user-specific notifications
-  const { markAsRead: markNotificationAsRead } = useNotifications()
-  const [localNotifications, setLocalNotifications] =
-    useState(mockNotifications)
+  const {
+    notifications,
+    isLoading,
+    markAsRead,
+    markAllAsRead,
+    removeNotification,
+    stats,
+  } = useNotifications()
 
-  // Inicializar contador de notificações não lidas
+  // Atualizar contador global no localStorage para compatibilidade com header
   useEffect(() => {
-    const unreadCount = localNotifications.filter((n) => !n.isRead).length
+    const unreadCount = stats.unread
     localStorage.setItem('gb-locacoes-unread-count', unreadCount.toString())
-  }, [localNotifications])
+    const event = new CustomEvent('notificationUpdate', {
+      detail: { unreadCount },
+    })
+    window.dispatchEvent(event)
+  }, [stats.unread])
 
-  const getNotificationIcon = (type: string) => {
-    switch (type) {
-      case 'quote':
-        return CheckCircle
-      case 'equipment':
-        return Settings
-      case 'payment':
-        return CheckCircle
-      case 'system':
-        return AlertCircle
-      default:
-        return Bell
-    }
+  const getNotificationIcon = (type: NotificationType) => {
+    if (type.startsWith('QUOTE_')) return CheckCircle
+    if (type.startsWith('RENTAL_')) return Settings
+    if (type.startsWith('PAYMENT_')) return CheckCircle
+    if (type.startsWith('DELIVERY_') || type.startsWith('PICKUP_'))
+      return Settings
+    if (type.startsWith('CONTRACT_')) return CheckCircle
+    if (type.startsWith('SYSTEM_') || type === 'PROMOTION') return AlertCircle
+    if (type === 'EQUIPMENT_AVAILABLE') return Settings
+    return Bell
   }
 
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case 'quote':
-        return 'Orçamento'
-      case 'equipment':
-        return 'Equipamento'
-      case 'payment':
-        return 'Pagamento'
-      case 'system':
-        return 'Sistema'
-      default:
-        return 'Geral'
-    }
+  const getTypeLabel = (type: NotificationType) => {
+    if (type.startsWith('QUOTE_')) return 'Orçamento'
+    if (type.startsWith('RENTAL_')) return 'Locação'
+    if (type.startsWith('PAYMENT_')) return 'Pagamento'
+    if (type.startsWith('DELIVERY_') || type.startsWith('PICKUP_'))
+      return 'Entrega'
+    if (type.startsWith('CONTRACT_')) return 'Contrato'
+    if (type.startsWith('SYSTEM_') || type === 'PROMOTION') return 'Sistema'
+    if (type === 'EQUIPMENT_AVAILABLE') return 'Equipamento'
+    return 'Geral'
   }
 
-  const formatTimeAgo = (dateString: string) => {
-    const date = new Date(dateString)
+  const formatTimeAgo = (date: Date) => {
     const now = new Date()
     const diffInMinutes = Math.floor(
       (now.getTime() - date.getTime()) / (1000 * 60)
@@ -256,47 +203,8 @@ export default function NotificacoesPage() {
     return `${Math.floor(diffInMinutes / 1440)}d atrás`
   }
 
-  const markAsRead = (id: string) => {
-    // Marcar no hook global (para sincronizar com header e layout)
-    markNotificationAsRead(id)
-
-    // Marcar no estado local também
-    setLocalNotifications((prev) => {
-      const updated = prev.map((n) =>
-        n.id === id ? { ...n, isRead: true } : n
-      )
-
-      // Atualizar contador de não lidas no localStorage
-      const unreadCount = updated.filter((n) => !n.isRead).length
-      localStorage.setItem('gb-locacoes-unread-count', unreadCount.toString())
-
-      return updated
-    })
-  }
-
-  const deleteNotification = (id: string) => {
-    // Remover do estado local
-    setLocalNotifications((prev) => {
-      const updated = prev.filter((n) => n.id !== id)
-
-      // Atualizar contador de não lidas no localStorage
-      const unreadCount = updated.filter((n) => !n.isRead).length
-      localStorage.setItem('gb-locacoes-unread-count', unreadCount.toString())
-
-      return updated
-    })
-  }
-
-  // Disparar evento quando o contador muda
-  useEffect(() => {
-    const unreadCount = localNotifications.filter((n) => !n.isRead).length
-    const event = new CustomEvent('notificationUpdate', {
-      detail: { unreadCount },
-    })
-    window.dispatchEvent(event)
-  }, [localNotifications])
-
-  const filteredNotifications = localNotifications
+  // Usar todas as notificações sem filtros
+  const filteredNotifications = notifications
 
   return (
     <div className="min-h-screen bg-gray-50 pt-[84px] sm:pt-0">
@@ -353,25 +261,55 @@ export default function NotificacoesPage() {
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 z-0">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 p-6">
-                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
-                    <Bell className="h-5 w-5" />
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex flex-col space-y-1.5">
+                    <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+                      <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
+                        <Bell className="h-5 w-5" />
+                      </div>
+                      Lista de Notificações
+                    </CardTitle>
+                    <CardDescription>
+                      {filteredNotifications.length} notificação(ões)
+                      encontrada(s)
+                      {stats.unread > 0 && (
+                        <span className="ml-2 text-orange-600 font-semibold">
+                          • {stats.unread} não lida(s)
+                        </span>
+                      )}
+                    </CardDescription>
                   </div>
-                  Lista de Notificações
-                </CardTitle>
-                <CardDescription>
-                  {filteredNotifications.length} notificação(ões) encontrada(s)
-                </CardDescription>
+                  {stats.unread > 0 && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={markAllAsRead}
+                      className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold"
+                    >
+                      <CheckCheck className="h-4 w-4 mr-2" />
+                      Marcar todas como lidas
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardContent className="relative p-6 pb-8 pt-0 md:px-6 lg:px-8 md:pb-6 lg:pb-8 z-0">
-                {filteredNotifications.length > 0 ? (
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Bell className="h-12 w-12 text-gray-300 animate-pulse" />
+                    </div>
+                    <p className="text-base md:text-lg text-gray-500">
+                      Carregando notificações...
+                    </p>
+                  </div>
+                ) : filteredNotifications.length > 0 ? (
                   <div className="space-y-6">
                     {filteredNotifications.map((notification) => (
                       <NotificationCard
                         key={notification.id}
                         notification={notification}
                         onMarkAsRead={markAsRead}
-                        onDelete={deleteNotification}
+                        onDelete={removeNotification}
                         getNotificationIcon={getNotificationIcon}
                         getTypeLabel={getTypeLabel}
                         formatTimeAgo={formatTimeAgo}

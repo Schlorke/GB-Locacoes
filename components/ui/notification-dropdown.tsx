@@ -10,6 +10,7 @@ import { useNotifications, Notification } from '@/hooks/use-notifications'
 import { NotificationBadge } from './notification-badge'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import { NotificationType } from '@prisma/client'
 
 interface NotificationDropdownProps {
   className?: string
@@ -63,15 +64,27 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
 
   const getNotificationIcon = (type: Notification['type']) => {
     switch (type) {
-      case 'quote':
+      case NotificationType.QUOTE_CREATED:
+      case NotificationType.QUOTE_APPROVED:
+      case NotificationType.QUOTE_REJECTED:
         return '📋'
-      case 'order':
+      case NotificationType.RENTAL_CREATED:
+      case NotificationType.RENTAL_ACTIVE:
+      case NotificationType.RENTAL_COMPLETED:
         return '📦'
-      case 'payment':
+      case NotificationType.PAYMENT_PENDING:
+      case NotificationType.PAYMENT_RECEIVED:
+      case NotificationType.PAYMENT_OVERDUE:
+      case NotificationType.PAYMENT_FAILED:
         return '💳'
-      case 'equipment':
+      case NotificationType.DELIVERY_SCHEDULED:
+      case NotificationType.DELIVERY_COMPLETED:
+      case NotificationType.PICKUP_SCHEDULED:
+      case NotificationType.PICKUP_COMPLETED:
+      case NotificationType.EQUIPMENT_AVAILABLE:
         return '🔧'
-      case 'system':
+      case NotificationType.CONTRACT_SIGNED:
+      case NotificationType.PROMOTION:
         return '🔔'
       default:
         return '📢'
@@ -80,11 +93,11 @@ export function NotificationDropdown({ className }: NotificationDropdownProps) {
 
   const getPriorityColor = (priority: Notification['priority']) => {
     switch (priority) {
-      case 'high':
+      case 'HIGH':
         return 'bg-red-100 text-red-800 border-red-200'
-      case 'medium':
+      case 'MEDIUM':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'low':
+      case 'LOW':
         return 'bg-blue-100 text-blue-800 border-blue-200'
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200'

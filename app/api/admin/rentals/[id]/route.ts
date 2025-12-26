@@ -44,7 +44,7 @@ const UpdateRentalSchema = z.object({
 // GET - Obter locação específica
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -52,8 +52,10 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     const rental = await prisma.rentals.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         users: {
           select: {
@@ -123,7 +125,7 @@ export async function GET(
 // PATCH - Atualizar locação
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -131,12 +133,13 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
     const body = await request.json()
     const validatedData = UpdateRentalSchema.parse(body)
 
     // Buscar locação atual
     const currentRental = await prisma.rentals.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!currentRental) {
@@ -177,7 +180,7 @@ export async function PATCH(
 
     // Atualizar locação
     const rental = await prisma.rentals.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
       include: {
         users: {
@@ -219,7 +222,7 @@ export async function PATCH(
 // DELETE - Cancelar locação
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -227,8 +230,10 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const { id } = await params
+
     const rental = await prisma.rentals.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!rental) {
@@ -237,7 +242,7 @@ export async function DELETE(
 
     // Atualizar status para CANCELLED em vez de deletar
     await prisma.rentals.update({
-      where: { id: params.id },
+      where: { id },
       data: { status: 'CANCELLED' },
     })
 
