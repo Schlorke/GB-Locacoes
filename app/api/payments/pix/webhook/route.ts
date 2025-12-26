@@ -99,11 +99,6 @@ export async function POST(request: NextRequest) {
         where: { id: payment.rentalId },
         include: {
           payments: true,
-          users: {
-            select: {
-              id: true,
-            },
-          },
         },
       })
 
@@ -121,42 +116,6 @@ export async function POST(request: NextRequest) {
               status: 'ACTIVE',
             },
           })
-
-          // Gerar notificação de locação ativada
-          if (rental.users?.id) {
-            try {
-              const { NotificationService } =
-                await import('@/lib/notification-service')
-              await NotificationService.createRentalActive(
-                rental.users.id,
-                rental.id
-              )
-            } catch (notificationError) {
-              console.error(
-                'Erro ao criar notificação de locação ativada:',
-                notificationError
-              )
-            }
-          }
-        }
-
-        // Gerar notificação de pagamento recebido
-        if (rental.users?.id) {
-          try {
-            const { NotificationService } =
-              await import('@/lib/notification-service')
-            await NotificationService.createPaymentReceived(
-              rental.users.id,
-              payment.id,
-              Number(payment.amount),
-              payment.method
-            )
-          } catch (notificationError) {
-            console.error(
-              'Erro ao criar notificação de pagamento recebido:',
-              notificationError
-            )
-          }
         }
       }
     }

@@ -24,28 +24,27 @@ datasource db {
 }
 
 model User {
-  id             String         @id @default(cuid())
+  id             String     @id @default(cuid())
   name           String?
-  email          String         @unique
+  email          String     @unique
   password       String?
-  role           Role           @default(CLIENT)
+  role           Role       @default(CLIENT)
   emailVerified  DateTime?
   image          String?
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  cnpj           String?        @unique
-  cpf            String?        @unique
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  cnpj           String?    @unique
+  cpf            String?    @unique
   phone          String?
   accounts       Account[]
   addresses      Address[]
   auditLogs      AuditLog[]
   cart           Cart?
-  approvedQuotes Quote[]         @relation("ApprovedQuotes")
-  rejectedQuotes Quote[]         @relation("RejectedQuotes")
+  approvedQuotes Quote[]    @relation("ApprovedQuotes")
+  rejectedQuotes Quote[]    @relation("RejectedQuotes")
   quotes         Quote[]
   rentals        rentals[]
   sessions       Session[]
-  notifications  Notification[]
 
   @@map("users")
 }
@@ -536,6 +535,26 @@ model AuditLog {
   @@map("audit_logs")
 }
 
+model Notification {
+  id         String               @id @default(cuid())
+  userId     String
+  type       NotificationType
+  title      String
+  message    String
+  priority   NotificationPriority @default(MEDIUM)
+  isRead     Boolean              @default(false)
+  actionUrl  String?
+  metadata   Json?
+  createdAt  DateTime             @default(now())
+  readAt     DateTime?
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@index([type])
+  @@map("notifications")
+}
+
 model Permission {
   id        String   @id @default(cuid())
   role      Role
@@ -690,61 +709,19 @@ enum EquipmentUnitStatus {
   RETIRED
 }
 
-model Notification {
-  id          String             @id @default(cuid())
-  userId      String
-  type        NotificationType
-  priority    NotificationPriority @default(MEDIUM)
-  title       String
-  message     String
-  isRead      Boolean            @default(false)
-  readAt      DateTime?
-  actionUrl   String?
-  metadata    Json?               // Dados adicionais (IDs de entidades, valores, etc.)
-  expiresAt   DateTime?          // Para notificações temporárias
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId, isRead])
-  @@index([userId, createdAt])
-  @@index([type])
-  @@index([expiresAt])
-  @@map("notifications")
-}
-
 enum NotificationType {
-  QUOTE_CREATED
-  QUOTE_APPROVED
-  QUOTE_REJECTED
-  QUOTE_EXPIRED
-  RENTAL_CREATED
-  RENTAL_ACTIVE
-  RENTAL_COMPLETED
-  RENTAL_OVERDUE
-  RENTAL_RETURN_REMINDER
-  PAYMENT_PENDING
-  PAYMENT_RECEIVED
-  PAYMENT_OVERDUE
-  PAYMENT_FAILED
-  DELIVERY_SCHEDULED
-  DELIVERY_IN_TRANSIT
-  DELIVERY_COMPLETED
-  DELIVERY_FAILED
-  PICKUP_SCHEDULED
-  PICKUP_COMPLETED
-  EQUIPMENT_AVAILABLE
-  CONTRACT_SENT
-  CONTRACT_SIGNED
-  CONTRACT_EXPIRED
-  SYSTEM_MAINTENANCE
-  SYSTEM_UPDATE
-  PROMOTION
+  QUOTE
+  ORDER
+  PAYMENT
+  EQUIPMENT
+  SYSTEM
+  RENTAL
+  DELIVERY
+  CONTRACT
 }
 
 enum NotificationPriority {
   LOW
   MEDIUM
   HIGH
-  URGENT
 }

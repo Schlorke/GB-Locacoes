@@ -4,9 +4,9 @@
 
 O sistema de notificações da GB Locações foi projetado para manter os usuários
 informados sobre eventos importantes relacionados a orçamentos, pedidos,
-pagamentos, equipamentos e sistema. O sistema inclui notificações visuais no
-header, página dedicada na área do cliente e integração com o carrinho de
-compras.
+pagamentos, equipamentos, locações, entregas, contratos e sistema. O sistema
+inclui notificações visuais no header, página dedicada na área do cliente e
+**persistência real no banco de dados** via PostgreSQL.
 
 ## 🎯 Funcionalidades Principais
 
@@ -16,6 +16,9 @@ compras.
 - **Pedidos**: Confirmação, atualizações de status
 - **Pagamentos**: Confirmação de pagamento
 - **Equipamentos**: Disponibilidade, estoque baixo
+- **Locações**: Início, término próximo, extensões
+- **Entregas**: Agendamento, conclusão
+- **Contratos**: Disponibilidade para assinatura
 - **Sistema**: Manutenções, promoções
 
 ### 2. **Notificações do Carrinho**
@@ -29,8 +32,71 @@ compras.
 - Dropdown de notificações no header
 - Página dedicada na área do cliente
 - Animações suaves com Framer Motion
+- **Bolinha azul** para indicar notificação não lida
+- **Fundo laranja animado** que desaparece gradualmente ao marcar como lida
+- **Badge vermelho** no sininho da sidebar indicando novas notificações
 
 ## 🏗️ Arquitetura
+
+### Modelo de Dados (Prisma)
+
+```prisma
+model Notification {
+  id         String               @id @default(cuid())
+  userId     String
+  type       NotificationType
+  title      String
+  message    String
+  priority   NotificationPriority @default(MEDIUM)
+  isRead     Boolean              @default(false)
+  actionUrl  String?
+  metadata   Json?
+  createdAt  DateTime             @default(now())
+  readAt     DateTime?
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@index([type])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  QUOTE
+  ORDER
+  PAYMENT
+  EQUIPMENT
+  SYSTEM
+  RENTAL
+  DELIVERY
+  CONTRACT
+}
+
+enum NotificationPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+```
+
+### APIs REST
+
+| Endpoint                                  | Método | Descrição                    |
+| :---------------------------------------- | :----- | :--------------------------- |
+| `/api/client/notifications`               | GET    | Lista paginada com filtros   |
+| `/api/client/notifications/[id]`          | PATCH  | Marcar como lida             |
+| `/api/client/notifications/[id]`          | DELETE | Deletar notificação          |
+| `/api/client/notifications/mark-all-read` | POST   | Marcar todas como lidas      |
+| `/api/client/notifications/stats`         | GET    | Estatísticas de notificações |
+
+### Query Parameters (GET /api/client/notifications)
+
+| Parâmetro | Tipo   | Descrição                                |
+| :-------- | :----- | :--------------------------------------- |
+| `page`    | number | Página (default: 1)                      |
+| `limit`   | number | Itens por página (default: 20, max: 100) |
+| `type`    | string | Filtrar por tipo (QUOTE, ORDER, etc.)    |
+| `isRead`  | string | Filtrar por status (true/false)          |
 
 ### Hooks Principais
 
@@ -40,12 +106,15 @@ compras.
 const {
   notifications, // Lista de todas as notificações
   unreadNotifications, // Notificações não lidas
+  highPriorityNotifications, // Notificações de alta prioridade não lidas
   stats, // Estatísticas (total, não lidas, por tipo)
-  addNotification, // Adicionar nova notificação
+  isLoading, // Estado de carregamento
+  error, // Erro, se houver
   markAsRead, // Marcar como lida
   markAllAsRead, // Marcar todas como lidas
   removeNotification, // Remover notificação
-  clearAll // Limpar todas
+  clearAll, // Limpar todas (local)
+  refresh // Recarregar da API
 } = useNotifications()
 ```
 
@@ -60,32 +129,57 @@ const {
 } = useCartNotifications()
 ```
 
-### Componentes
+## 🔧 Serviço de Notificações (Backend)
 
-#### `NotificationBadge`
+### Localização
 
-```tsx
-<NotificationBadge
-  count={5}
-  variant="pulse" // default, dot, pulse
-  size="sm" // sm, md, lg
-  maxCount={99}
-/>
+`lib/notification-service.ts`
+
+### Criando Notificações no Servidor
+
+```typescript
+import {
+  notifyQuoteApproved,
+  notifyPaymentReceived,
+  notifyDeliveryScheduled,
+  createNotification
+} from "@/lib/notification-service"
+
+// Notificação de orçamento aprovado
+await notifyQuoteApproved(userId, quoteId, "Betoneira 400L")
+
+// Notificação de pagamento
+await notifyPaymentReceived(userId, 1250.0, "PED-2024-001")
+
+// Notificação de entrega agendada
+await notifyDeliveryScheduled(userId, rentalId, new Date("2025-01-15"))
+
+// Notificação customizada
+await createNotification({
+  userId,
+  type: NotificationType.SYSTEM,
+  title: "Promoção Especial!",
+  message: "Desconto de 20% em locações mensais",
+  priority: NotificationPriority.MEDIUM,
+  actionUrl: "/equipamentos"
+})
 ```
 
-#### `NotificationBadgeWrapper`
+### Helpers Disponíveis
 
-```tsx
-<NotificationBadgeWrapper count={itemCount} size="sm">
-  <Button>Carrinho</Button>
-</NotificationBadgeWrapper>
-```
-
-#### `NotificationDropdown`
-
-```tsx
-<NotificationDropdown className="custom-class" />
-```
+| Função                     | Tipo      | Prioridade  |
+| :------------------------- | :-------- | :---------- |
+| `notifyQuoteCreated`       | QUOTE     | MEDIUM      |
+| `notifyQuoteApproved`      | QUOTE     | HIGH        |
+| `notifyQuoteRejected`      | QUOTE     | MEDIUM      |
+| `notifyPaymentReceived`    | PAYMENT   | HIGH        |
+| `notifyEquipmentAvailable` | EQUIPMENT | MEDIUM      |
+| `notifyRentalStarted`      | RENTAL    | HIGH        |
+| `notifyRentalEndingSoon`   | RENTAL    | HIGH/MEDIUM |
+| `notifyDeliveryScheduled`  | DELIVERY  | MEDIUM      |
+| `notifyDeliveryCompleted`  | DELIVERY  | HIGH        |
+| `notifyContractReady`      | CONTRACT  | HIGH        |
+| `notifySystem`             | SYSTEM    | LOW         |
 
 ## 📱 Integração no Header
 
@@ -100,100 +194,43 @@ const {
 - **Usuário logado**: Dropdown + botão de carrinho com notificações
 - **Usuário não logado**: Botões de login/cadastro
 
+### Sincronização
+
+O contador de notificações não lidas é sincronizado entre componentes via:
+
+1. **localStorage**: Chave `gb-locacoes-unread-count`
+2. **CustomEvent**: Evento `notificationUpdate` com `detail.unreadCount`
+
+```typescript
+// Disparar atualização
+window.dispatchEvent(
+  new CustomEvent("notificationUpdate", { detail: { unreadCount: 5 } })
+)
+
+// Escutar atualização
+window.addEventListener("notificationUpdate", (e) => {
+  console.log("Não lidas:", e.detail.unreadCount)
+})
+```
+
 ## 🎨 Tipos de Notificação
 
 ### Por Categoria
 
-- **📋 Orçamento**: Relacionadas a orçamentos
-- **📦 Pedido**: Relacionadas a pedidos
-- **💳 Pagamento**: Relacionadas a pagamentos
-- **🔧 Equipamento**: Relacionadas a equipamentos
-- **🔔 Sistema**: Relacionadas ao sistema
+- **📋 Orçamento (QUOTE)**: Relacionadas a orçamentos
+- **📦 Pedido (ORDER)**: Relacionadas a pedidos
+- **💳 Pagamento (PAYMENT)**: Relacionadas a pagamentos
+- **🔧 Equipamento (EQUIPMENT)**: Relacionadas a equipamentos
+- **📦 Locação (RENTAL)**: Relacionadas a locações
+- **🚚 Entrega (DELIVERY)**: Relacionadas a entregas
+- **📄 Contrato (CONTRACT)**: Relacionadas a contratos
+- **🔔 Sistema (SYSTEM)**: Relacionadas ao sistema
 
 ### Por Prioridade
 
-- **🔴 Alta**: Requer atenção imediata
-- **🟡 Média**: Importante mas não urgente
-- **🔵 Baixa**: Informativa
-
-## 💾 Persistência
-
-### LocalStorage
-
-- Notificações são salvas por usuário (email)
-- Chave: `gb-locacoes-notifications-{email}`
-- Limite: 50 notificações mais recentes
-- Limpeza automática de notificações antigas
-
-### Carrinho
-
-- Integrado com Zustand store existente
-- Persistência automática via localStorage
-- Sincronização entre abas
-
-## 🔧 Helpers de Notificação
-
-### Orçamentos
-
-```typescript
-const helpers = createNotificationHelpers(addNotification)
-
-// Novo orçamento
-helpers.newQuote("Betoneira 400L", "quote-123")
-
-// Orçamento aprovado
-helpers.quoteApproved("Betoneira 400L", "quote-123")
-
-// Orçamento rejeitado
-helpers.quoteRejected("Betoneira 400L", "Motivo: Estoque insuficiente")
-```
-
-### Pedidos
-
-```typescript
-// Novo pedido
-helpers.newOrder("PED-2024-001")
-
-// Atualização de status
-helpers.orderStatusUpdate("PED-2024-001", "Em transporte")
-```
-
-### Pagamentos
-
-```typescript
-// Pagamento confirmado
-helpers.paymentReceived(1250.0, "PED-2024-001")
-```
-
-### Equipamentos
-
-```typescript
-// Equipamento disponível
-helpers.equipmentAvailable("Guincho Elétrico 500kg")
-```
-
-### Sistema
-
-```typescript
-// Manutenção
-helpers.systemMaintenance("Sistema será atualizado hoje às 23h")
-
-// Promoção
-helpers.promotion(
-  "Promoção Especial!",
-  "Desconto de 20% em equipamentos para aluguel mensal",
-  "/equipamentos"
-)
-```
-
-### Carrinho
-
-```typescript
-import { cartNotificationHelpers } from "@/hooks/use-cart-notifications"
-
-// Carrinho abandonado
-cartNotificationHelpers.cartAbandoned(3)
-```
+- **🔴 Alta (HIGH)**: Requer atenção imediata
+- **🟡 Média (MEDIUM)**: Importante mas não urgente
+- **🔵 Baixa (LOW)**: Informativa
 
 ## 📄 Página de Notificações
 
@@ -203,19 +240,19 @@ cartNotificationHelpers.cartAbandoned(3)
 
 ### Funcionalidades
 
-- **Filtros**: Por tipo, status (lida/não lida)
-- **Busca**: Por título e mensagem
-- **Ordenação**: Por data, prioridade
-- **Ações**: Marcar como lida, remover, limpar todas
-- **Demo**: Componente para testar notificações
+- **Lista paginada** de notificações ordenadas por data
+- **Botão "Marcar todas como lidas"** (visível quando há não lidas)
+- **Botão de atualizar** para recarregar da API
+- **Ações por notificação**: Ver (se tiver actionUrl), Marcar como lida, Deletar
+- **Loading state** com spinner
+- **Error state** com botão de retry
+- **Empty state** informativo
 
-### Interface
+### Elementos Visuais Preservados
 
-- Lista paginada de notificações
-- Badges de prioridade e tipo
-- Timestamps relativos
-- Ações contextuais
-- Estados vazios informativos
+- **Bolinha azul**: Canto superior direito de cada notificação não lida
+- **Fundo laranja animado**: Gradiente que desaparece ao marcar como lida
+- **Badge vermelho no sininho**: Indica novas notificações na sidebar
 
 ## 🎭 Animações
 
@@ -232,6 +269,15 @@ cartNotificationHelpers.cartAbandoned(3)
 - **Duração**: 200ms para interações
 - **Easing**: Suave e natural
 - **Stagger**: 100ms entre itens de lista
+
+### Animação do Fundo Laranja
+
+```css
+.transition-opacity.duration-1000.ease-in-out
+```
+
+O fundo laranja usa `opacity-100` quando não lida e `opacity-0` quando lida, com
+transição de 1000ms para efeito gradual.
 
 ## ♿ Acessibilidade
 
@@ -253,65 +299,32 @@ cartNotificationHelpers.cartAbandoned(3)
 - Estados visuais claros
 - Texto legível em todos os tamanhos
 
-## 🧪 Testes
+## 🧪 Integração com Eventos do Sistema
 
-### Teste de Notificações
+Para integrar notificações com eventos do sistema, use os helpers do serviço nos
+endpoints de API ou server actions:
 
-Para testar notificações, use diretamente o hook `useNotifications`:
-
-```tsx
-import { useNotifications } from "@/hooks/use-notifications"
-
-const { addNotification } = useNotifications()
-
-// Adicionar notificação de teste
-addNotification({
-  type: "quote",
-  title: "Teste de Notificação",
-  message: "Esta é uma notificação de teste",
-  priority: "medium",
-  actionUrl: "/orcamento"
-})
-```
-
-## 🚀 Uso Prático
-
-### 1. Adicionar Notificação
+### Exemplo: Ao Aprovar Orçamento
 
 ```typescript
-import { useNotifications } from "@/hooks/use-notifications"
+// app/api/admin/quotes/[id]/approve/route.ts
+import { notifyQuoteApproved } from "@/lib/notification-service"
 
-const { addNotification } = useNotifications()
+export async function POST(req, { params }) {
+  const quote = await prisma.quote.update({
+    where: { id: params.id },
+    data: { status: "APPROVED" },
+    include: { items: { include: { equipment: true } } }
+  })
 
-addNotification({
-  type: "quote",
-  title: "Orçamento Aprovado",
-  message: "Seu orçamento foi aprovado!",
-  priority: "high",
-  actionUrl: "/area-cliente/orcamentos/123"
-})
-```
+  // Notificar cliente
+  if (quote.userId) {
+    const equipmentName = quote.items[0]?.equipment.name || "Equipamento"
+    await notifyQuoteApproved(quote.userId, quote.id, equipmentName)
+  }
 
-### 2. Integrar no Componente
-
-```tsx
-import { NotificationBadgeWrapper } from '@/components/ui/notification-badge'
-import { useCartNotifications } from '@/hooks/use-cart-notifications'
-
-const { itemCount } = useCartNotifications()
-
-<NotificationBadgeWrapper count={itemCount}>
-  <Button>Carrinho</Button>
-</NotificationBadgeWrapper>
-```
-
-### 3. Usar Helpers
-
-```typescript
-import { createNotificationHelpers } from "@/hooks/use-notifications"
-
-const helpers = createNotificationHelpers(addNotification)
-helpers.quoteApproved("Equipamento", "quote-123")
+  return NextResponse.json(quote)
+}
 ```
 
 ## 📊 Métricas e Analytics
@@ -339,12 +352,12 @@ helpers.quoteApproved("Equipamento", "quote-123")
 - **Templates**: Templates personalizáveis
 - **Agrupamento**: Agrupar notificações similares
 - **Preferências**: Configurações de notificação por usuário
+- **WebSocket**: Notificações em tempo real
 
 ### Otimizações
 
 - **Lazy Loading**: Carregar notificações sob demanda
 - **Virtual Scrolling**: Para listas grandes
-- **WebSocket**: Notificações em tempo real
 - **Service Worker**: Notificações offline
 
 ## 🐛 Troubleshooting
@@ -354,37 +367,39 @@ helpers.quoteApproved("Equipamento", "quote-123")
 #### Notificações não aparecem
 
 - Verificar se o usuário está logado
-- Verificar localStorage do navegador
-- Verificar console para erros
+- Verificar se a tabela `notifications` existe no banco
+- Verificar console para erros de API
 
 #### Badge não atualiza
 
-- Verificar se o hook está sendo usado corretamente
-- Verificar se o componente está re-renderizando
-- Verificar se o estado está sendo atualizado
+- Verificar se o evento `notificationUpdate` está sendo disparado
+- Verificar localStorage `gb-locacoes-unread-count`
+- Verificar se o componente está escutando o evento
 
 #### Performance lenta
 
-- Verificar se há muitas notificações (limite: 50)
+- Verificar se há muitas notificações (use paginação)
 - Verificar se as animações estão otimizadas
-- Verificar se o localStorage não está corrompido
+- Verificar índices no banco de dados
 
 ### Debug
 
 ```typescript
-// Verificar notificações no console
-console.log(useNotifications())
+// Verificar notificações via API
+fetch("/api/client/notifications")
+  .then((r) => r.json())
+  .then(console.log)
 
-// Verificar carrinho
-console.log(useCartNotifications())
+// Verificar estatísticas
+fetch("/api/client/notifications/stats")
+  .then((r) => r.json())
+  .then(console.log)
 
-// Limpar todas as notificações
-const { clearAll } = useNotifications()
-clearAll()
+// Verificar contador local
+console.log(localStorage.getItem("gb-locacoes-unread-count"))
 ```
 
 ---
 
-**Última atualização**: Janeiro 2025  
-**Versão**: 1.0  
+**Última atualização**: Dezembro 2025 **Versão**: 2.0 (Persistência no Banco)
 **Status**: ✅ Implementado e Funcional

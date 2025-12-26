@@ -47,13 +47,15 @@ interface Equipment {
 
 export default function EquipmentDetailsPage() {
   const params = useParams()
+  // Extrair valores imediatamente para evitar enumeração do objeto params
+  const equipmentId = typeof params.id === 'string' ? params.id : null
   const router = useRouter()
   const [equipment, setEquipment] = useState<Equipment | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
-    if (!params.id) return
+    if (!equipmentId) return
 
     const fetchEquipment = async (id: string) => {
       try {
@@ -73,8 +75,8 @@ export default function EquipmentDetailsPage() {
       }
     }
 
-    fetchEquipment(params.id as string)
-  }, [params.id, router])
+    fetchEquipment(equipmentId)
+  }, [equipmentId, router])
 
   const handleDelete = async () => {
     if (!equipment) return

@@ -1,103 +1,65 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
-// GET - Estatísticas de notificações do cliente
-export async function GET(_request: NextRequest) {
+/**
+ * GET /api/client/notifications/stats
+ * Retorna estatísticas de notificações do usuário
+ */
+export async function GET() {
   try {
     const session = await getServerSession(authOptions)
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
-    const userId = session.user.id
-
-    // Verificar se o modelo existe
-    if (!prisma.notification) {
-      console.error(
-        'Prisma Client não contém o modelo Notification. Execute: pnpm db:generate'
-      )
-      return NextResponse.json({
-        total: 0,
-        unread: 0,
-        byType: {},
-        byPriority: {},
-      })
-    }
-
-    // Construir filtro de expiresAt uma vez
-    const expiresAtFilter = {
-      OR: [{ expiresAt: null }, { expiresAt: { gte: new Date() } }],
-    }
-
-    // Buscar estatísticas em paralelo
     const [total, unread, byType, byPriority] = await Promise.all([
       // Total de notificações
       prisma.notification.count({
-        where: {
-          userId,
-          AND: [expiresAtFilter],
-        },
+        where: { userId: session.user.id },
       }),
-
       // Não lidas
       prisma.notification.count({
-        where: {
-          userId,
-          isRead: false,
-          AND: [expiresAtFilter],
-        },
+        where: { userId: session.user.id, isRead: false },
       }),
-
-      // Por tipo
+      // Por tipo (não lidas)
       prisma.notification.groupBy({
         by: ['type'],
-        where: {
-          userId,
-          isRead: false,
-          AND: [expiresAtFilter],
-        },
-        _count: {
-          id: true,
-        },
+        where: { userId: session.user.id, isRead: false },
+        _count: { type: true },
       }),
-
-      // Por prioridade
+      // Por prioridade (não lidas)
       prisma.notification.groupBy({
         by: ['priority'],
-        where: {
-          userId,
-          isRead: false,
-          AND: [expiresAtFilter],
-        },
-        _count: {
-          id: true,
-        },
+        where: { userId: session.user.id, isRead: false },
+        _count: { priority: true },
       }),
     ])
-
-    // Transformar resultados
-    const byTypeMap: Record<string, number> = {}
-    byType.forEach((item) => {
-      byTypeMap[item.type] = item._count.id
-    })
-
-    const byPriorityMap: Record<string, number> = {}
-    byPriority.forEach((item) => {
-      byPriorityMap[item.priority] = item._count.id
-    })
 
     return NextResponse.json({
       total,
       unread,
-      byType: byTypeMap,
-      byPriority: byPriorityMap,
+      byType: byType.reduce(
+        (acc, item) => {
+          acc[item.type.toLowerCase()] = item._count.type
+          return acc
+        },
+        {} as Record<string, number>
+      ),
+      byPriority: byPriority.reduce(
+        (acc, item) => {
+          acc[item.priority.toLowerCase()] = item._count.priority
+          return acc
+        },
+        {} as Record<string, number>
+      ),
     })
   } catch (error) {
-    console.error('Error fetching notification stats:', error)
+    console.error('[GET /api/client/notifications/stats] Erro:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Erro interno do servidor' },
       { status: 500 }
     )
   }

@@ -3,24 +3,22 @@ import * as z from 'zod';
 import type { Prisma } from '@prisma/client';
 import { NotificationTypeSchema } from '../enums/NotificationType.schema';
 import { NotificationPrioritySchema } from '../enums/NotificationPriority.schema';
-import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema';
-import { UserCreateNestedOneWithoutNotificationsInputObjectSchema as UserCreateNestedOneWithoutNotificationsInputObjectSchema } from './UserCreateNestedOneWithoutNotificationsInput.schema'
+import { NullableJsonNullValueInputSchema } from '../enums/NullableJsonNullValueInput.schema'
 
 import { JsonValueSchema as jsonSchema } from '../../helpers/json-helpers';
 
 const makeSchema = () => z.object({
   id: z.string().optional(),
+  userId: z.string(),
   type: NotificationTypeSchema,
-  priority: NotificationPrioritySchema.optional(),
   title: z.string(),
   message: z.string(),
+  priority: NotificationPrioritySchema.optional(),
   isRead: z.boolean().optional(),
-  readAt: z.coerce.date().optional().nullable(),
   actionUrl: z.string().optional().nullable(),
   metadata: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
-  expiresAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
-  user: z.lazy(() => UserCreateNestedOneWithoutNotificationsInputObjectSchema)
+  readAt: z.coerce.date().optional().nullable()
 }).strict();
 export const NotificationCreateInputObjectSchema: z.ZodType<Prisma.NotificationCreateInput> = makeSchema() as unknown as z.ZodType<Prisma.NotificationCreateInput>;
 export const NotificationCreateInputObjectZodSchema = makeSchema();

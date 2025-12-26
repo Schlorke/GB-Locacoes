@@ -10,6 +10,40 @@ adere ao [Versionamento Semântico](HTTPS://semver.org/lang/pt-BR/).
 
 ### Added ✨
 
+- **Sistema de Notificações Funcional com Persistência no Banco**: Implementado
+  sistema completo de notificações com persistência real no PostgreSQL
+  - **Modelo Prisma**: Novo modelo `Notification` com campos `id`, `userId`,
+    `type`, `title`, `message`, `priority`, `isRead`, `actionUrl`, `metadata`,
+    `createdAt`, `readAt`
+  - **Enums Prisma**: `NotificationType` (QUOTE, ORDER, PAYMENT, EQUIPMENT,
+    SYSTEM, RENTAL, DELIVERY, CONTRACT) e `NotificationPriority` (LOW, MEDIUM,
+    HIGH)
+  - **APIs REST**:
+    - `GET /api/client/notifications` - Lista paginada com filtros e
+      estatísticas
+    - `PATCH /api/client/notifications/[id]` - Marcar como lida
+    - `DELETE /api/client/notifications/[id]` - Deletar notificação
+    - `POST /api/client/notifications/mark-all-read` - Marcar todas como lidas
+    - `GET /api/client/notifications/stats` - Estatísticas de notificações
+  - **Serviço Central**: `lib/notification-service.ts` com helpers para criar
+    notificações de orçamentos, pagamentos, locações, entregas, contratos, etc.
+  - **Hook Atualizado**: `hooks/use-notifications.ts` agora consome a API real,
+    mantendo compatibilidade com header/layout via eventos customizados
+  - **Página Atualizada**: `/area-cliente/notificacoes` usa dados reais com
+    loading states, tratamento de erros, botão de atualizar e marcar todas como
+    lidas (visual 100% preservado: bolinha azul, animação laranja, badges)
+  - **Arquivos Criados**:
+    - `app/api/client/notifications/route.ts`
+    - `app/api/client/notifications/[id]/route.ts`
+    - `app/api/client/notifications/mark-all-read/route.ts`
+    - `app/api/client/notifications/stats/route.ts`
+    - `lib/notification-service.ts`
+  - **Arquivos Modificados**:
+    - `prisma/schema.prisma` - Modelo Notification e enums
+    - `hooks/use-notifications.ts` - Consumo de API
+    - `app/area-cliente/notificacoes/page.tsx` - Dados reais
+  - **Data**: 2025-12-26
+
 - **Sistema de Atividade Recente no Dashboard do Cliente**: Implementada
   funcionalidade completa para exibir atividades recentes do cliente
   - Nova API `/api/client/activities` que busca e agrega atividades do cliente

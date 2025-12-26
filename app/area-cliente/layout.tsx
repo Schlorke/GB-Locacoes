@@ -38,12 +38,6 @@ export default function AreaClienteLayout({
     }
   }, [status, router])
 
-  // Simular notificações não lidas (em produção, isso viria de uma API)
-  useEffect(() => {
-    // Simular algumas notificações não lidas
-    setUnreadNotifications(2)
-  }, [])
-
   // Escutar mudanças nas notificações via evento customizado
   useEffect(() => {
     const handleNotificationUpdate = (e: CustomEvent) => {

@@ -21,6 +21,5 @@ export const UserCreateResultSchema = z.object({
   rejectedQuotes: z.array(z.unknown()),
   quotes: z.array(z.unknown()),
   rentals: z.array(z.unknown()),
-  sessions: z.array(z.unknown()),
-  notifications: z.array(z.unknown())
+  sessions: z.array(z.unknown())
 });

@@ -11,7 +11,7 @@ const ExtendRentalSchema = z.object({
 // POST - Solicitar prorrogação de locação
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -19,14 +19,13 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params
     const body = await request.json()
     const validatedData = ExtendRentalSchema.parse(body)
 
     // Verificar se a locação pertence ao cliente
     const rental = await prisma.rentals.findFirst({
       where: {
-        id,
+        id: params.id,
         userid: session.user.id,
         status: {
           in: ['ACTIVE', 'OVERDUE'], // Só pode prorrogar locações ativas ou atrasadas
@@ -59,7 +58,7 @@ export async function POST(
 
     // Atualizar locação
     const updatedRental = await prisma.rentals.update({
-      where: { id },
+      where: { id: params.id },
       data: {
         enddate: newEndDate,
         extensionDays: validatedData.extensionDays,
@@ -70,7 +69,7 @@ export async function POST(
     // Criar pagamento para a prorrogação
     await prisma.payment.create({
       data: {
-        rentalId: id,
+        rentalId: params.id,
         amount: extensionFee,
         method: 'PIX',
         status: 'PENDING',

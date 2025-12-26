@@ -63,7 +63,7 @@ function buildContractContent(rental: RentalWithRelations) {
 
 export async function POST(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -71,10 +71,8 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params
-
     const rental = await prisma.rentals.findUnique({
-      where: { id },
+      where: { id: params.id },
       include: {
         users: true,
         rental_items: {
@@ -92,12 +90,12 @@ export async function POST(
     const content = buildContractContent(rental)
 
     const existing = await prisma.contract.findUnique({
-      where: { rentalId: id },
+      where: { rentalId: params.id },
     })
 
     const contract = existing
       ? await prisma.contract.update({
-          where: { rentalId: id },
+          where: { rentalId: params.id },
           data: {
             template: 'default-v1',
             content,
@@ -106,7 +104,7 @@ export async function POST(
         })
       : await prisma.contract.create({
           data: {
-            rentalId: id,
+            rentalId: params.id,
             template: 'default-v1',
             content,
             status: 'SENT',
@@ -125,7 +123,7 @@ export async function POST(
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -133,10 +131,8 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params
-
     const contract = await prisma.contract.findUnique({
-      where: { rentalId: id },
+      where: { rentalId: params.id },
     })
 
     if (!contract) {

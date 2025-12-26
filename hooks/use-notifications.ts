@@ -1,279 +1,280 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useSession } from 'next-auth/react'
-import { NotificationType, NotificationPriority } from '@prisma/client'
 
 export interface Notification {
   id: string
-  type: NotificationType
+  type:
+    | 'quote'
+    | 'order'
+    | 'payment'
+    | 'equipment'
+    | 'system'
+    | 'rental'
+    | 'delivery'
+    | 'contract'
   title: string
   message: string
   isRead: boolean
   createdAt: Date
+  actionUrl?: string
+  priority: 'low' | 'medium' | 'high'
   readAt?: Date | null
-  actionUrl?: string | null
-  priority: NotificationPriority
-  metadata?: Record<string, unknown> | null
-  expiresAt?: Date | null
+  metadata?: Record<string, unknown>
 }
 
 export interface NotificationStats {
   total: number
   unread: number
   byType: Record<string, number>
-  byPriority: Record<string, number>
 }
 
-interface NotificationFromAPI {
+interface ApiNotification {
   id: string
   type: string
   title: string
   message: string
   isRead: boolean
   createdAt: string
-  readAt?: string | null
-  expiresAt?: string | null
-  actionUrl?: string | null
+  actionUrl?: string
   priority: string
-  metadata?: Record<string, unknown> | null
+  readAt?: string | null
+  metadata?: Record<string, unknown>
 }
 
-const NOTIFICATIONS_STORAGE_KEY = 'gb-locacoes-notifications-cache'
+interface NotificationsResponse {
+  notifications: ApiNotification[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
+  stats: {
+    total: number
+    unread: number
+    byType: Record<string, number>
+  }
+}
+
+// Chave para contador local (mantém compatibilidade com header/layout)
+const UNREAD_COUNT_KEY = 'gb-locacoes-unread-count'
+
+// Função para disparar evento de atualização (usado pelo header/layout)
+function dispatchNotificationUpdate(unreadCount: number) {
+  localStorage.setItem(UNREAD_COUNT_KEY, unreadCount.toString())
+  const event = new CustomEvent('notificationUpdate', {
+    detail: { unreadCount },
+  })
+  window.dispatchEvent(event)
+}
 
 export function useNotifications() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
   const [notifications, setNotifications] = useState<Notification[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const [stats, setStats] = useState<NotificationStats>({
     total: 0,
     unread: 0,
     byType: {},
-    byPriority: {},
   })
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const fetchedRef = useRef(false)
+
+  // Converter notificação da API para o formato do hook
+  const mapApiNotification = useCallback(
+    (apiNotif: ApiNotification): Notification => ({
+      id: apiNotif.id,
+      type: apiNotif.type.toLowerCase() as Notification['type'],
+      title: apiNotif.title,
+      message: apiNotif.message,
+      isRead: apiNotif.isRead,
+      createdAt: new Date(apiNotif.createdAt),
+      actionUrl: apiNotif.actionUrl,
+      priority: apiNotif.priority.toLowerCase() as Notification['priority'],
+      readAt: apiNotif.readAt ? new Date(apiNotif.readAt) : null,
+      metadata: apiNotif.metadata,
+    }),
+    []
+  )
 
   // Carregar notificações da API
   const fetchNotifications = useCallback(async () => {
-    if (!session?.user) {
+    if (status !== 'authenticated' || !session?.user?.id) {
       setIsLoading(false)
       return
     }
 
     try {
-      const [notificationsRes, statsRes] = await Promise.all([
-        fetch('/api/client/notifications?limit=50'),
-        fetch('/api/client/notifications/stats'),
-      ])
+      setError(null)
+      const response = await fetch('/api/client/notifications?limit=50')
 
-      if (!notificationsRes.ok) {
-        const errorData = await notificationsRes.json().catch(() => ({}))
-        throw new Error(
-          errorData.error ||
-            `Failed to fetch notifications: ${notificationsRes.status}`
-        )
+      if (!response.ok) {
+        throw new Error('Erro ao carregar notificações')
       }
 
-      if (!statsRes.ok) {
-        const errorData = await statsRes.json().catch(() => ({}))
-        throw new Error(
-          errorData.error || `Failed to fetch stats: ${statsRes.status}`
-        )
-      }
+      const data: NotificationsResponse = await response.json()
 
-      const notificationsData = await notificationsRes.json()
-      const statsData = await statsRes.json()
-
-      const formattedNotifications: Notification[] =
-        notificationsData.notifications.map((n: NotificationFromAPI) => ({
-          ...n,
-          createdAt: new Date(n.createdAt),
-          readAt: n.readAt ? new Date(n.readAt) : null,
-          expiresAt: n.expiresAt ? new Date(n.expiresAt) : null,
-        }))
-
-      setNotifications(formattedNotifications)
-      setStats(statsData)
-
-      // Cache no localStorage para performance
-      if (session.user.email) {
-        try {
-          localStorage.setItem(
-            `${NOTIFICATIONS_STORAGE_KEY}-${session.user.email}`,
-            JSON.stringify({
-              notifications: formattedNotifications,
-              stats: statsData,
-              timestamp: Date.now(),
-            })
-          )
-        } catch (_error) {
-          // Ignorar erros de localStorage
-        }
-      }
-    } catch (error) {
-      console.error('Erro ao carregar notificações:', error)
-
-      // Log detalhado do erro para debug
-      if (error instanceof Error) {
-        console.error('Erro detalhado:', {
-          message: error.message,
-          stack: error.stack,
-        })
-      }
-
-      // Fallback para cache se API falhar
-      if (session?.user?.email) {
-        try {
-          const cached = localStorage.getItem(
-            `${NOTIFICATIONS_STORAGE_KEY}-${session.user.email}`
-          )
-          if (cached) {
-            const parsed = JSON.parse(cached)
-            if (parsed.timestamp && Date.now() - parsed.timestamp < 60000) {
-              // Cache válido por 1 minuto
-              setNotifications(
-                parsed.notifications.map((n: NotificationFromAPI) => ({
-                  ...n,
-                  createdAt: new Date(n.createdAt),
-                  readAt: n.readAt ? new Date(n.readAt) : null,
-                  expiresAt: n.expiresAt ? new Date(n.expiresAt) : null,
-                }))
-              )
-              setStats(parsed.stats)
-            }
-          }
-        } catch (_cacheError) {
-          // Ignorar erros de cache
-        }
-      }
-
-      // Se não há cache, definir arrays vazios para evitar erro de renderização
-      setNotifications([])
-      setStats({
-        total: 0,
-        unread: 0,
-        byType: {},
-        byPriority: {},
-      })
+      const mappedNotifications = data.notifications.map(mapApiNotification)
+      setNotifications(mappedNotifications)
+      setStats(data.stats)
+    } catch (err) {
+      console.error('[useNotifications] Erro ao carregar:', err)
+      setError(err instanceof Error ? err.message : 'Erro desconhecido')
     } finally {
       setIsLoading(false)
     }
-  }, [session?.user])
+  }, [session?.user?.id, status, mapApiNotification])
 
-  // Carregar notificações ao montar e quando sessão mudar
+  // Carregar notificações quando sessão estiver disponível
   useEffect(() => {
+    if (status === 'loading') return
+    if (status === 'unauthenticated') {
+      setIsLoading(false)
+      return
+    }
+
+    // Evitar múltiplas requisições
+    if (fetchedRef.current) return
+    fetchedRef.current = true
+
     fetchNotifications()
-  }, [fetchNotifications])
+  }, [status, fetchNotifications])
 
   // Marcar notificação como lida
-  const markAsRead = useCallback(
-    async (notificationId: string) => {
-      // Otimista: atualizar UI imediatamente
-      setNotifications((prev) =>
-        prev.map((n) =>
+  const markAsRead = useCallback(async (notificationId: string) => {
+    try {
+      const response = await fetch(
+        `/api/client/notifications/${notificationId}`,
+        {
+          method: 'PATCH',
+        }
+      )
+
+      if (!response.ok) {
+        const errorData = await response
+          .json()
+          .catch(() => ({ error: 'Erro desconhecido' }))
+        throw new Error(
+          errorData.error || `Erro ${response.status}: ${response.statusText}`
+        )
+      }
+
+      await response.json()
+
+      setNotifications((prev) => {
+        const updated = prev.map((n) =>
           n.id === notificationId
             ? { ...n, isRead: true, readAt: new Date() }
             : n
         )
-      )
+        return updated
+      })
 
-      try {
-        const res = await fetch(
-          `/api/client/notifications/${notificationId}/read`,
-          {
-            method: 'PATCH',
-          }
-        )
-
-        if (!res.ok) {
-          throw new Error('Failed to mark notification as read')
-        }
-
-        // Atualizar stats
-        await fetchNotifications()
-      } catch (error) {
-        console.error('Erro ao marcar notificação como lida:', error)
-        // Reverter otimista
-        fetchNotifications()
-      }
-    },
-    [fetchNotifications]
-  )
+      setStats((prev) => {
+        const newUnread = Math.max(0, prev.unread - 1)
+        return { ...prev, unread: newUnread }
+      })
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'Erro ao marcar como lida'
+      console.error('[useNotifications] Erro ao marcar como lida:', err)
+      setError(errorMessage)
+      // Não re-throw para evitar quebrar a UI, apenas logar o erro
+    }
+  }, [])
 
   // Marcar todas como lidas
   const markAllAsRead = useCallback(async () => {
-    // Otimista
-    setNotifications((prev) =>
-      prev.map((n) => ({ ...n, isRead: true, readAt: new Date() }))
-    )
-
     try {
-      const res = await fetch('/api/client/notifications/read-all', {
-        method: 'PATCH',
+      const response = await fetch('/api/client/notifications/mark-all-read', {
+        method: 'POST',
       })
 
-      if (!res.ok) {
-        throw new Error('Failed to mark all notifications as read')
+      if (!response.ok) {
+        throw new Error('Erro ao marcar todas como lidas')
       }
 
-      await fetchNotifications()
-    } catch (error) {
-      console.error('Erro ao marcar todas como lidas:', error)
-      fetchNotifications()
+      setNotifications((prev) =>
+        prev.map((n) => ({ ...n, isRead: true, readAt: new Date() }))
+      )
+
+      setStats((prev) => {
+        return { ...prev, unread: 0, byType: {} }
+      })
+    } catch (err) {
+      console.error('[useNotifications] Erro ao marcar todas como lidas:', err)
     }
-  }, [fetchNotifications])
+  }, [])
 
   // Remover notificação
-  const removeNotification = useCallback(
-    async (notificationId: string) => {
-      // Otimista
-      const removed = notifications.find((n) => n.id === notificationId)
-      setNotifications((prev) => prev.filter((n) => n.id !== notificationId))
-
-      try {
-        const res = await fetch(`/api/client/notifications/${notificationId}`, {
-          method: 'DELETE',
-        })
-
-        if (!res.ok) {
-          throw new Error('Failed to delete notification')
-        }
-
-        await fetchNotifications()
-      } catch (error) {
-        console.error('Erro ao remover notificação:', error)
-        // Reverter otimista
-        if (removed) {
-          setNotifications((prev) => [...prev, removed])
-        }
-        fetchNotifications()
-      }
-    },
-    [notifications, fetchNotifications]
-  )
-
-  // Limpar todas as notificações lidas
-  const clearAll = useCallback(async () => {
+  const removeNotification = useCallback(async (notificationId: string) => {
     try {
-      const res = await fetch('/api/client/notifications/delete-read', {
-        method: 'DELETE',
-      })
+      const response = await fetch(
+        `/api/client/notifications/${notificationId}`,
+        {
+          method: 'DELETE',
+        }
+      )
 
-      if (!res.ok) {
-        throw new Error('Failed to clear notifications')
+      if (!response.ok) {
+        throw new Error('Erro ao remover notificação')
       }
 
-      await fetchNotifications()
-    } catch (error) {
-      console.error('Erro ao limpar notificações:', error)
+      setNotifications((prev) => {
+        const notification = prev.find((n) => n.id === notificationId)
+        const updated = prev.filter((n) => n.id !== notificationId)
+
+        if (notification && !notification.isRead) {
+          setStats((prevStats) => {
+            const newUnread = Math.max(0, prevStats.unread - 1)
+            return {
+              ...prevStats,
+              unread: newUnread,
+              total: prevStats.total - 1,
+            }
+          })
+        } else {
+          setStats((prevStats) => ({
+            ...prevStats,
+            total: prevStats.total - 1,
+          }))
+        }
+
+        return updated
+      })
+    } catch (err) {
+      console.error('[useNotifications] Erro ao remover:', err)
     }
+  }, [])
+
+  // Limpar todas as notificações (não implementado na API, mas mantém interface)
+  const clearAll = useCallback(() => {
+    // Para limpar todas, precisaria deletar uma a uma ou criar endpoint específico
+    // Por ora, apenas limpa localmente
+    setNotifications([])
+    setStats({ total: 0, unread: 0, byType: {} })
+  }, [])
+
+  // Recarregar notificações
+  const refresh = useCallback(() => {
+    fetchedRef.current = false
+    setIsLoading(true)
+    fetchNotifications()
   }, [fetchNotifications])
+
+  // Sincronizar contador global quando stats.unread mudar (após render)
+  useEffect(() => {
+    dispatchNotificationUpdate(stats.unread)
+  }, [stats.unread])
 
   // Notificações não lidas
   const unreadNotifications = notifications.filter((n) => !n.isRead)
 
   // Notificações por prioridade
   const highPriorityNotifications = notifications.filter(
-    (n) => (n.priority === 'HIGH' || n.priority === 'URGENT') && !n.isRead
+    (n) => n.priority === 'high' && !n.isRead
   )
 
   return {
@@ -282,107 +283,75 @@ export function useNotifications() {
     highPriorityNotifications,
     stats,
     isLoading,
+    error,
     markAsRead,
     markAllAsRead,
     removeNotification,
     clearAll,
-    refresh: fetchNotifications,
+    refresh,
   }
 }
 
-// Funções utilitárias para criar notificações específicas
+// Funções utilitárias para criar notificações específicas (mantido para compatibilidade)
 export const createNotificationHelpers = (
-  addNotification: (
+  _addNotification: (
     _notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>
   ) => string
 ) => ({
-  // Notificação de novo orçamento
-  newQuote: (equipmentName: string, quoteId: string) =>
-    addNotification({
-      type: NotificationType.QUOTE_CREATED,
-      title: 'Novo Orçamento Criado',
-      message: `Seu orçamento para ${equipmentName} foi criado com sucesso!`,
-      priority: NotificationPriority.MEDIUM,
-      actionUrl: `/area-cliente/orcamentos/${quoteId}`,
-    }),
-
-  // Notificação de orçamento aprovado
-  quoteApproved: (equipmentName: string, quoteId: string) =>
-    addNotification({
-      type: NotificationType.QUOTE_APPROVED,
-      title: 'Orçamento Aprovado!',
-      message: `Seu orçamento para ${equipmentName} foi aprovado e está pronto para locação.`,
-      priority: NotificationPriority.HIGH,
-      actionUrl: `/area-cliente/orcamentos/${quoteId}`,
-    }),
-
-  // Notificação de orçamento rejeitado
-  quoteRejected: (equipmentName: string, reason?: string) =>
-    addNotification({
-      type: NotificationType.QUOTE_REJECTED,
-      title: 'Orçamento Rejeitado',
-      message: `Seu orçamento para ${equipmentName} foi rejeitado.${reason ? ` Motivo: ${reason}` : ''}`,
-      priority: NotificationPriority.MEDIUM,
-      actionUrl: '/area-cliente/orcamentos',
-    }),
-
-  // Notificação de novo pedido
-  newOrder: (orderNumber: string) =>
-    addNotification({
-      type: NotificationType.RENTAL_CREATED,
-      title: 'Pedido Confirmado',
-      message: `Seu pedido #${orderNumber} foi confirmado e está sendo processado.`,
-      priority: NotificationPriority.HIGH,
-      actionUrl: `/area-cliente/pedidos/${orderNumber}`,
-    }),
-
-  // Notificação de status do pedido
-  orderStatusUpdate: (orderNumber: string, status: string) =>
-    addNotification({
-      type: NotificationType.RENTAL_ACTIVE,
-      title: 'Status do Pedido Atualizado',
-      message: `Seu pedido #${orderNumber} agora está: ${status}`,
-      priority: NotificationPriority.MEDIUM,
-      actionUrl: `/area-cliente/pedidos/${orderNumber}`,
-    }),
-
-  // Notificação de pagamento
-  paymentReceived: (amount: number, orderNumber: string) =>
-    addNotification({
-      type: NotificationType.PAYMENT_RECEIVED,
-      title: 'Pagamento Confirmado',
-      message: `Pagamento de R$ ${amount.toFixed(2)} confirmado para o pedido #${orderNumber}.`,
-      priority: NotificationPriority.HIGH,
-      actionUrl: `/area-cliente/pedidos/${orderNumber}`,
-    }),
-
-  // Notificação de equipamento disponível
-  equipmentAvailable: (equipmentName: string) =>
-    addNotification({
-      type: NotificationType.EQUIPMENT_AVAILABLE,
-      title: 'Equipamento Disponível',
-      message: `${equipmentName} está disponível para locação!`,
-      priority: NotificationPriority.MEDIUM,
-      actionUrl: '/equipamentos',
-    }),
-
-  // Notificação de sistema
-  systemMaintenance: (message: string) =>
-    addNotification({
-      type: NotificationType.PROMOTION,
-      title: 'Manutenção do Sistema',
-      message,
-      priority: NotificationPriority.LOW,
-      actionUrl: '/sobre',
-    }),
-
-  // Notificação de promoção
-  promotion: (title: string, message: string, actionUrl?: string) =>
-    addNotification({
-      type: NotificationType.PROMOTION,
-      title,
-      message,
-      priority: NotificationPriority.MEDIUM,
-      actionUrl,
-    }),
+  // Nota: Essas funções são para uso legado com localStorage
+  // Para criar notificações reais, use lib/notification-service.ts no servidor
+  newQuote: (_equipmentName: string, _quoteId: string) => {
+    console.warn(
+      '[createNotificationHelpers] Use lib/notification-service.ts no servidor'
+    )
+    return ''
+  },
+  quoteApproved: (_equipmentName: string, _quoteId: string) => {
+    console.warn(
+      '[createNotificationHelpers] Use lib/notification-service.ts no servidor'
+    )
+    return ''
+  },
+  quoteRejected: (_equipmentName: string, _reason?: string) => {
+    console.warn(
+      '[createNotificationHelpers] Use lib/notification-service.ts no servidor'
+    )
+    return ''
+  },
+  newOrder: (_orderNumber: string) => {
+    console.warn(
+      '[createNotificationHelpers] Use lib/notification-service.ts no servidor'
+    )
+    return ''
+  },
+  orderStatusUpdate: (_orderNumber: string, _status: string) => {
+    console.warn(
+      '[createNotificationHelpers] Use lib/notification-service.ts no servidor'
+    )
+    return ''
+  },
+  paymentReceived: (_amount: number, _orderNumber: string) => {
+    console.warn(
+      '[createNotificationHelpers] Use lib/notification-service.ts no servidor'
+    )
+    return ''
+  },
+  equipmentAvailable: (_equipmentName: string) => {
+    console.warn(
+      '[createNotificationHelpers] Use lib/notification-service.ts no servidor'
+    )
+    return ''
+  },
+  systemMaintenance: (_message: string) => {
+    console.warn(
+      '[createNotificationHelpers] Use lib/notification-service.ts no servidor'
+    )
+    return ''
+  },
+  promotion: (_title: string, _message: string, _actionUrl?: string) => {
+    console.warn(
+      '[createNotificationHelpers] Use lib/notification-service.ts no servidor'
+    )
+    return ''
+  },
 })

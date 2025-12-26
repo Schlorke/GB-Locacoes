@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import { CloseButton } from '@/components/ui/close-button'
 import { NotificationBadgeWrapper } from '@/components/ui/notification-badge'
 import { useCartNotifications } from '@/hooks/use-cart-notifications'
-import { useNotifications } from '@/hooks/use-notifications'
 import { usePublicSettings } from '@/hooks/use-public-settings'
 import { cn } from '@/lib/utils'
 import { Menu, Phone, ShoppingCart, User } from 'lucide-react'
@@ -20,7 +19,6 @@ export default function Header() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const { itemCount } = useCartNotifications()
-  const { markAllAsRead } = useNotifications()
   const { settings } = usePublicSettings()
   const [notificationCount, setNotificationCount] = useState(0)
 
@@ -56,7 +54,6 @@ export default function Header() {
   }
 
   const handleMinhaContaNavigation = () => {
-    markAllAsRead() // Marcar notificações como lidas
     sessionStorage.setItem('internalNavigation', 'true')
     setIsMenuOpen(false)
 
@@ -235,10 +232,7 @@ export default function Header() {
                   )}
                   asChild
                 >
-                  <Link
-                    href="/area-cliente#dashboard-banner"
-                    onClick={markAllAsRead}
-                  >
+                  <Link href="/area-cliente#dashboard-banner">
                     <User
                       className={cn(
                         'h-5 w-5 transition-transform',
@@ -368,7 +362,6 @@ export default function Header() {
                       variant="outline"
                       asChild
                       className="w-full h-12 rounded-xl border-slate-200 hover:bg-orange-50 hover:border-orange-200 transition-all duration-200"
-                      onClick={markAllAsRead}
                     >
                       <Link
                         href="/area-cliente#dashboard-banner"

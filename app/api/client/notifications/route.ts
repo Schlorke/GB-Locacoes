@@ -2,107 +2,124 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { NotificationType, NotificationPriority, Prisma } from '@prisma/client'
+import { z } from 'zod'
 
-// GET - Listar notificações do cliente
+// Schema para query params
+const querySchema = z.object({
+  page: z.coerce.number().min(1).optional().default(1),
+  limit: z.coerce.number().min(1).max(100).optional().default(20),
+  type: z
+    .enum([
+      'QUOTE',
+      'ORDER',
+      'PAYMENT',
+      'EQUIPMENT',
+      'SYSTEM',
+      'RENTAL',
+      'DELIVERY',
+      'CONTRACT',
+    ])
+    .optional(),
+  isRead: z.enum(['true', 'false']).optional(),
+})
+
+/**
+ * GET /api/client/notifications
+ * Lista notificações do usuário autenticado
+ */
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
-    const type = searchParams.get('type') as NotificationType | null
-    const isRead = searchParams.get('isRead')
-    const priority = searchParams.get('priority') as NotificationPriority | null
-    const search = searchParams.get('search')
-    const limit = parseInt(searchParams.get('limit') || '50', 10)
-    const offset = parseInt(searchParams.get('offset') || '0', 10)
 
-    // Construir query where de forma mais segura
-    const whereConditions: Prisma.NotificationWhereInput[] = [
-      { userId: session.user.id },
-      // Filtrar notificações expiradas (apenas não expiradas)
-      {
-        OR: [{ expiresAt: null }, { expiresAt: { gte: new Date() } }],
-      },
-    ]
+    // Tratar valores null do searchParams
+    const pageParam = searchParams.get('page')
+    const limitParam = searchParams.get('limit')
 
-    // Filtrar por tipo
-    if (type) {
-      whereConditions.push({ type })
-    }
+    const parsed = querySchema.safeParse({
+      page: pageParam ? parseInt(pageParam, 10) : undefined,
+      limit: limitParam ? parseInt(limitParam, 10) : undefined,
+      type: searchParams.get('type') || undefined,
+      isRead: searchParams.get('isRead') || undefined,
+    })
 
-    // Filtrar por status de leitura
-    if (isRead !== null) {
-      whereConditions.push({ isRead: isRead === 'true' })
-    }
-
-    // Filtrar por prioridade
-    if (priority) {
-      whereConditions.push({ priority })
-    }
-
-    // Busca por título ou mensagem
-    if (search) {
-      whereConditions.push({
-        OR: [
-          { title: { contains: search, mode: 'insensitive' } },
-          { message: { contains: search, mode: 'insensitive' } },
-        ],
-      })
-    }
-
-    const where =
-      whereConditions.length > 1 ? { AND: whereConditions } : whereConditions[0]
-
-    // Verificar se o modelo existe (fallback caso Prisma Client não tenha sido regenerado)
-    if (!prisma.notification) {
-      console.error(
-        'Prisma Client não contém o modelo Notification. Execute: pnpm db:generate'
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: 'Parâmetros inválidos', details: parsed.error.issues },
+        { status: 400 }
       )
-      return NextResponse.json({
-        notifications: [],
-        pagination: {
-          total: 0,
-          limit,
-          offset,
-          hasMore: false,
-        },
-      })
     }
 
+    const { page, limit, type, isRead } = parsed.data
+    const skip = (page - 1) * limit
+
+    // Construir where clause
+    const where: Record<string, unknown> = {
+      userId: session.user.id,
+    }
+
+    if (type) {
+      where.type = type
+    }
+
+    if (isRead !== undefined) {
+      where.isRead = isRead === 'true'
+    }
+
+    // Buscar notificações e contagem total
     const [notifications, total] = await Promise.all([
       prisma.notification.findMany({
         where,
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: { createdAt: 'desc' },
+        skip,
         take: limit,
-        skip: offset,
       }),
       prisma.notification.count({ where }),
     ])
 
+    // Estatísticas
+    const [unreadCount, byType] = await Promise.all([
+      prisma.notification.count({
+        where: { userId: session.user.id, isRead: false },
+      }),
+      prisma.notification.groupBy({
+        by: ['type'],
+        where: { userId: session.user.id, isRead: false },
+        _count: { type: true },
+      }),
+    ])
+
+    const stats = {
+      total,
+      unread: unreadCount,
+      byType: byType.reduce(
+        (acc, item) => {
+          acc[item.type.toLowerCase()] = item._count.type
+          return acc
+        },
+        {} as Record<string, number>
+      ),
+    }
+
     return NextResponse.json({
       notifications,
       pagination: {
-        total,
+        page,
         limit,
-        offset,
-        hasMore: offset + limit < total,
+        total,
+        totalPages: Math.ceil(total / limit),
       },
+      stats,
     })
   } catch (error) {
-    console.error('Error fetching notifications:', error)
-    const errorMessage =
-      error instanceof Error ? error.message : 'Internal server error'
+    console.error('[GET /api/client/notifications] Erro:', error)
     return NextResponse.json(
-      {
-        error: errorMessage,
-        details: error instanceof Error ? error.stack : undefined,
-      },
+      { error: 'Erro interno do servidor' },
       { status: 500 }
     )
   }

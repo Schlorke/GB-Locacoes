@@ -14,8 +14,7 @@ import { CartUpdateOneWithoutUserNestedInputObjectSchema as CartUpdateOneWithout
 import { QuoteUpdateManyWithoutApprovedByUserNestedInputObjectSchema as QuoteUpdateManyWithoutApprovedByUserNestedInputObjectSchema } from './QuoteUpdateManyWithoutApprovedByUserNestedInput.schema';
 import { QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema as QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema } from './QuoteUpdateManyWithoutRejectedByUserNestedInput.schema';
 import { QuoteUpdateManyWithoutUserNestedInputObjectSchema as QuoteUpdateManyWithoutUserNestedInputObjectSchema } from './QuoteUpdateManyWithoutUserNestedInput.schema';
-import { rentalsUpdateManyWithoutUsersNestedInputObjectSchema as rentalsUpdateManyWithoutUsersNestedInputObjectSchema } from './rentalsUpdateManyWithoutUsersNestedInput.schema';
-import { NotificationUpdateManyWithoutUserNestedInputObjectSchema as NotificationUpdateManyWithoutUserNestedInputObjectSchema } from './NotificationUpdateManyWithoutUserNestedInput.schema'
+import { rentalsUpdateManyWithoutUsersNestedInputObjectSchema as rentalsUpdateManyWithoutUsersNestedInputObjectSchema } from './rentalsUpdateManyWithoutUsersNestedInput.schema'
 
 const makeSchema = () => z.object({
   id: z.union([z.string(), z.lazy(() => StringFieldUpdateOperationsInputObjectSchema)]).optional(),
@@ -37,8 +36,7 @@ const makeSchema = () => z.object({
   approvedQuotes: z.lazy(() => QuoteUpdateManyWithoutApprovedByUserNestedInputObjectSchema).optional(),
   rejectedQuotes: z.lazy(() => QuoteUpdateManyWithoutRejectedByUserNestedInputObjectSchema).optional(),
   quotes: z.lazy(() => QuoteUpdateManyWithoutUserNestedInputObjectSchema).optional(),
-  rentals: z.lazy(() => rentalsUpdateManyWithoutUsersNestedInputObjectSchema).optional(),
-  notifications: z.lazy(() => NotificationUpdateManyWithoutUserNestedInputObjectSchema).optional()
+  rentals: z.lazy(() => rentalsUpdateManyWithoutUsersNestedInputObjectSchema).optional()
 }).strict();
 export const UserUpdateWithoutSessionsInputObjectSchema: z.ZodType<Prisma.UserUpdateWithoutSessionsInput> = makeSchema() as unknown as z.ZodType<Prisma.UserUpdateWithoutSessionsInput>;
 export const UserUpdateWithoutSessionsInputObjectZodSchema = makeSchema();

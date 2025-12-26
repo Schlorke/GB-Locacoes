@@ -11,16 +11,14 @@ const makeSchema = () => z.object({
   id: z.string().optional(),
   userId: z.string(),
   type: NotificationTypeSchema,
-  priority: NotificationPrioritySchema.optional(),
   title: z.string(),
   message: z.string(),
+  priority: NotificationPrioritySchema.optional(),
   isRead: z.boolean().optional(),
-  readAt: z.coerce.date().optional().nullable(),
   actionUrl: z.string().optional().nullable(),
   metadata: z.union([NullableJsonNullValueInputSchema, jsonSchema]).optional(),
-  expiresAt: z.coerce.date().optional().nullable(),
   createdAt: z.coerce.date().optional(),
-  updatedAt: z.coerce.date().optional()
+  readAt: z.coerce.date().optional().nullable()
 }).strict();
 export const NotificationCreateManyInputObjectSchema: z.ZodType<Prisma.NotificationCreateManyInput> = makeSchema() as unknown as z.ZodType<Prisma.NotificationCreateManyInput>;
 export const NotificationCreateManyInputObjectZodSchema = makeSchema();

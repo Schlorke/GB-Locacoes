@@ -4,15 +4,12 @@ export const NotificationFindUniqueResultSchema = z.nullable(z.object({
   id: z.string(),
   userId: z.string(),
   type: z.unknown(),
-  priority: z.unknown(),
   title: z.string(),
   message: z.string(),
+  priority: z.unknown(),
   isRead: z.boolean(),
-  readAt: z.date().optional(),
   actionUrl: z.string().optional(),
   metadata: z.unknown().optional(),
-  expiresAt: z.date().optional(),
   createdAt: z.date(),
-  updatedAt: z.date(),
-  user: z.unknown()
+  readAt: z.date().optional()
 }));

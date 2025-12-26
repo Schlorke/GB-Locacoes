@@ -26,5 +26,5 @@ export { VehicleModelSchema } from './Vehicle.pure';
 export { DriverModelSchema } from './Driver.pure';
 export { ContractModelSchema } from './Contract.pure';
 export { AuditLogModelSchema } from './AuditLog.pure';
-export { PermissionModelSchema } from './Permission.pure';
 export { NotificationModelSchema } from './Notification.pure';
+export { PermissionModelSchema } from './Permission.pure';

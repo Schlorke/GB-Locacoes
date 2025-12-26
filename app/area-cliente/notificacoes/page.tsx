@@ -19,21 +19,19 @@ import {
   CheckCircle,
   AlertCircle,
   Trash2,
-  CheckCheck,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import { NotificationType } from '@prisma/client'
 
 interface NotificationCardProps {
   notification: Notification
   onMarkAsRead: (_id: string) => void
   onDelete: (_id: string) => void
   getNotificationIcon: (
-    _type: NotificationType
+    _type: string
   ) => React.ComponentType<{ className?: string }>
-  getTypeLabel: (_type: NotificationType) => string
+  getTypeLabel: (_type: string) => string
   formatTimeAgo: (_date: Date) => string
 }
 
@@ -96,9 +94,27 @@ function NotificationCard({
           </div>
 
           {/* Mensagem */}
-          <p className="text-sm md:text-[1rem] text-gray-600 leading-relaxed mb-4">
-            {notification.message}
-          </p>
+          <div className="text-sm md:text-[1rem] text-gray-600 leading-relaxed mb-4">
+            {notification.message.includes('\nMotivo:') ? (
+              <>
+                <p>{notification.message.split('\nMotivo:')[0]}</p>
+                <p className="mt-2 text-gray-700">
+                  <span className="font-medium">Motivo:</span>{' '}
+                  {notification.message.split('\nMotivo:')[1]}
+                </p>
+              </>
+            ) : notification.message.includes(' Motivo:') ? (
+              <>
+                <p>{notification.message.split(' Motivo:')[0]}</p>
+                <p className="mt-2 text-gray-700">
+                  <span className="font-medium">Motivo:</span>{' '}
+                  {notification.message.split(' Motivo:')[1]}
+                </p>
+              </>
+            ) : (
+              <p>{notification.message}</p>
+            )}
+          </div>
 
           {/* Footer com timestamp e botões */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
@@ -148,47 +164,48 @@ function NotificationCard({
 }
 
 export default function NotificacoesPage() {
-  const {
-    notifications,
-    isLoading,
-    markAsRead,
-    markAllAsRead,
-    removeNotification,
-    stats,
-  } = useNotifications()
+  const { notifications, stats, isLoading, markAsRead, removeNotification } =
+    useNotifications()
 
-  // Atualizar contador global no localStorage para compatibilidade com header
+  // Atualizar contador de notificações não lidas no localStorage e disparar evento
   useEffect(() => {
-    const unreadCount = stats.unread
-    localStorage.setItem('gb-locacoes-unread-count', unreadCount.toString())
-    const event = new CustomEvent('notificationUpdate', {
-      detail: { unreadCount },
-    })
-    window.dispatchEvent(event)
-  }, [stats.unread])
+    if (!isLoading) {
+      localStorage.setItem('gb-locacoes-unread-count', stats.unread.toString())
+      const event = new CustomEvent('notificationUpdate', {
+        detail: { unreadCount: stats.unread },
+      })
+      window.dispatchEvent(event)
+    }
+  }, [stats.unread, isLoading])
 
-  const getNotificationIcon = (type: NotificationType) => {
-    if (type.startsWith('QUOTE_')) return CheckCircle
-    if (type.startsWith('RENTAL_')) return Settings
-    if (type.startsWith('PAYMENT_')) return CheckCircle
-    if (type.startsWith('DELIVERY_') || type.startsWith('PICKUP_'))
-      return Settings
-    if (type.startsWith('CONTRACT_')) return CheckCircle
-    if (type.startsWith('SYSTEM_') || type === 'PROMOTION') return AlertCircle
-    if (type === 'EQUIPMENT_AVAILABLE') return Settings
-    return Bell
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'quote':
+        return CheckCircle
+      case 'equipment':
+        return Settings
+      case 'payment':
+        return CheckCircle
+      case 'system':
+        return AlertCircle
+      default:
+        return Bell
+    }
   }
 
-  const getTypeLabel = (type: NotificationType) => {
-    if (type.startsWith('QUOTE_')) return 'Orçamento'
-    if (type.startsWith('RENTAL_')) return 'Locação'
-    if (type.startsWith('PAYMENT_')) return 'Pagamento'
-    if (type.startsWith('DELIVERY_') || type.startsWith('PICKUP_'))
-      return 'Entrega'
-    if (type.startsWith('CONTRACT_')) return 'Contrato'
-    if (type.startsWith('SYSTEM_') || type === 'PROMOTION') return 'Sistema'
-    if (type === 'EQUIPMENT_AVAILABLE') return 'Equipamento'
-    return 'Geral'
+  const getTypeLabel = (type: string) => {
+    switch (type) {
+      case 'quote':
+        return 'Orçamento'
+      case 'equipment':
+        return 'Equipamento'
+      case 'payment':
+        return 'Pagamento'
+      case 'system':
+        return 'Sistema'
+      default:
+        return 'Geral'
+    }
   }
 
   const formatTimeAgo = (date: Date) => {
@@ -203,7 +220,6 @@ export default function NotificacoesPage() {
     return `${Math.floor(diffInMinutes / 1440)}d atrás`
   }
 
-  // Usar todas as notificações sem filtros
   const filteredNotifications = notifications
 
   return (
@@ -249,8 +265,8 @@ export default function NotificacoesPage() {
       </section>
 
       {/* Dashboard Principal - LAYOUT OTIMIZADO */}
-      <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24 overflow-visible">
-        <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-visible">
+      <section className="py-12 md:py-16 lg:py-10 relative -mt-20 md:-mt-24">
+        <div className="sm:px-6 lg:px-8 max-w-7xl mx-auto">
           {/* Lista de Notificações */}
           <motion.div
             className="mb-8"
@@ -261,36 +277,17 @@ export default function NotificacoesPage() {
             <Card className="relative overflow-hidden bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 border-0 z-0">
               <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-transparent opacity-50"></div>
               <CardHeader className="relative z-10 p-6">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div className="flex flex-col space-y-1.5">
-                    <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                      <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
-                        <Bell className="h-5 w-5" />
-                      </div>
-                      Lista de Notificações
-                    </CardTitle>
-                    <CardDescription>
-                      {filteredNotifications.length} notificação(ões)
-                      encontrada(s)
-                      {stats.unread > 0 && (
-                        <span className="ml-2 text-orange-600 font-semibold">
-                          • {stats.unread} não lida(s)
-                        </span>
-                      )}
-                    </CardDescription>
+                <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
+                  <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg text-white">
+                    <Bell className="h-5 w-5" />
                   </div>
-                  {stats.unread > 0 && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={markAllAsRead}
-                      className="bg-white hover:bg-white text-gray-900 hover:text-orange-600 font-semibold"
-                    >
-                      <CheckCheck className="h-4 w-4 mr-2" />
-                      Marcar todas como lidas
-                    </Button>
-                  )}
-                </div>
+                  Lista de Notificações
+                </CardTitle>
+                <CardDescription>
+                  {isLoading
+                    ? 'Carregando...'
+                    : `${filteredNotifications.length} notificação(ões) encontrada(s)`}
+                </CardDescription>
               </CardHeader>
               <CardContent className="relative p-6 pb-8 pt-0 md:px-6 lg:px-8 md:pb-6 lg:pb-8 z-0">
                 {isLoading ? (
@@ -298,7 +295,7 @@ export default function NotificacoesPage() {
                     <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                       <Bell className="h-12 w-12 text-gray-300 animate-pulse" />
                     </div>
-                    <p className="text-base md:text-lg text-gray-500">
+                    <p className="text-base md:text-lg text-gray-500 mb-8 leading-relaxed">
                       Carregando notificações...
                     </p>
                   </div>

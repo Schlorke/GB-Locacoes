@@ -91,6 +91,8 @@ interface FormData {
 
 export default function EditarEquipamento() {
   const params = useParams()
+  // Extrair valores imediatamente para evitar enumeração do objeto params
+  const equipmentId = typeof params.id === 'string' ? params.id : null
   const router = useRouter()
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -143,7 +145,7 @@ export default function EditarEquipamento() {
   const [isImageZoomed, setIsImageZoomed] = useState(false)
 
   useEffect(() => {
-    if (!params.id) return
+    if (!equipmentId) return
 
     const fetchEquipment = async (id: string) => {
       try {
@@ -197,9 +199,9 @@ export default function EditarEquipamento() {
       }
     }
 
-    fetchEquipment(params.id as string)
+    fetchEquipment(equipmentId)
     fetchCategories()
-  }, [params.id])
+  }, [equipmentId])
 
   const fetchCategories = async () => {
     try {
@@ -448,7 +450,7 @@ export default function EditarEquipamento() {
           throw new Error('Erro ao obter dados do formulário')
         }
 
-        const response = await fetch(`/api/admin/equipments/${params.id}`, {
+        const response = await fetch(`/api/admin/equipments/${equipmentId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -501,7 +503,7 @@ export default function EditarEquipamento() {
     newPartsLossQuantity,
     newPartsLossImages,
     editingPartsLossIndex,
-    params.id,
+    equipmentId,
     formData,
   ])
 
@@ -530,7 +532,7 @@ export default function EditarEquipamento() {
 
     setIsSaving(true)
     try {
-      const response = await fetch(`/api/admin/equipments/${params.id}`, {
+      const response = await fetch(`/api/admin/equipments/${equipmentId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -1650,7 +1652,7 @@ export default function EditarEquipamento() {
                                           // Salvar imediatamente no backend
                                           try {
                                             const response = await fetch(
-                                              `/api/admin/equipments/${params.id}`,
+                                              `/api/admin/equipments/${equipmentId}`,
                                               {
                                                 method: 'PUT',
                                                 headers: {

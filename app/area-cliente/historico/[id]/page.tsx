@@ -123,6 +123,8 @@ const statusConfig: Record<
 export default function RentalDetailsPage() {
   const { data: _session } = useSession()
   const params = useParams()
+  // Extrair valores imediatamente para evitar enumeração do objeto params
+  const rentalId = typeof params.id === 'string' ? params.id : null
   const router = useRouter()
   const [rental, setRental] = useState<Rental | null>(null)
   const [loading, setLoading] = useState(true)
@@ -138,9 +140,11 @@ export default function RentalDetailsPage() {
   }
 
   const fetchRental = useCallback(async () => {
+    if (!rentalId) return
+
     try {
       setLoading(true)
-      const response = await fetch(`/api/client/rentals/${params.id}`)
+      const response = await fetch(`/api/client/rentals/${rentalId}`)
       if (!response.ok) {
         if (response.status === 404) {
           toast.error('Locação não encontrada')
@@ -159,13 +163,13 @@ export default function RentalDetailsPage() {
     } finally {
       setLoading(false)
     }
-  }, [params.id, router])
+  }, [rentalId, router])
 
   useEffect(() => {
-    if (params.id) {
+    if (rentalId) {
       fetchRental()
     }
-  }, [params.id, fetchRental])
+  }, [rentalId, fetchRental])
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {

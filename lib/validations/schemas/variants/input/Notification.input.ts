@@ -7,17 +7,14 @@ export const NotificationInputSchema = z.object({
     id: z.string(),
     userId: z.string(),
     type: NotificationTypeSchema,
-    priority: NotificationPrioritySchema,
     title: z.string(),
     message: z.string(),
+    priority: NotificationPrioritySchema,
     isRead: z.boolean(),
-    readAt: z.date().optional().nullable(),
     actionUrl: z.string().optional().nullable(),
     metadata: z.unknown().optional().nullable(),
-    expiresAt: z.date().optional().nullable(),
     createdAt: z.date(),
-    updatedAt: z.date(),
-    user: z.unknown()
+    readAt: z.date().optional().nullable()
 }).strict();
 
 export type NotificationInputType = z.infer<typeof NotificationInputSchema>;

@@ -11,6 +11,10 @@ import type { Prisma } from '@prisma/client'
 import { formatCurrency } from '@/lib/utils'
 import getResend from '@/lib/resend'
 import { generateQuoteStatusChangeEmailHTML } from '@/lib/email-templates'
+import {
+  notifyQuoteApproved,
+  notifyQuoteRejected,
+} from '@/lib/notification-service'
 
 const resend = getResend()
 
@@ -234,19 +238,19 @@ export async function PATCH(
         delete updateQuoteData.approvedBy
       }
 
-      // Gerar notificação para o cliente
+      // Criar notificação para o cliente
       if (currentQuote.userId) {
         try {
-          const { NotificationService } =
-            await import('@/lib/notification-service')
-          await NotificationService.createQuoteApproved(
+          const equipmentName =
+            currentQuote.items[0]?.equipment?.name || 'Equipamento(s)'
+          await notifyQuoteApproved(
             currentQuote.userId,
-            params.id,
-            finalTotal ? Number(finalTotal) : undefined
+            currentQuote.id,
+            equipmentName
           )
         } catch (notificationError) {
           console.error(
-            'Erro ao criar notificação de orçamento aprovado:',
+            '[Quote Approval] Erro ao criar notificação:',
             notificationError
           )
           // Não falhar a aprovação por causa de erro na notificação
@@ -367,25 +371,6 @@ export async function PATCH(
         delete updateQuoteData.rejectedBy
       }
 
-      // Gerar notificação para o cliente
-      if (currentQuote.userId) {
-        try {
-          const { NotificationService } =
-            await import('@/lib/notification-service')
-          await NotificationService.createQuoteRejected(
-            currentQuote.userId,
-            params.id,
-            rejectionReason
-          )
-        } catch (notificationError) {
-          console.error(
-            'Erro ao criar notificação de orçamento rejeitado:',
-            notificationError
-          )
-          // Não falhar a rejeição por causa de erro na notificação
-        }
-      }
-
       // Cancelar todas as locações relacionadas a este orçamento
       // Usar updateMany para cancelar todas de uma vez (mais eficiente e atômico)
       try {
@@ -414,6 +399,26 @@ export async function PATCH(
         )
         // Não falhar a rejeição do orçamento por causa de erro ao cancelar locações
         // (pode ser corrigido manualmente depois)
+      }
+
+      // Criar notificação para o cliente
+      if (currentQuote.userId) {
+        try {
+          const equipmentName =
+            currentQuote.items[0]?.equipment?.name || 'Equipamento(s)'
+          await notifyQuoteRejected(
+            currentQuote.userId,
+            currentQuote.id,
+            equipmentName,
+            rejectionReason || undefined
+          )
+        } catch (notificationError) {
+          console.error(
+            '[Quote Rejection] Erro ao criar notificação:',
+            notificationError
+          )
+          // Não falhar a rejeição por causa de erro na notificação
+        }
       }
     }
 

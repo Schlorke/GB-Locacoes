@@ -5,6 +5,62 @@
 
 ---
 
+## 40. Badge de notificacoes nao sincronizava ao rejeitar orcamento
+
+### ? Problema RESOLVIDO
+
+**Data da Ocorrencia**: 2025-12-26 **Severidade**: Media (Area do Cliente)
+**Status**: ? Resolvido
+
+#### Descricao
+
+Ao rejeitar um orcamento no admin, a notificacao era criada no banco, mas o
+badge da Area do Cliente e do header nao atualizava ate o usuario abrir
+`/area-cliente/notificacoes`. Ao navegar pelo botao "Minha conta", o badge podia
+desaparecer porque o contador vinha zerado do localStorage.
+
+#### Sintomas
+
+- Badge de notificacoes nao aparece no header/side bar apos rejeicao
+- Badge some ao clicar em "Minha conta"
+- Notificacao so aparece apos abrir `/area-cliente/notificacoes`
+
+#### Causa Raiz
+
+- Contador de nao lidas dependia apenas de localStorage/evento e nao era
+  sincronizado com a API fora da pagina de notificacoes
+- Simulacao de notificacoes nao lidas no layout sobrescrevia o valor real
+
+### ? Solucao Implementada
+
+- Header passa a buscar `/api/client/notifications/stats` quando o usuario esta
+  autenticado e dispara `notificationUpdate` com o valor real
+- Removida a simulacao de notificacoes nao lidas no layout da Area do Cliente
+
+#### Arquivos Modificados
+
+1. `components/header.tsx`
+2. `app/area-cliente/layout.tsx`
+3. `docs/features/notification-system.md`
+4. `docs/issues/known-issues.md`
+5. `CHANGELOG.md`
+
+#### Como Validar
+
+1. Rejeitar um orcamento no admin
+2. Entrar no site como cliente e verificar o badge no header e na sidebar sem
+   abrir `/area-cliente/notificacoes`
+3. Confirmar que o badge continua visivel ao clicar em "Minha conta"
+4. Abrir `/area-cliente/notificacoes` e marcar como lida; o badge deve
+   desaparecer
+
+#### Armadilhas a Evitar
+
+- Reintroduzir simulacao de notificacoes no layout
+- Atualizar o contador apenas na pagina de notificacoes
+
+---
+
 ## 39. Recuperacao de senha nao enviava email e pagina de reset inexistente
 
 ### ? Problema RESOLVIDO

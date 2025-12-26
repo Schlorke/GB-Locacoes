@@ -23,8 +23,7 @@ export const UserModelSchema = z.object({
     rejectedQuotes: z.array(z.unknown()),
     quotes: z.array(z.unknown()),
     rentals: z.array(z.unknown()),
-    sessions: z.array(z.unknown()),
-    notifications: z.array(z.unknown())
+    sessions: z.array(z.unknown())
 }).strict();
 
 export type UserPureType = z.infer<typeof UserModelSchema>;
